@@ -1,0 +1,29 @@
+# Staging environment overrides
+version: '3.8'
+
+services:
+  web:
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_SITE_URL=${STAGING_SITE_URL}
+    restart: unless-stopped
+
+  medusa:
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
+  payload:
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
+  nginx:
+    volumes:
+      - ./nginx/conf.d/staging:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    restart: unless-stopped
+
+  # Staging uses same services as production
+  # but with staging environment variables
+  # and staging domain: staging.suzanneravenall.com

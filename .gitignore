@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Build outputs
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Docker local overrides (auto-loaded by docker-compose up — keep local if it has secrets)
+# docker-compose.override.yml
+
+# Logs
+*.log
+logs/
+
+# System
+.DS_Store
+Thumbs.db

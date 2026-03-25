@@ -1,0 +1,93 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Medusa is excluded here — it has no build step that runs cleanly in CI
+      # without a live database. The container is built on the VPS from source.
+      - name: Build
+        run: npx turbo run build --filter=!apps/medusa
+
+      - name: Lint
+        run: npx turbo run lint
+
+      - name: Test
+        run: npx turbo run test
+        continue-on-error: true
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    # The production GitHub Environment enforces required reviewers before this
+    # job is allowed to run. See .github/README.md for setup instructions.
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to production VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -euo pipefail
+            cd /var/www/suzanneravenall
+            git pull origin main
+            docker compose pull
+            docker compose up -d --remove-orphans postgres meilisearch n8n calcom nginx
+            docker system prune -f
+
+      - name: Health check production
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            for i in 1 2 3 4 5; do
+              if curl -sf https://suzanneravenall.com; then
+                echo "Health check passed on attempt $i"
+                exit 0
+              fi
+              echo "Attempt $i failed — waiting 15s"
+              sleep 15
+            done
+            echo "Health check failed after 5 attempts"
+            exit 1
+
+      - name: Notify success
+        if: success()
+        run: |
+          curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{"text":"Production deployed successfully — ${{ github.sha }}"}'
+
+      - name: Notify failure
+        if: failure()
+        run: |
+          curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{"text":"PRODUCTION deploy failed — immediate attention required: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'

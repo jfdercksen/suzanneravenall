@@ -1,0 +1,35 @@
+# Local development overrides — loaded automatically by `docker compose up`
+# This file is NOT used in production or staging.
+# Bind mounts enable hot reload. Postgres and MeiliSearch ports are exposed
+# so developers can connect with GUI clients (e.g. TablePlus, Meilisearch
+# Dashboard) without going through the Docker network.
+
+services:
+
+  web:
+    volumes:
+      # Source bind mount enables hot reload via Next.js dev server
+      - ../apps/web:/app
+      # Explicit named bind for node_modules prevents the host directory from
+      # shadowing the container's installed packages
+      - ../apps/web/node_modules:/app/node_modules
+
+  medusa:
+    volumes:
+      - ../apps/medusa:/app
+      - ../apps/medusa/node_modules:/app/node_modules
+
+  payload:
+    volumes:
+      - ../apps/payload:/app
+      - ../apps/payload/node_modules:/app/node_modules
+
+  postgres:
+    # Expose to host so devs can connect with TablePlus / psql / DataGrip
+    ports:
+      - "5432:5432"
+
+  meilisearch:
+    # Expose to host for local search index inspection
+    ports:
+      - "7700:7700"

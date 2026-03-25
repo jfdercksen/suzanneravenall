@@ -1,0 +1,6 @@
+- Match the reference design exactly — do not add features or sections not in the spec
+- Use the design system tokens defined in CLAUDE.md (colors, fonts, corner radii)
+- Mobile-first — build small screen layout first, then scale up
+- No inline styles — Tailwind classes only
+- Keep components focused — one responsibility per component
+- Do not over-engineer — three similar JSX blocks is better than a premature abstraction

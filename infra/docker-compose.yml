@@ -1,0 +1,277 @@
+# Production Docker Compose stack — suzanneravenall.com
+# Docker Compose v2 syntax — no version key required
+# All services communicate via the suzanne_network bridge.
+# Never expose meilisearch or sentry ports to the host in production.
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # Nginx — reverse proxy and SSL termination (entry point for all traffic)
+  # ---------------------------------------------------------------------------
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      web:
+        condition: service_healthy
+      medusa:
+        condition: service_healthy
+      payload:
+        condition: service_healthy
+      n8n:
+        condition: service_healthy
+      calcom:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.25"
+    restart: unless-stopped
+    networks:
+      - suzanne_network
+
+  # ---------------------------------------------------------------------------
+  # PostgreSQL — shared database for Medusa, Payload, and n8n
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - suzanne_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+          cpus: "0.5"
+
+  # ---------------------------------------------------------------------------
+  # Medusa.js v2 — commerce backend
+  # ---------------------------------------------------------------------------
+  medusa:
+    build:
+      context: ../apps/medusa
+    restart: unless-stopped
+    expose:
+      - "9000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      NODE_ENV: ${NODE_ENV}
+      MEDUSA_ADMIN_ONBOARDING_TYPE: ${MEDUSA_ADMIN_ONBOARDING_TYPE}
+      JWT_SECRET: ${JWT_SECRET}
+      COOKIE_SECRET: ${COOKIE_SECRET}
+    networks:
+      - suzanne_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: "1.0"
+
+  # ---------------------------------------------------------------------------
+  # Next.js 14 — public-facing web app
+  # ---------------------------------------------------------------------------
+  web:
+    build:
+      context: ../apps/web
+    restart: unless-stopped
+    expose:
+      - "3000"
+    environment:
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      NEXT_PUBLIC_MEDUSA_URL: ${NEXT_PUBLIC_MEDUSA_URL}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+      NEXT_PUBLIC_GA_MEASUREMENT_ID: ${NEXT_PUBLIC_GA_MEASUREMENT_ID}
+    networks:
+      - suzanne_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: "1.0"
+
+  # ---------------------------------------------------------------------------
+  # Payload CMS — content management
+  # ---------------------------------------------------------------------------
+  payload:
+    build:
+      context: ../apps/payload
+    restart: unless-stopped
+    expose:
+      - "3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      DATABASE_URI: ${DATABASE_URI}
+      PAYLOAD_PUBLIC_SERVER_URL: ${PAYLOAD_PUBLIC_SERVER_URL}
+    networks:
+      - suzanne_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3001/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+          cpus: "0.5"
+
+  # ---------------------------------------------------------------------------
+  # MeiliSearch — internal search engine (never exposed publicly)
+  # ---------------------------------------------------------------------------
+  meilisearch:
+    image: getmeili/meilisearch:v1.6
+    restart: unless-stopped
+    # No host port mapping — internal only. Use docker exec or the web service
+    # to interact with MeiliSearch from outside the container network.
+    expose:
+      - "7700"
+    volumes:
+      - meilisearch_data:/meili_data
+    environment:
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
+      MEILI_ENV: ${MEILI_ENV}
+    networks:
+      - suzanne_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:7700/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+          cpus: "0.5"
+
+  # ---------------------------------------------------------------------------
+  # n8n — workflow automation
+  # ---------------------------------------------------------------------------
+  n8n:
+    image: n8nio/n8n:1.30.1
+    restart: unless-stopped
+    expose:
+      - "5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    environment:
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
+      N8N_HOST: ${N8N_HOST}
+      N8N_PORT: ${N8N_PORT}
+      N8N_PROTOCOL: ${N8N_PROTOCOL}
+      WEBHOOK_URL: ${WEBHOOK_URL}
+      DB_TYPE: ${DB_TYPE}
+      DB_POSTGRESDB_HOST: ${DB_POSTGRESDB_HOST}
+      DB_POSTGRESDB_DATABASE: ${DB_POSTGRESDB_DATABASE}
+      DB_POSTGRESDB_USER: ${DB_POSTGRESDB_USER}
+      DB_POSTGRESDB_PASSWORD: ${DB_POSTGRESDB_PASSWORD}
+    networks:
+      - suzanne_network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:5678/healthz || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+          cpus: "0.5"
+
+  # ---------------------------------------------------------------------------
+  # Cal.com — self-hosted scheduling
+  # Note: calcom/cal.com does not publish a stable semver image tag beyond
+  # "latest". Pin this to a specific digest in production once the initial
+  # deployment is validated, e.g. calcom/cal.com@sha256:<digest>.
+  # ---------------------------------------------------------------------------
+  calcom:
+    image: calcom/cal.com:latest
+    restart: unless-stopped
+    expose:
+      - "3002"
+    environment:
+      NEXT_PUBLIC_WEBAPP_URL: ${NEXT_PUBLIC_WEBAPP_URL}
+      CALENDSO_ENCRYPTION_KEY: ${CALENDSO_ENCRYPTION_KEY}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      EMAIL_FROM: ${EMAIL_FROM}
+      EMAIL_SERVER_HOST: ${EMAIL_SERVER_HOST}
+      EMAIL_SERVER_PORT: ${EMAIL_SERVER_PORT}
+      EMAIL_SERVER_USER: ${EMAIL_SERVER_USER}
+      EMAIL_SERVER_PASSWORD: ${EMAIL_SERVER_PASSWORD}
+    networks:
+      - suzanne_network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: "1.0"
+
+# -----------------------------------------------------------------------------
+# Named volumes — never use bind mounts for persistent data in production
+# -----------------------------------------------------------------------------
+volumes:
+  postgres_data:
+  meilisearch_data:
+  n8n_data:
+
+# -----------------------------------------------------------------------------
+# Networks
+# -----------------------------------------------------------------------------
+networks:
+  suzanne_network:
+    driver: bridge

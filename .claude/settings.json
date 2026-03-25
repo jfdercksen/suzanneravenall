@@ -1,0 +1,42 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(node *)",
+      "Bash(docker *)",
+      "Bash(docker-compose *)",
+      "Bash(ssh *)",
+      "Bash(scp *)",
+      "Bash(rsync *)",
+      "Bash(pg_dump *)",
+      "Bash(psql *)",
+      "Bash(curl *)",
+      "Bash(chmod *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(cat *)",
+      "Bash(echo *)",
+      "Bash(grep *)",
+      "Bash(sed *)",
+      "Bash(awk *)",
+      "Bash(certbot *)",
+      "Bash(nginx *)",
+      "Bash(systemctl *)",
+      "Bash(vitest *)",
+      "Bash(turbo *)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(sudo rm *)",
+      "Bash(DROP DATABASE *)",
+      "Bash(DROP TABLE *)"
+    ]
+  }
+}
