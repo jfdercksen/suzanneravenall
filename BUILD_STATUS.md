@@ -1,7 +1,7 @@
 # Build Status — Suzanne Ravenall Platform
 
-Current Phase: Phase 0 complete — Phase 1 starting
-Current Task: Task 1.1 — Next.js App Setup
+Current Phase: Phase 1 — Public Website
+Current Task: Task 1.2 — Design System
 Current Branch: feature/phase-1-website
 Last Updated: April 2026
 Last Updated By: Johan
@@ -33,6 +33,19 @@ Last Updated By: Johan
 
 ---
 
+## Phase 1 — Task Status
+
+- ✅ Task 1.1 — Next.js App Setup
+- ⏳ Task 1.2 — Design System (blocked: waiting for brand assets from Suzanne)
+- ⏳ Task 1.3 — Homepage
+- ⏳ Task 1.4 — About page
+- ⏳ Task 1.5 — Services page
+- ⏳ Task 1.6 — Blog listing and post pages
+- ⏳ Task 1.7 — Contact page with Cal.com booking
+- ⏳ Task 1.8 — SEO and sitemap
+
+---
+
 ## Pre-Build Checklist
 
 - ✅ VPS provisioned (cloud.co.za, Ubuntu 22.04)
@@ -59,3 +72,4 @@ Last Updated By: Johan
 ## Session Notes
 
 - **April 2026:** Phase 0 fully complete. Starting Phase 1 Task 1.1. Creating feature branch now.
+- **April 2026:** Task 1.1 complete. Next.js 14 App Router scaffolded with TypeScript strict mode, Tailwind CSS v3, Sentry, GA4, Clarity, security headers, middleware, health check endpoint. Build passes. Awaiting brand assets from Suzanne before starting Task 1.2 Design System.

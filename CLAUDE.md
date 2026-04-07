@@ -10,6 +10,19 @@ Full coaching business platform for Dr. Suzanne Ravenall (suzanneravenall.com), 
 
 ---
 
+## Session Startup
+
+Every session begins with context recovery:
+
+1. Read `BUILD_STATUS.md` — know the current phase, current task, what is done
+2. Read `KNOWN_ISSUES.md` — know what is broken or pending
+3. Check `git status` and `git log --oneline -5` — know the branch and recent changes
+4. Ask: "Which task are you working on?" if BUILD_STATUS.md does not make it obvious
+
+Use `/restore-session` to automate this.
+
+---
+
 ## Monorepo Structure
 
 ```
@@ -221,8 +234,12 @@ Docs: https://developers.cloudflare.com/agents/
 | `SAGE_CLIENT_SECRET` | No | Sage API OAuth client secret |
 | `BUNNY_STREAM_API_KEY` | No | Bunny Stream API key |
 | `BUNNY_STREAM_LIBRARY_ID` | No | Bunny Stream library ID |
-| `SENTRY_DSN` | No | Sentry error tracking DSN |
+| `NEXT_PUBLIC_SENTRY_DSN` | Yes | Sentry DSN for client-side error tracking |
+| `SENTRY_DSN_WEB` | No | Sentry DSN for server-side and edge error tracking |
+| `NEXT_PUBLIC_SENTRY_ENVIRONMENT` | Yes | Sentry environment tag (client) |
+| `SENTRY_ENVIRONMENT` | No | Sentry environment tag (server) |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Yes | Google Analytics 4 measurement ID |
+| `NEXT_PUBLIC_CLARITY_ID` | Yes | Microsoft Clarity measurement ID |
 | `MEILISEARCH_HOST` | No | MeiliSearch host URL |
 | `MEILISEARCH_ADMIN_KEY` | No | MeiliSearch admin API key |
 | `N8N_WEBHOOK_SECRET` | No | Shared secret for n8n webhook verification |
@@ -258,7 +275,8 @@ For every non-trivial change (new component, route, API route, Docker service, i
 4. **QA (visual)** — Spawn `qa-visual` agent to screenshot and compare against reference. Reports differences, does NOT fix them.
 5. **Fix** — Apply all fixes from review and QA reports
 6. **Build check** — `npm run build` in `apps/web` — fix any errors
-7. **Ship** — Only after review passes, tests pass, build succeeds, and visual QA passes
+7. **Audit** — Spawn `code-auditor` for adversarial review on security-sensitive changes
+8. **Ship** — Only after review passes, tests pass, audit passes, build succeeds, and visual QA passes
 
 Spawn `code-reviewer` + `qa-unit` + `qa-visual` in parallel when they cover independent concerns.
 
@@ -271,6 +289,7 @@ For unfamiliar integrations, spawn `research` agent first.
 | Agent | Purpose |
 |-------|---------|
 | `code-reviewer` | TypeScript/React/Node.js code review (correctness, security, patterns) |
+| `code-auditor` | Adversarial review — actively tries to break code (model: opus) |
 | `qa-unit` | Vitest unit and integration tests |
 | `qa-visual` | Screenshot and visual comparison |
 | `research` | Docs, APIs, and patterns research |
@@ -299,6 +318,10 @@ For unfamiliar integrations, spawn `research` agent first.
 | `add-webhook` | New webhook handler between services |
 | `add-email-template` | New Resend email template |
 | `add-payment-provider` | New Medusa payment provider plugin |
+| `audit` | 9-category parallel codebase health check |
+| `visualise` | Interactive HTML codebase tree |
+| `restore-session` | Context recovery from previous sessions |
+| `security-check` | Vulnerability scan before staging deploys |
 
 ---
 
@@ -322,3 +345,31 @@ Use the `add-docker-service` skill — adds the service to `infra/docker-compose
 
 ### Add an n8n workflow
 Use the `add-n8n-workflow` skill — generates the workflow JSON and webhook handler.
+
+---
+
+## Rules Directory — .claude/rules/
+
+Rules are auto-loaded by Claude Code based on file context:
+
+| Rule File | Scope | Purpose |
+|-----------|-------|---------|
+| `code-style.md` | All files | TypeScript/React code style conventions |
+| `design-rules.md` | All files | UI/design constraints |
+| `workflow.md` | All files | Build workflow and process |
+| `technical-defaults.md` | All files | Framework and tooling defaults |
+| `security.md` | `auth/**`, `api/**`, `middleware.ts`, `webhooks/**` | Security rules for auth and API files |
+| `testing.md` | `*.test.ts`, `*.test.tsx`, `*.spec.ts` | Testing conventions |
+| `database.md` | `packages/database/**`, `migrations/**` | Schema and migration rules |
+| `no-bad-patterns.md` | All files | Compound learning — bad patterns caught in review |
+
+---
+
+## Compound Learning
+
+When a bad pattern is caught during code review or audit, add it to `.claude/rules/no-bad-patterns.md`. This file grows over time and ensures the same mistake is never repeated across sessions.
+
+Format:
+```
+- **Pattern:** description | **Why it's bad:** reason | **Do this instead:** correct approach
+```
