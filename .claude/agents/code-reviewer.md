@@ -2,6 +2,7 @@
 name: code-reviewer
 description: Unbiased code review of a TypeScript/React file. Returns actionable issues on correctness, readability, performance, and security. Use before shipping any non-trivial change.
 model: sonnet
+memory: project
 tools: Read, Write
 ---
 

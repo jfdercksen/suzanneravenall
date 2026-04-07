@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# Claude Code temp files
+.tmp/
+
 # Next.js
 .next/
 out/

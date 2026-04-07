@@ -1,7 +1,7 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 1 — Public Website
-Current Task: Task 1.2 — Design System
+Current Task: Task 1.2 — Design System (BLOCKED — awaiting brand assets from Suzanne)
 Current Branch: feature/phase-1-website
 Last Updated: April 2026
 Last Updated By: Johan
@@ -36,7 +36,7 @@ Last Updated By: Johan
 ## Phase 1 — Task Status
 
 - ✅ Task 1.1 — Next.js App Setup
-- ⏳ Task 1.2 — Design System (blocked: waiting for brand assets from Suzanne)
+- ⏳ Task 1.2 — Design System (BLOCKED — awaiting brand assets from Suzanne)
 - ⏳ Task 1.3 — Homepage
 - ⏳ Task 1.4 — About page
 - ⏳ Task 1.5 — Services page
@@ -72,4 +72,4 @@ Last Updated By: Johan
 ## Session Notes
 
 - **April 2026:** Phase 0 fully complete. Starting Phase 1 Task 1.1. Creating feature branch now.
-- **April 2026:** Task 1.1 complete. Next.js 14 App Router scaffolded with TypeScript strict mode, Tailwind CSS v3, Sentry, GA4, Clarity, security headers, middleware, health check endpoint. Build passes. Awaiting brand assets from Suzanne before starting Task 1.2 Design System.
+- **April 2026:** Task 1.1 complete. Next.js 14 app scaffolded in apps/web. 7/7 health check tests passing. Security headers reviewed by code-auditor — 6 fixes applied. Task 1.2 blocked until logo, colours and fonts received from Suzanne.

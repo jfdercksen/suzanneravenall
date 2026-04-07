@@ -38,5 +38,63 @@
       "Bash(DROP DATABASE *)",
       "Bash(DROP TABLE *)"
     ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git commit*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/block-at-commit.sh",
+            "description": "Block commit if tests are not passing"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/block-env-edit.sh \"$CLAUDE_FILE_PATH\"",
+            "description": "Block direct edits to .env files"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/post-edit.sh \"$CLAUDE_FILE_PATH\"",
+            "description": "Auto-format and type-check TypeScript/JavaScript files after edits"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/skill-evaluator.sh \"$CLAUDE_USER_PROMPT\"",
+            "description": "Suggest relevant skills based on prompt content"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/session-start.sh",
+            "description": "Load git status, recent log, branch and open TODOs"
+          }
+        ]
+      }
+    ]
   }
 }
