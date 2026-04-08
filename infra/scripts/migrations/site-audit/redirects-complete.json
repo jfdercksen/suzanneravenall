@@ -1,0 +1,2840 @@
+{
+  "generated": "2026-04-08",
+  "source_site": "suzanneravenall.com (WordPress)",
+  "total_redirects": 472,
+  "note": "Import into apps/web/next.config.mjs redirects() function for Task 1.9",
+  "redirects": [
+    {
+      "source": "/achieving-work-life-balance-2",
+      "destination": "/blog/achieving-work-life-balance-2",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/affiliate-area",
+      "destination": "/portal",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/akashic",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/akashic-clearing",
+      "destination": "/blog/akashic-clearing",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/akashic-navigator",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/akashic-navigator-advanced",
+      "destination": "/blog/akashic-navigator-advanced",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/april-newsletter-%e2%9c%a8-be-a-champion-of-change",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-abafazi-top-women",
+      "destination": "/blog/article-abafazi-top-women",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-african-investor-awards-issue",
+      "destination": "/blog/article-african-investor-awards-issue",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-african-investor-dial-up-for-profit",
+      "destination": "/blog/article-african-investor-dial-up-for-profit",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-african-millionare-leading-in-field-marketing",
+      "destination": "/blog/article-african-millionare-leading-in-field-marketing",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-business-report-looking-for-growth",
+      "destination": "/blog/article-business-report-looking-for-growth",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-business-report-south-africas-top-managers",
+      "destination": "/blog/article-business-report-south-africas-top-managers",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-business-times-leadership",
+      "destination": "/blog/article-business-times-leadership",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-ceo-magazine-b2b-outsourcing",
+      "destination": "/blog/article-ceo-magazine-b2b-outsourcing",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-ceo-magazine-be-effective-or-be-at-risk",
+      "destination": "/blog/article-ceo-magazine-be-effective-or-be-at-risk",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-ceo-magazine-cover-story-execution-excellence",
+      "destination": "/blog/article-ceo-magazine-cover-story-execution-excellence",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-ceo-magazine-cover-story-fast-and-furious",
+      "destination": "/blog/article-ceo-magazine-cover-story-fast-and-furious",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-ceo-magazine-creating-the-future",
+      "destination": "/blog/article-ceo-magazine-creating-the-future",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-ceo-magazine-mindset-for-success",
+      "destination": "/blog/article-ceo-magazine-mindset-for-success",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-ceo-magazine-new-trend-labour-market",
+      "destination": "/blog/article-ceo-magazine-new-trend-labour-market",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-ceo-magazine-pushing-the-envelope",
+      "destination": "/blog/article-ceo-magazine-pushing-the-envelope",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-ceo-magazine-transformation",
+      "destination": "/blog/article-ceo-magazine-transformation",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-ceo-magazine-welcome-to-the-world-of-how-to",
+      "destination": "/blog/article-ceo-magazine-welcome-to-the-world-of-how-to",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-ceo-magzaine-cover-story-power-of-positivity",
+      "destination": "/blog/article-ceo-magzaine-cover-story-power-of-positivity",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-destiny-magazine",
+      "destination": "/blog/article-destiny-magazine",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-empowerment-magazine-leading-by-example",
+      "destination": "/blog/article-empowerment-magazine-leading-by-example",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-engineering-news-people-on-the-move",
+      "destination": "/blog/article-engineering-news-people-on-the-move",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-entrepreneur-magazine-cover-story-start-up-case-study",
+      "destination": "/blog/article-entrepreneur-magazine-cover-story-start-up-case-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-finance-week-top-women",
+      "destination": "/blog/article-finance-week-top-women",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-honoree-leading-women-entrepreneurs-of-the-world",
+      "destination": "/blog/article-honoree-leading-women-entrepreneurs-of-the-world",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-intelligence-magazine",
+      "destination": "/blog/article-intelligence-magazine",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-it-web",
+      "destination": "/blog/article-it-web",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-leadership-magazine-making-things-happen",
+      "destination": "/blog/article-leadership-magazine-making-things-happen",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-most-influential-women-in-business-government",
+      "destination": "/blog/article-most-influential-women-in-business-government",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-outstanding-intellectuals-of-21st-century",
+      "destination": "/blog/article-outstanding-intellectuals-of-21st-century",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-press-release-leading-women-entrepreneurs-of-the-world",
+      "destination": "/blog/article-press-release-leading-women-entrepreneurs-of-the-world",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-public-sector-magazine-top-women",
+      "destination": "/blog/article-public-sector-magazine-top-women",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-sa-millionaire-outsourcing-the-bottom-line",
+      "destination": "/blog/article-sa-millionaire-outsourcing-the-bottom-line",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-sowetan-citizen-business-women-of-the-year-awards",
+      "destination": "/blog/article-sowetan-citizen-business-women-of-the-year-awards",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-sr-represents-prince-of-wales-trust-meeting-on-social-resp-sa",
+      "destination": "/blog/article-sr-represents-prince-of-wales-trust-meeting-on-social-resp-sa",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-sunday-times-leading-lights",
+      "destination": "/blog/article-sunday-times-leading-lights",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-sunday-times-sa-women-are-willing-to-do-it-all",
+      "destination": "/blog/article-sunday-times-sa-women-are-willing-to-do-it-all",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-sunday-times-secrets-to-success",
+      "destination": "/blog/article-sunday-times-secrets-to-success",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-sunday-times-talk-is-cheap-action-is-key",
+      "destination": "/blog/article-sunday-times-talk-is-cheap-action-is-key",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-sunday-times-top-women-finalists",
+      "destination": "/blog/article-sunday-times-top-women-finalists",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-the-citizen-nedbank-business-women-finalists",
+      "destination": "/blog/article-the-citizen-nedbank-business-women-finalists",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-the-sowetan-top-business-women",
+      "destination": "/blog/article-the-sowetan-top-business-women",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-the-star-nedbank-business-women-of-the-year-finalists",
+      "destination": "/blog/article-the-star-nedbank-business-women-of-the-year-finalists",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-top-women-in-business-and-government",
+      "destination": "/blog/article-top-women-in-business-and-government",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-top-women-in-business-government",
+      "destination": "/blog/article-top-women-in-business-government",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/article-top-women-top-billing-magazine",
+      "destination": "/blog/article-top-women-top-billing-magazine",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/articles",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/artile-making-things-happen",
+      "destination": "/blog/artile-making-things-happen",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/assessments",
+      "destination": "/about",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/august-newsletter%e2%9c%a8effortless-flow%e2%9c%a8from-control-to-co-creation",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-crf-best-companies-to-work-for",
+      "destination": "/blog/award-crf-best-companies-to-work-for",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-crf-best-company-to-work-for",
+      "destination": "/blog/award-crf-best-company-to-work-for",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-crf-best-company-to-work-for-2",
+      "destination": "/blog/award-crf-best-company-to-work-for-2",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-crf-best-company-to-work-for-7th-edition",
+      "destination": "/blog/award-crf-best-company-to-work-for-7th-edition",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-crf-leading-managers",
+      "destination": "/blog/award-crf-leading-managers",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-crf-leading-managers-2",
+      "destination": "/blog/award-crf-leading-managers-2",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-crf-leading-managers-3",
+      "destination": "/blog/award-crf-leading-managers-3",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-crf-leading-managers-best-employers",
+      "destination": "/blog/award-crf-leading-managers-best-employers",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-crf-leading-managers-beyond-the-ordinary",
+      "destination": "/blog/award-crf-leading-managers-beyond-the-ordinary",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-crf-leading-managers-press-release",
+      "destination": "/blog/award-crf-leading-managers-press-release",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-crf-most-promising-companies",
+      "destination": "/blog/award-crf-most-promising-companies",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-impumelelo-top-empowered-companies",
+      "destination": "/blog/award-impumelelo-top-empowered-companies",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-impumelelo-top-empowered-companies-2",
+      "destination": "/blog/award-impumelelo-top-empowered-companies-2",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-ravenall-institute-global-100",
+      "destination": "/blog/award-ravenall-institute-global-100",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-south-africas-most-promising-companies",
+      "destination": "/blog/award-south-africas-most-promising-companies",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-top-300-companies",
+      "destination": "/blog/award-top-300-companies",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-top-300-companies-2",
+      "destination": "/blog/award-top-300-companies-2",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-top-companies",
+      "destination": "/blog/award-top-companies",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-top-companies-edition-6",
+      "destination": "/blog/award-top-companies-edition-6",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-top-companies-feature",
+      "destination": "/blog/award-top-companies-feature",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-top-companies-new-edition",
+      "destination": "/blog/award-top-companies-new-edition",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-top-companies-new-edition-2",
+      "destination": "/blog/award-top-companies-new-edition-2",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-top-performing-business-leader-finalist",
+      "destination": "/blog/award-top-performing-business-leader-finalist",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-top-performing-companies",
+      "destination": "/blog/award-top-performing-companies",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-top-performing-company-finalist",
+      "destination": "/blog/award-top-performing-company-finalist",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-top-women-in-business-government",
+      "destination": "/blog/award-top-women-in-business-government",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/award-top-women-in-business-government-further-edition",
+      "destination": "/blog/award-top-women-in-business-government-further-edition",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/awards",
+      "destination": "/about",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/awards-african-investor-press-release",
+      "destination": "/blog/awards-african-investor-press-release",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/awards-top-national-business-awards",
+      "destination": "/blog/awards-top-national-business-awards",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/basket",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/be-an-energy-ninja-mastering-energy-for-an-abundant-life",
+      "destination": "/blog/be-an-energy-ninja-mastering-energy-for-an-abundant-life",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/become-an-energy-ninja",
+      "destination": "/blog/become-an-energy-ninja",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/being-a-great-boundry-setter-group-session",
+      "destination": "/blog/being-a-great-boundry-setter-group-session",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/beyond-outsourcing-2-2",
+      "destination": "/blog/beyond-outsourcing-2-2",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/blog-2",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/blog-post-1",
+      "destination": "/blog/blog-post-1",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/body-talk",
+      "destination": "/blog/body-talk",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/break-the-loop",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/careers",
+      "destination": "/contact",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/articles",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/awards",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/beyond-outsourcing",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/group-sessions-dates",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/live-programmes",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/media",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/newsletter",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/practitioner-programmes",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/private-sessions-dates",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/programmes-dates",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/self-paced-courses",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/services",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/uncategorised",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/category/uncategorized",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/checkout",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/children-young-people-foundations-for-life",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/conference-sr-represents-sa-at-prince-of-wales-trust-st-james-palace",
+      "destination": "/blog/conference-sr-represents-sa-at-prince-of-wales-trust-st-james-palace",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/conference-sr-speaks-at-african-women-in-leadership",
+      "destination": "/blog/conference-sr-speaks-at-african-women-in-leadership",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/conference-sr-speaks-at-effective-leadership-strategies",
+      "destination": "/blog/conference-sr-speaks-at-effective-leadership-strategies",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/conference-sr-speaks-at-hr-afica",
+      "destination": "/blog/conference-sr-speaks-at-hr-afica",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/conference-sr-speaks-at-leadership-summit",
+      "destination": "/blog/conference-sr-speaks-at-leadership-summit",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/conference-sr-speaks-at-women-in-leadership",
+      "destination": "/blog/conference-sr-speaks-at-women-in-leadership",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/conference-sr-speaks-at-women-in-management",
+      "destination": "/blog/conference-sr-speaks-at-women-in-management",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/consciousness-engineer",
+      "destination": "/blog/consciousness-engineer",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/conversations-with-my-brain",
+      "destination": "/blog/conversations-with-my-brain",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/courses",
+      "destination": "/portal",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/creative-concepts",
+      "destination": "/blog/creative-concepts",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/dates",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/dates-repository",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/advanced-akashic-navigator",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/akashic-clearing-session",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/become-an-energy-ninja",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/being-a-great-boundary-setter",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/being-a-great-boundary-setter-group-session",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/breaking-the-hold-trauma-to-transcendence",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/career-progression",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/energy-clearing-advanced-clearing-others-level-2",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/energy-clearing-level-1",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/finding-my-life-purpose-2",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/intuition-in-business",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/intuition-in-my-personal-capacity",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/love-and-relationships",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/love-and-relationships-2",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/meditation",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/mental-health-group-session",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/mindfulness",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/money-mastery-group-session",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/nice-or-not-nice-communication-2",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/overcoming-the-need-to-fix-others",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/overcoming-the-need-to-fix-others-2",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/rapid-repatterning-session",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/resonance-repatterning-5-elements-meridians",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/resonance-repatterning-accelerated-basic-5-training-series",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/resonance-repatterning-chakra-patterns",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/resonance-repatterning-energetics-of-relationships",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/resonance-repatterning-fundamentals",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/resonance-repatterning-inner-cultivation",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/resonance-repatterning-primary-patterns",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/resonance-repatterning-principles-of-relationship",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/resonance-repatterning-unconscious-patterns",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/shedding-excess-weight",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/datesrepo/shedding-excess-weight-group-session",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/december-newsletter%e2%9c%a8a-quiet-threshold%e2%9c%a8connection-begins-inside",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/duplicated-duplicated-programmes-1730-3141",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/duplicated-programmes-582",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/embracing-our-ascension-journey",
+      "destination": "/blog/embracing-our-ascension-journey",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/emotional-mastery-for-young-minds",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/emotional-nervous-system-mastery",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/energetic-clearing",
+      "destination": "/blog/energetic-clearing",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/energy-clearing",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/energy-clearing-2",
+      "destination": "/blog/energy-clearing-2",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/energy-clearing-clearing-others-advanced",
+      "destination": "/blog/energy-clearing-clearing-others-advanced",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/events-calendar",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/events/unleash-the-power-within",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/exploring-the-alpha-mind",
+      "destination": "/blog/exploring-the-alpha-mind",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/february-newsletter%e2%9c%a8own-your-happiness%e2%9c%a8joy-isnt-rented-its-owned",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/finding-my-life-purpose",
+      "destination": "/blog/finding-my-life-purpose",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/functional-integrative-medicine-practitioner",
+      "destination": "/blog/functional-integrative-medicine-practitioner",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/getting-unstuck",
+      "destination": "/blog/getting-unstuck",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/group-family-coaching",
+      "destination": "/blog/group-family-coaching",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/guided-programmes",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/health-energy-intelligence",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/how-to-muscle-check",
+      "destination": "/blog/how-to-muscle-check",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/identity-purpose-activation",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/inner-compass",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/intuition-as-patterned-intelligence",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/intuition-in-business",
+      "destination": "/blog/intuition-in-business",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/intuition-in-my-personal-capacity",
+      "destination": "/blog/intuition-in-my-personal-capacity",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/july-newsletter%e2%9c%a8riding-the-waves%e2%9c%a8finding-calm-and-clarity-in-the-chaos",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/june-newsletter%e2%9c%a8navigating-the-threshold-between-striving-and-surrender",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/leadership-high-performance",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/life-transitions-reinvention",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/login-customizer",
+      "destination": "/portal",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/love-relationships",
+      "destination": "/blog/love-relationships",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/love-relationships-session",
+      "destination": "/blog/love-relationships-session",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/march-newsletter-the-power-of-letting-go",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/march-newsletter%e2%9c%a8conscious-choice-%e2%9c%a8attention-shapes-experience",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/masterclass-register",
+      "destination": "/masterclass",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/masterclass-steps",
+      "destination": "/masterclass",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/masterclass-test-page",
+      "destination": "/masterclass",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/masterclass-viewing",
+      "destination": "/masterclass",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/masterclass2",
+      "destination": "/masterclass",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/may-newsletter%e2%9c%a8a-message-from-your-future-self",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/media",
+      "destination": "/about",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/mediator",
+      "destination": "/blog/mediator",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/meditation",
+      "destination": "/blog/meditation",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/memberships",
+      "destination": "/portal",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/mental-health",
+      "destination": "/blog/mental-health",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/mindfulness",
+      "destination": "/blog/mindfulness",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/my-account",
+      "destination": "/portal",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/my-acuity-bookings",
+      "destination": "/portal",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/newsletters",
+      "destination": "/blog",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/next-level-health-vitality-longevity",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/nice-or-not-nice-communication",
+      "destination": "/blog/nice-or-not-nice-communication",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/notices",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/november-newsletter-%f0%9f%8c%9fembracing-the-power-within",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/november-newsletter%e2%9c%a8from-survival-to-thriving",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/october-newsletter%e2%9c%a8the-art-of-inner-regulation%e2%9c%a8neuro-mastery",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/overcoming-the-need-to-fix-others",
+      "destination": "/blog/overcoming-the-need-to-fix-others",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/pattern-foundations",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/pattern-mastery",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/add-ons",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/career-progression-group-session",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/group-session",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/group-session/live-group-session",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/group-session/self-paced",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/akashic-navigator",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/akashic-navigator/live-akashic-intuitive-coach-programme",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/akashic-navigator/self-study-akashic-navigator",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/energy-clearing",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/energy-clearing/live-energy-clearing",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/energy-clearing/self-study-energy-clearing",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/live-programmes-guided-programmes",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/live-programmes-guided-programmes/live-live-programmes",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/live-programmes-guided-programmes/self-paced-live-programmes-guided-programmes",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/meditation",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/resonance-repatterning-programme",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/resonance-repatterning-programme/live",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/guided-programmes/resonance-repatterning-programme/self-study",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/how-to-muscle-check",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/intuition",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/life-purpose",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/love-and-relationships",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/love-and-relationships-group-session",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/meditations",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/mindfulness",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/money-mastery",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/presentations",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/private-session",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/private-session/akashic-coaching",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/private-session/energetic-clearing",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/private-session/executive-coaching-private-session",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/private-session/exploring-the-alpha-mind-private-session",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/private-session/family-coaching",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/private-session/not-used-akashic-coaching",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/private-session/rapid-repatterning",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/private-session/rapid-transformation-therapy",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/private-session/resonance-repatterning-private-session",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/private-session/transformation-coaching-private-session",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/products",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/products/book",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/products/book/preorder",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/products/brainwave-club-products",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/products/healing-tools",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/resonance-repatterning-being-human",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/resonance-repatterning-session",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/shedding-weight",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/trauma-programma",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-tag/1983470",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-tag/1983481",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product-tag/acuity",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-clearing-session",
+      "destination": "/shop/akashic-clearing-session",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-coaching-clearing-session-60-mins-package-of-12",
+      "destination": "/shop/akashic-coaching-clearing-session-60-mins-package-of-12",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-coaching-clearing-session-60-mins-package-of-4",
+      "destination": "/shop/akashic-coaching-clearing-session-60-mins-package-of-4",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-coaching-clearing-session-60-mins-package-of-8",
+      "destination": "/shop/akashic-coaching-clearing-session-60-mins-package-of-8",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-coaching-clearing-session-90min",
+      "destination": "/shop/akashic-coaching-clearing-session-90min",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-retaker-via-zoom",
+      "destination": "/shop/akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-retaker-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom",
+      "destination": "/shop/akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-self-study",
+      "destination": "/shop/akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-navigator-intuitive-coaching-fundamentals-adv-purchased-together-live-retaker-zoom",
+      "destination": "/shop/akashic-navigator-intuitive-coaching-fundamentals-adv-purchased-together-live-retaker-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom",
+      "destination": "/shop/akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-self-study",
+      "destination": "/shop/akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-retaker-via-zoom",
+      "destination": "/shop/akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-retaker-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+      "destination": "/shop/akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-self-study",
+      "destination": "/shop/akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live",
+      "destination": "/shop/be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-self-study",
+      "destination": "/shop/be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live",
+      "destination": "/shop/be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/being-a-great-boundry-setter-group-session",
+      "destination": "/shop/being-a-great-boundry-setter-group-session",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/bonus-lifetime-access-self-study-online",
+      "destination": "/shop/bonus-lifetime-access-self-study-online",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/brainwave-club",
+      "destination": "/shop/brainwave-club",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/bringing-your-energy-back",
+      "destination": "/shop/bringing-your-energy-back",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/career-progression-group-session",
+      "destination": "/shop/career-progression-group-session",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/coaching-support-package",
+      "destination": "/shop/coaching-support-package",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/coherence-muscle-testing-self-study-online-2",
+      "destination": "/shop/coherence-muscle-testing-self-study-online-2",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/deep-energy-clearing-advanced-clearing-others-level-2-live-retaker-via-zoom",
+      "destination": "/shop/deep-energy-clearing-advanced-clearing-others-level-2-live-retaker-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom",
+      "destination": "/shop/deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/deep-energy-clearing-advanced-clearing-others-level-2-self-study",
+      "destination": "/shop/deep-energy-clearing-advanced-clearing-others-level-2-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/deep-energy-clearing-fundamentals-advanced-purchased-together-live-retaker-via-zoom",
+      "destination": "/shop/deep-energy-clearing-fundamentals-advanced-purchased-together-live-retaker-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom",
+      "destination": "/shop/deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/deep-energy-clearing-fundamentals-clearing-self-level-1-live-retaker-via-zoom",
+      "destination": "/shop/deep-energy-clearing-fundamentals-clearing-self-level-1-live-retaker-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom",
+      "destination": "/shop/deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/deep-energy-clearing-fundamentals-clearing-self-level-1-self-study",
+      "destination": "/shop/deep-energy-clearing-fundamentals-clearing-self-level-1-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/email-support",
+      "destination": "/shop/email-support",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/energetic-alignment-inner-neutrality",
+      "destination": "/shop/energetic-alignment-inner-neutrality",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/energetic-clearing-completed-remotely",
+      "destination": "/shop/energetic-clearing-completed-remotely",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/energetic-clearing-completed-remotely-package-of-12",
+      "destination": "/shop/energetic-clearing-completed-remotely-package-of-12",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/energetic-clearing-completed-remotely-package-of-4",
+      "destination": "/shop/energetic-clearing-completed-remotely-package-of-4",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/energetic-clearing-completed-remotely-package-of-8",
+      "destination": "/shop/energetic-clearing-completed-remotely-package-of-8",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/executive-coaching-30-mins",
+      "destination": "/shop/executive-coaching-30-mins",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/executive-coaching-60-mins",
+      "destination": "/shop/executive-coaching-60-mins",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/executive-coaching-60-mins-package-of-12",
+      "destination": "/shop/executive-coaching-60-mins-package-of-12",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/executive-coaching-60-mins-package-of-16",
+      "destination": "/shop/executive-coaching-60-mins-package-of-16",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/executive-coaching-60-mins-package-of-4",
+      "destination": "/shop/executive-coaching-60-mins-package-of-4",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/executive-coaching-60-mins-package-of-8",
+      "destination": "/shop/executive-coaching-60-mins-package-of-8",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/exploring-the-alpha-mind-45-mins-package-of-5",
+      "destination": "/shop/exploring-the-alpha-mind-45-mins-package-of-5",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/exploring-the-alpha-mind-45-mins-package-of-8",
+      "destination": "/shop/exploring-the-alpha-mind-45-mins-package-of-8",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/exploring-the-alpha-mind-45-minutes",
+      "destination": "/shop/exploring-the-alpha-mind-45-minutes",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/finding-my-life-purpose-live",
+      "destination": "/shop/finding-my-life-purpose-live",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/finding-my-life-purpose-self-study",
+      "destination": "/shop/finding-my-life-purpose-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/getting-unstuck-self-study",
+      "destination": "/shop/getting-unstuck-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-family-coaching-60-mins",
+      "destination": "/shop/group-family-coaching-60-mins",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-family-coaching-60-mins-package-of-4",
+      "destination": "/shop/group-family-coaching-60-mins-package-of-4",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-family-coaching-60-mins-package-of-8",
+      "destination": "/shop/group-family-coaching-60-mins-package-of-8",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-session-attraction-frequency-recorded",
+      "destination": "/shop/group-session-attraction-frequency-recorded",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-session-being-a-great-boundary-setter-booked-as-a-series-only",
+      "destination": "/shop/group-session-being-a-great-boundary-setter-booked-as-a-series-only",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-session-career-progression",
+      "destination": "/shop/group-session-career-progression",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-session-develop-super-confidence",
+      "destination": "/shop/group-session-develop-super-confidence",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-session-develop-super-confidence-recorded",
+      "destination": "/shop/group-session-develop-super-confidence-recorded",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-session-love-relationships",
+      "destination": "/shop/group-session-love-relationships",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-session-money-mastery",
+      "destination": "/shop/group-session-money-mastery",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-session-nice-or-not-nice-in-communication-booked-as-a-series-only",
+      "destination": "/shop/group-session-nice-or-not-nice-in-communication-booked-as-a-series-only",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-session-shedding-excess-weight",
+      "destination": "/shop/group-session-shedding-excess-weight",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/group-session-shedding-excess-weight-booked-as-a-series-only",
+      "destination": "/shop/group-session-shedding-excess-weight-booked-as-a-series-only",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/https-suzanneravenall-com-product-resonance-represonance-repatterning-program-5-five-elements-meridians-self-study",
+      "destination": "/shop/https-suzanneravenall-com-product-resonance-represonance-repatterning-program-5-five-elements-meridians-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/intuition-in-my-business-capacity-live",
+      "destination": "/shop/intuition-in-my-business-capacity-live",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/intuition-in-my-business-capacity-self-study",
+      "destination": "/shop/intuition-in-my-business-capacity-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/intuition-in-my-personal-capacity-live",
+      "destination": "/shop/intuition-in-my-personal-capacity-live",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/intuition-in-my-personal-capacity-self-study",
+      "destination": "/shop/intuition-in-my-personal-capacity-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/love-relationships-group-session",
+      "destination": "/shop/love-relationships-group-session",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/love-relationships-live",
+      "destination": "/shop/love-relationships-live",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/love-relationships-self-study",
+      "destination": "/shop/love-relationships-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/meditation-live-via-zoom",
+      "destination": "/shop/meditation-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/meditation-self-study",
+      "destination": "/shop/meditation-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/mentorship-bundle-of-5-sessions-live",
+      "destination": "/shop/mentorship-bundle-of-5-sessions-live",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/mentorship-bundle-of-5-sessions-self-study",
+      "destination": "/shop/mentorship-bundle-of-5-sessions-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/mentorship-single-session-live",
+      "destination": "/shop/mentorship-single-session-live",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/mentorship-single-session-self-study",
+      "destination": "/shop/mentorship-single-session-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/mindfulness-live",
+      "destination": "/shop/mindfulness-live",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/mindfulness-self-study",
+      "destination": "/shop/mindfulness-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/money-mastery-group-session",
+      "destination": "/shop/money-mastery-group-session",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/post-traumatic-growth-self-study-online",
+      "destination": "/shop/post-traumatic-growth-self-study-online",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/quantum-healing-codes-ebook-audio-download",
+      "destination": "/shop/quantum-healing-codes-ebook-audio-download",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-repatterning-coaching-90-mins-package-of-04",
+      "destination": "/shop/rapid-repatterning-coaching-90-mins-package-of-04",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-repatterning-coaching-90-mins-package-of-08",
+      "destination": "/shop/rapid-repatterning-coaching-90-mins-package-of-08",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-repatterning-coaching-90-mins-package-of-12",
+      "destination": "/shop/rapid-repatterning-coaching-90-mins-package-of-12",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-repatterning-coaching-90-mins-package-of-16",
+      "destination": "/shop/rapid-repatterning-coaching-90-mins-package-of-16",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-repatterning-session-60-min-online",
+      "destination": "/shop/rapid-repatterning-session-60-min-online",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-repatterning-session-60-mins-in-person",
+      "destination": "/shop/rapid-repatterning-session-60-mins-in-person",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-repatterning-session-60-mins-package-of-12-sessions",
+      "destination": "/shop/rapid-repatterning-session-60-mins-package-of-12-sessions",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-repatterning-session-60-mins-package-of-16-sessions",
+      "destination": "/shop/rapid-repatterning-session-60-mins-package-of-16-sessions",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-repatterning-session-60-mins-package-of-4-sessions",
+      "destination": "/shop/rapid-repatterning-session-60-mins-package-of-4-sessions",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-repatterning-session-60-mins-package-of-8-sessions",
+      "destination": "/shop/rapid-repatterning-session-60-mins-package-of-8-sessions",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-repatterning-session-90-mins-in-person",
+      "destination": "/shop/rapid-repatterning-session-90-mins-in-person",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-repatterning-session-90-mins-online",
+      "destination": "/shop/rapid-repatterning-session-90-mins-online",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-transformation-therapy-session",
+      "destination": "/shop/rapid-transformation-therapy-session",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/rapid-transformation-therapy-session-1-hypnosis-session-hypnosis-recording",
+      "destination": "/shop/rapid-transformation-therapy-session-1-hypnosis-session-hypnosis-recording",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/ravenall-institute-certification-observation-fee",
+      "destination": "/shop/ravenall-institute-certification-observation-fee",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/relaxation-energy-reclamation",
+      "destination": "/shop/relaxation-energy-reclamation",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-05-five-elements-meridians-retaker-affwp-test",
+      "destination": "/shop/resonance-repatterning-05-five-elements-meridians-retaker-affwp-test",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-live-via-zoom",
+      "destination": "/shop/resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-self-study",
+      "destination": "/shop/resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-all-repatternings-as-demos-talk-throughs-resources-self-study",
+      "destination": "/shop/resonance-repatterning-all-repatternings-as-demos-talk-throughs-resources-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-coaching-90-mins",
+      "destination": "/shop/resonance-repatterning-coaching-90-mins",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-coaching-90-mins-in-person-session",
+      "destination": "/shop/resonance-repatterning-coaching-90-mins-in-person-session",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-coaching-90-mins-package-of-12",
+      "destination": "/shop/resonance-repatterning-coaching-90-mins-package-of-12",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-coaching-90-mins-package-of-16",
+      "destination": "/shop/resonance-repatterning-coaching-90-mins-package-of-16",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-coaching-90-mins-package-of-8",
+      "destination": "/shop/resonance-repatterning-coaching-90-mins-package-of-8",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-coaching-session-60-mins-package-of-12",
+      "destination": "/shop/resonance-repatterning-coaching-session-60-mins-package-of-12",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-coaching-session-60-mins-package-of-16",
+      "destination": "/shop/resonance-repatterning-coaching-session-60-mins-package-of-16",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-coaching-session-60-mins-package-of-4",
+      "destination": "/shop/resonance-repatterning-coaching-session-60-mins-package-of-4",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-coaching-session-60-mins-package-of-8",
+      "destination": "/shop/resonance-repatterning-coaching-session-60-mins-package-of-8",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-full-basic-training-programs-1-5-demos-resources-live-via-zoom",
+      "destination": "/shop/resonance-repatterning-full-basic-training-programs-1-5-demos-resources-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-full-basic-training-programs-1-5-demos-resources-self-study",
+      "destination": "/shop/resonance-repatterning-full-basic-training-programs-1-5-demos-resources-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom",
+      "destination": "/shop/resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-1-fundamentals-live-retaker-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-1-fundamentals-live-retaker-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-1-fundamentals-live-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-1-fundamentals-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-1-fundamentals-self-study",
+      "destination": "/shop/resonance-repatterning-program-1-fundamentals-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-2-primary-patterns-live-retaker-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-2-primary-patterns-live-retaker-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-2-primary-patterns-live-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-2-primary-patterns-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-2-primary-patterns-self-study",
+      "destination": "/shop/resonance-repatterning-program-2-primary-patterns-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-3-unconscious-patterns-live-retaker-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-3-unconscious-patterns-live-retaker-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-3-unconscious-patterns-live-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-3-unconscious-patterns-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-3-unconscious-patterns-self-study",
+      "destination": "/shop/resonance-repatterning-program-3-unconscious-patterns-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-4-chakra-patterns-live-retaker-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-4-chakra-patterns-live-retaker-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-4-chakra-patterns-live-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-4-chakra-patterns-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-4-chakra-patterns-self-study",
+      "destination": "/shop/resonance-repatterning-program-4-chakra-patterns-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-5-five-elements-meridians-live-retaker-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-5-five-elements-meridians-live-retaker-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-5-five-elements-meridians-live-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-5-five-elements-meridians-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-6-inner-cultivation-practical-demos-live-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-6-inner-cultivation-practical-demos-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-6-inner-cultivation-practical-demos-self-study",
+      "destination": "/shop/resonance-repatterning-program-6-inner-cultivation-practical-demos-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-7-principles-of-relationships-practical-demos-live-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-7-principles-of-relationships-practical-demos-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study",
+      "destination": "/shop/resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-9-energetics-of-relationships-practical-demos-live-via-zoom",
+      "destination": "/shop/resonance-repatterning-program-9-energetics-of-relationships-practical-demos-live-via-zoom",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study",
+      "destination": "/shop/resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-session",
+      "destination": "/shop/resonance-repatterning-session",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/resonance-repatterning-session-4x1",
+      "destination": "/shop/resonance-repatterning-session-4x1",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/suzanne-ravenall-coaching-app",
+      "destination": "/shop/suzanne-ravenall-coaching-app",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/the-latest-book-by-suzanne",
+      "destination": "/shop/the-latest-book-by-suzanne",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/transformation-coaching-60-mins",
+      "destination": "/shop/transformation-coaching-60-mins",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/transformation-coaching-60-mins-package-of-12",
+      "destination": "/shop/transformation-coaching-60-mins-package-of-12",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/transformation-coaching-60-mins-package-of-16",
+      "destination": "/shop/transformation-coaching-60-mins-package-of-16",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/transformation-coaching-60-mins-package-of-4",
+      "destination": "/shop/transformation-coaching-60-mins-package-of-4",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/transformation-coaching-60-mins-package-of-8",
+      "destination": "/shop/transformation-coaching-60-mins-package-of-8",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/transformation-coaching-90-mins",
+      "destination": "/shop/transformation-coaching-90-mins",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live",
+      "destination": "/shop/trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-self-study",
+      "destination": "/shop/trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-self-study",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/product/vip-package",
+      "destination": "/shop/vip-package",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/professional-speaker",
+      "destination": "/blog/professional-speaker",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/programmes",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/programmes/user-dashboard",
+      "destination": "/portal",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/protecting-your-joy",
+      "destination": "/blog/protecting-your-joy",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/qualifications",
+      "destination": "/about",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/rapid-repatterning",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/rapid-repatterning-2",
+      "destination": "/blog/rapid-repatterning-2",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/rapid-repatterning-3",
+      "destination": "/blog/rapid-repatterning-3",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/reclaim-your-power",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/recycling-my-soul",
+      "destination": "/blog/recycling-my-soul",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/reinvent-your-life",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/relationships-attachment-patterns",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/resilience-fortification",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/resonance-repatterning",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/resonance-repatterning-06-inner-cultivation-through-the-twelve-meridians",
+      "destination": "/blog/resonance-repatterning-06-inner-cultivation-through-the-twelve-meridians",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/resonance-repatterning-08-principles-of-relationship",
+      "destination": "/blog/resonance-repatterning-08-principles-of-relationship",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/resonance-repatterning-09-energetics-of-relationship",
+      "destination": "/blog/resonance-repatterning-09-energetics-of-relationship",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/resonance-repatterning-session",
+      "destination": "/blog/resonance-repatterning-session",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/second-time-around",
+      "destination": "/blog/second-time-around",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/september-newsletter%e2%9c%a8from-wounds-to-wisdom%e2%9c%a8healing-family-patterns",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/akashic-coaching",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/group-sessions",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/group-sessions/attraction-frequency",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/group-sessions/career-progression",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/group-sessions/develop-super-confidence",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/group-sessions/love-and-relationships",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/group-sessions/money-mastery",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/masterclass",
+      "destination": "/masterclass",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/masterclass/masterclass-thank-you",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/masterclass/masterclass-watch-now",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/private-sessions",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/private-sessions/akashic-clearing",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/private-sessions/transformational-behavioural-coaching",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/rapid-repatterning",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/rapid-transformational-therapy",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/transformational-coaching",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/services/true-transformation",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/shedding-excess-weight",
+      "destination": "/blog/shedding-excess-weight",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/speaking",
+      "destination": "/about",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/speaking-info",
+      "destination": "/blog/speaking-info",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/speaking-shop",
+      "destination": "/shop",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/teacher",
+      "destination": "/blog/teacher",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/test-page",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/testacuityapi",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/top-performance-companies",
+      "destination": "/blog/top-performance-companies",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/transformation-pathways",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/transformational-behavioural-coaching",
+      "destination": "/blog/transformational-behavioural-coaching",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/transformational-coach",
+      "destination": "/blog/transformational-coach",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/trauma-to-breakthrough",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/trauma-to-transcendance",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/trauma-to-transcendence",
+      "destination": "/blog/trauma-to-transcendence",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/trauma-to-transcendence-2",
+      "destination": "/blog/trauma-to-transcendence-2",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/unsubscribe",
+      "destination": "/",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/upgrade-your-operating-system",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/what-i-do",
+      "destination": "/services",
+      "permanent": true,
+      "statusCode": 301
+    },
+    {
+      "source": "/women-magazine-2",
+      "destination": "/blog/women-magazine-2",
+      "permanent": true,
+      "statusCode": 301
+    }
+  ]
+}

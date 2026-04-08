@@ -1,5 +1,5 @@
 # Suzanne Ravenall — Site Audit Summary
-**Generated:** 2026-04-08
+**Generated:** 2026-04-08 (updated with sitemap crawl)
 **Source:** suzanneravenall.com (WordPress + Elementor + WooCommerce)
 
 ---
@@ -8,14 +8,16 @@
 
 | Item | Count |
 |------|-------|
-| Total pages in URL map | 43 |
+| Total URLs in sitemap | 480 |
 | Core pages crawled (content extracted) | 8 |
-| Products found (WooCommerce) | 17 |
-| Screenshots taken — desktop | 34 |
-| Screenshots taken — mobile | 34 |
-| Images downloaded | 32 |
+| Products found (WooCommerce) | 148 (sitemap) / 17 (public shop) |
+| Blog posts / articles / awards in sitemap | ~151 |
+| Screenshots taken — desktop | 53 |
+| Screenshots taken — mobile | 53 |
+| Images downloaded | 39 |
 | Logo files captured | 7 |
 | Videos found | 0 |
+| 301 redirects mapped | 472 |
 
 ---
 
@@ -135,18 +137,25 @@ Categories:
 
 ## Files Generated
 
-| Directory | Contents |
-|-----------|----------|
-| `content/` | 10 content files (all-urls.txt + 8 page markdown + shop products + blog RSS) |
-| `seo/` | ALL-SEO-DATA.json with page titles and H1s |
-| `screenshots/desktop/` | 34 full-page desktop screenshots (1440px) |
-| `screenshots/mobile/` | 34 full-page mobile screenshots (390px) |
-| `assets/logos/` | 7 logo/favicon files (PNG only) |
+| Directory / File | Contents |
+|-----------------|----------|
+| `content/all-urls.txt` | Initial 43-page URL inventory |
+| `content/sitemap-all-urls.txt` | Complete 480-URL inventory from WordPress sitemaps |
+| `content/*.md` | 8 priority page content files |
+| `seo/ALL-SEO-DATA.json` | Page titles and H1s for priority pages |
+| `screenshots/desktop/` | 53 full-page desktop screenshots (1440px) |
+| `screenshots/mobile/` | 53 full-page mobile screenshots (390px) |
+| `assets/logos/` | 7 logo/favicon files (PNG only — no SVG) |
 | `assets/images/` | 32 images (hero, product, media, decorative) |
-| `assets/videos/` | video-urls.txt (no videos found) |
+| `assets/videos/video-urls.txt` | No videos found |
 | `assets/colours-found.txt` | Hex colour analysis |
 | `assets/fonts-found.txt` | Font family analysis |
 | `assets/image-urls.txt` | Complete image URL inventory |
+| `redirects-complete.json` | 472 x 301 redirects — ready for next.config.mjs (Task 1.9) |
+| `generate-redirects.js` | Script to regenerate redirects from updated URL list |
+| `screenshot.js` | Puppeteer screenshot script (first run) |
+| `screenshot-extra.js` | Puppeteer screenshot script (sitemap additions) |
+| `download-assets.sh` | Asset download script |
 
 ---
 
