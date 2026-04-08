@@ -1,0 +1,19 @@
+# Video URLs — suzanneravenall.com
+# Crawled: 2026-04-08
+
+## YouTube Embeds Found
+NONE DETECTED on homepage or key pages.
+(WP Rocket lazy-loads YouTube iframes — checked raw HTML, no YouTube IDs found)
+
+## Vimeo Embeds Found
+NONE DETECTED
+
+## Other Video Hosts
+NONE DETECTED (no Wistia, Bunny Stream, or other embeds found)
+
+## Notes
+- The site does NOT appear to use embedded video on public pages
+- Programme delivery is via Zoom (live) — not hosted video
+- Self-study products may contain gated video content not accessible without login
+- Check with Suzanne whether course videos exist and where they are hosted
+- If course videos exist, they will need uploading to Bunny Stream (Phase 3)

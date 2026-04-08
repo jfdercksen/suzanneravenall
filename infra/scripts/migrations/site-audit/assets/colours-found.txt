@@ -1,0 +1,32 @@
+# Colour frequencies extracted from suzanneravenall.com homepage HTML/CSS
+# Date: 2026-04-08
+# Method: grep hex values from raw HTML source
+
+# Primary Brand Colours (high frequency)
+     37 #000000   <- Black (primary text, backgrounds)
+     36 #ffffff   <- White (pure white)
+      9 #FFFFFF   <- White (alt case)
+      9 #1719F4   <- Electric Blue (primary CTA, accents) *** BRAND COLOUR
+      5 #012B43   <- Dark Navy (secondary)
+
+# Secondary Colours
+      4 #d8d8d8   <- Light grey
+      3 #333333   <- Dark grey text
+      2 #ffba00   <- Amber/Gold
+      2 #b3af54   <- Olive gold
+      2 #4a6e78   <- Teal
+
+# WordPress/Plugin Colours (likely not brand)
+      4 #7F54B3   <- WooCommerce purple
+      4 #69727d   <- WooCommerce grey
+      4 #0000ff   <- Default blue (not brand)
+      2 #7ad03a   <- WooCommerce green
+      2 #61a229   <- WooCommerce green alt
+      2 #2ea2cc   <- WooCommerce light blue
+
+# CONFIRMED BRAND PALETTE:
+# Primary:   #1719F4  (Electric Blue)
+# Secondary: #000000  (Black)
+# Accent:    #012B43  (Dark Navy)
+# White:     #FFFFFF
+# Font: Poppins (Google Fonts)

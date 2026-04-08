@@ -1,0 +1,84 @@
+{
+  "crawled": "2026-04-08",
+  "source": "suzanneravenall.com",
+  "platform": "WordPress + Elementor + WooCommerce",
+  "pages": [
+    {
+      "url": "https://suzanneravenall.com/",
+      "slug": "homepage",
+      "meta_title": "Suzanne Ravenall – Unlock your most extraordinary self and become an unstoppable force",
+      "meta_description": null,
+      "h1": "Unlock your most extraordinary self and become an unstoppable force",
+      "og_title": null,
+      "og_description": null,
+      "og_image": null
+    },
+    {
+      "url": "https://suzanneravenall.com/about",
+      "slug": "about",
+      "meta_title": "About – Suzanne Ravenall",
+      "meta_description": null,
+      "h1": "Meet Dr. Suzanne Ravenall",
+      "og_title": null,
+      "og_description": null,
+      "og_image": null
+    },
+    {
+      "url": "https://suzanneravenall.com/guided-programmes",
+      "slug": "guided-programmes",
+      "meta_title": "Guided Programmes – Suzanne Ravenall",
+      "meta_description": null,
+      "h1": "Programmes for dramatic change in your physical mental emotional health – unlock your super powers now.",
+      "og_title": null,
+      "og_description": null,
+      "og_image": null
+    },
+    {
+      "url": "https://suzanneravenall.com/transformation-pathways",
+      "slug": "transformation-pathways",
+      "meta_title": "Transformation Pathways – Suzanne Ravenall",
+      "meta_description": null,
+      "h1": "Transformation Pathways",
+      "og_title": null,
+      "og_description": null,
+      "og_image": null
+    },
+    {
+      "url": "https://suzanneravenall.com/services/private-sessions",
+      "slug": "services-private-sessions",
+      "meta_title": "Private Sessions – Suzanne Ravenall",
+      "meta_description": null,
+      "h1": "Private Session",
+      "og_title": null,
+      "og_description": null,
+      "og_image": null
+    },
+    {
+      "url": "https://suzanneravenall.com/masterclass2",
+      "slug": "masterclass",
+      "meta_title": "Masterclass – Suzanne Ravenall",
+      "meta_description": null,
+      "h1": "Unlock your most extraordinary self and become an unstoppable force",
+      "og_title": null,
+      "og_description": null,
+      "og_image": null
+    },
+    {
+      "url": "https://suzanneravenall.com/contact",
+      "slug": "contact",
+      "meta_title": "Contact – Suzanne Ravenall",
+      "meta_description": null,
+      "h1": "Contact",
+      "og_title": null,
+      "og_description": null,
+      "og_image": null
+    }
+  ],
+  "notes": {
+    "meta_descriptions": "No meta descriptions found — all pages missing meta descriptions. Opportunity for SEO improvement in new build.",
+    "og_tags": "No Open Graph tags detected. Add og:title, og:description, og:image to all pages in new build.",
+    "title_pattern": "All pages follow '[Page Name] – Suzanne Ravenall' pattern.",
+    "h1_issues": "Homepage and masterclass share same H1 — needs differentiation in new build.",
+    "seo_priority": "Add meta descriptions and OG tags to all pages as part of Task 1.8 SEO."
+  }
+}

@@ -1,0 +1,18 @@
+# Fonts detected on suzanneravenall.com
+# Date: 2026-04-08
+
+## Primary Font
+font-family: "Poppins", sans-serif
+- Usage: All headings and body text
+- Source: Elementor global typography var (--e-global-typography-primary-font-family)
+- Google Fonts: https://fonts.google.com/specimen/Poppins
+- Weights detected: Regular (400), SemiBold (600), Bold (700)
+
+## System Fallbacks
+font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif
+
+## Notes
+- No secondary/accent font detected — Poppins used throughout
+- Confirm with Suzanne if a serif display font is intended for headings
+- No custom local fonts found (no @font-face from wp-content)
+- Google Fonts loaded via Elementor (not via <link> tag directly)
