@@ -1,7 +1,7 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 1 — Public Website
-Current Task: Task 1.2 — Design System (BLOCKED — awaiting brand assets from Suzanne)
+Current Task: Task 1.3 — Homepage
 Current Branch: feature/phase-1-website
 Last Updated: April 2026
 Last Updated By: Johan
@@ -36,7 +36,7 @@ Last Updated By: Johan
 ## Phase 1 — Task Status
 
 - ✅ Task 1.1 — Next.js App Setup
-- ⏳ Task 1.2 — Design System (BLOCKED — awaiting brand assets from Suzanne)
+- ✅ Task 1.2 — Design System
 - ⏳ Task 1.3 — Homepage
 - ⏳ Task 1.4 — About page
 - ⏳ Task 1.5 — Services page
@@ -65,7 +65,7 @@ Last Updated By: Johan
 - ❌ Wild Apricot admin access obtained
 - ❌ WordPress admin access obtained
 - ✅ All .env placeholder values replaced
-- ❌ Client brand assets received (logo, colours, fonts)
+- ✅ Client brand assets received (SVG logos, colours confirmed, Poppins confirmed)
 
 ---
 
@@ -73,3 +73,4 @@ Last Updated By: Johan
 
 - **April 2026:** Phase 0 fully complete. Starting Phase 1 Task 1.1. Creating feature branch now.
 - **April 2026:** Task 1.1 complete. Next.js 14 app scaffolded in apps/web. 7/7 health check tests passing. Security headers reviewed by code-auditor — 6 fixes applied. Task 1.2 blocked until logo, colours and fonts received from Suzanne.
+- **April 2026:** Task 1.2 complete. Design system built aligned to Tony Robbins reference. Poppins confirmed (weights 200–700). Brand tokens confirmed (#012B43 navy, #1719F4 electric blue). Full primary/accent/neutral colour scales in tailwind.config.ts. SVG logos received from Suzanne and deployed to apps/web/public/logos/. WCAG AA contrast verified (8.5:1 accent on white, 14.7:1 white on navy). 108/108 tests passing. Build clean.

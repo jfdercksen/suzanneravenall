@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Poppins } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 
-// Placeholder font — replace with Suzanne's brand font when assets arrive
-const inter = Inter({
+const poppins = Poppins({
   subsets: ['latin'],
+  weight: ['200', '400', '500', '600', '700'],
   variable: '--font-sans',
   display: 'swap',
 })
@@ -38,7 +38,7 @@ const safeClarityId = CLARITY_ID_PATTERN.test(clarityId) ? clarityId : ''
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={poppins.variable}>
       <body className="font-sans antialiased">
         {children}
 

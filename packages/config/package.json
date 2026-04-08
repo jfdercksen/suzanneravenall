@@ -1,0 +1,9 @@
+{
+  "name": "@suzanne/config",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    "./tailwind.config": "./tailwind.config.ts",
+    "./sentry": "./sentry.ts"
+  }
+}

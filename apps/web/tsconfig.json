@@ -15,7 +15,9 @@
     "incremental": true,
     "plugins": [{ "name": "next" }],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@suzanne/ui": ["../../packages/ui/src/index.ts"],
+      "@suzanne/ui/*": ["../../packages/ui/src/*"]
     },
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,

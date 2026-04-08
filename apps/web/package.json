@@ -14,7 +14,8 @@
     "next": "14.2.29",
     "react": "^18",
     "react-dom": "^18",
-    "@sentry/nextjs": "^8"
+    "@sentry/nextjs": "^8",
+    "@suzanne/ui": "*"
   },
   "devDependencies": {
     "typescript": "^5",

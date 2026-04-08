@@ -1,3 +1,79 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ─── Brand CSS custom properties ─────────────────────────────────────────── */
+
+:root {
+  /* Primary (navy) */
+  --color-primary:     #012B43;
+  --color-primary-100: #e6eef2;
+  --color-primary-200: #bdd6e2;
+  --color-primary-300: #8db5c8;
+  --color-primary-400: #5994ae;
+  --color-primary-500: #2e7694;
+  --color-primary-600: #1d5c76;
+  --color-primary-700: #0f4159;
+  --color-primary-800: #022f4b;
+  --color-primary-900: #012B43;
+
+  /* Accent (electric blue) */
+  --color-accent:     #1719F4;
+  --color-accent-100: #e8e9fd;
+  --color-accent-200: #c2c3fb;
+  --color-accent-300: #9b9ef9;
+  --color-accent-400: #7578f7;
+  --color-accent-500: #4e52f5;
+  --color-accent-600: #1719F4;
+  --color-accent-700: #0E11C2;
+  --color-accent-800: #0a0d91;
+  --color-accent-900: #070861;
+
+  /* Supporting */
+  --color-amber:      #ffba00;
+  --color-text-dark:  #333333;
+  --color-text-muted: #737373;
+  --color-border:     #E5E5E5;
+  --color-bg-light:   #F9F9F9;
+}
+
+/* ─── Base styles ──────────────────────────────────────────────────────────── */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    /* gray-800 = #1F2937 — cool-gray body text matching the design reference */
+    @apply text-gray-800 bg-white;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  /* Heading scale — Poppins semibold by default */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold leading-tight tracking-tight;
+  }
+
+  /* Hero display headings — use font-display (weight 200) for large-scale impact */
+  .heading-display {
+    @apply font-display leading-none tracking-tight;
+  }
+
+  /* Smooth image rendering */
+  img, video {
+    @apply max-w-full;
+  }
+
+  /* Focus ring — accessible and on-brand */
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-accent ring-offset-2;
+  }
+
+  /* Selection colour */
+  ::selection {
+    background-color: var(--color-accent-200);
+    color: var(--color-primary-900);
+  }
+}

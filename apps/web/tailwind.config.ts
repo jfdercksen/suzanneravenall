@@ -1,18 +1,13 @@
 import type { Config } from 'tailwindcss'
+import baseConfig from '../../packages/config/tailwind.config'
 
 const config: Config = {
+  presets: [baseConfig as unknown as Config],
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     '../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
-      },
-    },
-  },
   plugins: [],
 }
 

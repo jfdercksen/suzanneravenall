@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "preserve",
+    "strict": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
