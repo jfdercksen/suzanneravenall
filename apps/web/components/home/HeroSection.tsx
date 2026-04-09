@@ -25,7 +25,7 @@ export default function HeroSection() {
           <p className="text-brand-accent text-xs font-semibold uppercase tracking-widest mb-5">
             Transformation Coaching · Neuro-Repatterning®
           </p>
-          <h1 id="hero-heading" className="text-5xl sm:text-6xl lg:text-[4.5rem] font-light text-white leading-[1.08] max-w-2xl lg:max-w-3xl">
+          <h1 id="hero-heading" className="text-5xl sm:text-6xl lg:text-[4.5rem] font-display text-white leading-[1.08] max-w-2xl lg:max-w-3xl">
             Unlock your most extraordinary self
           </h1>
           <p className="mt-6 text-lg lg:text-xl text-white/80 max-w-lg font-light leading-relaxed">

@@ -16,7 +16,7 @@ export default function FinalCTA() {
       <div className="absolute inset-0 bg-brand-primary/88" />
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
-        <h2 id="finalcta-heading" className="text-4xl lg:text-5xl font-light text-white leading-tight">
+        <h2 id="finalcta-heading" className="text-4xl lg:text-5xl font-display text-white leading-tight">
           Your breakthrough is one conversation away
         </h2>
         <p className="mt-6 text-white/70 text-lg leading-relaxed max-w-xl mx-auto">

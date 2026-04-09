@@ -15,7 +15,7 @@ const testimonials = [
     title: 'Executive Director, Johannesburg',
     result: 'Leadership transformation',
     initials: 'JT',
-    color: 'bg-brand-primary-400',
+    color: 'bg-brand-primary-700',
   },
   {
     quote: "I came in sceptical. Within weeks I had clarity I hadn't felt in years and landed a partnership I'd been chasing for two years.",

@@ -17,8 +17,9 @@ export default function AboutTeaser() {
                 className="object-cover object-top"
               />
             </div>
-            {/* Floating credential badge */}
-            <div className="absolute -bottom-4 -right-4 lg:-right-8 bg-brand-primary text-white rounded-card p-4 shadow-card-hover">
+            {/* Credential badge — normal flow on mobile (avoids section overflow-hidden clip),
+                absolute on lg where the column gutter gives enough room */}
+            <div className="mt-4 lg:mt-0 lg:absolute lg:-bottom-4 lg:-right-8 bg-brand-primary text-white rounded-card p-4 shadow-card-hover inline-block lg:block">
               <p className="text-xs text-white/60 uppercase tracking-wider mb-0.5">Academic credentials</p>
               <p className="font-semibold text-sm">B.Msc · M.Msc · Msc.D.</p>
             </div>
