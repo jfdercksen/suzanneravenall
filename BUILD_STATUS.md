@@ -74,5 +74,5 @@ Last Updated By: Johan
 
 - **April 2026:** Phase 0 fully complete. Starting Phase 1 Task 1.1. Creating feature branch now.
 - **April 2026:** Task 1.1 complete. Next.js 14 app scaffolded in apps/web. 7/7 health check tests passing. Security headers reviewed by code-auditor — 6 fixes applied. Task 1.2 blocked until logo, colours and fonts received from Suzanne.
-- **April 2026:** Task 1.3 complete. Sticky navy Header, full-screen MobileNav overlay with focus trap + inert/aria-modal conditional, dark Footer with multi-column links, credentials, social icons. Skip-to-content link added. WCAG 2.1 AA compliant. 159/159 tests passing. Build clean.
 - **April 2026:** Task 1.2 complete. Design system built aligned to Tony Robbins reference. Poppins confirmed (weights 200–700). Brand tokens confirmed (#012B43 navy, #1719F4 electric blue). Full primary/accent/neutral colour scales in tailwind.config.ts. SVG logos received from Suzanne and deployed to apps/web/public/logos/. WCAG AA contrast verified (8.5:1 accent on white, 14.7:1 white on navy). 108/108 tests passing. Build clean.
+- **April 2026:** Task 1.3 complete. Sticky navy Header, full-screen MobileNav overlay with focus trap + inert/aria-modal conditional, dark Footer with multi-column links, credentials, social icons. Skip-to-content link added. WCAG 2.1 AA compliant. 159/159 tests passing. Build clean.
