@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Logo } from '@suzanne/ui'
+import Image from 'next/image'
 
 const footerLinks = {
   services: {
@@ -59,7 +59,12 @@ export default function Footer() {
           {/* Brand column — spans 2 cols on lg */}
           <div className="lg:col-span-2">
             <Link href="/" aria-label="Dr. Suzanne Ravenall — return to homepage">
-              <Logo variant="white" width={160} height={48} />
+              <Image
+                src="/logos/suzanne-white-logo.png"
+                alt="Dr. Suzanne Ravenall"
+                width={160}
+                height={49}
+              />
             </Link>
             <p className="mt-4 text-sm text-white/70 leading-relaxed max-w-xs">
               Helping high-performers unlock their most extraordinary self through

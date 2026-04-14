@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Logo } from '@suzanne/ui'
+import Image from 'next/image'
 import MobileNav from './MobileNav'
 
 export interface NavLink {
@@ -25,7 +25,13 @@ export default function Header() {
 
           {/* Logo */}
           <Link href="/" aria-label="Dr. Suzanne Ravenall — return to homepage">
-            <Logo variant="white" width={160} height={48} priority />
+            <Image
+                src="/logos/suzanne-white-logo.png"
+                alt="Dr. Suzanne Ravenall"
+                width={160}
+                height={49}
+                priority
+              />
           </Link>
 
           {/* Desktop navigation */}

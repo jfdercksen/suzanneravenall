@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
-import HeroSection from '../components/home/HeroSection'
+import Hero from '../components/home/Hero'
+import MediaLogos from '../components/home/MediaLogos'
 import TrustBar from '../components/home/TrustBar'
+import UpcomingPrograms from '../components/home/UpcomingPrograms'
+import TransformationQuote from '../components/home/TransformationQuote'
 import FocusAreas from '../components/home/FocusAreas'
 import ServicesSection from '../components/home/ServicesSection'
+import TestimonialSpotlight from '../components/home/TestimonialSpotlight'
 import FeaturedPrograms from '../components/home/FeaturedPrograms'
 import TestimonialsSection from '../components/home/TestimonialsSection'
 import AboutTeaser from '../components/home/AboutTeaser'
@@ -26,14 +30,18 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
-      <HeroSection />
+      <Hero />
+      <MediaLogos id="media-logos" />
       <TrustBar />
+      <UpcomingPrograms />
+      <TransformationQuote />
       <FocusAreas />
+      <LeadMagnet />
       <ServicesSection />
+      <TestimonialSpotlight />
       <FeaturedPrograms />
       <TestimonialsSection />
       <AboutTeaser />
-      <LeadMagnet />
       <FinalCTA />
     </>
   )

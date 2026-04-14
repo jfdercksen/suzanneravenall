@@ -37,6 +37,39 @@
   --color-bg-light:   #F9F9F9;
 }
 
+/* ─── Media logo ticker animation ─────────────────────────────────────────── */
+
+@keyframes logo-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Reverse direction: start at -50% and return to 0 — keeps seamless loop math correct */
+@keyframes logo-scroll-reverse {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.animate-logo-scroll {
+  animation: logo-scroll 30s linear infinite;
+}
+
+.animate-logo-scroll-reverse {
+  animation: logo-scroll-reverse 30s linear infinite;
+}
+
+.animate-logo-scroll:hover,
+.animate-logo-scroll-reverse:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-logo-scroll,
+  .animate-logo-scroll-reverse {
+    animation: none;
+  }
+}
+
 /* ─── Base styles ──────────────────────────────────────────────────────────── */
 
 @layer base {
