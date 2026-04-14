@@ -1,7 +1,7 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 1 — Public Website
-Current Task: Task 1.4 — About page
+Current Task: Task 1.5 — Core Pages
 Current Branch: feature/phase-1-website
 Last Updated: April 2026
 Last Updated By: Johan
@@ -39,8 +39,8 @@ Last Updated By: Johan
 - ✅ Task 1.2 — Design System
 - ✅ Task 1.3 — Core Layout and Navigation
 - ✅ Task 1.4 — Homepage
-- ⏳ Task 1.4 — About page
-- ⏳ Task 1.5 — Services page
+- ⏳ Task 1.5 — Core Pages
+- ⏳ Task 1.6 — Services page
 - ⏳ Task 1.6 — Blog listing and post pages
 - ⏳ Task 1.7 — Contact page with Cal.com booking
 - ⏳ Task 1.8 — SEO and sitemap
@@ -77,3 +77,4 @@ Last Updated By: Johan
 - **April 2026:** Task 1.2 complete. Design system built aligned to Tony Robbins reference. Poppins confirmed (weights 200–700). Brand tokens confirmed (#012B43 navy, #1719F4 electric blue). Full primary/accent/neutral colour scales in tailwind.config.ts. SVG logos received from Suzanne and deployed to apps/web/public/logos/. WCAG AA contrast verified (8.5:1 accent on white, 14.7:1 white on navy). 108/108 tests passing. Build clean.
 - **April 2026:** Task 1.3 complete. Sticky navy Header, full-screen MobileNav overlay with focus trap + inert/aria-modal conditional, dark Footer with multi-column links, credentials, social icons. Skip-to-content link added. WCAG 2.1 AA compliant. 159/159 tests passing. Build clean.
 - **April 2026:** Task 1.4 complete. Homepage built — 9 sections (Hero, TrustBar, FocusAreas, ServicesSection, FeaturedPrograms, TestimonialsSection, AboutTeaser, LeadMagnet, FinalCTA). Code review fixes applied (PII logging removed, aria-labelledby on all sections, figcaption structure, dt/dd semantics, aria-invalid on form). Build clean.
+- **April 2026:** Task 1.4 complete. Homepage built to Tony Robbins cinematic standard. Sections: Hero (static image), MediaLogos ticker (12 logos from WordPress), AnimatedStats, UpcomingPrograms, TransformationQuote, FocusAreas (hover image swap), ServicesOverview, TestimonialSpotlight, FeaturedPrograms, AboutTeaser, LeadMagnet, FinalCTA. framer-motion animations on all sections. Open items: hero video (Suzanne to provide), focus area photos x6 (Suzanne to provide), real cohort dates and pricing to replace placeholders.
