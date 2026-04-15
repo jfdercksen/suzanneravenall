@@ -3,6 +3,11 @@
 The design reference for this project is tonyrobbins.com.
 Every page must meet that standard. Flat, static, generic pages fail QA.
 
+## Brand tokens (canonical — from packages/config/tailwind.config.ts)
+
+- Navy/dark background: `bg-brand-primary` or `bg-brand-primary-900` (#012B43) — there is NO `brand-navy` token
+- Electric blue accent: `bg-brand-accent` / `text-brand-accent` (#1719F4)
+- CTA button: `bg-brand-accent-600` hover `bg-brand-accent-700`
 ## Non-negotiable rules
 
 - Use brand tokens from tailwind.config.ts — never hardcode colours

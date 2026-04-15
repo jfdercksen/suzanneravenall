@@ -39,11 +39,11 @@ Last Updated By: Johan
 - ✅ Task 1.2 — Design System
 - ✅ Task 1.3 — Core Layout and Navigation
 - ✅ Task 1.4 — Homepage
-- ⏳ Task 1.5 — Core Pages
-- ⏳ Task 1.6 — Services page
-- ⏳ Task 1.6 — Blog listing and post pages
-- ⏳ Task 1.7 — Contact page with Cal.com booking
-- ⏳ Task 1.8 — SEO and sitemap
+- 🔄 Task 1.5 — Core Pages (built, reviewed, type-clean — visual QA pending)
+- ⏳ Task 1.6 — Payload CMS Setup
+- ⏳ Task 1.7 — SEO Foundation
+- ⏳ Task 1.8 — Cal.com Integration
+- ⏳ Task 1.9 — 301 Redirects
 
 ---
 
@@ -78,3 +78,4 @@ Last Updated By: Johan
 - **April 2026:** Task 1.3 complete. Sticky navy Header, full-screen MobileNav overlay with focus trap + inert/aria-modal conditional, dark Footer with multi-column links, credentials, social icons. Skip-to-content link added. WCAG 2.1 AA compliant. 159/159 tests passing. Build clean.
 - **April 2026:** Task 1.4 complete. Homepage built — 9 sections (Hero, TrustBar, FocusAreas, ServicesSection, FeaturedPrograms, TestimonialsSection, AboutTeaser, LeadMagnet, FinalCTA). Code review fixes applied (PII logging removed, aria-labelledby on all sections, figcaption structure, dt/dd semantics, aria-invalid on form). Build clean.
 - **April 2026:** Task 1.4 complete. Homepage built to Tony Robbins cinematic standard. Sections: Hero (static image), MediaLogos ticker (12 logos from WordPress), AnimatedStats, UpcomingPrograms, TransformationQuote, FocusAreas (hover image swap), ServicesOverview, TestimonialSpotlight, FeaturedPrograms, AboutTeaser, LeadMagnet, FinalCTA. framer-motion animations on all sections. Open items: hero video (Suzanne to provide), focus area photos x6 (Suzanne to provide), real cohort dates and pricing to replace placeholders.
+- **April 2026:** Task 1.5 in progress. 3-teammate parallel build: About (/about), Services (/services), Explore hub + 8 topic pages (/explore/[slug]). All built from scraped WordPress content. Code review complete — all issues fixed (CTA anchors, section alternation, rgba→token shadows, TypeScript narrowing, padStart counters). TypeScript clean. Visual QA blocked on usage quota (resets 10am SAST). Client [CONFIRM] items: About stats (qualifications count, years experience), Human Performance Replicator description, Services pricing/dates, Explore topic copy differentiation (3 topics share identical WordPress source template). no-bad-patterns.md updated: brand-navy does not exist — use brand-primary.

@@ -5,32 +5,6 @@ This document is the single source of truth for building the platform. Developme
 
 ---
 
-## Claude Code Documentation Reference
-
-Official Anthropic docs for the tools used in this build:
-- Memory and CLAUDE.md: https://docs.anthropic.com/en/docs/claude-code/memory
-- Settings: https://docs.anthropic.com/en/docs/claude-code/settings
-- Subagents: https://docs.anthropic.com/en/docs/claude-code/sub-agents
-- Skills (slash commands): https://docs.anthropic.com/en/docs/claude-code/slash-commands
-- Hooks: https://docs.anthropic.com/en/docs/claude-code/hooks
-- Agent teams: https://docs.anthropic.com/en/docs/claude-code/agent-teams
-- MCP: https://docs.anthropic.com/en/docs/claude-code/mcp
-
----
-
-## Session Restore — Start of Every Phase
-
-At the start of every phase (and every new session), run `/restore-session` to:
-1. Read `BUILD_STATUS.md` — current phase, task, what is done
-2. Read `KNOWN_ISSUES.md` — open issues that may affect work
-3. Read `DECISIONS.md` — architectural constraints
-4. Check `git log --oneline -15` — recent changes and current branch
-5. Present a summary and ask what to work on next
-
-Never start coding without context. Always restore first.
-
----
-
 ## Three-Environment Workflow
 
 | Environment | Branch | Domain | Who uses it |
@@ -268,6 +242,7 @@ Teammate 2: Use add-supabase-table skill to create membership tables:
 
 member_subscriptions (id, user_id, tier_id, status, start_date, end_date, medusa_subscription_id)
 resources (id, title, description, file_url, resource_type, allowed_tier_ids UUID[], is_published)
+
 video_content (id, title, description, bunny_video_id, bunny_library_id, thumbnail_url, allowed_tier_ids UUID[], duration_seconds, is_published)
 
 All tables must have RLS enabled.

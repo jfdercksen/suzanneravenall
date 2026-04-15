@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat)",
+      "Bash(bash \"C:\\\\Apps\\\\suzanneravenall.com\\\\.claude\\\\hooks\\\\skill-evaluator.sh\")",
+      "Bash(bash .claude/hooks/skill-evaluator.sh \"test prompt\")",
+      "Bash(bash .claude/hooks/post-edit.sh \"test/file.ts\")",
+      "Bash(bash .claude/hooks/block-env-edit.sh \".env.local\")",
+      "Bash(CLAUDE_TOOL_INPUT=\".env.local\" bash .claude/hooks/block-env-edit.sh)"
+    ]
+  }
+}
