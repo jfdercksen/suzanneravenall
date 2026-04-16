@@ -60,10 +60,10 @@ export default function AboutFinalCTA() {
             Book Discovery Call
           </Link>
           <Link
-            href="/programs"
+            href="/services"
             className="inline-flex items-center justify-center px-10 py-4 border border-white/40 hover:border-white text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/5"
           >
-            View Programs
+            View Services
           </Link>
         </motion.div>
       </div>

@@ -70,6 +70,14 @@
   }
 }
 
+/* ─── Logo ticker edge fade ────────────────────────────────────────────────── */
+
+.logo-ticker-fade {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+}
+
 /* ─── Base styles ──────────────────────────────────────────────────────────── */
 
 @layer base {

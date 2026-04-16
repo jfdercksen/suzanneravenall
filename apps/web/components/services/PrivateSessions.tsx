@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
@@ -83,14 +84,27 @@ export default function PrivateSessions() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative bg-gray-900 border border-white/5 rounded-card p-8 transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
+              className="group relative overflow-hidden bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
-              <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-brand-accent transition-colors duration-300">
-                {session.name}
-              </h3>
-              <p className="text-sm text-white/65 font-light leading-relaxed">
-                {session.description}
-              </p>
+              <Image
+                src="/images/hero-bg.jpg"
+                alt=""
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-500"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+              />
+              <div className="relative z-10 p-8">
+                <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-brand-accent transition-colors duration-300">
+                  {session.name}
+                </h3>
+                <p className="text-sm text-white/65 font-light leading-relaxed">
+                  {session.description}
+                </p>
+              </div>
             </motion.article>
           ))}
         </div>

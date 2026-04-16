@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import type { Topic } from '@/app/explore/topics'
 
@@ -14,21 +15,21 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
   return (
     <section
       aria-labelledby="topic-approach-heading"
-      className="w-full bg-gray-50 py-20 md:py-32"
+      className="w-full bg-gray-950 py-20 md:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div {...sectionVariants} className="max-w-3xl mb-16 md:mb-20">
           <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
-            Suzanne’s Method
+            Suzanne&apos;s Method
           </p>
           <h2
             id="topic-approach-heading"
-            className="text-4xl md:text-6xl font-light text-brand-primary leading-tight mb-6"
+            className="text-4xl md:text-6xl font-light text-white leading-tight mb-6"
           >
-            How Suzanne works with{' '}
-            <span className="text-brand-accent">this</span>
+            How Suzanne works{' '}
+            <span className="text-brand-accent">through this</span>
           </h2>
-          <p className="text-lg text-brand-primary/70 font-light leading-relaxed max-w-2xl">
+          <p className="text-lg text-white/70 font-light leading-relaxed max-w-2xl">
             Using Rapid Repatterning®, we work at the level where patterns are
             formed. This is not about coping. This is about changing the
             pattern.
@@ -47,20 +48,33 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
                 delay: (index % 4) * 0.1,
                 ease: 'easeOut',
               }}
-              className="group relative rounded-card border-t-2 border-brand-accent bg-white p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-card-hover"
+              className="group relative overflow-hidden rounded-card border-t-2 border-brand-accent bg-gray-900 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-accent/10"
             >
+              <Image
+                src="/images/hero-bg.jpg"
+                alt=""
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-500"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+              />
+              <div className="relative z-10 p-8">
               <span
                 aria-hidden="true"
                 className="block text-xs uppercase tracking-[0.3em] font-medium text-brand-accent"
               >
                 Step {stage.step}
               </span>
-              <h3 className="mt-5 text-xl font-light text-brand-primary leading-snug">
+              <h3 className="mt-5 text-xl font-light text-white leading-snug">
                 {stage.title}
               </h3>
-              <p className="mt-3 text-sm text-brand-primary/70 font-light leading-relaxed">
+              <p className="mt-3 text-sm text-white/70 font-light leading-relaxed">
                 {stage.body}
               </p>
+              </div>
             </motion.li>
           ))}
         </ol>

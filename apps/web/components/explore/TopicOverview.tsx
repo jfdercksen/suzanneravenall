@@ -14,7 +14,7 @@ export default function TopicOverview({ topic }: { topic: Topic }) {
   return (
     <section
       aria-labelledby="topic-overview-heading"
-      className="w-full bg-gray-950 py-20 md:py-32"
+      className="w-full bg-gray-950 pt-20 pb-12 md:pt-32 md:pb-16"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">

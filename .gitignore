@@ -3,6 +3,10 @@ node_modules/
 
 # Claude Code temp files
 .tmp/
+*.tmp*.png
+
+# Puppeteer/Playwright browser downloads
+chrome/
 
 # Next.js
 .next/

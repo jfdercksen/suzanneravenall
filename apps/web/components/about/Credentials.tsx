@@ -1,6 +1,7 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 
 const sectionReveal = {
   initial: { opacity: 0, y: 50 },
@@ -9,9 +10,6 @@ const sectionReveal = {
   transition: { duration: 0.6, ease: 'easeOut' as const },
 }
 
-// Scraped about.md lists degrees (B.Msc. M.Msc. Msc.D.) and references
-// /qualifications and /memberships pages, but the specific list of credentials
-// on those pages did not appear in the scrape. Using the confirmed set only.
 const credentials: string[] = [
   'B.Msc.',
   'M.Msc.',
@@ -27,12 +25,60 @@ const credentials: string[] = [
   'Neurobiology of Performance',
 ]
 
-// Qualifications count and years experience were not available in the scrape
-// (WordPress counter widgets that didn't hydrate). Only Awards confirmed.
-// Awaiting client-supplied values for the other two stats.
-const stats: { value: string; label: string }[] = [
-  { value: '30+', label: 'Awards' },
+// [CONFIRM with Suzanne]: qualifications count and years-experience values were
+// counter widgets that didn't hydrate during scrape. Using same values as
+// homepage AnimatedStats until client confirms exact numbers.
+const stats: { target: number; suffix: string; label: string }[] = [
+  { target: 20, suffix: '+', label: 'Years Experience' },
+  { target: 1000, suffix: '+', label: 'Clients Transformed' },
+  { target: 30, suffix: '+', label: 'Awards' },
+  { target: 30, suffix: '+', label: 'Countries' },
 ]
+
+function AnimatedStat({ target, suffix, label, delay }: {
+  target: number
+  suffix: string
+  label: string
+  delay: number
+}) {
+  const [count, setCount] = useState(0)
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-100px' })
+
+  useEffect(() => {
+    if (!inView) return
+    const duration = 2000
+    const startTime = performance.now()
+    const tick = (now: number) => {
+      const elapsed = now - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      // easeOut cubic
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setCount(Math.round(eased * target))
+      if (progress < 1) requestAnimationFrame(tick)
+    }
+    const timer = setTimeout(() => requestAnimationFrame(tick), delay * 1000)
+    return () => clearTimeout(timer)
+  }, [inView, target, delay])
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-100px' }}
+      transition={{ duration: 0.6, delay, ease: 'easeOut' as const }}
+      className="border-t border-white/15 pt-6 min-w-[140px]"
+    >
+      <p className="text-5xl md:text-6xl font-light text-brand-accent mb-2">
+        {count.toLocaleString()}{suffix}
+      </p>
+      <p className="text-white/60 text-sm tracking-widest uppercase">
+        {label}
+      </p>
+    </motion.div>
+  )
+}
 
 export default function Credentials() {
   return (
@@ -57,30 +103,15 @@ export default function Credentials() {
           Two decades. Multiple disciplines. One integrated method.
         </motion.h2>
 
-        {/* Stats row — only confirmed values from the scrape; qualifications count
-            and years-experience values were not available in the scrape output.
-            [CONFIRM: add remaining stat values with client before launch] */}
         <div className="flex flex-wrap gap-12 mb-16">
           {stats.map((stat, i) => (
-            <motion.div
+            <AnimatedStat
               key={stat.label}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{
-                duration: 0.6,
-                delay: 0.2 + i * 0.1,
-                ease: 'easeOut' as const,
-              }}
-              className="border-t border-white/15 pt-6 min-w-[140px]"
-            >
-              <p className="text-5xl md:text-6xl font-light text-brand-accent mb-2">
-                {stat.value}
-              </p>
-              <p className="text-white/60 text-sm tracking-widest uppercase">
-                {stat.label}
-              </p>
-            </motion.div>
+              target={stat.target}
+              suffix={stat.suffix}
+              label={stat.label}
+              delay={0.2 + i * 0.1}
+            />
           ))}
         </div>
 

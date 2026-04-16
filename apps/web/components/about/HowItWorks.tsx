@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 const sectionReveal = {
@@ -64,17 +65,27 @@ export default function HowItWorks() {
                 delay: i * 0.1,
                 ease: 'easeOut' as const,
               }}
-              className="group relative p-8 bg-white rounded-card shadow-card transition-all duration-500 hover:shadow-card-hover hover:-translate-y-1"
+              className="group relative overflow-hidden p-8 bg-gray-900 rounded-card transition-all duration-500 hover:shadow-2xl hover:shadow-brand-accent/10 hover:-translate-y-1"
             >
-              <p className="text-6xl font-light text-brand-accent/30 mb-4 transition-colors duration-500 group-hover:text-brand-accent/60">
-                {String(i + 1).padStart(2, '0')}
-              </p>
-              <h3 className="text-2xl font-semibold text-brand-primary mb-3">
-                {step.title}
-              </h3>
-              <p className="text-gray-600 leading-relaxed font-light">
-                {step.description}
-              </p>
+              {/* Background image at low opacity for depth */}
+              <Image
+                src="/images/hero-bg.jpg"
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover object-center opacity-20"
+              />
+              <div className="relative z-10">
+                <p className="text-6xl font-light text-brand-accent/30 mb-4 transition-colors duration-500 group-hover:text-brand-accent/60">
+                  {String(i + 1).padStart(2, '0')}
+                </p>
+                <h3 className="text-2xl font-semibold text-white mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-white/60 leading-relaxed font-light">
+                  {step.description}
+                </p>
+              </div>
             </motion.article>
           ))}
         </div>

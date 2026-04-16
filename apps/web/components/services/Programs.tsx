@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
@@ -147,37 +148,50 @@ export default function Programs() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.5, delay: colIdx * 0.1 }}
-              className="flex flex-col bg-white border border-gray-200 rounded-card p-8 md:p-10 shadow-sm hover:shadow-md transition-shadow duration-300"
+              className="group relative overflow-hidden flex flex-col bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
-                {col.eyebrow}
-              </p>
-              <h3 className="text-2xl md:text-3xl font-light text-brand-primary leading-tight mb-6">
-                {col.title}
-              </h3>
-              <p className="text-sm text-gray-600 font-light leading-relaxed mb-8">
-                {col.intro}
-              </p>
+              <Image
+                src="/images/hero-bg.jpg"
+                alt=""
+                fill
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                className="object-cover opacity-20 group-hover:opacity-35 transition-opacity duration-500"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+              />
+              <div className="relative z-10 flex flex-col h-full p-8 md:p-10">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+                  {col.eyebrow}
+                </p>
+                <h3 className="text-2xl md:text-3xl font-light text-white leading-tight mb-6">
+                  {col.title}
+                </h3>
+                <p className="text-sm text-white/70 font-light leading-relaxed mb-8">
+                  {col.intro}
+                </p>
 
-              <ul className="space-y-6 mb-10 flex-1">
-                {col.programmes.map((p) => (
-                  <li key={p.name}>
-                    <h4 className="text-base font-semibold text-brand-primary mb-2">
-                      {p.name}
-                    </h4>
-                    <p className="text-sm text-gray-600 font-light leading-relaxed">
-                      {p.description}
-                    </p>
-                  </li>
-                ))}
-              </ul>
+                <ul className="space-y-6 mb-10 flex-1">
+                  {col.programmes.map((p) => (
+                    <li key={p.name}>
+                      <h4 className="text-base font-semibold text-white mb-2">
+                        {p.name}
+                      </h4>
+                      <p className="text-sm text-white/65 font-light leading-relaxed">
+                        {p.description}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
 
-              <Link
-                href={col.ctaHref}
-                className="inline-flex items-center justify-center px-6 py-3 border border-brand-primary/30 hover:border-brand-accent hover:bg-brand-accent text-brand-primary hover:text-white text-xs uppercase tracking-widest font-medium rounded-button transition-all duration-300"
-              >
-                {col.ctaLabel}
-              </Link>
+                <Link
+                  href={col.ctaHref}
+                  className="inline-flex items-center justify-center px-6 py-3 border border-white/30 hover:border-brand-accent hover:bg-brand-accent text-white text-xs uppercase tracking-widest font-medium rounded-button transition-all duration-300"
+                >
+                  {col.ctaLabel}
+                </Link>
+              </div>
             </motion.div>
           ))}
         </div>

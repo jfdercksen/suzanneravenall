@@ -58,9 +58,15 @@ function LogoStrip({ items, reverse = false, size = 'sm' }: LogoStripProps) {
 
 interface MediaLogosProps {
   id?: string
+  quote?: string
+  quoteAttribution?: string
 }
 
-export default function MediaLogos({ id }: MediaLogosProps) {
+export default function MediaLogos({
+  id,
+  quote = '\u201cWhen in doubt, make a fool of yourself. There is a microscopically thin line between being brilliantly creative and acting like the most gigantic idiot on earth. So what the hell, leap.\u201d',
+  quoteAttribution = 'Cynthia Heimel',
+}: MediaLogosProps) {
   return (
     <section id={id} aria-label="As seen in media" className="bg-gray-950 py-16">
 
@@ -73,12 +79,10 @@ export default function MediaLogos({ id }: MediaLogosProps) {
         className="text-center max-w-3xl mx-auto px-4 mb-12"
       >
         <p className="text-white/70 text-base md:text-lg font-light italic leading-relaxed">
-          &ldquo;When in doubt, make a fool of yourself. There is a microscopically
-          thin line between being brilliantly creative and acting like the most
-          gigantic idiot on earth. So what the hell, leap.&rdquo;
+          {quote}
         </p>
         <footer className="mt-3 text-white/40 text-sm tracking-widest uppercase not-italic">
-          — Cynthia Heimel
+          — {quoteAttribution}
         </footer>
       </motion.blockquote>
 
@@ -96,19 +100,10 @@ export default function MediaLogos({ id }: MediaLogosProps) {
       </motion.div>
 
       {/*
-        Edge fade masks — overflow-hidden is on THIS div so the CSS mask-image
-        can fade the logos at the edges before they clip. Having overflow-hidden
-        on an inner child (LogoStrip) would clip logos before the mask has a
-        chance to fade them, producing a hard cut instead of a gradient fade.
+        Edge fade masks — overflow-hidden + CSS mask are combined in .logo-ticker-fade.
         Wider gradient stop (12%/88%) ensures the fade is perceptible.
       */}
-      <div
-        className="overflow-hidden"
-        style={{
-          maskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
-        }}
-      >
+      <div className="logo-ticker-fade">
         {/* Mobile: two rows scrolling in opposite directions */}
         <div className="flex flex-col gap-8 lg:hidden">
           <LogoStrip items={row1} />

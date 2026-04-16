@@ -25,7 +25,7 @@ export default function TopicDiscover({ topic }: { topic: Topic }) {
             id="topic-discover-heading"
             className="text-4xl md:text-6xl font-light text-brand-primary leading-tight"
           >
-            What you’ll{' '}
+            What you&apos;ll{' '}
             <span className="text-brand-accent">discover</span>
           </h2>
         </motion.div>
@@ -42,11 +42,11 @@ export default function TopicDiscover({ topic }: { topic: Topic }) {
                 delay: (index % 2) * 0.1,
                 ease: 'easeOut',
               }}
-              className="group relative rounded-card border border-brand-primary/10 bg-white p-8 transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/60 hover:shadow-card-hover"
+              className="group relative rounded-card border border-brand-primary/10 bg-gray-50 p-8 shadow-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/60 hover:shadow-card-hover"
             >
               <span
                 aria-hidden="true"
-                className="text-2xs uppercase tracking-[0.3em] font-medium text-brand-accent"
+                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent"
               >
                 {String(index + 1).padStart(2, '0')}
               </span>

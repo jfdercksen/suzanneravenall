@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { topics } from '@/app/explore/topics'
@@ -15,7 +16,7 @@ export default function ExploreTopicGrid() {
   return (
     <section
       aria-labelledby="explore-topic-grid-heading"
-      className="w-full bg-gray-950 py-20 md:py-32"
+      className="w-full bg-gray-50 py-20 md:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div {...sectionVariants} className="max-w-3xl mb-16 md:mb-20">
@@ -24,7 +25,7 @@ export default function ExploreTopicGrid() {
           </p>
           <h2
             id="explore-topic-grid-heading"
-            className="text-4xl md:text-6xl font-light text-white leading-tight"
+            className="text-4xl md:text-6xl font-light text-brand-primary leading-tight"
           >
             Choose the area you’re ready to{' '}
             <span className="text-brand-accent">repattern</span>
@@ -48,6 +49,16 @@ export default function ExploreTopicGrid() {
                 href={`/explore/${topic.slug}`}
                 className="group relative flex h-full flex-col justify-between overflow-hidden rounded-card bg-gray-900 border border-white/5 p-8 transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/60 hover:shadow-2xl hover:shadow-brand-accent/10"
               >
+                {/* Background image — placeholder until topic-specific images supplied */}
+                <Image
+                  src="/images/hero-bg.jpg"
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  className="object-cover object-center opacity-20 transition-opacity duration-500 group-hover:opacity-40"
+                />
+
+                {/* Accent gradient overlay on hover */}
                 <div
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-accent/0 to-brand-accent/0 opacity-0 transition-opacity duration-500 group-hover:from-brand-accent/10 group-hover:to-transparent group-hover:opacity-100"

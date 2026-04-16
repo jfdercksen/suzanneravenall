@@ -24,7 +24,10 @@ export default function AboutPage() {
       <TheStory />
       <Credentials />
       <HowItWorks />
-      <MediaLogos />
+      <MediaLogos
+        quote="\u201cWhen we find and disrupt the patterns that keep us stuck, we don\u2019t just change \u2014 we become.\u201d"
+        quoteAttribution="Dr. Suzanne Ravenall"
+      />
       <TheEcosystem />
       <AboutFinalCTA />
     </main>
