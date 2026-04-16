@@ -1,7 +1,7 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 1 — Public Website
-Current Task: Task 1.5 — Core Pages
+Current Task: Task 1.5 — Visual QA pending (runs at next session start)
 Current Branch: feature/phase-1-website
 Last Updated: April 2026
 Last Updated By: Johan
