@@ -65,17 +65,20 @@ export default function HowItWorks() {
                 delay: i * 0.1,
                 ease: 'easeOut' as const,
               }}
-              className="group relative overflow-hidden p-8 bg-gray-900 rounded-card transition-all duration-500 hover:shadow-2xl hover:shadow-brand-accent/10 hover:-translate-y-1"
+              className="group relative overflow-hidden bg-gray-900 rounded-card transition-all duration-500 hover:shadow-2xl hover:shadow-brand-accent/10 hover:-translate-y-1"
             >
-              {/* Background image at low opacity for depth */}
               <Image
                 src="/images/hero-bg.jpg"
                 alt=""
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover object-center opacity-20"
+                className="object-cover object-center opacity-20 group-hover:opacity-40 transition-opacity duration-500"
               />
-              <div className="relative z-10">
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+              />
+              <div className="relative z-10 p-8">
                 <p className="text-6xl font-light text-brand-accent/30 mb-4 transition-colors duration-500 group-hover:text-brand-accent/60">
                   {String(i + 1).padStart(2, '0')}
                 </p>

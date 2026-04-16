@@ -25,7 +25,7 @@ export default function AboutPage() {
       <Credentials />
       <HowItWorks />
       <MediaLogos
-        quote="\u201cWhen we find and disrupt the patterns that keep us stuck, we don\u2019t just change \u2014 we become.\u201d"
+        quote="&#8220;When we find and disrupt the patterns that keep us stuck, we don&#8217;t just change &#8212; we become.&#8221;"
         quoteAttribution="Dr. Suzanne Ravenall"
       />
       <TheEcosystem />

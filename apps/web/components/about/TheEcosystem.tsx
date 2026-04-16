@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
@@ -81,24 +82,37 @@ export default function TheEcosystem() {
             >
               <Link
                 href={card.href}
-                className="group relative block h-full p-10 rounded-card border border-gray-200 bg-gray-50 transition-all duration-500 hover:bg-brand-primary hover:border-brand-primary hover:shadow-card-hover hover:-translate-y-1"
+                className="group relative block h-full overflow-hidden rounded-card border border-white/5 bg-gray-900 transition-all duration-500 hover:border-brand-accent/40 hover:shadow-2xl hover:-translate-y-1"
               >
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
-                  {card.label}
-                </p>
-                <h3 className="text-3xl font-light text-brand-primary mb-5 transition-colors duration-500 group-hover:text-white">
-                  {card.title}
-                </h3>
-                <p className="text-gray-600 font-light leading-relaxed mb-8 transition-colors duration-500 group-hover:text-white/75">
-                  {card.description}
-                </p>
-                <span className="inline-flex items-center gap-2 text-brand-accent font-medium text-sm uppercase tracking-widest transition-colors duration-500 group-hover:text-white">
-                  Explore
-                  <ArrowUpRight
-                    className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1"
-                    aria-hidden="true"
-                  />
-                </span>
+                <Image
+                  src="/images/hero-bg.jpg"
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-500"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+                />
+                <div className="relative z-10 p-10">
+                  <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+                    {card.label}
+                  </p>
+                  <h3 className="text-3xl font-light text-white mb-5">
+                    {card.title}
+                  </h3>
+                  <p className="text-white/65 font-light leading-relaxed mb-8">
+                    {card.description}
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-brand-accent font-medium text-sm uppercase tracking-widest">
+                    Explore
+                    <ArrowUpRight
+                      className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </div>
               </Link>
             </motion.div>
           ))}
