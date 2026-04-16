@@ -1,29 +1,32 @@
 import { type NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/utils/supabase/middleware'
 
 // Routes that require authentication — expanded in Phase 3 when portal is built
 const PROTECTED_PREFIXES = ['/portal']
 
-export function middleware(request: NextRequest): NextResponse {
+export async function middleware(request: NextRequest): Promise<NextResponse> {
   const { pathname } = request.nextUrl
+
+  // Refresh the Supabase session on every request so cookies stay valid
+  const { supabase, supabaseResponse } = createClient(request)
 
   const isProtected = PROTECTED_PREFIXES.some((prefix) =>
     pathname.startsWith(prefix)
   )
 
   if (isProtected) {
-    // Phase 3: replace this stub with Supabase session validation.
+    // Phase 3: replace this with a full portal gate when portal is built.
     // For now, redirect unauthenticated users to the home page.
-    // The session check will read the Supabase auth cookie and verify it server-side.
-    const sessionCookie = request.cookies.get('sb-access-token')
+    const { data: { session } } = await supabase.auth.getSession()
 
-    if (!sessionCookie) {
+    if (!session) {
       const loginUrl = new URL('/', request.url)
       loginUrl.searchParams.set('redirect', pathname)
       return NextResponse.redirect(loginUrl)
     }
   }
 
-  return NextResponse.next()
+  return supabaseResponse
 }
 
 export const config = {
