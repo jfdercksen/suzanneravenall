@@ -146,8 +146,9 @@ services:
         condition: service_healthy
     environment:
       PAYLOAD_SECRET: ${PAYLOAD_SECRET}
-      DATABASE_URI: ${DATABASE_URI}
-      PAYLOAD_PUBLIC_SERVER_URL: ${PAYLOAD_PUBLIC_SERVER_URL}
+      DATABASE_URL: ${DATABASE_URL}
+      PAYLOAD_URL: ${PAYLOAD_URL}
+      NODE_ENV: ${NODE_ENV}
     networks:
       - suzanne_network
     healthcheck:

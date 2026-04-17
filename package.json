@@ -10,9 +10,12 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "payload:dev": "turbo run dev --filter=@suzanne/payload"
   },
   "devDependencies": {
+    "@swc-node/register": "^1.11.1",
+    "@swc/core": "^1.15.26",
     "jsdom": "^29.0.2",
     "turbo": "^2.0.0"
   },

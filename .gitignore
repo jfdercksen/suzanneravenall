@@ -23,6 +23,9 @@ build/
 .env.local
 .env.*.local
 
+# Claude Code local settings (may contain secrets)
+.claude/settings.local.json
+
 # Docker local overrides (auto-loaded by docker-compose up — keep local if it has secrets)
 # docker-compose.override.yml
 

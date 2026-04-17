@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@sentry/nextjs": "^8",
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.103.2",
     "@suzanne/ui": "*",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.8.0",
