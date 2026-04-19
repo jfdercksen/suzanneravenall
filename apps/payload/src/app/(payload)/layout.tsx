@@ -1,7 +1,22 @@
+import type { ServerFunctionClient } from 'payload'
+import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
+import config from '@payload-config'
 import React from 'react'
+import { importMap } from './admin/importMap'
 
-// This layout wraps all Payload admin routes.
-// Do not add global styles here — Payload manages its own UI.
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return children
+const serverFunction: ServerFunctionClient = async function (args) {
+  'use server'
+  return handleServerFunctions({
+    ...args,
+    config,
+    importMap,
+  })
+}
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
+      {children}
+    </RootLayout>
+  )
 }

@@ -1,7 +1,26 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { buildConfig } from 'payload'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import sharp from 'sharp'
+import {
+  lexicalEditor,
+  HeadingFeature,
+  BoldFeature,
+  ItalicFeature,
+  UnderlineFeature,
+  StrikethroughFeature,
+  InlineCodeFeature,
+  LinkFeature,
+  BlockquoteFeature,
+  OrderedListFeature,
+  UnorderedListFeature,
+  ChecklistFeature,
+  AlignFeature,
+  IndentFeature,
+  HorizontalRuleFeature,
+  ParagraphFeature,
+  UploadFeature,
+} from '@payloadcms/richtext-lexical'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 
 import { Users } from './src/collections/Users'
@@ -24,13 +43,37 @@ export default buildConfig({
 
   collections: [Users, BlogPosts, Programs, Testimonials, Pages, Media],
 
-  editor: lexicalEditor({}),
+  editor: lexicalEditor({
+    features: [
+      ParagraphFeature(),
+      HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
+      BoldFeature(),
+      ItalicFeature(),
+      UnderlineFeature(),
+      StrikethroughFeature(),
+      InlineCodeFeature(),
+      LinkFeature({}),
+      BlockquoteFeature(),
+      OrderedListFeature(),
+      UnorderedListFeature(),
+      ChecklistFeature(),
+      AlignFeature(),
+      IndentFeature(),
+      HorizontalRuleFeature(),
+      UploadFeature({ collections: { media: { fields: [{ name: 'alt', type: 'text' }] } } }),
+      // CodeHighlightFeature (Monaco editor) intentionally excluded —
+      // causes context initialisation crash in Payload 3.83.0 / Next.js 15.
+    ],
+  }),
 
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL,
     },
+    schemaName: 'payload',
   }),
+
+  sharp,
 
   secret: process.env.PAYLOAD_SECRET ?? '',
 

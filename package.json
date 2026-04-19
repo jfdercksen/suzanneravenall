@@ -19,5 +19,9 @@
     "jsdom": "^29.0.2",
     "turbo": "^2.0.0"
   },
-  "packageManager": "npm@10.9.0"
+  "packageManager": "npm@10.9.0",
+  "overrides": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  }
 }
