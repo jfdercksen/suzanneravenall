@@ -1,7 +1,7 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 1 — Public Website
-Current Task: Task 1.7 — SEO Foundation
+Current Task: Task 1.8 — Cal.com Integration
 Current Branch: feature/phase-1-website
 Last Updated: April 2026
 Last Updated By: Johan
@@ -41,7 +41,7 @@ Last Updated By: Johan
 - ✅ Task 1.4 — Homepage
 - ✅ Task 1.5 — Core Pages
 - ✅ Task 1.6 — Payload CMS Setup
-- ⏳ Task 1.7 — SEO Foundation
+- ✅ Task 1.7 — SEO Foundation
 - ⏳ Task 1.8 — Cal.com Integration
 - ⏳ Task 1.9 — 301 Redirects
 
@@ -72,6 +72,7 @@ Last Updated By: Johan
 
 ## Session Notes
 
+- **April 2026:** Tasks 1.5–1.7 complete. Full page structure built — 30 static routes including /contact, /masterclass, /programs, /programs/[slug], /resources hub + 5 sub-pages, /shop placeholder, /portal shell + login/signup. SEO foundation: robots.ts, sitemap.ts (30 routes), OG defaults, Twitter cards, Organization + Person JSON-LD structured data. Build clean. Pre-existing errors fixed: lucide-react social icons replaced with inline SVGs, Server Component motion extraction.
 - **April 2026:** Phase 0 fully complete. Starting Phase 1 Task 1.1. Creating feature branch now.
 - **April 2026:** Task 1.1 complete. Next.js 14 app scaffolded in apps/web. 7/7 health check tests passing. Security headers reviewed by code-auditor — 6 fixes applied. Task 1.2 blocked until logo, colours and fonts received from Suzanne.
 - **April 2026:** Task 1.2 complete. Design system built aligned to Tony Robbins reference. Poppins confirmed (weights 200–700). Brand tokens confirmed (#012B43 navy, #1719F4 electric blue). Full primary/accent/neutral colour scales in tailwind.config.ts. SVG logos received from Suzanne and deployed to apps/web/public/logos/. WCAG AA contrast verified (8.5:1 accent on white, 14.7:1 white on navy). 108/108 tests passing. Build clean.
@@ -82,4 +83,5 @@ Last Updated By: Johan
 - **April 2026:** Task 1.5 complete. Built /about, /services, /explore hub + 8 /explore/[slug] pages from scraped WordPress content. All pages pass visual QA — Tony Robbins design standard met. Animated stat counters, full-bleed heroes, card image overlays, dark/light alternation correct across all routes. 17 pages building clean, zero TypeScript errors. [CONFIRM] items logged in KNOWN_ISSUES.md: About stats numbers, Services pricing/dates, Explore topic copy differentiation.
 - **April 2026:** Task 1.5 in progress. 3-teammate parallel build: About (/about), Services (/services), Explore hub + 8 topic pages (/explore/[slug]). All built from scraped WordPress content. Code review complete — all issues fixed (CTA anchors, section alternation, rgba→token shadows, TypeScript narrowing, padStart counters). TypeScript clean. Visual QA blocked on usage quota (resets 10am SAST). Client [CONFIRM] items: About stats (qualifications count, years experience), Human Performance Replicator description, Services pricing/dates, Explore topic copy differentiation (3 topics share identical WordPress source template). no-bad-patterns.md updated: brand-navy does not exist — use brand-primary.
 - **April 2026:** Environment audit complete. Fixed critical DATABASE_URL conflict (Medusa/Payload split to separate vars), NEXT_PUBLIC_MEDUSA_URL browser bundle bug, incomplete apps/web/.env.local, SUPABASE_SERVICE_ROLE_KEY missing from docker-compose. Complete rewrite of infra/.env.example. pre-deploy-setup.sh added for VPS first-run database creation.
+- **April 2026:** Task 1.7 complete. SEO Foundation: robots.ts (blocks /portal, /api, /admin), sitemap.ts (30 routes including all 8 /explore/[slug] pages), root layout upgraded with full OG + Twitter card defaults, homepage JSON-LD (Organization + Person schemas). Fixed 3 pre-existing build errors: lucide-react missing social icons (Linkedin/Instagram/Facebook removed in v1.x — replaced with inline SVGs), framer-motion used in Server Component pages (shop, assessments — extracted to *Content.tsx client components), IntersectionObserver entry possibly undefined in ProgramsPageClient.tsx. Build clean — 30/30 pages.
 - **April 2026:** Task 1.6 fully operational. Payload admin 500 resolved — root cause: (payload)/layout.tsx returned bare children instead of using RootLayout from @payloadcms/next/layouts, so ConfigProvider never mounted. Fix: wired RootLayout + handleServerFunctions. Secondary fixes: deleted importMap.ts (was shadowing auto-generated importMap.js), added sharp to buildConfig(), cleared stale public-schema migrations. Monorepo React deduplication fixed: apps/web upgraded from Next.js 14 + React 18 to Next.js 15 + React 19 to match apps/payload and eliminate duplicate React instances. Admin login confirmed ✓ · All 6 collections respond ✓ · BlogPost write confirmed ✓ · Both apps build clean ✓.
