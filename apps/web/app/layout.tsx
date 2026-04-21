@@ -17,13 +17,32 @@ export const metadata: Metadata = {
     default: 'Dr. Suzanne Ravenall',
     template: '%s | Dr. Suzanne Ravenall',
   },
-  description: 'Coaching and professional development with Dr. Suzanne Ravenall.',
+  description:
+    'Break the childhood patterns holding you back. Dr. Suzanne Ravenall delivers permanent, measurable transformation through science-backed Neuro-Repatterning® coaching.',
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ??
       (process.env.NODE_ENV === 'production'
         ? 'https://suzanneravenall.com'
         : 'http://localhost:3000')
   ),
+  openGraph: {
+    type: 'website',
+    siteName: 'Dr. Suzanne Ravenall',
+    locale: 'en_ZA',
+    images: [
+      {
+        url: '/images/hero-bg-suzanne-ravenall.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Dr. Suzanne Ravenall — Transformation Coaching',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@suzanneravenall',
+    creator: '@suzanneravenall',
+  },
 }
 
 // Validate analytics IDs to prevent injection if env vars are ever compromised.

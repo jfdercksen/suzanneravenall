@@ -23,13 +23,63 @@ export const metadata: Metadata = {
     title: 'Dr. Suzanne Ravenall — Transformation Coaching',
     description:
       'Break the childhood patterns holding you back. Science-backed coaching that delivers permanent change.',
-    images: [{ url: '/images/hero-bg.jpg', width: 1200, height: 630 }],
+    images: [{ url: '/images/hero-bg-suzanne-ravenall.jpg', width: 1200, height: 630, alt: 'Dr. Suzanne Ravenall' }],
   },
+  twitter: {
+    title: 'Dr. Suzanne Ravenall — Transformation Coaching',
+    description:
+      'Break the childhood patterns holding you back. Science-backed coaching that delivers permanent change.',
+    images: ['/images/hero-bg-suzanne-ravenall.jpg'],
+  },
+}
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Dr. Suzanne Ravenall',
+  url: 'https://suzanneravenall.com',
+  logo: 'https://suzanneravenall.com/logos/suzanne-ravenall-logo.svg',
+  sameAs: [
+    'https://www.linkedin.com/in/suzanneravenall',
+    'https://www.instagram.com/suzanneravenall',
+  ],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer support',
+    url: 'https://suzanneravenall.com/contact',
+  },
+}
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Dr. Suzanne Ravenall',
+  url: 'https://suzanneravenall.com',
+  image: 'https://suzanneravenall.com/images/suzanne-portrait.jpg',
+  jobTitle: 'Transformation Coach',
+  description:
+    "Neuro-Repatterning\u00ae pioneer helping high-achievers break childhood patterns for permanent, measurable change.",
+  alumniOf: {
+    '@type': 'Organization',
+    name: 'University (credentials pending confirmation)',
+  },
+  sameAs: [
+    'https://www.linkedin.com/in/suzanneravenall',
+    'https://www.instagram.com/suzanneravenall',
+  ],
 }
 
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
       <Hero />
       <MediaLogos id="media-logos" />
       <TrustBar />
