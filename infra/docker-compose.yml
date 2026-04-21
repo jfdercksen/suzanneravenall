@@ -22,11 +22,7 @@ services:
     depends_on:
       web:
         condition: service_healthy
-      medusa:
-        condition: service_healthy
       payload:
-        condition: service_healthy
-      n8n:
         condition: service_healthy
       calcom:
         condition: service_healthy
@@ -76,7 +72,8 @@ services:
   # ---------------------------------------------------------------------------
   medusa:
     build:
-      context: ../apps/medusa
+      context: ..
+      dockerfile: apps/medusa/Dockerfile
     restart: unless-stopped
     expose:
       - "9000"
@@ -109,7 +106,8 @@ services:
   # ---------------------------------------------------------------------------
   web:
     build:
-      context: ../apps/web
+      context: ..
+      dockerfile: apps/web/Dockerfile
     restart: unless-stopped
     expose:
       - "3000"
@@ -162,7 +160,8 @@ services:
   # ---------------------------------------------------------------------------
   payload:
     build:
-      context: ../apps/payload
+      context: ..
+      dockerfile: apps/payload/Dockerfile
     restart: unless-stopped
     expose:
       - "3001"
@@ -177,7 +176,7 @@ services:
     networks:
       - suzanne_network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:3001/api/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:3001/admin || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -262,7 +261,7 @@ services:
     image: calcom/cal.com:latest
     restart: unless-stopped
     expose:
-      - "3002"
+      - "3000"
     environment:
       NEXT_PUBLIC_WEBAPP_URL: ${NEXT_PUBLIC_WEBAPP_URL}
       CALENDSO_ENCRYPTION_KEY: ${CALENDSO_ENCRYPTION_KEY}

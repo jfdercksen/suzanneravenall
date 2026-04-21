@@ -7,7 +7,7 @@ RUN apk add --no-cache libc6-compat curl
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci
+RUN npm ci && npm install --cpu=x64 --os=linux --libc=musl sharp
 
 # ── Builder stage ─────────────────────────────────────────────────────────────
 FROM base AS builder
@@ -27,15 +27,15 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=3001
+ENV HOSTNAME="0.0.0.0"
 
 # Create a non-root user for security
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copy built output (output: standalone produces a self-contained server.js)
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/payload/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/payload/.next/static ./.next/static
 
 # Ensure uploads directory exists and is writable
 RUN mkdir -p ./public/uploads && chown -R nextjs:nodejs ./public/uploads
@@ -44,4 +44,4 @@ USER nextjs
 
 EXPOSE 3001
 
-CMD ["node", "server.js"]
+CMD ["node", "apps/payload/server.js"]
