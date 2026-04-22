@@ -23,7 +23,7 @@ export default function CalBookingSection() {
 
   function openModal() {
     getCalApi({ embedJsUrl: `${CAL_URL}/embed/embed.js` }).then((cal) => {
-      cal('modal', { calLink: 'suzanneravenall', config: { theme: 'dark' } })
+      cal('modal', { calLink: 'suzanneravenall/discovery-call', config: { theme: 'dark' } })
     })
   }
 

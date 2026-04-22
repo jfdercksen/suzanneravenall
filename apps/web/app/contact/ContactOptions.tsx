@@ -59,7 +59,7 @@ export default function ContactOptions() {
 
             <div className="rounded-lg overflow-hidden -mx-2">
               <Cal
-                calLink="suzanneravenall"
+                calLink="suzanneravenall/discovery-call"
                 embedJsUrl={`${CAL_URL}/embed/embed.js`}
                 config={{ theme: 'dark', layout: 'month_view' }}
                 style={{ width: '100%', height: '600px', overflow: 'auto' }}
