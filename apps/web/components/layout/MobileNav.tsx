@@ -82,10 +82,6 @@ export default function MobileNav({ links }: MobileNavProps) {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, close])
 
-  // inert attribute removes the closed overlay from tab order and accessibility tree.
-  // @types/react 18 does not include inert in JSX props — use spread cast.
-  const inertProp = !isOpen ? ({ inert: '' } as Record<string, string>) : {}
-
   return (
     <>
       {/* Hamburger button — visible only below lg */}
@@ -112,7 +108,7 @@ export default function MobileNav({ links }: MobileNavProps) {
         role={isOpen ? 'dialog' : undefined}
         aria-modal={isOpen ? 'true' : undefined}
         aria-label={isOpen ? 'Navigation menu' : undefined}
-        {...inertProp}
+        inert={!isOpen}
         className={[
           'fixed inset-0 z-50 bg-brand-primary flex flex-col',
           'transition-transform duration-300 ease-in-out',
@@ -152,7 +148,7 @@ export default function MobileNav({ links }: MobileNavProps) {
           <nav aria-label="Mobile navigation" className="flex-1 flex flex-col justify-center px-8 gap-2">
             {links.map((link) => (
               <Link
-                key={link.href}
+                key={link.label}
                 href={link.href}
                 onClick={close}
                 className="text-white font-semibold text-3xl py-3 border-b border-white/10 hover:text-brand-accent-300 transition-colors duration-150"

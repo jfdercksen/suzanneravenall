@@ -11,6 +11,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@calcom/embed-react": "^1.5.3",
     "@sentry/nextjs": "^8",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.103.2",

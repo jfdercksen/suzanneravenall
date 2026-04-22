@@ -4,6 +4,7 @@ import PrivateSessions from '@/components/services/PrivateSessions'
 import GroupCorporate from '@/components/services/GroupCorporate'
 import Speaking from '@/components/services/Speaking'
 import Programs from '@/components/services/Programs'
+import CalBookingSection from '@/components/services/CalBookingSection'
 import ServicesFinalCTA from '@/components/services/ServicesFinalCTA'
 
 export function generateMetadata(): Metadata {
@@ -22,6 +23,7 @@ export default function ServicesPage() {
       <GroupCorporate />
       <Speaking />
       <Programs />
+      <CalBookingSection />
       <ServicesFinalCTA />
     </main>
   )

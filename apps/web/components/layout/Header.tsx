@@ -38,7 +38,7 @@ export default function Header() {
           <nav aria-label="Main navigation" className="hidden lg:flex items-center gap-7">
             {navLinks.map((link) => (
               <Link
-                key={link.href}
+                key={link.label}
                 href={link.href}
                 className="text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
               >

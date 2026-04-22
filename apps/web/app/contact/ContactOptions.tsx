@@ -1,8 +1,11 @@
 'use client'
 
+import Cal from '@calcom/embed-react'
 import { motion } from 'framer-motion'
 import { Mail, MapPin } from 'lucide-react'
 import ContactForm from './ContactForm'
+
+const CAL_URL = process.env.NEXT_PUBLIC_CAL_URL ?? 'https://cal.suzanneravenall.com'
 
 const sectionReveal = {
   initial: { opacity: 0, y: 50 },
@@ -54,17 +57,14 @@ export default function ContactOptions() {
               30 minutes. No obligation. Find out if we&rsquo;re a fit.
             </p>
 
-            {/* TODO Task 1.8: Replace button with Cal.com embed widget */}
-            <div id="calcom-embed" />
-
-            <a
-              href="https://cal.com/suzanneravenall"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-auto inline-flex items-center justify-center bg-brand-accent-600 hover:bg-brand-accent-700 text-white px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-300"
-            >
-              Book a Call &rarr;
-            </a>
+            <div className="rounded-lg overflow-hidden -mx-2">
+              <Cal
+                calLink="suzanneravenall"
+                embedJsUrl={`${CAL_URL}/embed/embed.js`}
+                config={{ theme: 'dark', layout: 'month_view' }}
+                style={{ width: '100%', height: '600px', overflow: 'auto' }}
+              />
+            </div>
           </motion.div>
 
           {/* Card 2 — Send a Message */}
