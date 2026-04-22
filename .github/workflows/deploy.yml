@@ -54,10 +54,11 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             set -euo pipefail
-            cd /var/www/suzanneravenall
+            cd /var/www/suzanneravenall/suzanneravenall
             git pull origin main
-            docker compose pull
-            docker compose up -d --remove-orphans postgres meilisearch n8n calcom nginx
+            cd infra
+            docker compose -f docker-compose.yml build web payload
+            docker compose -f docker-compose.yml up -d --remove-orphans
             docker system prune -f
 
       - name: Health check production
