@@ -22,6 +22,10 @@
   "packageManager": "npm@10.9.0",
   "overrides": {
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "next": "15.3.9"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
   }
 }
