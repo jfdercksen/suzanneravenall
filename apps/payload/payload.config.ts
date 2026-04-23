@@ -36,6 +36,9 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     user: 'users',
+    routes: {
+      admin: '/cms/admin',
+    },
     meta: {
       titleSuffix: '— Suzanne Ravenall CMS',
     },
