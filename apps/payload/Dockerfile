@@ -35,7 +35,7 @@ RUN adduser --system --uid 1001 nextjs
 
 # Copy built output (output: standalone produces a self-contained server.js)
 COPY --from=builder --chown=nextjs:nodejs /app/apps/payload/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/payload/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/payload/.next/static ./apps/payload/.next/static
 
 # Ensure uploads directory exists and is writable
 RUN mkdir -p ./public/uploads && chown -R nextjs:nodejs ./public/uploads
