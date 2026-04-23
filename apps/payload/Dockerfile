@@ -19,7 +19,7 @@ COPY . .
 RUN npm run generate:types || true
 
 ENV NODE_ENV=production
-RUN npm run build
+RUN npx turbo run build --filter=@suzanne/payload
 
 # ── Runner stage ──────────────────────────────────────────────────────────────
 FROM base AS runner
