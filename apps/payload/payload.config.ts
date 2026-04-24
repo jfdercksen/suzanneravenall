@@ -36,6 +36,11 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   serverURL: process.env.PAYLOAD_URL ?? '',
 
+  cors: [
+    process.env.PAYLOAD_URL ?? '',
+    process.env.PAYLOAD_PUBLIC_SERVER_URL ?? '',
+  ].filter(Boolean),
+
   admin: {
     user: 'users',
     theme: 'light',
