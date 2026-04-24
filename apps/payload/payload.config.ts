@@ -38,6 +38,7 @@ export default buildConfig({
 
   admin: {
     user: 'users',
+    theme: 'light',
     meta: {
       titleSuffix: '— Suzanne Ravenall CMS',
     },
