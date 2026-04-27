@@ -4,7 +4,7 @@
 // which ConfigManager.loadConfig handles identically.
 module.exports = {
   admin: {
-    disable: false,
+    disable: true,
   },
   projectConfig: {
     // Fallback URL satisfies build-time validation.
