@@ -25,7 +25,7 @@ jobs:
       # Medusa is excluded here — it has no build step that runs cleanly in CI
       # without a live database. The container is built on the VPS from source.
       - name: Build
-        run: npx turbo run build --filter=!apps/medusa
+        run: npx turbo run build --filter=!@suzanne/medusa
 
       - name: Lint
         run: npx turbo run lint
