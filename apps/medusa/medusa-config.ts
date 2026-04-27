@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from "@medusajs/utils"
+import { defineConfig, loadEnv } from "@medusajs/framework/config"
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd())
 
@@ -11,17 +11,8 @@ export default defineConfig({
       authCors:
         process.env.AUTH_CORS ||
         "http://localhost:7001,http://localhost:3000",
-      // Medusa validates these at startup — no need to throw here (build-time has no env vars)
-      jwtSecret: process.env.JWT_SECRET || "",
-      cookieSecret: process.env.COOKIE_SECRET || "",
+      jwtSecret: process.env.JWT_SECRET || "supersecret",
+      cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     },
   },
-  modules: [
-    {
-      resolve: "@medusajs/file-local",
-      options: {
-        upload_dir: "uploads",
-      },
-    },
-  ],
 })
