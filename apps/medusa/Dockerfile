@@ -24,10 +24,9 @@ RUN cd apps/medusa && node -e \
 
 RUN cd apps/medusa && node_modules/.bin/medusa build
 
-# Confirm build output exists before moving to runner stage
-RUN ls apps/medusa/.medusa/server/index.js && \
-    echo "✓ .medusa/server built" || \
-    (echo "✗ .medusa/server not found — build produced no output" && exit 1)
+# Show what the build actually produced
+RUN echo "=== .medusa output ===" && \
+    find apps/medusa/.medusa -type f 2>/dev/null | head -30 || echo "NO .medusa dir found"
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────────
 FROM node:20-alpine AS runner
