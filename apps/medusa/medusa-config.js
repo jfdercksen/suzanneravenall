@@ -1,9 +1,9 @@
-import { defineConfig } from "@medusajs/framework/config"
+const { defineConfig } = require("@medusajs/framework/config")
 
-export default defineConfig({
+module.exports = defineConfig({
   projectConfig: {
     // Fallback URL satisfies defineConfig validation at build time.
-    // The real DATABASE_URL is injected at runtime via Docker env vars.
+    // The real DATABASE_URL is injected at container runtime.
     databaseUrl:
       process.env.DATABASE_URL ||
       "postgres://build:build@localhost:5432/medusa",

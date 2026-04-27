@@ -18,8 +18,8 @@ RUN ls apps/medusa/node_modules/.bin/medusa && \
 # Copy source and build
 COPY apps/medusa/ ./apps/medusa/
 
-# Debug: verify config loads correctly before running medusa build
-RUN cd apps/medusa && node -r ts-node/register -e \
+# Verify config loads correctly before running medusa build
+RUN cd apps/medusa && node -e \
   "try { const m=require('./medusa-config'); console.log('Config OK, type:', typeof (m.default||m)); } catch(e) { console.error('Config load error:', e.message); process.exit(1); }"
 
 RUN cd apps/medusa && node_modules/.bin/medusa build
