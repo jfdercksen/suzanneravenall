@@ -3,6 +3,9 @@
 // at runtime. We skip it here and export the raw config object directly,
 // which ConfigManager.loadConfig handles identically.
 module.exports = {
+  admin: {
+    disable: false,
+  },
   projectConfig: {
     // Fallback URL satisfies build-time validation.
     // The real DATABASE_URL is injected at container runtime.
