@@ -1,7 +1,7 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 1 — Public Website
-Current Task: Phase 2 — E-Commerce (starting)
+Current Task: Task 2.2 — Product Catalogue Structure
 Current Branch: feature/phase-1-website
 Last Updated: April 2026
 Last Updated By: Johan
@@ -14,7 +14,7 @@ Last Updated By: Johan
 |-------|-------|---------|----------|
 | Phase 0 — Foundation | ✅ Complete | ✅ Staging deployed | ⏳ Awaiting sign-off |
 | Phase 1 — Public Website | ✅ Complete | ❌ Not yet | ❌ Not yet |
-| Phase 2 — E-Commerce | ⏳ Not started | ❌ Not yet | ❌ Not yet |
+| Phase 2 — E-Commerce | 🔄 In Progress | ❌ Not yet | ❌ Not yet |
 | Phase 3 — Membership Portal | ⏳ Not started | ❌ Not yet | ❌ Not yet |
 | Phase 4 — CRM and Automation | ⏳ Not started | ❌ Not yet | ❌ Not yet |
 | Phase 5 — QA and Launch | ⏳ Not started | ❌ Not yet | ❌ Not yet |
@@ -30,6 +30,23 @@ Last Updated By: Johan
 - ✅ Task 0.5 — Supabase schema foundation
 - ✅ Task 0.6 — Backup automation (Backblaze B2 configured, cron installed)
 - ⏳ Task 0.7 — Sentry setup (account created, DSNs deferred to Phase 5 — see KI001)
+
+---
+
+## Phase 2 — Task Status
+
+- ✅ Task 2.1 — Medusa v2 Setup
+- ⏳ Task 2.2 — Product Catalogue Structure ← CURRENT
+- ⏳ Task 2.3 — Product Migration (WooCommerce)
+- ⏳ Task 2.4 — Shop Pages
+- ⏳ Task 2.5 — Checkout Flow
+- ⏳ Task 2.6 — PayFast Integration
+- ⏳ Task 2.7 — PayPal Integration
+- ⏳ Task 2.8 — Sage Business Cloud Integration
+- ⏳ Task 2.9 — PDF Invoices
+- ⏳ Task 2.10 — Cart Abandonment
+- ⏳ Task 2.11 — Order Confirmation Email
+- ⏳ Task 2.12 — MeiliSearch Setup
 
 ---
 
@@ -84,5 +101,6 @@ Last Updated By: Johan
 - **April 2026:** Task 1.5 in progress. 3-teammate parallel build: About (/about), Services (/services), Explore hub + 8 topic pages (/explore/[slug]). All built from scraped WordPress content. Code review complete — all issues fixed (CTA anchors, section alternation, rgba→token shadows, TypeScript narrowing, padStart counters). TypeScript clean. Visual QA blocked on usage quota (resets 10am SAST). Client [CONFIRM] items: About stats (qualifications count, years experience), Human Performance Replicator description, Services pricing/dates, Explore topic copy differentiation (3 topics share identical WordPress source template). no-bad-patterns.md updated: brand-navy does not exist — use brand-primary.
 - **April 2026:** Environment audit complete. Fixed critical DATABASE_URL conflict (Medusa/Payload split to separate vars), NEXT_PUBLIC_MEDUSA_URL browser bundle bug, incomplete apps/web/.env.local, SUPABASE_SERVICE_ROLE_KEY missing from docker-compose. Complete rewrite of infra/.env.example. pre-deploy-setup.sh added for VPS first-run database creation.
 - **April 2026:** Task 1.7 complete. SEO Foundation: robots.ts (blocks /portal, /api, /admin), sitemap.ts (30 routes including all 8 /explore/[slug] pages), root layout upgraded with full OG + Twitter card defaults, homepage JSON-LD (Organization + Person schemas). Fixed 3 pre-existing build errors: lucide-react missing social icons (Linkedin/Instagram/Facebook removed in v1.x — replaced with inline SVGs), framer-motion used in Server Component pages (shop, assessments — extracted to *Content.tsx client components), IntersectionObserver entry possibly undefined in ProgramsPageClient.tsx. Build clean — 30/30 pages.
+- **April 2026:** Task 2.1 complete. Medusa v2 scaffolded in apps/medusa — medusa-config.ts, Dockerfile, seed script for regions/tax/shipping. Nginx /api/store and /api/admin routes added with correct path rewrites (/api/store/* → /store/*, /api/admin/* → /admin/*). Code review fixes applied: JWT/cookie secrets throw on missing env vars, Dockerfile runner stage does clean production install, admin TODO logged for IP restriction at DNS cutover. db:migrate must be run on VPS after first deploy.
 - **April 2026:** Payload CMS VPS deployment — CSS and login redirect issues encountered. Root cause: basePath/hydration conflict (KI004, KI005). Deferred to Phase 5; recommend dedicated subdomain cms.suzanneravenall.com at DNS cutover to avoid Nginx subpath complications. Moving to Task 1.8.
 - **April 2026:** Task 1.6 fully operational. Payload admin 500 resolved — root cause: (payload)/layout.tsx returned bare children instead of using RootLayout from @payloadcms/next/layouts, so ConfigProvider never mounted. Fix: wired RootLayout + handleServerFunctions. Secondary fixes: deleted importMap.ts (was shadowing auto-generated importMap.js), added sharp to buildConfig(), cleared stale public-schema migrations. Monorepo React deduplication fixed: apps/web upgraded from Next.js 14 + React 18 to Next.js 15 + React 19 to match apps/payload and eliminate duplicate React instances. Admin login confirmed ✓ · All 6 collections respond ✓ · BlogPost write confirmed ✓ · Both apps build clean ✓.
