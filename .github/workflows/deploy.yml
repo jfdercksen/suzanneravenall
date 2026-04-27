@@ -22,6 +22,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install linux-x64 sharp (cross-platform native binary)
+        run: npm install --os=linux --cpu=x64 --libc=glibc sharp
+
       # Medusa is excluded here — it has no build step that runs cleanly in CI
       # without a live database. The container is built on the VPS from source.
       - name: Build

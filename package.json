@@ -27,5 +27,8 @@
   },
   "dependencies": {
     "sharp": "^0.34.5"
+  },
+  "optionalDependencies": {
+    "@img/sharp-linux-x64": "^0.34.5"
   }
 }
