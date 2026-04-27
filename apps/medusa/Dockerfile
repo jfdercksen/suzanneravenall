@@ -10,9 +10,19 @@ COPY apps/medusa/package.json ./apps/medusa/
 # --force overrides all peer-dependency conflicts (stronger than --legacy-peer-deps)
 RUN cd apps/medusa && npm install --force
 
+# Confirm the medusa CLI binary exists before attempting build
+RUN ls apps/medusa/node_modules/.bin/medusa && \
+    echo "✓ medusa binary found" || \
+    (echo "✗ medusa binary MISSING — install failed" && exit 1)
+
 # Copy source and build
 COPY apps/medusa/ ./apps/medusa/
-RUN cd apps/medusa && npm exec -- medusa build
+RUN cd apps/medusa && node_modules/.bin/medusa build
+
+# Confirm build output exists before moving to runner stage
+RUN ls apps/medusa/.medusa/server/index.js && \
+    echo "✓ .medusa/server built" || \
+    (echo "✗ .medusa/server not found — build produced no output" && exit 1)
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────────
 FROM node:20-alpine AS runner
