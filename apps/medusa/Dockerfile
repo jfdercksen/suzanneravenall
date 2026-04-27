@@ -27,8 +27,8 @@ WORKDIR /app
 COPY --from=builder --chown=medusa:medusa /app/apps/medusa/package.json ./
 COPY --from=builder --chown=medusa:medusa /app/apps/medusa/medusa-config.js ./
 
-# Install production dependencies
-RUN npm install --omit=dev --force
+# Install production dependencies and transfer ownership to the non-root user
+RUN npm install --omit=dev --force && chown -R medusa:medusa /app
 
 # Backend compiled output (tsc → dist/)
 COPY --from=builder --chown=medusa:medusa /app/apps/medusa/dist ./dist
