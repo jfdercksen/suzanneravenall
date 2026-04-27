@@ -1,5 +1,7 @@
-# Local development overrides — loaded automatically by `docker compose up`
-# This file is NOT used in production or staging.
+# Local development ONLY — must never be loaded on the VPS.
+# Renamed from docker-compose.override.yml so it does NOT auto-load.
+# To use locally: docker compose -f docker-compose.yml -f docker-compose.local.yml up
+# On the VPS: always use docker compose -f docker-compose.yml only.
 # Bind mounts enable hot reload. Postgres and MeiliSearch ports are exposed
 # so developers can connect with GUI clients (e.g. TablePlus, Meilisearch
 # Dashboard) without going through the Docker network.
