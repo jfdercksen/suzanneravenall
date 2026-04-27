@@ -1,8 +1,10 @@
-const { defineConfig } = require("@medusajs/framework/config")
-
-module.exports = defineConfig({
+// medusa-config.js
+// defineConfig is a TypeScript type-inference helper that is a passthrough
+// at runtime. We skip it here and export the raw config object directly,
+// which ConfigManager.loadConfig handles identically.
+module.exports = {
   projectConfig: {
-    // Fallback URL satisfies defineConfig validation at build time.
+    // Fallback URL satisfies build-time validation.
     // The real DATABASE_URL is injected at container runtime.
     databaseUrl:
       process.env.DATABASE_URL ||
@@ -17,4 +19,4 @@ module.exports = defineConfig({
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     },
   },
-})
+}
