@@ -6,15 +6,13 @@ WORKDIR /app
 
 # Install dependencies first (layer-cached unless package.json changes)
 COPY apps/medusa/package.json ./apps/medusa/
-RUN cd apps/medusa && npm install --legacy-peer-deps
 
-# Debug: confirm what medusa binary is available post-install
-RUN echo "=== .bin ===" && ls apps/medusa/node_modules/.bin/ | grep -i medusa || echo "NO MEDUSA IN .BIN" && \
-    echo "=== @medusajs packages ===" && ls apps/medusa/node_modules/@medusajs/ 2>/dev/null || echo "NO @medusajs DIR"
+# --force overrides all peer-dependency conflicts (stronger than --legacy-peer-deps)
+RUN cd apps/medusa && npm install --force
 
 # Copy source and build
 COPY apps/medusa/ ./apps/medusa/
-RUN cd apps/medusa && node_modules/.bin/medusa build
+RUN cd apps/medusa && npm exec -- medusa build
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────────
 FROM node:20-alpine AS runner
@@ -26,7 +24,7 @@ WORKDIR /app
 
 # Install production dependencies fresh (avoids devDeps and native binary issues)
 COPY --from=builder --chown=medusa:medusa /app/apps/medusa/package.json ./
-RUN npm install --omit=dev --legacy-peer-deps
+RUN npm install --omit=dev --force
 
 # Copy compiled server output
 COPY --from=builder --chown=medusa:medusa /app/apps/medusa/.medusa/server ./
