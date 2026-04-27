@@ -11,16 +11,9 @@ export default defineConfig({
       authCors:
         process.env.AUTH_CORS ||
         "http://localhost:7001,http://localhost:3000",
-      jwtSecret: (() => {
-        const s = process.env.JWT_SECRET
-        if (!s) throw new Error("JWT_SECRET env var is not set")
-        return s
-      })(),
-      cookieSecret: (() => {
-        const s = process.env.COOKIE_SECRET
-        if (!s) throw new Error("COOKIE_SECRET env var is not set")
-        return s
-      })(),
+      // Medusa validates these at startup — no need to throw here (build-time has no env vars)
+      jwtSecret: process.env.JWT_SECRET || "",
+      cookieSecret: process.env.COOKIE_SECRET || "",
     },
   },
   modules: [
