@@ -8,6 +8,10 @@ WORKDIR /app
 COPY apps/medusa/package.json ./apps/medusa/
 RUN cd apps/medusa && npm install --legacy-peer-deps
 
+# Debug: confirm what medusa binary is available post-install
+RUN echo "=== .bin ===" && ls apps/medusa/node_modules/.bin/ | grep -i medusa || echo "NO MEDUSA IN .BIN" && \
+    echo "=== @medusajs packages ===" && ls apps/medusa/node_modules/@medusajs/ 2>/dev/null || echo "NO @medusajs DIR"
+
 # Copy source and build
 COPY apps/medusa/ ./apps/medusa/
 RUN cd apps/medusa && node_modules/.bin/medusa build
