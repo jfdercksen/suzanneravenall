@@ -10,7 +10,7 @@ RUN cd apps/medusa && npm install --legacy-peer-deps
 
 # Copy source and build
 COPY apps/medusa/ ./apps/medusa/
-RUN cd apps/medusa && npm run build
+RUN cd apps/medusa && node_modules/.bin/medusa build
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────────
 FROM node:20-alpine AS runner
