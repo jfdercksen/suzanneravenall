@@ -87,6 +87,9 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       COOKIE_SECRET: ${COOKIE_SECRET}
       SENTRY_DSN: ${SENTRY_DSN_MEDUSA}
+      ADMIN_CORS: ${ADMIN_CORS:-http://169.239.180.49}
+      STORE_CORS: ${STORE_CORS:-http://169.239.180.49}
+      AUTH_CORS: ${AUTH_CORS:-http://169.239.180.49}
     networks:
       - suzanne_network
     healthcheck:
