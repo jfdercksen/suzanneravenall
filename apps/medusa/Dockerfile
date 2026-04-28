@@ -2,9 +2,9 @@
 # Context is the monorepo root (set in docker-compose: context: ..)
 FROM node:20-alpine AS builder
 
-WORKDIR /build
+WORKDIR /server
 
-# Install dependencies (layer-cached unless package.json changes)
+# Install all deps (dev included — needed for medusa build)
 COPY apps/medusa/package.json ./
 RUN npm install --force
 
@@ -13,20 +13,33 @@ COPY apps/medusa/ .
 
 RUN node_modules/.bin/medusa build
 
-# Diagnostic: show exactly what medusa build produced so we know the structure
-RUN echo "=== .medusa contents ===" && find .medusa/ -maxdepth 3 2>/dev/null || echo "no .medusa dir"
+# Compile medusa-config.ts → medusa-config.js so the runner doesn't need ts-node
+RUN node_modules/.bin/tsc medusa-config.ts \
+    --target ES2021 \
+    --module CommonJS \
+    --moduleResolution node \
+    --esModuleInterop \
+    --skipLibCheck \
+    --outDir /server
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────────
 FROM node:20-alpine AS runner
 
 RUN addgroup -S medusa && adduser -S medusa -G medusa
 
-WORKDIR /app
+WORKDIR /server
 
-COPY --from=builder --chown=medusa:medusa /build/package.json ./
-COPY --from=builder --chown=medusa:medusa /build/.medusa ./.medusa
+# Built bundle + compiled config + package.json
+COPY --from=builder --chown=medusa:medusa /server/.medusa ./.medusa
+COPY --from=builder --chown=medusa:medusa /server/medusa-config.js ./
+COPY --from=builder --chown=medusa:medusa /server/package.json ./
 
-RUN npm install --omit=dev --force && chown -R medusa:medusa /app
+# Production deps only — no ts-node, no dashboard build tools
+RUN npm install --omit=dev --force && chown -R medusa:medusa /server
+
+# Startup script
+COPY --chown=medusa:medusa apps/medusa/start.sh ./
+RUN chmod +x start.sh
 
 USER medusa
 
@@ -34,4 +47,4 @@ EXPOSE 9000
 
 ENV NODE_ENV=production
 
-CMD ["sh", "-c", "node_modules/.bin/medusa db:migrate && node_modules/.bin/medusa start"]
+CMD ["./start.sh"]
