@@ -89,7 +89,7 @@ suzanne-ravenall/
 ```bash
 # Deploy to VPS
 git push origin main
-# GitHub Actions handles the rest — SSH to VPS, docker compose pull, docker compose up -d
+# GitHub Actions handles the rest — SSH to VPS, cd infra, docker compose -f docker-compose.yml pull, docker compose -f docker-compose.yml up -d --remove-orphans
 ```
 
 ---
@@ -114,18 +114,36 @@ main branch
 ```
 
 ### Local development
+
+Run from the `infra/` directory. Always include both `-f` flags locally.
+
 ```bash
-# Start all services locally
-docker-compose up -d
+# Start all services locally (bind mounts + hot reload)
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
 
 # View logs
-docker-compose logs -f web
+docker compose -f docker-compose.yml -f docker-compose.local.yml logs -f web
 
 # Stop everything
-docker-compose down
+docker compose -f docker-compose.yml -f docker-compose.local.yml down
 
 # Rebuild after dependency changes
-docker-compose up -d --build web
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build web
+```
+
+### VPS (production) commands
+
+Run from the `infra/` directory. Never load `docker-compose.local.yml` on the VPS.
+
+```bash
+# Start / restart all services
+docker compose -f docker-compose.yml up -d
+
+# Pull new images after a deploy
+docker compose -f docker-compose.yml pull && docker compose -f docker-compose.yml up -d --remove-orphans
+
+# Check status
+docker compose -f docker-compose.yml ps
 ```
 
 ### GitHub Secrets required

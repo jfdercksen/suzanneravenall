@@ -9,6 +9,13 @@
     "outDir": "dist",
     "rootDir": "."
   },
-  "include": ["src", "medusa-config.ts"],
-  "exclude": ["node_modules", "dist", ".medusa"]
+  "include": [
+    "src",
+    "medusa-config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".medusa"
+  ]
 }

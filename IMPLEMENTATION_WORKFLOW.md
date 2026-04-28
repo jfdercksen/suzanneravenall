@@ -23,7 +23,7 @@ This document is the single source of truth for building the platform. Developme
 
 2. **Build and test locally**
    ```bash
-   docker-compose up -d
+   docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
    # develop, test, iterate
    ```
 
@@ -52,25 +52,28 @@ This document is the single source of truth for building the platform. Developme
    ```
 
 ### Local development commands
+
+Run from the `infra/` directory. Always include both `-f` flags so `docker-compose.local.yml` loads the bind mounts and exposed ports needed for hot reload.
+
 ```bash
 # Start all services
-docker-compose up -d
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
 
 # Watch logs for a specific service
-docker-compose logs -f web
-docker-compose logs -f medusa
+docker compose -f docker-compose.yml -f docker-compose.local.yml logs -f web
+docker compose -f docker-compose.yml -f docker-compose.local.yml logs -f medusa
 
 # Restart a single service after code change
-docker-compose restart web
+docker compose -f docker-compose.yml -f docker-compose.local.yml restart web
 
 # Rebuild after adding dependencies
-docker-compose up -d --build web
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build web
 
 # Stop everything
-docker-compose down
+docker compose -f docker-compose.yml -f docker-compose.local.yml down
 
 # Full reset including volumes (WARNING: deletes local data)
-docker-compose down -v
+docker compose -f docker-compose.yml -f docker-compose.local.yml down -v
 ```
 
 ### Staging access for Suzanne
@@ -222,9 +225,9 @@ Steps:
 turbo run build (fail fast)
 turbo run test (fail if tests fail)
 SSH to VPS using SSH_PRIVATE_KEY secret
-git pull origin main
-docker-compose pull
-docker-compose up -d --remove-orphans
+cd infra && git pull origin main
+docker compose -f docker-compose.yml pull
+docker compose -f docker-compose.yml up -d --remove-orphans
 docker system prune -f
 Health check — verify all containers are running
 Required GitHub secrets: VPS_HOST, VPS_USER, SSH_PRIVATE_KEY
@@ -272,8 +275,8 @@ Reference: https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 
 **Phase 0 Sign-off Checklist:**
-- [ ] All containers start with docker-compose up -d
-- [ ] All health checks passing — docker-compose ps shows healthy
+- [ ] All containers start with `docker compose -f docker-compose.yml up -d` (run from `infra/`)
+- [ ] All health checks passing — `docker compose -f docker-compose.yml ps` shows healthy
 - [ ] Nginx serves correct domains with HTTPS
 - [ ] SSL certificates valid
 - [ ] GitHub Actions deploys successfully on push to main

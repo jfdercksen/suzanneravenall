@@ -18,28 +18,37 @@ cp infra/.env.example infra/.env
 
 All commands are run from the `infra/` directory.
 
+**On the VPS (production) — always use `-f docker-compose.yml` explicitly:**
 ```bash
-# Start all services (production config)
-docker compose up -d
+# Start all services
+docker compose -f docker-compose.yml up -d
 
 # Stop all services
-docker compose down
+docker compose -f docker-compose.yml down
 
 # View live logs for a specific service
-docker compose logs -f web
-docker compose logs -f medusa
-docker compose logs -f postgres
+docker compose -f docker-compose.yml logs -f web
+docker compose -f docker-compose.yml logs -f medusa
+docker compose -f docker-compose.yml logs -f postgres
 
 # Rebuild a single service after code changes
-docker compose up -d --build web
-docker compose up -d --build medusa
+docker compose -f docker-compose.yml up -d --build web
+docker compose -f docker-compose.yml up -d --build medusa
 
 # Check health and status of all containers
-docker compose ps
-
-# Start with local development overrides (bind mounts + exposed ports)
-docker compose -f docker-compose.yml -f docker-compose.override.yml up -d
+docker compose -f docker-compose.yml ps
 ```
+
+**Locally (dev machine) — add the local override file for bind mounts and exposed ports:**
+```bash
+# Start all services with hot reload and exposed ports
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
+
+# Stop all services
+docker compose -f docker-compose.yml -f docker-compose.local.yml down
+```
+
+> `docker-compose.local.yml` adds bind mounts (hot reload) and exposes Postgres and MeiliSearch ports to the host. It must NEVER be loaded on the VPS.
 
 ## Services and ports
 
@@ -62,7 +71,7 @@ Run once on the VPS after the nginx container is up and port 80 is reachable.
 2. Ensure Docker is running and the nginx container is up:
 
 ```bash
-docker compose ps nginx
+docker compose -f docker-compose.yml ps nginx
 ```
 
 3. Issue certificates for all domains:
@@ -74,17 +83,11 @@ bash infra/scripts/ssl-init.sh
 4. Once all certificates are issued, restart nginx:
 
 ```bash
-docker compose restart nginx
+docker compose -f docker-compose.yml restart nginx
 ```
 
 5. Renewal runs automatically if certbot is configured with a cron job or systemd timer. To renew manually:
 
 ```bash
-docker compose exec nginx certbot renew
-```
-
-6. Create the staging `.htpasswd` file for HTTP Basic Auth:
-
-```bash
-htpasswd -c /etc/nginx/.htpasswd staging_username
+docker compose -f docker-compose.yml exec nginx certbot renew
 ```

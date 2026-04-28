@@ -1,8 +1,6 @@
-// medusa-config.js
-// defineConfig is a TypeScript type-inference helper that is a passthrough
-// at runtime. We skip it here and export the raw config object directly,
-// which ConfigManager.loadConfig handles identically.
-module.exports = {
+import { defineConfig } from "@medusajs/framework/config"
+
+export default defineConfig({
   admin: {
     disable: true,
   },
@@ -22,4 +20,4 @@ module.exports = {
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     },
   },
-}
+})
