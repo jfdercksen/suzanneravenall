@@ -1,15 +1,11 @@
 FROM node:20-alpine
 
-RUN addgroup -S medusa && adduser -S medusa -G medusa
-
 WORKDIR /app
 
-COPY --chown=medusa:medusa apps/medusa/package.json ./
+COPY apps/medusa/package.json ./
 RUN npm install --force
 
-COPY --chown=medusa:medusa apps/medusa/ .
-
-USER medusa
+COPY apps/medusa/ .
 
 EXPOSE 9000
 
