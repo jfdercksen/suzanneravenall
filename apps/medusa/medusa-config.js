@@ -2,7 +2,8 @@ const { defineConfig } = require("@medusajs/utils")
 
 module.exports = defineConfig({
   admin: {
-    disable: true,
+    disable: false,
+    path: "/medusa",
   },
   projectConfig: {
     databaseUrl:
