@@ -1,14 +1,11 @@
-# Context is the monorepo root (set in docker-compose: context: ..)
-# No build step — Medusa runs directly from source via ts-node (no custom modules to bundle)
 FROM node:20-alpine
 
 RUN addgroup -S medusa && adduser -S medusa -G medusa
 
-WORKDIR /server
+WORKDIR /app
 
-# Install all deps including devDeps (ts-node required to load medusa-config.ts at runtime)
 COPY apps/medusa/package.json ./
-RUN npm install --force && chown -R medusa:medusa /server
+RUN npm install --force && chown -R medusa:medusa /app
 
 COPY --chown=medusa:medusa apps/medusa/ .
 

@@ -1,12 +1,8 @@
-import { defineConfig } from "@medusajs/framework/config"
-
-export default defineConfig({
+module.exports = {
   admin: {
     disable: true,
   },
   projectConfig: {
-    // Fallback URL satisfies build-time validation.
-    // The real DATABASE_URL is injected at container runtime.
     databaseUrl:
       process.env.DATABASE_URL ||
       "postgres://build:build@localhost:5432/medusa",
@@ -20,4 +16,4 @@ export default defineConfig({
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     },
   },
-})
+}
