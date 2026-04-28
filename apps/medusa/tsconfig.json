@@ -10,8 +10,7 @@
     "resolveJsonModule": true
   },
   "include": [
-    "src",
-    "medusa-config.ts"
+    "src"
   ],
   "exclude": [
     "node_modules",

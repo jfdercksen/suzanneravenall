@@ -1,6 +1,6 @@
-import { defineConfig } from "@medusajs/framework/config"
+const { defineConfig } = require("@medusajs/utils")
 
-export default defineConfig({
+module.exports = defineConfig({
   admin: {
     disable: true,
   },
