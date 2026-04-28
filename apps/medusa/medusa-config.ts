@@ -1,4 +1,6 @@
-module.exports = {
+import { defineConfig } from "@medusajs/framework/config"
+
+export default defineConfig({
   admin: {
     disable: true,
   },
@@ -16,4 +18,4 @@ module.exports = {
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     },
   },
-}
+})
