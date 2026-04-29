@@ -70,7 +70,7 @@ Last Updated By: Johan
 - ✅ Domain DNS in Cloudflare
 - ✅ GitHub repository created
 - ✅ Supabase project created
-- ✅ Staging VPS configured
+- ❌ No staging VPS — workflow is local → git push main → VPS Docker build (single environment, no staging)
 - ✅ GitHub Actions CI/CD tested
 - ✅ Docker containers running and healthy
 - ❌ Resend account and domain verified
@@ -89,6 +89,7 @@ Last Updated By: Johan
 
 ## Session Notes
 
+- **April 2026:** Deployment environment audit and P0 fixes applied. Root causes of Payload CSS/login/hydration issues identified and fixed: (1) `basePath: '/cms'` was in working copy of next.config.ts but never committed — deployed Payload had no basePath so all /cms/* routes 404'd; (2) infra/.env used stale variable names (`DATABASE_URI`, `PAYLOAD_PUBLIC_SERVER_URL`) that don't match docker-compose.yml — Payload DB and serverURL were not set; (3) `NEXT_PUBLIC_MEDUSA_URL=http://medusa:9000` baked internal Docker hostname into client bundle. Also fixed: production Nginx conf (suzanneravenall.conf.disabled) was missing /api/store and /api/admin path rewrites; pr-checks.yml referenced non-existent staging branch. VPS .env must be updated manually with corrected var names before rebuilding containers. KI004 and KI005 closed.
 - **April 2026:** Tasks 1.5–1.7 complete. Full page structure built — 30 static routes including /contact, /masterclass, /programs, /programs/[slug], /resources hub + 5 sub-pages, /shop placeholder, /portal shell + login/signup. SEO foundation: robots.ts, sitemap.ts (30 routes), OG defaults, Twitter cards, Organization + Person JSON-LD structured data. Build clean. Pre-existing errors fixed: lucide-react social icons replaced with inline SVGs, Server Component motion extraction.
 - **April 2026:** Phase 0 fully complete. Starting Phase 1 Task 1.1. Creating feature branch now.
 - **April 2026:** Task 1.1 complete. Next.js 14 app scaffolded in apps/web. 7/7 health check tests passing. Security headers reviewed by code-auditor — 6 fixes applied. Task 1.2 blocked until logo, colours and fonts received from Suzanne.

@@ -36,22 +36,57 @@ server {
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 
-    # Medusa storefront API
+    # Medusa storefront API — rewrite /api/store/* → /store/* (Medusa routes live at /store/*)
     location /api/store {
+        rewrite ^/api/store/?(.*)$ /store/$1 break;
         proxy_pass http://medusa:9000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
     }
 
-    # Medusa admin API
+    # Medusa admin API — rewrite /api/admin/* → /admin/* (Medusa routes live at /admin/*)
+    # TODO: restrict by IP or add auth_basic before DNS cutover goes live
     location /api/admin {
+        rewrite ^/api/admin/?(.*)$ /admin/$1 break;
         proxy_pass http://medusa:9000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+    }
+
+    # Medusa admin dashboard UI — served at admin.path ("/medusa") in medusa-config.js
+    location /medusa {
+        proxy_pass http://medusa:9000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+    }
+
+    # Medusa auth API — login flow calls /auth/user/emailpass
+    location /auth {
+        proxy_pass http://medusa:9000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+    }
+
+    # Medusa admin API direct calls from admin SPA
+    location /admin {
+        proxy_pass http://medusa:9000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
     }
 
     # Payload CMS
