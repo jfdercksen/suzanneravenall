@@ -1,17 +1,15 @@
-import { defineMiddlewares } from "@medusajs/framework/http"
-import type { MedusaNextFunction, MedusaRequest, MedusaResponse } from "@medusajs/framework/types"
+import { defineMiddlewares } from "@medusajs/medusa"
 
 export default defineMiddlewares({
   routes: [
     {
       matcher: "/**",
       middlewares: [
-        (req: MedusaRequest, _res: MedusaResponse, next: MedusaNextFunction) => {
-          // Trust the nginx reverse proxy's X-Forwarded-Proto header so that
-          // express-session sets cookies even when the client connects over HTTP.
-          // Safe because nginx is the only entry point — direct container access
-          // is not exposed. Remove once real HTTPS is live and NODE_ENV=production
-          // handles this correctly via Certbot + nginx SSL termination.
+        // Trust nginx's X-Forwarded-Proto header so express-session creates cookies
+        // even when the client connects over HTTP. nginx sets X-Forwarded-Proto: https
+        // and also strips the Secure flag on the response cookie via proxy_cookie_flags.
+        // Remove once real SSL is live on the domain.
+        (req: any, _res: any, next: any) => {
           req.app.set("trust proxy", 1)
           next()
         },
