@@ -82,7 +82,7 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: ${MEDUSA_DATABASE_URL}
-      NODE_ENV: ${NODE_ENV}
+      NODE_ENV: development
       MEDUSA_ADMIN_ONBOARDING_TYPE: ${MEDUSA_ADMIN_ONBOARDING_TYPE}
       JWT_SECRET: ${JWT_SECRET}
       COOKIE_SECRET: ${COOKIE_SECRET}
