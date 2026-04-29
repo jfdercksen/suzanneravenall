@@ -19,6 +19,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY --from=builder /app/.medusa/server ./
+COPY --from=builder /app/medusa-config.js ./
 
 RUN npm install --production --force
 
