@@ -1,0 +1,4459 @@
+{
+  "dry_run": true,
+  "generated_at": "2026-04-30T08:23:30.564Z",
+  "summary": {
+    "total_in_audit": 245,
+    "will_migrate": 128,
+    "will_skip": 117,
+    "skip_reasons": {
+      "not_published": 98,
+      "excluded_category_73": 17,
+      "empty_slug": 0,
+      "type_external": 1,
+      "type_grouped": 0,
+      "test_product": 1
+    },
+    "by_collection": {
+      "start-here": 26,
+      "deep-dive": 94,
+      "master-level": 8,
+      "practitioner": 0
+    },
+    "variable_products": 0,
+    "placeholder_variants": 0,
+    "no_description": 60,
+    "already_exists_in_medusa": 0,
+    "medusa_reachable": false,
+    "medusa_auth_ok": false
+  },
+  "will_migrate": [
+    {
+      "wc_id": 16441,
+      "name": "Bringing Your Energy Back",
+      "slug": "bringing-your-energy-back",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Bringing Your Energy Back",
+        "handle": "bringing-your-energy-back",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 35000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 16437,
+      "name": "Energetic Alignment & Inner Neutrality",
+      "slug": "energetic-alignment-inner-neutrality",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Energetic Alignment & Inner Neutrality",
+        "handle": "energetic-alignment-inner-neutrality",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 35000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 16440,
+      "name": "Relaxation & Energy Reclamation",
+      "slug": "relaxation-energy-reclamation",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Relaxation & Energy Reclamation",
+        "handle": "relaxation-energy-reclamation",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 35000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9298,
+      "name": "Coherence Muscle Testing (Self Study Online)",
+      "slug": "coherence-muscle-testing-self-study-online-2",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Coherence Muscle Testing (Self Study Online)",
+        "handle": "coherence-muscle-testing-self-study-online-2",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 161000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 17526,
+      "name": "Resonance Repatterning Accelerated Basic 5 Training Series: Review of Programs 1-5 (Live via Zoom)",
+      "slug": "resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Accelerated Basic 5 Training Series: Review of Programs 1-5 (Live via Zoom)",
+        "handle": "resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 531500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13156,
+      "name": "Resonance Repatterning Accelerated Basic 5 Training Series: Review of Programs 1-5 (Self Study)",
+      "slug": "resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Accelerated Basic 5 Training Series: Review of Programs 1-5 (Self Study)",
+        "handle": "resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 531500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13639,
+      "name": "Resonance Repatterning All Repatternings as Demo's / Talk Throughs + Resources (Self Study)",
+      "slug": "resonance-repatterning-all-repatternings-as-demos-talk-throughs-resources-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning All Repatternings as Demo's / Talk Throughs + Resources (Self Study)",
+        "handle": "resonance-repatterning-all-repatternings-as-demos-talk-throughs-resources-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 321000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 10721,
+      "name": "Resonance Repatterning Full Basic Training Series, Programs 1-5 (Live via Zoom)",
+      "slug": "resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Full Basic Training Series, Programs 1-5 (Live via Zoom)",
+        "handle": "resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 553500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9288,
+      "name": "Resonance Repatterning Full Basic Training, Programs 1-5 + Demos + Resources (Self Study)",
+      "slug": "resonance-repatterning-full-basic-training-programs-1-5-demos-resources-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Full Basic Training, Programs 1-5 + Demos + Resources (Self Study)",
+        "handle": "resonance-repatterning-full-basic-training-programs-1-5-demos-resources-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1395000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 8726,
+      "name": "Akashic Navigator & Intuitive Coaching Fundamentals: Clearing Self, Level 1 (Live via Zoom)",
+      "slug": "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Akashic Navigator & Intuitive Coaching Fundamentals: Clearing Self, Level 1 (Live via Zoom)",
+        "handle": "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1029500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13977,
+      "name": "Akashic Navigator & Intuitive Coaching Advanced: Clearing Others, Level 2 (Live via Zoom)",
+      "slug": "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Akashic Navigator & Intuitive Coaching Advanced: Clearing Others, Level 2 (Live via Zoom)",
+        "handle": "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1029500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 10710,
+      "name": "Akashic Navigator & Intuitive Coaching Fundamentals: Clearing Self, Level 1 (Live Retaker via Zoom)",
+      "slug": "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-retaker-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Akashic Navigator & Intuitive Coaching Fundamentals: Clearing Self, Level 1 (Live Retaker via Zoom)",
+        "handle": "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-retaker-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 221500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 10711,
+      "name": "Akashic Navigator & Intuitive Coaching Advanced: Clearing Others, Level 2 (Live Retaker via Zoom)",
+      "slug": "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-retaker-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Akashic Navigator & Intuitive Coaching Advanced: Clearing Others, Level 2 (Live Retaker via Zoom)",
+        "handle": "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-retaker-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 221500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9272,
+      "name": "Akashic Navigator & Intuitive Coaching Fundamentals & Advanced: Purchased together (Live via Zoom)",
+      "slug": "akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Akashic Navigator & Intuitive Coaching Fundamentals & Advanced: Purchased together (Live via Zoom)",
+        "handle": "akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1336000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 11504,
+      "name": "Akashic Navigator & Intuitive Coaching Fundamentals & Adv: Purchased together (Live Retaker Zoom)",
+      "slug": "akashic-navigator-intuitive-coaching-fundamentals-adv-purchased-together-live-retaker-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Akashic Navigator & Intuitive Coaching Fundamentals & Adv: Purchased together (Live Retaker Zoom)",
+        "handle": "akashic-navigator-intuitive-coaching-fundamentals-adv-purchased-together-live-retaker-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 166000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 6675,
+      "name": "Akashic Coaching/Clearing Session (60 mins)",
+      "slug": "akashic-clearing-session",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Akashic Coaching/Clearing Session (60 mins)",
+        "handle": "akashic-clearing-session",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 166000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9234,
+      "name": "Akashic Coaching/Clearing Session (60 mins) (package of 04)",
+      "slug": "akashic-coaching-clearing-session-60-mins-package-of-4",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Akashic Coaching/Clearing Session (60 mins) (package of 04)",
+        "handle": "akashic-coaching-clearing-session-60-mins-package-of-4",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 631000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9235,
+      "name": "Akashic Coaching/Clearing Session (60 mins) (package of 08)",
+      "slug": "akashic-coaching-clearing-session-60-mins-package-of-8",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Akashic Coaching/Clearing Session (60 mins) (package of 08)",
+        "handle": "akashic-coaching-clearing-session-60-mins-package-of-8",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1195500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9236,
+      "name": "Akashic Coaching/Clearing Session (60 mins) (package of 12)",
+      "slug": "akashic-coaching-clearing-session-60-mins-package-of-12",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Akashic Coaching/Clearing Session (60 mins) (package of 12)",
+        "handle": "akashic-coaching-clearing-session-60-mins-package-of-12",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1694000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 10768,
+      "name": "Akashic Coaching/Clearing Session (90min)",
+      "slug": "akashic-coaching-clearing-session-90min",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Akashic Coaching/Clearing Session (90min)",
+        "handle": "akashic-coaching-clearing-session-90min",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 232500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 8724,
+      "name": "Akashic Navigator & Intuitive Coaching Fundamentals: Clearing Self, Level 1 (Self Study)",
+      "slug": "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Akashic Navigator & Intuitive Coaching Fundamentals: Clearing Self, Level 1 (Self Study)",
+        "handle": "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 465000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 11614,
+      "name": "Akashic Navigator & Intuitive Coaching Advanced: Clearing Others, Level 2 (Self Study)",
+      "slug": "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Akashic Navigator & Intuitive Coaching Advanced: Clearing Others, Level 2 (Self Study)",
+        "handle": "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 465000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9269,
+      "name": "Akashic Navigator & Intuitive Coaching Fundamentals & Advanced: Purchased together (Self Study)",
+      "slug": "akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Akashic Navigator & Intuitive Coaching Fundamentals & Advanced: Purchased together (Self Study)",
+        "handle": "akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 790500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9301,
+      "name": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 1 (Live Zoom)",
+      "slug": "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 1 (Live Zoom)",
+        "handle": "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 498000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9300,
+      "name": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 1 (Self Study)",
+      "slug": "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 1 (Self Study)",
+        "handle": "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 332000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 10722,
+      "name": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 2 (Live Zoom)",
+      "slug": "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 2 (Live Zoom)",
+        "handle": "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 166000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 6104,
+      "name": "Trauma to Transcendence: Breaking the hold of the Childhood brain on your adult self (Live via Zoom)",
+      "slug": "trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Trauma to Transcendence: Breaking the hold of the Childhood brain on your adult self (Live via Zoom)",
+        "handle": "trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 332000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9292,
+      "name": "Trauma to Transcendence: Breaking the hold of the Childhood brain on your adult self (Self Study)",
+      "slug": "trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Trauma to Transcendence: Breaking the hold of the Childhood brain on your adult self (Self Study)",
+        "handle": "trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 350000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9265,
+      "name": "Energetic Clearing (completed remotely)",
+      "slug": "energetic-clearing-completed-remotely",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Energetic Clearing (completed remotely)",
+        "handle": "energetic-clearing-completed-remotely",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 83000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9266,
+      "name": "Energetic Clearing (completed remotely) Package of 04",
+      "slug": "energetic-clearing-completed-remotely-package-of-4",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Energetic Clearing (completed remotely) Package of 04",
+        "handle": "energetic-clearing-completed-remotely-package-of-4",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 315500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9267,
+      "name": "Energetic Clearing (completed remotely) Package of 08",
+      "slug": "energetic-clearing-completed-remotely-package-of-8",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Energetic Clearing (completed remotely) Package of 08",
+        "handle": "energetic-clearing-completed-remotely-package-of-8",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 598000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9268,
+      "name": "Energetic Clearing (completed remotely) Package of 12",
+      "slug": "energetic-clearing-completed-remotely-package-of-12",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Energetic Clearing (completed remotely) Package of 12",
+        "handle": "energetic-clearing-completed-remotely-package-of-12",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 847000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 11611,
+      "name": "Deep Energy Clearing Fundamentals: Clearing Self, Level 1 (Live via Zoom)",
+      "slug": "deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Deep Energy Clearing Fundamentals: Clearing Self, Level 1 (Live via Zoom)",
+        "handle": "deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 786000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 10723,
+      "name": "Deep Energy Clearing Fundamentals: Clearing Self, Level 1 (Live Retaker via Zoom)",
+      "slug": "deep-energy-clearing-fundamentals-clearing-self-level-1-live-retaker-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Deep Energy Clearing Fundamentals: Clearing Self, Level 1 (Live Retaker via Zoom)",
+        "handle": "deep-energy-clearing-fundamentals-clearing-self-level-1-live-retaker-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 332000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 10724,
+      "name": "Deep Energy Clearing Advanced: Clearing Others, Level 2 (Live Retaker via Zoom)",
+      "slug": "deep-energy-clearing-advanced-clearing-others-level-2-live-retaker-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Deep Energy Clearing Advanced: Clearing Others, Level 2 (Live Retaker via Zoom)",
+        "handle": "deep-energy-clearing-advanced-clearing-others-level-2-live-retaker-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 332000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 11608,
+      "name": "Deep Energy Clearing Fundamentals: Clearing Self, Level 1 (Self Study)",
+      "slug": "deep-energy-clearing-fundamentals-clearing-self-level-1-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Deep Energy Clearing Fundamentals: Clearing Self, Level 1 (Self Study)",
+        "handle": "deep-energy-clearing-fundamentals-clearing-self-level-1-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 465000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 8731,
+      "name": "Deep Energy Clearing Advanced: Clearing Others, Level 2 (Live via Zoom)",
+      "slug": "deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Deep Energy Clearing Advanced: Clearing Others, Level 2 (Live via Zoom)",
+        "handle": "deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 786000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 8729,
+      "name": "Deep Energy Clearing Advanced: Clearing Others, Level 2 (Self Study)",
+      "slug": "deep-energy-clearing-advanced-clearing-others-level-2-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Deep Energy Clearing Advanced: Clearing Others, Level 2 (Self Study)",
+        "handle": "deep-energy-clearing-advanced-clearing-others-level-2-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 465000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9243,
+      "name": "Executive coaching (30 mins)",
+      "slug": "executive-coaching-30-mins",
+      "type": "simple",
+      "proposed_collection": "master-level",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Executive coaching (30 mins)",
+        "handle": "executive-coaching-30-mins",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 166000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9332,
+      "name": "Executive coaching (60 mins)",
+      "slug": "executive-coaching-60-mins",
+      "type": "simple",
+      "proposed_collection": "master-level",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Executive coaching (60 mins)",
+        "handle": "executive-coaching-60-mins",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 277000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9245,
+      "name": "Executive coaching (60 mins) (package of 04)",
+      "slug": "executive-coaching-60-mins-package-of-4",
+      "type": "simple",
+      "proposed_collection": "master-level",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Executive coaching (60 mins) (package of 04)",
+        "handle": "executive-coaching-60-mins-package-of-4",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1051500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9246,
+      "name": "Executive coaching (60 mins) (package of 08)",
+      "slug": "executive-coaching-60-mins-package-of-8",
+      "type": "simple",
+      "proposed_collection": "master-level",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Executive coaching (60 mins) (package of 08)",
+        "handle": "executive-coaching-60-mins-package-of-8",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1993000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9247,
+      "name": "Executive coaching (60 mins) (package of 12)",
+      "slug": "executive-coaching-60-mins-package-of-12",
+      "type": "simple",
+      "proposed_collection": "master-level",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Executive coaching (60 mins) (package of 12)",
+        "handle": "executive-coaching-60-mins-package-of-12",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 2823000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9248,
+      "name": "Executive coaching (60 mins) (package of 16)",
+      "slug": "executive-coaching-60-mins-package-of-16",
+      "type": "simple",
+      "proposed_collection": "master-level",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Executive coaching (60 mins) (package of 16)",
+        "handle": "executive-coaching-60-mins-package-of-16",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 3542500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9260,
+      "name": "Exploring the Alpha Mind (45 mins)",
+      "slug": "exploring-the-alpha-mind-45-minutes",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Exploring the Alpha Mind (45 mins)",
+        "handle": "exploring-the-alpha-mind-45-minutes",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 77500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9261,
+      "name": "Exploring the Alpha Mind (45 Mins) (Package of 05)",
+      "slug": "exploring-the-alpha-mind-45-mins-package-of-5",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Exploring the Alpha Mind (45 Mins) (Package of 05)",
+        "handle": "exploring-the-alpha-mind-45-mins-package-of-5",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 368000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9262,
+      "name": "Exploring the Alpha Mind (45 Mins) (Package of 08)",
+      "slug": "exploring-the-alpha-mind-45-mins-package-of-8",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Exploring the Alpha Mind (45 Mins) (Package of 08)",
+        "handle": "exploring-the-alpha-mind-45-mins-package-of-8",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 558000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9257,
+      "name": "Group Family Coaching (60 Mins) (Single Sesson)",
+      "slug": "group-family-coaching-60-mins",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Group Family Coaching (60 Mins) (Single Sesson)",
+        "handle": "group-family-coaching-60-mins",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 166000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9258,
+      "name": "Group Family Coaching (60 Mins) (Package of 04)",
+      "slug": "group-family-coaching-60-mins-package-of-4",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Group Family Coaching (60 Mins) (Package of 04)",
+        "handle": "group-family-coaching-60-mins-package-of-4",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 631000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9259,
+      "name": "Group Family Coaching (60 Mins) (Package of 08)",
+      "slug": "group-family-coaching-60-mins-package-of-8",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Group Family Coaching (60 Mins) (Package of 08)",
+        "handle": "group-family-coaching-60-mins-package-of-8",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1195500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 6129,
+      "name": "Finding My Life Purpose (Live via Zoom)",
+      "slug": "finding-my-life-purpose-live",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Finding My Life Purpose (Live via Zoom)",
+        "handle": "finding-my-life-purpose-live",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 99500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9542,
+      "name": "Finding My Life Purpose (Self Study)",
+      "slug": "finding-my-life-purpose-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Finding My Life Purpose (Self Study)",
+        "handle": "finding-my-life-purpose-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 99500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13488,
+      "name": "Getting Unstuck (Self Study)",
+      "slug": "getting-unstuck-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Getting Unstuck (Self Study)",
+        "handle": "getting-unstuck-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 166000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 14545,
+      "name": "Post Traumatic Growth (Self Study Online)",
+      "slug": "post-traumatic-growth-self-study-online",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Post Traumatic Growth (Self Study Online)",
+        "handle": "post-traumatic-growth-self-study-online",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 22000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 14335,
+      "name": "Rapid Repatterning Session (60 mins) (In-person session)",
+      "slug": "rapid-repatterning-session-60-mins-in-person",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Rapid Repatterning Session (60 mins) (In-person session)",
+        "handle": "rapid-repatterning-session-60-mins-in-person",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 199500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 6674,
+      "name": "Rapid Repatterning Session (60 mins) (single online session)",
+      "slug": "rapid-repatterning-session-60-min-online",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Rapid Repatterning Session (60 mins) (single online session)",
+        "handle": "rapid-repatterning-session-60-min-online",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 166000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13235,
+      "name": "Group Session Attraction Frequency (available as a recorded series) Coming Soon",
+      "slug": "group-session-attraction-frequency-recorded",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Group Session Attraction Frequency (available as a recorded series) Coming Soon",
+        "handle": "group-session-attraction-frequency-recorded",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9749,
+      "name": "Group Session Being a Great Boundary Setter (available as a recorded series)",
+      "slug": "being-a-great-boundry-setter-group-session",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Group Session Being a Great Boundary Setter (available as a recorded series)",
+        "handle": "being-a-great-boundry-setter-group-session",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13492,
+      "name": "Group Session Being a Great Boundary Setter (booked as a series only)",
+      "slug": "group-session-being-a-great-boundary-setter-booked-as-a-series-only",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Group Session Being a Great Boundary Setter (booked as a series only)",
+        "handle": "group-session-being-a-great-boundary-setter-booked-as-a-series-only",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13163,
+      "name": "Group Session Career Progression (available as a recorded series)",
+      "slug": "group-session-career-progression",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Group Session Career Progression (available as a recorded series)",
+        "handle": "group-session-career-progression",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 6679,
+      "name": "Group Session Career Progression (booked as a series only)",
+      "slug": "career-progression-group-session",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Group Session Career Progression (booked as a series only)",
+        "handle": "career-progression-group-session",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13237,
+      "name": "Group Session Develop Super Confidence",
+      "slug": "group-session-develop-super-confidence",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Group Session Develop Super Confidence",
+        "handle": "group-session-develop-super-confidence",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13241,
+      "name": "Group Session Develop Super Confidence (available as a recorded series) Coming Soon",
+      "slug": "group-session-develop-super-confidence-recorded",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Group Session Develop Super Confidence (available as a recorded series) Coming Soon",
+        "handle": "group-session-develop-super-confidence-recorded",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13168,
+      "name": "Group Session Love & Relationships",
+      "slug": "group-session-love-relationships",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Group Session Love & Relationships",
+        "handle": "group-session-love-relationships",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 6678,
+      "name": "Group Session Love & Relationships (booked as a series only)",
+      "slug": "love-relationships-group-session",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Group Session Love & Relationships (booked as a series only)",
+        "handle": "love-relationships-group-session",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13171,
+      "name": "Group Session Money Mastery (available as a recorded series)",
+      "slug": "group-session-money-mastery",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Group Session Money Mastery (available as a recorded series)",
+        "handle": "group-session-money-mastery",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 6677,
+      "name": "Group Session Money Mastery (booked as a series only)",
+      "slug": "money-mastery-group-session",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Group Session Money Mastery (booked as a series only)",
+        "handle": "money-mastery-group-session",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13491,
+      "name": "Group Session Nice or not nice in communication (booked as a series only)",
+      "slug": "group-session-nice-or-not-nice-in-communication-booked-as-a-series-only",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Group Session Nice or not nice in communication (booked as a series only)",
+        "handle": "group-session-nice-or-not-nice-in-communication-booked-as-a-series-only",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13184,
+      "name": "Group Session Shedding excess Weight (available as recorded series)",
+      "slug": "group-session-shedding-excess-weight",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Group Session Shedding excess Weight (available as recorded series)",
+        "handle": "group-session-shedding-excess-weight",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13493,
+      "name": "Group Session Shedding excess Weight (booked as a series only)",
+      "slug": "group-session-shedding-excess-weight-booked-as-a-series-only",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Group Session Shedding excess Weight (booked as a series only)",
+        "handle": "group-session-shedding-excess-weight-booked-as-a-series-only",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 150000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9296,
+      "name": "Intuition in My Business Capacity (Live via Zoom)",
+      "slug": "intuition-in-my-business-capacity-live",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Intuition in My Business Capacity (Live via Zoom)",
+        "handle": "intuition-in-my-business-capacity-live",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 161000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9297,
+      "name": "Intuition in My Business Capacity (Self Study)",
+      "slug": "intuition-in-my-business-capacity-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Intuition in My Business Capacity (Self Study)",
+        "handle": "intuition-in-my-business-capacity-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 99500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 6113,
+      "name": "Intuition in My Personal Capacity (Live via Zoom)",
+      "slug": "intuition-in-my-personal-capacity-live",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Intuition in My Personal Capacity (Live via Zoom)",
+        "handle": "intuition-in-my-personal-capacity-live",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 161000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9295,
+      "name": "Intuition in My Personal Capacity (Self Study)",
+      "slug": "intuition-in-my-personal-capacity-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Intuition in My Personal Capacity (Self Study)",
+        "handle": "intuition-in-my-personal-capacity-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 99500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 6109,
+      "name": "Love & Relationships (Live via Zoom)",
+      "slug": "love-relationships-live",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Love & Relationships (Live via Zoom)",
+        "handle": "love-relationships-live",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 161000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9294,
+      "name": "Love & Relationships (Self Study)",
+      "slug": "love-relationships-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Love & Relationships (Self Study)",
+        "handle": "love-relationships-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 99500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 8606,
+      "name": "Meditation (Live via Zoom)",
+      "slug": "meditation-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Meditation (Live via Zoom)",
+        "handle": "meditation-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 277000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9302,
+      "name": "Meditation (Self Study)",
+      "slug": "meditation-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Meditation (Self Study)",
+        "handle": "meditation-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 166000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9303,
+      "name": "Mindfulness (Self Study)",
+      "slug": "mindfulness-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Mindfulness (Self Study)",
+        "handle": "mindfulness-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 166000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 8604,
+      "name": "Mindfulness (Live via Zoom)",
+      "slug": "mindfulness-live",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Mindfulness (Live via Zoom)",
+        "handle": "mindfulness-live",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 277000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9230,
+      "name": "Rapid Repatterning Session (60 mins) (Package of 04 sessions)",
+      "slug": "rapid-repatterning-session-60-mins-package-of-4-sessions",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Rapid Repatterning Session (60 mins) (Package of 04 sessions)",
+        "handle": "rapid-repatterning-session-60-mins-package-of-4-sessions",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 631000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9231,
+      "name": "Rapid Repatterning Session (60 mins) (Package of 08 sessions)",
+      "slug": "rapid-repatterning-session-60-mins-package-of-8-sessions",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Rapid Repatterning Session (60 mins) (Package of 08 sessions)",
+        "handle": "rapid-repatterning-session-60-mins-package-of-8-sessions",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1196000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9232,
+      "name": "Rapid Repatterning Session (60 mins) (Package of 12 sessions)",
+      "slug": "rapid-repatterning-session-60-mins-package-of-12-sessions",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Rapid Repatterning Session (60 mins) (Package of 12 sessions)",
+        "handle": "rapid-repatterning-session-60-mins-package-of-12-sessions",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1694000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9233,
+      "name": "Rapid Repatterning Session (60 mins) (Package of 16 sessions)",
+      "slug": "rapid-repatterning-session-60-mins-package-of-16-sessions",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Rapid Repatterning Session (60 mins) (Package of 16 sessions)",
+        "handle": "rapid-repatterning-session-60-mins-package-of-16-sessions",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 2126000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9229,
+      "name": "Rapid Repatterning Session (90 mins) (Single online session)",
+      "slug": "rapid-repatterning-session-90-mins-online",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Rapid Repatterning Session (90 mins) (Single online session)",
+        "handle": "rapid-repatterning-session-90-mins-online",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 249000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 14331,
+      "name": "Rapid Repatterning Session (90 mins In-person)",
+      "slug": "rapid-repatterning-session-90-mins-in-person",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Rapid Repatterning Session (90 mins In-person)",
+        "handle": "rapid-repatterning-session-90-mins-in-person",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 299000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 16449,
+      "name": "Rapid Repatterning / Coaching (90 mins) (package of 04)",
+      "slug": "rapid-repatterning-coaching-90-mins-package-of-04",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Rapid Repatterning / Coaching (90 mins) (package of 04)",
+        "handle": "rapid-repatterning-coaching-90-mins-package-of-04",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 946500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 16450,
+      "name": "Rapid Repatterning / Coaching (90 mins) (package of 08)",
+      "slug": "rapid-repatterning-coaching-90-mins-package-of-08",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Rapid Repatterning / Coaching (90 mins) (package of 08)",
+        "handle": "rapid-repatterning-coaching-90-mins-package-of-08",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1793500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 16452,
+      "name": "Rapid Repatterning / Coaching (90 mins) (package of 12)",
+      "slug": "rapid-repatterning-coaching-90-mins-package-of-12",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Rapid Repatterning / Coaching (90 mins) (package of 12)",
+        "handle": "rapid-repatterning-coaching-90-mins-package-of-12",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 2541000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 16451,
+      "name": "Rapid Repatterning / Coaching (90 mins) (package of 16)",
+      "slug": "rapid-repatterning-coaching-90-mins-package-of-16",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Rapid Repatterning / Coaching (90 mins) (package of 16)",
+        "handle": "rapid-repatterning-coaching-90-mins-package-of-16",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 3188500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9228,
+      "name": "Rapid Transformation Therapy Session (1 hypnosis session + hypnosis recording)",
+      "slug": "rapid-transformation-therapy-session-1-hypnosis-session-hypnosis-recording",
+      "type": "simple",
+      "proposed_collection": "master-level",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Rapid Transformation Therapy Session (1 hypnosis session + hypnosis recording)",
+        "handle": "rapid-transformation-therapy-session-1-hypnosis-session-hypnosis-recording",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 232500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 6673,
+      "name": "Rapid Transformation Therapy Session (1 hypnosis session, hypnosis, recording + 2 coaching sessions)",
+      "slug": "rapid-transformation-therapy-session",
+      "type": "simple",
+      "proposed_collection": "master-level",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Rapid Transformation Therapy Session (1 hypnosis session, hypnosis, recording + 2 coaching sessions)",
+        "handle": "rapid-transformation-therapy-session",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 454000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 8828,
+      "name": "Resonance Repatterning Program 1 Fundamentals (Live via Zoom)",
+      "slug": "resonance-repatterning-program-1-fundamentals-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 1 Fundamentals (Live via Zoom)",
+        "handle": "resonance-repatterning-program-1-fundamentals-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 531500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 10713,
+      "name": "Resonance Repatterning Program 1 Fundamentals (Live Retaker via Zoom)",
+      "slug": "resonance-repatterning-program-1-fundamentals-live-retaker-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 1 Fundamentals (Live Retaker via Zoom)",
+        "handle": "resonance-repatterning-program-1-fundamentals-live-retaker-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 221500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9273,
+      "name": "Resonance Repatterning Program 1 Fundamentals (Self Study)",
+      "slug": "resonance-repatterning-program-1-fundamentals-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 1 Fundamentals (Self Study)",
+        "handle": "resonance-repatterning-program-1-fundamentals-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 310000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9277,
+      "name": "Resonance Repatterning Program 2 Primary Patterns (Live via Zoom)",
+      "slug": "resonance-repatterning-program-2-primary-patterns-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 2 Primary Patterns (Live via Zoom)",
+        "handle": "resonance-repatterning-program-2-primary-patterns-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 531500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 10714,
+      "name": "Resonance Repatterning Program 2 Primary Patterns (Live Retaker via Zoom)",
+      "slug": "resonance-repatterning-program-2-primary-patterns-live-retaker-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 2 Primary Patterns (Live Retaker via Zoom)",
+        "handle": "resonance-repatterning-program-2-primary-patterns-live-retaker-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 221500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9274,
+      "name": "Resonance Repatterning Program 2 Primary Patterns (Self Study)",
+      "slug": "resonance-repatterning-program-2-primary-patterns-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 2 Primary Patterns (Self Study)",
+        "handle": "resonance-repatterning-program-2-primary-patterns-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 310000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9282,
+      "name": "Resonance Repatterning Program 3 Unconscious Patterns (Live via Zoom)",
+      "slug": "resonance-repatterning-program-3-unconscious-patterns-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 3 Unconscious Patterns (Live via Zoom)",
+        "handle": "resonance-repatterning-program-3-unconscious-patterns-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 531500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 10716,
+      "name": "Resonance Repatterning Program 3 Unconscious Patterns (Live Retaker via Zoom)",
+      "slug": "resonance-repatterning-program-3-unconscious-patterns-live-retaker-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 3 Unconscious Patterns (Live Retaker via Zoom)",
+        "handle": "resonance-repatterning-program-3-unconscious-patterns-live-retaker-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 221500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9278,
+      "name": "Resonance Repatterning Program 3 Unconscious Patterns (Self Study)",
+      "slug": "resonance-repatterning-program-3-unconscious-patterns-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 3 Unconscious Patterns (Self Study)",
+        "handle": "resonance-repatterning-program-3-unconscious-patterns-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 310000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9286,
+      "name": "Resonance Repatterning Program 4 Chakra Patterns (Live via Zoom)",
+      "slug": "resonance-repatterning-program-4-chakra-patterns-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 4 Chakra Patterns (Live via Zoom)",
+        "handle": "resonance-repatterning-program-4-chakra-patterns-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 531500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 10718,
+      "name": "Resonance Repatterning Program 4 Chakra Patterns (Live Retaker via Zoom)",
+      "slug": "resonance-repatterning-program-4-chakra-patterns-live-retaker-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 4 Chakra Patterns (Live Retaker via Zoom)",
+        "handle": "resonance-repatterning-program-4-chakra-patterns-live-retaker-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 221500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9283,
+      "name": "Resonance Repatterning Program 4 Chakra Patterns (Self Study)",
+      "slug": "resonance-repatterning-program-4-chakra-patterns-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 4 Chakra Patterns (Self Study)",
+        "handle": "resonance-repatterning-program-4-chakra-patterns-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 310000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 11270,
+      "name": "Resonance Repatterning Program 5 Five Elements & Meridians (Live via Zoom)",
+      "slug": "resonance-repatterning-program-5-five-elements-meridians-live-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 5 Five Elements & Meridians (Live via Zoom)",
+        "handle": "resonance-repatterning-program-5-five-elements-meridians-live-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 531500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 10719,
+      "name": "Resonance Repatterning Program 5 Five Elements & Meridians (Live Retaker via Zoom)",
+      "slug": "resonance-repatterning-program-5-five-elements-meridians-live-retaker-via-zoom",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 5 Five Elements & Meridians (Live Retaker via Zoom)",
+        "handle": "resonance-repatterning-program-5-five-elements-meridians-live-retaker-via-zoom",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 221500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 11266,
+      "name": "Resonance Repatterning Program 5 Five Elements & Meridians (Self Study)",
+      "slug": "https-suzanneravenall-com-product-resonance-represonance-repatterning-program-5-five-elements-meridians-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 5 Five Elements & Meridians (Self Study)",
+        "handle": "https-suzanneravenall-com-product-resonance-represonance-repatterning-program-5-five-elements-meridians-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 310000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 16237,
+      "name": "Resonance Repatterning Program 7 Principles of Relationships Practical + Demos (Self Study)",
+      "slug": "resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 7 Principles of Relationships Practical + Demos (Self Study)",
+        "handle": "resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 420500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 16236,
+      "name": "Resonance Repatterning Program 9 Energetics of Relationships Practical + Demos (Self Study)",
+      "slug": "resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning Program 9 Energetics of Relationships Practical + Demos (Self Study)",
+        "handle": "resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 420500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 6671,
+      "name": "Resonance Repatterning / Coaching (60 Mins)",
+      "slug": "resonance-repatterning-session",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Resonance Repatterning / Coaching (60 Mins)",
+        "handle": "resonance-repatterning-session",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 166000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9253,
+      "name": "Resonance Repatterning / Coaching Session (60 Mins) (package of 04)",
+      "slug": "resonance-repatterning-coaching-session-60-mins-package-of-4",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Resonance Repatterning / Coaching Session (60 Mins) (package of 04)",
+        "handle": "resonance-repatterning-coaching-session-60-mins-package-of-4",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 631000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9254,
+      "name": "Resonance Repatterning / Coaching Session (60 Mins) (package of 08)",
+      "slug": "resonance-repatterning-coaching-session-60-mins-package-of-8",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Resonance Repatterning / Coaching Session (60 Mins) (package of 08)",
+        "handle": "resonance-repatterning-coaching-session-60-mins-package-of-8",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1196000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9255,
+      "name": "Resonance Repatterning / Coaching Session (60 Mins) (package of 12)",
+      "slug": "resonance-repatterning-coaching-session-60-mins-package-of-12",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Resonance Repatterning / Coaching Session (60 Mins) (package of 12)",
+        "handle": "resonance-repatterning-coaching-session-60-mins-package-of-12",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1694000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9256,
+      "name": "Resonance Repatterning / Coaching Session (60 Mins) (package of 16)",
+      "slug": "resonance-repatterning-coaching-session-60-mins-package-of-16",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Resonance Repatterning / Coaching Session (60 Mins) (package of 16)",
+        "handle": "resonance-repatterning-coaching-session-60-mins-package-of-16",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 2126000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9249,
+      "name": "Resonance Repatterning / Coaching (90 Mins)",
+      "slug": "resonance-repatterning-coaching-90-mins",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Resonance Repatterning / Coaching (90 Mins)",
+        "handle": "resonance-repatterning-coaching-90-mins",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 249000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 13786,
+      "name": "Resonance Repatterning / Coaching (90 Mins) (In-person session)",
+      "slug": "resonance-repatterning-coaching-90-mins-in-person-session",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Resonance Repatterning / Coaching (90 Mins) (In-person session)",
+        "handle": "resonance-repatterning-coaching-90-mins-in-person-session",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 299000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 8630,
+      "name": "Resonance Repatterning / Coaching (90 mins) (package of 04)",
+      "slug": "resonance-repatterning-session-4x1",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Resonance Repatterning / Coaching (90 mins) (package of 04)",
+        "handle": "resonance-repatterning-session-4x1",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 946500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9250,
+      "name": "Resonance Repatterning / Coaching (90 mins) (package of 08)",
+      "slug": "resonance-repatterning-coaching-90-mins-package-of-8",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Resonance Repatterning / Coaching (90 mins) (package of 08)",
+        "handle": "resonance-repatterning-coaching-90-mins-package-of-8",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1793500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9251,
+      "name": "Resonance Repatterning / Coaching (90 mins) (package of 12)",
+      "slug": "resonance-repatterning-coaching-90-mins-package-of-12",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Resonance Repatterning / Coaching (90 mins) (package of 12)",
+        "handle": "resonance-repatterning-coaching-90-mins-package-of-12",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 2541000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9252,
+      "name": "Resonance Repatterning / Coaching (90 mins) (package of 16)",
+      "slug": "resonance-repatterning-coaching-90-mins-package-of-16",
+      "type": "simple",
+      "proposed_collection": "deep-dive",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Resonance Repatterning / Coaching (90 mins) (package of 16)",
+        "handle": "resonance-repatterning-coaching-90-mins-package-of-16",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 3188500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9237,
+      "name": "Transformation Coaching (60 mins)",
+      "slug": "transformation-coaching-60-mins",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Transformation Coaching (60 mins)",
+        "handle": "transformation-coaching-60-mins",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 166000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9239,
+      "name": "Transformation Coaching (60 mins) (package of 04)",
+      "slug": "transformation-coaching-60-mins-package-of-4",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Transformation Coaching (60 mins) (package of 04)",
+        "handle": "transformation-coaching-60-mins-package-of-4",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 631000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9240,
+      "name": "Transformation Coaching (60 mins) (package of 08)",
+      "slug": "transformation-coaching-60-mins-package-of-8",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Transformation Coaching (60 mins) (package of 08)",
+        "handle": "transformation-coaching-60-mins-package-of-8",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1196000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9241,
+      "name": "Transformation Coaching (60 mins) (package of 12)",
+      "slug": "transformation-coaching-60-mins-package-of-12",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Transformation Coaching (60 mins) (package of 12)",
+        "handle": "transformation-coaching-60-mins-package-of-12",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 1694000,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9242,
+      "name": "Transformation Coaching (60 mins) (package of 16)",
+      "slug": "transformation-coaching-60-mins-package-of-16",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Transformation Coaching (60 mins) (package of 16)",
+        "handle": "transformation-coaching-60-mins-package-of-16",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 2125500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 9238,
+      "name": "Transformation Coaching (90 mins)",
+      "slug": "transformation-coaching-90-mins",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": true,
+      "payload": {
+        "title": "Transformation Coaching (90 mins)",
+        "handle": "transformation-coaching-90-mins",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 232500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 4740,
+      "name": "The Latest Book By Suzanne (Pre-order)",
+      "slug": "the-latest-book-by-suzanne",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "The Latest Book By Suzanne (Pre-order)",
+        "handle": "the-latest-book-by-suzanne",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 16500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "wc_id": 14243,
+      "name": "Quantum Healing Codes",
+      "slug": "quantum-healing-codes-ebook-audio-download",
+      "type": "simple",
+      "proposed_collection": "start-here",
+      "collection_id": null,
+      "variant_count": 1,
+      "placeholder_variant": false,
+      "no_description": false,
+      "payload": {
+        "title": "Quantum Healing Codes",
+        "handle": "quantum-healing-codes-ebook-audio-download",
+        "description": "",
+        "status": "published",
+        "collection_id": null,
+        "options": [],
+        "variants": [
+          {
+            "title": "Default",
+            "prices": [
+              {
+                "amount": 34500,
+                "currency_code": "zar"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "will_skip": [
+    {
+      "wc_id": 17133,
+      "name": "Suzanne Ravenall Coaching App",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 16494,
+      "name": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 2 (Self Study)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16490,
+      "name": "Deep Energy Clearing Fundamentals & Advanced: Purchased Together (Self Study)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16624,
+      "name": "Rapid Repatterning / Coaching (60 mins) (package of 04) (In-person session)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16623,
+      "name": "Rapid Repatterning / Coaching (60 mins) (package of 08) (In-person session)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16625,
+      "name": "Rapid Repatterning / Coaching (60 mins) (package of 12) (In-person session)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16626,
+      "name": "Rapid Repatterning / Coaching (60 mins) (package of 16) (In-person session)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16630,
+      "name": "Rapid Repatterning / Coaching (90 mins) (package of 04) (In-person session)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16629,
+      "name": "Rapid Repatterning / Coaching (90 mins) (package of 08) (In-person session)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16627,
+      "name": "Rapid Repatterning / Coaching (90 mins) (package of 12) (In-person session)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16628,
+      "name": "Rapid Repatterning / Coaching (90 mins) (package of 16) (In-person session)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 15275,
+      "name": "Resonance Repatterning 06 Inner Cultivation (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16039,
+      "name": "Resonance Repatterning 06 Inner Cultivation (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16038,
+      "name": "SR-product-test-variable-8",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13733,
+      "name": "Akashic Coaching/Clearing Session",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14306,
+      "name": "Rapid Repatterning Session",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14317,
+      "name": "Rapid Repatterning Session (60 min Options)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14216,
+      "name": "Resonance Repatterning / Coaching (60 Min Options)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14207,
+      "name": "Resonance Repatterning / Coaching (90 Min Options)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14175,
+      "name": "Energetic Clearing (completed remotely)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14171,
+      "name": "BodyTalk",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14201,
+      "name": "Rapid Transformation Therapy Session",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14182,
+      "name": "Executive coaching",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14293,
+      "name": "Rapid Repatterning Session (90 mins) (In-person session)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14098,
+      "name": "Resonance Repatterning 03 Unconscious Patterns (Live without mentoring)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13952,
+      "name": "60 min (single session)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13954,
+      "name": "60 Mins (Package of 04 sessions)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13950,
+      "name": "60 Mins (Package of 08 sessions)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13951,
+      "name": "60 Mins (Package of 12 sessions)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13949,
+      "name": "60 Mins (Package of 16 sessions)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13953,
+      "name": "90 min (single session)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14061,
+      "name": "Resonance Repatterning Full Basic 5 Training Series (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 15187,
+      "name": "Resonance Repatterning Accelerated Basic 5 Training Series : Part 2 (Live Online) v2",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14109,
+      "name": "Resonance Repatterning 01 Fundamentals (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14100,
+      "name": "Resonance Repatterning Full Basic 5 Training Series + Demo's (Self Study Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14148,
+      "name": "Resonance Repatterning Full Basic 5 Training Series + Demo's (Self Study RR Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13749,
+      "name": "Resonance Repatterning : Demo's/Talk Throughs & Resources of Basic 5 Series (Self Study Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14105,
+      "name": "Resonance Repatterning 01 Fundamentals (Self Study Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14154,
+      "name": "Resonance Repatterning 01 Fundamentals (Self Study RR Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14120,
+      "name": "Resonance Repatterning 02 Primary Patterns (Self Study Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14158,
+      "name": "Resonance Repatterning 02 Primary Patterns (Self Study RR Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14128,
+      "name": "Resonance Repatterning 03 Unconscious Patterns (Self Study Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14161,
+      "name": "Resonance Repatterning 03 Unconscious Patterns (Self Study RR Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14136,
+      "name": "Resonance Repatterning 04 Chakra Patterns (Self Study Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14164,
+      "name": "Resonance Repatterning 04 Chakra Patterns (Self Study RR Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14141,
+      "name": "Resonance Repatterning 05 Five Elements & Meridian Patterns (Self Study Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14167,
+      "name": "Resonance Repatterning 05 Five Elements & Meridian Patterns (Self Study RR Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13860,
+      "name": "Resonance Repatterning Full Basic 5 Training Series + Demo's (Self Study Online with Mentoring)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13861,
+      "name": "Resonance Repatterning Full Basic 5 Training Series + Demo's (Self Study Online with Mentoring)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14072,
+      "name": "Resonance Repatterning 02 Primary Patterns (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14116,
+      "name": "Resonance Repatterning 02 Primary Patterns (Live online) (Copy)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14078,
+      "name": "Resonance Repatterning 03 Unconscious Patterns (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14084,
+      "name": "Resonance Repatterning 04 Chakra Patterns (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14092,
+      "name": "Resonance Repatterning 05 Five Elements & Meridian Patterns (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13795,
+      "name": "Resonance Repatterning Full Basic Training, Programs 1-5 + Demos + Resources (Live via Zoom)",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 13964,
+      "name": "Akashic Intuitive Coach (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13990,
+      "name": "Akashic Navigator Basic (Self study online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13986,
+      "name": "Akashic Navigator Basic & Advanced purchased together (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13998,
+      "name": "Akashic Navigator Advanced (Self study online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14005,
+      "name": "Akashic Navigator Basic & Advanced purchased together (Self study online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13867,
+      "name": "SR-product-test-variable",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14056,
+      "name": "Be an energy ninja : mastering energy for an abundant life Level 1 (Live online) Coming Soon",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 9263,
+      "name": "BodyTalk (30 mins)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 9264,
+      "name": "BodyTalk (30 mins) (Package of 03)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 7635,
+      "name": "Brainwave Club",
+      "reason": "type_external"
+    },
+    {
+      "wc_id": 14234,
+      "name": "Energy Clearing : Level 1 & Level 2 Purchased Together (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14012,
+      "name": "Energy Clearing Level 1 : Fundamentals Clearing Self (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14041,
+      "name": "Energy Clearing Level 1 Self Clearing (Self study online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14029,
+      "name": "Energy Clearing Level 2 : Practitioner Clearing Others (Live online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14045,
+      "name": "Energy Clearing Level 2 Clearing Others (Self study online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16259,
+      "name": "Deep Energy Clearing Fundamentals & Advanced: Purchased Together (Live via Zoom)",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 16260,
+      "name": "Deep Energy Clearing Fundamentals & Advanced: Purchased Together (Live Retaker via Zoom)",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 14191,
+      "name": "Exploring the Alpha Mind",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14196,
+      "name": "Group Family Coaching",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13885,
+      "name": "Rapid Repatterning Session",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14326,
+      "name": "Rapid Repatterning Session (90 min Options)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 15497,
+      "name": "Rapid Repatterning Session (60 mins) (single online session) (Copy)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13176,
+      "name": "Group Session Nice or not nice in communication (available as recorded series)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13180,
+      "name": "Group Session Overcoming the need to fix others (booked as a series only)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 9756,
+      "name": "Group Session Overcoming the need to fix others (booked as a series only)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16445,
+      "name": "Rapid Repatterning / Coaching (90 mins) (package of 08)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16446,
+      "name": "Rapid Repatterning / Coaching (90 mins) (package of 08)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16447,
+      "name": "Rapid Repatterning / Coaching (90 mins) (package of 12)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16448,
+      "name": "Rapid Repatterning / Coaching (90 mins) (package of 16)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14090,
+      "name": "Resonance Repatterning 05 Five Elements & Meridians Retaker (AffWP-test)",
+      "reason": "test_product"
+    },
+    {
+      "wc_id": 16238,
+      "name": "Resonance Repatterning Program 6 Inner Cultivation Practical + Demos (Self Study)",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 16491,
+      "name": "Resonance Repatterning Program 6 Inner Cultivation Practical + Demos (Live via Zoom)",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 16492,
+      "name": "Resonance Repatterning Program 7 Principles of Relationships Practical + Demos (Live via Zoom)",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 16493,
+      "name": "Resonance Repatterning Program 9 Energetics of Relationships Practical + Demos (Live via Zoom)",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 13941,
+      "name": "SR-product-test-2",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13932,
+      "name": "Transformational & Behavioural Coaching",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13524,
+      "name": "The Biology of Belief 10th Anniversary Edition: Unleashing the Power of Consciousness, Matter, and Miracles ~ Kindle",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13505,
+      "name": "Resonance Repatterning Spiral Up!: 127 Energizing Options to be your best right now ~ Paperback",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13521,
+      "name": "The Resonance Repatterning Process Guide ~ Spiral-bound",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13507,
+      "name": "The Fundamentals of Resonance Repatterning (The Resonance Repatterning Series Book 1) ~ Kindle Edition",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13518,
+      "name": "Transforming Primary Patterns with Resonance Repatterning ~ Paperback",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13519,
+      "name": "Transforming Unconscious Patterns with Resonance Repatterning ~ Paperback",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13522,
+      "name": "Transforming Chakra Patterns with Resonance Repatterning ~ Paperback",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13523,
+      "name": "Transforming Five Element & Meridian Patterns with Resonance Repatterning ~ Paperback",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13504,
+      "name": "The Secret Language of Your Body: The Essential Guide to Health and Wellness ~ Kindle Edition",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13541,
+      "name": "The Promise of Energy Psychology: Revolutionary Tools for Dramatic Personal Change",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13526,
+      "name": "The Book of Mirdad: The Strange Story of a Monastery which was Once Called The Ark ~ Kindle",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13528,
+      "name": "Color Therapy Mood Glasses (10 Pack) ~ Light Therapy ~ Chromotherapy",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 14283,
+      "name": "test-Quantum Healing Codes eBook & AUDIO Download (Copy)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 13539,
+      "name": "Tibetan Singing Bowl Set",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16110,
+      "name": "Bonus Lifetime Access (Self Study Online)",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 16137,
+      "name": "Akashic Records Certification Observation Fee",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16065,
+      "name": "Email Support",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 16067,
+      "name": "Coaching",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 14808,
+      "name": "group test",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16064,
+      "name": "Practitioner Mentorship Bundle of 5 Sessions (Self study)",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 16062,
+      "name": "Practitioner Mentorship Bundle of 5 Sessions (Live)",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 16037,
+      "name": "How to muscle check (Self Study Online)",
+      "reason": "not_published"
+    },
+    {
+      "wc_id": 16061,
+      "name": "Practitioner Mentorship Single Session (Live)",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 16138,
+      "name": "Ravenall Institute Certification Observation Fee",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 16066,
+      "name": "VIP Package",
+      "reason": "excluded_category_73"
+    },
+    {
+      "wc_id": 16063,
+      "name": "Practitioner Mentorship Single Session (Self study)",
+      "reason": "excluded_category_73"
+    }
+  ],
+  "placeholder_variant_products": []
+}

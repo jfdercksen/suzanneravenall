@@ -1,8 +1,8 @@
 # Build Status — Suzanne Ravenall Platform
 
-Current Phase: Phase 1 — Public Website
-Current Task: Task 2.2 — Product Catalogue Structure
-Current Branch: feature/phase-1-website
+Current Phase: Phase 2 — E-Commerce
+Current Task: Task 2.4 — Shop Pages
+Current Branch: main
 Last Updated: April 2026
 Last Updated By: Johan
 
@@ -36,8 +36,9 @@ Last Updated By: Johan
 ## Phase 2 — Task Status
 
 - ✅ Task 2.1 — Medusa v2 Setup
-- ⏳ Task 2.2 — Product Catalogue Structure ← CURRENT
-- ⏳ Task 2.3 — Product Migration (WooCommerce)
+- ✅ Task 2.2 — Product Catalogue Structure
+- ✅ Task 2.3 — Product Migration (WooCommerce)
+- ⏳ Task 2.4 — Shop Pages ← CURRENT
 - ⏳ Task 2.4 — Shop Pages
 - ⏳ Task 2.5 — Checkout Flow
 - ⏳ Task 2.6 — PayFast Integration
@@ -89,6 +90,8 @@ Last Updated By: Johan
 
 ## Session Notes
 
+- **April 2026:** Task 2.3 complete. 128 WC flat products consolidated into 48 Medusa products with variants using CONSOLIDATION_MAP in migrate-woocommerce.ts. 4 standalone products created (Programs 7/9 Self Study, Be an Energy Ninja L2, Group Sessions, etc. not covered by consolidation map). 129 URL redirect entries written to infra/scripts/migrations/redirect-map.json for Task 1.9. Medusa v2 fix applied: all products (including single-variant) require options array — buildConsolidatedPayload and buildStandalonePayload both updated. 4 collections (start-here, deep-dive, master-level, practitioner) created via seed-collections.mjs. Spot-checked: Rapid Repatterning (12 variants OK), RR Program 1 (3 variants OK), Executive Coaching (6 variants OK). KI006 remains open (15 cat-73 products excluded). KI007: 12 seed placeholder products NOT created (seed.ts failed on tax-rate API; only collections were seeded via seed-collections.mjs — remove KI007).
+- **April 2026:** Task 2.2 complete. Created 4 product collections (Start Here / Deep Dive / Master Level / Practitioner) matching Suzanne's offering tiers. Custom ProgramsModule added at src/modules/programs/ — ProgramMetadata entity with program_type, delivery_method, duration_weeks, max_participants, includes_certification. Seed script extended with 12 placeholder products (3 per collection) using realistic coaching business data scraped from suzanneravenall.com offering structure. medusa db:migrate must be run on VPS after deploying this branch — creates program_metadata table.
 - **April 2026:** Deployment environment audit and P0 fixes applied. Root causes of Payload CSS/login/hydration issues identified and fixed: (1) `basePath: '/cms'` was in working copy of next.config.ts but never committed — deployed Payload had no basePath so all /cms/* routes 404'd; (2) infra/.env used stale variable names (`DATABASE_URI`, `PAYLOAD_PUBLIC_SERVER_URL`) that don't match docker-compose.yml — Payload DB and serverURL were not set; (3) `NEXT_PUBLIC_MEDUSA_URL=http://medusa:9000` baked internal Docker hostname into client bundle. Also fixed: production Nginx conf (suzanneravenall.conf.disabled) was missing /api/store and /api/admin path rewrites; pr-checks.yml referenced non-existent staging branch. VPS .env must be updated manually with corrected var names before rebuilding containers. KI004 and KI005 closed.
 - **April 2026:** Tasks 1.5–1.7 complete. Full page structure built — 30 static routes including /contact, /masterclass, /programs, /programs/[slug], /resources hub + 5 sub-pages, /shop placeholder, /portal shell + login/signup. SEO foundation: robots.ts, sitemap.ts (30 routes), OG defaults, Twitter cards, Organization + Person JSON-LD structured data. Build clean. Pre-existing errors fixed: lucide-react social icons replaced with inline SVGs, Server Component motion extraction.
 - **April 2026:** Phase 0 fully complete. Starting Phase 1 Task 1.1. Creating feature branch now.
