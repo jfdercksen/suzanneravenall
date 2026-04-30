@@ -842,16 +842,14 @@ function buildConsolidatedPayload(
   entry: ConsolidationEntry,
   collectionId: string | null
 ): MedusaProductPayload {
-  const multiVariant = entry.variants.length > 1
-
-  const options: MedusaOptionInput[] = multiVariant
-    ? [{ title: "Option", values: entry.variants.map((v) => v.label) }]
-    : []
+  const options: MedusaOptionInput[] = [
+    { title: "Option", values: entry.variants.map((v) => v.label) },
+  ]
 
   const variants: MedusaVariantInput[] = entry.variants.map((v) => ({
-    title: multiVariant ? v.label : "Default",
+    title: v.label,
     prices: [{ amount: priceInCents(v.price_zar), currency_code: "zar" }],
-    options: multiVariant ? { Option: v.label } : undefined,
+    options: { Option: v.label },
   }))
 
   return {
@@ -869,21 +867,20 @@ function buildStandalonePayload(
   product: WcProduct,
   collectionId: string | null
 ): MedusaProductPayload {
-  const variants: MedusaVariantInput[] = [
-    {
-      title: "Default",
-      prices: [{ amount: priceStrInCents(product.price), currency_code: "zar" }],
-    },
-  ]
-
   return {
     title: product.name,
     handle: product.slug,
     description: "",
     status: "published",
     collection_id: collectionId,
-    options: [],
-    variants,
+    options: [{ title: "Option", values: ["Default"] }],
+    variants: [
+      {
+        title: "Default",
+        prices: [{ amount: priceStrInCents(product.price), currency_code: "zar" }],
+        options: { Option: "Default" },
+      },
+    ],
   }
 }
 
