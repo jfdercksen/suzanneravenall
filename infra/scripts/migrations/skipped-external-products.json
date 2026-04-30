@@ -1,0 +1,105 @@
+{
+  "skipped_at": "2026-04-30T08:23:30.564Z",
+  "count": 14,
+  "note": "External/affiliate products excluded from Medusa migration. Will become static /resources/books page.",
+  "products": [
+    {
+      "id": 7635,
+      "name": "Brainwave Club",
+      "slug": "brainwave-club",
+      "external_url": "https://jv.brainwave.club/27-jv001-welcome-to-brainwave-club?hop=srav7700",
+      "price": "590"
+    },
+    {
+      "id": 13524,
+      "name": "The Biology of Belief 10th Anniversary Edition: Unleashing the Power of Consciousness, Matter, and Miracles ~ Kindle",
+      "slug": "the-biology-of-belief-10th-anniversary-edition-unleashing-the-power-of-consciousness-matter-and-miracles-kindle",
+      "external_url": "https://amzn.to/3YfOQJP",
+      "price": "11.49"
+    },
+    {
+      "id": 13505,
+      "name": "Resonance Repatterning Spiral Up!: 127 Energizing Options to be your best right now ~ Paperback",
+      "slug": "resonance-repatterning-spiral-up-127-energizing-options-to-be-your-best-right-now-paperback",
+      "external_url": "https://amzn.to/3BtG3KB",
+      "price": "39.95"
+    },
+    {
+      "id": 13521,
+      "name": "The Resonance Repatterning Process Guide ~ Spiral-bound",
+      "slug": "the-resonance-repatterning-process-guide-spiral-bound",
+      "external_url": "https://amzn.to/3Bul1LZ",
+      "price": "35"
+    },
+    {
+      "id": 13507,
+      "name": "The Fundamentals of Resonance Repatterning (The Resonance Repatterning Series Book 1) ~ Kindle Edition",
+      "slug": "the-fundamentals-of-resonance-repatterning-the-resonance-repatterning-series-book-1-kindle-edition",
+      "external_url": "https://amzn.to/3Fi2C62",
+      "price": "11.49"
+    },
+    {
+      "id": 13518,
+      "name": "Transforming Primary Patterns with Resonance Repatterning ~ Paperback",
+      "slug": "transforming-primary-patterns-with-resonance-repatterning-paperback",
+      "external_url": "https://amzn.to/3FN5fhG",
+      "price": "39.95"
+    },
+    {
+      "id": 13519,
+      "name": "Transforming Unconscious Patterns with Resonance Repatterning ~ Paperback",
+      "slug": "13519",
+      "external_url": "https://amzn.to/3BuGKTI",
+      "price": "39.95"
+    },
+    {
+      "id": 13522,
+      "name": "Transforming Chakra Patterns with Resonance Repatterning ~ Paperback",
+      "slug": "transforming-chakra-patterns-with-resonance-repatterning-paperback",
+      "external_url": "https://amzn.to/3UTiMJ1",
+      "price": "39.95"
+    },
+    {
+      "id": 13523,
+      "name": "Transforming Five Element & Meridian Patterns with Resonance Repatterning ~ Paperback",
+      "slug": "transforming-five-element-meridian-patterns-with-resonance-repatterning-paperback",
+      "external_url": "https://amzn.to/3PnKEUn",
+      "price": "39.95"
+    },
+    {
+      "id": 13504,
+      "name": "The Secret Language of Your Body: The Essential Guide to Health and Wellness ~ Kindle Edition",
+      "slug": "the-secret-language-of-your-body-the-essential-guide-to-health-and-wellness-kindle-edition",
+      "external_url": "https://amzn.to/3Buuh2m",
+      "price": "15.17"
+    },
+    {
+      "id": 13541,
+      "name": "The Promise of Energy Psychology: Revolutionary Tools for Dramatic Personal Change",
+      "slug": "the-promise-of-energy-psychology-revolutionary-tools-for-dramatic-personal-change",
+      "external_url": "https://amzn.to/3BPmTyZ",
+      "price": "18.00"
+    },
+    {
+      "id": 13526,
+      "name": "The Book of Mirdad: The Strange Story of a Monastery which was Once Called The Ark ~ Kindle",
+      "slug": "the-book-of-mirdad-the-strange-story-of-a-monastery-which-was-once-called-the-ark-kindle",
+      "external_url": "https://amzn.to/3HwKoAv",
+      "price": "11.49"
+    },
+    {
+      "id": 13528,
+      "name": "Color Therapy Mood Glasses (10 Pack) ~ Light Therapy ~ Chromotherapy",
+      "slug": "color-therapy-mood-glasses-10-pack-light-therapy-chromotherapy",
+      "external_url": "https://amzn.to/3j5FC2U",
+      "price": "84.99"
+    },
+    {
+      "id": 13539,
+      "name": "Tibetan Singing Bowl Set",
+      "slug": "tibetan-singing-bowl-set-13539",
+      "external_url": "https://amzn.to/3WbLEO0",
+      "price": "27.97"
+    }
+  ]
+}
