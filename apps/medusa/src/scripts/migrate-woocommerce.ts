@@ -1,16 +1,12 @@
 /**
- * WooCommerce → Medusa v2 Product Migration
+ * WooCommerce → Medusa v2 Product Migration — Consolidation Edition
  *
- * Reads from the cached audit JSON — does NOT call the WooCommerce API.
- * Applies approved exclusion rules, maps categories to Medusa collections,
- * builds product payloads, and either dry-runs or creates products via the
- * Medusa Admin API.
+ * Groups related WooCommerce products into single Medusa products with variants
+ * using the CONSOLIDATION_MAP. Any WC product not absorbed becomes standalone.
+ * Produces a 301 redirect map at infra/scripts/migrations/redirect-map.json.
  *
- * Run (dry run — always start here):
- *   DRY_RUN=true MEDUSA_ADMIN_PASSWORD=xxx ts-node src/scripts/migrate-woocommerce.ts
- *
- * Run (live — only with explicit developer approval):
- *   DRY_RUN=false MEDUSA_ADMIN_PASSWORD=xxx ts-node src/scripts/migrate-woocommerce.ts
+ * Dry run:  DRY_RUN=true  MEDUSA_ADMIN_PASSWORD=xxx ts-node src/scripts/migrate-woocommerce.ts
+ * Live run: DRY_RUN=false MEDUSA_ADMIN_PASSWORD=xxx ts-node src/scripts/migrate-woocommerce.ts
  */
 
 import * as fs from "fs"
@@ -30,77 +26,617 @@ const SOURCE_DIR = path.join(MIGRATIONS_DIR, "source")
 // ── Exclusion rules ───────────────────────────────────────────────────────────
 
 const EXCLUDED_CATEGORY_ID = 73
-const EXCLUDED_CATEGORY_132_CORRECTION = 132 // maps to start-here, NOT master-level
 
-/** Word-boundary patterns — avoids false positives like "latest", "testing" */
 const TEST_NAME_PATTERNS: RegExp[] = [
   /\btest\b/i,
   /sr-product-test/i,
   /group\s+test/i,
 ]
 
-// ── Category → collection mapping ─────────────────────────────────────────────
+// ── Category → collection mapping (for standalone WC products) ────────────────
 
-/**
- * Category IDs that map to each Medusa collection handle.
- * Derived from the approved migration rules.
- */
 const CATEGORY_TO_COLLECTION: Record<number, string> = {
-  // start-here
-  50: "start-here",   // Private sessions
-  119: "start-here",  // Self Paced - self-study
-  125: "start-here",  // Self Paced
-  178: "start-here",  // Meditation
-  85: "start-here",   // Meditations
-  128: "start-here",  // Energetic Clearing
-  82: "start-here",   // Intuition
-  81: "start-here",   // Love and Relationships
-  83: "start-here",   // Life Purpose
-  84: "start-here",   // Mindfulness
-  177: "start-here",  // Product Add-ons: Growth Boosters
-  134: "start-here",  // Transformation Coaching
-  113: "start-here",  // Healing Tools
-  106: "start-here",  // preorder
-  52: "start-here",   // Books
-  174: "start-here",  // Presentations
-  132: "start-here",  // Rapid Repatterning — correction: start-here, NOT master-level
-
-  // deep-dive
-  51: "deep-dive",    // Guided Programmes
-  133: "deep-dive",   // Resonance Repatterning programme
-  63: "deep-dive",    // Life Enhancing Programmes
-  46: "deep-dive",    // Group Sessions
-  118: "deep-dive",   // Live programmes (under private-sessions parent)
-  116: "deep-dive",   // Resonance Repatterning
-  137: "deep-dive",   // Akashic Coaching
-  114: "deep-dive",   // Akashic Intuitive Coach
-  115: "deep-dive",   // Energy Clearing
-  131: "deep-dive",   // Family Coaching
-  86: "deep-dive",    // Trauma programme
-  92: "deep-dive",    // Love And Relationships Group
-  93: "deep-dive",    // Career Progression Group
-  130: "deep-dive",   // Exploring the Alpha Mind
-  88: "deep-dive",    // Resonance Repatterning - Being Human
-  173: "deep-dive",   // Brainwave Club (with product count)
-  120: "deep-dive",   // Live (Akashic Intuitive Coach sub)
-  121: "deep-dive",   // Self Paced (Akashic Intuitive Coach sub)
-  122: "deep-dive",   // Live (Resonance Repatterning sub)
-  123: "deep-dive",   // Self Paced (Resonance Repatterning sub)
-  124: "deep-dive",   // Live (Life Enhancing sub)
-  126: "deep-dive",   // Live (Resonance Repatterning private sub)
-  127: "deep-dive",   // Self Paced (Resonance Repatterning private sub)
-  69: "deep-dive",    // Resonance Repatterning Session
-
-  // master-level
-  129: "master-level", // Executive Coaching (ID 129)
-  135: "master-level", // Rapid Transformation Therapy
-  91: "master-level",  // Money Mastery
-
-  // practitioner
-  60: "practitioner",  // Practitioner Programmes
+  50: "start-here", 119: "start-here", 125: "start-here", 178: "start-here",
+  85: "start-here", 128: "start-here", 82: "start-here", 81: "start-here",
+  83: "start-here", 84: "start-here", 177: "start-here", 134: "start-here",
+  113: "start-here", 106: "start-here", 52: "start-here", 174: "start-here",
+  132: "start-here",
+  51: "deep-dive", 133: "deep-dive", 63: "deep-dive", 46: "deep-dive",
+  118: "deep-dive", 116: "deep-dive", 137: "deep-dive", 114: "deep-dive",
+  115: "deep-dive", 131: "deep-dive", 86: "deep-dive", 92: "deep-dive",
+  93: "deep-dive", 130: "deep-dive", 88: "deep-dive", 173: "deep-dive",
+  120: "deep-dive", 121: "deep-dive", 122: "deep-dive", 123: "deep-dive",
+  124: "deep-dive", 126: "deep-dive", 127: "deep-dive", 69: "deep-dive",
+  129: "master-level", 135: "master-level", 91: "master-level",
+  60: "practitioner",
 }
 
 const DEFAULT_COLLECTION = "start-here"
+
+// ── Consolidation map ─────────────────────────────────────────────────────────
+
+interface ConsolidationVariant {
+  label: string
+  price_zar: number
+  source_wc_slugs: string[]
+}
+
+interface ConsolidationEntry {
+  canonical_slug: string
+  title: string
+  collection: string
+  program_type: string
+  variants: ConsolidationVariant[]
+}
+
+const CONSOLIDATION_MAP: ConsolidationEntry[] = [
+  // ── Private Sessions ─────────────────────────────────────────────────────
+  {
+    canonical_slug: "rapid-repatterning-session-60-min-online",
+    title: "Rapid Repatterning Session",
+    collection: "start-here",
+    program_type: "session",
+    variants: [
+      { label: "60 min online", price_zar: 1660, source_wc_slugs: ["rapid-repatterning-session-60-min-online", "rapid-repatterning-session-2", "rapid-repatterning-session-3", "rapid-repatterning-session-60-min-options", "rapid-repatterning-session-60-mins-single-online-session-copy"] },
+      { label: "60 min in-person", price_zar: 1995, source_wc_slugs: ["rapid-repatterning-session-60-mins-in-person"] },
+      { label: "90 min online", price_zar: 2490, source_wc_slugs: ["rapid-repatterning-session-90-mins-online", "rapid-repatterning-session-90-min-options"] },
+      { label: "90 min in-person", price_zar: 2990, source_wc_slugs: ["rapid-repatterning-session-90-mins-in-person", "rapid-repatterning-session-90-mins-in-person-session"] },
+      { label: "Package of 04 (60 min online)", price_zar: 6310, source_wc_slugs: ["rapid-repatterning-session-60-mins-package-of-4-sessions"] },
+      { label: "Package of 08 (60 min online)", price_zar: 11960, source_wc_slugs: ["rapid-repatterning-session-60-mins-package-of-8-sessions"] },
+      { label: "Package of 12 (60 min online)", price_zar: 16940, source_wc_slugs: ["rapid-repatterning-session-60-mins-package-of-12-sessions"] },
+      { label: "Package of 16 (60 min online)", price_zar: 21260, source_wc_slugs: ["rapid-repatterning-session-60-mins-package-of-16-sessions"] },
+      { label: "Package of 04 (90 min online)", price_zar: 9465, source_wc_slugs: ["rapid-repatterning-coaching-90-mins-package-of-04"] },
+      { label: "Package of 08 (90 min online)", price_zar: 17935, source_wc_slugs: ["rapid-repatterning-coaching-90-mins-package-of-08"] },
+      { label: "Package of 12 (90 min online)", price_zar: 25410, source_wc_slugs: ["rapid-repatterning-coaching-90-mins-package-of-12"] },
+      { label: "Package of 16 (90 min online)", price_zar: 31885, source_wc_slugs: ["rapid-repatterning-coaching-90-mins-package-of-16"] },
+    ],
+  },
+  {
+    canonical_slug: "resonance-repatterning-session",
+    title: "Resonance Repatterning / Coaching Session",
+    collection: "start-here",
+    program_type: "session",
+    variants: [
+      { label: "60 min online", price_zar: 1660, source_wc_slugs: ["resonance-repatterning-session", "resonance-repatterning-coaching-60-mins", "resonance-repatterning-coaching-90-mins-2"] },
+      { label: "90 min online", price_zar: 2490, source_wc_slugs: ["resonance-repatterning-coaching-90-mins"] },
+      { label: "90 min in-person", price_zar: 2990, source_wc_slugs: ["resonance-repatterning-coaching-90-mins-in-person-session"] },
+      { label: "Package of 04 (60 min)", price_zar: 6310, source_wc_slugs: ["resonance-repatterning-coaching-session-60-mins-package-of-4"] },
+      { label: "Package of 08 (60 min)", price_zar: 11960, source_wc_slugs: ["resonance-repatterning-coaching-session-60-mins-package-of-8"] },
+      { label: "Package of 12 (60 min)", price_zar: 16940, source_wc_slugs: ["resonance-repatterning-coaching-session-60-mins-package-of-12"] },
+      { label: "Package of 16 (60 min)", price_zar: 21260, source_wc_slugs: ["resonance-repatterning-coaching-session-60-mins-package-of-16"] },
+      { label: "Package of 04 (90 min)", price_zar: 9465, source_wc_slugs: ["resonance-repatterning-session-4x1"] },
+      { label: "Package of 08 (90 min)", price_zar: 17935, source_wc_slugs: ["resonance-repatterning-coaching-90-mins-package-of-8"] },
+      { label: "Package of 12 (90 min)", price_zar: 25410, source_wc_slugs: ["resonance-repatterning-coaching-90-mins-package-of-12"] },
+      { label: "Package of 16 (90 min)", price_zar: 31885, source_wc_slugs: ["resonance-repatterning-coaching-90-mins-package-of-16"] },
+    ],
+  },
+  {
+    canonical_slug: "transformation-coaching-60-mins",
+    title: "Transformation Coaching Session",
+    collection: "start-here",
+    program_type: "session",
+    variants: [
+      { label: "60 min", price_zar: 1660, source_wc_slugs: ["transformation-coaching-60-mins", "transformational-behavioural-coaching"] },
+      { label: "90 min", price_zar: 2325, source_wc_slugs: ["transformation-coaching-90-mins"] },
+      { label: "Package of 04", price_zar: 6310, source_wc_slugs: ["transformation-coaching-60-mins-package-of-4"] },
+      { label: "Package of 08", price_zar: 11960, source_wc_slugs: ["transformation-coaching-60-mins-package-of-8"] },
+      { label: "Package of 12", price_zar: 16940, source_wc_slugs: ["transformation-coaching-60-mins-package-of-12"] },
+      { label: "Package of 16", price_zar: 21255, source_wc_slugs: ["transformation-coaching-60-mins-package-of-16"] },
+    ],
+  },
+  {
+    canonical_slug: "executive-coaching-30-mins",
+    title: "Executive Coaching Session",
+    collection: "master-level",
+    program_type: "session",
+    variants: [
+      { label: "30 min", price_zar: 1660, source_wc_slugs: ["executive-coaching-30-mins", "executive-coaching"] },
+      { label: "60 min", price_zar: 2770, source_wc_slugs: ["executive-coaching-60-mins"] },
+      { label: "Package of 04", price_zar: 10515, source_wc_slugs: ["executive-coaching-60-mins-package-of-4"] },
+      { label: "Package of 08", price_zar: 19930, source_wc_slugs: ["executive-coaching-60-mins-package-of-8"] },
+      { label: "Package of 12", price_zar: 28230, source_wc_slugs: ["executive-coaching-60-mins-package-of-12"] },
+      { label: "Package of 16", price_zar: 35425, source_wc_slugs: ["executive-coaching-60-mins-package-of-16"] },
+    ],
+  },
+  {
+    canonical_slug: "akashic-clearing-session",
+    title: "Akashic Coaching / Clearing Session",
+    collection: "deep-dive",
+    program_type: "session",
+    variants: [
+      { label: "60 min", price_zar: 1660, source_wc_slugs: ["akashic-clearing-session"] },
+      { label: "90 min", price_zar: 2325, source_wc_slugs: ["akashic-coaching-clearing-session-90min"] },
+      { label: "Package of 04", price_zar: 6310, source_wc_slugs: ["akashic-coaching-clearing-session-60-mins-package-of-4"] },
+      { label: "Package of 08", price_zar: 11955, source_wc_slugs: ["akashic-coaching-clearing-session-60-mins-package-of-8"] },
+      { label: "Package of 12", price_zar: 16940, source_wc_slugs: ["akashic-coaching-clearing-session-60-mins-package-of-12"] },
+    ],
+  },
+  {
+    canonical_slug: "group-family-coaching-60-mins",
+    title: "Group Family Coaching",
+    collection: "deep-dive",
+    program_type: "group",
+    variants: [
+      { label: "Single session", price_zar: 1660, source_wc_slugs: ["group-family-coaching-60-mins", "group-family-coaching"] },
+      { label: "Package of 04", price_zar: 6310, source_wc_slugs: ["group-family-coaching-60-mins-package-of-4"] },
+      { label: "Package of 08", price_zar: 11955, source_wc_slugs: ["group-family-coaching-60-mins-package-of-8"] },
+    ],
+  },
+  {
+    canonical_slug: "exploring-the-alpha-mind-45-minutes",
+    title: "Exploring the Alpha Mind",
+    collection: "deep-dive",
+    program_type: "session",
+    variants: [
+      { label: "Single session (45 min)", price_zar: 775, source_wc_slugs: ["exploring-the-alpha-mind-45-minutes", "exploring-the-alpha-mind"] },
+      { label: "Package of 05", price_zar: 3680, source_wc_slugs: ["exploring-the-alpha-mind-45-mins-package-of-5"] },
+      { label: "Package of 08", price_zar: 5580, source_wc_slugs: ["exploring-the-alpha-mind-45-mins-package-of-8"] },
+    ],
+  },
+  {
+    canonical_slug: "rapid-transformation-therapy-session",
+    title: "Rapid Transformation Therapy Session",
+    collection: "master-level",
+    program_type: "session",
+    variants: [
+      { label: "1 hypnosis session + recording", price_zar: 2325, source_wc_slugs: ["rapid-transformation-therapy-session", "rapid-transformation-therapy-session-2"] },
+      { label: "1 hypnosis session + recording + 2 coaching sessions", price_zar: 4540, source_wc_slugs: ["rapid-transformation-therapy-session-1-hypnosis-session-hypnosis-recording"] },
+    ],
+  },
+  {
+    canonical_slug: "energetic-clearing-completed-remotely",
+    title: "Energetic Clearing",
+    collection: "start-here",
+    program_type: "session",
+    variants: [
+      { label: "Single session", price_zar: 830, source_wc_slugs: ["energetic-clearing-completed-remotely", "energetic-clearing-completed-remotely-2"] },
+      { label: "Package of 04", price_zar: 3155, source_wc_slugs: ["energetic-clearing-completed-remotely-package-of-4"] },
+      { label: "Package of 08", price_zar: 5980, source_wc_slugs: ["energetic-clearing-completed-remotely-package-of-8"] },
+      { label: "Package of 12", price_zar: 8470, source_wc_slugs: ["energetic-clearing-completed-remotely-package-of-12"] },
+    ],
+  },
+
+  // ── Resonance Repatterning Programmes ────────────────────────────────────
+  {
+    canonical_slug: "resonance-repatterning-program-1-fundamentals-live-via-zoom",
+    title: "Resonance Repatterning Program 1 — Fundamentals",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 5315, source_wc_slugs: ["resonance-repatterning-program-1-fundamentals-live-via-zoom", "resonance-repatterning-01-fundamentals-live-online"] },
+      { label: "Live Retaker", price_zar: 2215, source_wc_slugs: ["resonance-repatterning-program-1-fundamentals-live-retaker-via-zoom"] },
+      { label: "Self Study", price_zar: 3100, source_wc_slugs: ["resonance-repatterning-program-1-fundamentals-self-study", "resonance-repatterning-01-fundamentals-self-study-online", "resonance-repatterning-01-fundamentals-self-study-rr-online"] },
+    ],
+  },
+  {
+    canonical_slug: "resonance-repatterning-program-2-primary-patterns-live-via-zoom",
+    title: "Resonance Repatterning Program 2 — Primary Patterns",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 5315, source_wc_slugs: ["resonance-repatterning-program-2-primary-patterns-live-via-zoom", "resonance-repatterning-02-primary-patterns-live-online"] },
+      { label: "Live Retaker", price_zar: 2215, source_wc_slugs: ["resonance-repatterning-program-2-primary-patterns-live-retaker-via-zoom"] },
+      { label: "Self Study", price_zar: 3100, source_wc_slugs: ["resonance-repatterning-program-2-primary-patterns-self-study", "resonance-repatterning-02-primary-patterns-self-study-online", "resonance-repatterning-02-primary-patterns-self-study-rr-online"] },
+    ],
+  },
+  {
+    canonical_slug: "resonance-repatterning-program-3-unconscious-patterns-live-via-zoom",
+    title: "Resonance Repatterning Program 3 — Unconscious Patterns",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 5315, source_wc_slugs: ["resonance-repatterning-program-3-unconscious-patterns-live-via-zoom", "resonance-repatterning-03-unconscious-patterns-live"] },
+      { label: "Live Retaker", price_zar: 2215, source_wc_slugs: ["resonance-repatterning-program-3-unconscious-patterns-live-retaker-via-zoom"] },
+      { label: "Self Study", price_zar: 3100, source_wc_slugs: ["resonance-repatterning-program-3-unconscious-patterns-self-study", "resonance-repatterning-03-unconscious-patterns-self-study-online", "resonance-repatterning-03-unconscious-patterns-self-study-rr-online"] },
+    ],
+  },
+  {
+    canonical_slug: "resonance-repatterning-program-4-chakra-patterns-live-via-zoom",
+    title: "Resonance Repatterning Program 4 — Chakra Patterns",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 5315, source_wc_slugs: ["resonance-repatterning-program-4-chakra-patterns-live-via-zoom", "resonance-repatterning-04-chakra-patterns-live-online"] },
+      { label: "Live Retaker", price_zar: 2215, source_wc_slugs: ["resonance-repatterning-program-4-chakra-patterns-live-retaker-via-zoom"] },
+      { label: "Self Study", price_zar: 3100, source_wc_slugs: ["resonance-repatterning-program-4-chakra-patterns-self-study", "resonance-repatterning-04-chakra-patterns-self-study-online", "resonance-repatterning-04-chakra-patterns-self-study-rr-online"] },
+    ],
+  },
+  {
+    canonical_slug: "resonance-repatterning-program-5-five-elements-meridians-live-via-zoom",
+    title: "Resonance Repatterning Program 5 — Five Elements & Meridians",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 5315, source_wc_slugs: ["resonance-repatterning-program-5-five-elements-meridians-live-via-zoom", "resonance-repatterning-05-five-elements-meridians-live-online"] },
+      { label: "Live Retaker", price_zar: 2215, source_wc_slugs: ["resonance-repatterning-program-5-five-elements-meridians-live-retaker-via-zoom"] },
+      { label: "Self Study", price_zar: 3100, source_wc_slugs: ["resonance-repatterning-05-five-elements-meridians-self-study-online", "resonance-repatterning-05-five-elements-meridian-patterns-self-study-rr-online", "https-suzanneravenall-com-product-resonance-represonance-repatterning-program-5-five-elements-meridians-self-study"] },
+    ],
+  },
+  {
+    canonical_slug: "resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study",
+    title: "Resonance Repatterning Program 7 — Principles of Relationships",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Self Study", price_zar: 4205, source_wc_slugs: ["resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study"] },
+    ],
+  },
+  {
+    canonical_slug: "resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study",
+    title: "Resonance Repatterning Program 9 — Energetics of Relationships",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Self Study", price_zar: 4205, source_wc_slugs: ["resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study"] },
+    ],
+  },
+  {
+    canonical_slug: "resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom",
+    title: "Resonance Repatterning Full Basic Series Programs 1–5",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 5535, source_wc_slugs: [
+        "resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom",
+        "resonance-repatterning-full-basic-training-programs-1-5-demos-resources-live-via-zoom",
+        "resonance-repatterning-full-basic-5-training-series-live-mentoring-copy",
+      ]},
+      { label: "Self Study", price_zar: 13950, source_wc_slugs: [
+        "resonance-repatterning-full-basic-training-programs-1-5-demos-resources-self-study",
+        "resonance-repatterning-full-basic-5-training-series-demos-self-study-online",
+        "resonance-repatterning-full-basic-5-training-series-demos-self-study-online-with-mentoring",
+        "resonance-repatterning-full-basic-5-training-series-demos-self-study-online-with-mentoring-2",
+        "resonance-repatterning-full-basic-5-training-series-demos-self-study-rr-online",
+        "resonance-repatterning-demos-talk-throughs-resources-of-basic-5-series-self-study-online-2",
+      ]},
+    ],
+  },
+  {
+    canonical_slug: "resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-live-via-zoom",
+    title: "Resonance Repatterning Accelerated Basic 5 Review",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 5315, source_wc_slugs: [
+        "resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-live-via-zoom",
+        "resonance-repatterning-accelerated-basic-5-training-series-part-2-live-online-v2",
+      ]},
+      { label: "Self Study", price_zar: 5315, source_wc_slugs: [
+        "resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-self-study",
+      ]},
+    ],
+  },
+
+  // ── Akashic Navigator Programmes ─────────────────────────────────────────
+  {
+    canonical_slug: "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+    title: "Akashic Navigator Level 1 — Fundamentals",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 10295, source_wc_slugs: [
+        "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+        "akashic-intuitive-coach-live-online",
+      ]},
+      { label: "Live Retaker", price_zar: 2215, source_wc_slugs: [
+        "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-retaker-via-zoom",
+      ]},
+      { label: "Self Study", price_zar: 4650, source_wc_slugs: [
+        "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-self-study",
+        "akashic-navigator-basic-self-study-online",
+      ]},
+    ],
+  },
+  {
+    canonical_slug: "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom",
+    title: "Akashic Navigator Level 2 — Advanced",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 10295, source_wc_slugs: [
+        "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom",
+      ]},
+      { label: "Live Retaker", price_zar: 2215, source_wc_slugs: [
+        "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-retaker-via-zoom",
+      ]},
+      { label: "Self Study", price_zar: 4650, source_wc_slugs: [
+        "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-self-study",
+        "akashic-navigator-advanced-self-study-online",
+      ]},
+    ],
+  },
+  {
+    canonical_slug: "akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom",
+    title: "Akashic Navigator Level 1 & 2 — Purchased Together",
+    collection: "deep-dive",
+    program_type: "bundle",
+    variants: [
+      { label: "Live via Zoom", price_zar: 13360, source_wc_slugs: [
+        "akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom",
+        "akashic-navigator-basic-advanced-purchased-together-live-online",
+      ]},
+      { label: "Live Retaker", price_zar: 1660, source_wc_slugs: [
+        "akashic-navigator-intuitive-coaching-fundamentals-adv-purchased-together-live-retaker-zoom",
+      ]},
+      { label: "Self Study", price_zar: 7905, source_wc_slugs: [
+        "akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-self-study",
+        "akashic-navigator-basic-advanced-purchased-together-self-study-online",
+      ]},
+    ],
+  },
+
+  // ── Deep Energy Clearing Programmes ──────────────────────────────────────
+  {
+    canonical_slug: "deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom",
+    title: "Deep Energy Clearing Level 1 — Fundamentals",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 7860, source_wc_slugs: [
+        "deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom",
+        "energy-clearing-level-1-fundamentals-clearing-self-live-online",
+      ]},
+      { label: "Live Retaker", price_zar: 3320, source_wc_slugs: [
+        "deep-energy-clearing-fundamentals-clearing-self-level-1-live-retaker-via-zoom",
+      ]},
+      { label: "Self Study", price_zar: 4650, source_wc_slugs: [
+        "deep-energy-clearing-fundamentals-clearing-self-level-1-self-study",
+        "energy-clearing-level-1-self-clearing-self-study-online",
+      ]},
+    ],
+  },
+  {
+    canonical_slug: "deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom",
+    title: "Deep Energy Clearing Level 2 — Advanced",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 7860, source_wc_slugs: [
+        "deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom",
+        "energy-clearing-level-2-practitioner-clearing-others-live-online",
+      ]},
+      { label: "Live Retaker", price_zar: 3320, source_wc_slugs: [
+        "deep-energy-clearing-advanced-clearing-others-level-2-live-retaker-via-zoom",
+      ]},
+      { label: "Self Study", price_zar: 4650, source_wc_slugs: [
+        "deep-energy-clearing-advanced-clearing-others-level-2-self-study",
+        "energy-clearing-level-2-clearing-others-self-study-online",
+      ]},
+    ],
+  },
+
+  // ── Life Enhancing Programmes ─────────────────────────────────────────────
+  {
+    canonical_slug: "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live",
+    title: "Be an Energy Ninja Level 1",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 4980, source_wc_slugs: [
+        "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live",
+        "be-an-energy-ninja-mastering-energy-for-an-abundant-life-level-1-live-online",
+      ]},
+      { label: "Self Study", price_zar: 3320, source_wc_slugs: [
+        "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-self-study",
+      ]},
+    ],
+  },
+  {
+    canonical_slug: "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live",
+    title: "Be an Energy Ninja Level 2",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 1660, source_wc_slugs: [
+        "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live",
+      ]},
+    ],
+  },
+  {
+    canonical_slug: "trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live",
+    title: "Trauma to Transcendence",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 3320, source_wc_slugs: [
+        "trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live",
+      ]},
+      { label: "Self Study", price_zar: 3500, source_wc_slugs: [
+        "trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-self-study",
+      ]},
+    ],
+  },
+  {
+    canonical_slug: "finding-my-life-purpose-live",
+    title: "Finding My Life Purpose",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 995, source_wc_slugs: ["finding-my-life-purpose-live"] },
+      { label: "Self Study", price_zar: 995, source_wc_slugs: ["finding-my-life-purpose-self-study"] },
+    ],
+  },
+  {
+    canonical_slug: "love-relationships-live",
+    title: "Love & Relationships",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 1610, source_wc_slugs: ["love-relationships-live"] },
+      { label: "Self Study", price_zar: 995, source_wc_slugs: ["love-relationships-self-study"] },
+    ],
+  },
+  {
+    canonical_slug: "intuition-in-my-personal-capacity-live",
+    title: "Intuition (Personal & Business Capacity)",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Personal Capacity — Live via Zoom", price_zar: 1610, source_wc_slugs: ["intuition-in-my-personal-capacity-live"] },
+      { label: "Personal Capacity — Self Study", price_zar: 995, source_wc_slugs: ["intuition-in-my-personal-capacity-self-study"] },
+      { label: "Business Capacity — Live via Zoom", price_zar: 1610, source_wc_slugs: ["intuition-in-my-business-capacity-live"] },
+      { label: "Business Capacity — Self Study", price_zar: 995, source_wc_slugs: ["intuition-in-my-business-capacity-self-study"] },
+    ],
+  },
+  {
+    canonical_slug: "meditation-live-via-zoom",
+    title: "Meditation",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 2770, source_wc_slugs: ["meditation-live-via-zoom"] },
+      { label: "Self Study", price_zar: 1660, source_wc_slugs: ["meditation-self-study"] },
+    ],
+  },
+  {
+    canonical_slug: "mindfulness-live",
+    title: "Mindfulness",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Live via Zoom", price_zar: 2770, source_wc_slugs: ["mindfulness-live"] },
+      { label: "Self Study", price_zar: 1660, source_wc_slugs: ["mindfulness-self-study"] },
+    ],
+  },
+
+  // ── Group Sessions ────────────────────────────────────────────────────────
+  {
+    canonical_slug: "group-session-attraction-frequency-recorded",
+    title: "Group Session — Attraction Frequency",
+    collection: "deep-dive",
+    program_type: "group",
+    variants: [
+      { label: "Recorded series", price_zar: 1500, source_wc_slugs: ["group-session-attraction-frequency-recorded"] },
+    ],
+  },
+  {
+    canonical_slug: "group-session-being-a-great-boundary-setter-booked-as-a-series-only",
+    title: "Group Session — Being a Great Boundary Setter",
+    collection: "deep-dive",
+    program_type: "group",
+    variants: [
+      { label: "Live (booked as series)", price_zar: 1500, source_wc_slugs: [
+        "group-session-being-a-great-boundary-setter-booked-as-a-series-only",
+        "being-a-great-boundry-setter-group-session",
+      ]},
+      { label: "Recorded series", price_zar: 1500, source_wc_slugs: [] },
+    ],
+  },
+  {
+    canonical_slug: "career-progression-group-session",
+    title: "Group Session — Career Progression",
+    collection: "deep-dive",
+    program_type: "group",
+    variants: [
+      { label: "Live (booked as series)", price_zar: 1500, source_wc_slugs: ["group-session-career-progression"] },
+      { label: "Recorded series", price_zar: 1500, source_wc_slugs: ["career-progression-group-session"] },
+    ],
+  },
+  {
+    canonical_slug: "group-session-develop-super-confidence",
+    title: "Group Session — Develop Super Confidence",
+    collection: "deep-dive",
+    program_type: "group",
+    variants: [
+      { label: "Live", price_zar: 1500, source_wc_slugs: ["group-session-develop-super-confidence"] },
+      { label: "Recorded series", price_zar: 1500, source_wc_slugs: ["group-session-develop-super-confidence-recorded"] },
+    ],
+  },
+  {
+    canonical_slug: "love-relationships-group-session",
+    title: "Group Session — Love & Relationships",
+    collection: "deep-dive",
+    program_type: "group",
+    variants: [
+      { label: "Live (booked as series)", price_zar: 1500, source_wc_slugs: ["group-session-love-relationships"] },
+      { label: "Recorded series", price_zar: 1500, source_wc_slugs: ["love-relationships-group-session"] },
+    ],
+  },
+  {
+    canonical_slug: "money-mastery-group-session",
+    title: "Group Session — Money Mastery",
+    collection: "deep-dive",
+    program_type: "group",
+    variants: [
+      { label: "Live (booked as series)", price_zar: 1500, source_wc_slugs: ["group-session-money-mastery"] },
+      { label: "Recorded series", price_zar: 1500, source_wc_slugs: ["money-mastery-group-session"] },
+    ],
+  },
+  {
+    canonical_slug: "group-session-nice-or-not-nice-in-communication-booked-as-a-series-only",
+    title: "Group Session — Nice or Not Nice in Communication",
+    collection: "deep-dive",
+    program_type: "group",
+    variants: [
+      { label: "Live (booked as series)", price_zar: 1500, source_wc_slugs: [
+        "group-session-nice-or-not-nice-in-communication-booked-as-a-series-only",
+        "group-session-nice-or-not-nice-in-communication-available-as-recorded-series",
+      ]},
+    ],
+  },
+  {
+    canonical_slug: "group-session-shedding-excess-weight",
+    title: "Group Session — Shedding Excess Weight",
+    collection: "deep-dive",
+    program_type: "group",
+    variants: [
+      { label: "Live (booked as series)", price_zar: 1500, source_wc_slugs: ["group-session-shedding-excess-weight-booked-as-a-series-only"] },
+      { label: "Recorded series", price_zar: 1500, source_wc_slugs: ["group-session-shedding-excess-weight"] },
+    ],
+  },
+
+  // ── Other Programmes ──────────────────────────────────────────────────────
+  {
+    canonical_slug: "coherence-muscle-testing-self-study-online-2",
+    title: "Coherence Muscle Testing",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Self Study", price_zar: 1610, source_wc_slugs: [
+        "coherence-muscle-testing-self-study-online-2",
+        "how-to-muscle-check-self-study-online",
+      ]},
+    ],
+  },
+  {
+    canonical_slug: "resonance-repatterning-all-repatternings-as-demos-talk-throughs-resources-self-study",
+    title: "Resonance Repatterning — All Demos & Talk Throughs",
+    collection: "deep-dive",
+    program_type: "course",
+    variants: [
+      { label: "Self Study", price_zar: 3210, source_wc_slugs: [
+        "resonance-repatterning-all-repatternings-as-demos-talk-throughs-resources-self-study",
+      ]},
+    ],
+  },
+  {
+    canonical_slug: "post-traumatic-growth-self-study-online",
+    title: "Post Traumatic Growth",
+    collection: "start-here",
+    program_type: "course",
+    variants: [
+      { label: "Self Study", price_zar: 220, source_wc_slugs: ["post-traumatic-growth-self-study-online"] },
+    ],
+  },
+  {
+    canonical_slug: "the-latest-book-by-suzanne",
+    title: "The Latest Book By Suzanne",
+    collection: "start-here",
+    program_type: "bundle",
+    variants: [
+      { label: "Pre-order", price_zar: 165, source_wc_slugs: ["the-latest-book-by-suzanne"] },
+    ],
+  },
+  {
+    canonical_slug: "quantum-healing-codes-ebook-audio-download",
+    title: "Quantum Healing Codes",
+    collection: "start-here",
+    program_type: "course",
+    variants: [
+      { label: "eBook & Audio Download", price_zar: 345, source_wc_slugs: ["quantum-healing-codes-ebook-audio-download"] },
+    ],
+  },
+]
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -113,7 +649,7 @@ interface WcCategory {
 interface WcAttribute {
   name: string
   options?: string[]
-  option?: string  // on variations, single value
+  option?: string
 }
 
 interface WcImage {
@@ -216,53 +752,22 @@ interface ExternalProduct {
   price: string
 }
 
-interface MigrateProductEntry {
-  wc_id: number
-  name: string
-  slug: string
-  type: string
-  proposed_collection: string
+interface ProductToCreate {
+  source: "consolidated" | "standalone"
+  canonical_slug: string
+  title: string
+  collection: string
   collection_id: string | null
   variant_count: number
-  placeholder_variant: boolean
+  absorbed_wc_slugs: string[]
+  wc_id: number | null
   no_description: boolean
   payload: MedusaProductPayload
 }
 
-interface DryRunSummary {
-  total_in_audit: number
-  will_migrate: number
-  will_skip: number
-  skip_reasons: {
-    not_published: number
-    excluded_category_73: number
-    empty_slug: number
-    type_external: number
-    type_grouped: number
-    test_product: number
-  }
-  by_collection: Record<string, number>
-  variable_products: number
-  placeholder_variants: number
-  no_description: number
-  already_exists_in_medusa: number
-  medusa_reachable: boolean
-  medusa_auth_ok: boolean
-}
-
-interface DryRunReport {
-  dry_run: true
-  generated_at: string
-  summary: DryRunSummary
-  will_migrate: MigrateProductEntry[]
-  will_skip: SkippedProduct[]
-  placeholder_variant_products: MigrateProductEntry[]
-}
-
-interface LiveRunResult {
-  migrated: Array<{ wc_id: number; wc_slug: string; medusa_id: string; medusa_handle: string }>
-  skipped: SkippedProduct[]
-  errors: Array<{ wc_id: number; name: string; error: string }>
+interface RedirectEntry {
+  from_slug: string
+  to_slug: string
 }
 
 interface AuthResponse {
@@ -270,11 +775,7 @@ interface AuthResponse {
 }
 
 interface MedusaProductResponse {
-  product: {
-    id: string
-    handle: string
-    title: string
-  }
+  product: { id: string; handle: string; title: string }
 }
 
 interface MedusaProductListResponse {
@@ -285,10 +786,111 @@ interface MedusaCollectionListResponse {
   collections: MedusaCollection[]
 }
 
+// ── Source slug index ─────────────────────────────────────────────────────────
+
+function buildSourceSlugIndex(): Set<string> {
+  const index = new Set<string>()
+  const seen = new Map<string, string>()
+
+  for (const entry of CONSOLIDATION_MAP) {
+    for (const variant of entry.variants) {
+      for (const slug of variant.source_wc_slugs) {
+        if (slug === "") continue
+        if (seen.has(slug)) {
+          console.warn(`  Warning: slug "${slug}" appears in both "${seen.get(slug)}" and "${entry.canonical_slug}"`)
+        } else {
+          seen.set(slug, entry.canonical_slug)
+          index.add(slug)
+        }
+      }
+    }
+  }
+
+  return index
+}
+
+// ── Redirect map builder ──────────────────────────────────────────────────────
+
+function buildRedirectMap(): RedirectEntry[] {
+  const redirects: RedirectEntry[] = []
+
+  for (const entry of CONSOLIDATION_MAP) {
+    for (const variant of entry.variants) {
+      for (const slug of variant.source_wc_slugs) {
+        if (slug !== "" && slug !== entry.canonical_slug) {
+          redirects.push({ from_slug: slug, to_slug: entry.canonical_slug })
+        }
+      }
+    }
+  }
+
+  return redirects
+}
+
+// ── Payload builders ──────────────────────────────────────────────────────────
+
+function priceInCents(zarAmount: number): number {
+  return Math.round(zarAmount * 100)
+}
+
+function priceStrInCents(priceStr: string): number {
+  const parsed = parseFloat(priceStr)
+  return isNaN(parsed) || parsed < 0 ? 0 : Math.round(parsed * 100)
+}
+
+function buildConsolidatedPayload(
+  entry: ConsolidationEntry,
+  collectionId: string | null
+): MedusaProductPayload {
+  const multiVariant = entry.variants.length > 1
+
+  const options: MedusaOptionInput[] = multiVariant
+    ? [{ title: "Option", values: entry.variants.map((v) => v.label) }]
+    : []
+
+  const variants: MedusaVariantInput[] = entry.variants.map((v) => ({
+    title: multiVariant ? v.label : "Default",
+    prices: [{ amount: priceInCents(v.price_zar), currency_code: "zar" }],
+    options: multiVariant ? { Option: v.label } : undefined,
+  }))
+
+  return {
+    title: entry.title,
+    handle: entry.canonical_slug,
+    description: "",
+    status: "published",
+    collection_id: collectionId,
+    options,
+    variants,
+  }
+}
+
+function buildStandalonePayload(
+  product: WcProduct,
+  collectionId: string | null
+): MedusaProductPayload {
+  const variants: MedusaVariantInput[] = [
+    {
+      title: "Default",
+      prices: [{ amount: priceStrInCents(product.price), currency_code: "zar" }],
+    },
+  ]
+
+  return {
+    title: product.name,
+    handle: product.slug,
+    description: "",
+    status: "published",
+    collection_id: collectionId,
+    options: [],
+    variants,
+  }
+}
+
 // ── HTTP helpers ──────────────────────────────────────────────────────────────
 
 async function medusaRequest<T>(
-  path: string,
+  urlPath: string,
   options: RequestInit = {},
   token?: string
 ): Promise<T> {
@@ -296,21 +898,13 @@ async function medusaRequest<T>(
     "Content-Type": "application/json",
     ...(token !== undefined ? { Authorization: `Bearer ${token}` } : {}),
   }
-
-  const res = await fetch(`${MEDUSA_BASE}${path}`, {
-    ...options,
-    headers,
-  })
-
+  const res = await fetch(`${MEDUSA_BASE}${urlPath}`, { ...options, headers })
   if (!res.ok) {
     const body = await res.text()
-    throw new Error(`${options.method ?? "GET"} ${path} → ${res.status}: ${body}`)
+    throw new Error(`${options.method ?? "GET"} ${urlPath} → ${res.status}: ${body}`)
   }
-
   return res.json() as Promise<T>
 }
-
-// ── Auth ──────────────────────────────────────────────────────────────────────
 
 async function authenticate(): Promise<string> {
   if (!ADMIN_PASSWORD) {
@@ -319,16 +913,12 @@ async function authenticate(): Promise<string> {
         "Export it before running: MEDUSA_ADMIN_PASSWORD=xxx ts-node src/scripts/migrate-woocommerce.ts"
     )
   }
-
   const data = await medusaRequest<AuthResponse>("/auth/user/emailpass", {
     method: "POST",
     body: JSON.stringify({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD }),
   })
-
   return data.token
 }
-
-// ── Collection fetch ──────────────────────────────────────────────────────────
 
 async function fetchMedusaCollections(token: string): Promise<Record<string, string>> {
   const data = await medusaRequest<MedusaCollectionListResponse>(
@@ -336,15 +926,12 @@ async function fetchMedusaCollections(token: string): Promise<Record<string, str
     {},
     token
   )
-
   const handleToId: Record<string, string> = {}
   for (const col of data.collections) {
     handleToId[col.handle] = col.id
   }
   return handleToId
 }
-
-// ── Existing product check ────────────────────────────────────────────────────
 
 async function productExistsByHandle(handle: string, token: string): Promise<boolean> {
   const encoded = encodeURIComponent(handle)
@@ -360,15 +947,11 @@ async function productExistsByHandle(handle: string, token: string): Promise<boo
 
 function loadExternalUrlMap(): Record<number, string> {
   const urlMap: Record<number, string> = {}
-  const sourceFiles = ["products_page1.json", "products_page2.json", "products_page3.json"]
-
-  for (const filename of sourceFiles) {
+  for (const filename of ["products_page1.json", "products_page2.json", "products_page3.json"]) {
     const filePath = path.join(SOURCE_DIR, filename)
     if (!fs.existsSync(filePath)) continue
-
     try {
-      const raw = fs.readFileSync(filePath, "utf8")
-      const products = JSON.parse(raw) as Array<{
+      const products = JSON.parse(fs.readFileSync(filePath, "utf8")) as Array<{
         id: number
         type: string
         external_url?: string
@@ -382,7 +965,6 @@ function loadExternalUrlMap(): Record<number, string> {
       console.warn(`  Warning: could not parse ${filename}`)
     }
   }
-
   return urlMap
 }
 
@@ -406,165 +988,27 @@ function getSkipReason(product: WcProduct): SkipReason | null {
   return null
 }
 
-// ── Collection mapping ────────────────────────────────────────────────────────
-
-function resolveCollection(
+function resolveCollectionForStandalone(
   product: WcProduct,
   collectionHandleToId: Record<string, string>
-): { handle: string; id: string | null; is_default: boolean; is_unmapped: boolean } {
-  // Try each category — first match that maps to something other than default wins.
-  // Exception: category 132 is explicitly corrected to start-here (not master-level).
+): { handle: string; id: string | null } {
   let resolvedHandle = DEFAULT_COLLECTION
-  let foundNonDefault = false
-  let isUnmapped = true
-
   for (const cat of product.categories) {
     const handle = CATEGORY_TO_COLLECTION[cat.id]
-    if (handle !== undefined) {
-      isUnmapped = false
-      if (!foundNonDefault && handle !== DEFAULT_COLLECTION) {
-        resolvedHandle = handle
-        foundNonDefault = true
-      } else if (resolvedHandle === DEFAULT_COLLECTION) {
-        resolvedHandle = handle
-      }
+    if (handle !== undefined && handle !== DEFAULT_COLLECTION) {
+      resolvedHandle = handle
+      break
+    } else if (handle !== undefined) {
+      resolvedHandle = handle
     }
   }
-
-  // If no category matched at all, isUnmapped stays true — use default
-  const id = collectionHandleToId[resolvedHandle] ?? null
-
-  return {
-    handle: resolvedHandle,
-    id,
-    is_default: !foundNonDefault,
-    is_unmapped: isUnmapped,
-  }
-}
-
-// ── Variant building ──────────────────────────────────────────────────────────
-
-function priceInCents(priceStr: string): number {
-  const parsed = parseFloat(priceStr)
-  if (isNaN(parsed) || parsed < 0) return 0
-  return Math.round(parsed * 100)
-}
-
-function buildVariants(product: WcProduct): {
-  options: MedusaOptionInput[]
-  variants: MedusaVariantInput[]
-  placeholder_variant: boolean
-} {
-  if (product.type === "simple") {
-    return {
-      options: [],
-      variants: [
-        {
-          title: "Default",
-          prices: [
-            {
-              amount: priceInCents(product.price),
-              currency_code: "zar",
-            },
-          ],
-        },
-      ],
-      placeholder_variant: false,
-    }
-  }
-
-  // Variable product
-  if (product.variations && product.variations.length > 0) {
-    const optionNames = new Set<string>()
-    const optionValues: Record<string, Set<string>> = {}
-
-    // Collect all attribute names and values across variations
-    for (const variation of product.variations) {
-      for (const attr of variation.attributes) {
-        if (!attr.option) continue
-        const name = attr.name
-        optionNames.add(name)
-        if (!optionValues[name]) optionValues[name] = new Set()
-        optionValues[name].add(attr.option)
-      }
-    }
-
-    const options: MedusaOptionInput[] = Array.from(optionNames).map((name) => ({
-      title: name,
-      values: Array.from(optionValues[name] ?? []),
-    }))
-
-    const variants: MedusaVariantInput[] = product.variations.map((variation) => {
-      const title = variation.attributes
-        .filter((a) => a.option !== undefined && a.option !== "")
-        .map((a) => a.option as string)
-        .join(" · ")
-
-      const variantOptions: MedusaVariantOption = {}
-      for (const attr of variation.attributes) {
-        if (attr.option !== undefined) {
-          variantOptions[attr.name] = attr.option
-        }
-      }
-
-      return {
-        title: title !== "" ? title : "Variant",
-        prices: [
-          {
-            amount: priceInCents(variation.price),
-            currency_code: "zar",
-          },
-        ],
-        options: Object.keys(variantOptions).length > 0 ? variantOptions : undefined,
-      }
-    })
-
-    return { options, variants, placeholder_variant: false }
-  }
-
-  // Variable product with no variation data fetched — placeholder
-  return {
-    options: [],
-    variants: [
-      {
-        title: "Standard",
-        prices: [
-          {
-            amount: priceInCents(product.price),
-            currency_code: "zar",
-          },
-        ],
-      },
-    ],
-    placeholder_variant: true,
-  }
-}
-
-// ── Product payload builder ───────────────────────────────────────────────────
-
-function buildProductPayload(
-  product: WcProduct,
-  collectionId: string | null
-): MedusaProductPayload {
-  const { options, variants } = buildVariants(product)
-
-  return {
-    title: product.name,
-    handle: product.slug,
-    description: "",  // filled from source files in enriched mode; audit has lengths only
-    status: "published",
-    collection_id: collectionId,
-    options,
-    variants,
-  }
+  return { handle: resolvedHandle, id: collectionHandleToId[resolvedHandle] ?? null }
 }
 
 // ── Log helpers ───────────────────────────────────────────────────────────────
 
 function log(message: string): void {
-  const ts = new Date().toISOString()
-  const line = `[${ts}] ${message}`
-  console.log(line)
+  console.log(`[${new Date().toISOString()}] ${message}`)
 }
 
 function writeJson(filePath: string, data: unknown): void {
@@ -577,29 +1021,25 @@ function writeJson(filePath: string, data: unknown): void {
 async function migrate(): Promise<void> {
   const startedAt = new Date().toISOString()
 
-  log(`WooCommerce → Medusa migration starting`)
-  log(`Mode: ${DRY_RUN ? "DRY RUN (no writes to Medusa)" : "LIVE — writes will happen"}`)
+  log(`WooCommerce → Medusa migration starting (consolidation edition)`)
+  log(`Mode: ${DRY_RUN ? "DRY RUN" : "LIVE — writes will happen"}`)
   log(`Medusa base URL: ${MEDUSA_BASE}`)
-  log(`Audit file: ${AUDIT_FILE}`)
 
-  // ── Step 1: Load audit JSON ─────────────────────────────────────────────────
+  // ── Load audit JSON ─────────────────────────────────────────────────────────
 
   if (!fs.existsSync(AUDIT_FILE)) {
     throw new Error(`Audit file not found: ${AUDIT_FILE}`)
   }
+  const audit = JSON.parse(fs.readFileSync(AUDIT_FILE, "utf8")) as WcAuditJson
+  const wcProducts = audit.products
+  log(`Loaded ${wcProducts.length} products from audit (fetched ${audit.fetched_at})`)
 
-  const auditRaw = fs.readFileSync(AUDIT_FILE, "utf8")
-  const audit = JSON.parse(auditRaw) as WcAuditJson
-  const products = audit.products
+  // ── Build source slug index ─────────────────────────────────────────────────
 
-  log(`Loaded ${products.length} products from audit (fetched ${audit.fetched_at})`)
+  const sourceSlugIndex = buildSourceSlugIndex()
+  log(`Source slug index: ${sourceSlugIndex.size} WC slugs absorbed by consolidation map`)
 
-  // ── Step 2: Load external URL map from source files ─────────────────────────
-
-  const externalUrlMap = loadExternalUrlMap()
-  log(`Loaded external URL map: ${Object.keys(externalUrlMap).length} external products`)
-
-  // ── Step 3: Connect to Medusa (graceful degradation if unreachable) ─────────
+  // ── Connect to Medusa ───────────────────────────────────────────────────────
 
   let token: string | null = null
   let collectionHandleToId: Record<string, string> = {}
@@ -611,28 +1051,68 @@ async function migrate(): Promise<void> {
     token = await authenticate()
     medusaAuthOk = true
     log("Authenticated successfully")
-
-    log("Fetching Medusa collections...")
     collectionHandleToId = await fetchMedusaCollections(token)
     medusaReachable = true
     log(`Found ${Object.keys(collectionHandleToId).length} collections: ${Object.keys(collectionHandleToId).join(", ")}`)
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
-    if (!medusaAuthOk) {
-      log(`Warning: Medusa auth failed (${message}) — existing-product check will be skipped`)
-    } else {
-      log(`Warning: Medusa unreachable (${message}) — collection IDs will be null in report`)
-    }
-    log("Continuing with collection-handle-only mode (medusa_reachable: false)")
+    log(`Warning: Medusa connection issue (${message}) — collection IDs will be null`)
+    log("Continuing with offline mode")
   }
 
-  // ── Step 4: Apply exclusion rules and build payloads ────────────────────────
+  // ── Build redirect map ──────────────────────────────────────────────────────
 
-  const willMigrate: MigrateProductEntry[] = []
-  const willSkip: SkippedProduct[] = []
+  const redirectMap = buildRedirectMap()
+  log(`Redirect map: ${redirectMap.length} entries`)
+
+  // ── Phase 1: Consolidated products ─────────────────────────────────────────
+
+  const productsToCreate: ProductToCreate[] = []
+  const skipped: SkippedProduct[] = []
+  let alreadyExistsCount = 0
+
+  log(`Processing ${CONSOLIDATION_MAP.length} consolidation map entries...`)
+
+  for (const entry of CONSOLIDATION_MAP) {
+    const collectionId = collectionHandleToId[entry.collection] ?? null
+
+    let alreadyExists = false
+    if (token !== null && medusaReachable) {
+      try {
+        alreadyExists = await productExistsByHandle(entry.canonical_slug, token)
+      } catch {
+        log(`  Warning: could not check existence for "${entry.canonical_slug}"`)
+      }
+    }
+
+    if (alreadyExists) {
+      alreadyExistsCount++
+      skipped.push({ wc_id: -1, name: entry.title, reason: "already_exists" })
+      continue
+    }
+
+    const allSourceSlugs = entry.variants.flatMap((v) => v.source_wc_slugs).filter((s) => s !== "")
+
+    productsToCreate.push({
+      source: "consolidated",
+      canonical_slug: entry.canonical_slug,
+      title: entry.title,
+      collection: entry.collection,
+      collection_id: collectionId,
+      variant_count: entry.variants.length,
+      absorbed_wc_slugs: allSourceSlugs,
+      wc_id: null,
+      no_description: true,
+      payload: buildConsolidatedPayload(entry, collectionId),
+    })
+  }
+
+  // ── Phase 2: Standalone WC products ────────────────────────────────────────
+
   const externalProducts: ExternalProduct[] = []
+  const externalUrlMap = loadExternalUrlMap()
 
-  const skipCounts: DryRunSummary["skip_reasons"] = {
+  const skipCounts: Record<SkipReason, number> = {
     not_published: 0,
     excluded_category_73: 0,
     empty_slug: 0,
@@ -641,20 +1121,9 @@ async function migrate(): Promise<void> {
     test_product: 0,
   }
 
-  const byCollection: Record<string, number> = {
-    "start-here": 0,
-    "deep-dive": 0,
-    "master-level": 0,
-    practitioner: 0,
-  }
+  const standaloneCount = { total: 0, by_collection: {} as Record<string, number> }
 
-  let variableProductCount = 0
-  let placeholderVariantCount = 0
-  let noDescriptionCount = 0
-  let alreadyExistsCount = 0
-
-  for (const product of products) {
-    // Collect external product data regardless of other exclusions
+  for (const product of wcProducts) {
     if (product.type === "external") {
       externalProducts.push({
         id: product.id,
@@ -666,241 +1135,209 @@ async function migrate(): Promise<void> {
     }
 
     const skipReason = getSkipReason(product)
-
     if (skipReason !== null) {
       skipCounts[skipReason]++
-      willSkip.push({ wc_id: product.id, name: product.name, reason: skipReason })
+      skipped.push({ wc_id: product.id, name: product.name, reason: skipReason })
       continue
     }
 
-    // Resolve collection
-    const collectionResult = resolveCollection(product, collectionHandleToId)
+    // Already absorbed into a consolidated product
+    if (sourceSlugIndex.has(product.slug)) continue
 
-    if (collectionResult.is_unmapped) {
-      willSkip.push({
-        wc_id: product.id,
-        name: product.name,
-        reason: "unmapped_category — defaulted to start-here (flagged for review)",
-      })
-      // Still migrate it — just flag it
-    }
-
-    // Check if already exists in Medusa
+    // This product is not absorbed — create as standalone
     let alreadyExists = false
     if (token !== null && medusaReachable) {
       try {
         alreadyExists = await productExistsByHandle(product.slug, token)
       } catch {
-        log(`  Warning: could not check existence for "${product.slug}" — assuming new`)
+        log(`  Warning: could not check existence for standalone "${product.slug}"`)
       }
     }
 
     if (alreadyExists) {
       alreadyExistsCount++
-      willSkip.push({ wc_id: product.id, name: product.name, reason: "already_exists" })
+      skipped.push({ wc_id: product.id, name: product.name, reason: "already_exists" })
       continue
     }
 
-    // Build payload
-    const payload = buildProductPayload(product, collectionResult.id)
-    const variantResult = buildVariants(product)
-    const placeholderVariant = variantResult.placeholder_variant
+    const col = resolveCollectionForStandalone(product, collectionHandleToId)
     const hasNoDescription = product.description_length === 0 && product.short_description_length === 0
-    const isVariable = product.type === "variable"
 
-    if (isVariable) variableProductCount++
-    if (placeholderVariant) placeholderVariantCount++
-    if (hasNoDescription) noDescriptionCount++
+    standaloneCount.total++
+    standaloneCount.by_collection[col.handle] = (standaloneCount.by_collection[col.handle] ?? 0) + 1
 
-    byCollection[collectionResult.handle] = (byCollection[collectionResult.handle] ?? 0) + 1
-
-    const entry: MigrateProductEntry = {
+    productsToCreate.push({
+      source: "standalone",
+      canonical_slug: product.slug,
+      title: product.name,
+      collection: col.handle,
+      collection_id: col.id,
+      variant_count: 1,
+      absorbed_wc_slugs: [],
       wc_id: product.id,
-      name: product.name,
-      slug: product.slug,
-      type: product.type,
-      proposed_collection: collectionResult.handle,
-      collection_id: collectionResult.id,
-      variant_count: variantResult.variants.length,
-      placeholder_variant: placeholderVariant,
       no_description: hasNoDescription,
-      payload,
-    }
-
-    willMigrate.push(entry)
+      payload: buildStandalonePayload(product, col.id),
+    })
   }
 
-  // ── Step 5: Write skipped-external-products.json (always) ──────────────────
+  // ── Write external products file ────────────────────────────────────────────
 
-  const externalOutput = {
+  writeJson(path.join(MIGRATIONS_DIR, "skipped-external-products.json"), {
     skipped_at: startedAt,
     count: externalProducts.length,
-    note: "External/affiliate products excluded from Medusa migration. Will become static /resources/books page.",
+    note: "External products excluded from Medusa migration. Will become static /resources page.",
     products: externalProducts,
+  })
+
+  // ── Write redirect map ──────────────────────────────────────────────────────
+
+  writeJson(path.join(MIGRATIONS_DIR, "redirect-map.json"), {
+    generated_at: startedAt,
+    note: "301 redirects for Task 1.9 — from WC slug to new Medusa canonical handle",
+    count: redirectMap.length,
+    redirects: redirectMap,
+  })
+  log(`Written: redirect-map.json (${redirectMap.length} entries)`)
+
+  const consolidatedCount = productsToCreate.filter((p) => p.source === "consolidated").length
+  const byCollection: Record<string, number> = {}
+  for (const p of productsToCreate) {
+    byCollection[p.collection] = (byCollection[p.collection] ?? 0) + 1
   }
 
-  const externalOutputPath = path.join(MIGRATIONS_DIR, "skipped-external-products.json")
-  writeJson(externalOutputPath, externalOutput)
-  log(`Written: ${externalOutputPath}`)
-
-  // ── Step 6: Dry run report ──────────────────────────────────────────────────
+  // ── Dry run ─────────────────────────────────────────────────────────────────
 
   if (DRY_RUN) {
-    const summary: DryRunSummary = {
-      total_in_audit: products.length,
-      will_migrate: willMigrate.length,
-      will_skip: willSkip.length,
-      skip_reasons: skipCounts,
-      by_collection: byCollection,
-      variable_products: variableProductCount,
-      placeholder_variants: placeholderVariantCount,
-      no_description: noDescriptionCount,
-      already_exists_in_medusa: alreadyExistsCount,
-      medusa_reachable: medusaReachable,
-      medusa_auth_ok: medusaAuthOk,
-    }
-
-    const report: DryRunReport = {
+    const report = {
       dry_run: true,
       generated_at: startedAt,
-      summary,
-      will_migrate: willMigrate,
-      will_skip: willSkip,
-      placeholder_variant_products: willMigrate.filter((e) => e.placeholder_variant),
+      summary: {
+        total_wc_in_audit: wcProducts.length,
+        consolidated_products: consolidatedCount,
+        standalone_products: standaloneCount.total,
+        total_medusa_products: productsToCreate.length,
+        already_exists_in_medusa: alreadyExistsCount,
+        redirect_map_entries: redirectMap.length,
+        wc_skip_reasons: skipCounts,
+        by_collection: byCollection,
+        medusa_reachable: medusaReachable,
+        medusa_auth_ok: medusaAuthOk,
+      },
+      products_to_create: productsToCreate,
+      skipped,
     }
 
-    const reportPath = path.join(MIGRATIONS_DIR, "wc-migration-dry-run-final.json")
-    writeJson(reportPath, report)
-    log(`Written: ${reportPath}`)
+    writeJson(path.join(MIGRATIONS_DIR, "wc-migration-dry-run-final.json"), report)
+    log(`Written: wc-migration-dry-run-final.json`)
 
     log("")
     log("=== DRY RUN SUMMARY ===")
-    log(`Total products in audit:       ${summary.total_in_audit}`)
-    log(`Will migrate:                  ${summary.will_migrate}`)
-    log(`Will skip:                     ${summary.will_skip}`)
-    log(`  - Not published:             ${summary.skip_reasons.not_published}`)
-    log(`  - Excluded category 73:      ${summary.skip_reasons.excluded_category_73}`)
-    log(`  - Empty slug:                ${summary.skip_reasons.empty_slug}`)
-    log(`  - Type external:             ${summary.skip_reasons.type_external}`)
-    log(`  - Type grouped:              ${summary.skip_reasons.type_grouped}`)
-    log(`  - Test product:              ${summary.skip_reasons.test_product}`)
-    log(``)
-    log(`By collection (will migrate):`)
-    for (const [handle, count] of Object.entries(summary.by_collection)) {
+    log(`Total WC products in audit:    ${wcProducts.length}`)
+    log(`Consolidated Medusa products:  ${consolidatedCount}`)
+    log(`Standalone Medusa products:    ${standaloneCount.total}`)
+    log(`Total Medusa products:         ${productsToCreate.length}`)
+    log(`Already exists (skipped):      ${alreadyExistsCount}`)
+    log(`Redirect map entries:          ${redirectMap.length}`)
+    log("")
+    log("WC skip reasons:")
+    log(`  not_published:               ${skipCounts.not_published}`)
+    log(`  excluded_category_73:        ${skipCounts.excluded_category_73}`)
+    log(`  empty_slug:                  ${skipCounts.empty_slug}`)
+    log(`  type_external:               ${skipCounts.type_external}`)
+    log(`  type_grouped:                ${skipCounts.type_grouped}`)
+    log(`  test_product:                ${skipCounts.test_product}`)
+    log("")
+    log("By collection (to create):")
+    for (const [handle, count] of Object.entries(byCollection)) {
       log(`  ${handle.padEnd(18)} ${count}`)
     }
-    log(``)
-    log(`Variable products:             ${summary.variable_products}`)
-    log(`Placeholder variants needed:   ${summary.placeholder_variants}`)
-    log(`Products with no description:  ${summary.no_description}`)
-    log(`Already exists in Medusa:      ${summary.already_exists_in_medusa}`)
-    log(`Medusa reachable:              ${summary.medusa_reachable}`)
-    log(`Medusa auth OK:                ${summary.medusa_auth_ok}`)
+    log("")
+    log("Consolidated products:")
+    for (const p of productsToCreate.filter((x) => x.source === "consolidated")) {
+      log(`  ${p.title.padEnd(60)} ${p.variant_count} variant(s)  → ${p.canonical_slug}`)
+    }
+    if (standaloneCount.total > 0) {
+      log("")
+      log("Standalone products:")
+      for (const p of productsToCreate.filter((x) => x.source === "standalone")) {
+        log(`  [WC #${p.wc_id}] ${p.title}  (${p.collection})  → ${p.canonical_slug}`)
+      }
+    }
+    log("")
+    log(`Medusa reachable: ${medusaReachable}`)
+    log(`Medusa auth OK:   ${medusaAuthOk}`)
     log("")
     log("DRY RUN complete — no products written to Medusa.")
-    log("Review the report, then run with DRY_RUN=false to migrate.")
+    log("Run with DRY_RUN=false to migrate.")
     return
   }
 
-  // ── Step 7: Live migration ──────────────────────────────────────────────────
+  // ── Live migration ──────────────────────────────────────────────────────────
 
   if (!token) {
-    throw new Error(
-      "Medusa authentication failed — cannot run live migration. " +
-        "Check MEDUSA_ADMIN_PASSWORD and Medusa API availability."
-    )
+    throw new Error("Medusa authentication failed — cannot run live migration.")
   }
 
-  log(`Starting live migration of ${willMigrate.length} products...`)
+  log(`Starting live migration of ${productsToCreate.length} products...`)
 
-  const results: LiveRunResult = {
-    migrated: [],
-    skipped: willSkip,
-    errors: [],
-  }
+  const migrated: Array<{ slug: string; medusa_id: string; source: string }> = []
+  const errors: Array<{ slug: string; name: string; error: string }> = []
 
-  const BATCH_SIZE = 50
-  let processedCount = 0
+  for (let i = 0; i < productsToCreate.length; i++) {
+    const product = productsToCreate[i]
+    if (product === undefined) continue
 
-  for (let i = 0; i < willMigrate.length; i += BATCH_SIZE) {
-    const batch = willMigrate.slice(i, i + BATCH_SIZE)
-    log(`Processing batch ${Math.floor(i / BATCH_SIZE) + 1}: items ${i + 1}–${i + batch.length}`)
-
-    for (const entry of batch) {
-      try {
-        // Final duplicate check before writing
-        const exists = await productExistsByHandle(entry.slug, token)
-        if (exists) {
-          log(`  Skipping "${entry.name}" — already exists in Medusa`)
-          results.skipped.push({ wc_id: entry.wc_id, name: entry.name, reason: "already_exists" })
-          continue
-        }
-
-        const apiPayload: Record<string, unknown> = {
-          title: entry.payload.title,
-          handle: entry.payload.handle,
-          description: entry.payload.description,
-          status: entry.payload.status,
-          collection_id: entry.payload.collection_id,
-        }
-
-        if (entry.payload.options.length > 0) {
-          apiPayload.options = entry.payload.options
-        }
-
-        if (entry.payload.variants.length > 0) {
-          apiPayload.variants = entry.payload.variants
-        }
-
-        const response = await medusaRequest<MedusaProductResponse>(
-          "/admin/products",
-          { method: "POST", body: JSON.stringify(apiPayload) },
-          token
-        )
-
-        results.migrated.push({
-          wc_id: entry.wc_id,
-          wc_slug: entry.slug,
-          medusa_id: response.product.id,
-          medusa_handle: response.product.handle,
-        })
-
-        processedCount++
-        log(`  [${processedCount}/${willMigrate.length}] Created "${entry.name}" (${response.product.id})`)
-      } catch (err) {
-        const message = err instanceof Error ? err.message : String(err)
-        log(`  ERROR creating "${entry.name}": ${message}`)
-        results.errors.push({ wc_id: entry.wc_id, name: entry.name, error: message })
+    try {
+      const exists = await productExistsByHandle(product.canonical_slug, token)
+      if (exists) {
+        log(`  Skipping "${product.title}" — already exists`)
+        skipped.push({ wc_id: product.wc_id ?? -1, name: product.title, reason: "already_exists" })
+        continue
       }
+
+      const apiPayload: Record<string, unknown> = {
+        title: product.payload.title,
+        handle: product.payload.handle,
+        description: product.payload.description,
+        status: product.payload.status,
+        collection_id: product.payload.collection_id,
+      }
+      if (product.payload.options.length > 0) apiPayload.options = product.payload.options
+      if (product.payload.variants.length > 0) apiPayload.variants = product.payload.variants
+
+      const response = await medusaRequest<MedusaProductResponse>(
+        "/admin/products",
+        { method: "POST", body: JSON.stringify(apiPayload) },
+        token
+      )
+
+      migrated.push({
+        slug: product.canonical_slug,
+        medusa_id: response.product.id,
+        source: product.source,
+      })
+
+      log(`  [${migrated.length}/${productsToCreate.length}] Created "${product.title}" → ${response.product.id}`)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      log(`  ERROR creating "${product.title}": ${message}`)
+      errors.push({ slug: product.canonical_slug, name: product.title, error: message })
     }
   }
-
-  // ── Step 8: Verify counts ───────────────────────────────────────────────────
 
   log("")
-  log(`Migration complete.`)
-  log(`  Migrated:  ${results.migrated.length}`)
-  log(`  Skipped:   ${results.skipped.length}`)
-  log(`  Errors:    ${results.errors.length}`)
-
-  if (results.errors.length > 0) {
-    log("")
-    log("ERRORS — the following products failed to migrate:")
-    for (const e of results.errors) {
-      log(`  WC #${e.wc_id} "${e.name}": ${e.error}`)
-    }
-  }
+  log(`Migration complete. Migrated: ${migrated.length}  Skipped: ${skipped.length}  Errors: ${errors.length}`)
 
   const resultsPath = path.join(MIGRATIONS_DIR, "wc-migration-results.json")
-  writeJson(resultsPath, results)
+  writeJson(resultsPath, { migrated_at: startedAt, migrated, skipped, errors })
   log(`Results written to: ${resultsPath}`)
 
-  if (results.errors.length > 0) {
+  if (errors.length > 0) {
     log("")
-    log("ROLLBACK PROCEDURE:")
-    log("  1. Delete migrated products using the Medusa Admin API:")
-    log(`     DELETE /admin/products/{medusa_id}  — see ${resultsPath}`)
-    log("  2. Re-run this script after fixing the root cause.")
+    log("ERRORS — the following products failed:")
+    for (const e of errors) log(`  "${e.name}" (${e.slug}): ${e.error}`)
+    log("")
+    log("ROLLBACK: DELETE /admin/products/{medusa_id} for each entry in wc-migration-results.json")
     process.exit(1)
   }
 }
