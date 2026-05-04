@@ -41,7 +41,6 @@ Last Updated By: Johan
 - ✅ Task 2.4 — Shop Pages
 - ✅ Task 2.5 — Checkout Flow
 - ⏳ Task 2.6 — PayFast Integration ← CURRENT
-- ⏳ Task 2.6 — PayFast Integration
 - ⏳ Task 2.7 — PayPal Integration
 - ⏳ Task 2.8 — Sage Business Cloud Integration
 - ⏳ Task 2.9 — PDF Invoices
