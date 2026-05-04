@@ -1,0 +1,137 @@
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import type { MedusaVariant } from './ProductPageContent'
+
+function getZarPrice(variant: MedusaVariant): number | null {
+  const price = variant.prices.find((p) => p.currency_code === 'zar')
+  return price ? price.amount / 100 : null
+}
+
+function formatPrice(amount: number): string {
+  return `R${amount.toLocaleString('en-ZA')}`
+}
+
+interface VariantSelectorProps {
+  variants: MedusaVariant[]
+  selectedVariantId: string
+  onSelect: (id: string) => void
+  /** When rendered on a dark background, invert text colours */
+  dark?: boolean
+}
+
+export function VariantSelector({
+  variants,
+  selectedVariantId,
+  onSelect,
+  dark = false,
+}: VariantSelectorProps) {
+  const [buttonState, setButtonState] = useState<'idle' | 'loading' | 'added'>('idle')
+
+  if (variants.length === 0) {
+    return (
+      <Link
+        href="/contact"
+        className="inline-block py-4 px-8 rounded-button text-base font-semibold bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+      >
+        Contact Us to Discuss Options
+      </Link>
+    )
+  }
+
+  const selectedVariant = variants.find((v) => v.id === selectedVariantId) ?? variants[0]
+  const selectedPrice = selectedVariant ? getZarPrice(selectedVariant) : null
+  const hasMultipleVariants = variants.length > 1
+
+  const headingClass = dark ? 'text-white' : 'text-gray-900'
+  const priceClass = dark ? 'text-white' : 'text-gray-900'
+  const noteClass = dark ? 'text-white/50' : 'text-gray-400'
+
+  function handleAddToCart() {
+    setButtonState('loading')
+
+    // TODO: Wire to Medusa cart API in Task 2.5
+    setTimeout(() => {
+      setButtonState('added')
+      setTimeout(() => setButtonState('idle'), 2000)
+    }, 500)
+  }
+
+  return (
+    <div className="space-y-8">
+      {hasMultipleVariants && (
+        <div>
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            Choose Your Programme
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {variants.map((variant) => {
+              const isSelected = variant.id === selectedVariantId
+              return (
+                <button
+                  key={variant.id}
+                  onClick={() => onSelect(variant.id)}
+                  className={`px-5 py-2.5 rounded-full text-sm font-medium border transition-all duration-200 ${
+                    isSelected
+                      ? 'bg-brand-accent-600 text-white border-brand-accent-600'
+                      : 'border-gray-300 text-gray-700 hover:border-brand-accent hover:text-brand-accent bg-transparent'
+                  }`}
+                >
+                  {variant.title}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Price display */}
+      <div>
+        {selectedPrice !== null ? (
+          <p className={`text-4xl font-light ${priceClass}`}>
+            {formatPrice(selectedPrice)}
+          </p>
+        ) : (
+          <p className={`text-xl font-light ${headingClass} opacity-60`}>
+            Contact us to discuss pricing
+          </p>
+        )}
+      </div>
+
+      {/* CTA */}
+      {selectedPrice !== null ? (
+        <div className="space-y-3">
+          <button
+            onClick={handleAddToCart}
+            disabled={buttonState !== 'idle'}
+            className={`w-full sm:w-auto sm:min-w-[240px] py-4 px-8 rounded-button text-base font-semibold transition-all duration-300 ${
+              buttonState === 'added'
+                ? 'bg-emerald-600 text-white cursor-default'
+                : buttonState === 'loading'
+                  ? 'bg-brand-accent-600 text-white/60 cursor-wait'
+                  : 'bg-brand-accent-600 hover:bg-brand-accent-700 text-white hover:-translate-y-0.5 hover:shadow-lg'
+            }`}
+          >
+            {buttonState === 'loading'
+              ? 'Adding...'
+              : buttonState === 'added'
+                ? 'Added to cart ✓'
+                : 'Add to Cart'}
+          </button>
+          {/* TODO: Implement payment plan options — Task 2.6 */}
+          <p className={`text-sm ${noteClass}`}>
+            💡 Payment plans available — contact us
+          </p>
+        </div>
+      ) : (
+        <Link
+          href="/contact"
+          className="inline-block py-4 px-8 rounded-button text-base font-semibold bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+        >
+          Contact Us to Discuss Pricing
+        </Link>
+      )}
+    </div>
+  )
+}

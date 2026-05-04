@@ -74,12 +74,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
 
         {/* GA4 — placeholder measurement ID, confirm with Suzanne before going live */}
+        {/* React 19 handles <script async> natively — no next/script wrapper needed for external src */}
         {safeGaId && (
           <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${safeGaId}`}
-              strategy="afterInteractive"
-            />
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${safeGaId}`} />
             <Script id="ga4-init" strategy="afterInteractive">
               {`
                 window.dataLayer = window.dataLayer || [];
