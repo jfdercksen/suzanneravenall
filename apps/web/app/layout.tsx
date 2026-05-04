@@ -3,6 +3,7 @@ import { Poppins } from 'next/font/google'
 import Script from 'next/script'
 import Header from '../components/layout/Header'
 import Footer from '../components/layout/Footer'
+import { Providers } from '../components/layout/Providers'
 import './globals.css'
 
 const poppins = Poppins({
@@ -68,10 +69,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to main content
         </a>
-        <Header />
-        {/* tabIndex={-1} allows the skip link to programmatically move focus here (WCAG 2.4.1) */}
-        <main id="main-content" tabIndex={-1} className="outline-none">{children}</main>
-        <Footer />
+        <Providers>
+          <Header />
+          {/* tabIndex={-1} allows the skip link to programmatically move focus here (WCAG 2.4.1) */}
+          <main id="main-content" tabIndex={-1} className="outline-none">
+            {children}
+          </main>
+          <Footer />
+        </Providers>
 
         {/* GA4 — placeholder measurement ID, confirm with Suzanne before going live */}
         {/* React 19 handles <script async> natively — no next/script wrapper needed for external src */}

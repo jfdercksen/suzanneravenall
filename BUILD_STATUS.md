@@ -39,7 +39,8 @@ Last Updated By: Johan
 - ✅ Task 2.2 — Product Catalogue Structure
 - ✅ Task 2.3 — Product Migration (WooCommerce)
 - ✅ Task 2.4 — Shop Pages
-- ⏳ Task 2.5 — Checkout Flow ← CURRENT
+- ✅ Task 2.5 — Checkout Flow
+- ⏳ Task 2.6 — PayFast Integration ← CURRENT
 - ⏳ Task 2.6 — PayFast Integration
 - ⏳ Task 2.7 — PayPal Integration
 - ⏳ Task 2.8 — Sage Business Cloud Integration
@@ -89,6 +90,7 @@ Last Updated By: Johan
 
 ## Session Notes
 
+- **May 2026:** Task 2.5 complete. Checkout flow built: CartProvider + useCart hook in apps/web/lib/cart/cart-context.tsx (localStorage persistence, Medusa v2 store API, ZAR formatPrice). CartIcon added to Header (client component, item count badge). VariantSelector wired to real addItem. /cart page with quantity controls, remove, order summary, trust badges, empty state. /checkout 3-step flow (contact details → PayFast redirect → processing animation). /checkout/confirmation clears cart and shows payment reference from PayFast return params. /api/checkout/payfast route generates MD5 signature. Providers wrapper moved to wrap full layout (Header + main + Footer) so CartIcon has access to context. Build clean — 34 pages.
 - **May 2026:** Task 2.4 complete. Shop pages built: /shop (catalogue with sticky category filter, collection tier filter, product grid 3-col, pagination, sort, loading skeletons) and /shop/[handle] (long-form sales page with hero, variant selector, outcome cards, programme details, testimonials, FAQ accordion, repeat CTA). Medusa category tree created (30 categories), all 48 products assigned. x-publishable-api-key wired to all store API fetches. Collection filter functional (fetches collection IDs from Medusa). Code review: 13 issues fixed (Next.js 15 params await, aria-controls, aria-pressed, useMemo, description split, md:→lg: breakpoints throughout). Pre-existing layout.tsx GA4 Script src type error fixed by switching to native React 19 <script async>. Build clean. Visual QA blocked by usage quota (resets 10am SAST).
 - **April 2026:** Task 2.3 complete. 128 WC flat products consolidated into 48 Medusa products with variants using CONSOLIDATION_MAP in migrate-woocommerce.ts. 4 standalone products created (Programs 7/9 Self Study, Be an Energy Ninja L2, Group Sessions, etc. not covered by consolidation map). 129 URL redirect entries written to infra/scripts/migrations/redirect-map.json for Task 1.9. Medusa v2 fix applied: all products (including single-variant) require options array — buildConsolidatedPayload and buildStandalonePayload both updated. 4 collections (start-here, deep-dive, master-level, practitioner) created via seed-collections.mjs. Spot-checked: Rapid Repatterning (12 variants OK), RR Program 1 (3 variants OK), Executive Coaching (6 variants OK). KI006 remains open (15 cat-73 products excluded). KI007: 12 seed placeholder products NOT created (seed.ts failed on tax-rate API; only collections were seeded via seed-collections.mjs — remove KI007).
 - **April 2026:** Task 2.2 complete. Created 4 product collections (Start Here / Deep Dive / Master Level / Practitioner) matching Suzanne's offering tiers. Custom ProgramsModule added at src/modules/programs/ — ProgramMetadata entity with program_type, delivery_method, duration_weeks, max_participants, includes_certification. Seed script extended with 12 placeholder products (3 per collection) using realistic coaching business data scraped from suzanneravenall.com offering structure. medusa db:migrate must be run on VPS after deploying this branch — creates program_metadata table.

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useCart } from '@/lib/cart'
 import type { MedusaVariant } from './ProductPageContent'
 
 function getZarPrice(variant: MedusaVariant): number | null {
@@ -28,6 +29,7 @@ export function VariantSelector({
   dark = false,
 }: VariantSelectorProps) {
   const [buttonState, setButtonState] = useState<'idle' | 'loading' | 'added'>('idle')
+  const { addItem } = useCart()
 
   if (variants.length === 0) {
     return (
@@ -48,14 +50,12 @@ export function VariantSelector({
   const priceClass = dark ? 'text-white' : 'text-gray-900'
   const noteClass = dark ? 'text-white/50' : 'text-gray-400'
 
-  function handleAddToCart() {
+  async function handleAddToCart() {
+    if (!selectedVariant) return
     setButtonState('loading')
-
-    // TODO: Wire to Medusa cart API in Task 2.5
-    setTimeout(() => {
-      setButtonState('added')
-      setTimeout(() => setButtonState('idle'), 2000)
-    }, 500)
+    await addItem(selectedVariant.id, 1)
+    setButtonState('added')
+    setTimeout(() => setButtonState('idle'), 2500)
   }
 
   return (
@@ -119,10 +119,16 @@ export function VariantSelector({
                 ? 'Added to cart ✓'
                 : 'Add to Cart'}
           </button>
-          {/* TODO: Implement payment plan options — Task 2.6 */}
-          <p className={`text-sm ${noteClass}`}>
-            💡 Payment plans available — contact us
-          </p>
+          {buttonState === 'added' ? (
+            <Link
+              href="/cart"
+              className={`text-sm font-medium underline underline-offset-4 transition-colors duration-200 ${dark ? 'text-brand-accent hover:text-white' : 'text-brand-accent hover:text-brand-primary'}`}
+            >
+              View cart →
+            </Link>
+          ) : (
+            <p className={`text-sm ${noteClass}`}>Payment plans available — contact us</p>
+          )}
         </div>
       ) : (
         <Link
