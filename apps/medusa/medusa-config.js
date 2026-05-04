@@ -23,5 +23,25 @@ module.exports = defineConfig({
     {
       resolve: "./src/modules/programs",
     },
+    {
+      resolve: "@medusajs/payment",
+      options: {
+        providers: [
+          {
+            resolve: "./src/modules/payment-payfast",
+            id: "payfast",
+            options: {
+              merchantId: process.env.PAYFAST_MERCHANT_ID || "",
+              merchantKey: process.env.PAYFAST_MERCHANT_KEY || "",
+              passphrase: process.env.PAYFAST_PASSPHRASE || "",
+              sandboxMode: process.env.NODE_ENV !== "production",
+              siteUrl:
+                process.env.NEXT_PUBLIC_SITE_URL ||
+                "https://suzanneravenall.com",
+            },
+          },
+        ],
+      },
+    },
   ],
 })
