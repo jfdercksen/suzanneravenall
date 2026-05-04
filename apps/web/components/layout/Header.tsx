@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import MobileNav from './MobileNav'
+import { CartIcon } from './CartIcon'
 
 export interface NavLink {
   label: string
@@ -47,8 +48,9 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Desktop CTA + mobile hamburger */}
-          <div className="flex items-center gap-4">
+          {/* Desktop CTA + cart + mobile hamburger */}
+          <div className="flex items-center gap-2 lg:gap-4">
+            <CartIcon />
             <Link
               href="/contact"
               className="hidden lg:inline-flex items-center px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white font-medium text-sm rounded-button transition-colors duration-150 whitespace-nowrap"
