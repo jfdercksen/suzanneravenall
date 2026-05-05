@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -10,14 +10,36 @@ import { useCart } from '@/lib/cart'
 export default function ConfirmationContent() {
   const { clearCart } = useCart()
   const searchParams = useSearchParams()
+  const [medusaOrderId, setMedusaOrderId] = useState<string | null>(null)
 
   const paymentId = searchParams.get('pf_payment_id') ?? null
-  const orderId = searchParams.get('m_payment_id') ?? null
+  // m_payment_id is the Medusa cart ID we set as PayFast's m_payment_id
+  const cartId = searchParams.get('m_payment_id') ?? null
 
-  // Clear the cart once the confirmation page is reached
+  // Complete the Medusa cart to create an order, then clear the local cart
   useEffect(() => {
-    clearCart()
-  }, [clearCart])
+    async function finalise() {
+      if (cartId) {
+        try {
+          const res = await fetch('/api/checkout/complete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cartId }),
+          })
+          if (res.ok) {
+            const data = (await res.json()) as { type?: string; order?: { id: string } }
+            if (data.type === 'order' && data.order?.id) {
+              setMedusaOrderId(data.order.id)
+            }
+          }
+        } catch {
+          // Cart completion fails gracefully — payment was already received by PayFast
+        }
+      }
+      clearCart()
+    }
+    finalise()
+  }, [cartId, clearCart])
 
   return (
     <div className="min-h-screen bg-white">
@@ -89,22 +111,28 @@ export default function ConfirmationContent() {
           </div>
 
           {/* Order reference */}
-          {(paymentId ?? orderId) && (
+          {(paymentId ?? cartId ?? medusaOrderId) && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.6 }}
               className="mb-10 p-4 bg-gray-50 rounded-xl border border-gray-100 text-sm text-gray-500 space-y-1"
             >
-              {orderId && (
+              {medusaOrderId && (
                 <p>
-                  <span className="font-medium text-gray-700">Order reference:</span>{' '}
-                  <code className="font-mono">{orderId}</code>
+                  <span className="font-medium text-gray-700">Order ID:</span>{' '}
+                  <code className="font-mono">{medusaOrderId}</code>
+                </p>
+              )}
+              {cartId && !medusaOrderId && (
+                <p>
+                  <span className="font-medium text-gray-700">Reference:</span>{' '}
+                  <code className="font-mono">{cartId}</code>
                 </p>
               )}
               {paymentId && (
                 <p>
-                  <span className="font-medium text-gray-700">Payment ID:</span>{' '}
+                  <span className="font-medium text-gray-700">PayFast payment ID:</span>{' '}
                   <code className="font-mono">{paymentId}</code>
                 </p>
               )}
