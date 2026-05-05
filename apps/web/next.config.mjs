@@ -6,12 +6,15 @@ const nextConfig = {
   output: 'standalone',
   reactStrictMode: true,
 
-  // TypeScript errors are caught in CI (turbo run build) and local dev.
-  // Disabling the Next.js tsc check here prevents the Docker builder from
-  // attempting to auto-install @types/react via yarn (which fails in the
-  // Alpine build environment because yarn 1.x misreads the packageManager field).
+  // TypeScript and ESLint errors are caught in CI (turbo run build) and local dev.
+  // Disabling these checks in next build prevents the Docker builder from
+  // attempting to auto-install @types/react via yarn (yarn 1.x misreads the
+  // packageManager field in the Alpine image and aborts with a corepack error).
   typescript: {
     ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 
   images: {
