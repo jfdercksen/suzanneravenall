@@ -21,6 +21,8 @@ module.exports = defineConfig({
   },
   modules: [
     {
+      // key avoids defineConfig calling require() on TypeScript source during build
+      key: "programsModule",
       resolve: "./src/modules/programs",
     },
     {

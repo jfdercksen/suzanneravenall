@@ -1,31 +1,28 @@
 import { createHash } from 'crypto'
 import { AbstractPaymentProvider } from '@medusajs/framework/utils'
 import type {
-  CreatePaymentProviderSession,
-  UpdatePaymentProviderSession,
-  PaymentProviderError,
-  PaymentProviderSessionResponse,
+  InitiatePaymentInput,
+  InitiatePaymentOutput,
+  UpdatePaymentInput,
+  UpdatePaymentOutput,
+  AuthorizePaymentInput,
+  AuthorizePaymentOutput,
+  CapturePaymentInput,
+  CapturePaymentOutput,
+  RefundPaymentInput,
+  RefundPaymentOutput,
+  CancelPaymentInput,
+  CancelPaymentOutput,
+  DeletePaymentInput,
+  DeletePaymentOutput,
+  GetPaymentStatusInput,
+  GetPaymentStatusOutput,
+  RetrievePaymentInput,
+  RetrievePaymentOutput,
   ProviderWebhookPayload,
   WebhookActionResult,
 } from '@medusajs/framework/types'
 import type { PayFastOptions, PayFastSessionData, PayFastITN } from './types'
-
-// PayFast payment actions (Medusa v2 enum values)
-const PaymentActions = {
-  AUTHORIZED: 'authorized',
-  FAILED: 'failed',
-  NOT_SUPPORTED: 'not_supported',
-} as const
-
-// Payment session statuses (Medusa v2 enum values)
-const PaymentSessionStatus = {
-  PENDING: 'pending',
-  AUTHORIZED: 'authorized',
-  CAPTURED: 'captured',
-  CANCELED: 'canceled',
-  REQUIRES_MORE: 'requires_more',
-  ERROR: 'error',
-} as const
 
 // MD5 of alpha-sorted URL-encoded key=value pairs, with passphrase appended
 function buildSignature(params: Record<string, string>, passphrase: string): string {
@@ -59,25 +56,25 @@ class PayFastPaymentProvider extends AbstractPaymentProvider<PayFastOptions> {
   protected options_: PayFastOptions
 
   async initiatePayment(
-    data: CreatePaymentProviderSession
-  ): Promise<PaymentProviderError | PaymentProviderSessionResponse> {
-    const { amount, currency_code, context } = data
+    input: InitiatePaymentInput
+  ): Promise<InitiatePaymentOutput> {
+    const { amount, currency_code, context } = input
 
     if (currency_code.toLowerCase() !== 'zar') {
-      return {
-        error: 'PayFast only supports ZAR payments',
-        code: 'unsupported_currency',
-      }
+      throw new Error('PayFast only supports ZAR payments')
     }
 
-    const cartId = (context?.cart_id as string | undefined) ?? ''
+    // context is typed as PaymentProviderContext which may not have cart_id/item_name
+    // at the type level, but they are passed at runtime — use index access
+    const ctx = context as Record<string, unknown> | undefined
+    const cartId = (ctx?.['cart_id'] as string | undefined) ?? ''
     if (!cartId) {
-      return { error: 'cart_id is required in payment context', code: 'missing_cart_id' }
+      throw new Error('cart_id is required in payment context')
     }
 
-    const amountFormatted = (amount / 100).toFixed(2)
+    const amountFormatted = (Number(amount) / 100).toFixed(2)
     const itemName =
-      ((context?.item_name as string | undefined) ?? 'Dr. Suzanne Ravenall Programme').slice(
+      ((ctx?.['item_name'] as string | undefined) ?? 'Dr. Suzanne Ravenall Programme').slice(
         0,
         255
       )
@@ -111,91 +108,95 @@ class PayFastPaymentProvider extends AbstractPaymentProvider<PayFastOptions> {
   }
 
   async updatePayment(
-    data: UpdatePaymentProviderSession
-  ): Promise<PaymentProviderError | PaymentProviderSessionResponse> {
-    // Re-initiate with updated amount
-    return this.initiatePayment(data)
+    input: UpdatePaymentInput
+  ): Promise<UpdatePaymentOutput> {
+    // Re-initiate with updated data
+    return this.initiatePayment(input)
   }
 
   async authorizePayment(
-    paymentSessionData: Record<string, unknown>,
-    _context: Record<string, unknown>
-  ): Promise<
-    PaymentProviderError | { status: string; data: Record<string, unknown> }
-  > {
-    const sessionData = paymentSessionData as PayFastSessionData
+    input: AuthorizePaymentInput
+  ): Promise<AuthorizePaymentOutput> {
+    const sessionData = input.data as unknown as PayFastSessionData
 
     // Authorized when ITN has confirmed the payment (status set by getWebhookActionAndData)
-    if (sessionData.status === 'authorized') {
+    if (sessionData?.status === 'authorized') {
       return {
-        status: PaymentSessionStatus.AUTHORIZED,
-        data: { ...paymentSessionData },
+        status: 'authorized',
+        data: { ...input.data },
       }
     }
 
     return {
-      status: PaymentSessionStatus.PENDING,
-      data: { ...paymentSessionData },
+      status: 'pending',
+      data: { ...input.data },
     }
   }
 
   async capturePayment(
-    paymentSessionData: Record<string, unknown>
-  ): Promise<PaymentProviderError | Record<string, unknown>> {
+    input: CapturePaymentInput
+  ): Promise<CapturePaymentOutput> {
     // PayFast captures immediately on COMPLETE ITN — nothing to do server-side
     return {
-      ...paymentSessionData,
-      status: 'captured',
+      data: {
+        ...(input.data ?? {}),
+        status: 'captured',
+      },
     }
   }
 
   async refundPayment(
-    paymentSessionData: Record<string, unknown>,
-    _refundAmount: number
-  ): Promise<PaymentProviderError | Record<string, unknown>> {
+    input: RefundPaymentInput
+  ): Promise<RefundPaymentOutput> {
     // PayFast refunds are initiated via the PayFast merchant portal
     // Automatic refund API is available on PayFast Pro accounts only
     return {
-      error: 'PayFast refunds must be initiated via the PayFast merchant portal',
-      code: 'manual_refund_required',
+      data: {
+        ...(input.data ?? {}),
+        refund_note: 'PayFast refunds must be initiated via the PayFast merchant portal',
+      },
     }
   }
 
   async cancelPayment(
-    paymentSessionData: Record<string, unknown>
-  ): Promise<PaymentProviderError | Record<string, unknown>> {
+    input: CancelPaymentInput
+  ): Promise<CancelPaymentOutput> {
     return {
-      ...paymentSessionData,
-      status: 'canceled',
+      data: {
+        ...(input.data ?? {}),
+        status: 'canceled',
+      },
     }
   }
 
   async deletePayment(
-    paymentSessionData: Record<string, unknown>
-  ): Promise<PaymentProviderError | Record<string, unknown>> {
-    return { ...paymentSessionData, deleted: true }
+    input: DeletePaymentInput
+  ): Promise<DeletePaymentOutput> {
+    return { data: { ...(input.data ?? {}), deleted: true } }
   }
 
-  async getPaymentStatus(paymentSessionData: Record<string, unknown>): Promise<string> {
-    const session = paymentSessionData as PayFastSessionData
-    switch (session.status) {
+  async getPaymentStatus(
+    input: GetPaymentStatusInput
+  ): Promise<GetPaymentStatusOutput> {
+    const session = input.data as unknown as PayFastSessionData
+    switch (session?.status) {
       case 'authorized':
-        return PaymentSessionStatus.AUTHORIZED
+        return { status: 'authorized' }
       case 'captured':
-        return PaymentSessionStatus.CAPTURED
+        return { status: 'captured' }
       case 'failed':
-        return PaymentSessionStatus.ERROR
+        return { status: 'error' }
       case 'canceled':
-        return PaymentSessionStatus.CANCELED
+        return { status: 'canceled' }
       default:
-        return PaymentSessionStatus.PENDING
+        return { status: 'pending' }
     }
   }
 
   async retrievePayment(
-    paymentSessionData: Record<string, unknown>
-  ): Promise<PaymentProviderError | Record<string, unknown>> {
-    return paymentSessionData
+    input: RetrievePaymentInput
+  ): Promise<RetrievePaymentOutput> {
+    return { data: input.data ?? {} }
   }
 
   async getWebhookActionAndData(
@@ -207,9 +208,9 @@ class PayFastPaymentProvider extends AbstractPaymentProvider<PayFastOptions> {
       if (!verifyITNSignature(itn as unknown as Record<string, string>, this.options_.passphrase)) {
         console.error('[PayFast] ITN signature verification failed', { m_payment_id: itn.m_payment_id })
         return {
-          action: PaymentActions.FAILED as string,
-          data: { session_id: itn.m_payment_id },
-        } as unknown as WebhookActionResult
+          action: 'failed',
+          data: { session_id: itn.m_payment_id, amount: 0 },
+        }
       }
 
       if (itn.payment_status === 'COMPLETE') {
@@ -220,21 +221,21 @@ class PayFastPaymentProvider extends AbstractPaymentProvider<PayFastOptions> {
         })
 
         return {
-          action: PaymentActions.AUTHORIZED as string,
+          action: 'authorized',
           data: {
             session_id: itn.m_payment_id,
             amount: Math.round(parseFloat(itn.amount_gross) * 100),
           },
-        } as unknown as WebhookActionResult
+        }
       }
 
       return {
-        action: PaymentActions.FAILED as string,
-        data: { session_id: itn.m_payment_id },
-      } as unknown as WebhookActionResult
+        action: 'failed',
+        data: { session_id: itn.m_payment_id, amount: 0 },
+      }
     } catch (err) {
       console.error('[PayFast] getWebhookActionAndData error', err)
-      return { action: PaymentActions.FAILED as string } as unknown as WebhookActionResult
+      return { action: 'failed', data: { session_id: '', amount: 0 } }
     }
   }
 }

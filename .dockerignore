@@ -1,0 +1,11 @@
+# Exclude all node_modules from Docker build context
+# node_modules are installed fresh inside each container via npm ci/install
+**/node_modules
+**/.next
+**/.turbo
+**/dist
+**/.git
+**/.env.local
+**/.env*.local
+**/coverage
+**/*.log
