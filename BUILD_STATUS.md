@@ -1,9 +1,9 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 2 — E-Commerce
-Current Task: Task 2.4 — Shop Pages
+Current Task: Task 2.7 — PayPal Integration
 Current Branch: main
-Last Updated: April 2026
+Last Updated: May 2026
 Last Updated By: Johan
 
 ---
@@ -42,7 +42,6 @@ Last Updated By: Johan
 - ✅ Task 2.5 — Checkout Flow
 - ✅ Task 2.6 — PayFast Integration
 - ⏳ Task 2.7 — PayPal Integration ← CURRENT
-- ⏳ Task 2.7 — PayPal Integration
 - ⏳ Task 2.8 — Sage Business Cloud Integration
 - ⏳ Task 2.9 — PDF Invoices
 - ⏳ Task 2.10 — Cart Abandonment
@@ -90,6 +89,7 @@ Last Updated By: Johan
 
 ## Session Notes
 
+- **May 2026:** Merged feature/task-2-6-payfast → main. South Africa/ZAR region confirmed on VPS (reg_01KQVE9KPER31E4GCKJ1PFW5DH). PayFast payment module now deployed — run seed-regions.mjs to attach pp_payfast_payfast to the ZAR region after the VPS rebuilds. seed-regions.mjs added at infra/scripts/migrations/seed-regions.mjs (idempotent, handles create + update).
 - **May 2026:** Task 2.6 complete. PayFast integration built: Medusa v2 payment provider at apps/medusa/src/modules/payment-payfast/ (AbstractPaymentProvider, all required methods, MD5 signature). Registered in medusa-config.js under @medusajs/payment module. ITN webhook handler at apps/web/app/api/webhooks/payfast/route.ts: IP allowlist, signature verification, cart completion via Medusa store API. /api/checkout/complete route added (called by ConfirmationContent on mount to create Medusa order). MEDUSA_BACKEND_URL=http://medusa:9000 added to infra/.env (already in docker-compose.yml). Security audit spawned (awaiting results). Build clean — 36 pages. SETUP REQUIRED: after deploy, activate PayFast provider in Medusa admin → Payment → Providers, and add it to the ZAR region's payment collection.
 - **May 2026:** Task 2.5 complete. Checkout flow built: CartProvider + useCart hook in apps/web/lib/cart/cart-context.tsx (localStorage persistence, Medusa v2 store API, ZAR formatPrice). CartIcon added to Header (client component, item count badge). VariantSelector wired to real addItem. /cart page with quantity controls, remove, order summary, trust badges, empty state. /checkout 3-step flow (contact details → PayFast redirect → processing animation). /checkout/confirmation clears cart and shows payment reference from PayFast return params. /api/checkout/payfast route generates MD5 signature. Providers wrapper moved to wrap full layout (Header + main + Footer) so CartIcon has access to context. Build clean — 34 pages.
 - **May 2026:** Task 2.4 complete. Shop pages built: /shop (catalogue with sticky category filter, collection tier filter, product grid 3-col, pagination, sort, loading skeletons) and /shop/[handle] (long-form sales page with hero, variant selector, outcome cards, programme details, testimonials, FAQ accordion, repeat CTA). Medusa category tree created (30 categories), all 48 products assigned. x-publishable-api-key wired to all store API fetches. Collection filter functional (fetches collection IDs from Medusa). Code review: 13 issues fixed (Next.js 15 params await, aria-controls, aria-pressed, useMemo, description split, md:→lg: breakpoints throughout). Pre-existing layout.tsx GA4 Script src type error fixed by switching to native React 19 <script async>. Build clean. Visual QA blocked by usage quota (resets 10am SAST).
