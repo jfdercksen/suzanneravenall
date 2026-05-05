@@ -16,13 +16,14 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-# Next.js 15 spawns a build worker with cwd=apps/web and checks for @types/react
-# using a path that does not follow Node.js module resolution up to the workspace
-# root. It tries to auto-install via yarn (present in Alpine), but yarn 1.x
-# misreads "packageManager": "npm@10.9.0" as "yarn@npm@..." and fails.
-# The fix: pre-create apps/web/node_modules/@types pointing to the hoisted types
-# so Next.js finds them at the expected relative path without triggering yarn.
-RUN mkdir -p apps/web/node_modules && \
+# Next.js 15 detects yarn via the corepack shim at /usr/local/bin/yarn and
+# attempts to auto-install @types/react when the package is not found at the
+# worker's cwd. The corepack shim reads the root packageManager field and
+# misidentifies it as "yarn@npm@10.9.0", causing the build to abort.
+# Remove the corepack yarn shim so Next.js falls back to npm for the install,
+# then create the @types symlink as an additional safeguard.
+RUN rm -f /usr/local/bin/yarn /usr/local/bin/yarnpkg && \
+    mkdir -p apps/web/node_modules && \
     ln -sf /app/node_modules/@types apps/web/node_modules/@types
 
 ARG NEXT_PUBLIC_SUPABASE_URL
