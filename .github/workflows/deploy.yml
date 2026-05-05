@@ -25,8 +25,6 @@ jobs:
       - name: Install linux-x64 sharp (cross-platform native binary)
         run: npm install --os=linux --cpu=x64 --libc=glibc sharp
 
-      # Medusa is excluded here — it has no build step that runs cleanly in CI
-      # without a live database. The container is built on the VPS from source.
       - name: Build
         run: npx turbo run build --filter=!@suzanne/medusa
 
@@ -60,7 +58,7 @@ jobs:
             cd /var/www/suzanneravenall/suzanneravenall
             git pull origin main
             cd infra
-            docker compose -f docker-compose.yml build web payload
+            docker compose -f docker-compose.yml build web payload medusa
             docker compose -f docker-compose.yml up -d --remove-orphans
             docker system prune -f
 
