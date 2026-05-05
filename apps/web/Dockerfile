@@ -16,6 +16,13 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# Remove yarn from the build environment. Next.js 15 attempts to auto-install
+# @types/react via yarn when it cannot resolve the package from the worker
+# process cwd. Yarn 1.x (present in Alpine) then errors because it misreads
+# the root packageManager field ("yarn@npm@10.9.0"). Removing yarn forces
+# Next.js to fall back to npm, which succeeds because @types/react is already
+# installed at the hoisted workspace root node_modules.
+RUN apk del yarn 2>/dev/null || true
 
 ARG NEXT_PUBLIC_SUPABASE_URL
 ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
