@@ -6,7 +6,7 @@ import { useCart } from '@/lib/cart'
 import type { MedusaVariant } from './ProductPageContent'
 
 function getZarPrice(variant: MedusaVariant): number | null {
-  const price = variant.prices.find((p) => p.currency_code === 'zar')
+  const price = (variant.prices ?? []).find((p) => p.currency_code === 'zar')
   return price ? price.amount / 100 : null
 }
 

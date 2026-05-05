@@ -3,6 +3,11 @@ import type { Metadata } from 'next'
 import type { MedusaProduct } from '@/components/shop/ProductPageContent'
 import ProductPageContent from '@/components/shop/ProductPageContent'
 
+// Force dynamic rendering — product pages depend on live Medusa data.
+// Static pre-rendering at build time would fail because variant prices
+// may be incomplete or missing during the Docker build environment.
+export const dynamic = 'force-dynamic'
+
 const MEDUSA_URL =
   process.env.MEDUSA_BACKEND_URL ?? process.env.NEXT_PUBLIC_MEDUSA_URL ?? ''
 const MEDUSA_PUB_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? ''
