@@ -165,9 +165,8 @@ const nextConfig = {
       { source: '/masterclass-steps',             destination: '/portal',         permanent: true },
       { source: '/memberships',                   destination: '/portal',         permanent: true },
 
-      // Commerce
-      { source: '/basket',   destination: '/shop', permanent: true },
-      { source: '/checkout', destination: '/shop', permanent: true },
+      // Commerce — /basket was old WooCommerce cart path; /checkout is our live checkout page
+      { source: '/basket', destination: '/cart', permanent: true },
 
       // Misc WP posts at root level → /services
       { source: '/trauma-to-transcendence',                        destination: '/services', permanent: true },
