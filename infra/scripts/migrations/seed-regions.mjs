@@ -1,8 +1,8 @@
 /**
  * seed-regions.mjs — idempotent Medusa region seeder
  *
- * Creates (or repairs) the South Africa / ZAR region and attaches the
- * PayFast payment provider.  Safe to re-run at any time.
+ * Creates (or repairs) the South Africa / ZAR region (PayFast) and the
+ * International / ZAR region (PayPal).  Safe to re-run at any time.
  *
  * Usage (on VPS, from infra/ directory):
  *   docker compose -f docker-compose.yml run --rm \
@@ -25,6 +25,7 @@ const ADMIN_EMAIL = process.env.MEDUSA_ADMIN_EMAIL ?? "admin@suzanneravenall.com
 const ADMIN_PASSWORD = process.env.MEDUSA_ADMIN_PASSWORD ?? ""
 
 const PAYFAST_PROVIDER_ID = "pp_payfast_payfast"
+const PAYPAL_PROVIDER_ID = "pp_paypal_paypal"
 
 if (!ADMIN_PASSWORD) {
   console.error("MEDUSA_ADMIN_PASSWORD is not set")
@@ -176,6 +177,51 @@ async function run() {
     console.log(`  Payment providers: ${(created.payment_providers ?? []).map((p) => p.id).join(", ") || "none"}`)
   }
 
+  // ----- International region (PayPal) -----
+  const allRegions = await getRegions(headers)
+  const intlRegion = allRegions.find(
+    (r) =>
+      r.name?.toLowerCase().includes("international") ||
+      r.name?.toLowerCase().includes("global") ||
+      (r.currency_code === "zar" && !r.countries?.some((c) => c.iso_2 === "za"))
+  )
+
+  if (intlRegion) {
+    console.log(`\nInternational region found: ${intlRegion.id}`)
+    console.log(`  Currency: ${intlRegion.currency_code}`)
+
+    const existingIntlProviders = intlRegion.payment_providers ?? []
+    const hasPayPal = existingIntlProviders.some((p) => p.id === PAYPAL_PROVIDER_ID)
+
+    if (hasPayPal) {
+      console.log(`  PayPal: already attached ✓`)
+    } else {
+      console.log(`  PayPal: not attached — attempting to add...`)
+      const updated = await updateRegionPaymentProviders(headers, intlRegion.id, [PAYPAL_PROVIDER_ID])
+      if (updated) {
+        const nowHasPayPal = (updated.payment_providers ?? []).some((p) => p.id === PAYPAL_PROVIDER_ID)
+        console.log(`  PayPal: ${nowHasPayPal ? "attached ✓" : "still not attached ✗"}`)
+      }
+    }
+  } else {
+    console.log("\nInternational region not found — creating...")
+    try {
+      const created = await createRegion(headers, {
+        name: "International",
+        currencyCode: "zar",
+        countries: ["US", "GB", "AU", "CA", "DE", "FR", "NL", "NZ", "IE", "CH"],
+        paymentProviders: [PAYPAL_PROVIDER_ID],
+      })
+      console.log(`  Created: ${created.id}`)
+      console.log(`  Currency: ${created.currency_code}`)
+      console.log(`  Countries: ${(created.countries ?? []).map((c) => c.iso_2).join(", ")}`)
+      console.log(`  Payment providers: ${(created.payment_providers ?? []).map((p) => p.id).join(", ") || "none"}`)
+    } catch (e) {
+      console.warn(`  Could not create International region: ${e.message}`)
+      console.warn("  You may need to create it manually in the Medusa admin UI after the PayPal module is deployed.")
+    }
+  }
+
   // ----- Final state -----
   const final = await getRegions(headers)
   const finalSA = final.find((r) => r.id === (saRegion?.id ?? ""))
@@ -185,6 +231,15 @@ async function run() {
     console.log(`  Currency:  ${finalSA.currency_code}`)
     console.log(`  Countries: ${(finalSA.countries ?? []).map((c) => c.iso_2).join(", ")}`)
     console.log(`  Providers: ${(finalSA.payment_providers ?? []).map((p) => p.id).join(", ") || "none"}`)
+  }
+
+  const finalIntl = final.find((r) => r.id === (intlRegion?.id ?? ""))
+  if (finalIntl) {
+    console.log("\nFinal International region state:")
+    console.log(`  ID:        ${finalIntl.id}`)
+    console.log(`  Currency:  ${finalIntl.currency_code}`)
+    console.log(`  Countries: ${(finalIntl.countries ?? []).map((c) => c.iso_2).join(", ")}`)
+    console.log(`  Providers: ${(finalIntl.payment_providers ?? []).map((p) => p.id).join(", ") || "none"}`)
   }
 
   console.log("\nRegion seed complete.")

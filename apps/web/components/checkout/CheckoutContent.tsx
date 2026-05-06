@@ -15,12 +15,14 @@ interface ContactForm {
   lastName: string
   email: string
   phone: string
+  country: 'ZA' | 'INTL'
 }
 
 interface FormErrors {
   firstName?: string
   lastName?: string
   email?: string
+  country?: string
 }
 
 function validateContact(form: ContactForm): FormErrors {
@@ -31,6 +33,9 @@ function validateContact(form: ContactForm): FormErrors {
     errors.email = 'Email is required'
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
     errors.email = 'Please enter a valid email address'
+  }
+  if (!['ZA', 'INTL'].includes(form.country)) {
+    errors.country = 'Please select a billing country'
   }
   return errors
 }
@@ -219,6 +224,18 @@ function PayFastRedirectForm({
   )
 }
 
+// PayPal redirect — uses window.location since PayPal uses GET approval URL
+function PayPalRedirect({ approvalUrl }: { approvalUrl: string }) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      window.location.href = approvalUrl
+    }, 1200)
+    return () => clearTimeout(timer)
+  }, [approvalUrl])
+
+  return null
+}
+
 export default function CheckoutContent() {
   const router = useRouter()
   const { cart, setEmail } = useCart()
@@ -229,6 +246,7 @@ export default function CheckoutContent() {
     lastName: '',
     email: '',
     phone: '',
+    country: 'ZA',
   })
   const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -236,7 +254,8 @@ export default function CheckoutContent() {
     params: Record<string, string>
     endpoint: string
   } | null>(null)
-  const [payFastError, setPayFastError] = useState<string | null>(null)
+  const [paymentError, setPaymentError] = useState<string | null>(null)
+  const [payPalApprovalUrl, setPayPalApprovalUrl] = useState<string | null>(null)
 
   // Redirect to /cart if cart is empty (after initial load)
   useEffect(() => {
@@ -268,7 +287,7 @@ export default function CheckoutContent() {
   async function handlePayWithPayFast() {
     if (!cart) return
     setIsSubmitting(true)
-    setPayFastError(null)
+    setPaymentError(null)
 
     try {
       const firstItem = cart.items[0]
@@ -301,8 +320,47 @@ export default function CheckoutContent() {
       setPayFastData(data)
       setStep(3)
     } catch (err) {
-      setPayFastError(
+      setPaymentError(
         err instanceof Error ? err.message : 'Unable to initialise payment. Please try again.'
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  async function handlePayWithPayPal() {
+    if (!cart) return
+    setIsSubmitting(true)
+    setPaymentError(null)
+
+    try {
+      const firstItem = cart.items[0]
+      const itemName =
+        cart.items.length === 1 && firstItem
+          ? firstItem.title
+          : `Dr. Suzanne Ravenall Programme${cart.items.length > 1 ? 's' : ''}`
+
+      const res = await fetch('/api/checkout/paypal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amountInCents: cart.total,
+          currencyCode: 'ZAR',
+          itemName,
+          cartId: cart.id,
+        }),
+      })
+
+      if (!res.ok) {
+        throw new Error('Payment configuration error')
+      }
+
+      const data = (await res.json()) as { orderId: string; approvalUrl: string }
+      setPayPalApprovalUrl(data.approvalUrl)
+      setStep(3)
+    } catch (err) {
+      setPaymentError(
+        err instanceof Error ? err.message : 'Unable to initialise PayPal payment. Please try again.'
       )
     } finally {
       setIsSubmitting(false)
@@ -384,6 +442,27 @@ export default function CheckoutContent() {
                         autoComplete="tel"
                       />
 
+                      {/* Country — determines payment provider */}
+                      <div>
+                        <label
+                          htmlFor="country"
+                          className="block text-sm font-medium text-gray-700 mb-1.5"
+                        >
+                          Billing country
+                        </label>
+                        <select
+                          id="country"
+                          value={contact.country}
+                          onChange={(e) =>
+                            updateContact('country', e.target.value as 'ZA' | 'INTL')
+                          }
+                          className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent transition-colors duration-200"
+                        >
+                          <option value="ZA">South Africa</option>
+                          <option value="INTL">Outside South Africa (International)</option>
+                        </select>
+                      </div>
+
                       <div className="pt-2">
                         <button
                           type="submit"
@@ -405,7 +484,9 @@ export default function CheckoutContent() {
                       Payment
                     </h2>
                     <p className="text-sm text-gray-500 mb-6">
-                      You will be securely redirected to PayFast to complete your payment.
+                      {contact.country === 'ZA'
+                        ? 'You will be securely redirected to PayFast to complete your payment.'
+                        : 'You will be securely redirected to PayPal to complete your payment.'}
                     </p>
 
                     {/* Billing summary */}
@@ -417,6 +498,10 @@ export default function CheckoutContent() {
                       <p className="text-gray-700">
                         <span className="font-medium">Email:</span> {contact.email}
                       </p>
+                      <p className="text-gray-700">
+                        <span className="font-medium">Billing country:</span>{' '}
+                        {contact.country === 'ZA' ? 'South Africa' : 'International'}
+                      </p>
                       <button
                         onClick={() => setStep(1)}
                         className="text-brand-accent text-xs underline underline-offset-4 hover:text-brand-primary transition-colors duration-200 mt-1"
@@ -425,25 +510,41 @@ export default function CheckoutContent() {
                       </button>
                     </div>
 
-                    {/* PayFast button */}
-                    {payFastError && (
+                    {paymentError && (
                       <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-600" role="alert">
-                        {payFastError}
+                        {paymentError}
                       </div>
                     )}
 
-                    <button
-                      onClick={handlePayWithPayFast}
-                      disabled={isSubmitting}
-                      className="w-full py-4 px-6 rounded-button text-base font-semibold bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
-                    >
-                      <Lock className="w-4 h-4" />
-                      {isSubmitting ? 'Preparing payment...' : 'Pay with PayFast'}
-                    </button>
-
-                    <p className="text-xs text-gray-400 text-center mt-4">
-                      Secured by PayFast. Your payment details are never stored on our servers.
-                    </p>
+                    {contact.country === 'ZA' ? (
+                      <>
+                        <button
+                          onClick={handlePayWithPayFast}
+                          disabled={isSubmitting}
+                          className="w-full py-4 px-6 rounded-button text-base font-semibold bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
+                        >
+                          <Lock className="w-4 h-4" />
+                          {isSubmitting ? 'Preparing payment...' : 'Pay with PayFast'}
+                        </button>
+                        <p className="text-xs text-gray-400 text-center mt-4">
+                          Secured by PayFast · South Africa&apos;s leading payment gateway
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={handlePayWithPayPal}
+                          disabled={isSubmitting}
+                          className="w-full py-4 px-6 rounded-button text-base font-semibold bg-[#0070BA] hover:bg-[#005ea6] disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
+                        >
+                          <Lock className="w-4 h-4" />
+                          {isSubmitting ? 'Preparing payment...' : 'Pay with PayPal'}
+                        </button>
+                        <p className="text-xs text-gray-400 text-center mt-4">
+                          Secured by PayPal · Accepted worldwide
+                        </p>
+                      </>
+                    )}
                   </motion.div>
                 )}
 
@@ -454,7 +555,7 @@ export default function CheckoutContent() {
                       <Lock className="w-6 h-6 text-brand-accent" />
                     </div>
                     <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                      Redirecting to PayFast
+                      {payPalApprovalUrl ? 'Redirecting to PayPal' : 'Redirecting to PayFast'}
                     </h2>
                     <p className="text-sm text-gray-500 mb-6">
                       Please wait — you are being securely redirected to complete your payment.
@@ -475,6 +576,10 @@ export default function CheckoutContent() {
                         params={payFastData.params}
                         endpoint={payFastData.endpoint}
                       />
+                    )}
+
+                    {payPalApprovalUrl && (
+                      <PayPalRedirect approvalUrl={payPalApprovalUrl} />
                     )}
                   </motion.div>
                 )}
