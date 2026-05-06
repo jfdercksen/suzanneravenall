@@ -42,6 +42,19 @@ module.exports = defineConfig({
                 "https://suzanneravenall.com",
             },
           },
+          {
+            resolve: "./src/modules/payment-paypal",
+            id: "paypal",
+            options: {
+              clientId: process.env.PAYPAL_CLIENT_ID || "",
+              clientSecret: process.env.PAYPAL_CLIENT_SECRET || "",
+              sandboxMode: process.env.NODE_ENV !== "production",
+              siteUrl:
+                process.env.NEXT_PUBLIC_SITE_URL ||
+                "https://suzanneravenall.com",
+              webhookId: process.env.PAYPAL_WEBHOOK_ID || "",
+            },
+          },
         ],
       },
     },

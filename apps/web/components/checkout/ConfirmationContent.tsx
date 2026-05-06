@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -12,19 +12,48 @@ export default function ConfirmationContent() {
   const searchParams = useSearchParams()
   const [medusaOrderId, setMedusaOrderId] = useState<string | null>(null)
 
+  // PayFast return params
   const paymentId = searchParams.get('pf_payment_id') ?? null
-  // m_payment_id is the Medusa cart ID we set as PayFast's m_payment_id
-  const cartId = searchParams.get('m_payment_id') ?? null
+  const payFastCartId = searchParams.get('m_payment_id') ?? null
 
-  // Complete the Medusa cart to create an order, then clear the local cart
+  // PayPal return params — gateway=paypal&cartId=xxx&token=PAYPAL_ORDER_ID&PayerID=yyy
+  const gateway = searchParams.get('gateway') ?? null
+  const isPayPal = gateway === 'paypal'
+  const payPalOrderId = searchParams.get('token') ?? null
+  const payPalCartId = searchParams.get('cartId') ?? null
+
+  const cartId = isPayPal ? payPalCartId : payFastCartId
+
+  // Guard against React Strict Mode double-invocation and page refreshes
+  const finalisedRef = useRef(false)
+
   useEffect(() => {
+    if (finalisedRef.current) return
+    finalisedRef.current = true
+
     async function finalise() {
-      if (cartId) {
+      if (isPayPal && payPalOrderId && payPalCartId) {
+        try {
+          const res = await fetch('/api/checkout/paypal/capture', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderId: payPalOrderId, cartId: payPalCartId }),
+          })
+          if (res.ok) {
+            const data = (await res.json()) as { medusaOrderId?: string | null }
+            if (data.medusaOrderId) {
+              setMedusaOrderId(data.medusaOrderId)
+            }
+          }
+        } catch {
+          // Capture fails gracefully — payment was already received by PayPal
+        }
+      } else if (payFastCartId) {
         try {
           const res = await fetch('/api/checkout/complete', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cartId }),
+            body: JSON.stringify({ cartId: payFastCartId }),
           })
           if (res.ok) {
             const data = (await res.json()) as { type?: string; order?: { id: string } }
@@ -38,8 +67,8 @@ export default function ConfirmationContent() {
       }
       clearCart()
     }
-    finalise()
-  }, [cartId, clearCart])
+    void finalise()
+  }, [isPayPal, payPalOrderId, payPalCartId, payFastCartId, clearCart])
 
   return (
     <div className="min-h-screen bg-white">
