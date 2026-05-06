@@ -6,6 +6,10 @@ const nextConfig = {
   output: 'standalone',
   reactStrictMode: true,
 
+  // @react-pdf/renderer uses Node.js built-ins and native binaries — must not
+  // be bundled by webpack. Mark as external so Next.js loads it from node_modules at runtime.
+  serverExternalPackages: ['@react-pdf/renderer'],
+
   // TypeScript and ESLint errors are caught in CI (turbo run build) and local dev.
   // Disabling these checks in next build prevents the Docker builder from
   // attempting to auto-install @types/react via yarn (yarn 1.x misreads the

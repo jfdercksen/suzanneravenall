@@ -100,6 +100,7 @@ services:
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
       N8N_WEBHOOK_URL: ${N8N_WEBHOOK_URL:-http://n8n:5678}
       N8N_WEBHOOK_SECRET: ${N8N_WEBHOOK_SECRET}
+      WEB_BASE_URL: http://web:3000
     networks:
       - suzanne_network
     healthcheck:
@@ -168,6 +169,7 @@ services:
       SAGE_CLIENT_ID: ${SAGE_CLIENT_ID}
       SAGE_CLIENT_SECRET: ${SAGE_CLIENT_SECRET}
       NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
+      MEDUSA_API_TOKEN: ${MEDUSA_API_TOKEN}
     networks:
       - suzanne_network
     healthcheck:
