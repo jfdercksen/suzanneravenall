@@ -100,7 +100,7 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
       const params = new URLSearchParams({
         limit: String(PAGE_SIZE),
         offset: String(page * PAGE_SIZE),
-        fields: 'id,handle,title,description,thumbnail,variants,categories,collection',
+        fields: 'id,handle,title,description,thumbnail,*variants,*variants.prices,*categories,*collection',
       })
 
       if (filters.categoryId) {
