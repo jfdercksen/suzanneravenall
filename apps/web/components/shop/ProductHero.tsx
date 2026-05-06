@@ -12,13 +12,10 @@ interface ProductHeroProps {
 export function ProductHero({ product }: ProductHeroProps) {
   const primaryCategory = product.categories[0]
 
-  // Extract first sentence from description as transformation promise
-  const transformationPromise =
-    product.description
-      ?.split('. ')[0]
-      ?.trim()
-      .replace(/[.!?]$/, '')
-      .concat('.') ?? 'Transform how you experience life.'
+  // Extract first sentence from description as transformation promise.
+  // Guard against empty-string description — "".concat('.') would render a lone ".".
+  const rawSentence = product.description?.split('. ')[0]?.trim().replace(/[.!?]$/, '') ?? ''
+  const transformationPromise = rawSentence ? `${rawSentence}.` : 'Transform how you experience life.'
 
   return (
     <section className="relative w-full min-h-[70vh] flex items-end bg-brand-primary overflow-hidden">

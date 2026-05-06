@@ -11,7 +11,7 @@ function getZarPrice(variant: MedusaVariant): number | null {
 }
 
 function formatPrice(amount: number): string {
-  return `R${amount.toLocaleString('en-ZA')}`
+  return `R${amount.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 interface VariantSelectorProps {
