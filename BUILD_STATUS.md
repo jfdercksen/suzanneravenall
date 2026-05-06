@@ -1,7 +1,7 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 2 — E-Commerce
-Current Task: Task 2.8 — Sage Business Cloud Integration
+Current Task: Task 2.9 — PDF Invoices
 Current Branch: main
 Last Updated: May 2026
 Last Updated By: Johan
@@ -42,9 +42,8 @@ Last Updated By: Johan
 - ✅ Task 2.5 — Checkout Flow
 - ✅ Task 2.6 — PayFast Integration
 - ✅ Task 2.7 — PayPal Integration
-- ⏳ Task 2.8 — Sage Business Cloud Integration ← CURRENT
-- ⏳ Task 2.8 — Sage Business Cloud Integration
-- ⏳ Task 2.9 — PDF Invoices
+- ✅ Task 2.8 — Sage Business Cloud Integration
+- ⏳ Task 2.9 — PDF Invoices ← CURRENT
 - ⏳ Task 2.10 — Cart Abandonment
 - ⏳ Task 2.11 — Order Confirmation Email
 - ⏳ Task 2.12 — MeiliSearch Setup
@@ -90,6 +89,7 @@ Last Updated By: Johan
 
 ## Session Notes
 
+- **May 2026:** Task 2.8 complete. Sage Business Cloud integration built. IMPORTANT: Sage SA v2.0.0 uses HTTP Basic Auth + API key query params — NOT OAuth. The oauth.accounting.sage.com/token endpoint is for GAC v3.1 (UK/US) and is not used by SA. Files built: (1) infra/n8n/workflows/medusa-order-to-sage.json — n8n workflow: webhook trigger (responds 200 immediately) → validate → search customers → create if needed → get tax types + chart of accounts → create TaxInvoice → update Medusa order metadata → error alert via Resend if any Sage call fails. (2) apps/medusa/src/modules/sage/ — SageService with findOrCreateCustomer, createInvoice, typed for SA v2 API. (3) apps/medusa/src/subscribers/order-placed.ts — fires n8n webhook on order.placed (fire-and-forget, never blocks). Medusa sageModule registered in medusa-config.js. Also fixed pre-existing PayPal TS2352 type error. SETUP REQUIRED: (1) Obtain SAGE_EMAIL, SAGE_PASSWORD, SAGE_API_KEY, SAGE_COMPANY_ID from Suzanne's Sage account. (2) Optionally get SAGE_INCOME_ACCOUNT_ID from Sage Chart of Accounts. (3) Generate MEDUSA_API_TOKEN in Medusa admin → API Keys. (4) Add all to infra/.env and rebuild medusa + n8n containers. (5) Import infra/n8n/workflows/medusa-order-to-sage.json into n8n UI and activate the workflow. KI010 added for missing Sage credentials.
 - **May 2026:** Task 2.7 complete. PayPal integration built: Medusa payment-paypal module (AbstractPaymentProvider, OAuth2 client credentials, Orders v2 API — create/capture/refund/cancel). Checkout now routes by billing country: ZA → PayFast, INTL → PayPal. /api/checkout/paypal creates order + returns approvalUrl. /api/checkout/paypal/capture captures order, verifies custom_id/cartId binding (substitution attack prevention). /api/webhooks/paypal: PAYMENT.CAPTURE.COMPLETED handler with cert_url validation (trusted PayPal origins only), 3-way verification result (verified/forged/transient_error), returns 500 on transient errors so PayPal retries. seed-regions.mjs extended with International/ZAR region. SETUP REQUIRED: after deploy, add PAYPAL_CLIENT_ID + PAYPAL_CLIENT_SECRET + PAYPAL_WEBHOOK_ID to infra/.env, rebuild medusa + web containers, run seed-regions.mjs to create International region.
 - **May 2026:** Merged feature/task-2-6-payfast → main. South Africa/ZAR region confirmed on VPS (reg_01KQVE9KPER31E4GCKJ1PFW5DH). PayFast payment module now deployed — run seed-regions.mjs to attach pp_payfast_payfast to the ZAR region after the VPS rebuilds. seed-regions.mjs added at infra/scripts/migrations/seed-regions.mjs (idempotent, handles create + update).
 - **May 2026:** Task 2.6 complete. PayFast integration built: Medusa v2 payment provider at apps/medusa/src/modules/payment-payfast/ (AbstractPaymentProvider, all required methods, MD5 signature). Registered in medusa-config.js under @medusajs/payment module. ITN webhook handler at apps/web/app/api/webhooks/payfast/route.ts: IP allowlist, signature verification, cart completion via Medusa store API. /api/checkout/complete route added (called by ConfirmationContent on mount to create Medusa order). MEDUSA_BACKEND_URL=http://medusa:9000 added to infra/.env (already in docker-compose.yml). Security audit spawned (awaiting results). Build clean — 36 pages. SETUP REQUIRED: after deploy, activate PayFast provider in Medusa admin → Payment → Providers, and add it to the ZAR region's payment collection.

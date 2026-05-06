@@ -98,6 +98,8 @@ services:
       PAYPAL_WEBHOOK_ID: ${PAYPAL_WEBHOOK_ID}
       PAYPAL_SANDBOX: ${PAYPAL_SANDBOX:-false}
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+      N8N_WEBHOOK_URL: ${N8N_WEBHOOK_URL:-http://n8n:5678}
+      N8N_WEBHOOK_SECRET: ${N8N_WEBHOOK_SECRET}
     networks:
       - suzanne_network
     healthcheck:
@@ -262,6 +264,15 @@ services:
       DB_POSTGRESDB_DATABASE: ${DB_POSTGRESDB_DATABASE}
       DB_POSTGRESDB_USER: ${DB_POSTGRESDB_USER}
       DB_POSTGRESDB_PASSWORD: ${DB_POSTGRESDB_PASSWORD}
+      # Sage credentials — accessed in n8n workflow via $env.SAGE_*
+      SAGE_EMAIL: ${SAGE_EMAIL}
+      SAGE_PASSWORD: ${SAGE_PASSWORD}
+      SAGE_API_KEY: ${SAGE_API_KEY}
+      SAGE_COMPANY_ID: ${SAGE_COMPANY_ID}
+      SAGE_API_URL: ${SAGE_API_URL:-https://accounting.sageone.co.za/api/2.0.0}
+      SAGE_INCOME_ACCOUNT_ID: ${SAGE_INCOME_ACCOUNT_ID:-}
+      MEDUSA_API_TOKEN: ${MEDUSA_API_TOKEN}
+      RESEND_API_KEY: ${RESEND_API_KEY}
     networks:
       - suzanne_network
     healthcheck:

@@ -26,6 +26,19 @@ module.exports = defineConfig({
       resolve: "./src/modules/programs",
     },
     {
+      key: "sageModule",
+      resolve: "./src/modules/sage",
+      options: {
+        apiKey: process.env.SAGE_API_KEY || "",
+        email: process.env.SAGE_EMAIL || "",
+        password: process.env.SAGE_PASSWORD || "",
+        companyId: process.env.SAGE_COMPANY_ID || "",
+        baseUrl: process.env.SAGE_API_URL || "https://accounting.sageone.co.za/api/2.0.0",
+        // Recommended: set this to your Sage income ledger account ID to avoid heuristic lookup
+        incomeAccountId: process.env.SAGE_INCOME_ACCOUNT_ID || "",
+      },
+    },
+    {
       resolve: "@medusajs/payment",
       options: {
         providers: [

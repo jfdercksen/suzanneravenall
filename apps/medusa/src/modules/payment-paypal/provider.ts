@@ -304,7 +304,7 @@ class PayPalPaymentProvider extends AbstractPaymentProvider<PayPalOptions> {
     data: ProviderWebhookPayload['payload']
   ): Promise<WebhookActionResult> {
     try {
-      const event = data.data as PayPalWebhookEvent
+      const event = data.data as unknown as PayPalWebhookEvent
 
       if (event.event_type === 'PAYMENT.CAPTURE.COMPLETED') {
         const capture = event.resource.purchase_units?.[0]?.payments?.captures?.[0]

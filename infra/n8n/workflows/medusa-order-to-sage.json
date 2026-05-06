@@ -1,0 +1,746 @@
+{
+  "name": "Medusa Order → Sage Invoice",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "medusa-order-placed",
+        "responseMode": "onReceived",
+        "responseCode": 200,
+        "responseData": "noData",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0001-0000-0000-000000000001",
+      "name": "Webhook: Order Placed",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "medusa-order-placed"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "check-order-id",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "check-customer-email",
+              "leftValue": "={{ $json.customer?.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "check-items",
+              "leftValue": "={{ $json.items?.length }}",
+              "rightValue": "0",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "a1b2c3d4-0002-0000-0000-000000000002",
+      "name": "Validate: Required Fields",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract order fields and build Sage Basic Auth header\nconst order = $input.first().json;\nconst email = $env.SAGE_EMAIL;\nconst password = $env.SAGE_PASSWORD;\nconst authHeader = 'Basic ' + Buffer.from(email + ':' + password).toString('base64');\n\nconst customerName = [\n  order.customer?.first_name,\n  order.customer?.last_name\n].filter(Boolean).join(' ') || order.customer?.email || 'Unknown';\n\nreturn [{\n  json: {\n    orderId: order.id,\n    displayId: order.display_id,\n    customerEmail: order.customer?.email,\n    customerName,\n    items: order.items,\n    totalCents: order.total,\n    currencyCode: order.currency_code,\n    authHeader,\n    apiKey: $env.SAGE_API_KEY,\n    companyId: $env.SAGE_COMPANY_ID,\n    sageBaseUrl: $env.SAGE_API_URL || 'https://accounting.sageone.co.za/api/2.0.0',\n  }\n}];"
+      },
+      "id": "a1b2c3d4-0003-0000-0000-000000000003",
+      "name": "Prepare: Extract Order + Build Auth",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 200]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.sageBaseUrl + '/Customer/Get' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authHeader }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json.apiKey }}"
+            },
+            {
+              "name": "companyid",
+              "value": "={{ $json.companyId }}"
+            },
+            {
+              "name": "$top",
+              "value": "100"
+            },
+            {
+              "name": "$skip",
+              "value": "0"
+            },
+            {
+              "name": "$orderby",
+              "value": "ID"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "a1b2c3d4-0004-0000-0000-000000000004",
+      "name": "Sage: Search Customers",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 200],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Find customer by email in paginated results.\n// Returns { customerId, customerFound } for downstream nodes.\nconst prep = $('Prepare: Extract Order + Build Auth').first().json;\nconst email = prep.customerEmail?.toLowerCase().trim();\nconst results = $input.first().json?.Results ?? [];\n\nconst match = results.find(c => c.Email?.toLowerCase().trim() === email);\n\nreturn [{\n  json: {\n    ...prep,\n    customerId: match?.ID ?? null,\n    customerFound: !!match,\n  }\n}];"
+      },
+      "id": "a1b2c3d4-0005-0000-0000-000000000005",
+      "name": "Find: Customer By Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "id": "customer-found",
+              "leftValue": "={{ $json.customerFound }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "a1b2c3d4-0006-0000-0000-000000000006",
+      "name": "IF: Customer Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1340, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.sageBaseUrl + '/Customer/Save' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authHeader }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json.apiKey }}"
+            },
+            {
+              "name": "companyid",
+              "value": "={{ $json.companyId }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ ID: 0, Name: $json.customerName, ContactName: $json.customerName, Email: $json.customerEmail, Active: true, AcceptsElectronicInvoices: true }) }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0007-0000-0000-000000000007",
+      "name": "Sage: Create Customer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1560, 320],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge customer ID from both branches (found or newly created).\n// Passes all prep data forward.\nconst customerFound = $('IF: Customer Exists?').first().json;\nconst newCustomer = $input.first().json;\n\nconst customerId = newCustomer.ID ?? customerFound.customerId;\n\nreturn [{\n  json: {\n    ...customerFound,\n    customerId,\n  }\n}];"
+      },
+      "id": "a1b2c3d4-0008-0000-0000-000000000008",
+      "name": "Merge: Set Customer ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1780, 200]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.sageBaseUrl + '/TaxType/Get' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authHeader }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json.apiKey }}"
+            },
+            {
+              "name": "companyid",
+              "value": "={{ $json.companyId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0009-0000-0000-000000000009",
+      "name": "Sage: Get Tax Types",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 200],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Merge: Set Customer ID').first().json.sageBaseUrl + '/Account/GetChartofAccounts' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $('Merge: Set Customer ID').first().json.authHeader }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Merge: Set Customer ID').first().json.apiKey }}"
+            },
+            {
+              "name": "companyid",
+              "value": "={{ $('Merge: Set Customer ID').first().json.companyId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0009b-000-0000-000000000009",
+      "name": "Sage: Get Chart of Accounts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 400],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "passThrough",
+        "output": "input1"
+      },
+      "id": "a1b2c3d4-0009c-000-0000-000000000009",
+      "name": "Merge: Tax + Accounts",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [2220, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Resolve default tax type ID (15% VAT) and income account ID,\n// then build the invoice payload.\nconst prep = $('Merge: Set Customer ID').first().json;\nconst taxTypes = $('Sage: Get Tax Types').first().json?.Results ?? [];\nconst accounts = $('Sage: Get Chart of Accounts').first().json?.Results ?? [];\n\nconst taxType =\n  taxTypes.find(t => t.IsDefault && t.Active) ??\n  taxTypes.find(t => t.Percentage === 15 && t.Active);\n\nif (!taxType) throw new Error('Sage: no active VAT tax type found for company');\n\nconst incomeAccount =\n  accounts.find(a => a.Active && a.Category?.Description?.toLowerCase().includes('income') && /sale|revenue|income|service/i.test(a.Name)) ??\n  accounts.find(a => a.Active && a.Category?.Description?.toLowerCase().includes('income'));\n\nif (!incomeAccount) throw new Error('Sage: no income ledger account found in chart of accounts');\n\nconst today = new Date().toISOString().slice(0, 10);\n\nconst lines = prep.items.map(item => {\n  const productTitle = item.variant?.product?.title ?? item.title;\n  const variantTitle = item.variant?.title;\n  const description = variantTitle ? productTitle + ' — ' + variantTitle : productTitle;\n  const unitPriceZar = item.unit_price / 100;\n\n  return {\n    ID: 0,\n    LineType: 1,\n    SelectionId: incomeAccount.ID,\n    TaxTypeId: taxType.ID,\n    Description: description,\n    Quantity: item.quantity,\n    UnitPriceInclusive: unitPriceZar,\n    DiscountPercentage: 0,\n  };\n});\n\nconst invoicePayload = {\n  ID: 0,\n  CustomerId: prep.customerId,\n  Date: today,\n  DueDate: today,\n  Inclusive: true,\n  Reference: prep.displayId ? 'ORDER-' + prep.displayId : prep.orderId,\n  Message: 'Thank you for your purchase.',\n  Lines: lines,\n};\n\nreturn [{\n  json: {\n    ...prep,\n    invoicePayload,\n    taxTypeId: taxType.ID,\n    incomeAccountId: incomeAccount.ID,\n  }\n}];"
+      },
+      "id": "a1b2c3d4-0010-0000-0000-000000000010",
+      "name": "Build: Invoice Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2440, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.sageBaseUrl + '/TaxInvoice/Save' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authHeader }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json.apiKey }}"
+            },
+            {
+              "name": "companyid",
+              "value": "={{ $json.companyId }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.invoicePayload) }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0011-0000-0000-000000000011",
+      "name": "Sage: Create Invoice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2660, 300],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract Sage invoice ID and prepare Medusa metadata update.\nconst invoice = $input.first().json;\nconst prep = $('Build: Invoice Payload').first().json;\n\nif (!invoice.ID) throw new Error('Sage invoice created but no ID returned: ' + JSON.stringify(invoice).slice(0, 200));\n\nreturn [{\n  json: {\n    ...prep,\n    sageInvoiceId: String(invoice.ID),\n    sageDocumentNumber: invoice.DocumentNumber,\n    sageTotal: invoice.Total,\n  }\n}];"
+      },
+      "id": "a1b2c3d4-0012-0000-0000-000000000012",
+      "name": "Extract: Invoice ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2880, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'http://medusa:9000/admin/orders/' + $json.orderId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-medusa-access-token",
+              "value": "={{ $env.MEDUSA_API_TOKEN || '' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ metadata: { sage_invoice_id: $json.sageInvoiceId, sage_document_number: $json.sageDocumentNumber, sage_synced_at: new Date().toISOString() } }) }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0013-0000-0000-000000000013",
+      "name": "Medusa: Update Order Metadata",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3100, 300],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Success — log confirmation.\nconst prev = $('Extract: Invoice ID').first().json;\nconsole.log('[sage-sync] SUCCESS order=' + prev.orderId + ' sageInvoiceId=' + prev.sageInvoiceId + ' doc=' + prev.sageDocumentNumber);\nreturn [$input.first()];"
+      },
+      "id": "a1b2c3d4-0014-0000-0000-000000000014",
+      "name": "Done: Log Success",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3320, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Error handler — called on any Sage or Medusa API failure.\n// Logs the error and sends an alert email via Resend.\n// Returns the error info so it can be passed to the email node.\nconst errItem = $input.first();\nconst errorMessage = errItem.error?.message ?? errItem.json?.message ?? 'Unknown error';\n\n// Try to get order context from any available upstream node\nlet orderId = 'unknown';\ntry { orderId = $('Prepare: Extract Order + Build Auth').first().json.orderId ?? 'unknown'; } catch {}\n\nconsole.error('[sage-sync] ERROR order=' + orderId + ' error=' + errorMessage);\n\nreturn [{\n  json: {\n    orderId,\n    errorMessage,\n    subject: '[ALERT] Sage sync failed for order ' + orderId,\n    timestamp: new Date().toISOString(),\n  }\n}];"
+      },
+      "id": "a1b2c3d4-0015-0000-0000-000000000015",
+      "name": "Error: Log and Prepare Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 600]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.RESEND_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ from: 'noreply@suzanneravenall.com', to: ['admin@suzanneravenall.com'], subject: $json.subject, html: '<p><strong>Sage sync failed.</strong></p><p>Order ID: ' + $json.orderId + '</p><p>Error: ' + $json.errorMessage + '</p><p>Time: ' + $json.timestamp + '</p><p>Manual recovery required — create invoice in Sage and update Medusa order metadata.</p>' }) }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0016-0000-0000-000000000016",
+      "name": "Alert: Send Error Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2220, 600],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Workflow ends cleanly — error was logged and alerted.\n// Returning success so this branch terminates without n8n error status.\nconsole.log('[sage-sync] error handled and alerted, workflow complete');\nreturn [$input.first()];"
+      },
+      "id": "a1b2c3d4-0017-0000-0000-000000000017",
+      "name": "Done: Error Handled",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2440, 600]
+    },
+    {
+      "parameters": {
+        "content": "## Medusa Order → Sage Invoice\\n\\n**Trigger:** POST /webhook/medusa-order-placed\\n**Response:** 200 immediately (never blocks Medusa)\\n\\n**Required env vars in n8n container:**\\n- SAGE_EMAIL\\n- SAGE_PASSWORD\\n- SAGE_API_KEY\\n- SAGE_COMPANY_ID\\n- SAGE_API_URL (default: https://accounting.sageone.co.za/api/2.0.0)\\n- MEDUSA_API_TOKEN (admin API token)\\n- RESEND_API_KEY\\n\\n**Sage SA v2.0.0 — Basic Auth (not OAuth)**\\nThe SA v2 API uses Basic Auth + apikey query param.\\nNo OAuth token endpoint is used.\\n\\n**Error policy:**\\nAny Sage failure → alert email via Resend → continue.\\nOrder is NEVER blocked by Sage errors.",
+        "height": 360,
+        "width": 480,
+        "color": 4
+      },
+      "id": "a1b2c3d4-0018-0000-0000-000000000018",
+      "name": "Notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, 560]
+    }
+  ],
+  "connections": {
+    "Webhook: Order Placed": {
+      "main": [
+        [
+          {
+            "node": "Validate: Required Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate: Required Fields": {
+      "main": [
+        [
+          {
+            "node": "Prepare: Extract Order + Build Auth",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Prepare: Extract Order + Build Auth": {
+      "main": [
+        [
+          {
+            "node": "Sage: Search Customers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sage: Search Customers": {
+      "main": [
+        [
+          {
+            "node": "Find: Customer By Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Error: Log and Prepare Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find: Customer By Email": {
+      "main": [
+        [
+          {
+            "node": "IF: Customer Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Customer Exists?": {
+      "main": [
+        [
+          {
+            "node": "Merge: Set Customer ID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sage: Create Customer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sage: Create Customer": {
+      "main": [
+        [
+          {
+            "node": "Merge: Set Customer ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Error: Log and Prepare Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge: Set Customer ID": {
+      "main": [
+        [
+          {
+            "node": "Sage: Get Tax Types",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Sage: Get Chart of Accounts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sage: Get Tax Types": {
+      "main": [
+        [
+          {
+            "node": "Merge: Tax + Accounts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Error: Log and Prepare Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sage: Get Chart of Accounts": {
+      "main": [
+        [
+          {
+            "node": "Merge: Tax + Accounts",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Error: Log and Prepare Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge: Tax + Accounts": {
+      "main": [
+        [
+          {
+            "node": "Build: Invoice Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build: Invoice Payload": {
+      "main": [
+        [
+          {
+            "node": "Sage: Create Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sage: Create Invoice": {
+      "main": [
+        [
+          {
+            "node": "Extract: Invoice ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Error: Log and Prepare Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract: Invoice ID": {
+      "main": [
+        [
+          {
+            "node": "Medusa: Update Order Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Medusa: Update Order Metadata": {
+      "main": [
+        [
+          {
+            "node": "Done: Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Error: Log and Prepare Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error: Log and Prepare Alert": {
+      "main": [
+        [
+          {
+            "node": "Alert: Send Error Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert: Send Error Email": {
+      "main": [
+        [
+          {
+            "node": "Done: Error Handled",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "versionId": "a1b2c3d4-ffff-0000-0000-000000000001",
+  "id": "medusa-order-to-sage-v1",
+  "tags": [
+    {
+      "id": "tag-sage",
+      "name": "sage"
+    },
+    {
+      "id": "tag-orders",
+      "name": "orders"
+    }
+  ]
+}
