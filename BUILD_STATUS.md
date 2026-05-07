@@ -1,7 +1,7 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 2 — E-Commerce
-Current Task: Task 2.9 — PDF Invoices
+Current Task: Task 2.11 — Order Confirmation Email
 Current Branch: main
 Last Updated: May 2026
 Last Updated By: Johan
@@ -44,9 +44,8 @@ Last Updated By: Johan
 - ✅ Task 2.7 — PayPal Integration
 - ✅ Task 2.8 — Sage Business Cloud Integration
 - ✅ Task 2.9 — PDF Invoices
-- ⏳ Task 2.10 — Cart Abandonment ← CURRENT
-- ⏳ Task 2.10 — Cart Abandonment
-- ⏳ Task 2.11 — Order Confirmation Email
+- ✅ Task 2.10 — Cart Abandonment
+- ⏳ Task 2.11 — Order Confirmation Email ← CURRENT
 - ⏳ Task 2.12 — MeiliSearch Setup
 
 ---
@@ -89,6 +88,8 @@ Last Updated By: Johan
 ---
 
 ## Session Notes
+
+- **May 2026:** Task 2.10 complete. Cart abandonment recovery built. Medusa cart-updated subscriber at apps/medusa/src/subscribers/cart-updated.ts: fires on cart.updated event, 30-minute in-memory debounce gate (prevents n8n flood from high-frequency cart mutations), sends cartId/email/items/total/cartUrl to n8n. n8n workflow at infra/n8n/workflows/cart-abandonment-recovery.json: 15-node linear chain — validate email+items, prepare data, wait 1h, check Medusa orders API, if no order send email 1, wait 23h, check again, if no order send email 2, wait 48h, check again, if no order send email 3. n8n uses MEDUSA_API_TOKEN (already in n8n environment) to check orders. Email API route at apps/web/app/api/email/cart-abandonment/route.ts: auth via N8N_WEBHOOK_SECRET (returns 500 if secret missing — not a silent skip), validates items array content with type guard, dispatches to send functions. 3 email templates at apps/web/lib/email/templates/ (CartAbandonment1/2/3.tsx) using react-email components, navy/blue brand tokens, cart items, CTAs. 3 send functions at apps/web/lib/email/ using Resend v6 SDK with createElement. Shared formatAmount util in lib/email/utils.ts (currency-aware, ZAR → R prefix). resend + @react-email/components installed. SETUP REQUIRED: (1) Add RESEND_API_KEY to infra/.env. (2) Verify sending domain in Resend dashboard (suzanneravenall.com). (3) Import infra/n8n/workflows/cart-abandonment-recovery.json into n8n UI and activate. (4) After DNS cutover, update RESEND_FROM_ADDRESS if needed. KNOWN: unsubscribe links are href="#" placeholders — must be wired before go-live (POPIA compliance).
 
 - **May 2026:** Task 2.9 complete. PDF invoice generation built. react-pdf InvoiceDocument at apps/web/components/invoice/InvoiceDocument.tsx — SA Tax Invoice layout: header, parties, line items (tax-inclusive VAT extraction 15/115), totals, payment+PAID stamp, footer. API route at apps/web/app/api/invoices/generate/route.ts: auth via N8N_WEBHOOK_SECRET header (x-webhook-secret), fetches order from Medusa admin API, renders PDF, uploads to Supabase Storage (invoices bucket, public), updates Medusa order metadata (spreads existing to avoid clobbering Sage/PayFast/PayPal keys), returns invoiceUrl. Medusa order-placed subscriber updated to fire-and-forget the invoice route (includes x-webhook-secret header). MEDUSA_API_TOKEN and WEB_BASE_URL added to docker-compose.yml. SETUP REQUIRED: (1) Add MEDUSA_API_TOKEN to infra/.env (generate in Medusa admin → Settings → API Key Management). (2) Rebuild medusa + web containers. (3) First invoice generation will auto-create the Supabase invoices bucket. Note: @react-pdf/renderer v3 + React 19 type conflict (TS2786/TS2607) is covered by typescript.ignoreBuildErrors: true — does not affect build or runtime. Test: POST /api/invoices/generate with real orderId and x-webhook-secret header.
 - **May 2026:** Task 2.8 complete. Sage Business Cloud integration built. IMPORTANT: Sage SA v2.0.0 uses HTTP Basic Auth + API key query params — NOT OAuth. The oauth.accounting.sage.com/token endpoint is for GAC v3.1 (UK/US) and is not used by SA. Files built: (1) infra/n8n/workflows/medusa-order-to-sage.json — n8n workflow: webhook trigger (responds 200 immediately) → validate → search customers → create if needed → get tax types + chart of accounts → create TaxInvoice → update Medusa order metadata → error alert via Resend if any Sage call fails. (2) apps/medusa/src/modules/sage/ — SageService with findOrCreateCustomer, createInvoice, typed for SA v2 API. (3) apps/medusa/src/subscribers/order-placed.ts — fires n8n webhook on order.placed (fire-and-forget, never blocks). Medusa sageModule registered in medusa-config.js. Also fixed pre-existing PayPal TS2352 type error. SETUP REQUIRED: (1) Obtain SAGE_EMAIL, SAGE_PASSWORD, SAGE_API_KEY, SAGE_COMPANY_ID from Suzanne's Sage account. (2) Optionally get SAGE_INCOME_ACCOUNT_ID from Sage Chart of Accounts. (3) Generate MEDUSA_API_TOKEN in Medusa admin → API Keys. (4) Add all to infra/.env and rebuild medusa + n8n containers. (5) Import infra/n8n/workflows/medusa-order-to-sage.json into n8n UI and activate the workflow. KI010 added for missing Sage credentials.

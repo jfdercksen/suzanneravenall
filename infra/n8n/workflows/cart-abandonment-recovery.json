@@ -1,0 +1,461 @@
+{
+  "name": "Cart Abandonment Recovery",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cart-updated",
+        "responseMode": "onReceived",
+        "responseCode": 200,
+        "responseData": "noData",
+        "options": {}
+      },
+      "id": "ca000001-0000-0000-0000-000000000001",
+      "name": "Webhook: Cart Updated",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "cart-updated"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "check-email",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "check-items",
+              "leftValue": "={{ $json.items?.length ?? 0 }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "ca000001-0000-0000-0000-000000000002",
+      "name": "IF: Has Email + Items",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const cart = $input.first().json;\nreturn [{\n  json: {\n    cartId: cart.cartId,\n    email: cart.email,\n    firstName: cart.firstName ?? '',\n    items: cart.items ?? [],\n    total: cart.total ?? 0,\n    currency: cart.currency ?? 'ZAR',\n    cartUrl: cart.cartUrl ?? '',\n  }\n}];"
+      },
+      "id": "ca000001-0000-0000-0000-000000000003",
+      "name": "Code: Prepare Cart Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 200]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 1,
+        "unit": "hours"
+      },
+      "id": "ca000001-0000-0000-0000-000000000004",
+      "name": "Wait: 1 Hour",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [900, 200],
+      "webhookId": "cart-wait-1h"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'http://medusa:9000/admin/orders?cart_id=' + $('Code: Prepare Cart Data').first().json.cartId + '&limit=1' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.MEDUSA_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "ca000001-0000-0000-0000-000000000005",
+      "name": "HTTP: Check Order 1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "no-order-1",
+              "leftValue": "={{ $json.count ?? -1 }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "ca000001-0000-0000-0000-000000000006",
+      "name": "IF: No Order 1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1340, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://web:3000/api/email/cart-abandonment",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-webhook-secret",
+              "value": "={{ $env.N8N_WEBHOOK_SECRET }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { template: 1, cartId: $('Code: Prepare Cart Data').first().json.cartId, email: $('Code: Prepare Cart Data').first().json.email, firstName: $('Code: Prepare Cart Data').first().json.firstName, items: $('Code: Prepare Cart Data').first().json.items, total: $('Code: Prepare Cart Data').first().json.total, currency: $('Code: Prepare Cart Data').first().json.currency, cartUrl: $('Code: Prepare Cart Data').first().json.cartUrl } }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "ca000001-0000-0000-0000-000000000007",
+      "name": "HTTP: Send Email 1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1560, 100]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 23,
+        "unit": "hours"
+      },
+      "id": "ca000001-0000-0000-0000-000000000008",
+      "name": "Wait: 23 Hours",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1780, 100],
+      "webhookId": "cart-wait-23h"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'http://medusa:9000/admin/orders?cart_id=' + $('Code: Prepare Cart Data').first().json.cartId + '&limit=1' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.MEDUSA_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "ca000001-0000-0000-0000-000000000009",
+      "name": "HTTP: Check Order 2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "no-order-2",
+              "leftValue": "={{ $json.count ?? -1 }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "ca000001-0000-0000-0000-000000000010",
+      "name": "IF: No Order 2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2220, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://web:3000/api/email/cart-abandonment",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-webhook-secret",
+              "value": "={{ $env.N8N_WEBHOOK_SECRET }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { template: 2, cartId: $('Code: Prepare Cart Data').first().json.cartId, email: $('Code: Prepare Cart Data').first().json.email, firstName: $('Code: Prepare Cart Data').first().json.firstName, items: $('Code: Prepare Cart Data').first().json.items, total: $('Code: Prepare Cart Data').first().json.total, currency: $('Code: Prepare Cart Data').first().json.currency, cartUrl: $('Code: Prepare Cart Data').first().json.cartUrl } }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "ca000001-0000-0000-0000-000000000011",
+      "name": "HTTP: Send Email 2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2440, 0]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 48,
+        "unit": "hours"
+      },
+      "id": "ca000001-0000-0000-0000-000000000012",
+      "name": "Wait: 48 Hours",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [2660, 0],
+      "webhookId": "cart-wait-48h"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'http://medusa:9000/admin/orders?cart_id=' + $('Code: Prepare Cart Data').first().json.cartId + '&limit=1' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.MEDUSA_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "ca000001-0000-0000-0000-000000000013",
+      "name": "HTTP: Check Order 3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2880, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "no-order-3",
+              "leftValue": "={{ $json.count ?? -1 }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "ca000001-0000-0000-0000-000000000014",
+      "name": "IF: No Order 3",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [3100, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://web:3000/api/email/cart-abandonment",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-webhook-secret",
+              "value": "={{ $env.N8N_WEBHOOK_SECRET }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { template: 3, cartId: $('Code: Prepare Cart Data').first().json.cartId, email: $('Code: Prepare Cart Data').first().json.email, firstName: $('Code: Prepare Cart Data').first().json.firstName, items: $('Code: Prepare Cart Data').first().json.items, total: $('Code: Prepare Cart Data').first().json.total, currency: $('Code: Prepare Cart Data').first().json.currency, cartUrl: $('Code: Prepare Cart Data').first().json.cartUrl } }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "ca000001-0000-0000-0000-000000000015",
+      "name": "HTTP: Send Email 3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3320, -100]
+    }
+  ],
+  "connections": {
+    "Webhook: Cart Updated": {
+      "main": [
+        [{ "node": "IF: Has Email + Items", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: Has Email + Items": {
+      "main": [
+        [{ "node": "Code: Prepare Cart Data", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Code: Prepare Cart Data": {
+      "main": [
+        [{ "node": "Wait: 1 Hour", "type": "main", "index": 0 }]
+      ]
+    },
+    "Wait: 1 Hour": {
+      "main": [
+        [{ "node": "HTTP: Check Order 1", "type": "main", "index": 0 }]
+      ]
+    },
+    "HTTP: Check Order 1": {
+      "main": [
+        [{ "node": "IF: No Order 1", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: No Order 1": {
+      "main": [
+        [{ "node": "HTTP: Send Email 1", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "HTTP: Send Email 1": {
+      "main": [
+        [{ "node": "Wait: 23 Hours", "type": "main", "index": 0 }]
+      ]
+    },
+    "Wait: 23 Hours": {
+      "main": [
+        [{ "node": "HTTP: Check Order 2", "type": "main", "index": 0 }]
+      ]
+    },
+    "HTTP: Check Order 2": {
+      "main": [
+        [{ "node": "IF: No Order 2", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: No Order 2": {
+      "main": [
+        [{ "node": "HTTP: Send Email 2", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "HTTP: Send Email 2": {
+      "main": [
+        [{ "node": "Wait: 48 Hours", "type": "main", "index": 0 }]
+      ]
+    },
+    "Wait: 48 Hours": {
+      "main": [
+        [{ "node": "HTTP: Check Order 3", "type": "main", "index": 0 }]
+      ]
+    },
+    "HTTP: Check Order 3": {
+      "main": [
+        [{ "node": "IF: No Order 3", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: No Order 3": {
+      "main": [
+        [{ "node": "HTTP: Send Email 3", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "HTTP: Send Email 3": {
+      "main": [[]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-05-06T00:00:00.000Z",
+  "versionId": "ca-abandonment-v1"
+}
