@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import MobileNav from './MobileNav'
 import { CartIcon } from './CartIcon'
+import { SearchBar } from '../search/SearchBar'
 
 export interface NavLink {
   label: string
@@ -48,8 +49,9 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Desktop CTA + cart + mobile hamburger */}
+          {/* Desktop CTA + cart + search + mobile hamburger */}
           <div className="flex items-center gap-2 lg:gap-4">
+            <SearchBar />
             <CartIcon />
             <Link
               href="/contact"

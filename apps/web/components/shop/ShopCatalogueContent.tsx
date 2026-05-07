@@ -1,12 +1,13 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Search, X } from 'lucide-react'
 import { CategoryFilterBar } from './CategoryFilterBar'
 import { ProductCard } from './ProductCard'
 import { ProductGridSkeleton } from './ProductGridSkeleton'
+import type { ProductSearchHit } from '@/lib/search/types'
 
 interface MedusaProduct {
   id: string
@@ -67,6 +68,24 @@ function sortProducts(products: MedusaProduct[], sort: SortOption): MedusaProduc
   return products
 }
 
+function searchHitToProduct(hit: ProductSearchHit): MedusaProduct {
+  return {
+    id: hit.id,
+    handle: hit.handle,
+    title: hit.title,
+    description: hit.description,
+    thumbnail: hit.thumbnail,
+    variants:
+      hit.price_zar !== null
+        ? [{ id: `${hit.id}-default`, title: 'Default', prices: [{ currency_code: 'zar', amount: hit.price_zar }] }]
+        : [],
+    categories: [],
+    collection: hit.collection_handle
+      ? { id: '', handle: hit.collection_handle, title: hit.collection_title ?? '' }
+      : null,
+  }
+}
+
 interface ShopCatalogueContentProps {
   initialCategories: MedusaCategory[]
 }
@@ -80,6 +99,11 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
   const [sort, setSort] = useState<SortOption>('featured')
   const [filters, setFilters] = useState<FilterState>({ categoryId: '', collectionHandle: '' })
   const [collectionIdMap, setCollectionIdMap] = useState<Record<string, string>>({})
+
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<MedusaProduct[] | null>(null)
+  const [searchLoading, setSearchLoading] = useState(false)
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     fetch(`${MEDUSA_URL}/store/collections?limit=20`, { headers: medusaHeaders })
@@ -136,6 +160,30 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
     setPage(0)
   }, [filters])
 
+  useEffect(() => {
+    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current)
+
+    if (!searchQuery.trim()) {
+      setSearchResults(null)
+      return
+    }
+
+    searchDebounceRef.current = setTimeout(() => {
+      setSearchLoading(true)
+      fetch(`/api/search?q=${encodeURIComponent(searchQuery)}&index=products&limit=24`)
+        .then((r) => (r.ok ? r.json() : { results: [] }))
+        .then((data: { results?: ProductSearchHit[] }) => {
+          setSearchResults((data.results ?? []).map(searchHitToProduct))
+          setSearchLoading(false)
+        })
+        .catch(() => setSearchLoading(false))
+    }, 300)
+
+    return () => {
+      if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current)
+    }
+  }, [searchQuery])
+
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
   const sortedProducts = useMemo(() => sortProducts(products, sort), [products, sort])
 
@@ -151,66 +199,129 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
 
       <div className="w-full bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <p className="text-sm text-gray-400">
-            {loading ? 'Loading…' : `${totalCount} programme${totalCount !== 1 ? 's' : ''} found`}
-          </p>
+          {/* Search input */}
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search programmes…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-gray-900 border border-white/10 text-white text-sm rounded-lg pl-9 pr-8 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200 placeholder-gray-500"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
 
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value as SortOption)}
-            className="bg-gray-900 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200"
-          >
-            <option value="featured">Featured</option>
-            <option value="price_asc">Price: Low to High</option>
-            <option value="price_desc">Price: High to Low</option>
-          </select>
+          <div className="flex items-center gap-3">
+            <p className="text-sm text-gray-400 whitespace-nowrap">
+              {searchLoading
+                ? 'Searching…'
+                : searchResults !== null
+                ? `${searchResults.length} result${searchResults.length !== 1 ? 's' : ''}`
+                : loading
+                ? 'Loading…'
+                : `${totalCount} programme${totalCount !== 1 ? 's' : ''}`}
+            </p>
+            {searchResults === null && (
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value as SortOption)}
+                className="bg-gray-900 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200"
+              >
+                <option value="featured">Featured</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+              </select>
+            )}
+          </div>
         </div>
       </div>
 
       <section id="programmes" className="w-full bg-gray-950 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {loading ? (
-            <div role="status" aria-label="Loading programmes">
-              <ProductGridSkeleton />
-            </div>
-          ) : null}
 
-          {!loading && error && (
-            <div className="flex flex-col items-center gap-6 py-24 text-center">
-              <p className="text-white/60 text-lg">
-                Unable to load programmes — please try again.
-              </p>
-              <button
-                onClick={() => void fetchProducts()}
-                className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium rounded-lg transition-colors duration-200"
-              >
-                Retry
-              </button>
-            </div>
+          {/* Search results mode */}
+          {searchResults !== null && (
+            <>
+              {searchLoading && (
+                <div role="status" aria-label="Searching"><ProductGridSkeleton /></div>
+              )}
+              {!searchLoading && searchResults.length === 0 && (
+                <div className="flex flex-col items-center gap-4 py-24 text-center">
+                  <p className="text-white/60 text-lg">No programmes match &ldquo;{searchQuery}&rdquo;.</p>
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="px-5 py-2.5 border border-white/20 hover:border-brand-accent text-white/70 hover:text-brand-accent rounded-lg text-sm transition-all duration-200"
+                  >
+                    Clear search
+                  </button>
+                </div>
+              )}
+              {!searchLoading && searchResults.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {searchResults.map((product, index) => (
+                    <ProductCard key={product.id} product={product} index={index} />
+                  ))}
+                </div>
+              )}
+            </>
           )}
 
-          {!loading && !error && sortedProducts.length === 0 && (
-            <div className="flex flex-col items-center gap-4 py-24 text-center">
-              <p className="text-white/60 text-lg">No programmes match your selection.</p>
-              <button
-                onClick={() => setFilters({ categoryId: '', collectionHandle: '' })}
-                className="px-5 py-2.5 border border-white/20 hover:border-brand-accent text-white/70 hover:text-brand-accent rounded-lg text-sm transition-all duration-200"
-              >
-                Clear filters
-              </button>
-            </div>
-          )}
+          {/* Normal browse mode */}
+          {searchResults === null && (
+            <>
+              {loading ? (
+                <div role="status" aria-label="Loading programmes">
+                  <ProductGridSkeleton />
+                </div>
+              ) : null}
 
-          {!loading && !error && sortedProducts.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sortedProducts.map((product, index) => (
-                <ProductCard key={product.id} product={product} index={index} />
-              ))}
-            </div>
-          )}
+              {!loading && error && (
+                <div className="flex flex-col items-center gap-6 py-24 text-center">
+                  <p className="text-white/60 text-lg">
+                    Unable to load programmes — please try again.
+                  </p>
+                  <button
+                    onClick={() => void fetchProducts()}
+                    className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium rounded-lg transition-colors duration-200"
+                  >
+                    Retry
+                  </button>
+                </div>
+              )}
 
-          {!loading && !error && totalPages > 1 && (
-            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+              {!loading && !error && sortedProducts.length === 0 && (
+                <div className="flex flex-col items-center gap-4 py-24 text-center">
+                  <p className="text-white/60 text-lg">No programmes match your selection.</p>
+                  <button
+                    onClick={() => setFilters({ categoryId: '', collectionHandle: '' })}
+                    className="px-5 py-2.5 border border-white/20 hover:border-brand-accent text-white/70 hover:text-brand-accent rounded-lg text-sm transition-all duration-200"
+                  >
+                    Clear filters
+                  </button>
+                </div>
+              )}
+
+              {!loading && !error && sortedProducts.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {sortedProducts.map((product, index) => (
+                    <ProductCard key={product.id} product={product} index={index} />
+                  ))}
+                </div>
+              )}
+
+              {!loading && !error && totalPages > 1 && (
+                <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+              )}
+            </>
           )}
         </div>
       </section>
