@@ -104,6 +104,8 @@ services:
       MEILISEARCH_HOST: http://meilisearch:7700
       MEILISEARCH_ADMIN_KEY: ${MEILISEARCH_ADMIN_KEY}
       MEDUSA_API_TOKEN: ${MEDUSA_API_TOKEN}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
     networks:
       - suzanne_network
     healthcheck:
