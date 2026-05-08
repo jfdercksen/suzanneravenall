@@ -51,12 +51,13 @@ interface ProductPrice {
 
 interface ProductOption {
   title: string
+  values: string[]
 }
 
 interface ProductVariantInput {
   title: string
   prices: ProductPrice[]
-  options: Array<{ value: string }>
+  options: Record<string, string>
 }
 
 interface MembershipProductMetadata {
@@ -130,12 +131,12 @@ const MEMBERSHIP_DEFINITIONS: MembershipProductDefinition[] = [
     handle: "membership-free",
     collectionHandle: "start-here",
     status: "published",
-    options: [{ title: "Type" }],
+    options: [{ title: "Type", values: ["Membership"] }],
     variants: [
       {
         title: "Monthly",
         prices: [{ currency_code: "zar", amount: 0 }],
-        options: [{ value: "Membership" }],
+        options: { Type: "Membership" },
       },
     ],
     metadata: {
@@ -149,12 +150,12 @@ const MEMBERSHIP_DEFINITIONS: MembershipProductDefinition[] = [
     handle: "membership-silver",
     collectionHandle: "deep-dive",
     status: "published",
-    options: [{ title: "Type" }],
+    options: [{ title: "Type", values: ["Membership"] }],
     variants: [
       {
         title: "Monthly",
         prices: [{ currency_code: "zar", amount: 29900 }],
-        options: [{ value: "Membership" }],
+        options: { Type: "Membership" },
       },
     ],
     metadata: {
@@ -168,12 +169,12 @@ const MEMBERSHIP_DEFINITIONS: MembershipProductDefinition[] = [
     handle: "membership-gold",
     collectionHandle: "master-level",
     status: "published",
-    options: [{ title: "Type" }],
+    options: [{ title: "Type", values: ["Membership"] }],
     variants: [
       {
         title: "Monthly",
         prices: [{ currency_code: "zar", amount: 59900 }],
-        options: [{ value: "Membership" }],
+        options: { Type: "Membership" },
       },
     ],
     metadata: {
@@ -187,12 +188,12 @@ const MEMBERSHIP_DEFINITIONS: MembershipProductDefinition[] = [
     handle: "membership-practitioner",
     collectionHandle: "practitioner",
     status: "published",
-    options: [{ title: "Type" }],
+    options: [{ title: "Type", values: ["Membership"] }],
     variants: [
       {
         title: "Monthly",
         prices: [{ currency_code: "zar", amount: 99900 }],
-        options: [{ value: "Membership" }],
+        options: { Type: "Membership" },
       },
     ],
     metadata: {
