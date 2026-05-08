@@ -22,6 +22,16 @@ vi.mock('./MobileNav', () => ({
   ),
 }))
 
+// Mock SearchBar — uses useRouter which requires App Router context
+vi.mock('../search/SearchBar', () => ({
+  SearchBar: () => <div data-testid="search-bar" />,
+}))
+
+// Mock CartIcon — uses useCart hook which requires cart context
+vi.mock('./CartIcon', () => ({
+  CartIcon: () => <div data-testid="cart-icon" />,
+}))
+
 describe('Header', () => {
   it('renders a <header> element with role="banner"', () => {
     render(<Header />)
@@ -51,7 +61,7 @@ describe('Header', () => {
       { label: 'Home', href: '/' },
       { label: 'About', href: '/about' },
       { label: 'Services', href: '/services' },
-      { label: 'Programs', href: '/programs' },
+      { label: 'Programs', href: '/services' },
       { label: 'Blog', href: '/blog' },
       { label: 'Contact', href: '/contact' },
       { label: 'Member Portal', href: '/portal' },

@@ -15,5 +15,9 @@
   },
   "dependencies": {
     "@react-email/components": "^1.0.12"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6",
+    "@testing-library/react": "^16"
   }
 }
