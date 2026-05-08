@@ -49,9 +49,14 @@ interface ProductPrice {
   amount: number
 }
 
+interface ProductOption {
+  title: string
+}
+
 interface ProductVariantInput {
   title: string
   prices: ProductPrice[]
+  options: Array<{ value: string }>
 }
 
 interface MembershipProductMetadata {
@@ -65,6 +70,7 @@ interface MembershipProductDefinition {
   handle: string
   collectionHandle: string
   status: "published" | "draft"
+  options: ProductOption[]
   variants: ProductVariantInput[]
   metadata: MembershipProductMetadata
 }
@@ -124,10 +130,12 @@ const MEMBERSHIP_DEFINITIONS: MembershipProductDefinition[] = [
     handle: "membership-free",
     collectionHandle: "start-here",
     status: "published",
+    options: [{ title: "Type" }],
     variants: [
       {
         title: "Monthly",
         prices: [{ currency_code: "zar", amount: 0 }],
+        options: [{ value: "Membership" }],
       },
     ],
     metadata: {
@@ -141,10 +149,12 @@ const MEMBERSHIP_DEFINITIONS: MembershipProductDefinition[] = [
     handle: "membership-silver",
     collectionHandle: "deep-dive",
     status: "published",
+    options: [{ title: "Type" }],
     variants: [
       {
         title: "Monthly",
         prices: [{ currency_code: "zar", amount: 29900 }],
+        options: [{ value: "Membership" }],
       },
     ],
     metadata: {
@@ -158,10 +168,12 @@ const MEMBERSHIP_DEFINITIONS: MembershipProductDefinition[] = [
     handle: "membership-gold",
     collectionHandle: "master-level",
     status: "published",
+    options: [{ title: "Type" }],
     variants: [
       {
         title: "Monthly",
         prices: [{ currency_code: "zar", amount: 59900 }],
+        options: [{ value: "Membership" }],
       },
     ],
     metadata: {
@@ -175,10 +187,12 @@ const MEMBERSHIP_DEFINITIONS: MembershipProductDefinition[] = [
     handle: "membership-practitioner",
     collectionHandle: "practitioner",
     status: "published",
+    options: [{ title: "Type" }],
     variants: [
       {
         title: "Monthly",
         prices: [{ currency_code: "zar", amount: 99900 }],
+        options: [{ value: "Membership" }],
       },
     ],
     metadata: {
@@ -229,6 +243,7 @@ async function seedMembershipProducts(token: string): Promise<void> {
           handle: def.handle,
           status: def.status,
           collection_id: collectionId,
+          options: def.options,
           variants: def.variants,
           metadata: def.metadata,
         }),
