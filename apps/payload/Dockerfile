@@ -6,7 +6,11 @@ RUN apk add --no-cache libc6-compat curl
 # ── Dependencies stage ────────────────────────────────────────────────────────
 FROM base AS deps
 WORKDIR /app
-COPY package.json package-lock.json* ./
+COPY package.json package-lock.json* turbo.json ./
+COPY apps/payload/package.json ./apps/payload/
+COPY packages/config/package.json ./packages/config/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/database/package.json ./packages/database/
 RUN npm ci && npm install --cpu=x64 --os=linux --libc=musl sharp
 
 # ── Builder stage ─────────────────────────────────────────────────────────────
@@ -14,9 +18,6 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# Generate Payload types before building
-RUN npm run generate:types || true
 
 ENV NODE_ENV=production
 RUN npx turbo run build --filter=@suzanne/payload
