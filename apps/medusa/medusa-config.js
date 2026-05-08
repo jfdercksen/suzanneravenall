@@ -26,6 +26,10 @@ module.exports = defineConfig({
       resolve: "./src/modules/programs",
     },
     {
+      key: "membershipsModule",
+      resolve: "./src/modules/memberships",
+    },
+    {
       key: "sageModule",
       resolve: "./src/modules/sage",
       options: {

@@ -1,8 +1,8 @@
 # Build Status — Suzanne Ravenall Platform
 
-Current Phase: Phase 2 — E-Commerce (COMPLETE — all core tasks done)
-Current Task: Phase 2 wrap-up / Phase 3 planning
-Current Branch: main
+Current Phase: Phase 3 — Membership Portal
+Current Task: Task 3.1 — Membership Products in Medusa
+Current Branch: feature/task-3-1-membership-products
 Last Updated: 2026-05-07
 Last Updated By: Johan
 
@@ -14,8 +14,8 @@ Last Updated By: Johan
 |-------|-------|---------|----------|
 | Phase 0 — Foundation | ✅ Complete | ✅ Staging deployed | ⏳ Awaiting sign-off |
 | Phase 1 — Public Website | ✅ Complete | ❌ Not yet | ❌ Not yet |
-| Phase 2 — E-Commerce | 🔄 In Progress | ❌ Not yet | ❌ Not yet |
-| Phase 3 — Membership Portal | ⏳ Not started | ❌ Not yet | ❌ Not yet |
+| Phase 2 — E-Commerce | ✅ Complete | ❌ Not yet | ⏳ Awaiting client credentials (see pending items) |
+| Phase 3 — Membership Portal | 🔄 In Progress | ❌ Not yet | ❌ Not yet |
 | Phase 4 — CRM and Automation | ⏳ Not started | ❌ Not yet | ❌ Not yet |
 | Phase 5 — QA and Launch | ⏳ Not started | ❌ Not yet | ❌ Not yet |
 
@@ -47,6 +47,31 @@ Last Updated By: Johan
 - ✅ Task 2.10 — Cart Abandonment
 - ✅ Task 2.11 — Order Confirmation Email
 - ✅ Task 2.12 — MeiliSearch Setup
+
+## Phase 2 — Pending Before Sign-off (awaiting client)
+
+These items are built but cannot be validated without external credentials or action:
+
+1. ⏳ **PayFast sandbox test** — waiting on Suzanne's sandbox merchant credentials
+2. ⏳ **PayPal sandbox test** — waiting on developer.paypal.com sandbox credentials
+3. ⏳ **Sage integration test** — waiting on Suzanne's Sage credentials (SAGE_EMAIL, SAGE_PASSWORD, SAGE_API_KEY, SAGE_COMPANY_ID)
+4. ⏳ **MeiliSearch seed script** — run `node infra/scripts/migrations/seed-meilisearch.js` on VPS once deployed
+5. ⏳ **POPIA compliance** — unsubscribe links + physical address placeholder in email templates (apps/web/emails/ and apps/web/lib/email/templates/) must be replaced before go-live
+6. ⏳ **Resend domain verification** — verify suzanneravenall.com as sending domain in Resend dashboard
+
+---
+
+## Phase 3 — Task Status
+
+- 🔄 Task 3.1 — Membership Products in Medusa (in progress)
+- ⏳ Task 3.2 — Supabase Auth Configuration
+- ⏳ Task 3.3 — Member Portal
+- ⏳ Task 3.4 — Middleware Auth Protection
+- ⏳ Task 3.5 — Resource Access Control
+- ⏳ Task 3.6 — Bunny Stream Integration
+- ⏳ Task 3.7 — Wild Apricot Member Migration
+- ⏳ Task 3.8 — Discourse Community
+- ⏳ Task 3.9 — Membership Emails
 
 ---
 

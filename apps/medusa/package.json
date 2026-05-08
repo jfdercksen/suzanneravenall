@@ -13,7 +13,8 @@
     "@medusajs/dashboard": "^2.0.0",
     "@medusajs/framework": "^2.0.0",
     "@medusajs/file-local": "^2.0.0",
-    "@medusajs/admin-sdk": "^2.0.0"
+    "@medusajs/admin-sdk": "^2.0.0",
+    "@supabase/supabase-js": "^2.0.0"
   },
   "devDependencies": {
     "typescript": "^5.0.0",
