@@ -30,6 +30,7 @@ jobs:
         # NODE_OPTIONS: cap each Next.js build at 4GB heap
         env:
           NODE_OPTIONS: '--max-old-space-size=4096'
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: npx turbo run build --filter=!@suzanne/medusa --concurrency=1
 
       - name: Lint

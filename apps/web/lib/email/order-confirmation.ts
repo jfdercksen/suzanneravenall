@@ -6,8 +6,6 @@ import { formatAmount } from './utils'
 
 export type { OrderEmailData }
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 const FROM =
   process.env.RESEND_FROM_ADDRESS ?? 'Dr Suzanne Ravenall <noreply@suzanneravenall.com>'
 const REPLY_TO = 'sravenall@suzanneravenall.com'
@@ -19,6 +17,7 @@ export async function sendOrderConfirmationEmail({
   order: OrderEmailData
   invoiceUrl: string | null
 }): Promise<string> {
+  const resend = new Resend(process.env.RESEND_API_KEY ?? '')
   const subject = `Your transformation begins — Order #${order.displayId}`
   const text = buildPlainText(order, invoiceUrl)
 

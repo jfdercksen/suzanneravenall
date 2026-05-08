@@ -5,11 +5,10 @@ import type { CartEmailData } from './types'
 
 export type { CartEmailData }
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 const FROM = process.env.RESEND_FROM_ADDRESS ?? 'Dr Suzanne Ravenall <hello@suzanneravenall.com>'
 
 export async function sendCartAbandonmentEmail1(data: CartEmailData): Promise<string> {
+  const resend = new Resend(process.env.RESEND_API_KEY ?? '')
   const subject = data.firstName
     ? `You left something behind, ${data.firstName}`
     : 'You left something behind'
