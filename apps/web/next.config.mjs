@@ -1,9 +1,17 @@
 // @ts-check
 import { withSentryConfig } from '@sentry/nextjs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  // Explicit monorepo root for standalone output file tracing.
+  // Without this, Next.js cannot find npm-hoisted packages on Linux
+  // (strict hoisting puts them in ../../node_modules, outside apps/web).
+  outputFileTracingRoot: path.join(__dirname, '../../'),
   reactStrictMode: true,
 
   // @react-pdf/renderer uses Node.js built-ins and native binaries — must not
@@ -293,19 +301,18 @@ export default withSentryConfig(nextConfig, {
   org: sentryOrg,
   project: 'suzanneravenall-web',
 
-  // Suppress Sentry CLI output during builds — also suppressed when org is a placeholder
-  silent: !process.env.CI || sentryOrg === 'your-sentry-org',
+  // Suppress Sentry CLI output when no auth token is present
+  silent: !sentryAuthToken,
 
   // Only upload source maps when a real auth token is present (Phase 5)
   sourcemaps: {
     disable: !sentryAuthToken,
   },
 
-  // Upload larger source map artifacts for better stack traces
-  widenClientFileUpload: true,
-
-  // Hide source maps from the browser bundle
-  hideSourceMaps: true,
+  // These webpack plugins add build-time transformations that can fail on Linux
+  // when no auth token is set. Only enable them for production source map uploads.
+  widenClientFileUpload: !!sentryAuthToken,
+  hideSourceMaps: !!sentryAuthToken,
 
   // Remove Sentry logger statements from the production bundle
   disableLogger: true,

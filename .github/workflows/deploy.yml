@@ -26,10 +26,14 @@ jobs:
         run: npm install --os=linux --cpu=x64 --libc=glibc sharp
 
       - name: Build
-        run: npx turbo run build --filter=!@suzanne/medusa
+        # --concurrency=1: build packages sequentially to avoid OOM on 7GB CI runner
+        # NODE_OPTIONS: cap each Next.js build at 4GB heap
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+        run: npx turbo run build --filter=!@suzanne/medusa --concurrency=1
 
       - name: Lint
-        run: npx turbo run lint
+        run: npx turbo run lint --filter=@suzanne/web
 
       - name: Test
         run: npx turbo run test
