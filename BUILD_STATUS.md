@@ -65,9 +65,7 @@ These items are built but cannot be validated without external credentials or ac
 
 - ✅ Task 3.1 — Membership Products in Medusa (complete — 4 tiers seeded: Free, Silver, Gold, Practitioner)
 - ✅ Task 3.2 — Supabase Auth Configuration (complete)
-- ⏳ Task 3.3 — Member Portal
-- ⏳ Task 3.2 — Supabase Auth Configuration
-- ⏳ Task 3.3 — Member Portal
+- ✅ Task 3.3 — Member Content Access Control (complete)
 - ⏳ Task 3.4 — Middleware Auth Protection
 - ⏳ Task 3.5 — Resource Access Control
 - ⏳ Task 3.6 — Bunny Stream Integration
@@ -115,6 +113,8 @@ These items are built but cannot be validated without external credentials or ac
 ---
 
 ## Session Notes
+
+- **May 2026:** Task 3.3 complete. Member Content Access Control built. lib/access/tiers.ts: TierPermissions interface + TIER_ACCESS matrix for 4 tiers (free/silver/gold/practitioner), hasAccess(), tierLabel(), minimumTierFor(). lib/access/check-access.ts: getMemberTier(supabase) + requireAccess(supabase, resource, fromPath?) — unauthenticated redirects to /portal/login, wrong tier redirects to /portal/upgrade, both with encoded fromPath for context. New portal pages: portal/upgrade (Tony Robbins-energy tier comparison, context-aware headline from `from=` query param, from param validated as relative path only), portal/resources (6-category resource library, locked/unlocked cards per tier), portal/videos (video grid with category filter, Bunny Stream embed modal via useEffect+AbortController). lib/bunny/get-signed-url.ts: SHA256 signed URL per Bunny Stream algorithm (signingKey+videoId+expires — no userId in hash), gold+ live_session_recordings access correctly covered. api/video/[videoId]/route.ts: auth + tier check + Zod validation on videoId. Public resources page: MemberResourcesSection injected — shows locked/unlocked cards based on auth state, unauthenticated gets "log in" CTA. resources/media and resources/assessments: server-side requireAccess(silver) with redirect. Dashboard updated: Silver+ content spotlights (assessments, group sessions, workbooks links), My Programmes section (Medusa customer looked up by email — not from user metadata, IDOR-safe), free-tier upgrade CTA split into "View Upgrade Options" + "Membership Plans". docker-compose.yml: BUNNY_CDN_HOSTNAME + BUNNY_STREAM_SIGNING_KEY added. 48/48 unit tests passing. Build clean — 54 pages. SETUP REQUIRED: (1) Obtain Bunny Stream library signing key from Bunny dashboard → Stream → Library → Security → Token Auth Key → add as BUNNY_STREAM_SIGNING_KEY in infra/.env. (2) Set BUNNY_STREAM_LIBRARY_ID and BUNNY_CDN_HOSTNAME (default: iframe.mediadelivery.net). NOTE: video_access_log table not yet created — logging is a TODO in api/video/[videoId]/route.ts, use add-supabase-table skill when ready.
 
 - **May 2026:** Task 3.2 complete. Supabase Auth + Member Portal auth flows built. middleware.ts fixed: redirects unauthenticated /portal/* to /portal/login (was /), exempts login/signup/callback/forgot-password/reset-password. New files: portal/callback/route.ts (server PKCE exchange, creates free member_subscriptions on first email confirmation, detects recovery via AMR claim), portal/dashboard (server component + DashboardContent client with tier badge + quick links + upgrade CTA), portal/forgot-password, portal/reset-password (session guard on mount). Login page updated with password/magic-link toggle and forgot password link; open redirect fixed. Signup page: emailRedirectTo wired, free subscription creation moved to callback route. api/auth/signup-sync: requires session + userId self-match, idempotent free-tier insert. 17/17 unit tests passing. Build clean (49 pages). SETUP REQUIRED: (1) In Supabase dashboard mjhwonoekokxyisfljtj.supabase.co → Auth → Email Providers: enable magic link. (2) Auth → URL Configuration: set Site URL to http://169.239.180.49, add redirect URLs: http://169.239.180.49/portal/callback, https://suzanneravenall.com/portal/callback, http://localhost:3000/portal/callback.
 
