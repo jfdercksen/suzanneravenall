@@ -1,8 +1,16 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/middleware'
 
-// Routes that require authentication — expanded in Phase 3 when portal is built
 const PROTECTED_PREFIXES = ['/portal']
+
+// These paths live under /portal but do not require authentication
+const PUBLIC_PORTAL_PATHS = [
+  '/portal/login',
+  '/portal/signup',
+  '/portal/callback',
+  '/portal/forgot-password',
+  '/portal/reset-password',
+]
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   const { pathname } = request.nextUrl
@@ -15,14 +23,20 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   )
 
   if (isProtected) {
-    // Phase 3: replace this with a full portal gate when portal is built.
-    // For now, redirect unauthenticated users to the home page.
-    const { data: { session } } = await supabase.auth.getSession()
+    const isPublicPortalPath = PUBLIC_PORTAL_PATHS.some((p) =>
+      pathname.startsWith(p)
+    )
 
-    if (!session) {
-      const loginUrl = new URL('/', request.url)
-      loginUrl.searchParams.set('redirect', pathname)
-      return NextResponse.redirect(loginUrl)
+    if (!isPublicPortalPath) {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      if (!session) {
+        const loginUrl = new URL('/portal/login', request.url)
+        loginUrl.searchParams.set('redirect', pathname)
+        return NextResponse.redirect(loginUrl)
+      }
     }
   }
 

@@ -1,9 +1,9 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 3 — Membership Portal
-Current Task: Task 3.1 — Membership Products in Medusa
-Current Branch: feature/task-3-1-membership-products
-Last Updated: 2026-05-07
+Current Task: Task 3.2 — Supabase Auth Configuration
+Current Branch: feature/task-3-2-supabase-auth
+Last Updated: 2026-05-11
 Last Updated By: Johan
 
 ---
@@ -63,7 +63,8 @@ These items are built but cannot be validated without external credentials or ac
 
 ## Phase 3 — Task Status
 
-- 🔄 Task 3.1 — Membership Products in Medusa (in progress)
+- ✅ Task 3.1 — Membership Products in Medusa (complete — 4 tiers seeded: Free, Silver, Gold, Practitioner)
+- 🔄 Task 3.2 — Supabase Auth Configuration (in progress)
 - ⏳ Task 3.2 — Supabase Auth Configuration
 - ⏳ Task 3.3 — Member Portal
 - ⏳ Task 3.4 — Middleware Auth Protection

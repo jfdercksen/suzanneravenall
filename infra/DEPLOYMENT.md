@@ -184,6 +184,52 @@ curl http://localhost:3001/admin    # from inside VPS
 
 ---
 
+## Supabase Auth Setup
+
+These settings must be configured manually in the Supabase dashboard at
+**https://supabase.com/dashboard/project/mjhwonoekokxyisfljtj/auth/providers**
+
+### Required settings
+
+| Setting | Value |
+|---------|-------|
+| Email provider | Enabled (should already be on) |
+| Email / magic link | Enabled |
+| Email confirmation | Required — do NOT disable |
+| Minimum password length | 8 characters |
+
+### Site URL
+
+Set in **Authentication → URL Configuration → Site URL**:
+
+- **IP testing**: `http://169.239.180.49`
+- **Production (after DNS cutover)**: `https://suzanneravenall.com`
+
+### Redirect URLs (allow-list)
+
+Add all of these in **Authentication → URL Configuration → Redirect URLs**:
+
+```
+http://169.239.180.49/portal/callback
+https://suzanneravenall.com/portal/callback
+http://localhost:3000/portal/callback
+```
+
+Without these entries, magic links and email confirmations will be blocked by Supabase.
+
+### Email templates
+
+Supabase uses its own built-in email templates for confirmation, magic link, and password reset.
+These can be customised in **Authentication → Email Templates**.
+The `{{ .ConfirmationURL }}` variable already contains the correct redirect URL from the allow-list above.
+
+### After DNS cutover
+
+Update Site URL to `https://suzanneravenall.com` in the Supabase dashboard.
+No code changes required — the redirect URL is already in the allow-list.
+
+---
+
 ## Troubleshooting
 
 ### Payload admin loads unstyled / hydration error #418
