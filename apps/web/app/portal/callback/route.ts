@@ -3,7 +3,13 @@ import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function GET(request: NextRequest) {
-  const { searchParams, origin } = new URL(request.url)
+  const { searchParams } = new URL(request.url)
+  // Use the configured site URL rather than deriving from request.url.
+  // In Docker behind Nginx, request.url resolves to http://0.0.0.0:3000
+  // because Next.js uses the server's bind address, not the forwarded Host header.
+  const origin =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    `${request.nextUrl.protocol}//${request.nextUrl.host}`
   const code = searchParams.get('code')
   const next = searchParams.get('next') ?? '/portal/dashboard'
 
