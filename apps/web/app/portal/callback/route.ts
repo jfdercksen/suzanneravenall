@@ -11,7 +11,11 @@ export async function GET(request: NextRequest) {
     process.env.NEXT_PUBLIC_SITE_URL ??
     `${request.nextUrl.protocol}//${request.nextUrl.host}`
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/portal/dashboard'
+  const rawNext = searchParams.get('next') ?? '/portal/dashboard'
+  const next =
+    rawNext.startsWith('/') && !rawNext.startsWith('//')
+      ? rawNext
+      : '/portal/dashboard'
 
   if (!code) {
     return NextResponse.redirect(`${origin}/portal/login?error=missing-code`)
