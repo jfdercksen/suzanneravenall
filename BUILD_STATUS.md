@@ -1,8 +1,8 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 4 — CRM and Automation
-Current Task: Task 4.1 — Vtiger CRM Configuration
-Current Branch: main
+Current Task: Task 4.2 — Vtiger Automation Workflows
+Current Branch: feature/task-4-2-vtiger-workflows
 Last Updated: 2026-05-12
 Last Updated By: Johan
 
@@ -78,7 +78,7 @@ These items are built but cannot be validated without external credentials or ac
 ## Phase 4 — Task Status
 
 - ✅ Task 4.1 — Vtiger CRM Configuration
-- ⏳ Task 4.2 — Vtiger Automation Workflows
+- ✅ Task 4.2 — Vtiger Automation Workflows
 - ⏳ Task 4.3 — Vibe Marketing Connection
 - ⏳ Task 4.4 — Remaining n8n Workflows
 - ⏳ Task 4.5 — Staff Training Documentation
@@ -123,6 +123,8 @@ These items are built but cannot be validated without external credentials or ac
 ---
 
 ## Session Notes
+
+- **May 2026:** Task 4.2 complete. Vtiger Automation Workflows: 3 n8n workflows at infra/n8n/workflows/ — (1) calcom-booking-to-vtiger.json: webhook /calcom-booking → validate → Vtiger auth (challenge→login) → find/create contact → create Activity (Call, Planned, booking date/time) → update pipeline → Discovery Call Booked → Resend error alert. (2) medusa-order-to-vtiger.json: webhook /medusa-order-vtiger → validate → Vtiger auth → find/create contact → update last_purchase_date + increment total_spend_zar + set pipeline → Closed Won → create Activity (Purchase — products, R{total}) → Resend error alert. (3) lead-magnet-to-vtiger.json: webhook /lead-magnet-submission → validate → Vtiger auth → check if contact exists → if exists: update lead_source only if blank → if new: create with lead_source=Lead Magnet + pipeline=New Lead → create Activity (Lead Magnet Download — source) → Resend error alert. Medusa order-placed.ts subscriber updated: added fire-and-forget POST to /webhook/medusa-order-vtiger (separate from Sage webhook, comment label 1b). Cal.com webhook handler at apps/web/app/api/webhooks/calcom/route.ts: verifies X-Cal-Signature-256 HMAC-SHA256 using byte-level timingSafeEqual (not hex string comparison), explicit missing-header 401, Zod schema validation, forwards BOOKING_CREATED to n8n fire-and-forget, returns 200 immediately. CALCOM_WEBHOOK_SECRET added to infra/.env.example. Cal.com webhook setup documented in infra/DEPLOYMENT.md. Code review: 2 issues found and fixed (byte-level HMAC comparison, missing header 401 log). All 3 workflow JSONs validated parseable. SETUP REQUIRED: (1) Generate CALCOM_WEBHOOK_SECRET (openssl rand -hex 32) and add to infra/.env. (2) Register webhook in Cal.com → Settings → Developer → Webhooks (URL: /api/webhooks/calcom, events: BOOKING_CREATED + BOOKING_CANCELLED). (3) Import all 3 Vtiger workflow JSONs into n8n and activate. (4) Add VTIGER_URL, VTIGER_USERNAME, VTIGER_ACCESS_KEY to n8n environment (already in infra/.env for Medusa).
 
 - **May 2026:** Task 4.1 complete. VtigerService module built at apps/medusa/src/modules/vtiger/. Files: service.ts (authenticate/findContact/createContact/updateContact/createActivity/updatePipelineStage), types.ts (VtigerContact, VtigerActivity, PipelineStage, VtigerChallengeResponse, VtigerLoginResponse, VtigerApiResponse, VtigerError), index.ts (Module registration + re-exports). Key decisions: (1) Lazy config validation — constructor accepts missing env vars, throws only on first API call, so medusa container starts cleanly without VTIGER_* vars; (2) Reads env vars directly (no medusa-config.js options block) for simplicity; (3) Session caching with single re-auth retry on ACCESS_DENIED (prevents infinite loops); (4) Pipeline tracking via cf_pipeline_stage custom field on Contacts module — Vtiger admin must create this field; (5) VQL email escaping to prevent injection. Module registered as vtigerModule in medusa-config.js. VTIGER_URL/VTIGER_USERNAME/VTIGER_ACCESS_KEY added to medusa service in docker-compose.yml with `:-` empty defaults. All 16 unit tests passing. TypeScript clean. KI013 logged — Vtiger instance and credentials awaited from Suzanne before module can be activated.
 

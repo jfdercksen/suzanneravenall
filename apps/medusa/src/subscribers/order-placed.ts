@@ -280,6 +280,16 @@ export default async function orderPlacedHandler({
       console.error(`[order-placed] n8n webhook failed for order ${orderId}: ${message}`)
     })
 
+    // 1b. n8n → Vtiger: fire-and-forget, separate from Sage workflow
+    void fetch(`${N8N_BASE_URL}/webhook/medusa-order-vtiger`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(order),
+    }).catch((err: unknown) => {
+      const message = err instanceof Error ? err.message : String(err)
+      console.error(`[order-placed] vtiger webhook failed for order ${orderId}: ${message}`)
+    })
+
     // 2. Invoice generation → order confirmation email
     // Chained sequentially so the invoice URL is available when the email is sent.
     // The entire chain is fire-and-forget — any failure is logged, never propagated.
