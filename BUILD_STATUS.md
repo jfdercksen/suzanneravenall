@@ -77,7 +77,7 @@ These items are built but cannot be validated without external credentials or ac
 
 ## Phase 4 — Task Status
 
-- ⏳ Task 4.1 — Vtiger CRM Configuration
+- ✅ Task 4.1 — Vtiger CRM Configuration
 - ⏳ Task 4.2 — Vtiger Automation Workflows
 - ⏳ Task 4.3 — Vibe Marketing Connection
 - ⏳ Task 4.4 — Remaining n8n Workflows
@@ -123,6 +123,8 @@ These items are built but cannot be validated without external credentials or ac
 ---
 
 ## Session Notes
+
+- **May 2026:** Task 4.1 complete. VtigerService module built at apps/medusa/src/modules/vtiger/. Files: service.ts (authenticate/findContact/createContact/updateContact/createActivity/updatePipelineStage), types.ts (VtigerContact, VtigerActivity, PipelineStage, VtigerChallengeResponse, VtigerLoginResponse, VtigerApiResponse, VtigerError), index.ts (Module registration + re-exports). Key decisions: (1) Lazy config validation — constructor accepts missing env vars, throws only on first API call, so medusa container starts cleanly without VTIGER_* vars; (2) Reads env vars directly (no medusa-config.js options block) for simplicity; (3) Session caching with single re-auth retry on ACCESS_DENIED (prevents infinite loops); (4) Pipeline tracking via cf_pipeline_stage custom field on Contacts module — Vtiger admin must create this field; (5) VQL email escaping to prevent injection. Module registered as vtigerModule in medusa-config.js. VTIGER_URL/VTIGER_USERNAME/VTIGER_ACCESS_KEY added to medusa service in docker-compose.yml with `:-` empty defaults. All 16 unit tests passing. TypeScript clean. KI013 logged — Vtiger instance and credentials awaited from Suzanne before module can be activated.
 
 - **May 2026:** Task 3.9 complete. Membership Emails: 3 react-email templates (MembershipWelcome/RenewalReminder/Expired) in apps/web/lib/email/templates/ — navy/blue brand tokens, Suzanne's voice, tier-specific benefit lists, working unsubscribe links (→ /portal/account, POPIA TODO still noted). 3 send functions in apps/web/lib/email/ — RESEND_API_KEY fail-loud check, Resend v6 SDK, shared REPLY_TO constant. 3 API routes (membership-welcome/renewal-reminder/expired) — timing-safe HMAC secret comparison (crypto.timingSafeEqual), Zod validation on all inputs. order-placed.ts subscriber updated: replaces TODO comment with fire-and-forget call to /api/email/membership-welcome when membership product detected in order — passes email, firstName, tier. 2 n8n workflows: membership-renewal-check.json (query active subs expiring in 7 days → send reminder), membership-expiry-check.json (query expired active subs → PATCH status=expired → send expiry email) — both cron 07:00 UTC (09:00 SAST). Code review: 7 issues found — all resolved (timing-safe comparison, RESEND_API_KEY check, heading dynamic date, formatDate guard, unsubscribe href). 34/34 unit tests passing. Build clean. SETUP REQUIRED: (1) Import membership-renewal-check.json + membership-expiry-check.json into n8n UI and activate. (2) Ensure SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY + N8N_WEBHOOK_SECRET + NEXT_PUBLIC_SITE_URL are set in n8n environment. (3) Verify that member_subscriptions table has a profiles foreign key relationship (needed for n8n Supabase select with ?select=...,profiles(first_name,email)). (4) TODO for Suzanne: replace unsubscribe links in templates once Resend list management is configured.
 
