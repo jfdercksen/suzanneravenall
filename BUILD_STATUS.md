@@ -1,8 +1,8 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 4 — CRM and Automation
-Current Task: Task 4.2 — Vtiger Automation Workflows
-Current Branch: feature/task-4-2-vtiger-workflows
+Current Task: Task 4.3 — Vibe Marketing Connection ✅ Complete
+Current Branch: feature/task-4-3-vibe-marketing
 Last Updated: 2026-05-12
 Last Updated By: Johan
 
@@ -79,7 +79,7 @@ These items are built but cannot be validated without external credentials or ac
 
 - ✅ Task 4.1 — Vtiger CRM Configuration
 - ✅ Task 4.2 — Vtiger Automation Workflows
-- ⏳ Task 4.3 — Vibe Marketing Connection
+- ✅ Task 4.3 — Vibe Marketing Connection
 - ⏳ Task 4.4 — Remaining n8n Workflows
 - ⏳ Task 4.5 — Staff Training Documentation
 
@@ -123,6 +123,8 @@ These items are built but cannot be validated without external credentials or ac
 ---
 
 ## Session Notes
+
+- **May 2026:** Task 4.3 complete. Vibe Marketing Connection: 3 connections wired. (1) Lead Magnet → Vibe: apps/web/app/api/lead-magnet/route.ts updated — Zod schema replaces manual regex check (email + optional firstName/source), fire-and-forget POST to VIBE_MARKETING_WEBHOOK_URL with { email, firstName, source, timestamp, platform:'suzanneravenall' }, Sentry.captureException on fetch error (email excluded from context, POPIA), graceful degradation when var unset. (2) New Customer → Vibe: apps/medusa/src/subscribers/order-placed.ts updated — deduplication logic: skips if membership product (product_type=membership metadata), fires only if first order (listOrders count ≤ 1), fire-and-forget POST to VIBE_MARKETING_WEBHOOK_URL/customer with { email, firstName, lastName, productName, orderTotal (÷100 for ZAR), currency, platform }. Deduplication review fixes: > 1 guard (not !== 1) + Array.isArray runtime check on listOrders result + .catch() on IIFE + type-safe .filter(name: name is string). (3) n8n monitoring workflow: infra/n8n/workflows/vibe-marketing-sync-monitor.json — receives /webhook/vibe-sync-confirm, parses confirmation, IF success→log, IF failure→log+Resend admin alert email. Env vars: VIBE_MARKETING_WEBHOOK_URL added to .env.example, CLAUDE.md, docker-compose.yml (web + medusa services). CALCOM_WEBHOOK_SECRET also added to web service in docker-compose.yml (was missing from Task 4.2). Code review: 4 issues found, all fixed. 27/27 unit tests passing. Build clean. SETUP REQUIRED: (1) Johan to provide VIBE_MARKETING_WEBHOOK_URL from Vibe Marketing dashboard and add to infra/.env. (2) Import vibe-marketing-sync-monitor.json into n8n UI, configure Resend SMTP credentials, activate. (3) Give Vibe Marketing the sync confirmation URL: https://n8n.suzanneravenall.com/webhook/vibe-sync-confirm.
 
 - **May 2026:** Task 4.2 complete. Vtiger Automation Workflows: 3 n8n workflows at infra/n8n/workflows/ — (1) calcom-booking-to-vtiger.json: webhook /calcom-booking → validate → Vtiger auth (challenge→login) → find/create contact → create Activity (Call, Planned, booking date/time) → update pipeline → Discovery Call Booked → Resend error alert. (2) medusa-order-to-vtiger.json: webhook /medusa-order-vtiger → validate → Vtiger auth → find/create contact → update last_purchase_date + increment total_spend_zar + set pipeline → Closed Won → create Activity (Purchase — products, R{total}) → Resend error alert. (3) lead-magnet-to-vtiger.json: webhook /lead-magnet-submission → validate → Vtiger auth → check if contact exists → if exists: update lead_source only if blank → if new: create with lead_source=Lead Magnet + pipeline=New Lead → create Activity (Lead Magnet Download — source) → Resend error alert. Medusa order-placed.ts subscriber updated: added fire-and-forget POST to /webhook/medusa-order-vtiger (separate from Sage webhook, comment label 1b). Cal.com webhook handler at apps/web/app/api/webhooks/calcom/route.ts: verifies X-Cal-Signature-256 HMAC-SHA256 using byte-level timingSafeEqual (not hex string comparison), explicit missing-header 401, Zod schema validation, forwards BOOKING_CREATED to n8n fire-and-forget, returns 200 immediately. CALCOM_WEBHOOK_SECRET added to infra/.env.example. Cal.com webhook setup documented in infra/DEPLOYMENT.md. Code review: 2 issues found and fixed (byte-level HMAC comparison, missing header 401 log). All 3 workflow JSONs validated parseable. SETUP REQUIRED: (1) Generate CALCOM_WEBHOOK_SECRET (openssl rand -hex 32) and add to infra/.env. (2) Register webhook in Cal.com → Settings → Developer → Webhooks (URL: /api/webhooks/calcom, events: BOOKING_CREATED + BOOKING_CANCELLED). (3) Import all 3 Vtiger workflow JSONs into n8n and activate. (4) Add VTIGER_URL, VTIGER_USERNAME, VTIGER_ACCESS_KEY to n8n environment (already in infra/.env for Medusa).
 
