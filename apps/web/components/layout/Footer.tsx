@@ -16,7 +16,8 @@ const footerLinks = {
     links: [
       { label: 'Guided Programmes', href: '/programs' },
       { label: 'Online Courses', href: '/programs' },
-      { label: 'Masterclass', href: '/programs' },
+      { label: 'Masterclass', href: '/masterclass' },
+      { label: 'Shop', href: '/shop' },
       { label: 'Workshops', href: '/programs' },
     ],
   },
@@ -25,16 +26,17 @@ const footerLinks = {
     links: [
       { label: 'About', href: '/about' },
       { label: 'Blog', href: '/blog' },
-      { label: 'Media', href: '/about' },
+      { label: 'Explore', href: '/explore' },
+      { label: 'Resources', href: '/resources' },
       { label: 'Contact', href: '/contact' },
     ],
   },
   legal: {
     label: 'Legal',
     links: [
-      { label: 'Privacy Policy', href: '/privacy' },
-      { label: 'Terms of Service', href: '/terms' },
-      { label: 'Cookie Policy', href: '/cookies' },
+      { label: 'Privacy Policy', href: '/legal/privacy' },
+      { label: 'Terms of Service', href: '/legal/terms' },
+      { label: 'Cookie Policy', href: '/legal/cookies' },
     ],
   },
 }

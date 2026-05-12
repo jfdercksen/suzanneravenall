@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import MobileNav from './MobileNav'
+import DesktopNav from './DesktopNav'
 import { CartIcon } from './CartIcon'
 import { SearchBar } from '../search/SearchBar'
 
@@ -9,15 +10,39 @@ export interface NavLink {
   href: string
 }
 
-const navLinks: NavLink[] = [
-  { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
-  { label: 'Services', href: '/services' },
-  { label: 'Programs', href: '/services' },
-  { label: 'Blog', href: '/blog' },
+export interface NavGroup {
+  label: string
+  children: NavLink[]
+}
+
+export type NavItem = NavLink | NavGroup
+
+const navItems: NavItem[] = [
+  {
+    label: 'Learn',
+    children: [
+      { label: 'About', href: '/about' },
+      { label: 'Blog', href: '/blog' },
+      { label: 'Explore', href: '/explore' },
+      { label: 'Resources', href: '/resources' },
+    ],
+  },
+  {
+    label: 'Work With Me',
+    children: [
+      { label: 'Services', href: '/services' },
+      { label: 'Programs', href: '/programs' },
+      { label: 'Shop', href: '/shop' },
+      { label: 'Masterclass', href: '/masterclass' },
+    ],
+  },
   { label: 'Contact', href: '/contact' },
   { label: 'Member Portal', href: '/portal' },
 ]
+
+function getMobileLinks(items: NavItem[]): NavLink[] {
+  return items.flatMap((item) => ('children' in item ? item.children : [item]))
+}
 
 export default function Header() {
   return (
@@ -36,18 +61,8 @@ export default function Header() {
               />
           </Link>
 
-          {/* Desktop navigation */}
-          <nav aria-label="Main navigation" className="hidden lg:flex items-center gap-7">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+          {/* Desktop nav — client component for keyboard-accessible dropdowns */}
+          <DesktopNav items={navItems} />
 
           {/* Desktop CTA + cart + search + mobile hamburger */}
           <div className="flex items-center gap-2 lg:gap-4">
@@ -60,7 +75,7 @@ export default function Header() {
               Book a Discovery Call
             </Link>
             {/* MobileNav renders hamburger on mobile and the full-screen overlay */}
-            <MobileNav links={navLinks} />
+            <MobileNav links={getMobileLinks(navItems)} />
           </div>
 
         </div>
