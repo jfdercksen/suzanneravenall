@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import { getMemberTier } from '@/lib/access/check-access'
+import { getMedusaCustomerId } from '@/lib/medusa/get-customer-id'
 import DashboardContent from './DashboardContent'
 
 export const metadata = {
@@ -15,35 +16,6 @@ interface MedusaOrder {
     variant?: { product_id: string }
     thumbnail: string | null
   }>
-}
-
-interface MedusaCustomer {
-  id: string
-}
-
-/**
- * Look up Medusa customer ID by email (authoritative, server-side).
- * Never trusts client-controlled metadata for the customer ID.
- */
-async function getMedusaCustomerId(
-  email: string,
-  medusaUrl: string,
-  apiToken: string,
-): Promise<string | null> {
-  try {
-    const res = await fetch(
-      `${medusaUrl}/admin/customers?email=${encodeURIComponent(email)}&limit=1`,
-      {
-        headers: { 'x-medusa-access-token': apiToken },
-        next: { revalidate: 300 },
-      },
-    )
-    if (!res.ok) return null
-    const { customers }: { customers: MedusaCustomer[] } = await res.json()
-    return customers[0]?.id ?? null
-  } catch {
-    return null
-  }
 }
 
 async function fetchPurchasedProgrammes(email: string) {
@@ -102,19 +74,21 @@ export default async function DashboardPage() {
 
   const { data: subscription } = await supabase
     .from('member_subscriptions')
-    .select('tier_id, status, membership_tiers(name, slug)')
+    .select('tier_id, status, start_date, membership_tiers(name, slug)')
     .eq('user_id', user.id)
     .eq('status', 'active')
     .order('start_date', { ascending: false })
     .limit(1)
     .maybeSingle()
 
-  const tier = subscription?.membership_tiers as
-    | { name: string; slug: string }
+  const subscriptionData = subscription as
+    | { tier_id: string; status: string; start_date?: string; membership_tiers: { name: string; slug: string } | null }
     | null
     | undefined
+  const tier = subscriptionData?.membership_tiers
   const tierName = tier?.name ?? 'Free Member'
   const tierSlug = (tier?.slug ?? 'free') as 'free' | 'silver' | 'gold' | 'practitioner'
+  const memberSince = subscriptionData?.start_date ?? user.created_at ?? null
 
   const firstName =
     (user.user_metadata?.full_name as string | undefined)?.split(' ')[0] ?? ''
@@ -128,6 +102,7 @@ export default async function DashboardPage() {
       tierName={tierName}
       tierSlug={tierSlug}
       programmes={programmes}
+      memberSince={memberSince}
     />
   )
 }
