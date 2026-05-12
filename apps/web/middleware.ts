@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   const { supabase, supabaseResponse } = createClient(request)
 
   const isProtected = PROTECTED_PREFIXES.some((prefix) =>
-    pathname.startsWith(prefix)
+    pathname === prefix || pathname.startsWith(prefix + '/')
   )
 
   if (isProtected) {
@@ -29,12 +29,16 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
     if (!isPublicPortalPath) {
       const {
-        data: { session },
-      } = await supabase.auth.getSession()
+        data: { user },
+      } = await supabase.auth.getUser()
 
-      if (!session) {
+      if (!user) {
         const loginUrl = new URL('/portal/login', request.url)
-        loginUrl.searchParams.set('redirect', pathname)
+        const safeRedirect =
+          pathname.startsWith('/') && !pathname.startsWith('//')
+            ? pathname
+            : '/portal/dashboard'
+        loginUrl.searchParams.set('redirect', safeRedirect)
         return NextResponse.redirect(loginUrl)
       }
     }

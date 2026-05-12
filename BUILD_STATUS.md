@@ -1,8 +1,8 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 3 — Membership Portal
-Current Task: Task 3.5 — Middleware Auth Protection
-Current Branch: feature/task-3-5-middleware-auth
+Current Task: Task 3.6 — Resource Access Control
+Current Branch: feature/task-3-6-resource-access-control
 Last Updated: 2026-05-12
 Last Updated By: Johan
 
@@ -67,7 +67,7 @@ These items are built but cannot be validated without external credentials or ac
 - ✅ Task 3.2 — Supabase Auth Configuration (complete)
 - ✅ Task 3.3 — Member Content Access Control (complete)
 - ✅ Task 3.4 — Discourse Community (deferred — VPS RAM constraint, D014, KI011; placeholder /community page with email capture in place)
-- ⏳ Task 3.5 — Middleware Auth Protection
+- ✅ Task 3.5 — Middleware Auth Protection (complete — security-agent audit applied: getUser() replaces getSession(), prefix slash-boundary fix, redirect param sanitisation, callback next param guard, invoice bucket private + signed URLs, Zod orderId validation)
 - ⏳ Task 3.6 — Resource Access Control
 - ⏳ Task 3.7 — Bunny Stream Integration
 - ⏳ Task 3.8 — Wild Apricot Member Migration
@@ -113,6 +113,8 @@ These items are built but cannot be validated without external credentials or ac
 ---
 
 ## Session Notes
+
+- **May 2026:** Task 3.5 complete. Security-agent audit of middleware.ts found 5 real issues — all fixed: (1) getUser() replaces getSession() (critical — getSession doesn't validate token with Supabase server); (2) prefix match now requires slash boundary (portal/ not portal*); (3) redirect param sanitised in middleware; (4) callback next param guard added; (5) invoice bucket changed to private with 7-day signed URLs + Zod orderId validation added.
 
 - **May 2026:** Task 3.4 complete (deferred). Discourse community deferred to post-launch — VPS has only 1.6Gi free RAM, Discourse minimum is 2GB (D014, KI011). Placeholder /community page created: navy brand design, "Your Transformation Community" headline, coming-soon subheadline, email capture POST to /api/lead-magnet, "Explore the Portal" CTA to /portal/dashboard, feature preview cards section. Portal dashboard community link updated from /portal/community to /community. DECISIONS.md D014 logged. KNOWN_ISSUES.md KI011 logged.
 

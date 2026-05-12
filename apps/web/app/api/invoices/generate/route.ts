@@ -3,7 +3,12 @@ import { timingSafeEqual, createHash } from 'crypto'
 import { renderToBuffer } from '@react-pdf/renderer'
 import { createClient } from '@supabase/supabase-js'
 import { createElement } from 'react'
+import { z } from 'zod'
 import InvoiceDocument, { type InvoiceOrder } from '@/components/invoice/InvoiceDocument'
+
+const bodySchema = z.object({
+  orderId: z.string().min(1).max(64).regex(/^[a-zA-Z0-9_-]+$/, 'Invalid order ID format'),
+})
 
 interface MedusaOrderItem {
   id: string
@@ -111,13 +116,13 @@ export async function POST(req: NextRequest) {
   // Both the Medusa subscriber and any manual callers must include this header.
   // If the env var is not configured (dev/test), skip verification with a warning.
   const webhookSecret = process.env.N8N_WEBHOOK_SECRET
-  if (webhookSecret) {
-    const provided = req.headers.get('x-webhook-secret') ?? ''
-    if (!provided || !verifySecret(provided, webhookSecret)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-  } else {
-    console.warn('[invoices/generate] N8N_WEBHOOK_SECRET not set — skipping auth check')
+  if (!webhookSecret) {
+    console.error('[invoices/generate] N8N_WEBHOOK_SECRET is not set')
+    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
+  }
+  const provided = req.headers.get('x-webhook-secret') ?? ''
+  if (!provided || !verifySecret(provided, webhookSecret)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   const medusaBase = process.env.MEDUSA_BACKEND_URL ?? 'http://medusa:9000'
@@ -136,11 +141,12 @@ export async function POST(req: NextRequest) {
 
   let orderId: string
   try {
-    const body = (await req.json()) as { orderId?: unknown }
-    if (!body.orderId || typeof body.orderId !== 'string') {
-      return NextResponse.json({ error: 'orderId is required' }, { status: 400 })
+    const raw = await req.json()
+    const parsed = bodySchema.safeParse(raw)
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.issues[0]?.message ?? 'Invalid request body' }, { status: 400 })
     }
-    orderId = body.orderId
+    orderId = parsed.data.orderId
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
@@ -201,9 +207,10 @@ export async function POST(req: NextRequest) {
   const filePath = `${orderId}.pdf`
 
   try {
-    // Create bucket if it doesn't exist yet — idempotent
+    // Create bucket if it doesn't exist yet — idempotent. Private: invoices
+    // contain sensitive financial data and must not be publicly addressable.
     const { error: bucketError } = await supabase.storage.createBucket('invoices', {
-      public: true,
+      public: false,
       fileSizeLimit: 5 * 1024 * 1024,
     })
     if (
@@ -230,12 +237,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to store invoice' }, { status: 500 })
   }
 
-  // 4. Get public URL
-  const { data: urlData } = supabase.storage.from('invoices').getPublicUrl(filePath)
-  const invoiceUrl = urlData.publicUrl
+  // 4. Generate a signed URL (7 days) for the confirmation email.
+  // Store invoice_path in metadata so the portal can generate fresh signed URLs on demand.
+  const { data: signedData, error: signedError } = await supabase.storage
+    .from('invoices')
+    .createSignedUrl(filePath, 7 * 24 * 60 * 60)
+
+  if (signedError || !signedData?.signedUrl) {
+    console.error(`[invoices/generate] Signed URL error for ${orderId}: ${signedError?.message}`)
+    return NextResponse.json({ error: 'Failed to generate invoice URL' }, { status: 500 })
+  }
+  const invoiceUrl = signedData.signedUrl
 
   // 5. Update Medusa order metadata — spread existing metadata to avoid clobbering
   //    keys written by earlier steps (Sage, PayFast, PayPal).
+  //    invoice_path is the permanent storage reference; invoice_url is the 7-day email link.
   try {
     const existingMeta = order.metadata ?? {}
     const res = await fetch(`${medusaBase}/admin/orders/${orderId}`, {
@@ -245,7 +261,7 @@ export async function POST(req: NextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        metadata: { ...existingMeta, invoice_url: invoiceUrl },
+        metadata: { ...existingMeta, invoice_path: filePath, invoice_url: invoiceUrl },
       }),
     })
 
