@@ -1,9 +1,9 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 3 — Membership Portal
-Current Task: Task 3.2 — Supabase Auth Configuration
-Current Branch: feature/task-3-2-supabase-auth
-Last Updated: 2026-05-11
+Current Task: Task 3.5 — Middleware Auth Protection
+Current Branch: feature/task-3-5-middleware-auth
+Last Updated: 2026-05-12
 Last Updated By: Johan
 
 ---
@@ -66,11 +66,11 @@ These items are built but cannot be validated without external credentials or ac
 - ✅ Task 3.1 — Membership Products in Medusa (complete — 4 tiers seeded: Free, Silver, Gold, Practitioner)
 - ✅ Task 3.2 — Supabase Auth Configuration (complete)
 - ✅ Task 3.3 — Member Content Access Control (complete)
-- ⏳ Task 3.4 — Middleware Auth Protection
-- ⏳ Task 3.5 — Resource Access Control
-- ⏳ Task 3.6 — Bunny Stream Integration
-- ⏳ Task 3.7 — Wild Apricot Member Migration
-- ⏳ Task 3.8 — Discourse Community
+- ✅ Task 3.4 — Discourse Community (deferred — VPS RAM constraint, D014, KI011; placeholder /community page with email capture in place)
+- ⏳ Task 3.5 — Middleware Auth Protection
+- ⏳ Task 3.6 — Resource Access Control
+- ⏳ Task 3.7 — Bunny Stream Integration
+- ⏳ Task 3.8 — Wild Apricot Member Migration
 - ⏳ Task 3.9 — Membership Emails
 
 ---
@@ -113,6 +113,10 @@ These items are built but cannot be validated without external credentials or ac
 ---
 
 ## Session Notes
+
+- **May 2026:** Task 3.4 complete (deferred). Discourse community deferred to post-launch — VPS has only 1.6Gi free RAM, Discourse minimum is 2GB (D014, KI011). Placeholder /community page created: navy brand design, "Your Transformation Community" headline, coming-soon subheadline, email capture POST to /api/lead-magnet, "Explore the Portal" CTA to /portal/dashboard, feature preview cards section. Portal dashboard community link updated from /portal/community to /community. DECISIONS.md D014 logged. KNOWN_ISSUES.md KI011 logged.
+
+- **May 2026:** Bunny Stream credentials (BUNNY_STREAM_LIBRARY_ID, BUNNY_CDN_HOSTNAME, BUNNY_STREAM_SIGNING_KEY) added to VPS infra/.env — Task 3.3 video access is now fully wired on VPS. Starting Task 3.4 — Discourse Community Integration.
 
 - **May 2026:** Task 3.3 complete. Member Content Access Control built. lib/access/tiers.ts: TierPermissions interface + TIER_ACCESS matrix for 4 tiers (free/silver/gold/practitioner), hasAccess(), tierLabel(), minimumTierFor(). lib/access/check-access.ts: getMemberTier(supabase) + requireAccess(supabase, resource, fromPath?) — unauthenticated redirects to /portal/login, wrong tier redirects to /portal/upgrade, both with encoded fromPath for context. New portal pages: portal/upgrade (Tony Robbins-energy tier comparison, context-aware headline from `from=` query param, from param validated as relative path only), portal/resources (6-category resource library, locked/unlocked cards per tier), portal/videos (video grid with category filter, Bunny Stream embed modal via useEffect+AbortController). lib/bunny/get-signed-url.ts: SHA256 signed URL per Bunny Stream algorithm (signingKey+videoId+expires — no userId in hash), gold+ live_session_recordings access correctly covered. api/video/[videoId]/route.ts: auth + tier check + Zod validation on videoId. Public resources page: MemberResourcesSection injected — shows locked/unlocked cards based on auth state, unauthenticated gets "log in" CTA. resources/media and resources/assessments: server-side requireAccess(silver) with redirect. Dashboard updated: Silver+ content spotlights (assessments, group sessions, workbooks links), My Programmes section (Medusa customer looked up by email — not from user metadata, IDOR-safe), free-tier upgrade CTA split into "View Upgrade Options" + "Membership Plans". docker-compose.yml: BUNNY_CDN_HOSTNAME + BUNNY_STREAM_SIGNING_KEY added. 48/48 unit tests passing. Build clean — 54 pages. SETUP REQUIRED: (1) Obtain Bunny Stream library signing key from Bunny dashboard → Stream → Library → Security → Token Auth Key → add as BUNNY_STREAM_SIGNING_KEY in infra/.env. (2) Set BUNNY_STREAM_LIBRARY_ID and BUNNY_CDN_HOSTNAME (default: iframe.mediadelivery.net). NOTE: video_access_log table not yet created — logging is a TODO in api/video/[videoId]/route.ts, use add-supabase-table skill when ready.
 

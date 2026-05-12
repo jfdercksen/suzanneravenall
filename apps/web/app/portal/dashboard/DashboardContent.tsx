@@ -46,7 +46,7 @@ const QUICK_LINKS = [
     ),
   },
   {
-    href: '/portal/community',
+    href: '/community',
     label: 'Community',
     description: 'Connect with fellow members',
     icon: (
