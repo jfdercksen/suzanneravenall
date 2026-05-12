@@ -1,8 +1,8 @@
 # Build Status — Suzanne Ravenall Platform
 
-Current Phase: Phase 3 — Membership Portal
-Current Task: Task 3.6 — Member Dashboard & Portal Pages
-Current Branch: feature/task-3-6-portal-pages
+Current Phase: Phase 4 — CRM and Automation
+Current Task: Task 4.1 — Vtiger CRM Configuration
+Current Branch: main
 Last Updated: 2026-05-12
 Last Updated By: Johan
 
@@ -15,8 +15,8 @@ Last Updated By: Johan
 | Phase 0 — Foundation | ✅ Complete | ✅ Staging deployed | ⏳ Awaiting sign-off |
 | Phase 1 — Public Website | ✅ Complete | ❌ Not yet | ❌ Not yet |
 | Phase 2 — E-Commerce | ✅ Complete | ❌ Not yet | ⏳ Awaiting client credentials (see pending items) |
-| Phase 3 — Membership Portal | 🔄 In Progress | ❌ Not yet | ❌ Not yet |
-| Phase 4 — CRM and Automation | ⏳ Not started | ❌ Not yet | ❌ Not yet |
+| Phase 3 — Membership Portal | ✅ Complete (Task 3.8 on hold — see KI012) | ❌ Not yet | ❌ Not yet |
+| Phase 4 — CRM and Automation | 🔄 In Progress | ❌ Not yet | ❌ Not yet |
 | Phase 5 — QA and Launch | ⏳ Not started | ❌ Not yet | ❌ Not yet |
 
 ---
@@ -70,8 +70,18 @@ These items are built but cannot be validated without external credentials or ac
 - ✅ Task 3.5 — Middleware Auth Protection (complete — security-agent audit applied: getUser() replaces getSession(), prefix slash-boundary fix, redirect param sanitisation, callback next param guard, invoice bucket private + signed URLs, Zod orderId validation)
 - ✅ Task 3.6 — Member Dashboard & Portal Pages (complete)
 - ✅ Task 3.7 — Bunny Stream Integration (complete)
-- ⏳ Task 3.8 — Wild Apricot Member Migration
+- ⏳ Task 3.8 — Wild Apricot Member Migration (on hold — see KI012, awaiting Suzanne's confirmation)
 - ✅ Task 3.9 — Membership Emails (complete)
+
+---
+
+## Phase 4 — Task Status
+
+- ⏳ Task 4.1 — Vtiger CRM Configuration
+- ⏳ Task 4.2 — Vtiger Automation Workflows
+- ⏳ Task 4.3 — Vibe Marketing Connection
+- ⏳ Task 4.4 — Remaining n8n Workflows
+- ⏳ Task 4.5 — Staff Training Documentation
 
 ---
 
