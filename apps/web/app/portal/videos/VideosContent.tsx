@@ -1,79 +1,32 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { hasAccess, tierLabel, type TierSlug, type ResourceKey } from '@/lib/access/tiers'
+import { hasAccess, tierLabel, minimumTierFor, type TierSlug, type ResourceKey } from '@/lib/access/tiers'
 
-interface VideoItem {
+export interface VideoRow {
   id: string
+  bunny_video_id: string
   title: string
-  description: string
-  duration: string
+  description: string | null
+  duration_seconds: number | null
   category: string
-  resource: ResourceKey
-  thumbnailColor: string
+  resource_key: string
+  status: string
+  thumbnail_url: string | null
+  sort_order: number
 }
 
-// Placeholder video catalogue — replace with Supabase video_content query once table is populated
-const VIDEOS: VideoItem[] = [
-  {
-    id: 'intro-hpr-overview',
-    title: 'Introduction to HPR — Welcome Session',
-    description: 'Dr. Suzanne Ravenall introduces the Human Performance Replicator methodology.',
-    duration: '28 min',
-    category: 'Getting Started',
-    resource: 'resources_basic',
-    thumbnailColor: 'from-blue-900 to-brand-primary',
-  },
-  {
-    id: 'group-session-rr-1',
-    title: 'Rapid Repatterning — Group Session 1',
-    description: 'Introduction to the RR process with live group practice.',
-    duration: '90 min',
-    category: 'Group Sessions',
-    resource: 'group_sessions_recorded',
-    thumbnailColor: 'from-purple-900 to-brand-primary',
-  },
-  {
-    id: 'group-session-efs-1',
-    title: 'Emotional Freedom Intensive',
-    description: 'Neuroscience of emotional regulation with group experiential work.',
-    duration: '2 hr',
-    category: 'Group Sessions',
-    resource: 'group_sessions_recorded',
-    thumbnailColor: 'from-indigo-900 to-brand-primary',
-  },
-  {
-    id: 'group-session-rel-heal',
-    title: 'Relationship Healing Session',
-    description: 'Clearing ancestral and relational energy patterns.',
-    duration: '90 min',
-    category: 'Group Sessions',
-    resource: 'group_sessions_recorded',
-    thumbnailColor: 'from-pink-900 to-brand-primary',
-  },
-  {
-    id: 'live-gold-may-2026',
-    title: 'Gold Cohort — May 2026 Intensive',
-    description: 'Full 3-hour live coaching intensive with Gold members. Advanced patterns work.',
-    duration: '3 hr',
-    category: 'Live Sessions',
-    resource: 'live_session_recordings',
-    thumbnailColor: 'from-yellow-900 to-brand-primary',
-  },
-  {
-    id: 'live-energy-leadership',
-    title: 'VIP Masterclass — Energy Leadership',
-    description: 'Exclusive masterclass on energy leadership for high-performance professionals.',
-    duration: '2.5 hr',
-    category: 'Live Sessions',
-    resource: 'live_session_recordings',
-    thumbnailColor: 'from-orange-900 to-brand-primary',
-  },
-]
-
-const CATEGORIES = ['All', 'Getting Started', 'Group Sessions', 'Live Sessions']
+function formatDuration(seconds: number | null): string {
+  if (!seconds) return ''
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  if (h > 0) return `${h} hr${m > 0 ? ` ${m} min` : ''}`
+  return `${m} min`
+}
 
 interface VideoPlayerModalProps {
   videoId: string
@@ -148,43 +101,60 @@ function VideoPlayerModal({ videoId, title, onClose }: VideoPlayerModalProps) {
 }
 
 interface VideoCardProps {
-  video: VideoItem
+  video: VideoRow
   tier: TierSlug
-  onWatch: (id: string, title: string) => void
+  onWatch: (bunnyVideoId: string, title: string) => void
 }
 
 function VideoCard({ video, tier, onWatch }: VideoCardProps) {
-  const unlocked = hasAccess(tier, video.resource)
-  const minTier = (['free', 'silver', 'gold', 'practitioner'] as TierSlug[]).find(
-    (t) => hasAccess(t, video.resource),
-  ) ?? 'silver'
+  const resourceKey = video.resource_key as ResourceKey
+  const unlocked = hasAccess(tier, resourceKey)
+  const minTier = minimumTierFor(resourceKey)
+  const duration = formatDuration(video.duration_seconds)
 
   return (
     <div className="group flex flex-col bg-gray-900 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-      <div className={`relative aspect-video bg-gradient-to-br ${video.thumbnailColor} flex items-center justify-center`}>
-        {unlocked ? (
-          <button
-            onClick={() => onWatch(video.id, video.title)}
-            className="flex items-center justify-center w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm group-hover:scale-110 transition-transform duration-300"
-            aria-label={`Watch ${video.title}`}
-          >
-            <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          </button>
+      <div className="relative aspect-video bg-brand-primary-900 flex items-center justify-center">
+        {video.thumbnail_url ? (
+          <Image
+            src={video.thumbnail_url}
+            alt={video.title}
+            fill
+            className="object-cover group-hover:opacity-90 transition-opacity duration-300"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
         ) : (
-          <div className="flex flex-col items-center gap-2">
-            <svg className="w-8 h-8 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-            </svg>
-            <span className="text-white/40 text-xs">{tierLabel(minTier)}</span>
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-primary-900 to-gray-800" />
+        )}
+
+        <div className="relative z-10">
+          {unlocked ? (
+            <button
+              onClick={() => onWatch(video.bunny_video_id, video.title)}
+              className="flex items-center justify-center w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm group-hover:scale-110 transition-transform duration-300"
+              aria-label={`Watch ${video.title}`}
+            >
+              <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </button>
+          ) : (
+            <div className="flex flex-col items-center gap-2">
+              <svg className="w-8 h-8 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+              </svg>
+              <span className="text-white/40 text-xs">{tierLabel(minTier)}</span>
+            </div>
+          )}
+        </div>
+
+        {duration && (
+          <div className="absolute bottom-2 right-2 z-10">
+            <span className="bg-black/60 text-white/80 text-xs px-2 py-0.5 rounded backdrop-blur-sm">
+              {duration}
+            </span>
           </div>
         )}
-        <div className="absolute bottom-2 right-2">
-          <span className="bg-black/60 text-white/80 text-xs px-2 py-0.5 rounded backdrop-blur-sm">
-            {video.duration}
-          </span>
-        </div>
       </div>
 
       <div className="flex flex-col flex-1 p-5">
@@ -192,12 +162,12 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
           {video.category}
         </p>
         <p className="text-white font-semibold leading-snug mb-2 text-sm">{video.title}</p>
-        <p className="text-white/40 text-xs leading-relaxed flex-1">{video.description}</p>
+        <p className="text-white/40 text-xs leading-relaxed flex-1">{video.description ?? ''}</p>
 
         <div className="mt-4">
           {unlocked ? (
             <button
-              onClick={() => onWatch(video.id, video.title)}
+              onClick={() => onWatch(video.bunny_video_id, video.title)}
               className="w-full py-2.5 px-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-xl transition-colors duration-300"
             >
               Watch Now
@@ -218,15 +188,16 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
 
 interface VideosContentProps {
   tier: TierSlug
+  videos: VideoRow[]
 }
 
-export default function VideosContent({ tier }: VideosContentProps) {
+export default function VideosContent({ tier, videos }: VideosContentProps) {
+  const categories = ['All', ...Array.from(new Set(videos.map((v) => v.category)))]
   const [activeCategory, setActiveCategory] = useState('All')
   const [playingVideo, setPlayingVideo] = useState<{ id: string; title: string } | null>(null)
 
-  const filtered = activeCategory === 'All'
-    ? VIDEOS
-    : VIDEOS.filter((v) => v.category === activeCategory)
+  const filtered =
+    activeCategory === 'All' ? videos : videos.filter((v) => v.category === activeCategory)
 
   return (
     <main className="w-full bg-brand-primary min-h-screen py-20 lg:py-32">
@@ -258,48 +229,67 @@ export default function VideosContent({ tier }: VideosContentProps) {
           </p>
         </motion.div>
 
-        {/* Category filter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="flex flex-wrap gap-2 mb-10"
-        >
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
-                activeCategory === cat
-                  ? 'bg-brand-accent text-white'
-                  : 'bg-gray-900 text-white/60 hover:text-white hover:bg-gray-800'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </motion.div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((video, i) => (
+        {videos.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center justify-center py-24 text-center"
+          >
+            <svg className="w-16 h-16 text-white/10 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            <p className="text-white/40 text-lg font-light mb-2">Videos coming soon</p>
+            <p className="text-white/25 text-sm max-w-sm">
+              New sessions are uploaded after each cohort. Check back after your next live session.
+            </p>
+          </motion.div>
+        ) : (
+          <>
             <motion.div
-              key={video.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="flex flex-wrap gap-2 mb-10"
             >
-              <VideoCard
-                video={video}
-                tier={tier}
-                onWatch={(id, title) => setPlayingVideo({ id, title })}
-              />
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
+                    activeCategory === cat
+                      ? 'bg-brand-accent text-white'
+                      : 'bg-gray-900 text-white/60 hover:text-white hover:bg-gray-800'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
             </motion.div>
-          ))}
-        </div>
 
-        {tier === 'free' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map((video, i) => (
+                <motion.div
+                  key={video.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-100px' }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                >
+                  <VideoCard
+                    video={video}
+                    tier={tier}
+                    onWatch={(id, title) => setPlayingVideo({ id, title })}
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {tier === 'free' && videos.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
