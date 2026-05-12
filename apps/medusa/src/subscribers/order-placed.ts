@@ -226,10 +226,20 @@ async function handleMembershipActivation(
     `[order-placed] Membership activated in Medusa for customer ${order.customer_id} → tier=${tier}`
   )
 
-  // 3. Placeholder: Task 3.9 will build the membership welcome email template
-  console.log(
-    `TODO: send membership welcome email to ${order.customer?.email ?? '(unknown email)'}`
-  )
+  // 3. Send membership welcome email — fire-and-forget
+  const email = order.customer?.email
+  if (email) {
+    const customerAny = order.customer as Record<string, unknown>
+    const firstName = typeof customerAny.first_name === 'string' ? customerAny.first_name : null
+    void fetch(`${WEB_BASE_URL}/api/email/membership-welcome`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...(N8N_WEBHOOK_SECRET ? { 'x-webhook-secret': N8N_WEBHOOK_SECRET } : {}) },
+      body: JSON.stringify({ email, firstName, tier }),
+    }).catch((err: unknown) => {
+      const msg = err instanceof Error ? err.message : String(err)
+      console.error(`[order-placed] membership welcome email failed for order ${order.id}: ${msg}`)
+    })
+  }
 }
 
 // ── Subscriber ────────────────────────────────────────────────────────────────

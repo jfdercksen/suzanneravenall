@@ -25,6 +25,15 @@ export interface OrderLineItem {
   unitPrice: number
 }
 
+export interface MembershipEmailData {
+  email: string
+  firstName: string | null
+  tier: 'free' | 'silver' | 'gold' | 'practitioner'
+  tierLabel: string
+  renewalDate?: string | null
+  siteUrl: string
+}
+
 export interface OrderEmailData {
   id: string
   displayId: number
