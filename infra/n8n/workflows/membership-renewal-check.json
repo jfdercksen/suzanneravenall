@@ -1,0 +1,224 @@
+{
+  "name": "Membership Renewal Check",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * *"
+            }
+          ]
+        }
+      },
+      "id": "mr000001-0000-0000-0000-000000000001",
+      "name": "Schedule: Daily 09:00 SAST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "notes": "09:00 SAST = 07:00 UTC. Adjust if server timezone differs."
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/member_subscriptions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "user_id,tier_slug,expires_at,profiles(first_name,email)"
+            },
+            {
+              "name": "status",
+              "value": "eq.active"
+            },
+            {
+              "name": "expires_at",
+              "value": "=gte.{{ new Date().toISOString() }}"
+            },
+            {
+              "name": "expires_at",
+              "value": "=lte.{{ new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "mr000001-0000-0000-0000-000000000002",
+      "name": "Supabase: Get Memberships Expiring in 7 Days",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "has-email",
+              "leftValue": "={{ $json.profiles?.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "mr000001-0000-0000-0000-000000000003",
+      "name": "IF: Has Email",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.NEXT_PUBLIC_SITE_URL }}/api/email/membership-renewal-reminder",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-webhook-secret",
+              "value": "={{ $env.N8N_WEBHOOK_SECRET }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "={{ $json.profiles.email }}"
+            },
+            {
+              "name": "firstName",
+              "value": "={{ $json.profiles.first_name ?? null }}"
+            },
+            {
+              "name": "tier",
+              "value": "={{ $json.tier_slug }}"
+            },
+            {
+              "name": "renewalDate",
+              "value": "={{ $json.expires_at }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "mr000001-0000-0000-0000-000000000004",
+      "name": "POST: Send Renewal Reminder Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.NEXT_PUBLIC_SITE_URL }}/api/email/membership-renewal-reminder",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-webhook-secret",
+              "value": "={{ $env.N8N_WEBHOOK_SECRET }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "=Membership renewal check failed for user {{ $json.user_id }} — {{ $error.message }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "mr000001-0000-0000-0000-000000000005",
+      "name": "Error: Log to Sentry Webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 420],
+      "notes": "TODO: Replace URL with Sentry webhook or internal error logging endpoint"
+    }
+  ],
+  "connections": {
+    "Schedule: Daily 09:00 SAST": {
+      "main": [
+        [
+          {
+            "node": "Supabase: Get Memberships Expiring in 7 Days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase: Get Memberships Expiring in 7 Days": {
+      "main": [
+        [
+          {
+            "node": "IF: Has Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Has Email": {
+      "main": [
+        [
+          {
+            "node": "POST: Send Renewal Reminder Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error: Log to Sentry Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": ["membership", "email", "scheduled"]
+}
