@@ -1,8 +1,8 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 3 — Membership Portal
-Current Task: Task 3.6 — Resource Access Control
-Current Branch: feature/task-3-6-resource-access-control
+Current Task: Task 3.6 — Member Dashboard & Portal Pages
+Current Branch: feature/task-3-6-portal-pages
 Last Updated: 2026-05-12
 Last Updated By: Johan
 
@@ -68,7 +68,7 @@ These items are built but cannot be validated without external credentials or ac
 - ✅ Task 3.3 — Member Content Access Control (complete)
 - ✅ Task 3.4 — Discourse Community (deferred — VPS RAM constraint, D014, KI011; placeholder /community page with email capture in place)
 - ✅ Task 3.5 — Middleware Auth Protection (complete — security-agent audit applied: getUser() replaces getSession(), prefix slash-boundary fix, redirect param sanitisation, callback next param guard, invoice bucket private + signed URLs, Zod orderId validation)
-- ⏳ Task 3.6 — Resource Access Control
+- 🔄 Task 3.6 — Member Dashboard & Portal Pages (in progress — feature/task-3-6-portal-pages)
 - ⏳ Task 3.7 — Bunny Stream Integration
 - ⏳ Task 3.8 — Wild Apricot Member Migration
 - ⏳ Task 3.9 — Membership Emails
@@ -113,6 +113,8 @@ These items are built but cannot be validated without external credentials or ac
 ---
 
 ## Session Notes
+
+- **May 2026:** Task 3.6 in progress. Built: PortalNav (sidebar lg / bottom nav mobile, tier badge, logout), portal layout.tsx (wraps all /portal/* — shows nav when authenticated, passes through login/signup unchanged), enhanced DashboardContent (quick stats row: member-since/programme-count/tier, sessions widget, community CTA card, Continue Learning placeholder), /portal/account (profile form, password change with session-only note, membership details, danger zone), /portal/programmes (full grid with All/Live/Self-Study/In-Person filter, empty state, per-item thumbnail+delivery badge). Shared utilities: lib/medusa/get-customer-id.ts (extracted from dashboard+programmes), TIER_BADGE_STYLES moved to lib/access/tiers.ts. Code review 9 issues all fixed: silent logout fixed, misleading currentPassword field removed, double getUser() eliminated in layout, dead SkeletonCard export removed. Build clean 58 pages.
 
 - **May 2026:** Task 3.5 complete. Security-agent audit of middleware.ts found 5 real issues — all fixed: (1) getUser() replaces getSession() (critical — getSession doesn't validate token with Supabase server); (2) prefix match now requires slash boundary (portal/ not portal*); (3) redirect param sanitised in middleware; (4) callback next param guard added; (5) invoice bucket changed to private with 7-day signed URLs + Zod orderId validation added.
 
