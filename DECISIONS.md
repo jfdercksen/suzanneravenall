@@ -105,3 +105,13 @@ This is the decision log. Every significant architectural choice is recorded her
 **Decision:** Self-hosted MeiliSearch for all product, course and content search.
 **Reason:** Native Medusa integration. Open source. Fast. Self-hosted on VPS keeps costs minimal.
 **Date:** March 2026 | **Decided by:** Johan
+
+---
+
+## D014 — Discourse community deferred to post-launch
+
+**Decision:** Discourse community forum deferred. Placeholder `/community` page in place with email capture for launch notification.
+**Reason:** VPS has only 1.6Gi available RAM. Discourse requires a minimum of 2GB — deploying on the current VPS would destabilise all other containers.
+**When to revisit:** After VPS upgrade (8GB RAM recommended) or when a dedicated community server is provisioned. SSO implementation plan is documented in IMPLEMENTATION_WORKFLOW.md Task 3.8 — ready to build when hardware allows.
+**Alternatives evaluated:** Hosted Discourse ($100/month) ruled out to avoid recurring cost at launch. Supabase-backed custom forum ruled out — scope too large for this phase.
+**Date:** May 2026 | **Decided by:** Johan
