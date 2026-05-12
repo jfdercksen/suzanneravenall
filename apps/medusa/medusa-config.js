@@ -30,6 +30,10 @@ module.exports = defineConfig({
       resolve: "./src/modules/memberships",
     },
     {
+      key: "vtigerModule",
+      resolve: "./src/modules/vtiger",
+    },
+    {
       key: "sageModule",
       resolve: "./src/modules/sage",
       options: {
