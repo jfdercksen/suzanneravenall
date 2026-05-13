@@ -1,0 +1,321 @@
+{
+  "name": "Sage Invoice Sync — Daily Audit",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 4 * * *"
+            }
+          ]
+        }
+      },
+      "id": "sis00001-0000-0000-0000-000000000001",
+      "name": "Schedule: Daily 06:00 SAST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "notes": "06:00 SAST = 04:00 UTC"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "since-date",
+              "name": "sinceDate",
+              "type": "string",
+              "value": "={{ new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() }}"
+            },
+            {
+              "id": "until-date",
+              "name": "untilDate",
+              "type": "string",
+              "value": "={{ new Date().toISOString() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "sis00001-0000-0000-0000-000000000002",
+      "name": "Set: Date Range (last 24h)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "=http://medusa:9000/admin/orders",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-medusa-access-token",
+              "value": "={{ $env.MEDUSA_API_TOKEN }}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "created_at[gte]",
+              "value": "={{ $json.sinceDate }}"
+            },
+            {
+              "name": "created_at[lte]",
+              "value": "={{ $json.untilDate }}"
+            },
+            {
+              "name": "limit",
+              "value": "200"
+            },
+            {
+              "name": "fields",
+              "value": "id,display_id,metadata,total,customer.email,customer.first_name,customer.last_name,status"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "sis00001-0000-0000-0000-000000000003",
+      "name": "Medusa: Get Orders (last 24h)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "has-orders",
+              "leftValue": "={{ $json.orders?.length ?? 0 }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "sis00001-0000-0000-0000-000000000004",
+      "name": "IF: Orders Found",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "orders",
+        "options": {}
+      },
+      "id": "sis00001-0000-0000-0000-000000000005",
+      "name": "Split: Each Order",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "no-sage-doc",
+              "leftValue": "={{ $json.metadata?.sage_document_number }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "sis00001-0000-0000-0000-000000000006",
+      "name": "IF: Missing Sage Invoice",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1340, 200]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "sis00001-0000-0000-0000-000000000007",
+      "name": "Aggregate: Missing Invoice Orders",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [1560, 120]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "has-missing",
+              "leftValue": "={{ $json.data?.length ?? 0 }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "sis00001-0000-0000-0000-000000000008",
+      "name": "IF: Any Missing",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1780, 120]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.RESEND_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"from\": \"noreply@suzanneravenall.com\",\n  \"to\": [\"dercksenjf@gmail.com\"],\n  \"subject\": \"[ACTION REQUIRED] Sage Invoice Sync — {{ $json.data.length }} order(s) missing\",\n  \"html\": \"<h2>Sage Invoice Sync Alert</h2><p><strong>{{ $json.data.length }}</strong> order(s) from the last 24 hours are missing Sage invoices.</p><table border='1' cellpadding='8' style='border-collapse:collapse'><tr><th>Order ID</th><th>Display</th><th>Customer</th><th>Total (ZAR)</th><th>Status</th></tr>{{ $json.data.map(o => `<tr><td>${o.id}</td><td>#${o.display_id}</td><td>${o.customer?.email ?? 'unknown'}</td><td>R${((o.total ?? 0) / 100).toFixed(2)}</td><td>${o.status}</td></tr>`).join('') }}</table><p>Check the Medusa admin and Sage dashboard. Possible causes: Sage API was unavailable, missing credentials, or n8n workflow error.</p><p><em>Sent by: sage-invoice-sync n8n workflow — {{ new Date().toISOString() }}</em></p>\"\n}",
+        "options": {}
+      },
+      "id": "sis00001-0000-0000-0000-000000000009",
+      "name": "Resend: Alert Admin — Missing Invoices",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 40],
+      "notes": "Admin email hardcoded. Update to environment variable when n8n supports dynamic to: field."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "log-ok",
+              "name": "status",
+              "type": "string",
+              "value": "ok"
+            },
+            {
+              "id": "log-count",
+              "name": "message",
+              "type": "string",
+              "value": "=Sage invoice sync complete. All orders have Sage invoices. Run: {{ new Date().toISOString() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "sis00001-0000-0000-0000-000000000010",
+      "name": "Log: All Synced OK",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2000, 200],
+      "notes": "No alert needed — all orders have sage_document_number in metadata"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "log-none",
+              "name": "message",
+              "type": "string",
+              "value": "=Sage invoice sync: No orders found in last 24h. Run: {{ new Date().toISOString() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "sis00001-0000-0000-0000-000000000011",
+      "name": "Log: No Orders Today",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1120, 400]
+    }
+  ],
+  "connections": {
+    "Schedule: Daily 06:00 SAST": {
+      "main": [
+        [{ "node": "Set: Date Range (last 24h)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Set: Date Range (last 24h)": {
+      "main": [
+        [{ "node": "Medusa: Get Orders (last 24h)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Medusa: Get Orders (last 24h)": {
+      "main": [
+        [{ "node": "IF: Orders Found", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: Orders Found": {
+      "main": [
+        [{ "node": "Split: Each Order", "type": "main", "index": 0 }],
+        [{ "node": "Log: No Orders Today", "type": "main", "index": 0 }]
+      ]
+    },
+    "Split: Each Order": {
+      "main": [
+        [{ "node": "IF: Missing Sage Invoice", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: Missing Sage Invoice": {
+      "main": [
+        [{ "node": "Aggregate: Missing Invoice Orders", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Aggregate: Missing Invoice Orders": {
+      "main": [
+        [{ "node": "IF: Any Missing", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: Any Missing": {
+      "main": [
+        [{ "node": "Resend: Alert Admin — Missing Invoices", "type": "main", "index": 0 }],
+        [{ "node": "Log: All Synced OK", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": ["sage", "invoices", "scheduled", "audit"]
+}

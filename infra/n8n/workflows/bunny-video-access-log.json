@@ -1,0 +1,135 @@
+{
+  "name": "Bunny Video Access Logger",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "video-access-log",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "bval0001-0000-0000-0000-000000000001",
+      "name": "Webhook: POST /video-access-log",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "bval0001-0000-0000-0000-000000000001",
+      "notes": "Called fire-and-forget from apps/web/app/api/video/[videoId]/route.ts after a successful signed URL is issued."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-secret",
+              "leftValue": "={{ $json.headers['x-webhook-secret'] }}",
+              "rightValue": "={{ $env.N8N_WEBHOOK_SECRET }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "bval0001-0000-0000-0000-000000000002",
+      "name": "IF: Valid Secret",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"error\": \"Unauthorized\" }",
+        "options": {
+          "responseCode": 401
+        }
+      },
+      "id": "bval0001-0000-0000-0000-000000000003",
+      "name": "Respond: 401 Unauthorized",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [680, 440]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/video_access_log",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"user_id\": \"{{ $json.body.userId }}\",\n  \"video_id\": \"{{ $json.body.videoId }}\",\n  \"tier\": \"{{ $json.body.tier }}\",\n  \"accessed_at\": \"{{ $json.body.accessedAt ?? new Date().toISOString() }}\"\n}",
+        "options": {}
+      },
+      "id": "bval0001-0000-0000-0000-000000000004",
+      "name": "Supabase: Insert video_access_log",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 200],
+      "notes": "video_access_log table must be created first. Run the add-supabase-table skill or migration in packages/database/migrations/. Required columns: id UUID PK, user_id UUID, video_id TEXT, tier TEXT, accessed_at TIMESTAMPTZ."
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"logged\" }",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "bval0001-0000-0000-0000-000000000005",
+      "name": "Respond: 200 OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [900, 200]
+    }
+  ],
+  "connections": {
+    "Webhook: POST /video-access-log": {
+      "main": [
+        [{ "node": "IF: Valid Secret", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: Valid Secret": {
+      "main": [
+        [{ "node": "Supabase: Insert video_access_log", "type": "main", "index": 0 }],
+        [{ "node": "Respond: 401 Unauthorized", "type": "main", "index": 0 }]
+      ]
+    },
+    "Supabase: Insert video_access_log": {
+      "main": [
+        [{ "node": "Respond: 200 OK", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": ["video", "logging", "bunny"]
+}

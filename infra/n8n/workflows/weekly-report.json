@@ -1,0 +1,383 @@
+{
+  "name": "Weekly Business Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 6 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "wr000001-0000-0000-0000-000000000001",
+      "name": "Schedule: Monday 08:00 SAST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "notes": "08:00 SAST = 06:00 UTC. Fires every Monday."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "week-start",
+              "name": "weekStart",
+              "type": "string",
+              "value": "={{ new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString() }}"
+            },
+            {
+              "id": "week-end",
+              "name": "weekEnd",
+              "type": "string",
+              "value": "={{ new Date().toISOString() }}"
+            },
+            {
+              "id": "week-label",
+              "name": "weekLabel",
+              "type": "string",
+              "value": "={{ new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long' }) }} – {{ new Date().toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' }) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "wr000001-0000-0000-0000-000000000002",
+      "name": "Set: Week Date Range",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/member_subscriptions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "count=exact"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "id"
+            },
+            {
+              "name": "created_at",
+              "value": "=gte.{{ $('Set: Week Date Range').item.json.weekStart }}"
+            },
+            {
+              "name": "tier_slug",
+              "value": "neq.free"
+            },
+            {
+              "name": "limit",
+              "value": "0"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "wr000001-0000-0000-0000-000000000003",
+      "name": "Supabase: New Paid Members",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 160],
+      "notes": "Uses Content-Range header for count. Prefer: count=exact returns total in header."
+    },
+    {
+      "parameters": {
+        "url": "=http://medusa:9000/admin/orders",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-medusa-access-token",
+              "value": "={{ $env.MEDUSA_API_TOKEN }}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "created_at[gte]",
+              "value": "={{ $('Set: Week Date Range').item.json.weekStart }}"
+            },
+            {
+              "name": "created_at[lte]",
+              "value": "={{ $('Set: Week Date Range').item.json.weekEnd }}"
+            },
+            {
+              "name": "status[]",
+              "value": "completed"
+            },
+            {
+              "name": "limit",
+              "value": "500"
+            },
+            {
+              "name": "fields",
+              "value": "id,total,currency_code"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "wr000001-0000-0000-0000-000000000004",
+      "name": "Medusa: Completed Orders (revenue)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/member_subscriptions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "count=exact"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "id"
+            },
+            {
+              "name": "created_at",
+              "value": "=gte.{{ $('Set: Week Date Range').item.json.weekStart }}"
+            },
+            {
+              "name": "tier_slug",
+              "value": "eq.free"
+            },
+            {
+              "name": "limit",
+              "value": "0"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "wr000001-0000-0000-0000-000000000005",
+      "name": "Supabase: New Free Signups",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 440]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/video_content",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Prefer",
+              "value": "count=exact"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "id"
+            },
+            {
+              "name": "limit",
+              "value": "0"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "wr000001-0000-0000-0000-000000000006",
+      "name": "Supabase: Total Video Content",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 580]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "stat-new-members",
+              "name": "newPaidMembers",
+              "type": "number",
+              "value": "={{ parseInt(($('Supabase: New Paid Members').item.json.headers?.['content-range'] ?? '0/0').split('/')[1] ?? '0') }}"
+            },
+            {
+              "id": "stat-free-signups",
+              "name": "newFreeSignups",
+              "type": "number",
+              "value": "={{ parseInt(($('Supabase: New Free Signups').item.json.headers?.['content-range'] ?? '0/0').split('/')[1] ?? '0') }}"
+            },
+            {
+              "id": "stat-revenue",
+              "name": "revenueZAR",
+              "type": "number",
+              "value": "={{ ($('Medusa: Completed Orders (revenue)').item.json.orders ?? []).reduce((sum, o) => sum + (o.total ?? 0), 0) / 100 }}"
+            },
+            {
+              "id": "stat-order-count",
+              "name": "orderCount",
+              "type": "number",
+              "value": "={{ ($('Medusa: Completed Orders (revenue)').item.json.orders ?? []).length }}"
+            },
+            {
+              "id": "stat-video-total",
+              "name": "totalVideos",
+              "type": "number",
+              "value": "={{ parseInt(($('Supabase: Total Video Content').item.json.headers?.['content-range'] ?? '0/0').split('/')[1] ?? '0') }}"
+            },
+            {
+              "id": "week-label-ref",
+              "name": "weekLabel",
+              "type": "string",
+              "value": "={{ $('Set: Week Date Range').item.json.weekLabel }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "wr000001-0000-0000-0000-000000000007",
+      "name": "Set: Compile Stats",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.RESEND_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"from\": \"noreply@suzanneravenall.com\",\n  \"to\": [\"dercksenjf@gmail.com\"],\n  \"subject\": \"Weekly Report — {{ $json.weekLabel }}\",\n  \"html\": \"<div style='font-family:sans-serif;max-width:600px;margin:auto;padding:24px'><h1 style='color:#012B43'>Weekly Business Report</h1><p style='color:#555'>{{ $json.weekLabel }}</p><hr/><h2 style='color:#012B43'>Membership</h2><table width='100%' cellpadding='8'><tr><td>New paid members</td><td><strong>{{ $json.newPaidMembers }}</strong></td></tr><tr><td>New free signups</td><td><strong>{{ $json.newFreeSignups }}</strong></td></tr></table><h2 style='color:#012B43'>Revenue</h2><table width='100%' cellpadding='8'><tr><td>Completed orders</td><td><strong>{{ $json.orderCount }}</strong></td></tr><tr><td>Total revenue</td><td><strong>R{{ $json.revenueZAR.toFixed(2) }}</strong></td></tr></table><h2 style='color:#012B43'>Content</h2><table width='100%' cellpadding='8'><tr><td>Total videos in library</td><td><strong>{{ $json.totalVideos }}</strong></td></tr></table><hr/><p style='color:#999;font-size:12px'>Generated by the Suzanne Ravenall platform weekly-report n8n workflow at {{ new Date().toISOString() }}. Booking counts from Cal.com require Cal.com API key — not yet configured.</p></div>\"\n}",
+        "options": {}
+      },
+      "id": "wr000001-0000-0000-0000-000000000008",
+      "name": "Resend: Send Weekly Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 300],
+      "notes": "Cal.com booking count omitted — Cal.com API key not yet in n8n environment. Add CALCOM_API_KEY to n8n and extend this workflow to fetch /api/v1/bookings."
+    }
+  ],
+  "connections": {
+    "Schedule: Monday 08:00 SAST": {
+      "main": [
+        [{ "node": "Set: Week Date Range", "type": "main", "index": 0 }]
+      ]
+    },
+    "Set: Week Date Range": {
+      "main": [
+        [
+          { "node": "Supabase: New Paid Members", "type": "main", "index": 0 },
+          { "node": "Medusa: Completed Orders (revenue)", "type": "main", "index": 0 },
+          { "node": "Supabase: New Free Signups", "type": "main", "index": 0 },
+          { "node": "Supabase: Total Video Content", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Supabase: New Paid Members": {
+      "main": [
+        [{ "node": "Set: Compile Stats", "type": "main", "index": 0 }]
+      ]
+    },
+    "Medusa: Completed Orders (revenue)": {
+      "main": [
+        [{ "node": "Set: Compile Stats", "type": "main", "index": 0 }]
+      ]
+    },
+    "Supabase: New Free Signups": {
+      "main": [
+        [{ "node": "Set: Compile Stats", "type": "main", "index": 0 }]
+      ]
+    },
+    "Supabase: Total Video Content": {
+      "main": [
+        [{ "node": "Set: Compile Stats", "type": "main", "index": 0 }]
+      ]
+    },
+    "Set: Compile Stats": {
+      "main": [
+        [{ "node": "Resend: Send Weekly Report", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": ["reporting", "scheduled", "email"]
+}

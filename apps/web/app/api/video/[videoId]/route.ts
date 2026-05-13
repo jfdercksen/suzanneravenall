@@ -52,12 +52,20 @@ export async function GET(
     )
   }
 
-  // TODO: insert into video_access_log table once it is created via the
-  // add-supabase-table skill. Columns: user_id, video_id, tier, accessed_at.
-  // Example:
-  //   await supabase.from('video_access_log').insert({
-  //     user_id: user.id, video_id: parsed.data.videoId, tier, accessed_at: new Date().toISOString(),
-  //   })
+  const n8nWebhookUrl = process.env.N8N_BASE_URL
+  const webhookSecret = process.env.N8N_WEBHOOK_SECRET
+  if (n8nWebhookUrl && webhookSecret) {
+    fetch(`${n8nWebhookUrl}/webhook/video-access-log`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-webhook-secret': webhookSecret },
+      body: JSON.stringify({
+        userId: user.id,
+        videoId: parsed.data.videoId,
+        tier,
+        accessedAt: new Date().toISOString(),
+      }),
+    }).catch(() => {})
+  }
 
   return NextResponse.json({ url })
 }
