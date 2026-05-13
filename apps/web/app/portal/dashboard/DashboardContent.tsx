@@ -230,7 +230,7 @@ export default function DashboardContent({
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-6 bg-gray-900 rounded-xl">
               <div className="flex-1">
                 <p className="text-white font-semibold mb-1">No programmes yet</p>
-                <p className="text-white/50 text-sm">Browse Suzanne's coaching programmes and start your transformation.</p>
+                <p className="text-white/50 text-sm">Browse Suzanne&apos;s coaching programmes and start your transformation.</p>
               </div>
               <Link
                 href="/shop"
