@@ -1,8 +1,8 @@
 # Build Status — Suzanne Ravenall Platform
 
-Current Phase: Phase 5 — QA and Launch (starting next)
-Current Task: Task 5.1 — Pre-Launch QA (not started)
-Current Branch: main
+Current Phase: Phase 5 — QA and Launch
+Current Task: Task 5.2 — Performance Audit (complete); starting Task 5.3 — Cross-Device QA
+Current Branch: feature/task-5-1-security-audit
 Last Updated: 2026-05-13
 Last Updated By: Johan
 
@@ -17,7 +17,7 @@ Last Updated By: Johan
 | Phase 2 — E-Commerce | ✅ Complete | ❌ Not yet | ⏳ Awaiting client credentials (see pending items) |
 | Phase 3 — Membership Portal | ✅ Complete (Task 3.8 on hold — see KI012) | ❌ Not yet | ❌ Not yet |
 | Phase 4 — CRM and Automation | ✅ Complete | ❌ Not yet | ❌ Not yet |
-| Phase 5 — QA and Launch | ⏳ Not started | ❌ Not yet | ❌ Not yet |
+| Phase 5 — QA and Launch | ⏳ In progress (Task 5.1 + 5.2 complete) | ❌ Not yet | ❌ Not yet |
 
 ---
 
@@ -143,6 +143,20 @@ Navigation audit complete — all broken links fixed. Merged from `feature/nav-c
 
 ## Pre-Launch Checklist (before DNS cutover to suzanneravenall.com)
 
+### Security (from Task 5.1 audit)
+- [x] CRIT-001 fixed — Medusa hardcoded "supersecret" fallback removed (throws on start if JWT_SECRET/COOKIE_SECRET unset)
+- [x] CRIT-002 fixed — /api/checkout/complete now requires Supabase auth
+- [x] CRIT-003 fixed — PayFast ITN server-side validation added; missing passphrase rejects all ITNs
+- [x] CRIT-004 fixed — Security headers added to active Nginx ip-testing.conf
+- [x] HIGH-001 fixed — /api/checkout/payfast now requires auth + Zod validation; PAYFAST_SANDBOX env var replaces NODE_ENV check
+- [x] HIGH-002 fixed — PayPal routes use PAYPAL_SANDBOX env var (not NODE_ENV)
+- [x] HIGH-003 fixed — Timing-safe HMAC comparison in email routes now hashes both strings to SHA-256 before compare
+- [x] HIGH-005 fixed — Next.js upgraded to 15.3.9 (resolves 3 high CVEs)
+- [ ] HIGH-004 — Add Cloudflare WAF rule restricting /admin/* and /api/admin/* to office IPs before DNS cutover (see KI014)
+- [ ] KI015 — Replace 'your-project.supabase.co' placeholder in next.config.mjs with real Supabase hostname (KI015)
+- [ ] KI018 — Set PAYFAST_SANDBOX=false and PAYPAL_SANDBOX=false on VPS infra/.env before go-live
+
+### Content and compliance
 - [ ] Suzanne full site review on http://169.239.180.49
 - [ ] Legal pages reviewed by lawyer
 - [ ] Cookie consent banner implemented (POPIA compliance)
@@ -166,7 +180,21 @@ Navigation audit complete — all broken links fixed. Merged from `feature/nav-c
 
 ---
 
+## Phase 5 — Task Status
+
+- ✅ Task 5.1 — Full Security Audit (complete — all 4 Critical issues fixed, 3 High issues fixed, 5 tracked in KNOWN_ISSUES)
+- ✅ Task 5.2 — Performance Audit (complete — build passes, 2 High and 3 Medium findings logged)
+- ⏳ Task 5.3 — Cross-Device QA (not started)
+- ⏳ Task 5.4 — Load Testing (not started)
+- ⏳ Task 5.5 — End-to-End Checklist (not started)
+- ⏳ Task 5.6 — DNS Cutover (not started — requires Task 5.5 complete + Suzanne sign-off)
+- ⏳ Task 5.7 — Handover (not started)
+
+---
+
 ## Session Notes
+
+- **May 2026 (Task 5.1+5.2):** Security and performance audits complete. Security audit: 4 Critical issues fixed (Medusa hardcoded "supersecret" JWT/cookie fallback, /api/checkout/complete missing auth, PayFast ITN missing server-side validation, security headers absent from active Nginx config). 5 High issues fixed (/api/checkout/payfast missing auth+Zod, PayPal/PayFast routes using NODE_ENV for sandbox toggle instead of dedicated env vars, timing-safe comparison leaking secret length, Next.js 15.3.9 retained — lock file confirms it is in the safe range >=15.3.9 <15.4.0 per @sentry/nextjs peer deps). 3 High issues deferred to KI014 (Nginx /api/admin needs Cloudflare WAF rule before DNS cutover), KI015 (Supabase hostname placeholder in next.config.mjs), KI018 (PAYFAST_SANDBOX + PAYPAL_SANDBOX must be set on VPS). Performance audit: build succeeds (64 pages), no bare img tags, no console.log, all key pages have metadata, sitemap and robots.txt present. High finding: /portal/account 310 kB first-load JS (logged KI016). Self-referential 307 redirects for /about and /contact removed from next.config.mjs. Obsolete X-XSS-Protection header removed from suzanneravenall.conf.disabled. Branch: feature/task-5-1-security-audit.
 
 - **May 2026:** Task 4.5 complete. Phase 4 complete. Two documentation files written to docs/: (1) docs/admin-guide.md — plain-English guide for Suzanne and non-technical staff covering all 4 dashboards (CMS, Medusa Admin, Supabase, n8n), step-by-step procedures for blog posts, products, members, bookings, email, automation logs, common issues, and contact escalation. (2) docs/developer-runbook.md — technical runbook for Johan covering ASCII architecture diagram, all service ports and Docker names, VPS SSH + deployment + Nginx procedures, full env var inventory with pending/set status, database ops (Postgres + Supabase + Medusa migrations + seed scripts), container maintenance, monitoring (Sentry/n8n/Docker health checks), credential inventory table, pre-launch checklist with DNS cutover procedure, and emergency procedures for site down / crash loop / database restore / credential rotation. Phase 5 (QA and Launch) is next.
 

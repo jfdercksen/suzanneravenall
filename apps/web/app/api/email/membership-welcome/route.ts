@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { timingSafeEqual } from 'crypto'
+import { createHash, timingSafeEqual } from 'crypto'
 import { z } from 'zod'
 import { sendMembershipWelcomeEmail } from '@/lib/email/membership-welcome'
 import { tierLabel } from '@/lib/access/tiers'
@@ -10,10 +10,13 @@ const bodySchema = z.object({
   tier: z.enum(['free', 'silver', 'gold', 'practitioner']),
 })
 
+// Hash both values to equal-length digests before comparing so that the
+// timingSafeEqual call cannot leak the length of the expected secret.
 function secretsMatch(a: string, b: string): boolean {
-  if (a.length !== b.length) return false
   try {
-    return timingSafeEqual(Buffer.from(a), Buffer.from(b))
+    const hashA = createHash('sha256').update(a).digest()
+    const hashB = createHash('sha256').update(b).digest()
+    return timingSafeEqual(hashA, hashB)
   } catch {
     return false
   }
