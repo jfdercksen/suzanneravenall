@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Payment configuration missing' }, { status: 500 })
   }
 
-  const isSandbox = process.env.NODE_ENV !== 'production'
+  const isSandbox = process.env.PAYPAL_SANDBOX === 'true'
   const apiBase = isSandbox ? 'https://api-m.sandbox.paypal.com' : 'https://api-m.paypal.com'
 
   try {

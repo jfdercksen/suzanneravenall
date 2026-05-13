@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
   const clientId = process.env.PAYPAL_CLIENT_ID ?? ''
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET ?? ''
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://suzanneravenall.com'
-  const isSandbox = process.env.NODE_ENV !== 'production'
+  const isSandbox = process.env.PAYPAL_SANDBOX === 'true'
 
   if (!clientId || !clientSecret) {
     return NextResponse.json({ error: 'Payment configuration missing' }, { status: 500 })

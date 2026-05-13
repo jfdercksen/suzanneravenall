@@ -1,4 +1,6 @@
+import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/utils/supabase/server'
 
 interface CompleteRequest {
   cartId: string
@@ -11,7 +13,26 @@ interface MedusaCompleteResponse {
 }
 
 export async function POST(req: NextRequest) {
-  const body = (await req.json()) as CompleteRequest
+  // Require an authenticated Supabase session — cart completion must be
+  // tied to a real user, not triggered anonymously.
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  let body: CompleteRequest
+  try {
+    body = (await req.json()) as CompleteRequest
+  } catch {
+    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
+  }
+
   const { cartId } = body
 
   if (!cartId || typeof cartId !== 'string') {

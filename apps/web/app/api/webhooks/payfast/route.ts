@@ -22,6 +22,8 @@ function getAllowedIPs(): Set<string> {
 }
 
 // MD5 signature — same algorithm as /api/checkout/payfast
+// Passphrase is required: if PAYFAST_PASSPHRASE is unset, we fail loudly
+// rather than silently accepting passphrase-less signatures.
 function buildSignature(params: Record<string, string>, passphrase: string): string {
   const queryString = Object.entries(params)
     .sort(([a], [b]) => a.localeCompare(b))
@@ -42,6 +44,33 @@ function getClientIP(req: NextRequest): string {
     req.headers.get('x-real-ip') ??
     '127.0.0.1'
   )
+}
+
+// Step 4 of PayFast ITN spec: validate the ITN against the PayFast server
+// by POSTing the received params back to PayFast's validation endpoint.
+// This is required by PayFast in addition to the MD5 signature check.
+// Ref: https://developers.payfast.co.za/docs#step_4_confirm_payment
+async function validateWithPayFast(
+  itnBody: string,
+  isSandbox: boolean,
+): Promise<boolean> {
+  const host = isSandbox
+    ? 'sandbox.payfast.co.za'
+    : 'www.payfast.co.za'
+  const validateUrl = `https://${host}/eng/query/validate`
+
+  try {
+    const res = await fetch(validateUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: itnBody,
+    })
+    const text = (await res.text()).trim()
+    return res.ok && text === 'VALID'
+  } catch (err) {
+    console.error('[PayFast ITN] Validation endpoint request failed', { err })
+    return false
+  }
 }
 
 async function completeCart(cartId: string): Promise<boolean> {
@@ -84,7 +113,15 @@ async function completeCart(cartId: string): Promise<boolean> {
 // PayFast requires HTTP 200 for ALL ITN responses — even on error.
 // If we return anything other than 200, PayFast retries the ITN.
 export async function POST(req: NextRequest) {
-  const passphrase = process.env.PAYFAST_PASSPHRASE ?? ''
+  const passphrase = process.env.PAYFAST_PASSPHRASE
+
+  // Fail loudly if passphrase env var is missing — an empty passphrase would
+  // silently accept forged ITN requests signed without a passphrase.
+  if (!passphrase) {
+    console.error('[PayFast ITN] PAYFAST_PASSPHRASE is not set — rejecting all ITN requests')
+    return new NextResponse('OK', { status: 200 })
+  }
+
   const isSandbox = process.env.NODE_ENV !== 'production'
 
   // 1. IP allowlist check
@@ -96,10 +133,11 @@ export async function POST(req: NextRequest) {
   }
 
   // 2. Parse form body (PayFast sends application/x-www-form-urlencoded)
+  let rawBody: string
   let itn: Record<string, string>
   try {
-    const text = await req.text()
-    itn = Object.fromEntries(new URLSearchParams(text).entries())
+    rawBody = await req.text()
+    itn = Object.fromEntries(new URLSearchParams(rawBody).entries())
   } catch {
     console.error('[PayFast ITN] Failed to parse body')
     return new NextResponse('OK', { status: 200 })
@@ -107,7 +145,7 @@ export async function POST(req: NextRequest) {
 
   const { signature, ...itnWithoutSig } = itn
 
-  // 3. Signature verification
+  // 3. MD5 signature verification
   const expectedSignature = buildSignature(itnWithoutSig, passphrase)
   if (signature !== expectedSignature) {
     console.error('[PayFast ITN] Signature mismatch', {
@@ -118,12 +156,21 @@ export async function POST(req: NextRequest) {
     return new NextResponse('OK', { status: 200 })
   }
 
+  // 4. PayFast server-side validation (required by PayFast ITN spec)
+  const isValid = await validateWithPayFast(rawBody, isSandbox)
+  if (!isValid) {
+    console.error('[PayFast ITN] Server-side validation failed', {
+      m_payment_id: itn.m_payment_id,
+    })
+    return new NextResponse('OK', { status: 200 })
+  }
+
   const cartId = itn.m_payment_id ?? ''
   const pfPaymentId = itn.pf_payment_id ?? ''
   const paymentStatus = itn.payment_status ?? ''
   const amountGross = itn.amount_gross ?? '0.00'
 
-  // 4. Log ITN in sandbox mode (Sentry integration deferred to Phase 5 — KI001)
+  // 5. Log ITN in sandbox mode (Sentry integration deferred to Phase 5 — KI001)
   if (isSandbox) {
     console.info('[PayFast ITN] Received (sandbox)', {
       cartId,
@@ -133,7 +180,7 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  // 5. Process payment status
+  // 6. Process payment status
   if (paymentStatus === 'COMPLETE') {
     console.info('[PayFast ITN] Payment COMPLETE', { cartId, pfPaymentId, amountGross })
     await completeCart(cartId)
