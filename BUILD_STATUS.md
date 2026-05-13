@@ -1,7 +1,7 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 4 — CRM and Automation
-Current Task: Task 4.4 — Remaining n8n Workflows (in progress)
+Current Task: Task 4.5 — Staff Training Documentation (starting next)
 Current Branch: main
 Last Updated: 2026-05-13
 Last Updated By: Johan
@@ -80,7 +80,7 @@ These items are built but cannot be validated without external credentials or ac
 - ✅ Task 4.1 — Vtiger CRM Configuration
 - ✅ Task 4.2 — Vtiger Automation Workflows
 - ✅ Task 4.3 — Vibe Marketing Connection
-- ⏳ Task 4.4 — Remaining n8n Workflows
+- ✅ Task 4.4 — Remaining n8n Workflows
 - ⏳ Task 4.5 — Staff Training Documentation
 
 ---
@@ -167,6 +167,8 @@ Navigation audit complete — all broken links fixed. Merged from `feature/nav-c
 ---
 
 ## Session Notes
+
+- **May 2026:** Task 4.4 complete. 3 remaining n8n workflows built and committed to infra/n8n/workflows/. (1) sage-invoice-sync.json — daily 06:00 SAST: queries Medusa admin API for orders from last 24h, checks each for sage_document_number in metadata, aggregates missing ones, sends Resend alert to admin if any found. (2) weekly-report.json — every Monday 08:00 SAST: parallel fetch of new paid members + free signups (Supabase count=exact), completed order revenue (Medusa), total videos; compiles HTML summary and sends to admin via Resend. (3) bunny-video-access-log.json — webhook POST /video-access-log: validates N8N_WEBHOOK_SECRET header, inserts user_id/video_id/tier/accessed_at into Supabase video_access_log table. apps/web/app/api/video/[videoId]/route.ts updated to fire this webhook fire-and-forget after issuing signed URL. n8n service in docker-compose.yml now receives SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, N8N_WEBHOOK_SECRET, NEXT_PUBLIC_SITE_URL. N8N_BASE_URL added to web service and .env.example. Build clean. SETUP REQUIRED: (1) Import all 3 workflow JSONs into n8n UI and activate. (2) video_access_log table must be created in Supabase before bunny-video-access-log.json can write — use add-supabase-table skill when ready. (3) Cal.com bookings count in weekly-report is omitted pending CALCOM_API_KEY in n8n env.
 
 - **May 2026:** Task 4.3 complete. Vibe Marketing Connection: 3 connections wired. (1) Lead Magnet → Vibe: apps/web/app/api/lead-magnet/route.ts updated — Zod schema replaces manual regex check (email + optional firstName/source), fire-and-forget POST to VIBE_MARKETING_WEBHOOK_URL with { email, firstName, source, timestamp, platform:'suzanneravenall' }, Sentry.captureException on fetch error (email excluded from context, POPIA), graceful degradation when var unset. (2) New Customer → Vibe: apps/medusa/src/subscribers/order-placed.ts updated — deduplication logic: skips if membership product (product_type=membership metadata), fires only if first order (listOrders count ≤ 1), fire-and-forget POST to VIBE_MARKETING_WEBHOOK_URL/customer with { email, firstName, lastName, productName, orderTotal (÷100 for ZAR), currency, platform }. Deduplication review fixes: > 1 guard (not !== 1) + Array.isArray runtime check on listOrders result + .catch() on IIFE + type-safe .filter(name: name is string). (3) n8n monitoring workflow: infra/n8n/workflows/vibe-marketing-sync-monitor.json — receives /webhook/vibe-sync-confirm, parses confirmation, IF success→log, IF failure→log+Resend admin alert email. Env vars: VIBE_MARKETING_WEBHOOK_URL added to .env.example, CLAUDE.md, docker-compose.yml (web + medusa services). CALCOM_WEBHOOK_SECRET also added to web service in docker-compose.yml (was missing from Task 4.2). Code review: 4 issues found, all fixed. 27/27 unit tests passing. Build clean. SETUP REQUIRED: (1) Johan to provide VIBE_MARKETING_WEBHOOK_URL from Vibe Marketing dashboard and add to infra/.env. (2) Import vibe-marketing-sync-monitor.json into n8n UI, configure Resend SMTP credentials, activate. (3) Give Vibe Marketing the sync confirmation URL: https://n8n.suzanneravenall.com/webhook/vibe-sync-confirm.
 
