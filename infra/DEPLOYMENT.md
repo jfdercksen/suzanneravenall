@@ -230,6 +230,41 @@ No code changes required — the redirect URL is already in the allow-list.
 
 ---
 
+## Cal.com Webhook Setup
+
+Cal.com must send booking events to the Next.js webhook handler, which verifies the signature and forwards to n8n.
+
+### Step 1 — Generate a webhook secret
+
+```bash
+openssl rand -hex 32
+```
+
+Add the output as `CALCOM_WEBHOOK_SECRET` in `infra/.env`.
+
+### Step 2 — Register the webhook in Cal.com
+
+1. Go to **Cal.com → Settings → Developer → Webhooks**
+2. Click **New Webhook**
+3. Set the webhook URL:
+   - **IP testing**: `http://169.239.180.49/api/webhooks/calcom`
+   - **Production**: `https://suzanneravenall.com/api/webhooks/calcom`
+4. Enable events: **BOOKING_CREATED**, **BOOKING_CANCELLED**
+5. Copy the secret Cal.com shows you into `CALCOM_WEBHOOK_SECRET` (or use your own — must match)
+
+### Step 3 — Activate the n8n workflow
+
+Import `infra/n8n/workflows/calcom-booking-to-vtiger.json` into n8n and activate it.
+
+### Step 4 — Verify
+
+Book a test meeting in Cal.com and confirm:
+- The web app receives the webhook (check web container logs)
+- n8n receives the forwarded payload (check n8n execution history)
+- A new Activity appears in Vtiger under the booker's contact
+
+---
+
 ## Troubleshooting
 
 ### Payload admin loads unstyled / hydration error #418

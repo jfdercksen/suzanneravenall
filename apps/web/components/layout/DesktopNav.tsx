@@ -1,0 +1,106 @@
+"use client"
+
+import { useState, useEffect, useRef, useCallback } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import type { NavItem, NavGroup, NavLink } from './Header'
+
+function isNavGroup(item: NavItem): item is NavGroup {
+  return 'children' in item
+}
+
+interface DesktopNavProps {
+  items: NavItem[]
+}
+
+export default function DesktopNav({ items }: DesktopNavProps) {
+  const [openGroup, setOpenGroup] = useState<string | null>(null)
+  const pathname = usePathname()
+  const navRef = useRef<HTMLElement>(null)
+
+  const close = useCallback(() => setOpenGroup(null), [])
+
+  // Close on route change
+  useEffect(() => {
+    close()
+  }, [pathname, close])
+
+  // Close on Escape and on click outside
+  useEffect(() => {
+    if (!openGroup) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') close()
+    }
+    const handleClickOutside = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) close()
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [openGroup, close])
+
+  return (
+    <nav ref={navRef} aria-label="Main navigation" className="hidden lg:flex items-center gap-6">
+      {items.map((item) => {
+        if (isNavGroup(item)) {
+          const isOpen = openGroup === item.label
+          return (
+            <div key={item.label} className="relative">
+              <button
+                type="button"
+                aria-haspopup="true"
+                aria-expanded={isOpen}
+                onClick={() => setOpenGroup(isOpen ? null : item.label)}
+                className="flex items-center gap-1 text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
+              >
+                {item.label}
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  aria-hidden="true"
+                  className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                >
+                  <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </button>
+
+              {isOpen && (
+                <div className="absolute top-full left-0 pt-2 z-50">
+                  <div className="bg-white rounded-lg shadow-xl py-2 min-w-[180px]">
+                    {(item as NavGroup).children.map((child: NavLink) => (
+                      <Link
+                        key={child.label}
+                        href={child.href}
+                        onClick={close}
+                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-brand-primary hover:text-white transition-colors duration-150"
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        }
+
+        return (
+          <Link
+            key={item.label}
+            href={(item as NavLink).href}
+            className="text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
+          >
+            {item.label}
+          </Link>
+        )
+      })}
+    </nav>
+  )
+}

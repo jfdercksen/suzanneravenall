@@ -7,6 +7,7 @@ import type MembershipsModuleService from '../modules/memberships/service'
 const N8N_BASE_URL = (process.env.N8N_WEBHOOK_URL ?? 'http://n8n:5678').replace(/\/$/, '')
 const N8N_WEBHOOK_SECRET = process.env.N8N_WEBHOOK_SECRET ?? ''
 const WEB_BASE_URL = (process.env.WEB_BASE_URL ?? 'http://web:3000').replace(/\/$/, '')
+const VIBE_MARKETING_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
 
 if (!N8N_WEBHOOK_SECRET) {
   console.warn('[order-placed] N8N_WEBHOOK_SECRET is not set — outgoing webhooks will have no secret header')
@@ -244,10 +245,12 @@ async function handleMembershipActivation(
 
 // ── Subscriber ────────────────────────────────────────────────────────────────
 
-// The subscriber fires four fire-and-forget side effects on order placement:
+// The subscriber fires fire-and-forget side effects on order placement:
 // 1. n8n webhook → Sage invoice creation (medusa-order-to-sage workflow)
+// 1b. n8n webhook → Vtiger CRM contact/activity update
 // 2. web app → PDF invoice generation → order confirmation email (chained sequentially)
 // 3. Membership activation (Medusa module + Supabase mirror) when order contains a membership product
+// 4. Vibe Marketing post-purchase onboarding for first-time non-membership customers
 // None must ever block order completion.
 export default async function orderPlacedHandler({
   event: { data },
@@ -259,6 +262,7 @@ export default async function orderPlacedHandler({
   try {
     const orderService = container.resolve('order') as {
       retrieveOrder: (id: string, options?: object) => Promise<unknown>
+      listOrders: (filters?: object, config?: object) => Promise<{ id: string }[]>
     }
 
     const order = await orderService.retrieveOrder(orderId, {
@@ -278,6 +282,16 @@ export default async function orderPlacedHandler({
     }).catch((err: unknown) => {
       const message = err instanceof Error ? err.message : String(err)
       console.error(`[order-placed] n8n webhook failed for order ${orderId}: ${message}`)
+    })
+
+    // 1b. n8n → Vtiger: fire-and-forget, separate from Sage workflow
+    void fetch(`${N8N_BASE_URL}/webhook/medusa-order-vtiger`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(order),
+    }).catch((err: unknown) => {
+      const message = err instanceof Error ? err.message : String(err)
+      console.error(`[order-placed] vtiger webhook failed for order ${orderId}: ${message}`)
     })
 
     // 2. Invoice generation → order confirmation email
@@ -333,6 +347,68 @@ export default async function orderPlacedHandler({
       const message = err instanceof Error ? err.message : String(err)
       console.error(`[order-placed] membership activation error for order ${orderId}: ${message}`)
     })
+
+    // 4. Vibe Marketing — post-purchase onboarding for first-time customers.
+    // Skipped for membership orders (Task 3.9 welcome email handles those).
+    // Skipped when VIBE_MARKETING_WEBHOOK_URL is not set (graceful degradation).
+    const isMembershipOrder = (order.items ?? []).some((item) => {
+      const meta = item?.variant?.product?.metadata
+      return meta && (meta as Record<string, unknown>).product_type === 'membership'
+    })
+
+    if (!isMembershipOrder && VIBE_MARKETING_WEBHOOK_URL) {
+      void (async () => {
+        try {
+          // Fetch up to 2 of the customer's orders — if count is 1, this is their first.
+          // Guard: > 1 (not !== 1) so a 0-result edge case fires Vibe rather than silently skips.
+          const customerOrders = await orderService.listOrders(
+            { customer_id: order.customer_id },
+            { take: 2 }
+          )
+          if (!Array.isArray(customerOrders) || customerOrders.length > 1) return
+
+          const email = order.customer?.email
+          if (!email) return
+
+          const customer = order.customer as Record<string, unknown>
+          const orderAny = order as Record<string, unknown>
+          const productNames = (order.items ?? [])
+            .map((item) => {
+              const itemAny = item as Record<string, unknown>
+              return typeof itemAny.title === 'string' ? itemAny.title : null
+            })
+            .filter((name): name is string => name !== null)
+            .join(', ')
+
+          await fetch(`${VIBE_MARKETING_WEBHOOK_URL}/customer`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email,
+              firstName: typeof customer.first_name === 'string' ? customer.first_name : null,
+              lastName: typeof customer.last_name === 'string' ? customer.last_name : null,
+              productName: productNames || null,
+              orderTotal: typeof orderAny.total === 'number' ? orderAny.total / 100 : 0,
+              currency: typeof orderAny.currency_code === 'string' ? orderAny.currency_code : 'zar',
+              platform: 'suzanneravenall',
+            }),
+          }).then((res) => {
+            if (!res.ok) {
+              console.error(`[order-placed] Vibe Marketing webhook returned ${res.status} for order ${orderId}`)
+            }
+          }).catch((err: unknown) => {
+            const message = err instanceof Error ? err.message : String(err)
+            console.error(`[order-placed] Vibe Marketing webhook failed for order ${orderId}: ${message}`)
+          })
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : String(err)
+          console.error(`[order-placed] Vibe Marketing first-order check failed for order ${orderId}: ${message}`)
+        }
+      })().catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : String(err)
+        console.error(`[order-placed] Vibe Marketing IIFE error for order ${orderId}: ${message}`)
+      })
+    }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err)
     // Log but never throw — side-effect failures must not block order completion

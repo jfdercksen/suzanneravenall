@@ -1,6 +1,14 @@
 import { NextResponse } from 'next/server'
+import { z } from 'zod'
+import * as Sentry from '@sentry/nextjs'
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const VIBE_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
+
+const LeadMagnetSchema = z.object({
+  email: z.string().email(),
+  firstName: z.string().max(100).optional(),
+  source: z.string().max(200).optional(),
+})
 
 export async function POST(request: Request) {
   let body: unknown
@@ -11,23 +19,37 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid request body.' }, { status: 400 })
   }
 
-  if (
-    typeof body !== 'object' ||
-    body === null ||
-    !('email' in body) ||
-    typeof (body as Record<string, unknown>).email !== 'string' ||
-    !EMAIL_RE.test((body as Record<string, unknown>).email as string)
-  ) {
+  const parsed = LeadMagnetSchema.safeParse(body)
+  if (!parsed.success) {
     return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 422 })
   }
 
-  const { email } = body as { email: string }
+  const { email, firstName, source } = parsed.data
+
+  // Forward to Vibe Marketing — fire-and-forget, never blocks the response.
+  // Only fires when VIBE_MARKETING_WEBHOOK_URL is configured (graceful degradation).
+  if (VIBE_WEBHOOK_URL) {
+    void fetch(VIBE_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        firstName: firstName ?? null,
+        source: source ?? null,
+        timestamp: new Date().toISOString(),
+        platform: 'suzanneravenall',
+      }),
+    }).catch((err: unknown) => {
+      const message = err instanceof Error ? err.message : String(err)
+      console.error(`[lead-magnet] Vibe Marketing webhook failed: ${message}`)
+      // Email is PII (POPIA) — never include in error context
+      Sentry.captureException(err, { extra: { source } })
+    })
+  }
 
   // TODO (Task 1.7): integrate with Resend once the account is verified.
-  // The email is intentionally not logged here — email addresses are PII (POPIA).
+  // Email is intentionally not logged here — email addresses are PII (POPIA).
   // Returning 202 Accepted to signal the request is queued but not yet processed.
-  void email
-
   return NextResponse.json(
     { success: true, message: 'Received — integration pending.' },
     { status: 202 }

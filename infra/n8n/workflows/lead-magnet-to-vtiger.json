@@ -1,0 +1,400 @@
+{
+  "name": "Lead Magnet Submission → Vtiger Contact",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-magnet-submission",
+        "responseMode": "onReceived",
+        "responseCode": 200,
+        "responseData": "noData",
+        "options": {}
+      },
+      "id": "lm2v-0001-0000-0000-000000000001",
+      "name": "Webhook: Lead Magnet",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "lead-magnet-submission"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "check-email",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "",
+              "operator": { "type": "string", "operation": "notEmpty" }
+            },
+            {
+              "id": "check-first-name",
+              "leftValue": "={{ $json.first_name ?? $json.firstName }}",
+              "rightValue": "",
+              "operator": { "type": "string", "operation": "notEmpty" }
+            },
+            {
+              "id": "check-source",
+              "leftValue": "={{ $json.source }}",
+              "rightValue": "",
+              "operator": { "type": "string", "operation": "notEmpty" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "lm2v-0002-0000-0000-000000000002",
+      "name": "Validate: Required Fields",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json;\nconst email = (body.email ?? '').toLowerCase().trim();\nconst firstName = body.first_name ?? body.firstName ?? email.split('@')[0];\nconst lastName = body.last_name ?? body.lastName ?? '';\nconst source = body.source ?? 'Lead Magnet';\n\nconst vtigerUrl = $env.VTIGER_URL?.replace(/\\/$/, '') ?? '';\nconst vtigerUser = $env.VTIGER_USERNAME ?? '';\nconst vtigerKey = $env.VTIGER_ACCESS_KEY ?? '';\n\nif (!vtigerUrl || !vtigerUser || !vtigerKey) {\n  throw new Error('Vtiger env vars not set in n8n');\n}\n\nreturn [{ json: { email, firstName, lastName, source, vtigerUrl, vtigerUser, vtigerKey } }];"
+      },
+      "id": "lm2v-0003-0000-0000-000000000003",
+      "name": "Prepare: Extract Submission Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 200]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.vtigerUrl + '/webservice.php' }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "operation", "value": "getchallenge" },
+            { "name": "username", "value": "={{ $json.vtigerUser }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "lm2v-0004-0000-0000-000000000004",
+      "name": "Vtiger: Get Challenge",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 200],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prep = $('Prepare: Extract Submission Data').first().json;\nconst challenge = $input.first().json;\nif (!challenge.success) throw new Error('Vtiger getchallenge failed');\nconst { createHash } = require('crypto');\nconst accessKeyHash = createHash('md5').update(challenge.result.token + prep.vtigerKey).digest('hex');\nreturn [{ json: { ...prep, accessKeyHash } }];"
+      },
+      "id": "lm2v-0005-0000-0000-000000000005",
+      "name": "Prepare: Build Login Hash",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.vtigerUrl + '/webservice.php' }}",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "operation", "value": "login" },
+            { "name": "username", "value": "={{ $json.vtigerUser }}" },
+            { "name": "accessKey", "value": "={{ $json.accessKeyHash }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "lm2v-0006-0000-0000-000000000006",
+      "name": "Vtiger: Login",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 200],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prep = $('Prepare: Build Login Hash').first().json;\nconst loginResult = $input.first().json;\nif (!loginResult.success) throw new Error('Vtiger login failed');\nconst sessionName = loginResult.result.sessionName;\nconst safeEmail = prep.email.replace(/'/g, \"\\\\'\");\nreturn [{ json: { ...prep, sessionName, safeEmail } }];"
+      },
+      "id": "lm2v-0007-0000-0000-000000000007",
+      "name": "Prepare: Session",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 200]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.vtigerUrl + '/webservice.php' }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "operation", "value": "query" },
+            { "name": "sessionName", "value": "={{ $json.sessionName }}" },
+            { "name": "query", "value": "=SELECT * FROM Contacts WHERE email='{{ $json.safeEmail }}' LIMIT 1" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "lm2v-0008-0000-0000-000000000008",
+      "name": "Vtiger: Check Contact Exists",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1780, 200],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "id": "contact-found",
+              "leftValue": "={{ $json.success && $json.result?.length > 0 }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "lm2v-0009-0000-0000-000000000009",
+      "name": "IF: Contact Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2000, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Existing contact — update lead_source only if blank, log activity.\nconst prep = $('Prepare: Session').first().json;\nconst findResult = $('Vtiger: Check Contact Exists').first().json;\nconst existing = findResult.result[0];\n\n// Only set leadsource if it's blank\nconst updates = {};\nif (!existing.leadsource) {\n  updates.leadsource = 'Lead Magnet';\n}\n\nconst element = JSON.stringify({ id: existing.id, ...updates });\nreturn [{ json: { ...prep, contactId: existing.id, element, isNew: false } }];"
+      },
+      "id": "lm2v-0010-0000-0000-000000000010",
+      "name": "Prepare: Update Existing Contact",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2220, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// New contact — create with lead source and pipeline stage.\nconst prep = $('Prepare: Session').first().json;\nconst element = JSON.stringify({\n  email: prep.email,\n  firstname: prep.firstName,\n  lastname: prep.lastName,\n  leadsource: 'Lead Magnet',\n  cf_pipeline_stage: 'New Lead',\n});\nreturn [{ json: { ...prep, element, isNew: true } }];"
+      },
+      "id": "lm2v-0011-0000-0000-000000000011",
+      "name": "Prepare: New Contact Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2220, 340]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.vtigerUrl + '/webservice.php' }}",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "operation", "value": "={{ $json.isNew ? 'create' : 'update' }}" },
+            { "name": "sessionName", "value": "={{ $json.sessionName }}" },
+            { "name": "elementType", "value": "Contacts" },
+            { "name": "element", "value": "={{ $json.element }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "lm2v-0012-0000-0000-000000000012",
+      "name": "Vtiger: Upsert Contact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2440, 220],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const upsertResult = $input.first().json;\nlet contactId = upsertResult.contactId ?? null;\nif (!contactId && upsertResult.success) {\n  contactId = upsertResult.result?.id ?? null;\n}\nif (!contactId) throw new Error('Could not resolve contactId for ' + upsertResult.email);\nreturn [{ json: { ...$('Prepare: Session').first().json, contactId } }];"
+      },
+      "id": "lm2v-0013-0000-0000-000000000013",
+      "name": "Merge: Resolve Contact ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2660, 220]
+    },
+    {
+      "parameters": {
+        "jsCode": "const prep = $input.first().json;\nconst today = new Date().toISOString().slice(0, 10);\nconst nowTime = new Date().toTimeString().slice(0, 8);\nconst element = JSON.stringify({\n  activitytype: 'Call',\n  subject: `Lead Magnet Download — ${prep.source}`,\n  description: `Source: ${prep.source}. Email: ${prep.email}`,\n  contact_id: prep.contactId,\n  date_start: today,\n  time_start: nowTime,\n  eventstatus: 'Held',\n});\nreturn [{ json: { ...prep, element } }];"
+      },
+      "id": "lm2v-0014-0000-0000-000000000014",
+      "name": "Prepare: Activity Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2880, 220]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.vtigerUrl + '/webservice.php' }}",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "operation", "value": "create" },
+            { "name": "sessionName", "value": "={{ $json.sessionName }}" },
+            { "name": "elementType", "value": "Activities" },
+            { "name": "element", "value": "={{ $json.element }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "lm2v-0015-0000-0000-000000000015",
+      "name": "Vtiger: Create Activity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3100, 220],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prep = $('Merge: Resolve Contact ID').first().json;\nconsole.log('[lead-magnet-vtiger] SUCCESS contactId=' + prep.contactId + ' email=' + prep.email + ' source=' + prep.source);\nreturn [$input.first()];"
+      },
+      "id": "lm2v-0016-0000-0000-000000000016",
+      "name": "Done: Log Success",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3320, 220]
+    },
+    {
+      "parameters": {
+        "jsCode": "const errItem = $input.first();\nconst errorMessage = errItem.error?.message ?? errItem.json?.message ?? 'Unknown error';\nlet email = 'unknown';\ntry { email = $('Prepare: Extract Submission Data').first().json.email ?? 'unknown'; } catch {}\nconsole.error('[lead-magnet-vtiger] ERROR email=' + email + ' error=' + errorMessage);\nreturn [{ json: { email, errorMessage, subject: '[ALERT] Lead Magnet → Vtiger failed for ' + email, timestamp: new Date().toISOString() } }];"
+      },
+      "id": "lm2v-0017-0000-0000-000000000017",
+      "name": "Error: Log and Prepare Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 460]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $env.RESEND_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ from: 'noreply@suzanneravenall.com', to: ['admin@suzanneravenall.com'], subject: $json.subject, html: '<p><strong>Lead Magnet → Vtiger sync failed.</strong></p><p>Email: ' + $json.email + '</p><p>Error: ' + $json.errorMessage + '</p><p>Time: ' + $json.timestamp + '</p>' }) }}",
+        "options": {}
+      },
+      "id": "lm2v-0018-0000-0000-000000000018",
+      "name": "Alert: Send Error Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2220, 460],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "console.log('[lead-magnet-vtiger] error handled');\nreturn [$input.first()];"
+      },
+      "id": "lm2v-0019-0000-0000-000000000019",
+      "name": "Done: Error Handled",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2440, 460]
+    },
+    {
+      "parameters": {
+        "content": "## Lead Magnet Submission → Vtiger Contact\n\n**Trigger:** POST /webhook/lead-magnet-submission\nFired by /api/lead-magnet route in apps/web\n\n**Required env vars in n8n:**\n- VTIGER_URL\n- VTIGER_USERNAME\n- VTIGER_ACCESS_KEY\n- RESEND_API_KEY\n\n**What this workflow does:**\n1. Validates email, first_name, source\n2. Checks if contact exists in Vtiger\n3a. Exists → update lead_source if blank, log activity\n3b. New → create with lead_source='Lead Magnet', stage='New Lead'\n4. Creates Activity: 'Lead Magnet Download — {source}'\n\n**Error policy:** log + Resend alert, never blocks.",
+        "height": 300,
+        "width": 440,
+        "color": 4
+      },
+      "id": "lm2v-0020-0000-0000-000000000020",
+      "name": "Notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, 500]
+    }
+  ],
+  "connections": {
+    "Webhook: Lead Magnet": {
+      "main": [[{ "node": "Validate: Required Fields", "type": "main", "index": 0 }]]
+    },
+    "Validate: Required Fields": {
+      "main": [
+        [{ "node": "Prepare: Extract Submission Data", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Prepare: Extract Submission Data": {
+      "main": [[{ "node": "Vtiger: Get Challenge", "type": "main", "index": 0 }]]
+    },
+    "Vtiger: Get Challenge": {
+      "main": [[{ "node": "Prepare: Build Login Hash", "type": "main", "index": 0 }]],
+      "error": [[{ "node": "Error: Log and Prepare Alert", "type": "main", "index": 0 }]]
+    },
+    "Prepare: Build Login Hash": {
+      "main": [[{ "node": "Vtiger: Login", "type": "main", "index": 0 }]]
+    },
+    "Vtiger: Login": {
+      "main": [[{ "node": "Prepare: Session", "type": "main", "index": 0 }]],
+      "error": [[{ "node": "Error: Log and Prepare Alert", "type": "main", "index": 0 }]]
+    },
+    "Prepare: Session": {
+      "main": [[{ "node": "Vtiger: Check Contact Exists", "type": "main", "index": 0 }]]
+    },
+    "Vtiger: Check Contact Exists": {
+      "main": [[{ "node": "IF: Contact Exists?", "type": "main", "index": 0 }]],
+      "error": [[{ "node": "Error: Log and Prepare Alert", "type": "main", "index": 0 }]]
+    },
+    "IF: Contact Exists?": {
+      "main": [
+        [{ "node": "Prepare: Update Existing Contact", "type": "main", "index": 0 }],
+        [{ "node": "Prepare: New Contact Payload", "type": "main", "index": 0 }]
+      ]
+    },
+    "Prepare: Update Existing Contact": {
+      "main": [[{ "node": "Vtiger: Upsert Contact", "type": "main", "index": 0 }]]
+    },
+    "Prepare: New Contact Payload": {
+      "main": [[{ "node": "Vtiger: Upsert Contact", "type": "main", "index": 0 }]]
+    },
+    "Vtiger: Upsert Contact": {
+      "main": [[{ "node": "Merge: Resolve Contact ID", "type": "main", "index": 0 }]],
+      "error": [[{ "node": "Error: Log and Prepare Alert", "type": "main", "index": 0 }]]
+    },
+    "Merge: Resolve Contact ID": {
+      "main": [[{ "node": "Prepare: Activity Payload", "type": "main", "index": 0 }]]
+    },
+    "Prepare: Activity Payload": {
+      "main": [[{ "node": "Vtiger: Create Activity", "type": "main", "index": 0 }]]
+    },
+    "Vtiger: Create Activity": {
+      "main": [[{ "node": "Done: Log Success", "type": "main", "index": 0 }]],
+      "error": [[{ "node": "Error: Log and Prepare Alert", "type": "main", "index": 0 }]]
+    },
+    "Error: Log and Prepare Alert": {
+      "main": [[{ "node": "Alert: Send Error Email", "type": "main", "index": 0 }]]
+    },
+    "Alert: Send Error Email": {
+      "main": [[{ "node": "Done: Error Handled", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "versionId": "lm2v-ffff-0000-0000-000000000001",
+  "id": "lead-magnet-to-vtiger-v1",
+  "tags": [
+    { "id": "tag-vtiger", "name": "vtiger" },
+    { "id": "tag-leads", "name": "leads" }
+  ]
+}

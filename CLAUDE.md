@@ -264,6 +264,7 @@ Docs: https://developers.cloudflare.com/agents/
 | `VTIGER_URL` | No | Vtiger CRM instance URL |
 | `VTIGER_USERNAME` | No | Vtiger username |
 | `VTIGER_ACCESS_KEY` | No | Vtiger access key |
+| `VIBE_MARKETING_WEBHOOK_URL` | No | Vibe Marketing webhook base URL (Ai Dynamic Advisory) — optional, graceful degradation when unset |
 | `ANTHROPIC_API_KEY` | No | Claude API — server only |
 
 ### Adding an environment variable
