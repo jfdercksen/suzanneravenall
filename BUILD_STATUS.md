@@ -1,9 +1,9 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 4 — CRM and Automation
-Current Task: Navigation audit fixes + missing pages ✅ Complete (awaiting merge)
-Current Branch: feature/nav-complete-site-map
-Last Updated: 2026-05-12
+Current Task: Task 4.4 — Remaining n8n Workflows (in progress)
+Current Branch: main
+Last Updated: 2026-05-13
 Last Updated By: Johan
 
 ---
@@ -119,6 +119,50 @@ These items are built but cannot be validated without external credentials or ac
 - ❌ WordPress admin access obtained
 - ✅ All .env placeholder values replaced
 - ✅ Client brand assets received (SVG logos, colours confirmed, Poppins confirmed)
+
+---
+
+## Navigation Audit — Complete (2026-05-13)
+
+Navigation audit complete — all broken links fixed. Merged from `feature/nav-complete-site-map`.
+
+**Changes shipped:**
+- Blog listing + post detail pages wired to Payload CMS (graceful degradation when CMS offline)
+- Legal pages: `/legal/privacy`, `/legal/terms`, `/legal/cookies` (POPIA-compliant placeholders)
+- DesktopNav restructured into two dropdown groups: "Learn" and "Work With Me" (keyboard accessible, aria-expanded)
+- Footer hrefs fixed throughout
+- Redirects expanded in `next.config.mjs`
+- Sitemap updated with all new routes
+
+**3 items pending before go-live:**
+1. ⏳ Legal pages need lawyer review (TODO markers in place — do not ship as authoritative text)
+2. ⏳ Cookie consent banner needed (POPIA — GA4 + Clarity currently fire unconditionally)
+3. ⏳ Blog needs real content from Payload CMS (placeholder image and "coming soon" state in place)
+
+---
+
+## Pre-Launch Checklist (before DNS cutover to suzanneravenall.com)
+
+- [ ] Suzanne full site review on http://169.239.180.49
+- [ ] Legal pages reviewed by lawyer
+- [ ] Cookie consent banner implemented (POPIA compliance)
+- [ ] All `change_me` env vars replaced in `infra/.env`
+- [ ] PayFast sandbox test completed (waiting on credentials)
+- [ ] PayPal sandbox test completed (waiting on credentials)
+- [ ] Sage integration tested (waiting on credentials)
+- [ ] Resend domain verified for suzanneravenall.com
+- [ ] Wild Apricot migration decision from Suzanne
+- [ ] Hero video provided by Suzanne
+- [ ] Real product descriptions added by Suzanne
+- [ ] Real testimonials added by Suzanne
+- [ ] VAT registration number added to invoice template
+- [ ] Physical address added to email footer (POPIA)
+- [ ] Unsubscribe links wired (POPIA)
+- [ ] MeiliSearch seed script run on VPS
+- [ ] n8n workflows imported and activated
+- [ ] Sentry DSNs configured
+- [ ] Backblaze B2 backup configured
+- [ ] DNS cutover plan documented
 
 ---
 
