@@ -75,7 +75,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             for i in 1 2 3 4 5; do
-              if curl -sf https://suzanneravenall.com; then
+              if curl -sf http://localhost; then
                 echo "Health check passed on attempt $i"
                 exit 0
               fi

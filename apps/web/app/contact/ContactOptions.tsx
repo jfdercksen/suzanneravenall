@@ -27,7 +27,7 @@ export default function ContactOptions() {
   return (
     <section
       aria-labelledby="contact-options-heading"
-      className="w-full bg-gray-950 py-20 md:py-32"
+      className="w-full bg-gray-950 py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
@@ -41,12 +41,12 @@ export default function ContactOptions() {
           id="contact-options-heading"
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
-          className="text-3xl md:text-4xl font-light text-white text-center mb-12"
+          className="text-3xl lg:text-4xl font-light text-white text-center mb-12"
         >
           Choose Your Path
         </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
           {/* Card 1 — Book Discovery Call (primary) */}
           <motion.div
             {...cardReveal(0.15)}
