@@ -1,8 +1,8 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 5 — QA and Launch
-Current Task: Task 5.2 — Performance Audit (complete); starting Task 5.3 — Cross-Device QA
-Current Branch: feature/task-5-1-security-audit
+Current Task: Task 5.3 — Cross-Device QA (in progress — critical fixes applied, VPS redeploy pending)
+Current Branch: feature/task-5-3-qa
 Last Updated: 2026-05-13
 Last Updated By: Johan
 
@@ -155,9 +155,28 @@ Navigation audit complete — all broken links fixed. Merged from `feature/nav-c
 - [ ] HIGH-004 — Add Cloudflare WAF rule restricting /admin/* and /api/admin/* to office IPs before DNS cutover (see KI014)
 - [ ] KI015 — Replace 'your-project.supabase.co' placeholder in next.config.mjs with real Supabase hostname (KI015)
 - [ ] KI018 — Set PAYFAST_SANDBOX=false and PAYPAL_SANDBOX=false on VPS infra/.env before go-live
+- [ ] KI019 — Rebuild VPS Docker web container (fixes /about+/contact redirect loops and /blog+/community+/legal/* 404s)
+- [ ] KI020 — Run MeiliSearch seed script on VPS (node infra/scripts/migrations/seed-meilisearch.js)
+- [ ] KI021 — Wire social media links in Contact page and Footer to Suzanne's real profiles
+
+### Task 5.3 QA — Code items ✅ (from QA run 2026-05-13)
+- [x] All /portal/* routes protected by middleware (redirect to /portal/login with encoded redirect param)
+- [x] Login, signup, forgot-password, reset-password flows verified correct
+- [x] /portal/resources tier-gating verified (Free/Silver/Gold/Practitioner access matrix correct)
+- [x] Cart state management wired (CartIcon badge + Medusa SDK)
+- [x] Nav links point to valid routes — no /# placeholder hrefs in main nav
+- [x] Mobile hamburger menu implemented (MobileNav.tsx — aria-expanded, focus trap, Escape handler)
+- [x] Desktop dropdown menus correct (aria-haspopup, aria-expanded)
+- [x] Contact form validation working (HTML5 required fields + server Zod)
+- [x] Lead magnet form Zod validation correct (422 on invalid email, success state)
+- [x] Forgot password calls supabase.auth.resetPasswordForEmail correctly
+- [x] Homepage, /services, /programs, /masterclass, /shop, /shop/rapid-repatterning-session, /cart, /explore all return HTTP 200
+- [x] /portal/login returns HTTP 200 (public portal path)
+- [x] Contact form now wired to Resend (feature/task-5-3-qa fix)
+- [x] CI/CD health check updated to http://localhost — passes before DNS cutover (feature/task-5-3-qa fix)
 
 ### Content and compliance
-- [ ] Suzanne full site review on http://169.239.180.49
+- [ ] Suzanne full site review on http://169.239.180.49 (blocked on KI019 — VPS redeploy needed first)
 - [ ] Legal pages reviewed by lawyer
 - [ ] Cookie consent banner implemented (POPIA compliance)
 - [ ] All `change_me` env vars replaced in `infra/.env`
@@ -184,7 +203,7 @@ Navigation audit complete — all broken links fixed. Merged from `feature/nav-c
 
 - ✅ Task 5.1 — Full Security Audit (complete — all 4 Critical issues fixed, 3 High issues fixed, 5 tracked in KNOWN_ISSUES)
 - ✅ Task 5.2 — Performance Audit (complete — build passes, 2 High and 3 Medium findings logged)
-- ⏳ Task 5.3 — Cross-Device QA (not started)
+- ⏳ Task 5.3 — Cross-Device QA (in progress — QA run complete, 2 critical + 5 high findings; 3 code fixes applied on feature/task-5-3-qa; VPS redeploy required for redirect-loop and 404 fixes — see KI019)
 - ⏳ Task 5.4 — Load Testing (not started)
 - ⏳ Task 5.5 — End-to-End Checklist (not started)
 - ⏳ Task 5.6 — DNS Cutover (not started — requires Task 5.5 complete + Suzanne sign-off)
