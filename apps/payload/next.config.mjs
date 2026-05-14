@@ -1,7 +1,6 @@
 import { withPayload } from '@payloadcms/next/withPayload'
-import type { NextConfig } from 'next'
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   // Payload CMS requires output: 'standalone' for Docker deployment
   output: 'standalone',
   // basePath required: nginx proxies /cms/* to this container without stripping

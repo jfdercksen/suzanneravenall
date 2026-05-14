@@ -18,8 +18,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV NODE_ENV=production
 RUN npx turbo run build --filter=@suzanne/payload
+ENV NODE_ENV=production
 
 # ── Runner stage ──────────────────────────────────────────────────────────────
 FROM base AS runner
