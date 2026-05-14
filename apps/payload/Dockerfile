@@ -10,7 +10,6 @@ COPY package.json package-lock.json* turbo.json ./
 COPY apps/payload/package.json ./apps/payload/
 COPY packages/config/package.json ./packages/config/
 COPY packages/ui/package.json ./packages/ui/
-COPY packages/database/package.json ./packages/database/
 RUN npm ci && npm install --cpu=x64 --os=linux --libc=musl sharp
 
 # ── Builder stage ─────────────────────────────────────────────────────────────
