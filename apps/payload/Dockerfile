@@ -18,6 +18,12 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Dummy build-time values — pg throws "Invalid URL" if DATABASE_URL is unset
+# when withPayload() imports payload.config.ts. Not copied into the runner stage.
+ENV DATABASE_URL=postgresql://dummy:dummy@localhost:5432/payload_build
+ENV PAYLOAD_SECRET=build-time-placeholder-not-used-at-runtime
+ENV PAYLOAD_URL=http://localhost:3001/cms
+
 RUN npx turbo run build --filter=@suzanne/payload
 ENV NODE_ENV=production
 

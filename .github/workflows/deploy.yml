@@ -28,9 +28,14 @@ jobs:
       - name: Build
         # --concurrency=1: build packages sequentially to avoid OOM on 7GB CI runner
         # NODE_OPTIONS: cap each Next.js build at 4GB heap
+        # DATABASE_URL / PAYLOAD_SECRET / PAYLOAD_URL: dummy values so Payload's
+        # withPayload() doesn't throw when there is no real database on the CI runner.
         env:
           NODE_OPTIONS: '--max-old-space-size=4096'
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/payload_build
+          PAYLOAD_SECRET: build-time-placeholder
+          PAYLOAD_URL: http://localhost:3001/cms
         run: npx turbo run build --filter=!@suzanne/medusa --concurrency=1
 
       - name: Lint
