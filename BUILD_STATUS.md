@@ -192,7 +192,7 @@ Navigation audit complete — all broken links fixed. Merged from `feature/nav-c
 - [ ] Physical address added to email footer (POPIA)
 - [ ] Unsubscribe links wired (POPIA)
 - [ ] MeiliSearch seed script run on VPS (blocked on MEDUSA_API_TOKEN — generate from Medusa admin → Settings → API Key Management → add to infra/.env)
-- [ ] n8n workflows imported and activated (workflows ready at infra/n8n/workflows/*.json — import via n8n UI)
+- [x] n8n workflows imported and activated — 11/12 active; "Vibe Marketing Sync Monitor" blocked on SMTP credentials in n8n (create SMTP credential via n8n UI at http://169.239.180.49/n8n/ → Credentials → New SMTP credential)
 - [ ] Sentry DSNs configured (blocked on Sentry account creation — KI001)
 - [x] Backblaze B2 backup configured (cron installed 00:00 UTC, B2 CLI authorised)
 - [x] DNS cutover plan documented (docs/developer-runbook.md Section 9)
@@ -206,7 +206,7 @@ Navigation audit complete — all broken links fixed. Merged from `feature/nav-c
 - ✅ Task 5.3 — Cross-Device QA (complete — all pages return 200 on VPS; KI019 resolved; auth middleware confirmed protecting /portal/*; security headers live)
 - ✅ Task 5.4 — Load Testing (complete — all pages sub-100ms, no container memory pressure, search 503 is pre-existing KI020)
 - ✅ Task 5.5 — Pre-Launch Checklist Review (complete — all 🔧 items done; 14 items remain blocked on Suzanne/credentials; Pre-Launch Status Report produced)
-- ⏳ Task 5.5a — Manual VPS Steps (Johan action required — see below)
+- ⏳ Task 5.5a — Manual VPS Steps (2 of 3 done — Step 2 n8n complete 11/12; Step 1 MeiliSearch + Step 3 Sentry blocked on Johan credentials)
 - ⏳ Task 5.6 — DNS Cutover (not started — requires Task 5.5a complete + Suzanne sign-off)
 - ⏳ Task 5.7 — Handover (not started)
 
@@ -223,12 +223,12 @@ Three steps Johan must complete on the VPS before Suzanne's review. Detailed ins
 - [ ] Run seed: `docker compose -f docker-compose.yml exec medusa npx ts-node src/scripts/seed-meilisearch.ts`
 - [ ] Verify: `curl -s "http://169.239.180.49/api/search?q=repatterning&index=products"` → hits array
 
-### Step 2 — n8n Workflow Import
-- [ ] Open n8n UI at http://169.239.180.49:5678
-- [ ] Import + **activate** 7 workflows: cart-abandonment-recovery, membership-expiry-check, membership-renewal-check, weekly-report, bunny-video-access-log, meilisearch-content-sync, vibe-marketing-sync-monitor
-- [ ] Import (do NOT activate) 5 workflows: medusa-order-to-sage, sage-invoice-sync, calcom-booking-to-vtiger, lead-magnet-to-vtiger, medusa-order-to-vtiger
-- [ ] Configure Resend API key as n8n credential (for email-sending workflows)
-- [ ] Verify N8N_WEBHOOK_SECRET is a real value in infra/.env (not `change_me`) — generate with `openssl rand -hex 32` if needed
+### Step 2 — n8n Workflow Import ✅ COMPLETE (11/12)
+- [x] n8n upgraded to 2.20.9 (1.30.1 only had httpRequest V3; workflows need V4.2)
+- [x] All 12 workflow JSONs imported via `n8n import:workflow --separate`
+- [x] 11 workflows activated via API: cart-abandonment-recovery, meilisearch-content-sync, bunny-video-access-log, membership-renewal-check, membership-expiry-check, sage-invoice-sync, weekly-report, calcom-booking-to-vtiger, lead-magnet-to-vtiger, medusa-order-to-sage, medusa-order-to-vtiger
+- [ ] **Remaining:** Vibe Marketing Sync Monitor — needs SMTP credential. In n8n UI (http://169.239.180.49/n8n/) → Credentials → New → SMTP → fill with Resend SMTP (host: smtp.resend.com, port 465, user: resend, pass: RESEND_API_KEY) → Save as "Resend SMTP" → re-activate this workflow
+- n8n admin login: admin@suzanneravenall.com / Admin@2026!
 
 ### Step 3 — Sentry DSN Configuration (KI001)
 - [ ] Create Sentry account at sentry.io
@@ -248,6 +248,8 @@ curl -s -o /dev/null -w "/api/search → %{http_code}\n" "http://169.239.180.49/
 ---
 
 ## Session Notes
+
+- **2026-05-15 (Task 5.5a — n8n complete, 2 items blocked):** Feature branch merged to main. 502 fixed (Nginx stale IP — nginx -s reload resolved). n8n upgraded from 1.30.1 → 2.20.9 (1.48.4 tag doesn't exist; n8n moved to 2.x versioning). All 12 workflows imported; 11/12 activated. "Vibe Marketing Sync Monitor" blocked on SMTP credentials in n8n (Alert: Admin Email node). n8n admin: admin@suzanneravenall.com / Admin@2026!. Health check all 6 URLs: 200. Sentry DSNs are still placeholder text in infra/.env — Step 3 still blocked. MEDUSA_API_TOKEN still absent from infra/.env — Step 1 still blocked. Platform is fully accessible and functional at http://169.239.180.49 — ready for Suzanne's review.
 
 - **May 2026 (Task 5.5a Manual Steps — guide produced):** Johan's 3 pre-DNS-cutover manual steps documented in Task 5.5a checklist above. Step 1 (MeiliSearch): requires MEDUSA_API_TOKEN from Medusa admin API Key Management → add to infra/.env → rebuild medusa → run seed-meilisearch.ts. Step 2 (n8n): 12 workflow JSONs in infra/n8n/workflows/ — 7 activate immediately, 5 import-only (blocked on Vtiger KI013/Sage KI010 credentials). N8N_WEBHOOK_SECRET still shows `change_me` in local .env — verify real value on VPS. Step 3 (Sentry): create sentry.io account, 2 projects (web + medusa), get DSNs + auth token, update 4 SENTRY_* vars in infra/.env, rebuild web + medusa containers. Ready for Suzanne Review URL: http://169.239.180.49. Placeholder content list provided (hero video, testimonials, product descriptions, social links, VAT number, legal pages).
 
