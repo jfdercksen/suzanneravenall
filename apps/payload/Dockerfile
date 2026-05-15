@@ -24,7 +24,15 @@ ENV DATABASE_URL=postgresql://dummy:dummy@localhost:5432/payload_build
 ENV PAYLOAD_SECRET=build-time-placeholder-not-used-at-runtime
 ENV PAYLOAD_URL=http://localhost:3001/cms
 
-RUN npx turbo run build --filter=@suzanne/payload
+# Debug: verify next.config.mjs can be loaded before attempting the full build.
+# This surfaces the exact underlying error if withPayload() or any import fails.
+RUN cd apps/payload && node -e \
+  "import('./next.config.mjs').then(m => console.log('config ok:', JSON.stringify(m.default))).catch(e => { console.error('config failed:', e); process.exit(1) })"
+
+# Build — fall back to direct next build so the raw Next.js error is visible
+# rather than being swallowed by Turbo's output formatter.
+RUN npx turbo run build --filter=@suzanne/payload -- --debug 2>&1 || \
+  (cd apps/payload && npx next build 2>&1; exit 1)
 ENV NODE_ENV=production
 
 # ── Runner stage ──────────────────────────────────────────────────────────────
