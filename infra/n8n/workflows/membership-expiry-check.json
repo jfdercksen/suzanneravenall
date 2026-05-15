@@ -16,14 +16,16 @@
       "name": "Schedule: Daily 09:00 SAST",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.1,
-      "position": [240, 300],
+      "position": [
+        240,
+        300
+      ],
       "notes": "09:00 SAST = 07:00 UTC. Adjust if server timezone differs."
     },
     {
       "parameters": {
         "url": "={{ $env.SUPABASE_URL }}/rest/v1/member_subscriptions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "authentication": "none",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -60,7 +62,10 @@
       "name": "Supabase: Get Expired Active Memberships",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [460, 300]
+      "position": [
+        460,
+        300
+      ]
     },
     {
       "parameters": {
@@ -88,14 +93,16 @@
       "name": "IF: Has Email",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [680, 300]
+      "position": [
+        680,
+        300
+      ]
     },
     {
       "parameters": {
         "url": "={{ $env.SUPABASE_URL }}/rest/v1/member_subscriptions",
         "method": "PATCH",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "authentication": "none",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -141,7 +148,10 @@
       "name": "Supabase: Set Status to Expired",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [900, 200]
+      "position": [
+        900,
+        200
+      ]
     },
     {
       "parameters": {
@@ -182,7 +192,10 @@
       "name": "POST: Send Expiry Email",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1120, 200]
+      "position": [
+        1120,
+        200
+      ]
     },
     {
       "parameters": {
@@ -192,7 +205,10 @@
       "name": "Error: Log Failure",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [900, 420],
+      "position": [
+        900,
+        420
+      ],
       "notes": "TODO: Wire to Sentry or alert channel once error DSNs are configured (Phase 5)"
     }
   ],
@@ -253,5 +269,9 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "tags": ["membership", "email", "scheduled"]
+  "tags": [
+    "membership",
+    "email",
+    "scheduled"
+  ]
 }

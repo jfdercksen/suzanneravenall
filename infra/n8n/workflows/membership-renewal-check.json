@@ -16,14 +16,16 @@
       "name": "Schedule: Daily 09:00 SAST",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.1,
-      "position": [240, 300],
+      "position": [
+        240,
+        300
+      ],
       "notes": "09:00 SAST = 07:00 UTC. Adjust if server timezone differs."
     },
     {
       "parameters": {
         "url": "={{ $env.SUPABASE_URL }}/rest/v1/member_subscriptions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "authentication": "none",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -64,7 +66,10 @@
       "name": "Supabase: Get Memberships Expiring in 7 Days",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [460, 300]
+      "position": [
+        460,
+        300
+      ]
     },
     {
       "parameters": {
@@ -92,7 +97,10 @@
       "name": "IF: Has Email",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [680, 300]
+      "position": [
+        680,
+        300
+      ]
     },
     {
       "parameters": {
@@ -137,7 +145,10 @@
       "name": "POST: Send Renewal Reminder Email",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [900, 200]
+      "position": [
+        900,
+        200
+      ]
     },
     {
       "parameters": {
@@ -160,7 +171,7 @@
           "parameters": [
             {
               "name": "message",
-              "value": "=Membership renewal check failed for user {{ $json.user_id }} — {{ $error.message }}"
+              "value": "=Membership renewal check failed for user {{ $json.user_id }} \u00e2\u20ac\u201d {{ $error.message }}"
             }
           ]
         },
@@ -170,7 +181,10 @@
       "name": "Error: Log to Sentry Webhook",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [900, 420],
+      "position": [
+        900,
+        420
+      ],
       "notes": "TODO: Replace URL with Sentry webhook or internal error logging endpoint"
     }
   ],
@@ -220,5 +234,9 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "tags": ["membership", "email", "scheduled"]
+  "tags": [
+    "membership",
+    "email",
+    "scheduled"
+  ]
 }

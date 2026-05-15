@@ -1,5 +1,6 @@
 {
   "name": "Cart Abandonment Recovery",
+  "active": false,
   "nodes": [
     {
       "parameters": {

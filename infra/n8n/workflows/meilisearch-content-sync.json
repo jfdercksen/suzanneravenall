@@ -1,5 +1,6 @@
 {
   "name": "MeiliSearch Content Sync",
+  "active": false,
   "nodes": [
     {
       "parameters": {
