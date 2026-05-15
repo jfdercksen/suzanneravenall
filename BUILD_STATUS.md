@@ -206,12 +206,50 @@ Navigation audit complete — all broken links fixed. Merged from `feature/nav-c
 - ✅ Task 5.3 — Cross-Device QA (complete — all pages return 200 on VPS; KI019 resolved; auth middleware confirmed protecting /portal/*; security headers live)
 - ✅ Task 5.4 — Load Testing (complete — all pages sub-100ms, no container memory pressure, search 503 is pre-existing KI020)
 - ✅ Task 5.5 — Pre-Launch Checklist Review (complete — all 🔧 items done; 14 items remain blocked on Suzanne/credentials; Pre-Launch Status Report produced)
-- ⏳ Task 5.6 — DNS Cutover (not started — requires Task 5.5 complete + Suzanne sign-off)
+- ⏳ Task 5.5a — Manual VPS Steps (Johan action required — see below)
+- ⏳ Task 5.6 — DNS Cutover (not started — requires Task 5.5a complete + Suzanne sign-off)
 - ⏳ Task 5.7 — Handover (not started)
 
 ---
 
+## Task 5.5a — Manual VPS Steps (pre-DNS-cutover)
+
+Three steps Johan must complete on the VPS before Suzanne's review. Detailed instructions in session notes below.
+
+### Step 1 — MeiliSearch Seed (KI020)
+- [ ] Log into Medusa admin at http://169.239.180.49/api/admin → Settings → API Key Management → Create API Key
+- [ ] Add `MEDUSA_API_TOKEN=<key>` to `/var/www/suzanneravenall/suzanneravenall/infra/.env`
+- [ ] Rebuild medusa container: `docker compose -f docker-compose.yml up -d --build medusa`
+- [ ] Run seed: `docker compose -f docker-compose.yml exec medusa npx ts-node src/scripts/seed-meilisearch.ts`
+- [ ] Verify: `curl -s "http://169.239.180.49/api/search?q=repatterning&index=products"` → hits array
+
+### Step 2 — n8n Workflow Import
+- [ ] Open n8n UI at http://169.239.180.49:5678
+- [ ] Import + **activate** 7 workflows: cart-abandonment-recovery, membership-expiry-check, membership-renewal-check, weekly-report, bunny-video-access-log, meilisearch-content-sync, vibe-marketing-sync-monitor
+- [ ] Import (do NOT activate) 5 workflows: medusa-order-to-sage, sage-invoice-sync, calcom-booking-to-vtiger, lead-magnet-to-vtiger, medusa-order-to-vtiger
+- [ ] Configure Resend API key as n8n credential (for email-sending workflows)
+- [ ] Verify N8N_WEBHOOK_SECRET is a real value in infra/.env (not `change_me`) — generate with `openssl rand -hex 32` if needed
+
+### Step 3 — Sentry DSN Configuration (KI001)
+- [ ] Create Sentry account at sentry.io
+- [ ] Create 2 projects: `suzanneravenall-web` (Next.js) + `suzanneravenall-medusa` (Node.js)
+- [ ] Get DSNs and an Auth Token (scope: project:releases + project:write)
+- [ ] Update 4 Sentry vars in `infra/.env`: SENTRY_DSN_MEDUSA, NEXT_PUBLIC_SENTRY_DSN, SENTRY_DSN_WEB, SENTRY_AUTH_TOKEN
+- [ ] Rebuild: `docker compose -f docker-compose.yml up -d --build web medusa`
+
+### Post-steps health check
+```bash
+docker compose -f docker-compose.yml ps
+curl -s -o /dev/null -w "/ → %{http_code}\n" http://169.239.180.49/
+curl -s -o /dev/null -w "/shop → %{http_code}\n" http://169.239.180.49/shop
+curl -s -o /dev/null -w "/api/search → %{http_code}\n" "http://169.239.180.49/api/search?q=repatterning&index=products"
+```
+
+---
+
 ## Session Notes
+
+- **May 2026 (Task 5.5a Manual Steps — guide produced):** Johan's 3 pre-DNS-cutover manual steps documented in Task 5.5a checklist above. Step 1 (MeiliSearch): requires MEDUSA_API_TOKEN from Medusa admin API Key Management → add to infra/.env → rebuild medusa → run seed-meilisearch.ts. Step 2 (n8n): 12 workflow JSONs in infra/n8n/workflows/ — 7 activate immediately, 5 import-only (blocked on Vtiger KI013/Sage KI010 credentials). N8N_WEBHOOK_SECRET still shows `change_me` in local .env — verify real value on VPS. Step 3 (Sentry): create sentry.io account, 2 projects (web + medusa), get DSNs + auth token, update 4 SENTRY_* vars in infra/.env, rebuild web + medusa containers. Ready for Suzanne Review URL: http://169.239.180.49. Placeholder content list provided (hero video, testimonials, product descriptions, social links, VAT number, legal pages).
 
 - **May 2026 (Task 5.3 complete):** All VPS pages returning HTTP 200. KI019 resolved (dual Next.js instance caused by stale lockfile entry — fixed by pinning apps/web to next@15.3.9 and removing workspace-local duplicate). CI/CD pipeline green (all containers building). Security headers live (CRIT-004 fixed in prior session). Auth middleware confirmed protecting all /portal/* routes. Pre-Launch Checklist: KI019 checked off, Suzanne site review unblocked. Moving to Task 5.4 — Load Testing.
 
