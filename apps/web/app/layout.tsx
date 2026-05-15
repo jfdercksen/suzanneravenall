@@ -4,6 +4,7 @@ import Script from 'next/script'
 import Header from '../components/layout/Header'
 import Footer from '../components/layout/Footer'
 import { Providers } from '../components/layout/Providers'
+import CookieConsent from '../components/layout/CookieConsent'
 import './globals.css'
 
 const poppins = Poppins({
@@ -76,9 +77,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </main>
           <Footer />
+          {/* Cookie consent banner — manages gtag consent update and Clarity injection */}
+          <CookieConsent clarityId={safeClarityId} />
         </Providers>
 
-        {/* GA4 — placeholder measurement ID, confirm with Suzanne before going live */}
+        {/* Consent Mode v2 defaults — must fire before GA4 loads so gtag respects user choice */}
+        {safeGaId && (
+          <Script id="consent-default" strategy="beforeInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('consent', 'default', {
+                analytics_storage: 'denied',
+                ad_storage: 'denied',
+                wait_for_update: 500
+              });
+            `}
+          </Script>
+        )}
+
+        {/* GA4 — confirm measurement ID with Suzanne before going live */}
         {/* React 19 handles <script async> natively — no next/script wrapper needed for external src */}
         {safeGaId && (
           <>
@@ -93,19 +111,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Script>
           </>
         )}
-
-        {/* Microsoft Clarity — placeholder ID, confirm with Suzanne before going live */}
-        {safeClarityId && (
-          <Script id="clarity-init" strategy="afterInteractive">
-            {`
-              (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity", "script", "${safeClarityId}");
-            `}
-          </Script>
-        )}
+        {/* Clarity is injected by CookieConsent after the user accepts — not loaded here */}
       </body>
     </html>
   )

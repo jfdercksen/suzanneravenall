@@ -32,10 +32,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        // Replace with exact Supabase project hostname before go-live
-        // e.g. 'abcdefghijklmnop.supabase.co'
         protocol: 'https',
-        hostname: 'your-project.supabase.co',
+        hostname: 'mjhwonoekokxyisfljtj.supabase.co',
         port: '',
         pathname: '/storage/v1/object/public/**',
       },
