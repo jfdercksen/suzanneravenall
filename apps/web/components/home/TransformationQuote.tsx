@@ -17,7 +17,7 @@ export default function TransformationQuote() {
     <section aria-labelledby="quote-heading" className="relative min-h-[70vh] flex items-center overflow-hidden">
       {/* Layer 1 — Background (same photo as hero, different crop) */}
       <Image
-        src="/images/suzanne-revanell.jpg"
+        src="/images/suzanne-ravenall.jpg"
         alt=""
         fill
         priority={false}
@@ -41,7 +41,7 @@ export default function TransformationQuote() {
         </motion.h2>
 
         <motion.blockquote {...fadeUp(0.2)}>
-          <p className="text-3xl md:text-5xl lg:text-6xl font-display text-white leading-[1.2] italic mb-8">
+          <p className="text-3xl lg:text-5xl xl:text-6xl font-display text-white leading-[1.2] italic mb-8">
             &ldquo;I don&apos;t just help people change their minds.
             I help them change the structure that was
             running their mind all along.&rdquo;

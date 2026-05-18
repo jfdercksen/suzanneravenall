@@ -51,7 +51,7 @@ export default function FocusAreas() {
   const activeItem = areas[activeArea] ?? areas[0]!
 
   return (
-    <section aria-label="Areas of Focus" className="bg-white py-20 md:py-32">
+    <section aria-label="Areas of Focus" className="bg-white py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <h2 className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-16">
@@ -102,7 +102,7 @@ export default function FocusAreas() {
                       aria-current={isActive ? 'true' : undefined}
                       className="text-left flex-1 group hover:text-gray-500 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                     >
-                      <span className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight block">
+                      <span className="text-2xl lg:text-4xl font-light tracking-tight block">
                         {area.title}
                       </span>
                       <span

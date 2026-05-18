@@ -4,18 +4,18 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 const logos = [
-  { src: '/logos/media/women-magazine.png',      alt: 'Women Magazine' },
-  { src: '/logos/media/africa-investor.png',     alt: 'Africa Investor' },
-  { src: '/logos/media/ceo-magazine.png',        alt: 'CEO Magazine' },
-  { src: '/logos/media/entrepreneur.png',        alt: 'Entrepreneur Magazine' },
-  { src: '/logos/media/media-5.png',             alt: '' },
-  { src: '/logos/media/media-6.png',             alt: '' },
-  { src: '/logos/media/media-7.png',             alt: '' },
-  { src: '/logos/media/media-8.png',             alt: '' },
-  { src: '/logos/media/media-9.png',             alt: '' },
-  { src: '/logos/media/media-10.png',            alt: '' },
-  { src: '/logos/media/media-11.png',            alt: '' },
-  { src: '/logos/media/business-excellence.png', alt: 'Business Excellence Awards' },
+  { src: '/logos/media/women-magazine.png',                      alt: 'Women Magazine' },
+  { src: '/logos/media/africa-investor.png',                     alt: 'Africa Investor' },
+  { src: '/logos/media/ceo-magazine.png',                        alt: 'CEO Magazine' },
+  { src: '/logos/media/entrepreneur.png',                        alt: 'Entrepreneur Magazine' },
+  { src: '/logos/media/sabc.png',                                alt: 'SABC' },
+  { src: '/logos/media/sunday-times.png',                        alt: 'Sunday Times' },
+  { src: '/logos/media/the-start.png',                           alt: 'The Start' },
+  { src: '/logos/media/engineering-news-mining-weekly.png',      alt: 'Engineering News & Mining Weekly' },
+  { src: '/logos/media/global-100-2020.png',                     alt: 'Global 100' },
+  { src: '/logos/media/herald-international-tribune.png',        alt: 'Herald International Tribune' },
+  { src: '/logos/media/top-women-in-business-and-government.png', alt: 'Top Women in Business and Government' },
+  { src: '/logos/media/business-excellence.png',                 alt: 'Business Excellence Awards' },
 ]
 
 // Split into two rows for the mobile two-row layout
@@ -64,8 +64,8 @@ interface MediaLogosProps {
 
 export default function MediaLogos({
   id,
-  quote = '\u201cWhen in doubt, make a fool of yourself. There is a microscopically thin line between being brilliantly creative and acting like the most gigantic idiot on earth. So what the hell, leap.\u201d',
-  quoteAttribution = 'Cynthia Heimel',
+  quote = '\u201cDecode the Pattern. Unlock Your Potential.\u201d',
+  quoteAttribution = 'Dr. Suzanne Ravenall',
 }: MediaLogosProps) {
   return (
     <section id={id} aria-label="As seen in media" className="bg-gray-950 py-16">
@@ -78,7 +78,7 @@ export default function MediaLogos({
         transition={{ duration: 0.8, ease: 'easeOut' as const }}
         className="text-center max-w-3xl mx-auto px-4 mb-12"
       >
-        <p className="text-white/70 text-base md:text-lg font-light italic leading-relaxed">
+        <p className="text-white/70 text-base lg:text-lg font-light italic leading-relaxed">
           {quote}
         </p>
         <footer className="mt-3 text-white/40 text-sm tracking-widest uppercase not-italic">

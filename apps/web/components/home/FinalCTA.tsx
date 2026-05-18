@@ -1,36 +1,48 @@
-import Image from 'next/image'
+'use client'
+
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 
 export default function FinalCTA() {
   return (
-    <section aria-labelledby="finalcta-heading" className="relative py-28 lg:py-36 overflow-hidden">
-      {/* Background image — reduced opacity so overlay can reliably carry text */}
-      <Image
-        src="/images/coaching-bg.jpg"
-        alt=""
-        fill
-        sizes="100vw"
-        className="object-cover object-center opacity-30"
-      />
-      {/* Overlay — two layers: solid base + gradient to ensure centre text area is fully readable */}
-      <div className="absolute inset-0 bg-brand-primary/90" />
-      <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/60 via-transparent to-brand-primary/60" />
-
-      <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
-        <h2 id="finalcta-heading" className="text-4xl lg:text-5xl font-display text-white leading-tight">
+    <section aria-labelledby="finalcta-heading" className="py-28 lg:py-36 bg-white border-t border-gray-100">
+      <motion.div
+        className="max-w-3xl mx-auto px-4 text-center"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-100px' }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
+      >
+        <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-6">
+          Take The First Step
+        </p>
+        <h2 id="finalcta-heading" className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight">
           Your breakthrough is one conversation away
         </h2>
-        <p className="mt-6 text-white/70 text-lg leading-relaxed max-w-xl mx-auto">
-          Schedule a complimentary discovery call. No obligation — just clarity on where you are, where you want to be, and whether working together is the right fit.
-        </p>
-        <Link
-          href="/contact"
-          className="mt-10 inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-lg rounded-button transition-colors duration-150"
+        <motion.p
+          className="mt-6 text-gray-500 text-lg leading-relaxed max-w-xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
         >
-          Book Discovery Call
-        </Link>
-        <p className="mt-4 text-white/40 text-sm">Complimentary 30-minute session · No obligation</p>
-      </div>
+          Schedule a complimentary discovery call. No obligation — just clarity on where you are, where you want to be, and whether working together is the right fit.
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, delay: 0.35, ease: 'easeOut' }}
+        >
+          <Link
+            href="/contact"
+            className="mt-10 inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-lg rounded-button transition-all duration-300 hover:shadow-[0_0_40px_rgba(23,25,244,0.5)]"
+          >
+            Book Discovery Call
+          </Link>
+          <p className="mt-4 text-gray-400 text-sm">Complimentary 30-minute session · No obligation</p>
+        </motion.div>
+      </motion.div>
     </section>
   )
 }

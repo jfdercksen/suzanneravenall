@@ -1,3 +1,7 @@
+'use client'
+
+import { motion } from 'framer-motion'
+
 // NOTE: the `color` field below uses full Tailwind class strings (not interpolated).
 // Tailwind's JIT scanner requires complete class names — never build them dynamically.
 const testimonials = [
@@ -29,31 +33,40 @@ const testimonials = [
 
 export default function TestimonialsSection() {
   return (
-    <section aria-labelledby="testimonials-heading" className="py-20 lg:py-28 bg-white">
+    <section aria-labelledby="testimonials-heading" className="py-20 lg:py-32 bg-white">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-12 lg:mb-16">
-          <p className="text-brand-accent text-xs font-semibold uppercase tracking-widest mb-3">
+
+        <motion.div
+          className="text-center mb-12 lg:mb-16"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             Client Results
           </p>
-          <h2 id="testimonials-heading" className="text-3xl lg:text-4xl font-semibold text-brand-primary">
+          <h2 id="testimonials-heading" className="text-4xl lg:text-6xl font-light text-brand-primary">
             Real people. Real breakthroughs.
           </h2>
-        </div>
+        </motion.div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {testimonials.map(({ quote, name, title, result, initials, color }) => (
-            <figure
+          {testimonials.map(({ quote, name, title, result, initials, color }, i) => (
+            <motion.figure
               key={name}
-              className="relative flex flex-col bg-gray-50 rounded-card p-8 shadow-card"
+              className="relative flex flex-col bg-gray-50 rounded-card p-8 shadow-card hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
             >
-              {/* Quote mark */}
               <div className="text-brand-accent/20 text-8xl font-serif leading-none select-none absolute top-4 left-6">&ldquo;</div>
 
               <blockquote className="relative text-gray-700 text-base leading-relaxed flex-1 mt-4">
                 {quote}
               </blockquote>
 
-              {/* figcaption contains attribution — result badge and author info together */}
               <figcaption className="mt-6">
                 <div className="inline-flex items-center gap-1.5 mb-4">
                   <span className="w-1.5 h-1.5 rounded-full bg-brand-accent flex-none" />
@@ -62,7 +75,6 @@ export default function TestimonialsSection() {
                   </span>
                 </div>
                 <div className="flex items-center gap-4">
-                  {/* Avatar — initials placeholder until real client photos are provided */}
                   <div className={`w-12 h-12 rounded-full ${color} flex items-center justify-center flex-none`}>
                     <span className="text-white text-sm font-semibold">{initials}</span>
                   </div>
@@ -72,7 +84,7 @@ export default function TestimonialsSection() {
                   </div>
                 </div>
               </figcaption>
-            </figure>
+            </motion.figure>
           ))}
         </div>
       </div>

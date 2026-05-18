@@ -32,7 +32,7 @@ const oneOnOne = {
 
 export default function UpcomingPrograms() {
   return (
-    <section className="bg-brand-primary py-20 md:py-32">
+    <section className="bg-brand-primary py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}
@@ -41,14 +41,13 @@ export default function UpcomingPrograms() {
             <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-2">
               UPCOMING PROGRAMS
             </p>
-            {/* Promoted to text-4xl md:text-6xl per design-rules.md minimum */}
-            <h2 className="text-4xl md:text-6xl font-light text-white">
+            <h2 className="text-4xl lg:text-6xl font-light text-white">
               Your next step starts here
             </h2>
           </div>
           <Link
             href="/programs"
-            className="hidden md:flex items-center gap-2 text-white/70 hover:text-white text-sm uppercase tracking-widest transition-colors duration-300"
+            className="hidden lg:flex items-center gap-2 text-white/70 hover:text-white text-sm uppercase tracking-widest transition-colors duration-300"
           >
             All programs <ChevronRight className="w-4 h-4" />
           </Link>
@@ -78,7 +77,7 @@ export default function UpcomingPrograms() {
             <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-brand-primary/80 to-transparent" />
 
             {/* Content */}
-            <div className="relative z-10 p-8 md:p-12 flex flex-col justify-between min-h-[380px]">
+            <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-between min-h-[380px]">
 
               <div>
                 {/* Top row — label + spots badge */}
@@ -91,7 +90,7 @@ export default function UpcomingPrograms() {
                   </span>
                 </div>
 
-                <h3 className="text-4xl md:text-5xl font-light text-white leading-tight mb-3">
+                <h3 className="text-4xl lg:text-5xl font-light text-white leading-tight mb-3">
                   {featuredCohort.title}
                 </h3>
                 <p className="text-white/60 text-lg font-light mb-8">
@@ -99,7 +98,7 @@ export default function UpcomingPrograms() {
                 </p>
 
                 {/* Meta row — normal-case on mobile, uppercase on desktop for readability */}
-                <div className="flex flex-wrap gap-4 text-sm text-white/50 normal-case md:uppercase md:tracking-wider mb-8">
+                <div className="flex flex-wrap gap-4 text-sm text-white/50 normal-case lg:uppercase lg:tracking-wider mb-8">
                   <span className="flex items-center gap-2">
                     <CalendarDays className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
                     {featuredCohort.date}
@@ -176,7 +175,7 @@ export default function UpcomingPrograms() {
         </div>
 
         {/* Mobile — all programs link */}
-        <div className="mt-8 text-center md:hidden">
+        <div className="mt-8 text-center lg:hidden">
           <Link
             href="/programs"
             className="text-white/70 hover:text-white text-sm uppercase tracking-widest transition-colors duration-300"
