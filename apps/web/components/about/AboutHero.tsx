@@ -40,7 +40,7 @@ export default function AboutHero() {
           <motion.h1
             id="about-hero-heading"
             {...fadeUp(0.2)}
-            className="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-[1.08] mb-8"
+            className="text-4xl lg:text-7xl font-light text-white leading-[1.08] mb-8"
           >
             Championing the change in the human condition{' '}
             <span className="text-brand-accent">one person at a time</span>
@@ -48,7 +48,7 @@ export default function AboutHero() {
 
           <motion.p
             {...fadeUp(0.4)}
-            className="text-lg md:text-xl text-white/75 font-light max-w-xl"
+            className="text-lg lg:text-xl text-white/75 font-light max-w-xl"
           >
             B.Msc. M.Msc. Msc.D. — Transformation &amp; Performance Coach, Speaker,
             and multiple award-winning entrepreneur.
@@ -56,7 +56,7 @@ export default function AboutHero() {
 
           <motion.blockquote
             {...fadeUp(0.6)}
-            className="mt-10 max-w-2xl border-l-2 border-brand-accent pl-6 italic text-white/80 text-base md:text-lg font-light leading-relaxed"
+            className="mt-10 max-w-2xl border-l-2 border-brand-accent pl-6 italic text-white/80 text-base lg:text-lg font-light leading-relaxed"
           >
             &ldquo;When we find and disrupt the patterns that keep us stuck, we don&rsquo;t
             just change — we become.&rdquo;

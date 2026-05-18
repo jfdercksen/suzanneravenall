@@ -48,7 +48,7 @@ export default function TheEcosystem() {
   return (
     <section
       aria-labelledby="ecosystem-heading"
-      className="bg-white py-20 md:py-32"
+      className="bg-white py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
@@ -62,12 +62,12 @@ export default function TheEcosystem() {
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
           id="ecosystem-heading"
-          className="text-4xl md:text-6xl font-light text-brand-primary leading-[1.08] max-w-3xl mb-16"
+          className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] max-w-3xl mb-16"
         >
           Two arms of the same mission.
         </motion.h2>
 
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-10">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-10">
           {cards.map((card, i) => (
             <motion.div
               key={card.title}
@@ -82,13 +82,14 @@ export default function TheEcosystem() {
             >
               <Link
                 href={card.href}
+                aria-label={card.title}
                 className="group relative block h-full overflow-hidden rounded-card border border-white/5 bg-gray-900 transition-all duration-500 hover:border-brand-accent/40 hover:shadow-2xl hover:-translate-y-1"
               >
                 <Image
                   src="/images/hero-bg.jpg"
                   alt=""
                   fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-500"
                 />
                 <div

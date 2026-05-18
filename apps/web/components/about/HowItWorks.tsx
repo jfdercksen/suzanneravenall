@@ -35,7 +35,7 @@ const steps: { title: string; description: string }[] = [
 
 export default function HowItWorks() {
   return (
-    <section aria-labelledby="how-heading" className="bg-gray-50 py-20 md:py-32">
+    <section aria-labelledby="how-heading" className="bg-gray-50 py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           {...sectionReveal}
@@ -48,12 +48,12 @@ export default function HowItWorks() {
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
           id="how-heading"
-          className="text-4xl md:text-6xl font-light text-brand-primary leading-[1.08] max-w-3xl mb-16"
+          className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] max-w-3xl mb-16"
         >
           Four movements from pattern to breakthrough.
         </motion.h2>
 
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
           {steps.map((step, i) => (
             <motion.article
               key={step.title}
@@ -71,7 +71,7 @@ export default function HowItWorks() {
                 src="/images/hero-bg.jpg"
                 alt=""
                 fill
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover object-center opacity-20 group-hover:opacity-40 transition-opacity duration-500"
               />
               <div

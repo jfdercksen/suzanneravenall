@@ -43,6 +43,7 @@ function AnimatedStat({ target, suffix, label, delay }: {
 }) {
   const [count, setCount] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
+  const rafRef = useRef<number>(0)
   const inView = useInView(ref, { once: true, margin: '-100px' })
 
   useEffect(() => {
@@ -52,13 +53,21 @@ function AnimatedStat({ target, suffix, label, delay }: {
     const tick = (now: number) => {
       const elapsed = now - startTime
       const progress = Math.min(elapsed / duration, 1)
-      // easeOut cubic
       const eased = 1 - Math.pow(1 - progress, 3)
       setCount(Math.round(eased * target))
-      if (progress < 1) requestAnimationFrame(tick)
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(tick)
+      } else {
+        setCount(target)
+      }
     }
-    const timer = setTimeout(() => requestAnimationFrame(tick), delay * 1000)
-    return () => clearTimeout(timer)
+    const timer = setTimeout(() => {
+      rafRef.current = requestAnimationFrame(tick)
+    }, delay * 1000)
+    return () => {
+      clearTimeout(timer)
+      cancelAnimationFrame(rafRef.current)
+    }
   }, [inView, target, delay])
 
   return (
@@ -70,7 +79,7 @@ function AnimatedStat({ target, suffix, label, delay }: {
       transition={{ duration: 0.6, delay, ease: 'easeOut' as const }}
       className="border-t border-white/15 pt-6 min-w-[140px]"
     >
-      <p className="text-5xl md:text-6xl font-light text-brand-accent mb-2">
+      <p className="text-5xl lg:text-6xl font-light text-brand-accent mb-2">
         {count.toLocaleString()}{suffix}
       </p>
       <p className="text-white/60 text-sm tracking-widest uppercase">
@@ -84,7 +93,7 @@ export default function Credentials() {
   return (
     <section
       aria-labelledby="credentials-heading"
-      className="bg-brand-primary py-20 md:py-32"
+      className="bg-brand-primary py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
@@ -98,7 +107,7 @@ export default function Credentials() {
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
           id="credentials-heading"
-          className="text-4xl md:text-6xl font-light text-white leading-[1.08] max-w-3xl mb-16"
+          className="text-4xl lg:text-6xl font-light text-white leading-[1.08] max-w-3xl mb-16"
         >
           Two decades. Multiple disciplines. One integrated method.
         </motion.h2>

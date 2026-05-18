@@ -11,7 +11,7 @@ const sectionReveal = {
 
 export default function TheMethod() {
   return (
-    <section aria-labelledby="method-heading" className="bg-gray-950 py-20 md:py-32">
+    <section aria-labelledby="method-heading" className="bg-gray-950 py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           {...sectionReveal}
@@ -24,7 +24,7 @@ export default function TheMethod() {
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
           id="method-heading"
-          className="text-4xl md:text-6xl font-light text-white leading-[1.08] max-w-4xl mb-16"
+          className="text-4xl lg:text-6xl font-light text-white leading-[1.08] max-w-4xl mb-16"
         >
           Rewiring from the inside out through{' '}
           <span className="text-brand-accent">Rapid Repatterning&reg; &amp; Neuro-repatterning&reg;</span>
