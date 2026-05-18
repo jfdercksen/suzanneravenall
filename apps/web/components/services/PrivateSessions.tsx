@@ -56,7 +56,7 @@ export default function PrivateSessions() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.6 }}
-      className="relative w-full bg-gray-950 py-20 md:py-32"
+      className="relative w-full bg-white py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-16">
@@ -65,11 +65,11 @@ export default function PrivateSessions() {
           </p>
           <h2
             id="private-heading"
-            className="text-4xl md:text-6xl font-light text-white leading-tight mb-8"
+            className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-8"
           >
             Private Sessions to unlock the root cause — and go beyond it.
           </h2>
-          <p className="text-lg text-white/70 font-light leading-relaxed">
+          <p className="text-lg text-gray-600 font-light leading-relaxed">
             Suzanne helps you get to the root cause of the key issues disrupting your
             life, track the patterns through the impact, and break through into self
             mastery. You close the gap from where you are to where you want to be.
@@ -84,8 +84,9 @@ export default function PrivateSessions() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative overflow-hidden bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
+              className="group relative overflow-hidden min-h-[280px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
+              {/* TODO: Replace with service-specific image — Suzanne to provide: photograph representing each session type (e.g. 1-on-1 coaching, energy work, hypnotherapy) */}
               <Image
                 src="/images/hero-bg.jpg"
                 alt=""

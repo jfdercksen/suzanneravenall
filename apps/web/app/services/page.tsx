@@ -17,7 +17,7 @@ export function generateMetadata(): Metadata {
 
 export default function ServicesPage() {
   return (
-    <main>
+    <>
       <ServicesHero />
       <PrivateSessions />
       <GroupCorporate />
@@ -25,6 +25,6 @@ export default function ServicesPage() {
       <Programs />
       <CalBookingSection />
       <ServicesFinalCTA />
-    </main>
+    </>
   )
 }

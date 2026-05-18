@@ -120,7 +120,7 @@ export default function Programs() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.6 }}
-      className="relative w-full bg-gray-50 py-20 md:py-32"
+      className="relative w-full bg-gray-950 py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-20">
@@ -129,11 +129,11 @@ export default function Programs() {
           </p>
           <h2
             id="programs-heading"
-            className="text-4xl md:text-6xl font-light text-brand-primary leading-tight mb-8"
+            className="text-4xl lg:text-6xl font-light text-white leading-tight mb-8"
           >
             Programmes for dramatic change — unlock your super powers now.
           </h2>
-          <p className="text-lg text-gray-600 font-light leading-relaxed">
+          <p className="text-lg text-white/70 font-light leading-relaxed">
             Programmes to transform yourself and others, utilising conscious
             engineering and natural healing practices. Dive deep into the unconscious
             and flip open your — and others’ — self mastery.
@@ -148,8 +148,9 @@ export default function Programs() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.5, delay: colIdx * 0.1 }}
-              className="group relative overflow-hidden flex flex-col bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
+              className="group relative overflow-hidden flex flex-col min-h-[480px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
+              {/* TODO: Replace with programme-specific image — Suzanne to provide: images representing each programme track (Practitioner, Self-Paced, Live) */}
               <Image
                 src="/images/hero-bg.jpg"
                 alt=""
@@ -161,11 +162,11 @@ export default function Programs() {
                 aria-hidden="true"
                 className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
               />
-              <div className="relative z-10 flex flex-col h-full p-8 md:p-10">
+              <div className="relative z-10 flex flex-col h-full p-8 lg:p-10">
                 <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
                   {col.eyebrow}
                 </p>
-                <h3 className="text-2xl md:text-3xl font-light text-white leading-tight mb-6">
+                <h3 className="text-2xl lg:text-3xl font-light text-white leading-tight mb-6">
                   {col.title}
                 </h3>
                 <p className="text-sm text-white/70 font-light leading-relaxed mb-8">

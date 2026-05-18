@@ -16,7 +16,7 @@ export default function ServicesHero() {
     <section
       id="hero"
       aria-labelledby="services-hero-heading"
-      className="relative min-h-[90vh] flex items-center overflow-hidden"
+      className="relative h-screen min-h-[640px] flex items-center overflow-hidden"
     >
       {/* Cinematic background image */}
       <Image
@@ -56,7 +56,7 @@ export default function ServicesHero() {
             <motion.h1
               id="services-hero-heading"
               {...fadeUp(0.15)}
-              className="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-[1.05] mb-8"
+              className="text-4xl lg:text-7xl font-light text-white leading-[1.05] mb-8"
             >
               Unlock your life{' '}
               <span className="text-brand-accent">and potential.</span>
@@ -64,7 +64,7 @@ export default function ServicesHero() {
 
             <motion.p
               {...fadeUp(0.3)}
-              className="text-lg md:text-xl text-white/75 font-light max-w-xl mb-12 leading-relaxed"
+              className="text-lg lg:text-xl text-white/75 font-light max-w-xl mb-12 leading-relaxed"
             >
               Through a comfortable, authentic and safe environment, Suzanne helps you
               get to the root cause of key issues that disrupt life, track the patterns

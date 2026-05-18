@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { getCalApi } from '@calcom/embed-react'
 import { motion } from 'framer-motion'
 
@@ -8,6 +8,7 @@ const CAL_URL = process.env.NEXT_PUBLIC_CAL_URL ?? 'https://cal.suzanneravenall.
 
 export default function CalBookingSection() {
   const initialised = useRef(false)
+  const [calReady, setCalReady] = useState(false)
 
   useEffect(() => {
     if (initialised.current) return
@@ -18,10 +19,12 @@ export default function CalBookingSection() {
         styles: { branding: { brandColor: '#1719F4' } },
         hideEventTypeDetails: false,
       })
+      setCalReady(true)
     })
   }, [])
 
   function openModal() {
+    if (!calReady) return
     getCalApi({ embedJsUrl: `${CAL_URL}/embed/embed.js` }).then((cal) => {
       cal('modal', { calLink: 'suzanneravenall/discovery-call', config: { theme: 'dark' } })
     })
@@ -34,7 +37,7 @@ export default function CalBookingSection() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.6 }}
-      className="relative w-full bg-gray-950 py-20 md:py-32"
+      className="relative w-full bg-white py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.p
@@ -53,7 +56,7 @@ export default function CalBookingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-4xl md:text-6xl font-light text-white leading-tight mb-6"
+          className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-6"
         >
           Ready to begin?
         </motion.h2>
@@ -63,7 +66,7 @@ export default function CalBookingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="text-lg text-white/60 font-light max-w-xl mx-auto mb-12"
+          className="text-lg text-gray-600 font-light max-w-xl mx-auto mb-12"
         >
           A 30-minute discovery call — no obligation. Find out which path is right for you.
         </motion.p>
@@ -76,7 +79,8 @@ export default function CalBookingSection() {
         >
           <button
             onClick={openModal}
-            className="inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_40px_theme(colors.brand.accent/60%)]"
+            disabled={!calReady}
+            className="inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_40px_theme(colors.brand.accent/60%)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Book a Discovery Call
           </button>
