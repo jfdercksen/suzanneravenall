@@ -6,15 +6,15 @@ import { motion } from 'framer-motion'
 
 export default function AboutTeaser() {
   return (
-    <section aria-labelledby="about-heading" className="py-20 lg:py-32 bg-brand-primary overflow-hidden">
+    <section aria-labelledby="about-heading" className="py-20 lg:py-32 bg-brand-primary">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
           {/* Image — left on desktop */}
           <motion.div
             className="relative"
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
@@ -36,8 +36,8 @@ export default function AboutTeaser() {
           {/* Text — right on desktop */}
           <motion.div
             className="lg:pl-4"
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
           >

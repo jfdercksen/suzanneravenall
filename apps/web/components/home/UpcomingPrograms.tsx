@@ -77,7 +77,7 @@ export default function UpcomingPrograms() {
             <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-brand-primary/80 to-transparent" />
 
             {/* Content */}
-            <div className="relative z-10 p-8 md:p-12 flex flex-col justify-between min-h-[380px]">
+            <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-between min-h-[380px]">
 
               <div>
                 {/* Top row — label + spots badge */}
