@@ -11,7 +11,7 @@ export default function ServicesFinalCTA() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.6 }}
-      className="relative w-full bg-brand-primary-900 py-20 md:py-32 overflow-hidden"
+      className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
     >
       <div
         aria-hidden="true"
@@ -35,7 +35,7 @@ export default function ServicesFinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-4xl md:text-6xl font-light text-white leading-tight mb-6"
+          className="text-4xl lg:text-6xl font-light text-white leading-tight mb-6"
         >
           Not sure which path is right for you?
         </motion.h2>
@@ -45,7 +45,7 @@ export default function ServicesFinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-lg md:text-xl text-white/70 font-light max-w-2xl mx-auto mb-12 leading-relaxed"
+          className="text-lg lg:text-xl text-white/70 font-light max-w-2xl mx-auto mb-12 leading-relaxed"
         >
           Spend twenty minutes with Suzanne. Describe what you’re stuck on. Leave
           with a clear, honest sense of which session, programme or keynote fits

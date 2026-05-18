@@ -4,8 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
-// Section is dark (bg-gray-950) to maintain dark/light alternation after
-// GroupCorporate (bg-white). Text colours updated accordingly.
+// Section is light (bg-white) — position 4 in dark/light alternation after GroupCorporate (dark).
 const topics = [
   {
     name: 'Conversations with My Brain',
@@ -38,7 +37,7 @@ export default function Speaking() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.6 }}
-      className="relative w-full bg-gray-950 py-20 md:py-32"
+      className="relative w-full bg-white py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-16">
@@ -47,29 +46,30 @@ export default function Speaking() {
           </p>
           <h2
             id="speaking-heading"
-            className="text-4xl md:text-6xl font-light text-white leading-tight mb-8"
+            className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-8"
           >
             Customised, real, authentic — keynotes that cut to what underlies human
             behaviour.
           </h2>
-          <p className="text-lg text-white/70 font-light leading-relaxed mb-6">
+          <p className="text-lg text-gray-600 font-light leading-relaxed mb-6">
             As a keynote speaker, Suzanne takes audiences on a journey of inner
             transformation — changing lives from the inside out. When we turn on the
             magic on the inside and capitalise on it, we begin to transform in
             unimaginable ways, and that shows up in every-day life.
           </p>
-          <p className="text-lg text-white/70 font-light leading-relaxed">
+          <p className="text-lg text-gray-600 font-light leading-relaxed">
             More resilience to navigate today&apos;s challenging world. More courage and
             confidence than you ever thought possible. The power of our own innate
             wisdom, energy and mind — to respond, not react, to life.
           </p>
         </div>
 
+        {/* TODO (Suzanne to confirm): Is this Helen Keller quote intentional or should it be replaced with one of Suzanne's own quotes? */}
         <figure className="max-w-4xl mb-16 border-l-2 border-brand-accent pl-6">
-          <blockquote className="text-2xl md:text-3xl font-light italic text-white leading-snug">
+          <blockquote className="text-2xl lg:text-3xl font-light italic text-brand-primary leading-snug">
             &ldquo;Life is an adventure or nothing at all.&rdquo;
           </blockquote>
-          <figcaption className="mt-4 text-xs uppercase tracking-[0.3em] font-medium text-white/50">
+          <figcaption className="mt-4 text-xs uppercase tracking-[0.3em] font-medium text-gray-600">
             Helen Keller
           </figcaption>
         </figure>
@@ -88,8 +88,9 @@ export default function Speaking() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative overflow-hidden bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
+              className="group relative overflow-hidden min-h-[280px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
+              {/* TODO: Replace with keynote-specific image — Suzanne to provide: photographs from keynote events or speaking engagements */}
               <Image
                 src="/images/hero-bg.jpg"
                 alt=""

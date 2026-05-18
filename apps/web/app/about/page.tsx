@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function AboutPage() {
   return (
-    <main>
+    <>
       <AboutHero />
       <TheMethod />
       <TheStory />
@@ -30,6 +30,6 @@ export default function AboutPage() {
       />
       <TheEcosystem />
       <AboutFinalCTA />
-    </main>
+    </>
   )
 }
