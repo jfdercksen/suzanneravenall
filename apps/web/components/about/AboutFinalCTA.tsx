@@ -14,7 +14,7 @@ export default function AboutFinalCTA() {
   return (
     <section
       aria-labelledby="about-cta-heading"
-      className="relative bg-brand-primary py-24 md:py-36 overflow-hidden"
+      className="relative bg-brand-primary py-24 lg:py-36 overflow-hidden"
     >
       {/* Accent glow */}
       <div
@@ -34,7 +34,7 @@ export default function AboutFinalCTA() {
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
           id="about-cta-heading"
-          className="text-4xl md:text-6xl font-light text-white leading-[1.08] mb-8"
+          className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
         >
           Step into who you were always meant to be.
         </motion.h2>
