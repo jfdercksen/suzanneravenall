@@ -1,13 +1,23 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 
 export default function AboutTeaser() {
   return (
-    <section aria-labelledby="about-heading" className="py-20 lg:py-28 bg-gray-50 overflow-hidden">
+    <section aria-labelledby="about-heading" className="py-20 lg:py-32 bg-brand-primary overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
           {/* Image — left on desktop */}
-          <div className="relative">
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+          >
             <div className="relative aspect-[4/5] rounded-card overflow-hidden shadow-card-hover">
               <Image
                 src="/images/suzanne-casual.jpg"
@@ -17,26 +27,30 @@ export default function AboutTeaser() {
                 className="object-cover object-top"
               />
             </div>
-            {/* Credential badge — normal flow on mobile (avoids section overflow-hidden clip),
-                absolute on lg where the column gutter gives enough room */}
-            <div className="mt-4 lg:mt-0 lg:absolute lg:-bottom-4 lg:-right-8 bg-brand-primary text-white rounded-card p-4 shadow-card-hover inline-block lg:block">
-              <p className="text-xs text-white/60 uppercase tracking-wider mb-0.5">Academic credentials</p>
-              <p className="font-semibold text-sm">B.Msc · M.Msc · Msc.D.</p>
+            <div className="mt-4 lg:mt-0 lg:absolute lg:-bottom-4 lg:-right-8 bg-white text-brand-primary rounded-card p-4 shadow-card-hover inline-block lg:block">
+              <p className="text-xs text-brand-primary/50 uppercase tracking-wider mb-0.5">Academic credentials</p>
+              <p className="font-semibold text-sm text-brand-primary">B.Msc · M.Msc · Msc.D.</p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Text — right on desktop */}
-          <div className="lg:pl-4">
-            <p className="text-brand-accent text-xs font-semibold uppercase tracking-widest mb-4">
+          <motion.div
+            className="lg:pl-4"
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
+          >
+            <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-4">
               About Dr. Suzanne
             </p>
-            <h2 id="about-heading" className="text-3xl lg:text-4xl font-semibold text-brand-primary leading-tight">
+            <h2 id="about-heading" className="text-4xl lg:text-6xl font-light text-white leading-tight">
               Science-backed coaching with a track record of real results
             </h2>
-            <p className="mt-6 text-gray-600 leading-relaxed">
+            <p className="mt-6 text-white/70 leading-relaxed">
               Dr. Suzanne Ravenall developed Neuro-Repatterning® after two decades of clinical study and thousands of hours with private clients across four continents. Her methodology targets the childhood brain patterns that sabotage adult success — and dissolves them at the root.
             </p>
-            <p className="mt-4 text-gray-600 leading-relaxed">
+            <p className="mt-4 text-white/70 leading-relaxed">
               The result is not motivation. It is permanent, measurable change.
             </p>
 
@@ -49,12 +63,13 @@ export default function AboutTeaser() {
               </Link>
               <Link
                 href="/services"
-                className="inline-flex items-center justify-center px-7 py-3.5 border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white font-semibold rounded-button transition-colors duration-150"
+                className="inline-flex items-center justify-center px-7 py-3.5 border-2 border-white text-white hover:bg-white hover:text-brand-primary font-semibold rounded-button transition-all duration-300"
               >
                 View Services
               </Link>
             </div>
-          </div>
+          </motion.div>
+
         </div>
       </div>
     </section>

@@ -83,13 +83,13 @@ export default function HomePage() {
       <Hero />
       <MediaLogos id="media-logos" />
       <TrustBar />
-      <UpcomingPrograms />
       <TransformationQuote />
       <FocusAreas />
-      <LeadMagnet />
+      <UpcomingPrograms />
       <ServicesSection />
       <TestimonialSpotlight />
       <FeaturedPrograms />
+      <LeadMagnet />
       <TestimonialsSection />
       <AboutTeaser />
       <FinalCTA />

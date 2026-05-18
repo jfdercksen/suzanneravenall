@@ -53,7 +53,7 @@ export default function Hero() {
           <motion.h1
             id="hero-heading"
             {...fadeUp(0.2)}
-            className="text-5xl md:text-7xl lg:text-8xl font-display text-white leading-[1.05] mb-6"
+            className="text-5xl lg:text-7xl xl:text-8xl font-display text-white leading-[1.05] mb-6"
           >
             Unlock Your Most{' '}
             <span className="text-brand-accent">Extraordinary Self</span>
@@ -62,7 +62,7 @@ export default function Hero() {
           {/* Subheadline */}
           <motion.p
             {...fadeUp(0.4)}
-            className="text-lg md:text-xl text-white/70 font-light max-w-md mb-10"
+            className="text-lg lg:text-xl text-white/70 font-light max-w-md mb-10"
           >
             Break the patterns. Rewrite the story. Become unstoppable.
           </motion.p>

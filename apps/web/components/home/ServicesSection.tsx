@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 
 const services = [
   {
@@ -27,24 +30,34 @@ const services = [
 
 export default function ServicesSection() {
   return (
-    <section aria-labelledby="services-heading" className="py-20 lg:py-28 bg-gray-50">
+    <section aria-labelledby="services-heading" className="py-20 lg:py-32 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-12 lg:mb-16">
-          <p className="text-brand-accent text-xs font-semibold uppercase tracking-widest mb-3">
+
+        <motion.div
+          className="text-center mb-12 lg:mb-16"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             Work With Suzanne
           </p>
-          <h2 id="services-heading" className="text-3xl lg:text-4xl font-semibold text-brand-primary">
+          <h2 id="services-heading" className="text-4xl lg:text-6xl font-light text-brand-primary">
             Choose your path to transformation
           </h2>
-        </div>
+        </motion.div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map(({ title, promise, image, href, cta }) => (
-            <div
+          {services.map(({ title, promise, image, href, cta }, i) => (
+            <motion.div
               key={title}
-              className="group relative bg-white rounded-card overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-300"
+              className="group relative bg-white rounded-card overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
             >
-              {/* Image */}
               <div className="relative h-64 overflow-hidden">
                 <Image
                   src={image}
@@ -56,7 +69,6 @@ export default function ServicesSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-primary/60 to-transparent" />
               </div>
 
-              {/* Content */}
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-brand-primary">{title}</h3>
                 <p className="mt-2 text-gray-600 text-sm leading-relaxed">{promise}</p>
@@ -70,7 +82,7 @@ export default function ServicesSection() {
                   </svg>
                 </Link>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

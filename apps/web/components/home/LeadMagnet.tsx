@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
@@ -37,18 +38,31 @@ export default function LeadMagnet() {
   }
 
   return (
-    <section id="lead-magnet" aria-labelledby="leadmagnet-heading" className="py-20 lg:py-28 bg-brand-primary-900">
+    <section id="lead-magnet" aria-labelledby="leadmagnet-heading" className="py-20 lg:py-32 bg-brand-primary-900">
       <div className="max-w-3xl mx-auto px-4 text-center">
-        <p className="text-brand-accent text-xs font-semibold uppercase tracking-widest mb-4">
-          Free Resource
-        </p>
-        <h2 id="leadmagnet-heading" className="text-3xl lg:text-4xl font-semibold text-white">
-          The Breakthrough Masterclass
-        </h2>
-        <p className="mt-4 text-white/70 text-lg leading-relaxed">
-          Discover the three core patterns keeping you stuck — and the exact method to dissolve them permanently. Free. No catch.
-        </p>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-4">
+            Free Resource
+          </p>
+          <h2 id="leadmagnet-heading" className="text-4xl lg:text-6xl font-light text-white">
+            The Breakthrough Masterclass
+          </h2>
+          <p className="mt-4 text-white/70 text-lg leading-relaxed">
+            Discover the three core patterns keeping you stuck — and the exact method to dissolve them permanently. Free. No catch.
+          </p>
+        </motion.div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+        >
         {status === 'success' ? (
           <div className="mt-8 rounded-card bg-brand-accent/20 border border-brand-accent/40 px-8 py-6">
             <p className="text-white font-semibold text-lg">You&apos;re on the list!</p>
@@ -91,6 +105,7 @@ export default function LeadMagnet() {
         <p className="mt-4 text-white/40 text-xs">
           No spam. Unsubscribe at any time.
         </p>
+        </motion.div>
       </div>
     </section>
   )
