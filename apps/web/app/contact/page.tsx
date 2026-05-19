@@ -12,11 +12,11 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main>
+    <>
       <ContactHero />
       <ContactOptions />
       <ContactFAQ />
       <ContactFinalCTA />
-    </main>
+    </>
   )
 }

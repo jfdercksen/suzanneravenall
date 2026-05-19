@@ -2,18 +2,18 @@
 
 import { motion } from 'framer-motion'
 
-const sectionReveal = {
-  initial: { opacity: 0, y: 50 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-100px' } as const,
-  transition: { duration: 0.6, ease: 'easeOut' as const },
-}
+// Hero is always in the initial viewport — use animate (mount), not whileInView.
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 40 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, delay, ease: 'easeOut' as const },
+})
 
 export default function ContactHero() {
   return (
     <section
       aria-labelledby="contact-hero-heading"
-      className="relative bg-brand-primary w-full py-32 md:py-40 overflow-hidden"
+      className="relative bg-brand-primary w-full py-32 lg:py-40 overflow-hidden"
     >
       <div
         aria-hidden="true"
@@ -22,7 +22,7 @@ export default function ContactHero() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.p
-          {...sectionReveal}
+          {...fadeUp(0)}
           className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
         >
           GET IN TOUCH
@@ -30,17 +30,15 @@ export default function ContactHero() {
 
         <motion.h1
           id="contact-hero-heading"
-          {...sectionReveal}
-          transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
-          className="text-4xl md:text-6xl font-light text-white leading-[1.08] mb-8"
+          {...fadeUp(0.15)}
+          className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
         >
           Let&rsquo;s Start Your Transformation
         </motion.h1>
 
         <motion.p
-          {...sectionReveal}
-          transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' as const }}
-          className="text-white/70 text-lg md:text-xl font-light max-w-2xl mx-auto"
+          {...fadeUp(0.3)}
+          className="text-white/70 text-lg lg:text-xl font-light max-w-2xl mx-auto"
         >
           Book a discovery call, send a message, or find out which path is right for you.
         </motion.p>
