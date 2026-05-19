@@ -41,7 +41,7 @@ export default function ContactOptions() {
           id="contact-options-heading"
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
-          className="text-3xl lg:text-4xl font-light text-brand-primary text-center mb-12"
+          className="text-4xl lg:text-5xl font-light text-brand-primary text-center mb-12"
         >
           Choose Your Path
         </motion.h2>
@@ -50,7 +50,7 @@ export default function ContactOptions() {
           {/* Card 1 — Book Discovery Call (primary) */}
           <motion.div
             {...cardReveal(0.15)}
-            className="rounded-card bg-brand-accent/10 border border-brand-accent p-8 flex flex-col"
+            className="rounded-card bg-brand-accent/10 border border-brand-accent p-8 flex flex-col hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
           >
             <h3 className="text-lg font-semibold text-brand-primary mb-2">Book a Discovery Call</h3>
             <p className="text-gray-600 text-sm leading-relaxed mb-6">
@@ -70,7 +70,7 @@ export default function ContactOptions() {
           {/* Card 2 — Send a Message */}
           <motion.div
             {...cardReveal(0.25)}
-            className="rounded-card bg-gray-50 border border-gray-200 p-8 flex flex-col"
+            className="rounded-card bg-gray-50 border border-gray-200 p-8 flex flex-col hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
           >
             <h3 className="text-lg font-semibold text-brand-primary mb-2">Send a Message</h3>
             <ContactForm light />
@@ -79,7 +79,7 @@ export default function ContactOptions() {
           {/* Card 3 — Other Ways to Connect */}
           <motion.div
             {...cardReveal(0.35)}
-            className="rounded-card bg-gray-50 border border-gray-200 p-8 flex flex-col gap-6"
+            className="rounded-card bg-gray-50 border border-gray-200 p-8 flex flex-col gap-6 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
           >
             <h3 className="text-lg font-semibold text-brand-primary">Other Ways to Connect</h3>
 

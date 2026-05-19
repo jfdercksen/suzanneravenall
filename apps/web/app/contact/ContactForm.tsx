@@ -163,7 +163,7 @@ export default function ContactForm({ light = false }: { light?: boolean }) {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-brand-accent hover:bg-brand-accent-700 disabled:opacity-60 text-white font-semibold py-3 rounded-button transition-all duration-300 text-sm uppercase tracking-wider"
+        className="w-full bg-brand-accent hover:bg-brand-accent-700 disabled:opacity-60 text-white font-semibold py-4 rounded-button transition-all duration-300 text-sm uppercase tracking-wider"
       >
         {isSubmitting ? 'Sending…' : 'Send Message'}
       </button>
