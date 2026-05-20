@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useCart } from '@/lib/cart'
-import type { MedusaVariant } from './ProductPageContent'
+import type { MedusaVariant } from '@/types/medusa'
 
 function getZarPrice(variant: MedusaVariant): number | null {
   const price = (variant.prices ?? []).find((p) => p.currency_code === 'zar')
@@ -53,9 +53,13 @@ export function VariantSelector({
   async function handleAddToCart() {
     if (!selectedVariant) return
     setButtonState('loading')
-    await addItem(selectedVariant.id, 1)
-    setButtonState('added')
-    setTimeout(() => setButtonState('idle'), 2500)
+    try {
+      await addItem(selectedVariant.id, 1)
+      setButtonState('added')
+      setTimeout(() => setButtonState('idle'), 2500)
+    } catch {
+      setButtonState('idle')
+    }
   }
 
   return (
@@ -75,7 +79,9 @@ export function VariantSelector({
                   className={`px-5 py-2.5 rounded-full text-sm font-medium border transition-all duration-200 ${
                     isSelected
                       ? 'bg-brand-accent-600 text-white border-brand-accent-600'
-                      : 'border-gray-300 text-gray-700 hover:border-brand-accent hover:text-brand-accent bg-transparent'
+                      : dark
+                        ? 'border-white/30 text-white/80 hover:border-brand-accent hover:text-brand-accent bg-transparent'
+                        : 'border-gray-300 text-gray-700 hover:border-brand-accent hover:text-brand-accent bg-transparent'
                   }`}
                 >
                   {variant.title}

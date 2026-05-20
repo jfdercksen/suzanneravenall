@@ -12,6 +12,9 @@ export interface ProductVariant {
   prices: Array<{ currency_code: string; amount: number }>
 }
 
+/** Alias used by product detail page components */
+export type MedusaVariant = ProductVariant
+
 export interface MedusaProduct {
   id: string
   handle: string
@@ -33,5 +36,5 @@ export interface MembershipProduct extends MedusaProduct {
     tier: MembershipTier
     access_level: number
     product_type: 'membership'
-  }
+  } | null
 }
