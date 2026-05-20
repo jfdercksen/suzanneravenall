@@ -24,7 +24,7 @@ export function ShopFinalCTA() {
           transition={{ duration: 0.6 }}
           className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
         >
-          NOT SURE WHERE TO START?
+          Not sure where to start?
         </motion.p>
 
         <motion.h2

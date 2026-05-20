@@ -8,7 +8,7 @@ export function ShopHeroBanner() {
   return (
     <section
       aria-labelledby="shop-hero-heading"
-      className="relative w-full bg-brand-primary min-h-[60vh] flex items-center py-20 lg:py-32 overflow-hidden"
+      className="relative w-full bg-brand-primary min-h-screen flex items-center py-20 lg:py-32 overflow-hidden"
     >
       {/* Background image with overlay */}
       <div className="absolute inset-0" aria-hidden="true">
@@ -82,6 +82,33 @@ export function ShopHeroBanner() {
           </Link>
         </motion.div>
       </div>
+
+      {/* Scroll indicator */}
+      <motion.button
+        type="button"
+        aria-label="Scroll to programmes"
+        onClick={() =>
+          document.getElementById('programmes')?.scrollIntoView({ behavior: 'smooth' })
+        }
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.8 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 text-white/40 hover:text-white/80 transition-colors duration-300"
+      >
+        <span className="text-xs uppercase tracking-[0.2em] font-medium">Scroll</span>
+        <motion.svg
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.5}
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+        </motion.svg>
+      </motion.button>
     </section>
   )
 }

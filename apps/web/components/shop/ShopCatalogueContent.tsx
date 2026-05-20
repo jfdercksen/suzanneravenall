@@ -189,7 +189,7 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
       />
 
       {/* 3 — Light product grid */}
-      <section id="programmes" className="w-full bg-white">
+      <section id="programmes" className="w-full bg-white scroll-mt-48">
         {/* Search + sort toolbar */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="relative flex-1 max-w-sm">
