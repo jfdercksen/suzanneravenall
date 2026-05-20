@@ -3,23 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-
-interface ProductVariant {
-  id: string
-  title: string
-  prices: Array<{ currency_code: string; amount: number }>
-}
-
-interface MedusaProduct {
-  id: string
-  handle: string
-  title: string
-  description: string | null
-  thumbnail: string | null
-  variants: ProductVariant[]
-  categories: Array<{ id: string; handle: string; name: string }>
-  collection: { id: string; handle: string; title: string } | null
-}
+import type { MedusaProduct, ProductVariant } from '@/types/medusa'
 
 interface DeliveryBadge {
   label: string
@@ -91,10 +75,10 @@ export function ProductCard({ product, index }: ProductCardProps) {
       transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
     >
       <Link href={`/shop/${product.handle}`} className="block group">
-        <div className="bg-gray-900 rounded-2xl overflow-hidden border border-white/5 hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500">
+        <div className="bg-gray-900 rounded-card overflow-hidden border border-white/5 hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500">
           <div className="relative aspect-video overflow-hidden">
             <Image
-              src={product.thumbnail ?? '/images/shop/placeholder.jpg'}
+              src={product.thumbnail ?? '/images/blog-placeholder.jpg'}
               alt={product.title}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

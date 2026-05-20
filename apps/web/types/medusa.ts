@@ -6,6 +6,12 @@
 
 // ── Core product types ────────────────────────────────────────────────────────
 
+export interface ProductVariant {
+  id: string
+  title: string
+  prices: Array<{ currency_code: string; amount: number }>
+}
+
 export interface MedusaProduct {
   id: string
   handle: string
@@ -13,11 +19,7 @@ export interface MedusaProduct {
   description: string | null
   thumbnail: string | null
   metadata?: Record<string, unknown> | null
-  variants: Array<{
-    id: string
-    title: string
-    prices: Array<{ currency_code: string; amount: number }>
-  }>
+  variants: ProductVariant[]
   categories: Array<{ id: string; handle: string; name: string }>
   collection: { id: string; handle: string; title: string } | null
 }
