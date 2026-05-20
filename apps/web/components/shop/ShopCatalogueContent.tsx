@@ -1,28 +1,16 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Search, X } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import { CategoryFilterBar } from './CategoryFilterBar'
 import { ProductCard } from './ProductCard'
 import { ProductGridSkeleton } from './ProductGridSkeleton'
+import { ShopHeroBanner } from './ShopHeroBanner'
+import { ShopPagination } from './ShopPagination'
+import { ShopFinalCTA } from './ShopFinalCTA'
+import type { MedusaProduct } from '@/types/medusa'
 import type { ProductSearchHit } from '@/lib/search/types'
-
-interface MedusaProduct {
-  id: string
-  handle: string
-  title: string
-  description: string | null
-  thumbnail: string | null
-  variants: Array<{
-    id: string
-    title: string
-    prices: Array<{ currency_code: string; amount: number }>
-  }>
-  categories: Array<{ id: string; handle: string; name: string }>
-  collection: { id: string; handle: string; title: string } | null
-}
 
 interface MedusaCategory {
   id: string
@@ -100,6 +88,11 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
   const [filters, setFilters] = useState<FilterState>({ categoryId: '', collectionHandle: '' })
   const [collectionIdMap, setCollectionIdMap] = useState<Record<string, string>>({})
 
+  const handleFiltersChange = (newFilters: FilterState) => {
+    setFilters(newFilters)
+    setPage(0)
+  }
+
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<MedusaProduct[] | null>(null)
   const [searchLoading, setSearchLoading] = useState(false)
@@ -157,10 +150,6 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
   }, [fetchProducts])
 
   useEffect(() => {
-    setPage(0)
-  }, [filters])
-
-  useEffect(() => {
     if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current)
 
     if (!searchQuery.trim()) {
@@ -188,31 +177,34 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
   const sortedProducts = useMemo(() => sortProducts(products, sort), [products, sort])
 
   return (
-    <main className="min-h-screen bg-gray-950">
-      <HeroBanner />
+    <main className="min-h-screen">
+      {/* 1 — Dark hero */}
+      <ShopHeroBanner />
 
+      {/* 2 — Dark sticky filter bar */}
       <CategoryFilterBar
         categories={initialCategories}
         filters={filters}
-        onFiltersChange={setFilters}
+        onFiltersChange={handleFiltersChange}
       />
 
-      <div className="w-full bg-gray-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          {/* Search input */}
+      {/* 3 — Light product grid */}
+      <section id="programmes" className="w-full bg-white scroll-mt-48">
+        {/* Search + sort toolbar */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
             <input
               type="text"
               placeholder="Search programmes…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-gray-900 border border-white/10 text-white text-sm rounded-lg pl-9 pr-8 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200 placeholder-gray-500"
+              className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg pl-9 pr-8 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200 placeholder-gray-400"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors"
                 aria-label="Clear search"
               >
                 <X className="w-3.5 h-3.5" />
@@ -221,7 +213,7 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
           </div>
 
           <div className="flex items-center gap-3">
-            <p className="text-sm text-gray-400 whitespace-nowrap">
+            <p className="text-sm text-gray-500 whitespace-nowrap">
               {searchLoading
                 ? 'Searching…'
                 : searchResults !== null
@@ -234,7 +226,7 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortOption)}
-                className="bg-gray-900 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200"
+                className="bg-white border border-gray-200 text-gray-700 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200"
               >
                 <option value="featured">Featured</option>
                 <option value="price_asc">Price: Low to High</option>
@@ -243,11 +235,9 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
             )}
           </div>
         </div>
-      </div>
 
-      <section id="programmes" className="w-full bg-gray-950 pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
+        {/* Grid area */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
           {/* Search results mode */}
           {searchResults !== null && (
             <>
@@ -255,15 +245,10 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
                 <div role="status" aria-label="Searching"><ProductGridSkeleton /></div>
               )}
               {!searchLoading && searchResults.length === 0 && (
-                <div className="flex flex-col items-center gap-4 py-24 text-center">
-                  <p className="text-white/60 text-lg">No programmes match &ldquo;{searchQuery}&rdquo;.</p>
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="px-5 py-2.5 border border-white/20 hover:border-brand-accent text-white/70 hover:text-brand-accent rounded-lg text-sm transition-all duration-200"
-                  >
-                    Clear search
-                  </button>
-                </div>
+                <EmptyState
+                  message={`No programmes match "${searchQuery}".`}
+                  action={{ label: 'Clear search', onClick: () => setSearchQuery('') }}
+                />
               )}
               {!searchLoading && searchResults.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -278,20 +263,18 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
           {/* Normal browse mode */}
           {searchResults === null && (
             <>
-              {loading ? (
+              {loading && (
                 <div role="status" aria-label="Loading programmes">
                   <ProductGridSkeleton />
                 </div>
-              ) : null}
+              )}
 
               {!loading && error && (
                 <div className="flex flex-col items-center gap-6 py-24 text-center">
-                  <p className="text-white/60 text-lg">
-                    Unable to load programmes — please try again.
-                  </p>
+                  <p className="text-gray-500 text-lg">Unable to load programmes — please try again.</p>
                   <button
                     onClick={() => void fetchProducts()}
-                    className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium rounded-lg transition-colors duration-200"
+                    className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium rounded-button transition-colors duration-200"
                   >
                     Retry
                   </button>
@@ -299,15 +282,10 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
               )}
 
               {!loading && !error && sortedProducts.length === 0 && (
-                <div className="flex flex-col items-center gap-4 py-24 text-center">
-                  <p className="text-white/60 text-lg">No programmes match your selection.</p>
-                  <button
-                    onClick={() => setFilters({ categoryId: '', collectionHandle: '' })}
-                    className="px-5 py-2.5 border border-white/20 hover:border-brand-accent text-white/70 hover:text-brand-accent rounded-lg text-sm transition-all duration-200"
-                  >
-                    Clear filters
-                  </button>
-                </div>
+                <EmptyState
+                  message="No programmes match your selection."
+                  action={{ label: 'Clear filters', onClick: () => handleFiltersChange({ categoryId: '', collectionHandle: '' }) }}
+                />
               )}
 
               {!loading && !error && sortedProducts.length > 0 && (
@@ -319,142 +297,38 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
               )}
 
               {!loading && !error && totalPages > 1 && (
-                <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+                <ShopPagination page={page} totalPages={totalPages} onPageChange={setPage} />
               )}
             </>
           )}
         </div>
       </section>
+
+      {/* 4 — Dark final CTA */}
+      <ShopFinalCTA />
     </main>
   )
 }
 
-function HeroBanner() {
-  return (
-    <section className="w-full bg-brand-primary min-h-[60vh] flex items-center py-20 lg:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6 }}
-          className="max-w-3xl"
-        >
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
-          >
-            Transform Your Life
-          </motion.p>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl lg:text-6xl font-light text-white mb-6 leading-tight"
-          >
-            Invest in Your
-            <br />
-            <span className="text-brand-accent">Transformation</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg lg:text-xl text-white/70 leading-relaxed mb-10"
-          >
-            Private sessions, guided programmes, and group coaching designed to create lasting change.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-            <button
-              onClick={() =>
-                document.getElementById('programmes')?.scrollIntoView({ behavior: 'smooth' })
-              }
-              className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-lg transition-colors duration-200"
-            >
-              Explore All Programmes
-            </button>
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center px-8 py-4 border border-white/40 hover:border-white text-white font-semibold rounded-lg transition-colors duration-200"
-            >
-              Book a Discovery Call
-            </Link>
-          </motion.div>
-        </motion.div>
-      </div>
-    </section>
-  )
+interface EmptyStateProps {
+  message: string
+  action: { label: string; onClick: () => void }
 }
 
-interface PaginationProps {
-  page: number
-  totalPages: number
-  onPageChange: (page: number) => void
-}
-
-function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
-  const pages = Array.from({ length: totalPages }, (_, i) => i)
-
-  const visiblePages = pages.filter(
-    (p) => p === 0 || p === totalPages - 1 || Math.abs(p - page) <= 1
-  )
-
+function EmptyState({ message, action }: EmptyStateProps) {
   return (
-    <div className="flex items-center justify-center gap-2 mt-16">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="flex flex-col items-center gap-4 py-24 text-center"
+    >
+      <p className="text-gray-500 text-lg">{message}</p>
       <button
-        onClick={() => onPageChange(page - 1)}
-        disabled={page === 0}
-        className="p-2 rounded-lg border border-white/10 text-white/60 hover:text-white hover:border-white/30 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
-        aria-label="Previous page"
+        onClick={action.onClick}
+        className="px-5 py-2.5 border border-gray-200 hover:border-brand-accent text-gray-500 hover:text-brand-accent rounded-lg text-sm transition-all duration-200"
       >
-        <ChevronLeft className="w-5 h-5" />
+        {action.label}
       </button>
-
-      {visiblePages.map((p, i) => {
-        const prev = visiblePages[i - 1]
-        const showEllipsis = prev !== undefined && p - prev > 1
-
-        return (
-          <span key={p} className="flex items-center gap-2">
-            {showEllipsis && (
-              <span className="text-white/30 px-1 select-none">…</span>
-            )}
-            <button
-              onClick={() => onPageChange(p)}
-              className={`w-10 h-10 rounded-lg text-sm font-medium transition-all duration-200 ${
-                p === page
-                  ? 'bg-brand-accent-600 text-white'
-                  : 'border border-white/10 text-white/60 hover:text-white hover:border-white/30'
-              }`}
-            >
-              {p + 1}
-            </button>
-          </span>
-        )
-      })}
-
-      <button
-        onClick={() => onPageChange(page + 1)}
-        disabled={page === totalPages - 1}
-        className="p-2 rounded-lg border border-white/10 text-white/60 hover:text-white hover:border-white/30 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
-        aria-label="Next page"
-      >
-        <ChevronRight className="w-5 h-5" />
-      </button>
-    </div>
+    </motion.div>
   )
 }

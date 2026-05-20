@@ -1,5 +1,5 @@
 const SkeletonCard = () => (
-  <div className="bg-gray-900 rounded-2xl overflow-hidden animate-pulse">
+  <div className="bg-gray-900 rounded-card overflow-hidden animate-pulse">
     <div className="aspect-video bg-gray-800" />
     <div className="p-6 flex flex-col gap-3">
       <div className="h-3 w-24 bg-gray-800 rounded" />
