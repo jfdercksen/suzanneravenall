@@ -10,6 +10,8 @@ interface BlogListingContentProps {
   posts: BlogPost[]
 }
 
+const CAL_URL = process.env.NEXT_PUBLIC_CAL_URL ?? 'https://cal.suzanneravenall.com'
+
 function formatDate(dateString?: string): string {
   if (!dateString) return ''
   const date = new Date(dateString)
@@ -27,33 +29,120 @@ function getExcerpt(post: BlogPost): string {
 
 export function ComingSoonSection() {
   return (
-    <section className="py-20 lg:py-32 bg-brand-primary-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6 }}
-        >
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
-            Insights & Inspiration
-          </p>
-          <h1 className="text-4xl lg:text-6xl font-light text-white mb-6">
-            Our Blog is Launching Soon
-          </h1>
-          <p className="text-lg text-gray-300 max-w-xl mx-auto mb-10">
-            Insights on transformation, pattern mastery, and the science of lasting change —
-            subscribe to be the first to know when we go live.
-          </p>
-          <Link
-            href="/contact"
-            className="inline-block bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium px-8 py-4 rounded-button transition-all duration-300"
+    <>
+      {/* Hero */}
+      <section className="relative min-h-[60vh] flex items-center bg-brand-primary-900 overflow-hidden py-20 lg:py-32">
+        {/* Background image with lightened overlay so image is visible */}
+        <div className="absolute inset-0" aria-hidden="true">
+          <Image
+            src="/images/suzanne-casual.jpg"
+            alt=""
+            fill
+            className="object-cover object-top"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
+        </div>
+
+        {/* Ambient glow */}
+        <div
+          aria-hidden="true"
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-brand-accent/10 blur-[140px]"
+        />
+
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            Stay Updated
-          </Link>
-        </motion.div>
-      </div>
-    </section>
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+              Insights & Inspiration
+            </p>
+            <h1 className="text-4xl lg:text-6xl font-light text-white mb-6">
+              Our Blog is Launching Soon
+            </h1>
+            <p className="text-lg text-gray-300 max-w-xl mx-auto mb-10">
+              Insights on transformation, pattern mastery, and the science of lasting change —
+              subscribe to be the first to know when we go live.
+            </p>
+            <Link
+              href="/contact"
+              className="inline-block bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium px-8 py-4 rounded-button transition-all duration-300"
+            >
+              Stay Updated
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section
+        aria-labelledby="coming-soon-cta-heading"
+        className="relative w-full bg-white py-20 lg:py-32 overflow-hidden"
+      >
+        <div
+          aria-hidden="true"
+          className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-brand-accent/10 blur-[120px]"
+        />
+
+        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.p
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6 }}
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
+          >
+            YOUR NEXT STEP
+          </motion.p>
+
+          <motion.h2
+            id="coming-soon-cta-heading"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] mb-6"
+          >
+            Ready to Transform Your Life?
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-gray-600 text-lg font-light leading-relaxed mb-10"
+          >
+            Book a free discovery call with Dr. Suzanne Ravenall and find your path to lasting change.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <a
+              href={`${CAL_URL}/suzanneravenall/discovery-call`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center px-10 py-4 bg-brand-primary hover:bg-brand-primary-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_8px_30px_theme(colors.brand.primary/30%)]"
+            >
+              Book Discovery Call &rarr;
+            </a>
+            <Link
+              href="/programs"
+              className="inline-flex items-center justify-center px-10 py-4 border border-brand-primary/30 hover:border-brand-primary text-brand-primary font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300"
+            >
+              Explore Programmes &rarr;
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+    </>
   )
 }
 
@@ -65,10 +154,13 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
     [posts]
   )
 
-  const filtered =
-    activeTag === 'All'
-      ? posts
-      : posts.filter((p) => p.tags?.some((t) => t.tag === activeTag))
+  const filtered = useMemo(
+    () =>
+      activeTag === 'All'
+        ? posts
+        : posts.filter((p) => p.tags?.some((t) => t.tag === activeTag)),
+    [posts, activeTag]
+  )
 
   if (posts.length === 0) {
     return <ComingSoonSection />
@@ -77,28 +169,35 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
   return (
     <>
       {/* Hero */}
-      <section className="py-20 lg:py-32 bg-brand-primary-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
+      <motion.section
+        aria-labelledby="blog-hero-heading"
+        className="relative py-20 lg:py-32 bg-brand-primary-900 overflow-hidden"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        {/* Ambient glow */}
+        <div
+          aria-hidden="true"
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-brand-accent/10 blur-[140px]"
+        />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            Insights & Inspiration
+          </p>
+          <h1
+            id="blog-hero-heading"
+            className="text-4xl lg:text-6xl font-light text-white"
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
-              Insights & Inspiration
-            </p>
-            <h1 className="text-4xl lg:text-6xl font-light text-white">
-              The Blog
-            </h1>
-            <p className="mt-6 text-lg text-gray-300 max-w-2xl mx-auto">
-              Science-backed perspectives on transformation, pattern mastery, and the art of
-              becoming who you were always meant to be.
-            </p>
-          </motion.div>
+            The Blog
+          </h1>
+          <p className="mt-6 text-lg text-gray-300 max-w-2xl mx-auto">
+            Science-backed perspectives on transformation, pattern mastery, and the art of
+            becoming who you were always meant to be.
+          </p>
         </div>
-      </section>
+      </motion.section>
 
       {/* Tag filter bar */}
       {allTags.length > 0 && (
@@ -128,6 +227,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filtered.length === 0 ? (
             <motion.p
+              key={activeTag}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="text-center text-gray-500 text-lg py-16"
@@ -143,7 +243,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-100px' }}
                   transition={{ duration: 0.6, delay: (index % 3) * 0.1 }}
-                  className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
+                  className="group bg-white rounded-card overflow-hidden border border-gray-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
                 >
                   {/* Featured image */}
                   <Link href={`/blog/${post.slug}`} className="block relative aspect-[16/9] overflow-hidden">
@@ -180,9 +280,11 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
                       </h2>
                     </Link>
 
-                    <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3">
-                      {getExcerpt(post)}
-                    </p>
+                    {getExcerpt(post) && (
+                      <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3">
+                        {getExcerpt(post)}
+                      </p>
+                    )}
 
                     <div className="flex items-center justify-between">
                       {post.publishedAt && (
@@ -202,6 +304,73 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section
+        aria-labelledby="blog-cta-heading"
+        className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
+      >
+        <div
+          aria-hidden="true"
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-brand-accent/10 blur-[120px]"
+        />
+
+        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.p
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6 }}
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
+          >
+            YOUR NEXT STEP
+          </motion.p>
+
+          <motion.h2
+            id="blog-cta-heading"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-6"
+          >
+            Ready to Transform Your Life?
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-gray-300 text-lg font-light leading-relaxed mb-10"
+          >
+            Book a free discovery call with Dr. Suzanne Ravenall and find your path to lasting change.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <a
+              href={`${CAL_URL}/suzanneravenall/discovery-call`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center px-10 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_8px_30px_theme(colors.brand.accent/30%)]"
+            >
+              Book Discovery Call &rarr;
+            </a>
+            <Link
+              href="/programs"
+              className="inline-flex items-center justify-center px-10 py-4 border border-white/30 hover:border-white text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300"
+            >
+              Explore Programmes &rarr;
+            </Link>
+          </motion.div>
         </div>
       </section>
     </>
