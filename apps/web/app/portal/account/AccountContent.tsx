@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { createClient } from '@/utils/supabase/client'
@@ -17,7 +17,9 @@ interface AccountContentProps {
 
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return '—'
-  return new Date(dateStr).toLocaleDateString('en-ZA', {
+  const date = new Date(dateStr)
+  if (isNaN(date.getTime())) return '—'
+  return date.toLocaleDateString('en-ZA', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -47,29 +49,36 @@ export default function AccountContent({
   const [passwordSuccess, setPasswordSuccess] = useState(false)
   const [passwordError, setPasswordError] = useState<string | null>(null)
 
+  const profileSuccessTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const passwordSuccessTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   async function handleProfileSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setProfileSaving(true)
     setProfileError(null)
     setProfileSuccess(false)
+    if (profileSuccessTimer.current) clearTimeout(profileSuccessTimer.current)
 
     const supabase = createClient()
     const fullName = [firstName.trim(), lastName.trim()].filter(Boolean).join(' ')
 
-    const { error } = await supabase.auth.updateUser({
-      data: {
-        full_name: fullName,
-        phone: phone.trim() || null,
-      },
-    })
-
-    if (error) {
-      setProfileError(error.message)
-    } else {
-      setProfileSuccess(true)
-      setTimeout(() => setProfileSuccess(false), 3000)
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          // page.tsx reads from user.user_metadata — writes here are correct
+          full_name: fullName,
+          phone: phone.trim() || null,
+        },
+      })
+      if (error) {
+        setProfileError(error.message)
+      } else {
+        setProfileSuccess(true)
+        profileSuccessTimer.current = setTimeout(() => setProfileSuccess(false), 3000)
+      }
+    } finally {
+      setProfileSaving(false)
     }
-    setProfileSaving(false)
   }
 
   async function handlePasswordChange(e: React.FormEvent<HTMLFormElement>) {
@@ -87,29 +96,37 @@ export default function AccountContent({
     }
 
     setPasswordSaving(true)
-    const supabase = createClient()
-    const { error } = await supabase.auth.updateUser({ password: newPassword })
+    if (passwordSuccessTimer.current) clearTimeout(passwordSuccessTimer.current)
 
-    if (error) {
-      setPasswordError(error.message)
-    } else {
-      setPasswordSuccess(true)
-      setNewPassword('')
-      setConfirmPassword('')
-      setTimeout(() => setPasswordSuccess(false), 4000)
+    const supabase = createClient()
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword })
+      if (error) {
+        setPasswordError(error.message)
+      } else {
+        setPasswordSuccess(true)
+        setNewPassword('')
+        setConfirmPassword('')
+        passwordSuccessTimer.current = setTimeout(() => setPasswordSuccess(false), 4000)
+      }
+    } finally {
+      setPasswordSaving(false)
     }
-    setPasswordSaving(false)
   }
 
   return (
-    <main className="w-full bg-brand-primary min-h-screen py-16 lg:py-24">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="relative w-full bg-brand-primary min-h-screen py-16 lg:py-24 overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+      </div>
+
+      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-10"
         >
@@ -126,7 +143,7 @@ export default function AccountContent({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5, delay: 0.05 }}
-          className="mb-8 p-6 lg:p-8 bg-gray-900 rounded-2xl"
+          className="mb-8 p-6 lg:p-8 bg-gray-900 rounded-card"
           aria-labelledby="profile-heading"
         >
           <h2 id="profile-heading" className="text-lg font-semibold text-white mb-6">Profile</h2>
@@ -202,7 +219,7 @@ export default function AccountContent({
               <button
                 type="submit"
                 disabled={profileSaving}
-                className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-50 text-white font-semibold rounded-xl transition-colors duration-300"
+                className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-50 text-white font-semibold rounded-button transition-colors duration-300"
               >
                 {profileSaving ? 'Saving…' : 'Save Changes'}
               </button>
@@ -216,7 +233,7 @@ export default function AccountContent({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="mb-8 p-6 lg:p-8 bg-gray-900 rounded-2xl"
+          className="mb-8 p-6 lg:p-8 bg-gray-900 rounded-card"
           aria-labelledby="password-heading"
         >
           <h2 id="password-heading" className="text-lg font-semibold text-white mb-2">Change Password</h2>
@@ -250,6 +267,7 @@ export default function AccountContent({
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
+                minLength={8}
                 className="w-full px-4 py-3 bg-gray-800 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-brand-accent/60 transition-colors"
                 placeholder="Repeat new password"
               />
@@ -266,7 +284,7 @@ export default function AccountContent({
               <button
                 type="submit"
                 disabled={passwordSaving}
-                className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-50 text-white font-semibold rounded-xl transition-colors duration-300"
+                className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-50 text-white font-semibold rounded-button transition-colors duration-300"
               >
                 {passwordSaving ? 'Updating…' : 'Update Password'}
               </button>
@@ -280,7 +298,7 @@ export default function AccountContent({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="mb-8 p-6 lg:p-8 bg-gray-900 rounded-2xl"
+          className="mb-8 p-6 lg:p-8 bg-gray-900 rounded-card"
           aria-labelledby="membership-heading"
         >
           <h2 id="membership-heading" className="text-lg font-semibold text-white mb-6">Membership Details</h2>
@@ -299,12 +317,14 @@ export default function AccountContent({
             </div>
           </dl>
           <div className="mt-5">
+            {/* TODO: Build /portal/upgrade page */}
+            {/* Temporarily linking to shop membership collection */}
             <Link
-              href="/portal/upgrade"
+              href="/shop?collection=membership"
               className="inline-flex items-center gap-2 text-brand-accent text-sm font-medium hover:underline"
             >
               View upgrade options
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg aria-hidden="true" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
             </Link>
@@ -317,7 +337,7 @@ export default function AccountContent({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="p-6 lg:p-8 bg-gray-900 rounded-2xl border border-red-900/30"
+          className="p-6 lg:p-8 bg-gray-900 rounded-card border border-red-900/30"
           aria-labelledby="danger-heading"
         >
           <h2 id="danger-heading" className="text-lg font-semibold text-red-400 mb-2">Danger Zone</h2>
@@ -326,7 +346,8 @@ export default function AccountContent({
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 px-5 py-2.5 border border-red-900/50 hover:border-red-700/60 text-red-400 hover:text-red-300 text-sm font-semibold rounded-xl transition-colors duration-300"
+            aria-label="Contact us to cancel membership"
+            className="inline-flex items-center gap-2 px-5 py-2.5 border border-red-900/50 hover:border-red-700/60 text-red-400 hover:text-red-300 text-sm font-semibold rounded-button transition-colors duration-300"
           >
             Cancel Membership
           </Link>
