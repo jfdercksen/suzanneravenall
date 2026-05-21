@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import type { MedusaProduct } from '@/components/shop/ProductPageContent'
+import type { MedusaProduct } from '@/types/medusa'
 import ProductPageContent from '@/components/shop/ProductPageContent'
 
 // Force dynamic rendering — product pages depend on live Medusa data.
@@ -18,7 +18,6 @@ async function getProduct(handle: string): Promise<MedusaProduct | null> {
       `${MEDUSA_URL}/store/products?handle=${handle}&fields=id,handle,title,description,thumbnail,*variants,*variants.prices,*categories,*collection`,
       {
         headers: { 'x-publishable-api-key': MEDUSA_PUB_KEY },
-        next: { revalidate: 3600 },
       }
     )
     if (!res.ok) return null

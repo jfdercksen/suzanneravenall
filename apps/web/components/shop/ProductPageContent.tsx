@@ -7,23 +7,7 @@ import { FAQAccordion } from './FAQAccordion'
 import { motion } from 'framer-motion'
 import { Sparkles, Heart, Zap, Check } from 'lucide-react'
 import Link from 'next/link'
-
-export interface MedusaVariant {
-  id: string
-  title: string
-  prices: Array<{ currency_code: string; amount: number }>
-}
-
-export interface MedusaProduct {
-  id: string
-  handle: string
-  title: string
-  description: string | null
-  thumbnail: string | null
-  variants: MedusaVariant[]
-  categories: Array<{ id: string; handle: string; name: string }>
-  collection: { id: string; handle: string; title: string } | null
-}
+import type { MedusaProduct } from '@/types/medusa'
 
 const fadeUp = {
   initial: { opacity: 0, y: 50 },
@@ -131,7 +115,12 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       {/* 2 — Variant Selector / primary conversion zone (light) */}
       <section className="w-full bg-white py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div {...fadeUp} className="max-w-2xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-2xl mx-auto"
+          >
             <VariantSelector
               variants={product.variants}
               selectedVariantId={selectedVariantId}
@@ -163,7 +152,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-100px' }}
                   transition={{ duration: 0.6, delay: i * 0.1 }}
-                  className="group relative bg-gray-900 rounded-2xl p-8 border border-white/5 hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500"
+                  className="group relative bg-gray-900 rounded-card p-8 border border-white/5 hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500"
                 >
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-accent/10 text-brand-accent mb-6 group-hover:bg-brand-accent group-hover:text-white transition-all duration-300">
                     <Icon className="w-5 h-5" />
@@ -178,7 +167,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       </section>
 
       {/* 4 — Programme Details (light) */}
-      <section className="w-full bg-gray-50 py-20 lg:py-32">
+      <section className="w-full bg-white py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="mb-12">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
@@ -217,21 +206,23 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 </div>
               )}
 
-              <div>
-                <dt className="text-xs uppercase tracking-[0.2em] font-medium text-gray-400 mb-1">
-                  Duration
-                </dt>
-                {/* TODO: Add duration to product metadata in Medusa */}
-                <dd className="text-gray-900 font-medium">To be confirmed</dd>
-              </div>
+              {product.metadata?.duration && (
+                <div>
+                  <dt className="text-xs uppercase tracking-[0.2em] font-medium text-gray-400 mb-1">
+                    Duration
+                  </dt>
+                  <dd className="text-gray-900 font-medium">{String(product.metadata.duration)}</dd>
+                </div>
+              )}
 
-              <div>
-                <dt className="text-xs uppercase tracking-[0.2em] font-medium text-gray-400 mb-1">
-                  Who It&apos;s For
-                </dt>
-                {/* TODO: Add target audience to product metadata in Medusa */}
-                <dd className="text-gray-900 font-medium">To be confirmed</dd>
-              </div>
+              {product.metadata?.who_its_for && (
+                <div>
+                  <dt className="text-xs uppercase tracking-[0.2em] font-medium text-gray-400 mb-1">
+                    Who It&apos;s For
+                  </dt>
+                  <dd className="text-gray-900 font-medium">{String(product.metadata.who_its_for)}</dd>
+                </div>
+              )}
 
               <div>
                 <dt className="text-xs uppercase tracking-[0.2em] font-medium text-gray-400 mb-1">
@@ -273,8 +264,13 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       </section>
 
       {/* 5 — Testimonials (dark) */}
-      <section className="w-full bg-brand-primary py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden">
+        {/* Ambient glow */}
+        <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="text-center mb-16">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Client Stories
@@ -293,10 +289,10 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="bg-brand-primary-700 rounded-2xl p-8 border border-white/10"
+                className="bg-brand-primary-700 rounded-card p-8 border border-white/10"
               >
                 <p
-                  className="text-6xl font-serif leading-none text-brand-amber mb-4"
+                  className="text-6xl font-serif leading-none text-brand-accent mb-4"
                   aria-hidden="true"
                 >
                   &ldquo;
@@ -342,6 +338,9 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       <section className="w-full bg-brand-primary py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="text-center mb-16">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+              Your next step
+            </p>
             <h2 className="text-4xl lg:text-5xl font-light text-white mb-4">
               Ready to Transform?
             </h2>
@@ -370,7 +369,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-center mt-12"
+            className="text-center mt-12 space-y-3"
           >
             <p className="text-white/50 text-sm">
               Not sure which programme is right for you?{' '}
@@ -381,6 +380,14 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 Book a free discovery call
               </Link>{' '}
               with Dr. Ravenall.
+            </p>
+            <p>
+              <Link
+                href="/shop"
+                className="text-white/30 hover:text-white/60 text-sm transition-colors duration-200"
+              >
+                &larr; Back to all programmes
+              </Link>
             </p>
           </motion.div>
         </div>

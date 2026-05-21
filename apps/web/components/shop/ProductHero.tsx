@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import type { MedusaProduct } from './ProductPageContent'
+import type { MedusaProduct } from '@/types/medusa'
 
 interface ProductHeroProps {
   product: MedusaProduct
@@ -18,7 +18,7 @@ export function ProductHero({ product }: ProductHeroProps) {
   const transformationPromise = rawSentence ? `${rawSentence}.` : 'Transform how you experience life.'
 
   return (
-    <section className="relative w-full min-h-[70vh] flex items-end bg-brand-primary overflow-hidden">
+    <section className="relative w-full min-h-screen flex items-end bg-brand-primary overflow-hidden">
       {/* Background image */}
       {product.thumbnail && (
         <div className="absolute inset-0">
@@ -93,15 +93,13 @@ export function ProductHero({ product }: ProductHeroProps) {
           {transformationPromise}
         </motion.p>
 
-        {/* Social proof */}
-        {/* TODO: Replace with real client count from CRM/analytics */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="text-sm text-white/60 italic"
         >
-          Trusted by 2,000+ clients globally
+          Join thousands of clients worldwide
         </motion.p>
       </div>
 
