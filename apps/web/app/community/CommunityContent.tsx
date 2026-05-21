@@ -6,6 +6,38 @@ import { motion } from 'framer-motion'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 
+const FEATURES = [
+  {
+    title: 'Member Discussions',
+    description: 'Ask questions, share wins, and get support from fellow members who are on the same path.',
+    icon: (
+      <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.122v10a2.25 2.25 0 01-2.25 2.25H6.75a2.25 2.25 0 01-2.25-2.25v-10c0-.994.616-1.838 1.5-2.122M12 3a3 3 0 110 6 3 3 0 010-6zm0 0v3m0 0H9m3 0h3" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21v-6.75a2.25 2.25 0 012.25-2.25h4.5a2.25 2.25 0 012.25 2.25V21" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Breakthrough Sharing',
+    description: 'Celebrate your breakthroughs in a safe, supportive environment with people who understand your journey.',
+    icon: (
+      <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Tier-Based Access',
+    description: 'Your membership tier determines your access — practitioners get dedicated spaces, Gold members get priority.',
+    icon: (
+      <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+      </svg>
+    ),
+  },
+]
+
 const EXPLORE_LINKS = [
   {
     label: 'Programmes',
@@ -250,35 +282,3 @@ export default function CommunityContent() {
     </main>
   )
 }
-
-const FEATURES = [
-  {
-    title: 'Member Discussions',
-    description: 'Ask questions, share wins, and get support from fellow members who are on the same path.',
-    icon: (
-      <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.122v10a2.25 2.25 0 01-2.25 2.25H6.75a2.25 2.25 0 01-2.25-2.25v-10c0-.994.616-1.838 1.5-2.122M12 3a3 3 0 110 6 3 3 0 010-6zm0 0v3m0 0H9m3 0h3" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21v-6.75a2.25 2.25 0 012.25-2.25h4.5a2.25 2.25 0 012.25 2.25V21" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Breakthrough Sharing',
-    description: 'Celebrate your breakthroughs in a safe, supportive environment with people who understand your journey.',
-    icon: (
-      <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Tier-Based Access',
-    description: 'Your membership tier determines your access — practitioners get dedicated spaces, Gold members get priority.',
-    icon: (
-      <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-      </svg>
-    ),
-  },
-]

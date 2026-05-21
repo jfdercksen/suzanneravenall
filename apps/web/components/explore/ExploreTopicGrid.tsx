@@ -5,12 +5,6 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { topics } from '@/app/explore/topics'
 
-const sectionVariants = {
-  initial: { opacity: 0, y: 50 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-100px' },
-  transition: { duration: 0.6, ease: 'easeOut' as const },
-}
 
 export default function ExploreTopicGrid() {
   return (
@@ -19,7 +13,13 @@ export default function ExploreTopicGrid() {
       className="w-full bg-gray-50 py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div {...sectionVariants} className="max-w-3xl mb-16 lg:mb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="max-w-3xl mb-16 lg:mb-20"
+        >
           <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
             Eight Patterns. One System.
           </p>

@@ -118,7 +118,6 @@ export default function ResourcesCategories() {
               <Link
                 href={href}
                 className="group relative flex flex-col bg-gray-50 rounded-card p-8 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 h-full"
-                aria-label={`${title} — ${label}`}
               >
                 {badge && (
                   <span className="absolute top-6 right-6 text-xs font-medium uppercase tracking-wider bg-brand-accent/20 text-brand-accent rounded-full px-3 py-1">

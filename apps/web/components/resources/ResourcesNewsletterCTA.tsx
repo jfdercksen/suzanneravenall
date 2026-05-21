@@ -98,7 +98,9 @@ export default function ResourcesNewsletterCTA() {
               onSubmit={handleSubmit}
               className="flex flex-col sm:flex-row gap-3"
             >
+              <label htmlFor="newsletter-first-name" className="sr-only">First name</label>
               <input
+                id="newsletter-first-name"
                 type="text"
                 placeholder="First name"
                 value={firstName}
@@ -107,7 +109,9 @@ export default function ResourcesNewsletterCTA() {
                 disabled={state === 'submitting'}
                 className="flex-1 min-w-0 bg-gray-100 border border-gray-200 rounded-xl px-5 py-4 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand-accent transition-all duration-300 disabled:opacity-60"
               />
+              <label htmlFor="newsletter-email" className="sr-only">Email address</label>
               <input
+                id="newsletter-email"
                 type="email"
                 placeholder="Email address"
                 value={email}

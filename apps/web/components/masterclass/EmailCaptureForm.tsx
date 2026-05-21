@@ -61,7 +61,9 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
   return (
     <form onSubmit={handleSubmit} noValidate>
       <div className="flex flex-col sm:flex-row gap-3">
+        <label htmlFor="masterclass-first-name" className="sr-only">First name</label>
         <input
+          id="masterclass-first-name"
           type="text"
           placeholder="First name"
           value={firstName}
@@ -69,7 +71,9 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
           required
           className={inputClass}
         />
+        <label htmlFor="masterclass-email" className="sr-only">Email address</label>
         <input
+          id="masterclass-email"
           type="email"
           placeholder="Email address"
           value={email}

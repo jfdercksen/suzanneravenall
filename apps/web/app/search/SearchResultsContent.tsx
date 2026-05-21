@@ -59,10 +59,6 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
     void fetchResults()
   }, [fetchResults])
 
-  useEffect(() => {
-    setResults([])
-  }, [activeTab])
-
   return (
     <main className="relative min-h-screen bg-gray-950 py-16 overflow-hidden">
       {/* Glow blob */}
@@ -160,8 +156,7 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
         {!loading && results.length > 0 && (
           <motion.ul
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            animate="visible"
             variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07 } } }}
             className="space-y-3"
           >
