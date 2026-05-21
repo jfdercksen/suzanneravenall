@@ -40,8 +40,14 @@ const cardVariants = {
 
 export default function ResourcesFeaturedAwards() {
   return (
-    <section aria-labelledby="featured-awards-heading" className="w-full bg-gray-50 py-20 lg:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section
+      aria-labelledby="featured-awards-heading"
+      className="relative w-full bg-gray-950 py-20 lg:py-32 overflow-hidden"
+    >
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+      </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -59,7 +65,7 @@ export default function ResourcesFeaturedAwards() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-light text-gray-900"
+            className="text-4xl lg:text-5xl font-light text-white"
           >
             Awards &amp; Honours
           </motion.h2>
@@ -90,22 +96,22 @@ export default function ResourcesFeaturedAwards() {
             <motion.div
               key={award.name}
               variants={cardVariants}
-              className="bg-white rounded-2xl p-8 hover:shadow-lg transition-all duration-300 group"
+              className="bg-gray-900 rounded-card p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group"
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-accent/10 text-brand-accent group-hover:bg-brand-accent/20 transition-colors duration-300">
+                <div className="flex items-center justify-center w-12 h-12 rounded-card bg-brand-accent/10 text-brand-accent group-hover:bg-brand-accent/20 transition-colors duration-300">
                   <Award size={22} />
                 </div>
                 <span className="text-3xl font-light text-brand-accent">{award.year}</span>
               </div>
 
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-snug">
+              <h3 className="text-lg font-semibold text-white mb-2 leading-snug">
                 {award.name}
               </h3>
 
               <p className="text-sm font-medium text-brand-accent mb-4">{award.organisation}</p>
 
-              <p className="text-sm text-gray-600 font-light leading-relaxed">{award.description}</p>
+              <p className="text-sm text-white/60 font-light leading-relaxed">{award.description}</p>
             </motion.div>
           ))}
         </motion.div>

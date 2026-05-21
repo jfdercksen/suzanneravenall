@@ -16,16 +16,16 @@ export default function ExploreTopicGrid() {
   return (
     <section
       aria-labelledby="explore-topic-grid-heading"
-      className="w-full bg-gray-50 py-20 md:py-32"
+      className="w-full bg-gray-50 py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div {...sectionVariants} className="max-w-3xl mb-16 md:mb-20">
+        <motion.div {...sectionVariants} className="max-w-3xl mb-16 lg:mb-20">
           <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
             Eight Patterns. One System.
           </p>
           <h2
             id="explore-topic-grid-heading"
-            className="text-4xl md:text-6xl font-light text-brand-primary leading-tight"
+            className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight"
           >
             Choose the area you’re ready to{' '}
             <span className="text-brand-accent">repattern</span>
@@ -68,7 +68,7 @@ export default function ExploreTopicGrid() {
                   <span className="text-2xs uppercase tracking-[0.3em] font-medium text-brand-accent/80">
                     {String(index + 1).padStart(2, '0')}
                   </span>
-                  <h3 className="mt-6 text-xl md:text-2xl font-light text-white leading-tight transition-colors duration-300 group-hover:text-brand-accent">
+                  <h3 className="mt-6 text-xl lg:text-2xl font-light text-white leading-tight transition-colors duration-300 group-hover:text-brand-accent">
                     {topic.title}
                   </h3>
                   <p className="mt-4 text-sm text-white/65 font-light leading-relaxed">

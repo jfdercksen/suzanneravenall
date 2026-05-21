@@ -83,7 +83,7 @@ const cardVariants = {
 
 export default function ResourcesCategories() {
   return (
-    <section aria-labelledby="categories-heading" className="w-full bg-gray-950 py-20 lg:py-32">
+    <section aria-labelledby="categories-heading" className="w-full bg-white py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           initial={{ opacity: 0, y: 50 }}
@@ -101,7 +101,7 @@ export default function ResourcesCategories() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl lg:text-5xl font-light text-white mb-12"
+          className="text-4xl lg:text-5xl font-light text-gray-900 mb-12"
         >
           Everything in one place
         </motion.h2>
@@ -117,7 +117,7 @@ export default function ResourcesCategories() {
             <motion.div key={label} variants={cardVariants}>
               <Link
                 href={href}
-                className="group relative flex flex-col bg-gray-900 rounded-2xl p-8 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 h-full"
+                className="group relative flex flex-col bg-gray-50 rounded-card p-8 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 h-full"
                 aria-label={`${title} — ${label}`}
               >
                 {badge && (
@@ -126,7 +126,7 @@ export default function ResourcesCategories() {
                   </span>
                 )}
 
-                <div className="mb-5 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-accent/10 text-brand-accent group-hover:bg-brand-accent/20 transition-colors duration-300">
+                <div className="mb-5 inline-flex items-center justify-center w-12 h-12 rounded-card bg-brand-accent/10 text-brand-accent group-hover:bg-brand-accent/20 transition-colors duration-300">
                   <Icon size={22} />
                 </div>
 
@@ -134,9 +134,9 @@ export default function ResourcesCategories() {
                   {label}
                 </p>
 
-                <h3 className="text-xl font-semibold text-white mb-3 leading-snug">{title}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3 leading-snug">{title}</h3>
 
-                <p className="text-sm text-gray-400 font-light leading-relaxed flex-1">
+                <p className="text-sm text-gray-500 font-light leading-relaxed flex-1">
                   {description}
                 </p>
 

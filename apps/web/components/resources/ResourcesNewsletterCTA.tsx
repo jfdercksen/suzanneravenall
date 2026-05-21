@@ -3,21 +3,44 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
+type FormState = 'idle' | 'submitting' | 'success' | 'error'
+
 export default function ResourcesNewsletterCTA() {
   const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
+  const [state, setState] = useState<FormState>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    // TODO Phase 4: Wire to Vibe Marketing
-    setSubmitted(true)
+    setState('submitting')
+    setErrorMessage('')
+
+    try {
+      const res = await fetch('/api/lead-magnet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firstName, email, source: 'newsletter' }),
+      })
+
+      if (!res.ok) {
+        const data = (await res.json()) as { error?: string }
+        setErrorMessage(data.error ?? 'Something went wrong. Please try again.')
+        setState('error')
+        return
+      }
+
+      setState('success')
+    } catch {
+      setErrorMessage('Unable to submit. Please check your connection and try again.')
+      setState('error')
+    }
   }
 
   return (
     <section
       aria-labelledby="newsletter-cta-heading"
-      className="w-full bg-brand-primary py-20 lg:py-32"
+      className="w-full bg-white py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center">
@@ -37,7 +60,7 @@ export default function ResourcesNewsletterCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-light text-white mb-6"
+            className="text-4xl lg:text-5xl font-light text-gray-900 mb-6"
           >
             Stay Connected
           </motion.h2>
@@ -47,22 +70,22 @@ export default function ResourcesNewsletterCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-white/70 font-light leading-relaxed mb-10"
+            className="text-gray-600 font-light leading-relaxed mb-10"
           >
             Each month, Dr. Suzanne Ravenall shares insights on consciousness, healing, inner
             regulation and transformation — the kind of wisdom that changes how you see yourself
             and your world.
           </motion.p>
 
-          {submitted ? (
+          {state === 'success' ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
-              className="bg-white/10 rounded-2xl p-8 text-white"
+              className="bg-brand-accent/10 border border-brand-accent/30 rounded-card p-8"
             >
-              <p className="text-lg font-semibold mb-2">You&apos;re on the list.</p>
-              <p className="text-white/70 font-light text-sm">
+              <p className="text-lg font-semibold text-gray-900 mb-2">You&apos;re on the list.</p>
+              <p className="text-gray-600 font-light text-sm">
                 Watch your inbox for the next issue.
               </p>
             </motion.div>
@@ -81,7 +104,8 @@ export default function ResourcesNewsletterCTA() {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 required
-                className="flex-1 min-w-0 bg-white/10 border border-white/20 rounded-xl px-5 py-4 text-white placeholder-white/40 text-sm focus:outline-none focus:border-brand-accent focus:bg-white/15 transition-all duration-300"
+                disabled={state === 'submitting'}
+                className="flex-1 min-w-0 bg-gray-100 border border-gray-200 rounded-xl px-5 py-4 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand-accent transition-all duration-300 disabled:opacity-60"
               />
               <input
                 type="email"
@@ -89,15 +113,21 @@ export default function ResourcesNewsletterCTA() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="flex-1 min-w-0 bg-white/10 border border-white/20 rounded-xl px-5 py-4 text-white placeholder-white/40 text-sm focus:outline-none focus:border-brand-accent focus:bg-white/15 transition-all duration-300"
+                disabled={state === 'submitting'}
+                className="flex-1 min-w-0 bg-gray-100 border border-gray-200 rounded-xl px-5 py-4 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand-accent transition-all duration-300 disabled:opacity-60"
               />
               <button
                 type="submit"
-                className="whitespace-nowrap bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm px-8 py-4 rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                disabled={state === 'submitting'}
+                className="whitespace-nowrap bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 text-white font-semibold text-sm px-8 py-4 rounded-button transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               >
-                Subscribe
+                {state === 'submitting' ? 'Subscribing…' : 'Subscribe'}
               </button>
             </motion.form>
+          )}
+
+          {state === 'error' && errorMessage && (
+            <p className="mt-3 text-red-500 text-sm">{errorMessage}</p>
           )}
 
           <motion.p
@@ -105,7 +135,7 @@ export default function ResourcesNewsletterCTA() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-4 text-xs text-white/40 font-light"
+            className="mt-4 text-xs text-gray-400 font-light"
           >
             No spam. Unsubscribe at any time.
           </motion.p>
