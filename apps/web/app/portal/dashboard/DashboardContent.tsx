@@ -60,14 +60,18 @@ export default function DashboardContent({
   const canAccessAssessments = hasAccess(tierSlug, 'resources_assessments')
 
   return (
-    <main className="w-full bg-brand-primary min-h-screen py-16 lg:py-24">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="relative w-full bg-brand-primary min-h-screen py-16 lg:py-24 overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+      </div>
+
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-10"
         >
@@ -95,11 +99,11 @@ export default function DashboardContent({
           transition={{ duration: 0.5, delay: 0.05 }}
           className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-10"
         >
-          <div className="p-5 bg-gray-900 rounded-xl">
+          <div className="p-5 bg-gray-900 rounded-card">
             <p className="text-xs uppercase tracking-widest text-white/40 mb-1">Member since</p>
             <p className="text-white font-semibold">{formatMemberSince(memberSince)}</p>
           </div>
-          <div className="p-5 bg-gray-900 rounded-xl">
+          <div className="p-5 bg-gray-900 rounded-card">
             <p className="text-xs uppercase tracking-widest text-white/40 mb-1">Programmes</p>
             <p className="text-white font-semibold">
               {programmes.length > 0 ? (
@@ -109,7 +113,7 @@ export default function DashboardContent({
               )}
             </p>
           </div>
-          <div className="p-5 bg-gray-900 rounded-xl col-span-2 lg:col-span-1">
+          <div className="p-5 bg-gray-900 rounded-card col-span-2 lg:col-span-1">
             <p className="text-xs uppercase tracking-widest text-white/40 mb-1">Membership tier</p>
             <p className={`font-semibold ${tierSlug === 'gold' ? 'text-yellow-300' : tierSlug === 'practitioner' ? 'text-brand-accent' : 'text-white'}`}>
               {tierName}
@@ -130,9 +134,11 @@ export default function DashboardContent({
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
               {canAccessAssessments && (
+                // TODO: Build portal resources tab filter for assessments
+                // Currently links to portal resources root
                 <Link
-                  href="/resources/assessments"
-                  className="group flex items-start gap-4 p-5 bg-gray-900 hover:bg-gray-800 rounded-xl transition-all duration-300"
+                  href="/portal/resources"
+                  className="group flex items-start gap-4 p-5 bg-gray-900 hover:bg-gray-800 rounded-card transition-all duration-300"
                 >
                   <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-300">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -152,7 +158,7 @@ export default function DashboardContent({
               {canAccessVideos && (
                 <Link
                   href="/portal/videos"
-                  className="group flex items-start gap-4 p-5 bg-gray-900 hover:bg-gray-800 rounded-xl transition-all duration-300"
+                  className="group flex items-start gap-4 p-5 bg-gray-900 hover:bg-gray-800 rounded-card transition-all duration-300"
                 >
                   <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-accent/20 flex items-center justify-center text-brand-accent">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -171,7 +177,7 @@ export default function DashboardContent({
 
               <Link
                 href="/portal/resources"
-                className="group flex items-start gap-4 p-5 bg-gray-900 hover:bg-gray-800 rounded-xl transition-all duration-300"
+                className="group flex items-start gap-4 p-5 bg-gray-900 hover:bg-gray-800 rounded-card transition-all duration-300"
               >
                 <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center text-green-300">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -212,7 +218,7 @@ export default function DashboardContent({
                 <Link
                   key={programme.id}
                   href="/portal/programmes"
-                  className="group flex items-center gap-4 p-4 bg-gray-900 hover:bg-gray-800 rounded-xl transition-all duration-300"
+                  className="group flex items-center gap-4 p-4 bg-gray-900 hover:bg-gray-800 rounded-card transition-all duration-300"
                 >
                   <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-brand-accent/10 flex items-center justify-center text-brand-accent">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -227,14 +233,14 @@ export default function DashboardContent({
               ))}
             </div>
           ) : (
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-6 bg-gray-900 rounded-xl">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-6 bg-gray-900 rounded-card">
               <div className="flex-1">
                 <p className="text-white font-semibold mb-1">No programmes yet</p>
                 <p className="text-white/50 text-sm">Browse Suzanne&apos;s coaching programmes and start your transformation.</p>
               </div>
               <Link
                 href="/shop"
-                className="flex-shrink-0 inline-flex items-center px-5 py-2.5 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-xl transition-colors duration-300"
+                className="flex-shrink-0 inline-flex items-center px-5 py-2.5 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-button transition-colors duration-300"
               >
                 Browse Shop
               </Link>
@@ -251,7 +257,7 @@ export default function DashboardContent({
           className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10"
         >
           {/* Upcoming sessions widget */}
-          <div className="p-6 bg-gray-900 rounded-xl">
+          <div className="p-6 bg-gray-900 rounded-card">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-lg bg-brand-accent/10 flex items-center justify-center text-brand-accent">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -276,7 +282,7 @@ export default function DashboardContent({
           </div>
 
           {/* Community CTA */}
-          <div className="relative overflow-hidden p-6 bg-gray-900 rounded-xl">
+          <div className="relative overflow-hidden p-6 bg-gray-900 rounded-card">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-300">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -306,7 +312,7 @@ export default function DashboardContent({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6, delay: 0.25 }}
-          className="mb-10 p-6 bg-gray-900/50 border border-white/5 rounded-xl"
+          className="mb-10 p-6 bg-gray-900/50 border border-white/5 rounded-card"
         >
           <div className="flex items-center gap-3 mb-2">
             <h3 className="text-white font-semibold">Continue Learning</h3>
@@ -325,7 +331,7 @@ export default function DashboardContent({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="relative overflow-hidden rounded-2xl bg-gray-900 p-8 lg:p-10"
+            className="relative overflow-hidden rounded-card bg-gray-900 p-8 lg:p-10"
           >
             <Image
               src="/images/hero-bg.jpg"
@@ -348,17 +354,19 @@ export default function DashboardContent({
                 </p>
               </div>
               <div className="flex-shrink-0 flex flex-col sm:flex-row gap-3">
-                <Link
-                  href="/portal/upgrade"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-xl transition-colors duration-300"
-                >
-                  View Upgrade Options
-                </Link>
+                {/* TODO: Build /portal/upgrade page (dedicated tier comparison + upgrade flow) */}
+                {/* Temporarily linking to shop membership collection */}
                 <Link
                   href="/shop?collection=membership"
-                  className="inline-flex items-center justify-center px-8 py-4 border border-white/20 hover:border-white/40 text-white font-semibold rounded-xl transition-colors duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-colors duration-300"
                 >
-                  Membership Plans
+                  View Membership Plans
+                </Link>
+                <Link
+                  href="/shop"
+                  className="inline-flex items-center justify-center px-8 py-4 border border-white/20 hover:border-white/40 text-white font-semibold rounded-button transition-colors duration-300"
+                >
+                  Browse All Programmes
                 </Link>
               </div>
             </div>
