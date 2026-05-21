@@ -84,9 +84,12 @@ const sectionFadeUp = {
 export default function MasterclassContent() {
   return (
     <>
-      {/* ── Section 1: Hero ─────────────────────────────────────────────── */}
-      <section className="w-full bg-brand-primary min-h-screen flex items-center py-24 md:py-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      {/* ── Section 1: Hero (dark) ───────────────────────────────────────── */}
+      <section className="relative w-full bg-brand-primary min-h-screen flex items-center py-24 lg:py-40 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-2xl">
             <motion.p
               initial={{ opacity: 0, y: 50 }}
@@ -101,7 +104,7 @@ export default function MasterclassContent() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-4xl md:text-6xl font-light text-white leading-tight mb-6"
+              className="text-4xl lg:text-6xl font-light text-white leading-tight mb-6"
             >
               Unlock Your Most Extraordinary Self and Become an{' '}
               <span className="text-brand-accent">Unstoppable Force</span>
@@ -128,19 +131,19 @@ export default function MasterclassContent() {
         </div>
       </section>
 
-      {/* ── Section 2: What You'll Discover ─────────────────────────────── */}
-      <section className="w-full bg-gray-950 py-20 md:py-32">
+      {/* ── Section 2: What You'll Discover (light) ─────────────────────── */}
+      <section className="w-full bg-white py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="mb-16 text-center">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               What You&rsquo;ll Learn
             </p>
-            <h2 className="text-3xl md:text-5xl font-light text-white">
+            <h2 className="text-3xl lg:text-5xl font-light text-gray-900">
               Inside This Free Masterclass
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             {outcomes.map((item, i) => (
               <motion.div
                 key={item.number}
@@ -148,7 +151,7 @@ export default function MasterclassContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="relative p-8 rounded-2xl bg-gray-900 group hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
+                className="relative p-8 rounded-card bg-gray-50 group hover:shadow-lg hover:-translate-y-1 transition-all duration-500"
               >
                 <span
                   aria-hidden="true"
@@ -156,29 +159,32 @@ export default function MasterclassContent() {
                 >
                   {item.number}
                 </span>
-                <h3 className="text-white text-xl font-semibold mb-3 pr-16">
+                <h3 className="text-gray-900 text-xl font-semibold mb-3 pr-16">
                   {item.headline}
                 </h3>
-                <p className="text-gray-400 leading-relaxed">{item.description}</p>
+                <p className="text-gray-600 leading-relaxed">{item.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Section 3: Who This Is For ───────────────────────────────────── */}
-      <section className="w-full bg-white py-20 md:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ── Section 3: Who This Is For (dark) ───────────────────────────── */}
+      <section className="relative w-full bg-gray-950 py-20 lg:py-32 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="mb-16 text-center">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Is This for You?
             </p>
-            <h2 className="text-3xl md:text-5xl font-light text-gray-900">
+            <h2 className="text-3xl lg:text-5xl font-light text-white">
               This Masterclass Is Perfect If&hellip;
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {audience.map(({ icon: Icon, title, description }, i) => (
               <motion.div
                 key={title}
@@ -186,27 +192,27 @@ export default function MasterclassContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="bg-gray-50 rounded-2xl p-8 hover:shadow-card-hover hover:-translate-y-1 transition-all duration-500"
+                className="bg-gray-900 rounded-card p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
               >
-                <div className="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center mb-6">
+                <div className="w-12 h-12 rounded-card bg-brand-accent/10 flex items-center justify-center mb-6">
                   <Icon className="w-6 h-6 text-brand-accent" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-gray-900 text-xl font-semibold mb-3">{title}</h3>
-                <p className="text-gray-600 leading-relaxed">{description}</p>
+                <h3 className="text-white text-xl font-semibold mb-3">{title}</h3>
+                <p className="text-white/60 leading-relaxed">{description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Section 4: About Suzanne ─────────────────────────────────────── */}
-      <section className="w-full bg-gray-50 py-20 md:py-32">
+      {/* ── Section 4: About Suzanne (light) ────────────────────────────── */}
+      <section className="w-full bg-gray-50 py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="max-w-3xl">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Your Host
             </p>
-            <h2 className="text-3xl md:text-5xl font-light text-gray-900 mb-8">
+            <h2 className="text-3xl lg:text-5xl font-light text-gray-900 mb-8">
               Dr. Suzanne Ravenall
             </h2>
             <p className="text-gray-700 text-lg leading-relaxed mb-4">
@@ -235,19 +241,22 @@ export default function MasterclassContent() {
         </div>
       </section>
 
-      {/* ── Section 5: Social Proof ──────────────────────────────────────── */}
-      <section className="w-full bg-gray-950 py-20 md:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ── Section 5: Social Proof (dark) ──────────────────────────────── */}
+      <section className="relative w-full bg-gray-950 py-20 lg:py-32 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="mb-16 text-center">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               What People Say
             </p>
-            <h2 className="text-3xl md:text-5xl font-light text-white">
+            <h2 className="text-3xl lg:text-5xl font-light text-white">
               Real Results, Real People
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {testimonials.map(({ quote, name, location }, i) => (
               <motion.figure
                 key={name + location}
@@ -255,7 +264,7 @@ export default function MasterclassContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="bg-gray-900 rounded-2xl p-8"
+                className="bg-gray-900 rounded-card p-8"
               >
                 <blockquote className="italic text-gray-300 leading-relaxed mb-6">
                   &ldquo;{quote}&rdquo;
@@ -270,22 +279,21 @@ export default function MasterclassContent() {
         </div>
       </section>
 
-      {/* ── Section 6: Second CTA ────────────────────────────────────────── */}
-      <section className="w-full bg-brand-primary py-20 md:py-32">
+      {/* ── Section 6: Second CTA (light) ───────────────────────────────── */}
+      <section className="w-full bg-white py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="max-w-2xl mx-auto text-center">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Ready to Begin?
             </p>
-            <h2 className="text-3xl md:text-5xl font-light text-white mb-4">
+            <h2 className="text-3xl lg:text-5xl font-light text-gray-900 mb-4">
               Your Transformation Starts Here
             </h2>
-            <p className="text-gray-300 text-lg mb-10">
-              Join thousands of people who have already taken the first step.{' '}
-              {/* [CONFIRM] actual number */}
+            <p className="text-gray-600 text-lg mb-10">
+              Join thousands of people who have already taken the first step.
             </p>
-            <EmailCaptureForm />
-            <p className="mt-4 text-gray-500 text-xs">
+            <EmailCaptureForm variant="light" />
+            <p className="mt-4 text-gray-400 text-xs">
               Free. Takes 2 minutes. You can unsubscribe anytime.
             </p>
           </motion.div>

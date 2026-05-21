@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Search } from 'lucide-react'
+import { motion } from 'framer-motion'
 import type { SearchResultItem, SearchIndex } from '@/lib/search/types'
 
 type TabFilter = 'all' | SearchIndex
@@ -58,16 +59,22 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
     void fetchResults()
   }, [fetchResults])
 
-  useEffect(() => {
-    setResults([])
-  }, [activeTab])
-
   return (
-    <div className="min-h-screen bg-gray-950 py-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="relative min-h-screen bg-gray-950 py-16 overflow-hidden">
+      {/* Glow blob */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
-        <div className="mb-10">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-10"
+        >
           <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
             Search Results
           </p>
@@ -83,10 +90,15 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
               {results.length} result{results.length !== 1 ? 's' : ''} found
             </p>
           )}
-        </div>
+        </motion.div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-8 border-b border-white/10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="flex gap-1 mb-8 border-b border-white/10"
+        >
           {TABS.map((tab) => (
             <button
               key={tab.id}
@@ -100,13 +112,13 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
               {tab.label}
             </button>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Results */}
+        {/* Loading skeleton */}
         {loading && (
           <div className="space-y-3">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="flex gap-4 p-4 rounded-lg bg-gray-900 animate-pulse">
+              <div key={i} className="flex gap-4 p-4 rounded-card bg-gray-900 animate-pulse">
                 <div className="w-16 h-16 rounded bg-gray-800 flex-shrink-0" />
                 <div className="flex-1 space-y-2">
                   <div className="h-4 bg-gray-800 rounded w-3/4" />
@@ -117,16 +129,18 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
           </div>
         )}
 
+        {/* Empty — no query */}
         {!loading && !initialQuery && (
           <div className="text-center py-20">
-            <Search className="w-12 h-12 text-gray-700 mx-auto mb-4" />
+            <Search aria-hidden="true" className="w-12 h-12 text-gray-700 mx-auto mb-4" />
             <p className="text-gray-400">Enter a search term to find programmes and topics.</p>
           </div>
         )}
 
+        {/* Empty — no results */}
         {!loading && initialQuery && results.length === 0 && (
           <div className="text-center py-20">
-            <Search className="w-12 h-12 text-gray-700 mx-auto mb-4" />
+            <Search aria-hidden="true" className="w-12 h-12 text-gray-700 mx-auto mb-4" />
             <p className="text-gray-300 text-lg mb-2">No results found</p>
             <p className="text-gray-500 text-sm">
               Try different keywords, or{' '}
@@ -138,13 +152,25 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
           </div>
         )}
 
+        {/* Results list */}
         {!loading && results.length > 0 && (
-          <ul className="space-y-3">
+          <motion.ul
+            initial="hidden"
+            animate="visible"
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07 } } }}
+            className="space-y-3"
+          >
             {results.map((item) => (
-              <li key={`${item.type}-${item.id}`}>
+              <motion.li
+                key={`${item.type}-${item.id}`}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+                }}
+              >
                 <Link
                   href={item.url}
-                  className="flex items-start gap-4 p-4 rounded-lg bg-gray-900 hover:bg-gray-800 transition-colors duration-200 group"
+                  className="flex items-start gap-4 p-4 rounded-card bg-gray-900 hover:bg-gray-800 transition-colors duration-200 group"
                 >
                   {/* Thumbnail */}
                   <div className="w-16 h-16 flex-shrink-0 rounded bg-gray-800 overflow-hidden">
@@ -158,7 +184,7 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <Search className="w-5 h-5 text-gray-600" />
+                        <Search aria-hidden="true" className="w-5 h-5 text-gray-600" />
                       </div>
                     )}
                   </div>
@@ -191,11 +217,11 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
                     </div>
                   </div>
                 </Link>
-              </li>
+              </motion.li>
             ))}
-          </ul>
+          </motion.ul>
         )}
       </div>
-    </div>
+    </main>
   )
 }
