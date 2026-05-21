@@ -15,10 +15,15 @@ export default async function PortalLayout({ children }: { children: React.React
     // Auth pages (login, signup, forgot-password, reset-password) should be
     // full-screen cinematic dark — no public site header or footer visible.
     // The fixed overlay (z-[100] > header z-50) covers the marketing nav cleanly.
+    // The <style> tag prevents body scroll on mobile so the public footer (rendered
+    // by the root layout in the document flow) cannot be scrolled into view.
     return (
-      <div className="fixed inset-0 z-[100] bg-brand-primary overflow-auto">
-        {children}
-      </div>
+      <>
+        <style>{`html, body { overflow: hidden !important; }`}</style>
+        <div className="fixed inset-0 z-[100] bg-brand-primary overflow-auto">
+          {children}
+        </div>
+      </>
     )
   }
 
