@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
@@ -61,10 +60,15 @@ function VideoPlayerModal({ videoId, title, onClose }: VideoPlayerModalProps) {
   }, [videoId])
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-      <div className="relative w-full max-w-4xl bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="video-modal-title"
+    >
+      <div className="relative w-full max-w-4xl bg-gray-900 rounded-card overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between p-4 border-b border-white/10">
-          <p className="text-white font-semibold text-sm">{title}</p>
+          <p id="video-modal-title" className="text-white font-semibold text-sm">{title}</p>
           <button
             onClick={onClose}
             className="text-white/50 hover:text-white transition-colors"
@@ -89,6 +93,7 @@ function VideoPlayerModal({ videoId, title, onClose }: VideoPlayerModalProps) {
           {embedUrl && (
             <iframe
               src={embedUrl}
+              title={title}
               className="w-full h-full"
               allow="autoplay; fullscreen"
               allowFullScreen
@@ -113,7 +118,7 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
   const duration = formatDuration(video.duration_seconds)
 
   return (
-    <div className="group flex flex-col bg-gray-900 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+    <div className="group flex flex-col bg-gray-900 rounded-card overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
       <div className="relative aspect-video bg-brand-primary-900 flex items-center justify-center">
         {video.thumbnail_url ? (
           <Image
@@ -131,7 +136,7 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
           {unlocked ? (
             <button
               onClick={() => onWatch(video.bunny_video_id, video.title)}
-              className="flex items-center justify-center w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm group-hover:scale-110 transition-transform duration-300"
+              className="flex items-center justify-center w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-all duration-300"
               aria-label={`Watch ${video.title}`}
             >
               <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
@@ -168,14 +173,15 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
           {unlocked ? (
             <button
               onClick={() => onWatch(video.bunny_video_id, video.title)}
-              className="w-full py-2.5 px-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-xl transition-colors duration-300"
+              className="w-full py-2.5 px-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-button transition-colors duration-300"
             >
               Watch Now
             </button>
           ) : (
+            /* TODO: Build /portal/upgrade page */
             <Link
-              href={`/portal/upgrade?from=${encodeURIComponent('/portal/videos')}`}
-              className="block w-full py-2.5 px-4 bg-gray-800 hover:bg-gray-700 text-white/50 hover:text-white text-sm font-semibold rounded-xl transition-colors duration-300 text-center"
+              href="/shop?collection=membership"
+              className="block w-full py-2.5 px-4 bg-gray-800 hover:bg-gray-700 text-white/50 hover:text-white text-sm font-semibold rounded-button transition-colors duration-300 text-center"
             >
               Unlock with {tierLabel(minTier)}
             </Link>
@@ -200,7 +206,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
     activeCategory === 'All' ? videos : videos.filter((v) => v.category === activeCategory)
 
   return (
-    <main className="w-full bg-brand-primary min-h-screen py-20 lg:py-32">
+    <main className="relative w-full bg-brand-primary min-h-screen py-20 lg:py-32 overflow-hidden">
       {playingVideo && (
         <VideoPlayerModal
           videoId={playingVideo.id}
@@ -209,12 +215,16 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
         />
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Ambient glow */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-12"
         >
@@ -249,8 +259,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
           <>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.1 }}
               className="flex flex-wrap gap-2 mb-10"
             >
@@ -295,7 +304,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6 }}
-            className="mt-16 relative overflow-hidden rounded-2xl bg-gray-900 p-8 lg:p-12"
+            className="mt-16 relative overflow-hidden rounded-card bg-gray-900 p-8 lg:p-12"
           >
             <div className="flex flex-col lg:flex-row lg:items-center gap-8">
               <div className="flex-1">
@@ -310,9 +319,10 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
                 </p>
               </div>
               <div className="flex-shrink-0">
+                {/* TODO: Build /portal/upgrade page */}
                 <Link
-                  href="/portal/upgrade?from=%2Fportal%2Fvideos"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-xl transition-colors duration-300"
+                  href="/shop?collection=membership"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-colors duration-300"
                 >
                   Upgrade Membership
                 </Link>
