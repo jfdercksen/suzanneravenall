@@ -197,7 +197,7 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
     return (
       <Link
         href={`/portal/videos?category=group-sessions`}
-        className="group flex flex-col gap-3 p-5 bg-gray-800 hover:bg-gray-750 rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+        className="group flex flex-col gap-3 p-5 bg-gray-800 hover:bg-gray-700 rounded-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
       >
         <div className="flex items-start justify-between gap-3">
           <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${TYPE_BADGE[resource.type]}`}>
@@ -217,7 +217,7 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
     return (
       <a
         href={resource.href}
-        className="group flex flex-col gap-3 p-5 bg-gray-800 hover:bg-gray-750 rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+        className="group flex flex-col gap-3 p-5 bg-gray-800 hover:bg-gray-700 rounded-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
         download
       >
         <div className="flex items-start justify-between gap-3">
@@ -240,15 +240,16 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
     ) ?? 'silver'
 
     return (
-      <div className="relative flex flex-col gap-3 p-5 bg-gray-900/50 rounded-xl border border-white/5 select-none">
-        <div className="absolute inset-0 rounded-xl backdrop-blur-[1px] bg-gray-950/40 flex items-center justify-center">
+      <div className="relative flex flex-col gap-3 p-5 bg-gray-900/50 rounded-card border border-white/5 select-none">
+        <div className="absolute inset-0 rounded-card backdrop-blur-[1px] bg-gray-950/40 flex items-center justify-center">
           <div className="text-center px-4">
             <svg className="w-5 h-5 text-white/30 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
             </svg>
             <p className="text-white/40 text-xs">
               Unlock with{' '}
-              <Link href="/portal/upgrade" className="text-brand-accent hover:underline">
+              {/* TODO: Build /portal/upgrade page */}
+              <Link href="/shop?collection=membership" className="text-brand-accent hover:underline">
                 {tierLabel(minTier)}
               </Link>
             </p>
@@ -266,7 +267,7 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
   }
 
   return (
-    <div className="flex flex-col gap-3 p-5 bg-gray-800 rounded-xl">
+    <div className="flex flex-col gap-3 p-5 bg-gray-800 rounded-card">
       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium w-fit ${TYPE_BADGE[resource.type]}`}>
         {resource.type}
       </span>
@@ -278,13 +279,17 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
 
 export default function ResourcesContent({ tier }: ResourcesContentProps) {
   return (
-    <main className="w-full bg-brand-primary min-h-screen py-20 lg:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="relative w-full bg-brand-primary min-h-screen py-20 lg:py-32 overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
@@ -313,12 +318,13 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
               >
                 <div className="flex items-center gap-3 mb-6">
                   <h2 className="text-xl font-semibold text-white">{category.title}</h2>
+                  {/* TODO: Build /portal/upgrade page */}
                   {!categoryUnlocked && (
                     <Link
-                      href="/portal/upgrade"
+                      href="/shop?collection=membership"
                       className="inline-flex items-center gap-1 px-3 py-1 bg-brand-accent/10 text-brand-accent text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-brand-accent/20 transition-colors"
                     >
-                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <svg aria-hidden="true" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                       </svg>
                       Upgrade to unlock
@@ -342,7 +348,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6 }}
-            className="mt-20 relative overflow-hidden rounded-2xl bg-gray-900 p-8 lg:p-12"
+            className="mt-20 relative overflow-hidden rounded-card bg-gray-900 p-8 lg:p-12"
           >
             <div className="flex flex-col lg:flex-row lg:items-center gap-8">
               <div className="flex-1">
@@ -357,9 +363,10 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
                 </p>
               </div>
               <div className="flex-shrink-0">
+                {/* TODO: Build /portal/upgrade page */}
                 <Link
-                  href="/portal/upgrade"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-xl transition-colors duration-300"
+                  href="/shop?collection=membership"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-colors duration-300"
                 >
                   View Upgrade Options
                 </Link>

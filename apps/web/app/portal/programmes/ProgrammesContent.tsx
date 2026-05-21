@@ -21,7 +21,9 @@ const DELIVERY_BADGE: Record<string, string> = {
 }
 
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-ZA', {
+  const date = new Date(dateStr)
+  if (isNaN(date.getTime())) return '—'
+  return date.toLocaleDateString('en-ZA', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
@@ -45,7 +47,7 @@ function ProgrammeCard({ programme }: { programme: ProgrammeItem }) {
         hidden: { opacity: 0, y: 24 },
         show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
       }}
-      className="group flex flex-col bg-gray-900 rounded-2xl overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+      className="group flex flex-col bg-gray-900 rounded-card overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
     >
       {/* Thumbnail */}
       <div className="relative h-44 bg-gradient-to-br from-brand-primary to-gray-900 overflow-hidden">
@@ -85,10 +87,10 @@ function ProgrammeCard({ programme }: { programme: ProgrammeItem }) {
             Currently links to portal resources as a placeholder. */}
         <Link
           href="/portal/resources"
-          className="inline-flex items-center justify-center gap-2 w-full py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-xl transition-colors duration-300"
+          className="inline-flex items-center justify-center gap-2 w-full py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-button transition-colors duration-300"
         >
           Access Programme
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg aria-hidden="true" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </Link>
@@ -106,14 +108,18 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
   })
 
   return (
-    <main className="w-full bg-brand-primary min-h-screen py-16 lg:py-24">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="relative w-full bg-brand-primary min-h-screen py-16 lg:py-24 overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+      </div>
+
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-10"
         >
@@ -129,8 +135,7 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
         {programmes.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className="flex flex-wrap gap-2 mb-8"
           >
@@ -164,7 +169,7 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
             className="py-20 text-center"
           >
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gray-900 flex items-center justify-center text-white/20">
-              <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+              <svg aria-hidden="true" className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" />
               </svg>
             </div>
@@ -174,10 +179,10 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
             </p>
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-xl transition-colors duration-300"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-colors duration-300"
             >
               Browse Programmes
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg aria-hidden="true" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
             </Link>
@@ -211,7 +216,7 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="mt-16 flex flex-col sm:flex-row items-center gap-4 p-6 bg-gray-900 rounded-2xl"
+            className="mt-16 flex flex-col sm:flex-row items-center gap-4 p-6 bg-gray-900 rounded-card"
           >
             <div className="flex-1 text-center sm:text-left">
               <p className="text-white font-semibold mb-1">Explore more programmes</p>
@@ -219,7 +224,7 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
             </div>
             <Link
               href="/shop"
-              className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 border border-white/20 hover:border-white/40 text-white text-sm font-semibold rounded-xl transition-colors duration-300"
+              className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 border border-white/20 hover:border-white/40 text-white text-sm font-semibold rounded-button transition-colors duration-300"
             >
               Browse Shop
             </Link>
