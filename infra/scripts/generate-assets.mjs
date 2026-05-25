@@ -10,11 +10,14 @@
  * Default: http://169.239.180.49/images/suzanne-casual.jpg (VPS)
  * Override: REFERENCE_IMAGE_URL=https://... node infra/scripts/generate-assets.mjs
  *
+ * To force-regenerate existing files:
+ *   FORCE=1 KIE_API_KEY=<your-key> node infra/scripts/generate-assets.mjs
+ *
  * Outputs to: apps/web/public/images/generated/
  *
  * Models used:
- *   - flux-2/pro-image-to-image  (image compositing with reference — 3 images)
- *   - flux-kontext-pro            (text-to-image abstract backgrounds — 7 images)
+ *   - nano-banana-pro  (Gemini 3.0 Pro — image compositing with reference, 3 images)
+ *   - nano-banana-2    (Gemini 3.1 Flash — text-to-image abstract backgrounds, 7 images)
  */
 
 import fs from 'fs'
@@ -35,12 +38,13 @@ if (!KIE_API_KEY) {
 
 const REFERENCE_IMAGE_URL =
   process.env.REFERENCE_IMAGE_URL || 'http://169.239.180.49/images/suzanne-casual.jpg'
+const FORCE = process.env.FORCE === '1'
 
 const API_BASE = 'https://api.kie.ai/api/v1'
 const OUTPUT_DIR = path.join(ROOT, 'apps/web/public/images/generated')
 
 const TASKS = [
-  // ── Image compositing (flux-2/pro-image-to-image, uses REFERENCE_IMAGE_URL) ──
+  // ── Image compositing (nano-banana-pro, uses REFERENCE_IMAGE_URL) ──────────
   {
     filename: 'group-coaching-real.jpg',
     type: 'composite',
@@ -59,7 +63,7 @@ const TASKS = [
     prompt:
       'Place this person on a dramatic stage with single spotlight, dark background, transformation masterclass atmosphere, powerful and inspirational, cinematic photography, keep the person\'s appearance identical',
   },
-  // ── Abstract backgrounds (flux-kontext-pro, text-to-image, no reference) ──
+  // ── Abstract backgrounds (nano-banana-2, text-to-image, no reference) ───────
   {
     filename: 'explore-energy.jpg',
     type: 'text2img',
@@ -160,77 +164,43 @@ function sleep(ms) {
 }
 
 async function pollForResult(taskId) {
-  // flux-kontext tasks use a dedicated polling endpoint and different response shape
-  const isKontext = taskId.startsWith('fluxkontext_')
-
   const maxAttempts = 72 // 6 minutes max
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     await sleep(5000)
+    const res = await fetchJson(`${API_BASE}/jobs/recordInfo?taskId=${encodeURIComponent(taskId)}`)
+    const data = res?.data
+    const state = data?.state
 
-    if (isKontext) {
-      const res = await fetchJson(`${API_BASE}/flux/kontext/record-info?taskId=${encodeURIComponent(taskId)}`)
-      const data = res?.data
-      const flag = data?.successFlag
-      // 0 = generating, 1 = success, 2/3 = failed
-      if (flag === 1) {
-        const imageUrl = data?.response?.resultImageUrl || data?.response?.originImageUrl
-        if (imageUrl) return imageUrl
-        throw new Error(`successFlag=1 but no URL. data: ${JSON.stringify(data).slice(0, 200)}`)
+    if (state === 'success') {
+      let resultData = data.resultJson
+      if (typeof resultData === 'string') {
+        try { resultData = JSON.parse(resultData) } catch { /* keep as-is */ }
       }
-      if (flag === 2 || flag === 3) {
-        throw new Error(`Task failed (flag=${flag}): ${data?.errorMessage || JSON.stringify(res).slice(0, 200)}`)
-      }
-      // flag === 0 — still generating, keep polling
-    } else {
-      const res = await fetchJson(`${API_BASE}/jobs/recordInfo?taskId=${encodeURIComponent(taskId)}`)
-      const data = res?.data
-      const state = data?.state
-
-      if (state === 'success') {
-        let resultData = data.resultJson
-        if (typeof resultData === 'string') {
-          try { resultData = JSON.parse(resultData) } catch { /* keep as-is */ }
-        }
-        const imageUrl = resultData?.resultUrls?.[0] || resultData?.url
-        if (imageUrl) return imageUrl
-        throw new Error(`success state but no URL. resultJson: ${JSON.stringify(data.resultJson).slice(0, 200)}`)
-      }
-      if (state === 'fail') {
-        throw new Error(`Task failed: ${data?.failMsg || JSON.stringify(res).slice(0, 200)}`)
-      }
-      // waiting / queuing / generating — keep polling
+      const imageUrl = resultData?.resultUrls?.[0] || resultData?.url
+      if (imageUrl) return imageUrl
+      throw new Error(`success state but no URL. resultJson: ${JSON.stringify(data.resultJson).slice(0, 200)}`)
     }
+    if (state === 'fail') {
+      throw new Error(`Task failed: ${data?.failMsg || JSON.stringify(res).slice(0, 200)}`)
+    }
+    // waiting / queuing / generating — keep polling
   }
   throw new Error(`Task ${taskId} timed out after ${maxAttempts * 5}s`)
 }
 
-async function submitComposite(task) {
-  // flux-2/pro-image-to-image via createTask
-  const body = JSON.stringify({
-    model: 'flux-2/pro-image-to-image',
-    input: {
-      input_urls: [REFERENCE_IMAGE_URL],
-      prompt: task.prompt,
-      aspect_ratio: '16:9',
-      resolution: '2K',
-      nsfw_checker: false,
-    },
-  })
-  const res = await fetchJson(`${API_BASE}/jobs/createTask`, { method: 'POST', body })
-  const taskId = res?.data?.taskId || res?.taskId
-  if (!taskId) throw new Error(`No taskId: ${JSON.stringify(res).slice(0, 200)}`)
-  return taskId
-}
-
-async function submitText2Img(task) {
-  // flux-kontext-pro via dedicated endpoint
-  const body = JSON.stringify({
-    model: 'flux-kontext-pro',
+async function submitTask(task) {
+  const model = task.type === 'composite' ? 'nano-banana-pro' : 'nano-banana-2'
+  const input = {
     prompt: task.prompt,
-    aspectRatio: '16:9',
-    outputFormat: 'jpeg',
-  })
-  const res = await fetchJson(`${API_BASE}/flux/kontext/generate`, { method: 'POST', body })
+    aspect_ratio: '16:9',
+    resolution: '2K',
+    output_format: 'jpg',
+  }
+  if (task.type === 'composite') {
+    input.image_input = [REFERENCE_IMAGE_URL]
+  }
+  const body = JSON.stringify({ model, input })
+  const res = await fetchJson(`${API_BASE}/jobs/createTask`, { method: 'POST', body })
   const taskId = res?.data?.taskId || res?.taskId
   if (!taskId) throw new Error(`No taskId: ${JSON.stringify(res).slice(0, 200)}`)
   return taskId
@@ -241,24 +211,22 @@ async function main() {
 
   const total = TASKS.length
   console.log(`Reference image URL: ${REFERENCE_IMAGE_URL}`)
-  console.log(`Output directory: apps/web/public/images/generated/\n`)
+  console.log(`Output directory: apps/web/public/images/generated/`)
+  console.log(`Force regenerate: ${FORCE ? 'yes' : 'no (set FORCE=1 to regenerate existing)'}\n`)
 
   for (let i = 0; i < TASKS.length; i++) {
     const task = TASKS[i]
     const destPath = path.join(OUTPUT_DIR, task.filename)
-    const modelLabel = task.type === 'composite' ? 'flux-2/pro-image-to-image' : 'flux-kontext-pro'
-    console.log(`[${i + 1}/${total}] Generating: ${task.filename} (${modelLabel})`)
+    const model = task.type === 'composite' ? 'nano-banana-pro' : 'nano-banana-2'
+    console.log(`[${i + 1}/${total}] Generating: ${task.filename} (${model})`)
 
-    if (fs.existsSync(destPath)) {
-      console.log(`  Skipping — already exists.`)
+    if (!FORCE && fs.existsSync(destPath)) {
+      console.log(`  Skipping — already exists. (run with FORCE=1 to regenerate)`)
       continue
     }
 
     try {
-      const taskId = task.type === 'composite'
-        ? await submitComposite(task)
-        : await submitText2Img(task)
-
+      const taskId = await submitTask(task)
       console.log(`  Submitted: ${taskId} — polling every 5s...`)
       const imageUrl = await pollForResult(taskId)
       console.log(`  Downloading...`)
