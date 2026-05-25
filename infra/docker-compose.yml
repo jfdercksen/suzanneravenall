@@ -275,7 +275,7 @@ services:
       N8N_HOST: 169.239.180.49
       N8N_PORT: 5678
       N8N_PROTOCOL: http
-      N8N_PATH: /n8n
+      N8N_PATH: /n8n/
       N8N_EDITOR_BASE_URL: http://169.239.180.49/n8n
       WEBHOOK_URL: http://169.239.180.49/n8n
       DB_TYPE: ${DB_TYPE}
