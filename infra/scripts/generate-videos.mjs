@@ -6,9 +6,13 @@
  * Run from the project root:
  *   KIE_API_KEY=<your-key> node infra/scripts/generate-videos.mjs
  *
+ * Input images must be publicly accessible.
+ * Defaults use the VPS IP: http://169.239.180.49/images/...
+ * Override individual URLs via env vars (see TASKS below).
+ *
  * Outputs to: apps/web/public/videos/generated/
  *
- * IMPORTANT: Video URLs expire in 24 hours — download immediately after generation.
+ * IMPORTANT: Video URLs expire in 24 hours — download happens automatically.
  */
 
 import fs from 'fs'
@@ -27,23 +31,22 @@ if (!KIE_API_KEY) {
   process.exit(1)
 }
 
+const VPS_BASE = process.env.VPS_BASE_URL || 'http://169.239.180.49'
 const API_BASE = 'https://api.kie.ai/api/v1'
 const OUTPUT_DIR = path.join(ROOT, 'apps/web/public/videos/generated')
 
 const TASKS = [
   {
     filename: 'hero-stage-video.mp4',
-    inputImage: path.join(ROOT, 'apps/web/public/images/hero-bg-suzanne-ravenall.jpg'),
-    model: 'kling-3.0/image-to-video',
-    duration: 10,
+    imageUrl: `${VPS_BASE}/images/hero-bg-suzanne-ravenall.jpg`,
+    duration: '10',
     prompt:
       'Subtle crowd movement and applause, stage lights shimmering gently, cinematic atmosphere, Suzanne stays still, no text, powerful and inspirational',
   },
   {
     filename: 'hero-brain-video.mp4',
-    inputImage: path.join(ROOT, 'apps/web/public/images/suzanne-ravenall.jpg'),
-    model: 'kling-3.0/image-to-video',
-    duration: 8,
+    imageUrl: `${VPS_BASE}/images/suzanne-ravenall.jpg`,
+    duration: '8',
     prompt:
       'Neural network connections pulsing and lighting up in slow rhythmic patterns, energy flowing through the brain, Suzanne stays completely still, cinematic blue energy',
   },
@@ -51,35 +54,33 @@ const TASKS = [
 
 // ---------------------------------------------------------------------------
 
-function readFileAsBase64(filePath) {
-  const data = fs.readFileSync(filePath)
-  return data.toString('base64')
-}
-
 async function fetchJson(url, options = {}) {
   return new Promise((resolve, reject) => {
     const parsed = new URL(url)
     const lib = parsed.protocol === 'https:' ? https : http
+    const body = options.body || null
     const reqOptions = {
       hostname: parsed.hostname,
+      port: parsed.port || undefined,
       path: parsed.pathname + parsed.search,
       method: options.method || 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${KIE_API_KEY}`,
+        ...(body ? { 'Content-Length': Buffer.byteLength(body) } : {}),
         ...(options.headers || {}),
       },
     }
     const req = lib.request(reqOptions, (res) => {
-      let body = ''
-      res.on('data', (chunk) => { body += chunk })
+      let raw = ''
+      res.on('data', (chunk) => { raw += chunk })
       res.on('end', () => {
-        try { resolve(JSON.parse(body)) }
-        catch { reject(new Error(`Non-JSON response (${res.statusCode}): ${body.slice(0, 200)}`)) }
+        try { resolve(JSON.parse(raw)) }
+        catch { reject(new Error(`Non-JSON (${res.statusCode}): ${raw.slice(0, 300)}`)) }
       })
     })
     req.on('error', reject)
-    if (options.body) req.write(options.body)
+    if (body) req.write(body)
     req.end()
   })
 }
@@ -92,13 +93,13 @@ function downloadFile(url, destPath) {
     lib.get(url, (res) => {
       if (res.statusCode === 301 || res.statusCode === 302) {
         file.close()
-        fs.unlinkSync(destPath)
+        if (fs.existsSync(destPath)) fs.unlinkSync(destPath)
         return downloadFile(res.headers.location, destPath).then(resolve).catch(reject)
       }
       res.pipe(file)
       file.on('finish', () => { file.close(); resolve() })
-      file.on('error', (err) => { fs.unlinkSync(destPath); reject(err) })
-    }).on('error', (err) => { fs.unlinkSync(destPath); reject(err) })
+      file.on('error', (err) => { if (fs.existsSync(destPath)) fs.unlinkSync(destPath); reject(err) })
+    }).on('error', (err) => { if (fs.existsSync(destPath)) fs.unlinkSync(destPath); reject(err) })
   })
 }
 
@@ -107,67 +108,52 @@ function sleep(ms) {
 }
 
 async function pollForResult(taskId) {
-  const maxAttempts = 120 // 20 minutes max (video generation is slower)
+  const maxAttempts = 120 // 20 minutes max
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    await sleep(10000) // 10 second poll interval
-    const result = await fetchJson(`${API_BASE}/jobs/status?taskId=${taskId}`)
-    const status = result?.data?.status || result?.status
+    await sleep(10000)
+    const res = await fetchJson(`${API_BASE}/jobs/recordInfo?taskId=${encodeURIComponent(taskId)}`)
+    const data = res?.data
+    const state = data?.state
     const elapsed = ((attempt + 1) * 10)
 
     if (attempt % 3 === 0) {
-      process.stdout.write(`  Polling... ${elapsed}s elapsed (status: ${status})\r`)
+      process.stdout.write(`  Polling... ${elapsed}s elapsed (state: ${state || 'unknown'})\r`)
     }
 
-    if (status === 'COMPLETED' || status === 'completed' || status === 'success') {
+    if (state === 'success') {
       process.stdout.write('\n')
-      // resultJson may be a JSON string or already an object
-      let resultData = result?.data?.resultJson ?? result?.resultJson
+      let resultData = data.resultJson
       if (typeof resultData === 'string') {
-        try { resultData = JSON.parse(resultData) } catch { /* use as-is */ }
+        try { resultData = JSON.parse(resultData) } catch { /* keep as-is */ }
       }
-      // Extract video URL from common response shapes
-      const videoUrl =
-        resultData?.videos?.[0]?.url ||
-        resultData?.video_url ||
-        resultData?.url ||
-        result?.data?.output?.url ||
-        result?.data?.output?.video
+      const videoUrl = resultData?.resultUrls?.[0] || resultData?.url
       if (videoUrl) return videoUrl
-      throw new Error(`Task completed but no video URL found. Response: ${JSON.stringify(result).slice(0, 300)}`)
+      throw new Error(`success state but no URL. resultJson: ${JSON.stringify(data.resultJson).slice(0, 200)}`)
     }
 
-    if (status === 'FAILED' || status === 'failed' || status === 'error') {
+    if (state === 'fail') {
       process.stdout.write('\n')
-      throw new Error(`Task failed: ${JSON.stringify(result).slice(0, 300)}`)
+      throw new Error(`Task failed: ${data?.failMsg || JSON.stringify(res).slice(0, 200)}`)
     }
   }
   process.stdout.write('\n')
   throw new Error(`Task ${taskId} timed out after ${maxAttempts * 10}s`)
 }
 
-async function submitVideoTask(task) {
-  const imageBase64 = readFileAsBase64(task.inputImage)
-  const imageName = path.basename(task.inputImage)
-  console.log(`  Reference image: ${imageName} (${Math.round(imageBase64.length * 0.75 / 1024)} KB)`)
-
+async function submitVideo(task) {
   const body = JSON.stringify({
-    model: task.model,
+    model: 'kling-3.0/video',
     input: {
       prompt: task.prompt,
+      image_urls: [task.imageUrl],
       duration: task.duration,
-      image_input: [`data:image/jpeg;base64,${imageBase64}`],
+      aspect_ratio: '16:9',
+      mode: 'pro',
     },
   })
-
-  const result = await fetchJson(`${API_BASE}/jobs/createTask`, {
-    method: 'POST',
-    body,
-  })
-
-  const taskId = result?.data?.taskId || result?.taskId || result?.id
-  if (!taskId) {
-    throw new Error(`No taskId in response: ${JSON.stringify(result).slice(0, 300)}`)
-  }
+  const res = await fetchJson(`${API_BASE}/jobs/createTask`, { method: 'POST', body })
+  const taskId = res?.data?.taskId || res?.taskId
+  if (!taskId) throw new Error(`No taskId: ${JSON.stringify(res).slice(0, 200)}`)
   return taskId
 }
 
@@ -175,34 +161,33 @@ async function main() {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true })
 
   const total = TASKS.length
-  console.log('⚠️  IMPORTANT: Video URLs expire in 24 hours. Download will happen automatically.\n')
+  console.log('Model: kling-3.0/video')
+  console.log(`VPS base URL: ${VPS_BASE}`)
+  console.log('Note: Video URLs expire in 24h — downloading immediately on completion.\n')
 
   for (let i = 0; i < TASKS.length; i++) {
     const task = TASKS[i]
     const destPath = path.join(OUTPUT_DIR, task.filename)
-    console.log(`[${i + 1}/${total}] Generating: ${task.filename} (${task.duration}s, ${task.model})`)
+    console.log(`[${i + 1}/${total}] Generating: ${task.filename} (${task.duration}s)`)
+    console.log(`  Input image: ${task.imageUrl}`)
 
     try {
-      if (!fs.existsSync(task.inputImage)) {
-        throw new Error(`Input image not found: ${task.inputImage}`)
-      }
-
-      const taskId = await submitVideoTask(task)
-      console.log(`  Submitted task ${taskId} — polling every 10s...`)
+      const taskId = await submitVideo(task)
+      console.log(`  Submitted: ${taskId} — polling every 10s...`)
 
       const videoUrl = await pollForResult(taskId)
-      console.log(`  Completed. Downloading (this may take a moment for large video files)...`)
+      console.log(`  Downloading...`)
       await downloadFile(videoUrl, destPath)
 
       const sizeKB = Math.round(fs.statSync(destPath).size / 1024)
-      console.log(`  Saved: ${path.relative(ROOT, destPath)} (${sizeKB} KB)`)
+      console.log(`  Saved: ${task.filename} (${sizeKB} KB)`)
     } catch (err) {
       console.error(`  Error on ${task.filename}: ${err.message}`)
     }
   }
 
   console.log('\nDone. Generated videos saved to apps/web/public/videos/generated/')
-  console.log('Run "git add apps/web/public/videos/generated/" to stage them.')
+  console.log('Next: git add apps/web/public/videos/generated/ && git commit')
 }
 
 main().catch((err) => { console.error(err); process.exit(1) })
