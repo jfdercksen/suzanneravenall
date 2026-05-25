@@ -160,27 +160,46 @@ function sleep(ms) {
 }
 
 async function pollForResult(taskId) {
+  // flux-kontext tasks use a dedicated polling endpoint and different response shape
+  const isKontext = taskId.startsWith('fluxkontext_')
+
   const maxAttempts = 72 // 6 minutes max
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     await sleep(5000)
-    const res = await fetchJson(`${API_BASE}/jobs/recordInfo?taskId=${encodeURIComponent(taskId)}`)
-    const data = res?.data
-    const state = data?.state
 
-    if (state === 'success') {
-      let resultData = data.resultJson
-      if (typeof resultData === 'string') {
-        try { resultData = JSON.parse(resultData) } catch { /* keep as-is */ }
+    if (isKontext) {
+      const res = await fetchJson(`${API_BASE}/flux/kontext/record-info?taskId=${encodeURIComponent(taskId)}`)
+      const data = res?.data
+      const flag = data?.successFlag
+      // 0 = generating, 1 = success, 2/3 = failed
+      if (flag === 1) {
+        const imageUrl = data?.response?.resultImageUrl || data?.response?.originImageUrl
+        if (imageUrl) return imageUrl
+        throw new Error(`successFlag=1 but no URL. data: ${JSON.stringify(data).slice(0, 200)}`)
       }
-      const imageUrl = resultData?.resultUrls?.[0] || resultData?.url
-      if (imageUrl) return imageUrl
-      throw new Error(`success state but no URL. resultJson: ${JSON.stringify(data.resultJson).slice(0, 200)}`)
-    }
+      if (flag === 2 || flag === 3) {
+        throw new Error(`Task failed (flag=${flag}): ${data?.errorMessage || JSON.stringify(res).slice(0, 200)}`)
+      }
+      // flag === 0 — still generating, keep polling
+    } else {
+      const res = await fetchJson(`${API_BASE}/jobs/recordInfo?taskId=${encodeURIComponent(taskId)}`)
+      const data = res?.data
+      const state = data?.state
 
-    if (state === 'fail') {
-      throw new Error(`Task failed: ${data?.failMsg || JSON.stringify(res).slice(0, 200)}`)
+      if (state === 'success') {
+        let resultData = data.resultJson
+        if (typeof resultData === 'string') {
+          try { resultData = JSON.parse(resultData) } catch { /* keep as-is */ }
+        }
+        const imageUrl = resultData?.resultUrls?.[0] || resultData?.url
+        if (imageUrl) return imageUrl
+        throw new Error(`success state but no URL. resultJson: ${JSON.stringify(data.resultJson).slice(0, 200)}`)
+      }
+      if (state === 'fail') {
+        throw new Error(`Task failed: ${data?.failMsg || JSON.stringify(res).slice(0, 200)}`)
+      }
+      // waiting / queuing / generating — keep polling
     }
-    // waiting / queuing / generating — keep polling
   }
   throw new Error(`Task ${taskId} timed out after ${maxAttempts * 5}s`)
 }
@@ -229,6 +248,11 @@ async function main() {
     const destPath = path.join(OUTPUT_DIR, task.filename)
     const modelLabel = task.type === 'composite' ? 'flux-2/pro-image-to-image' : 'flux-kontext-pro'
     console.log(`[${i + 1}/${total}] Generating: ${task.filename} (${modelLabel})`)
+
+    if (fs.existsSync(destPath)) {
+      console.log(`  Skipping — already exists.`)
+      continue
+    }
 
     try {
       const taskId = task.type === 'composite'
