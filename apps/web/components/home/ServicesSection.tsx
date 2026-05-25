@@ -15,14 +15,15 @@ const services = [
   {
     title: 'Group Programs',
     promise: 'Transform alongside others committed to real change',
-    image: '/images/group-coaching.jpg',
+    image: '/images/generated/group-coaching-real.jpg',
     href: '/services',
     cta: 'View Programs',
   },
   {
     title: 'Practitioner Licensing',
     promise: 'Master Neuro-Repatterning® and change lives professionally',
-    image: '/images/session.jpg',
+    // TODO: Replace with real 1-on-1 coaching session photo
+    image: '/images/suzanne-portrait.jpg',
     href: '/services',
     cta: 'Get Certified',
   },

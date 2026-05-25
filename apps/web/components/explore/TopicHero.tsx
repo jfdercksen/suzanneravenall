@@ -20,7 +20,7 @@ export default function TopicHero({ topic }: { topic: Topic }) {
     >
       {/* Cinematic background image */}
       <Image
-        src="/images/hero-bg.jpg"
+        src="/images/hero-bg-suzanne-ravenall.jpg"
         alt=""
         fill
         priority

@@ -88,7 +88,7 @@ export default function PrivateSessions() {
             >
               {/* TODO: Replace with service-specific image — Suzanne to provide: photograph representing each session type (e.g. 1-on-1 coaching, energy work, hypnotherapy) */}
               <Image
-                src="/images/hero-bg.jpg"
+                src="/images/hero-bg-suzanne-ravenall.jpg"
                 alt=""
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

@@ -334,7 +334,7 @@ export default function DashboardContent({
             className="relative overflow-hidden rounded-card bg-gray-900 p-8 lg:p-10"
           >
             <Image
-              src="/images/hero-bg.jpg"
+              src="/images/hero-bg-suzanne-ravenall.jpg"
               alt=""
               fill
               className="object-cover opacity-10"

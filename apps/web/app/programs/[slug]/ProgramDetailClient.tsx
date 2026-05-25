@@ -146,7 +146,7 @@ function RelatedProgramCard({ program }: { program: Program }) {
     >
       {/* TODO: Replace with programme-specific image — Suzanne to provide */}
       <Image
-        src="/images/hero-bg.jpg"
+        src="/images/hero-bg-suzanne-ravenall.jpg"
         alt=""
         fill
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -191,7 +191,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
       >
         {/* TODO: Replace with programme-specific image — Suzanne to provide per-programme photography */}
         <Image
-          src="/images/hero-bg.jpg"
+          src="/images/hero-bg-suzanne-ravenall.jpg"
           alt=""
           fill
           priority

@@ -17,7 +17,7 @@ const areas = [
   {
     title: 'Neuro-Repatterning™',
     description: "Suzanne's proprietary methodology",
-    image: '/images/focus/neuro.jpg',
+    image: '/images/suzanne-ravenall.jpg',
     href: '/services#neuro',
   },
   {

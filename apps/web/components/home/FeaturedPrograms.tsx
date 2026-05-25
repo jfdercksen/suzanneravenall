@@ -19,7 +19,7 @@ const programs = [
     subtitle: '8-Week Live Program',
     description: 'A structured 8-week journey with a small cohort. Weekly live sessions, community support, and lasting change.',
     price: 'From R4,500',
-    image: '/images/group-coaching.jpg',
+    image: '/images/generated/group-coaching-real.jpg',
     href: '/services',
     badge: 'Most Popular',
   },

@@ -86,7 +86,7 @@ export default function TheEcosystem() {
                 className="group relative block h-full overflow-hidden rounded-card border border-white/5 bg-gray-900 transition-all duration-500 hover:border-brand-accent/40 hover:shadow-2xl hover:-translate-y-1"
               >
                 <Image
-                  src="/images/hero-bg.jpg"
+                  src="/images/hero-bg-suzanne-ravenall.jpg"
                   alt=""
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"

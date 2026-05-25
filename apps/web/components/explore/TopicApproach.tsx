@@ -51,7 +51,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
               className="group relative overflow-hidden rounded-card border-t-2 border-brand-accent bg-gray-900 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-accent/10"
             >
               <Image
-                src="/images/hero-bg.jpg"
+                src="/images/hero-bg-suzanne-ravenall.jpg"
                 alt=""
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

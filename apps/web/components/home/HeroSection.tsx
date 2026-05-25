@@ -6,7 +6,7 @@ export default function HeroSection() {
     <section aria-labelledby="hero-heading" className="relative min-h-[90vh] lg:min-h-screen flex items-end lg:items-center overflow-hidden">
       {/* Background image */}
       <Image
-        src="/images/hero-bg.jpg"
+        src="/images/hero-bg-suzanne-ravenall.jpg"
         alt=""
         fill
         priority

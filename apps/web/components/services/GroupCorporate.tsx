@@ -93,9 +93,8 @@ export default function GroupCorporate() {
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               className="group relative overflow-hidden min-h-[220px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
-              {/* TODO: Replace with service-specific image — Suzanne to provide: photographs representing each group programme topic */}
               <Image
-                src="/images/hero-bg.jpg"
+                src="/images/generated/group-coaching-real.jpg"
                 alt=""
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

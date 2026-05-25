@@ -92,7 +92,7 @@ export default function Speaking() {
             >
               {/* TODO: Replace with keynote-specific image — Suzanne to provide: photographs from keynote events or speaking engagements */}
               <Image
-                src="/images/hero-bg.jpg"
+                src="/images/hero-bg-suzanne-ravenall.jpg"
                 alt=""
                 fill
                 sizes="(max-width: 640px) 100vw, 50vw"

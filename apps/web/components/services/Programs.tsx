@@ -152,7 +152,7 @@ export default function Programs() {
             >
               {/* TODO: Replace with programme-specific image — Suzanne to provide: images representing each programme track (Practitioner, Self-Paced, Live) */}
               <Image
-                src="/images/hero-bg.jpg"
+                src="/images/hero-bg-suzanne-ravenall.jpg"
                 alt=""
                 fill
                 sizes="(max-width: 1024px) 100vw, 33vw"

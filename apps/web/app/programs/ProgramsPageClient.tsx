@@ -69,7 +69,7 @@ function DarkProgramCard({ program }: { program: Program }) {
     >
       {/* TODO: Replace with programme-specific image — Suzanne to provide */}
       <Image
-        src="/images/hero-bg.jpg"
+        src="/images/hero-bg-suzanne-ravenall.jpg"
         alt=""
         fill
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -147,13 +147,13 @@ export default function ProgramsPageClient() {
 
   return (
     <>
-      {/* Hero — cinematic group-coaching.jpg background */}
+      {/* Hero — TODO: Replace with real group coaching photo */}
       <section
         aria-labelledby="programs-hero-heading"
         className="relative h-screen min-h-[640px] flex items-center overflow-hidden"
       >
         <Image
-          src="/images/group-coaching.jpg"
+          src="/images/hero-bg-suzanne-ravenall.jpg"
           alt=""
           fill
           priority

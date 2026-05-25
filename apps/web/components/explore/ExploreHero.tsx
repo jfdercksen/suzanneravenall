@@ -17,7 +17,7 @@ export default function ExploreHero() {
     >
       {/* Cinematic background image */}
       <Image
-        src="/images/hero-bg.jpg"
+        src="/images/hero-bg-suzanne-ravenall.jpg"
         alt=""
         fill
         priority

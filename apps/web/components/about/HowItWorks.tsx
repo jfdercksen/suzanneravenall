@@ -68,7 +68,7 @@ export default function HowItWorks() {
               className="group relative overflow-hidden bg-gray-900 rounded-card transition-all duration-500 hover:shadow-2xl hover:shadow-brand-accent/10 hover:-translate-y-1"
             >
               <Image
-                src="/images/hero-bg.jpg"
+                src="/images/hero-bg-suzanne-ravenall.jpg"
                 alt=""
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"

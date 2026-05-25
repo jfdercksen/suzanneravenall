@@ -3,8 +3,18 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { topics } from '@/app/explore/topics'
+import { topics, type TopicSlug } from '@/app/explore/topics'
 
+const TOPIC_IMAGES: Record<TopicSlug, string> = {
+  'emotional-nervous-system-mastery': '/images/generated/explore-energy.jpg',
+  'relationships-attachment-patterns': '/images/generated/session-coaching.jpg',
+  'next-level-health-vitality-longevity': '/images/generated/explore-mindfulness.jpg',
+  'intuition-as-patterned-intelligence': '/images/generated/explore-akashic.jpg',
+  'leadership-high-performance': '/images/generated/explore-transformation.jpg',
+  'life-transitions-reinvention': '/images/generated/explore-purpose.jpg',
+  'health-energy-intelligence': '/images/generated/explore-resonance.jpg',
+  'identity-purpose-activation': '/images/generated/explore-repatterning.jpg',
+}
 
 export default function ExploreTopicGrid() {
   return (
@@ -49,9 +59,8 @@ export default function ExploreTopicGrid() {
                 href={`/explore/${topic.slug}`}
                 className="group relative flex h-full flex-col justify-between overflow-hidden rounded-card bg-gray-900 border border-white/5 p-8 transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/60 hover:shadow-2xl hover:shadow-brand-accent/10"
               >
-                {/* Background image — placeholder until topic-specific images supplied */}
                 <Image
-                  src="/images/hero-bg.jpg"
+                  src={TOPIC_IMAGES[topic.slug] ?? '/images/hero-bg-suzanne-ravenall.jpg'}
                   alt=""
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

@@ -1,9 +1,9 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 5 — QA and Launch
-Current Task: Task 5.4 — Load Testing (in progress)
+Current Task: Task 5.5a — Manual VPS Steps (in progress)
 Current Branch: main
-Last Updated: 2026-05-15
+Last Updated: 2026-05-25
 Last Updated By: Johan
 
 ---
@@ -248,6 +248,8 @@ curl -s -o /dev/null -w "/api/search → %{http_code}\n" "http://169.239.180.49/
 ---
 
 ## Session Notes
+
+- **2026-05-25 (n8n routing fixed):** n8n sub-path routing confirmed working on VPS. Fixes applied: N8N_PATH trailing slash resolved /n8nassets/ path collision, nginx rewrite removed (N8N_PATH handles routing), Docker DNS resolver added to nginx, N8N_SECURE_COOKIE=false for HTTP IP-testing phase. n8n UI accessible at http://169.239.180.49/n8n/. Task 5.5a Step 2 fully confirmed. Remaining blockers: Step 1 (MeiliSearch — needs MEDUSA_API_TOKEN), Step 3 (Sentry — needs account creation), Vibe Marketing Sync Monitor workflow — needs SMTP credential in n8n UI.
 
 - **2026-05-15 (Task 5.5a — n8n complete, 2 items blocked):** Feature branch merged to main. 502 fixed (Nginx stale IP — nginx -s reload resolved). n8n upgraded from 1.30.1 → 2.20.9 (1.48.4 tag doesn't exist; n8n moved to 2.x versioning). All 12 workflows imported; 11/12 activated. "Vibe Marketing Sync Monitor" blocked on SMTP credentials in n8n (Alert: Admin Email node). n8n admin: admin@suzanneravenall.com / Admin@2026!. Health check all 6 URLs: 200. Sentry DSNs are still placeholder text in infra/.env — Step 3 still blocked. MEDUSA_API_TOKEN still absent from infra/.env — Step 1 still blocked. Platform is fully accessible and functional at http://169.239.180.49 — ready for Suzanne's review.
 
