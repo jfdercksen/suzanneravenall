@@ -15,7 +15,7 @@ const services = [
   {
     title: 'Group Programs',
     promise: 'Transform alongside others committed to real change',
-    image: '/images/generated/group-coaching-real.jpg',
+    image: '/images/generated/group-coaching-real.webp',
     href: '/services',
     cta: 'View Programs',
   },

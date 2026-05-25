@@ -88,7 +88,7 @@ export default function MasterclassContent() {
       {/* ── Section 1: Hero (dark) ───────────────────────────────────────── */}
       <section className="relative w-full bg-brand-primary min-h-screen flex items-center py-24 lg:py-40 overflow-hidden">
         <Image
-          src="/images/generated/hero-masterclass.jpg"
+          src="/images/generated/hero-masterclass.webp"
           alt=""
           fill
           priority

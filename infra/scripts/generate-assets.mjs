@@ -46,62 +46,62 @@ const OUTPUT_DIR = path.join(ROOT, 'apps/web/public/images/generated')
 const TASKS = [
   // ── Image compositing (nano-banana-pro, uses REFERENCE_IMAGE_URL) ──────────
   {
-    filename: 'group-coaching-real.jpg',
+    filename: 'group-coaching-real.webp',
     type: 'composite',
     prompt:
       'Transform this into a warm group coaching circle scene, add 6-8 diverse participants seated around the person, modern wellness studio, natural light, authentic community feeling, professional photography, keep the person\'s appearance identical',
   },
   {
-    filename: 'session-coaching.jpg',
+    filename: 'session-coaching.webp',
     type: 'composite',
     prompt:
       'Place this person in an intimate 1:1 coaching conversation, seated across from a client in a beautiful modern office, warm natural light through windows, professional coaching atmosphere, keep the person\'s appearance identical',
   },
   {
-    filename: 'hero-masterclass.jpg',
+    filename: 'hero-masterclass.webp',
     type: 'composite',
     prompt:
       'Place this person on a dramatic stage with single spotlight, dark background, transformation masterclass atmosphere, powerful and inspirational, cinematic photography, keep the person\'s appearance identical',
   },
   // ── Abstract backgrounds (nano-banana-2, text-to-image, no reference) ───────
   {
-    filename: 'explore-energy.jpg',
+    filename: 'explore-energy.webp',
     type: 'text2img',
     prompt:
       'Abstract energy field, blue and white light waves, spiritual healing concept, very dark navy background, cinematic visualization, no people, no text',
   },
   {
-    filename: 'explore-akashic.jpg',
+    filename: 'explore-akashic.webp',
     type: 'text2img',
     prompt:
       'Mystical cosmic library, ancient glowing scrolls floating in infinite dark space, gold and deep blue tones, akashic records visualization, cinematic, no people, no text',
   },
   {
-    filename: 'explore-repatterning.jpg',
+    filename: 'explore-repatterning.webp',
     type: 'text2img',
     prompt:
       'Neural pathways lighting up in sequence, brain rewiring visualization, electric blue on very dark background, cinematic scientific visualization, no people, no text',
   },
   {
-    filename: 'explore-transformation.jpg',
+    filename: 'explore-transformation.webp',
     type: 'text2img',
     prompt:
       'Golden sunrise over dramatic South African landscape, transformation and new beginnings concept, cinematic landscape photography, warm golden tones, no text',
   },
   {
-    filename: 'explore-mindfulness.jpg',
+    filename: 'explore-mindfulness.webp',
     type: 'text2img',
     prompt:
       'Serene meditation garden at golden hour, soft bokeh background, peaceful atmosphere, cinematic lifestyle photography, warm tones, no people, no text',
   },
   {
-    filename: 'explore-purpose.jpg',
+    filename: 'explore-purpose.webp',
     type: 'text2img',
     prompt:
       'Open road stretching to horizon at sunrise, life purpose and direction concept, cinematic landscape, aspirational mood, South African scenery, no text',
   },
   {
-    filename: 'explore-resonance.jpg',
+    filename: 'explore-resonance.webp',
     type: 'text2img',
     prompt:
       'Beautiful sound wave patterns as glowing light sculpture, resonance and vibration healing concept, blues and purples on dark background, cinematic, no text',
@@ -193,8 +193,8 @@ async function submitTask(task) {
   const input = {
     prompt: task.prompt,
     aspect_ratio: '16:9',
-    resolution: '2K',
-    output_format: 'jpg',
+    resolution: '1K',
+    output_format: 'webp',
   }
   if (task.type === 'composite') {
     input.image_input = [REFERENCE_IMAGE_URL]

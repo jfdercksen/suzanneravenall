@@ -94,7 +94,7 @@ export default function GroupCorporate() {
               className="group relative overflow-hidden min-h-[220px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
               <Image
-                src="/images/generated/group-coaching-real.jpg"
+                src="/images/generated/group-coaching-real.webp"
                 alt=""
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

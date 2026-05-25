@@ -6,14 +6,14 @@ import { motion } from 'framer-motion'
 import { topics, type TopicSlug } from '@/app/explore/topics'
 
 const TOPIC_IMAGES: Record<TopicSlug, string> = {
-  'emotional-nervous-system-mastery': '/images/generated/explore-energy.jpg',
-  'relationships-attachment-patterns': '/images/generated/session-coaching.jpg',
-  'next-level-health-vitality-longevity': '/images/generated/explore-mindfulness.jpg',
-  'intuition-as-patterned-intelligence': '/images/generated/explore-akashic.jpg',
-  'leadership-high-performance': '/images/generated/explore-transformation.jpg',
-  'life-transitions-reinvention': '/images/generated/explore-purpose.jpg',
-  'health-energy-intelligence': '/images/generated/explore-resonance.jpg',
-  'identity-purpose-activation': '/images/generated/explore-repatterning.jpg',
+  'emotional-nervous-system-mastery': '/images/generated/explore-energy.webp',
+  'relationships-attachment-patterns': '/images/generated/session-coaching.webp',
+  'next-level-health-vitality-longevity': '/images/generated/explore-mindfulness.webp',
+  'intuition-as-patterned-intelligence': '/images/generated/explore-akashic.webp',
+  'leadership-high-performance': '/images/generated/explore-transformation.webp',
+  'life-transitions-reinvention': '/images/generated/explore-purpose.webp',
+  'health-energy-intelligence': '/images/generated/explore-resonance.webp',
+  'identity-purpose-activation': '/images/generated/explore-repatterning.webp',
 }
 
 export default function ExploreTopicGrid() {
