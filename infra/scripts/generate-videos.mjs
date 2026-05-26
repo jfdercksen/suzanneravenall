@@ -2,7 +2,7 @@
 /**
  * generate-videos.mjs
  *
- * Generates hero videos using Kling 3.0 image-to-video via Kie.ai API.
+ * Generates hero videos using Seedance 2.0 (bytedance/seedance-2) via Kie.ai API.
  * Run from the project root:
  *   KIE_API_KEY=<your-key> node infra/scripts/generate-videos.mjs
  *
@@ -142,13 +142,15 @@ async function pollForResult(taskId) {
 
 async function submitVideo(task) {
   const body = JSON.stringify({
-    model: 'kling-3.0/video',
+    model: 'bytedance/seedance-2',
     input: {
       prompt: task.prompt,
-      image_urls: [task.imageUrl],
-      duration: task.duration,
+      first_frame_url: task.imageUrl,
       aspect_ratio: '16:9',
-      mode: 'pro',
+      duration: Number(task.duration),
+      resolution: '720p',
+      generate_audio: false,
+      web_search: false,
     },
   })
   const res = await fetchJson(`${API_BASE}/jobs/createTask`, { method: 'POST', body })
@@ -161,7 +163,7 @@ async function main() {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true })
 
   const total = TASKS.length
-  console.log('Model: kling-3.0/video')
+  console.log('Model: bytedance/seedance-2')
   console.log(`VPS base URL: ${VPS_BASE}`)
   console.log('Note: Video URLs expire in 24h — downloading immediately on completion.\n')
 
