@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 const fadeUp = (delay: number) => ({
@@ -15,14 +14,17 @@ export default function AboutHero() {
       aria-labelledby="about-hero-heading"
       className="relative h-screen min-h-[640px] overflow-hidden"
     >
-      <Image
-        src="/images/hero-bg-suzanne-ravenall.jpg"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover"
+        poster="/images/hero-bg-suzanne-ravenall.jpg"
+      >
+        <source src="/videos/generated/hero-brain-video.mp4" type="video/mp4" />
+      </video>
       <div
         aria-hidden="true"
         className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/20"

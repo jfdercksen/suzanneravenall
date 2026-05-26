@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
@@ -21,15 +20,18 @@ export default function Hero() {
       aria-labelledby="hero-heading"
       className="relative h-screen min-h-[700px] overflow-hidden"
     >
-      {/* Layer 1 — Background image */}
-      <Image
-        src="/images/hero-bg-suzanne-ravenall.jpg"
-        alt="Dr. Suzanne Ravenall speaking on stage"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
+      {/* Layer 1 — Background video */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover"
+        poster="/images/hero-bg-suzanne-ravenall.jpg"
+      >
+        <source src="/videos/generated/hero-stage-video.mp4" type="video/mp4" />
+      </video>
 
       {/* Layer 2 — Gradient overlay */}
       <div
