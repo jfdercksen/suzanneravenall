@@ -144,7 +144,7 @@ export default function ExploreTopicGrid() {
         </div>
 
         {/* RIGHT PANEL — active topic display (60%) */}
-        <div className="relative w-3/5 h-full rounded-card overflow-hidden">
+        <div className="relative w-3/5 rounded-card overflow-hidden">
           {/* Progress bar — key resets animation on every topic change */}
           {!paused && (
             <motion.div
