@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Target, Users, Zap } from 'lucide-react'
@@ -87,14 +86,17 @@ export default function MasterclassContent() {
     <>
       {/* ── Section 1: Hero (dark) ───────────────────────────────────────── */}
       <section className="relative w-full bg-brand-primary min-h-screen flex items-center py-24 lg:py-40 overflow-hidden">
-        <Image
-          src="/images/generated/hero-masterclass.webp"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-30"
-        />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden="true"
+          className="absolute inset-0 z-0 w-full h-full object-cover opacity-30"
+          poster="/images/generated/hero-masterclass.webp"
+        >
+          <source src="/videos/generated/hero-brain-video.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
         </div>
