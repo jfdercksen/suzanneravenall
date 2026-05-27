@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { topics, type TopicSlug } from '@/app/explore/topics'
@@ -20,6 +21,7 @@ const TOPIC_IMAGES: Record<TopicSlug, string> = {
 }
 
 export default function ExploreTopicGrid() {
+  const router = useRouter()
   const [activeIndex, setActiveIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -109,6 +111,12 @@ export default function ExploreTopicGrid() {
                 key={topic.slug}
                 id={`explore-topic-${i}`}
                 onClick={() => selectTopic(i)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    router.push(`/explore/${topic.slug}`)
+                  }
+                }}
                 className={[
                   'group text-left border-l-2 pl-6 py-3.5 transition-all duration-300',
                   'focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-inset',
