@@ -9,6 +9,13 @@
  *   - testimonial.quote, testimonial.name, testimonial.outcome
  *   - stat.value, stat.label
  *   - programSlug (link to Medusa product slug once products are named)
+ *
+ * Orphaned assets (not assigned to any topic — available for approach section
+ * card backgrounds or other phase-2 decorative use):
+ *   - /images/generated/explore-akashic.webp   (cosmic library, deep blue/gold)
+ *   - /images/generated/explore-repatterning.webp (neural pathways, electric blue)
+ *   - /images/generated/explore-mindfulness.webp  (freed by neuro.jpg swap)
+ *   - /images/generated/explore-purpose.webp   (open road at sunrise)
  */
 
 export type TopicSlug =
@@ -48,7 +55,7 @@ export const topics: Topic[] = [
     title: 'Emotional & Nervous System Mastery',
     shortDescription:
       'You don’t have an emotional problem. You have a nervous system pattern.',
-    image: '/images/generated/explore-mindfulness.webp',
+    image: '/images/focus/neuro.jpg',
     openingQuestion:
       'Do you feel wired but exhausted — calm on the outside, running hard on the inside?',
     heroHeadline: 'Emotional Mastery Begins in the Nervous System',
@@ -208,11 +215,11 @@ export const topics: Topic[] = [
       'You don’t choose relationships consciously — you choose what feels familiar to your nervous system. Repattern the attachment template underneath the cycle.',
   },
   {
-    slug: 'next-level-health-vitality-longevity',
-    title: 'Next-Level Health, Vitality & Longevity',
+    slug: ‘next-level-health-vitality-longevity’,
+    title: ‘Next-Level Health, Vitality & Longevity’,
     shortDescription:
-      'Your ceiling isn’t your effort. It’s the pattern your system runs under pressure.',
-    image: '/images/generated/explore-energy.webp',
+      ‘Your ceiling isn’t your effort. It’s the pattern your system runs under pressure.’,
+    image: ‘/images/generated/explore-vitality.webp’,
     openingQuestion:
       'Is your body telling you something your mind keeps overriding?',
     heroHeadline: 'Vitality Isn’t Willpower. It’s Pattern.',
@@ -529,7 +536,7 @@ export const topics: Topic[] = [
     title: 'Health & Energy Intelligence',
     shortDescription:
       'Your body is not failing you. It is responding to patterns.',
-    image: '/images/generated/explore-energy.webp',
+    image: '/images/focus/health.webp',
     openingQuestion:
       'Is your body telling you something your mind keeps overriding?',
     heroHeadline: 'Your Body Is Not Failing You. It Is Responding to Patterns.',
@@ -605,11 +612,11 @@ export const topics: Topic[] = [
       'Your body is not broken — it is responding to patterns. Repattern the nervous system so energy, recovery and resilience return.',
   },
   {
-    slug: 'identity-purpose-activation',
-    title: 'Identity & Purpose Activation',
+    slug: ‘identity-purpose-activation’,
+    title: ‘Identity & Purpose Activation’,
     shortDescription:
-      'You don’t have a motivation problem. You have an identity pattern.',
-    image: '/images/focus/mindset.webp',
+      ‘You don’t have a motivation problem. You have an identity pattern.’,
+    image: ‘/images/focus/purpose.webp’,
     openingQuestion:
       'Do you know what you should want — but struggle to actually want it?',
     heroHeadline: 'You Don’t Have a Motivation Problem. You Have an Identity Pattern.',
