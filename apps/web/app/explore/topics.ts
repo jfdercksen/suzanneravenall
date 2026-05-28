@@ -10,7 +10,7 @@
  *   - stat.value, stat.label
  *   - programSlug (link to Medusa product slug once products are named)
  *
- * Orphaned assets (not assigned to any topic — available for approach section
+ * Orphaned assets (not assigned to any topic -- available for approach section
  * card backgrounds or other phase-2 decorative use):
  *   - /images/generated/explore-akashic.webp   (cosmic library, deep blue/gold)
  *   - /images/generated/explore-repatterning.webp (neural pathways, electric blue)
@@ -54,15 +54,15 @@ export const topics: Topic[] = [
     slug: 'emotional-nervous-system-mastery',
     title: 'Emotional & Nervous System Mastery',
     shortDescription:
-      'You don't have an emotional problem. You have a nervous system pattern.',
+      'You don’t have an emotional problem. You have a nervous system pattern.',
     image: '/images/focus/neuro.jpg',
     openingQuestion:
       'Do you feel wired but exhausted — calm on the outside, running hard on the inside?',
     heroHeadline: 'Emotional Mastery Begins in the Nervous System',
     heroSubheadline:
-      'If your emotions feel overwhelming, unpredictable or exhausting — it's not because you're too emotional. It's because your nervous system has learned a pattern.',
+      'If your emotions feel overwhelming, unpredictable or exhausting — it’s not because you’re too emotional. It’s because your nervous system has learned a pattern.',
     overview: [
-      'Most people believe their emotions are the problem. “I'm anxious.” “I overreact.” “I shut down.” So they try to control them.',
+      'Most people believe their emotions are the problem. “I’m anxious.” “I overreact.” “I shut down.” So they try to control them.',
       'But emotions are not the cause — they are the output. They are the result of how your nervous system is interpreting the world.',
       'If your nervous system feels unsafe, you will experience anxiety — even in safe environments. If your system expects pressure, you will feel stress — even when nothing is wrong. If your system learned to shut down, you will disconnect — even when you want to engage.',
     ],
@@ -78,7 +78,7 @@ export const topics: Topic[] = [
       },
       {
         title: 'You think clearly under pressure',
-        body: 'Clarity returns because the nervous system isn't hijacking it.',
+        body: 'Clarity returns because the nervous system isn’t hijacking it.',
       },
       {
         title: 'You stop feeling “on edge”',
@@ -132,21 +132,21 @@ export const topics: Topic[] = [
     ],
     metaTitle: 'Emotional & Nervous System Mastery | Dr. Suzanne Ravenall',
     metaDescription:
-      'Emotional mastery begins in the nervous system. Repattern anxiety, overwhelm and reactivity at the level where they're actually formed.',
+      'Emotional mastery begins in the nervous system. Repattern anxiety, overwhelm and reactivity at the level where they’re actually formed.',
   },
   {
     slug: 'relationships-attachment-patterns',
     title: 'Relationships & Attachment Patterns',
-    shortDescription: 'Love isn't the problem. The pattern is.',
+    shortDescription: 'Love isn’t the problem. The pattern is.',
     image: '/images/focus/relationships.webp',
     openingQuestion:
-      'Do you find yourself repeating the same relationship dynamic, no matter who you're with?',
-    heroHeadline: 'Love Isn't the Problem. The Pattern Is.',
+      'Do you find yourself repeating the same relationship dynamic, no matter who you’re with?',
+    heroHeadline: 'Love Isn’t the Problem. The Pattern Is.',
     heroSubheadline:
-      'If you keep experiencing the same relationship dynamics — different person, same feeling — it's not coincidence. It's pattern.',
+      'If you keep experiencing the same relationship dynamics — different person, same feeling — it’s not coincidence. It’s pattern.',
     overview: [
-      'You don't choose relationships consciously. You choose what feels familiar to your nervous system. Your mind thinks it is choosing love, but your body is selecting what it already knows. Familiar dynamics read as “home,” even when they are chaotic.',
-      'Safety gets interpreted as recognition, not health. If intensity once felt like love, you'll keep chasing intensity. If distance felt protective, you'll keep agreeing to distance.',
+      'You don’t choose relationships consciously. You choose what feels familiar to your nervous system. Your mind thinks it is choosing love, but your body is selecting what it already knows. Familiar dynamics read as “home,” even when they are chaotic.',
+      'Safety gets interpreted as recognition, not health. If intensity once felt like love, you’ll keep chasing intensity. If distance felt protective, you’ll keep agreeing to distance.',
       'Your attachment pattern formed early. It taught your system what connection should feel like, what to expect from others, and how to stay safe — so now you may chase connection (anxious), avoid closeness (avoidant), or move between both (push-pull).',
     ],
     corePrinciple:
@@ -212,25 +212,25 @@ export const topics: Topic[] = [
     ],
     metaTitle: 'Relationships & Attachment Patterns | Dr. Suzanne Ravenall',
     metaDescription:
-      'You don't choose relationships consciously — you choose what feels familiar to your nervous system. Repattern the attachment template underneath the cycle.',
+      'You don’t choose relationships consciously — you choose what feels familiar to your nervous system. Repattern the attachment template underneath the cycle.',
   },
   {
     slug: 'next-level-health-vitality-longevity',
     title: 'Next-Level Health, Vitality & Longevity',
     shortDescription:
-      'Your ceiling isn't your effort. It's the pattern your system runs under pressure.',
+      'Your ceiling isn’t your effort. It’s the pattern your system runs under pressure.',
     image: '/images/generated/explore-vitality.webp',
     openingQuestion:
       'Is your body telling you something your mind keeps overriding?',
-    heroHeadline: 'Vitality Isn't Willpower. It's Pattern.',
+    heroHeadline: 'Vitality Isn’t Willpower. It’s Pattern.',
     heroSubheadline:
-      'High performers don't just work harder — they operate from different internal patterns. Shift the pattern and vitality follows.',
+      'High performers don’t just work harder — they operate from different internal patterns. Shift the pattern and vitality follows.',
     overview: [
       'Performance is the output of the pattern you are running under pressure. The way your system learned to drive results — overdrive, reactivity, chaos — keeps repeating until the internal operating system changes.',
       'High performers often run one of three programs on repeat: overdrive (always-on output that burns energy faster than you can recover), reactivity (decisions driven by threat response that produce errors and erode trust), or lack of structure (inconsistent systems that create sporadic wins).',
       'The outcome is predictable: plateau, exhaustion, ineffective leadership, inconsistency. Pushing harder only reinforces the same pattern.',
     ],
-    corePrinciple: 'Your energy is not your genetics. It's your pattern.',
+    corePrinciple: 'Your energy is not your genetics. It’s your pattern.',
     discover: [
       {
         title: 'Calm, clear decision-making',
@@ -258,7 +258,7 @@ export const topics: Topic[] = [
       {
         step: '02',
         title: 'Subconscious pattern decoding',
-        body: 'We locate the performance pattern — overdrive, reactivity, or chaos — that's capping your results.',
+        body: 'We locate the performance pattern — overdrive, reactivity, or chaos — that’s capping your results.',
       },
       {
         step: '03',
@@ -272,7 +272,7 @@ export const topics: Topic[] = [
       },
     ],
     ctaHook:
-      'Your body is not failing you. It's following a pattern. Patterns change.',
+      'Your body is not failing you. It’s following a pattern. Patterns change.',
     // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
@@ -297,19 +297,19 @@ export const topics: Topic[] = [
   {
     slug: 'intuition-as-patterned-intelligence',
     title: 'Intuition as Patterned Intelligence',
-    shortDescription: 'Intuition isn't magic. It's pattern recognition.',
+    shortDescription: 'Intuition isn’t magic. It’s pattern recognition.',
     image: '/images/generated/explore-resonance.webp',
     openingQuestion:
       'Have you ever known something before you could explain why you knew it?',
-    heroHeadline: 'Intuition Is Not Magic. It's Pattern Recognition.',
+    heroHeadline: 'Intuition Is Not Magic. It’s Pattern Recognition.',
     heroSubheadline:
-      'Your nervous system reads the room faster than your conscious mind can. When the system is clear, intuition is reliable intelligence. When it's dysregulated, it drowns in noise.',
+      'Your nervous system reads the room faster than your conscious mind can. When the system is clear, intuition is reliable intelligence. When it’s dysregulated, it drowns in noise.',
     overview: [
-      'Intuition is your nervous system processing signal at a speed your conscious mind cannot match. It isn't a mystical sense — it's a high-speed pattern recognition engine built from every experience your system has ever logged.',
-      'When your nervous system is dysregulated, signal gets drowned by noise — you second-guess, override, or miss what your body already knew. The “gut feeling” you keep ignoring is not unreliable. The system that's supposed to deliver it is.',
+      'Intuition is your nervous system processing signal at a speed your conscious mind cannot match. It isn’t a mystical sense — it’s a high-speed pattern recognition engine built from every experience your system has ever logged.',
+      'When your nervous system is dysregulated, signal gets drowned by noise — you second-guess, override, or miss what your body already knew. The “gut feeling” you keep ignoring is not unreliable. The system that’s supposed to deliver it is.',
       'Regulate the system and intuition returns as reliable, patterned intelligence — not a lucky hunch, but a consistent read you can act on without hesitation.',
     ],
-    corePrinciple: 'Your intuition is not a gift. It's a pattern you can decode.',
+    corePrinciple: 'Your intuition is not a gift. It’s a pattern you can decode.',
     discover: [
       {
         title: 'You trust the read',
@@ -351,7 +351,7 @@ export const topics: Topic[] = [
       },
     ],
     ctaHook:
-      'Your intuition is not a feeling. It's intelligence your nervous system collected before your mind caught up.',
+      'Your intuition is not a feeling. It’s intelligence your nervous system collected before your mind caught up.',
     // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
@@ -376,19 +376,19 @@ export const topics: Topic[] = [
   {
     slug: 'leadership-high-performance',
     title: 'Leadership & High Performance',
-    shortDescription: 'High performance isn't effort. It's pattern.',
+    shortDescription: 'High performance isn’t effort. It’s pattern.',
     image: '/images/focus/business.jpg',
     openingQuestion:
-      'Are you performing at the level others see — or the level you know you're capable of?',
-    heroHeadline: 'High Performance Isn't Effort. It's Pattern.',
+      'Are you performing at the level others see — or the level you know you’re capable of?',
+    heroHeadline: 'High Performance Isn’t Effort. It’s Pattern.',
     heroSubheadline:
-      'Top performers don't just work harder — they operate from different internal patterns. Shift the pattern and output follows.',
+      'Top performers don’t just work harder — they operate from different internal patterns. Shift the pattern and output follows.',
     overview: [
       'Performance is the output of the pattern you are running under pressure. The way your system learned to drive results — overdrive, reactivity, chaos — keeps repeating until the internal operating system changes.',
       'High performers often run one of three programs on repeat: overdrive (always-on output that burns energy faster than you can recover), reactivity (decisions driven by threat response that produce errors and erode trust), or lack of structure (inconsistent systems that create sporadic wins and unreliable teams).',
       'You see: plateau, exhaustion, ineffective leadership, inconsistency. Pushing harder only reinforces the same pattern — interpreting intensity as progress and recycling the same stress chemistry.',
     ],
-    corePrinciple: 'Your ceiling is not your skill level. It's your pattern.',
+    corePrinciple: 'Your ceiling is not your skill level. It’s your pattern.',
     discover: [
       {
         title: 'Calm, clear decision-making',
@@ -416,7 +416,7 @@ export const topics: Topic[] = [
       {
         step: '02',
         title: 'Subconscious pattern decoding',
-        body: 'We name the performance pattern — overdrive, reactivity, or inconsistency — that's capping the team.',
+        body: 'We name the performance pattern — overdrive, reactivity, or inconsistency — that’s capping the team.',
       },
       {
         step: '03',
@@ -430,7 +430,7 @@ export const topics: Topic[] = [
       },
     ],
     ctaHook:
-      'The ceiling you keep hitting is not a skill gap. It's a pattern.',
+      'The ceiling you keep hitting is not a skill gap. It’s a pattern.',
     // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
@@ -455,19 +455,19 @@ export const topics: Topic[] = [
   {
     slug: 'life-transitions-reinvention',
     title: 'Life Transitions & Reinvention',
-    shortDescription: 'You're not lost. You're between identities.',
+    shortDescription: 'You’re not lost. You’re between identities.',
     image: '/images/generated/explore-transformation.webp',
     openingQuestion:
-      'Does it feel like the version of you that got here can't take you where you need to go?',
+      'Does it feel like the version of you that got here can’t take you where you need to go?',
     heroHeadline: 'When Life Changes, Patterns Decide What Happens Next',
     heroSubheadline:
-      'You are not lost. You are between identities — one is dissolving while the next hasn't formed yet. That space in-between is not failure; it's pattern reconfiguration.',
+      'You are not lost. You are between identities — one is dissolving while the next hasn’t formed yet. That space in-between is not failure; it’s pattern reconfiguration.',
     overview: [
-      'Transitions strip away familiar patterns before new ones exist. That's why everything feels uncertain.',
-      'When life shifts, old patterns no longer work and a new identity hasn't been anchored. What has always created certainty no longer fits this chapter — and your system hasn't coded who you are becoming, so it hesitates.',
+      'Transitions strip away familiar patterns before new ones exist. That’s why everything feels uncertain.',
+      'When life shifts, old patterns no longer work and a new identity hasn’t been anchored. What has always created certainty no longer fits this chapter — and your system hasn’t coded who you are becoming, so it hesitates.',
       'The in-between feels unstable and shows up as confusion, fear, or paralysis — feeling stuck even when you want to move forward.',
     ],
-    corePrinciple: 'Transitions don't break you. They expose your patterns.',
+    corePrinciple: 'Transitions don’t break you. They expose your patterns.',
     discover: [
       {
         title: 'Clarity',
@@ -495,7 +495,7 @@ export const topics: Topic[] = [
       {
         step: '02',
         title: 'Subconscious pattern decoding',
-        body: 'We surface the old identity pattern that's still running in the background.',
+        body: 'We surface the old identity pattern that’s still running in the background.',
       },
       {
         step: '03',
@@ -509,7 +509,7 @@ export const topics: Topic[] = [
       },
     ],
     ctaHook:
-      'Transitions don't require you to figure out who to become. They require you to release who you've been.',
+      'Transitions don’t require you to figure out who to become. They require you to release who you’ve been.',
     // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
@@ -529,7 +529,7 @@ export const topics: Topic[] = [
     ],
     metaTitle: 'Life Transitions & Reinvention | Dr. Suzanne Ravenall',
     metaDescription:
-      'You're not lost — you're between identities. Move through transition by repatterning the old identity and anchoring the next one.',
+      'You’re not lost — you’re between identities. Move through transition by repatterning the old identity and anchoring the next one.',
   },
   {
     slug: 'health-energy-intelligence',
@@ -543,9 +543,9 @@ export const topics: Topic[] = [
     heroSubheadline:
       'Symptoms are not random — they are signals. Your nervous system assigns meaning to every sensation, and when the pattern stays the same, the signals do too.',
     overview: [
-      'Fatigue, tension, and pain are your body reporting how safe it feels — not proof that it's broken.',
-      'When your nervous system is under constant stress, cortisol rises and your body stays on alert, keeping you wired even when you're trying to rest. Recovery decreases — sleep, digestion, and repair get deprioritised while the system keeps scanning for risk. Inflammation increases as the immune system overfires.',
-      'Over time this creates fatigue, burnout, immune disruption and chronic symptoms. Rest alone doesn't change the pattern — if your system still feels unsafe, it stays activated.',
+      'Fatigue, tension, and pain are your body reporting how safe it feels — not proof that it’s broken.',
+      'When your nervous system is under constant stress, cortisol rises and your body stays on alert, keeping you wired even when you’re trying to rest. Recovery decreases — sleep, digestion, and repair get deprioritised while the system keeps scanning for risk. Inflammation increases as the immune system overfires.',
+      'Over time this creates fatigue, burnout, immune disruption and chronic symptoms. Rest alone doesn’t change the pattern — if your system still feels unsafe, it stays activated.',
     ],
     corePrinciple: 'Your body is not the problem. It is the messenger.',
     discover: [
@@ -589,7 +589,7 @@ export const topics: Topic[] = [
       },
     ],
     ctaHook:
-      'Your body is not failing you. It's following a pattern. Patterns change.',
+      'Your body is not failing you. It’s following a pattern. Patterns change.',
     // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
@@ -615,13 +615,13 @@ export const topics: Topic[] = [
     slug: 'identity-purpose-activation',
     title: 'Identity & Purpose Activation',
     shortDescription:
-      'You don't have a motivation problem. You have an identity pattern.',
+      'You don’t have a motivation problem. You have an identity pattern.',
     image: '/images/focus/purpose.webp',
     openingQuestion:
       'Do you know what you should want — but struggle to actually want it?',
-    heroHeadline: 'You Don't Have a Motivation Problem. You Have an Identity Pattern.',
+    heroHeadline: 'You Don’t Have a Motivation Problem. You Have an Identity Pattern.',
     heroSubheadline:
-      'You don't act based on what you want. You act based on who you believe you are. Every choice is filtered through identity — and identity keeps you loyal to what feels true about you, even when it contradicts what you want next.',
+      'You don’t act based on what you want. You act based on who you believe you are. Every choice is filtered through identity — and identity keeps you loyal to what feels true about you, even when it contradicts what you want next.',
     overview: [
       'If your identity says “stay invisible,” you play small no matter how big the goal.',
       'Your identity is built from past experiences, conditioning, and survival adaptations. Old moments defined who you think you must be to stay safe or valued. Roles you were praised or punished for convinced you that certain identities are “right.” You learned strategies — prove yourself, stay invisible, drift — that kept you safe then and run you now.',
@@ -642,7 +642,7 @@ export const topics: Topic[] = [
         body: 'Purpose stops being abstract and becomes embodied.',
       },
       {
-        title: 'You match where you're going',
+        title: 'You match where you’re going',
         body: 'You show up as the identity your next chapter actually needs.',
       },
     ],
@@ -665,11 +665,11 @@ export const topics: Topic[] = [
       {
         step: '04',
         title: 'Identity recalibration',
-        body: 'You anchor the identity that matches where you're actually going.',
+        body: 'You anchor the identity that matches where you’re actually going.',
       },
     ],
     ctaHook:
-      'Purpose isn't found. It's uncovered when the patterns obscuring it are cleared.',
+      'Purpose isn’t found. It’s uncovered when the patterns obscuring it are cleared.',
     // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
@@ -689,7 +689,7 @@ export const topics: Topic[] = [
     ],
     metaTitle: 'Identity & Purpose Activation | Dr. Suzanne Ravenall',
     metaDescription:
-      'You don't have a motivation problem — you have an identity pattern. Shift the identity and behaviour follows.',
+      'You don’t have a motivation problem — you have an identity pattern. Shift the identity and behaviour follows.',
   },
 ]
 
