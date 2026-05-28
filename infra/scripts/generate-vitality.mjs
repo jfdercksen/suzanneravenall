@@ -35,7 +35,7 @@ const OUTPUT_FILE = 'explore-vitality.webp'
 
 const TASK = {
   filename: OUTPUT_FILE,
-  model: 'google/nano-banana-pro',
+  model: 'nano-banana-2',
   prompt:
     'Peak physical vitality and longevity concept, person running at sunrise on a mountain trail, biological age reversal, energy and performance, cinematic photography, golden hour light, South African landscape, aspirational and powerful, no text, 16:9',
 }
@@ -139,7 +139,6 @@ async function main() {
       prompt: TASK.prompt,
       aspect_ratio: '16:9',
       resolution: '1K',
-      output_format: 'webp',
     },
   })
 
@@ -151,9 +150,13 @@ async function main() {
   const imageUrl = await pollForResult(taskId)
 
   console.log('Downloading...')
-  await downloadFile(imageUrl, destPath)
+  // Download to a temp file first (API may return .jpg or .png), then rename to .webp
+  const ext = imageUrl.split('?')[0].split('.').pop() || 'jpg'
+  const tmpPath = destPath.replace('.webp', `.tmp.${ext}`)
+  await downloadFile(imageUrl, tmpPath)
+  fs.renameSync(tmpPath, destPath)
   const sizeKB = Math.round(fs.statSync(destPath).size / 1024)
-  console.log(`\nSaved: ${TASK.filename} (${sizeKB} KB)`)
+  console.log(`\nSaved: ${TASK.filename} (${sizeKB} KB) — original format: .${ext}`)
   console.log('\nNext steps:')
   console.log('  git add apps/web/public/images/generated/explore-vitality.webp')
   console.log('  git commit -m "feat: add explore-vitality.webp hero image for next-level-health topic"')
