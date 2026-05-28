@@ -4,6 +4,11 @@
  *
  * Do not invent content for these topics. If a field needs a new value,
  * pull it from the source .md file for that slug.
+ *
+ * TODO fields are placeholders Suzanne must replace before go-live:
+ *   - testimonial.quote, testimonial.name, testimonial.outcome
+ *   - stat.value, stat.label
+ *   - programSlug (link to Medusa product slug once products are named)
  */
 
 export type TopicSlug =
@@ -20,12 +25,19 @@ export type Topic = {
   slug: TopicSlug
   title: string
   shortDescription: string
+  image: string
+  openingQuestion: string
   heroHeadline: string
   heroSubheadline: string
   overview: string[]
   corePrinciple: string
   discover: { title: string; body: string }[]
   approach: { step: string; title: string; body: string }[]
+  ctaHook: string
+  testimonial: { quote: string; name: string; outcome: string }
+  stat: { value: string; label: string }
+  relatedTo: TopicSlug[]
+  programSlug?: string
   metaTitle: string
   metaDescription: string
 }
@@ -36,6 +48,9 @@ export const topics: Topic[] = [
     title: 'Emotional & Nervous System Mastery',
     shortDescription:
       'You don’t have an emotional problem. You have a nervous system pattern.',
+    image: '/images/generated/explore-mindfulness.webp',
+    openingQuestion:
+      'Do you feel wired but exhausted — calm on the outside, running hard on the inside?',
     heroHeadline: 'Emotional Mastery Begins in the Nervous System',
     heroSubheadline:
       'If your emotions feel overwhelming, unpredictable or exhausting — it’s not because you’re too emotional. It’s because your nervous system has learned a pattern.',
@@ -89,6 +104,25 @@ export const topics: Topic[] = [
         body: 'You integrate as the version of you who no longer needs the pattern to feel safe.',
       },
     ],
+    ctaHook:
+      'Your nervous system learned this pattern to keep you safe. It can learn a new one.',
+    // TODO: Suzanne to replace with real anonymised client testimonial
+    testimonial: {
+      quote:
+        'TODO: Suzanne to provide real client testimonial for emotional & nervous system mastery.',
+      name: 'TODO: Client name (anonymised)',
+      outcome: 'TODO: e.g. “6 sessions — from chronic anxiety to sleeping through the night”',
+    },
+    // TODO: Suzanne to provide real outcome stat
+    stat: {
+      value: 'TODO',
+      label: 'TODO: e.g. clients report sustained calm within 4 weeks',
+    },
+    relatedTo: [
+      'relationships-attachment-patterns',
+      'next-level-health-vitality-longevity',
+      'life-transitions-reinvention',
+    ],
     metaTitle: 'Emotional & Nervous System Mastery | Dr. Suzanne Ravenall',
     metaDescription:
       'Emotional mastery begins in the nervous system. Repattern anxiety, overwhelm and reactivity at the level where they’re actually formed.',
@@ -96,8 +130,10 @@ export const topics: Topic[] = [
   {
     slug: 'relationships-attachment-patterns',
     title: 'Relationships & Attachment Patterns',
-    shortDescription:
-      'Love isn’t the problem. The pattern is.',
+    shortDescription: 'Love isn’t the problem. The pattern is.',
+    image: '/images/focus/relationships.webp',
+    openingQuestion:
+      'Do you find yourself repeating the same relationship dynamic, no matter who you’re with?',
     heroHeadline: 'Love Isn’t the Problem. The Pattern Is.',
     heroSubheadline:
       'If you keep experiencing the same relationship dynamics — different person, same feeling — it’s not coincidence. It’s pattern.',
@@ -148,6 +184,25 @@ export const topics: Topic[] = [
         body: 'You become the version of you who can receive and sustain healthy connection.',
       },
     ],
+    ctaHook:
+      'The pattern in your relationships started long before this relationship.',
+    // TODO: Suzanne to replace with real anonymised client testimonial
+    testimonial: {
+      quote:
+        'TODO: Suzanne to provide real client testimonial for relationships & attachment patterns.',
+      name: 'TODO: Client name (anonymised)',
+      outcome: 'TODO: e.g. “8 sessions — ended the push-pull cycle, in a stable relationship for the first time”',
+    },
+    // TODO: Suzanne to provide real outcome stat
+    stat: {
+      value: 'TODO',
+      label: 'TODO: e.g. clients identify their attachment pattern within the first two sessions',
+    },
+    relatedTo: [
+      'emotional-nervous-system-mastery',
+      'identity-purpose-activation',
+      'life-transitions-reinvention',
+    ],
     metaTitle: 'Relationships & Attachment Patterns | Dr. Suzanne Ravenall',
     metaDescription:
       'You don’t choose relationships consciously — you choose what feels familiar to your nervous system. Repattern the attachment template underneath the cycle.',
@@ -157,15 +212,18 @@ export const topics: Topic[] = [
     title: 'Next-Level Health, Vitality & Longevity',
     shortDescription:
       'Your ceiling isn’t your effort. It’s the pattern your system runs under pressure.',
+    image: '/images/generated/explore-energy.webp',
+    openingQuestion:
+      'Is your body telling you something your mind keeps overriding?',
     heroHeadline: 'Vitality Isn’t Willpower. It’s Pattern.',
     heroSubheadline:
-      'Top performers don’t just work harder — they operate from different internal patterns. Shift the pattern and output follows.',
+      'High performers don’t just work harder — they operate from different internal patterns. Shift the pattern and vitality follows.',
     overview: [
       'Performance is the output of the pattern you are running under pressure. The way your system learned to drive results — overdrive, reactivity, chaos — keeps repeating until the internal operating system changes.',
       'High performers often run one of three programs on repeat: overdrive (always-on output that burns energy faster than you can recover), reactivity (decisions driven by threat response that produce errors and erode trust), or lack of structure (inconsistent systems that create sporadic wins).',
       'The outcome is predictable: plateau, exhaustion, ineffective leadership, inconsistency. Pushing harder only reinforces the same pattern.',
     ],
-    corePrinciple: 'Your ceiling is not your skill level. It’s your pattern.',
+    corePrinciple: 'Your energy is not your genetics. It’s your pattern.',
     discover: [
       {
         title: 'Calm, clear decision-making',
@@ -206,6 +264,25 @@ export const topics: Topic[] = [
         body: 'You integrate as the leader whose vitality matches their ambition.',
       },
     ],
+    ctaHook:
+      'Your body is not failing you. It’s following a pattern. Patterns change.',
+    // TODO: Suzanne to replace with real anonymised client testimonial
+    testimonial: {
+      quote:
+        'TODO: Suzanne to provide real client testimonial for next-level health, vitality & longevity.',
+      name: 'TODO: Client name (anonymised)',
+      outcome: 'TODO: e.g. “10 sessions — from burnout to consistent energy and 6-hour deep sleep”',
+    },
+    // TODO: Suzanne to provide real outcome stat
+    stat: {
+      value: 'TODO',
+      label: 'TODO: e.g. clients report measurable energy improvement within 6 weeks',
+    },
+    relatedTo: [
+      'emotional-nervous-system-mastery',
+      'life-transitions-reinvention',
+      'identity-purpose-activation',
+    ],
     metaTitle: 'Next-Level Health, Vitality & Longevity | Dr. Suzanne Ravenall',
     metaDescription:
       'Vitality is pattern, not willpower. Repattern the internal operating system so output becomes sustainable — not powered by pressure.',
@@ -214,31 +291,34 @@ export const topics: Topic[] = [
     slug: 'intuition-as-patterned-intelligence',
     title: 'Intuition as Patterned Intelligence',
     shortDescription: 'Intuition isn’t magic. It’s pattern recognition.',
+    image: '/images/generated/explore-resonance.webp',
+    openingQuestion:
+      'Have you ever known something before you could explain why you knew it?',
     heroHeadline: 'Intuition Is Not Magic. It’s Pattern Recognition.',
     heroSubheadline:
-      'Top performers don’t just work harder — they operate from different internal patterns. Shift the pattern and intuition sharpens.',
+      'Your nervous system reads the room faster than your conscious mind can. When the system is clear, intuition is reliable intelligence. When it’s dysregulated, it drowns in noise.',
     overview: [
-      'Performance is the output of the pattern you are running under pressure. The way your system learned to read the room — under overdrive, reactivity, or chaos — keeps repeating until the internal operating system changes.',
-      'Intuition is your nervous system reading signal faster than the conscious mind can. When the system is dysregulated, signal gets drowned by noise — you second-guess, override, or miss what your body already knew.',
-      'Regulate the system and intuition returns as reliable, patterned intelligence — not a lucky hunch.',
+      'Intuition is your nervous system processing signal at a speed your conscious mind cannot match. It isn’t a mystical sense — it’s a high-speed pattern recognition engine built from every experience your system has ever logged.',
+      'When your nervous system is dysregulated, signal gets drowned by noise — you second-guess, override, or miss what your body already knew. The “gut feeling” you keep ignoring is not unreliable. The system that’s supposed to deliver it is.',
+      'Regulate the system and intuition returns as reliable, patterned intelligence — not a lucky hunch, but a consistent read you can act on without hesitation.',
     ],
-    corePrinciple: 'Your ceiling is not your skill level. It’s your pattern.',
+    corePrinciple: 'Your intuition is not a gift. It’s a pattern you can decode.',
     discover: [
       {
-        title: 'Calm, clear decision-making',
-        body: 'You trust the read instead of overriding it.',
+        title: 'You trust the read',
+        body: 'Signal comes through clearly instead of getting overridden by doubt.',
       },
       {
-        title: 'Sustainable performance',
-        body: 'Good calls stop costing you energy you can’t afford.',
+        title: 'Decisions cost less energy',
+        body: 'Good calls stop requiring the exhausting internal negotiation.',
       },
       {
-        title: 'Strategic leadership',
-        body: 'You lead from signal, not from noise.',
+        title: 'You lead from signal, not noise',
+        body: 'Clarity in you creates certainty in the room.',
       },
       {
-        title: 'Teams align around your clarity',
-        body: 'Certainty in you creates certainty in the room.',
+        title: 'You stop second-guessing yourself',
+        body: 'The pattern becomes legible — and legible patterns are actionable.',
       },
     ],
     approach: [
@@ -263,6 +343,25 @@ export const topics: Topic[] = [
         body: 'You integrate as the leader whose decisions are backed by patterned intelligence.',
       },
     ],
+    ctaHook:
+      'Your intuition is not a feeling. It’s intelligence your nervous system collected before your mind caught up.',
+    // TODO: Suzanne to replace with real anonymised client testimonial
+    testimonial: {
+      quote:
+        'TODO: Suzanne to provide real client testimonial for intuition as patterned intelligence.',
+      name: 'TODO: Client name (anonymised)',
+      outcome: 'TODO: e.g. “5 sessions — from chronic second-guessing to confident, fast decisions under pressure”',
+    },
+    // TODO: Suzanne to provide real outcome stat
+    stat: {
+      value: 'TODO',
+      label: 'TODO: e.g. clients report trusting their instincts consistently within 3 sessions',
+    },
+    relatedTo: [
+      'leadership-high-performance',
+      'identity-purpose-activation',
+      'emotional-nervous-system-mastery',
+    ],
     metaTitle: 'Intuition as Patterned Intelligence | Dr. Suzanne Ravenall',
     metaDescription:
       'Intuition is pattern recognition, not magic. Repattern the nervous system and your internal read becomes reliable, strategic intelligence.',
@@ -271,6 +370,9 @@ export const topics: Topic[] = [
     slug: 'leadership-high-performance',
     title: 'Leadership & High Performance',
     shortDescription: 'High performance isn’t effort. It’s pattern.',
+    image: '/images/focus/business.jpg',
+    openingQuestion:
+      'Are you performing at the level others see — or the level you know you’re capable of?',
     heroHeadline: 'High Performance Isn’t Effort. It’s Pattern.',
     heroSubheadline:
       'Top performers don’t just work harder — they operate from different internal patterns. Shift the pattern and output follows.',
@@ -320,6 +422,25 @@ export const topics: Topic[] = [
         body: 'You become the leader whose clarity the team can organise around.',
       },
     ],
+    ctaHook:
+      'The ceiling you keep hitting is not a skill gap. It’s a pattern.',
+    // TODO: Suzanne to replace with real anonymised client testimonial
+    testimonial: {
+      quote:
+        'TODO: Suzanne to provide real client testimonial for leadership & high performance.',
+      name: 'TODO: Client name (anonymised)',
+      outcome: 'TODO: e.g. “8 sessions — from reactive, exhausted leader to calm under pressure, team retention improved”',
+    },
+    // TODO: Suzanne to provide real outcome stat
+    stat: {
+      value: 'TODO',
+      label: 'TODO: e.g. leaders report measurable reduction in reactive decisions within 6 weeks',
+    },
+    relatedTo: [
+      'identity-purpose-activation',
+      'intuition-as-patterned-intelligence',
+      'next-level-health-vitality-longevity',
+    ],
     metaTitle: 'Leadership & High Performance | Dr. Suzanne Ravenall',
     metaDescription:
       'High performance is pattern, not effort. Repattern the internal operating system so leadership, energy and output finally align.',
@@ -328,6 +449,9 @@ export const topics: Topic[] = [
     slug: 'life-transitions-reinvention',
     title: 'Life Transitions & Reinvention',
     shortDescription: 'You’re not lost. You’re between identities.',
+    image: '/images/generated/explore-transformation.webp',
+    openingQuestion:
+      'Does it feel like the version of you that got here can’t take you where you need to go?',
     heroHeadline: 'When Life Changes, Patterns Decide What Happens Next',
     heroSubheadline:
       'You are not lost. You are between identities — one is dissolving while the next hasn’t formed yet. That space in-between is not failure; it’s pattern reconfiguration.',
@@ -377,6 +501,25 @@ export const topics: Topic[] = [
         body: 'You anchor the new identity before the circumstances have fully caught up.',
       },
     ],
+    ctaHook:
+      'Transitions don’t require you to figure out who to become. They require you to release who you’ve been.',
+    // TODO: Suzanne to replace with real anonymised client testimonial
+    testimonial: {
+      quote:
+        'TODO: Suzanne to provide real client testimonial for life transitions & reinvention.',
+      name: 'TODO: Client name (anonymised)',
+      outcome: 'TODO: e.g. “6 sessions — from paralysed in a career pivot to first client signed within 3 months”',
+    },
+    // TODO: Suzanne to provide real outcome stat
+    stat: {
+      value: 'TODO',
+      label: 'TODO: e.g. clients identify their next identity anchor within the first three sessions',
+    },
+    relatedTo: [
+      'identity-purpose-activation',
+      'emotional-nervous-system-mastery',
+      'relationships-attachment-patterns',
+    ],
     metaTitle: 'Life Transitions & Reinvention | Dr. Suzanne Ravenall',
     metaDescription:
       'You’re not lost — you’re between identities. Move through transition by repatterning the old identity and anchoring the next one.',
@@ -386,6 +529,9 @@ export const topics: Topic[] = [
     title: 'Health & Energy Intelligence',
     shortDescription:
       'Your body is not failing you. It is responding to patterns.',
+    image: '/images/generated/explore-energy.webp',
+    openingQuestion:
+      'Is your body telling you something your mind keeps overriding?',
     heroHeadline: 'Your Body Is Not Failing You. It Is Responding to Patterns.',
     heroSubheadline:
       'Symptoms are not random — they are signals. Your nervous system assigns meaning to every sensation, and when the pattern stays the same, the signals do too.',
@@ -435,6 +581,25 @@ export const topics: Topic[] = [
         body: 'You integrate as the version of you whose body is allowed to feel safe.',
       },
     ],
+    ctaHook:
+      'Your body is not failing you. It’s following a pattern. Patterns change.',
+    // TODO: Suzanne to replace with real anonymised client testimonial
+    testimonial: {
+      quote:
+        'TODO: Suzanne to provide real client testimonial for health & energy intelligence.',
+      name: 'TODO: Client name (anonymised)',
+      outcome: 'TODO: e.g. “8 sessions — chronic fatigue resolved, digestion improved, sleeping through the night”',
+    },
+    // TODO: Suzanne to provide real outcome stat
+    stat: {
+      value: 'TODO',
+      label: 'TODO: e.g. clients report measurable improvement in sleep and energy within 4 weeks',
+    },
+    relatedTo: [
+      'emotional-nervous-system-mastery',
+      'next-level-health-vitality-longevity',
+      'life-transitions-reinvention',
+    ],
     metaTitle: 'Health & Energy Intelligence | Dr. Suzanne Ravenall',
     metaDescription:
       'Your body is not broken — it is responding to patterns. Repattern the nervous system so energy, recovery and resilience return.',
@@ -444,6 +609,9 @@ export const topics: Topic[] = [
     title: 'Identity & Purpose Activation',
     shortDescription:
       'You don’t have a motivation problem. You have an identity pattern.',
+    image: '/images/focus/mindset.webp',
+    openingQuestion:
+      'Do you know what you should want — but struggle to actually want it?',
     heroHeadline: 'You Don’t Have a Motivation Problem. You Have an Identity Pattern.',
     heroSubheadline:
       'You don’t act based on what you want. You act based on who you believe you are. Every choice is filtered through identity — and identity keeps you loyal to what feels true about you, even when it contradicts what you want next.',
@@ -493,6 +661,25 @@ export const topics: Topic[] = [
         body: 'You anchor the identity that matches where you’re actually going.',
       },
     ],
+    ctaHook:
+      'Purpose isn’t found. It’s uncovered when the patterns obscuring it are cleared.',
+    // TODO: Suzanne to replace with real anonymised client testimonial
+    testimonial: {
+      quote:
+        'TODO: Suzanne to provide real client testimonial for identity & purpose activation.',
+      name: 'TODO: Client name (anonymised)',
+      outcome: 'TODO: e.g. “6 sessions — from invisible and proving to visible, leading, and clear on direction”',
+    },
+    // TODO: Suzanne to provide real outcome stat
+    stat: {
+      value: 'TODO',
+      label: 'TODO: e.g. clients report clarity on their next identity chapter within 4 sessions',
+    },
+    relatedTo: [
+      'life-transitions-reinvention',
+      'leadership-high-performance',
+      'intuition-as-patterned-intelligence',
+    ],
     metaTitle: 'Identity & Purpose Activation | Dr. Suzanne Ravenall',
     metaDescription:
       'You don’t have a motivation problem — you have an identity pattern. Shift the identity and behaviour follows.',
@@ -502,12 +689,10 @@ export const topics: Topic[] = [
 export const topicBySlug = (slug: string): Topic | undefined =>
   topics.find((t) => t.slug === slug)
 
-export const relatedTopics = (slug: string, count = 3): Topic[] => {
-  const others = topics.filter((t) => t.slug !== slug)
-  const startIndex = topics.findIndex((t) => t.slug === slug)
-  const ordered = [
-    ...others.slice(startIndex),
-    ...others.slice(0, startIndex),
-  ]
-  return ordered.slice(0, count)
+export const relatedTopics = (slug: string): Topic[] => {
+  const current = topics.find((t) => t.slug === slug)
+  if (!current) return []
+  return current.relatedTo
+    .map((relSlug) => topics.find((t) => t.slug === relSlug))
+    .filter((t): t is Topic => t !== undefined)
 }

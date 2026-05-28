@@ -5,6 +5,7 @@ import TopicHero from '@/components/explore/TopicHero'
 import TopicOverview from '@/components/explore/TopicOverview'
 import TopicDiscover from '@/components/explore/TopicDiscover'
 import TopicApproach from '@/components/explore/TopicApproach'
+import TopicSocialProof from '@/components/explore/TopicSocialProof'
 import TopicRelated from '@/components/explore/TopicRelated'
 import TopicCTA from '@/components/explore/TopicCTA'
 
@@ -37,13 +38,14 @@ export default async function TopicPage({ params }: PageProps) {
   if (!topic) notFound()
 
   return (
-    <main>
+    <>
       <TopicHero topic={topic!} />
       <TopicOverview topic={topic!} />
       <TopicDiscover topic={topic!} />
       <TopicApproach topic={topic!} />
+      <TopicSocialProof topic={topic!} />
       <TopicRelated slug={topic!.slug} />
       <TopicCTA topic={topic!} />
-    </main>
+    </>
   )
 }
