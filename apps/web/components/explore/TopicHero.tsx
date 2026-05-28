@@ -6,21 +6,25 @@ import { motion } from 'framer-motion'
 import type { Topic } from '@/app/explore/topics'
 
 const fadeUp = (delay: number) => ({
-  initial: { opacity: 0, y: 50 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-100px' },
-  transition: { duration: 0.6, delay, ease: 'easeOut' as const },
+  initial: { opacity: 0, y: 40 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, delay, ease: 'easeOut' as const },
 })
 
 export default function TopicHero({ topic }: { topic: Topic }) {
+  const handleScrollToApproach = () => {
+    const el = document.getElementById('approach')
+    if (el) el.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
     <section
       aria-labelledby="topic-hero-heading"
-      className="relative w-full overflow-hidden min-h-[70vh] flex items-center"
+      className="relative w-full overflow-hidden min-h-screen flex items-center"
     >
-      {/* Cinematic background image */}
+      {/* Per-topic background image */}
       <Image
-        src="/images/hero-bg-suzanne-ravenall.jpg"
+        src={topic.image}
         alt=""
         fill
         priority
@@ -28,23 +32,31 @@ export default function TopicHero({ topic }: { topic: Topic }) {
         className="object-cover object-center"
       />
 
-      {/* Dark gradient overlay */}
+      {/* Multi-layer dark overlay for legibility */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black/80"
       />
 
-      {/* Accent glow */}
+      {/* Brand accent glow — top right */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-48 -right-32 h-[520px] w-[520px] rounded-full bg-brand-accent/10 blur-3xl"
+        className="pointer-events-none absolute -top-48 -right-32 h-[600px] w-[600px] rounded-full bg-brand-accent/8 blur-3xl"
+      />
+      {/* Subtle bottom glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-32 left-1/4 h-[400px] w-[400px] rounded-full bg-brand-accent/5 blur-3xl"
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-40">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-48">
+        {/* Breadcrumb */}
         <motion.nav
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
           aria-label="Breadcrumb"
-          {...fadeUp(0)}
-          className="mb-10 text-xs uppercase tracking-[0.3em] font-medium text-white/60"
+          className="mb-12 text-xs uppercase tracking-[0.3em] font-medium text-white/50"
         >
           <Link
             href="/explore"
@@ -52,51 +64,52 @@ export default function TopicHero({ topic }: { topic: Topic }) {
           >
             Explore
           </Link>
-          <span aria-hidden="true" className="mx-3">
-            /
-          </span>
+          <span aria-hidden="true" className="mx-3">/</span>
           <span className="text-brand-accent">{topic.title}</span>
         </motion.nav>
 
         <div className="max-w-4xl">
+          {/* Opening question — pattern interrupt, white with shadow to read against any image */}
           <motion.p
             {...fadeUp(0.1)}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+            className="text-white text-lg lg:text-xl font-light italic mb-6 leading-relaxed drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]"
           >
-            Area of Focus
+            {topic.openingQuestion}
           </motion.p>
 
+          {/* Main headline */}
           <motion.h1
             id="topic-hero-heading"
             {...fadeUp(0.2)}
-            className="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-[1.05] mb-8"
+            className="text-4xl lg:text-6xl xl:text-7xl font-light text-white leading-[1.05] mb-8"
           >
             {topic.heroHeadline}
           </motion.h1>
 
+          {/* Subheadline */}
           <motion.p
             {...fadeUp(0.3)}
-            className="text-lg md:text-xl text-white/75 font-light max-w-2xl leading-relaxed mb-10"
+            className="text-lg lg:text-xl text-white/75 font-light max-w-2xl leading-relaxed mb-12"
           >
             {topic.heroSubheadline}
           </motion.p>
 
-          <motion.div
-            {...fadeUp(0.4)}
-            className="flex flex-wrap gap-4"
-          >
+          {/* CTAs — reduced padding on mobile so both buttons fit in the initial viewport */}
+          <motion.div {...fadeUp(0.4)} className="flex flex-wrap gap-3">
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
+              className="inline-flex items-center justify-center px-6 py-3 lg:px-8 lg:py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
             >
               Book Discovery Call
             </Link>
-            <Link
-              href="/services"
-              className="inline-flex items-center justify-center px-8 py-4 border border-white/50 hover:border-white text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
+            <button
+              type="button"
+              onClick={handleScrollToApproach}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 lg:px-8 lg:py-4 border border-white/40 hover:border-white/80 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
             >
-              View Services
-            </Link>
+              Explore the Method
+              <span aria-hidden="true" className="inline-block">↓</span>
+            </button>
           </motion.div>
         </div>
       </div>
@@ -105,7 +118,7 @@ export default function TopicHero({ topic }: { topic: Topic }) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.6 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
         aria-hidden="true"
       >
@@ -114,7 +127,7 @@ export default function TopicHero({ topic }: { topic: Topic }) {
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
         >
           <svg
-            className="w-6 h-6 text-white/50"
+            className="w-6 h-6 text-white/40"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
