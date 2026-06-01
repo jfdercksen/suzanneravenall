@@ -87,9 +87,9 @@ export default function Footer() {
 
             {/* Social icons */}
             <ul className="mt-6 flex items-center gap-4 list-none" aria-label="Social media links">
-              <li><SocialLink href="https://facebook.com" label="Facebook"><FacebookIcon /></SocialLink></li>
-              <li><SocialLink href="https://instagram.com" label="Instagram"><InstagramIcon /></SocialLink></li>
-              <li><SocialLink href="https://linkedin.com" label="LinkedIn"><LinkedInIcon /></SocialLink></li>
+              <li><SocialLink href="https://www.facebook.com/suzanneravenalltransformation" label="Facebook"><FacebookIcon /></SocialLink></li>
+              <li><SocialLink href="https://www.instagram.com/ravenallinstitute" label="Instagram"><InstagramIcon /></SocialLink></li>
+              <li><SocialLink href="https://www.linkedin.com/in/sravenall" label="LinkedIn"><LinkedInIcon /></SocialLink></li>
               <li><SocialLink href="https://youtube.com" label="YouTube"><YouTubeIcon /></SocialLink></li>
             </ul>
           </div>

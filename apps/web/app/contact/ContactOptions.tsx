@@ -89,11 +89,11 @@ export default function ContactOptions() {
                 <div>
                   <p className="text-xs uppercase tracking-wider text-gray-500 mb-0.5">Email</p>
                   <a
-                    href="mailto:hello@suzanneravenall.com"
+                    href="mailto:support@ravenallinstitute.com"
                     className="text-gray-700 hover:text-brand-accent text-sm transition-colors"
                   >
-                    hello@suzanneravenall.com
-                  </a>{/* [CONFIRM] */}
+                    support@ravenallinstitute.com
+                  </a>
                 </div>
               </li>
 
@@ -101,7 +101,7 @@ export default function ContactOptions() {
                 <MapPin className="w-5 h-5 text-brand-accent mt-0.5 shrink-0" aria-hidden="true" />
                 <div>
                   <p className="text-xs uppercase tracking-wider text-gray-500 mb-0.5">Location</p>
-                  <span className="text-gray-700 text-sm">Cape Town, South Africa</span>{/* [CONFIRM] */}
+                  <span className="text-gray-700 text-sm">Kyalami, GP, South Africa, 1684</span>
                 </div>
               </li>
             </ul>
@@ -111,7 +111,9 @@ export default function ContactOptions() {
               <ul className="flex flex-col gap-3">
                 <li>
                   <a
-                    href="#"
+                    href="https://www.linkedin.com/in/sravenall"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="LinkedIn"
                     className="inline-flex items-center gap-3 text-gray-600 hover:text-brand-accent text-sm transition-colors group"
                   >
@@ -121,7 +123,9 @@ export default function ContactOptions() {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="https://www.instagram.com/ravenallinstitute"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="Instagram"
                     className="inline-flex items-center gap-3 text-gray-600 hover:text-brand-accent text-sm transition-colors group"
                   >
@@ -131,7 +135,9 @@ export default function ContactOptions() {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="https://www.facebook.com/suzanneravenalltransformation"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="Facebook"
                     className="inline-flex items-center gap-3 text-gray-600 hover:text-brand-accent text-sm transition-colors group"
                   >
