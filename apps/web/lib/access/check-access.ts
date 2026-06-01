@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { hasAccess, type ResourceKey, type TierSlug } from './tiers'
+import { hasAccess, type ResourceKey, type TierSlug, type MembershipTrack } from './tiers'
 
 export async function getMemberTier(supabase: SupabaseClient): Promise<TierSlug> {
   const {
@@ -25,6 +25,49 @@ export async function getMemberTier(supabase: SupabaseClient): Promise<TierSlug>
     return slug
   }
   return 'free'
+}
+
+export interface MemberAccessInfo {
+  accessLevel: number
+  track: MembershipTrack | 'both'
+  sku: string | null
+  annualRenewalDate: string | null
+}
+
+/**
+ * Returns access_level, track, sku, and annual_renewal_date from the member's
+ * active subscription. Reads the columns added by the 20260526_membership_tiers
+ * migration. Falls back to guest defaults when not authenticated or no subscription.
+ */
+export async function getMemberAccessLevel(supabase: SupabaseClient): Promise<MemberAccessInfo> {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { accessLevel: 1, track: 'general', sku: null, annualRenewalDate: null }
+  }
+
+  const { data } = await supabase
+    .from('member_subscriptions')
+    .select('access_level, track, sku, annual_renewal_date')
+    .eq('user_id', user.id)
+    .eq('status', 'active')
+    .order('start_date', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (!data) {
+    return { accessLevel: 1, track: 'general', sku: null, annualRenewalDate: null }
+  }
+
+  const row = data as Record<string, unknown>
+  return {
+    accessLevel: typeof row.access_level === 'number' ? row.access_level : 1,
+    track: (row.track as MembershipTrack | 'both') ?? 'general',
+    sku: typeof row.sku === 'string' ? row.sku : null,
+    annualRenewalDate: typeof row.annual_renewal_date === 'string' ? row.annual_renewal_date : null,
+  }
 }
 
 /**
