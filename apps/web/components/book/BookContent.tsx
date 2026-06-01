@@ -150,7 +150,7 @@ export default function BookContent() {
           playsInline
           aria-hidden="true"
           className="absolute inset-0 z-0 w-full h-full object-cover"
-          poster="/images/generated/explore-transformation.webp"
+          poster="/images/suzanne-holding-book.jpg"
         >
           <source src="/videos/generated/hero-brain-video.mp4" type="video/mp4" />
         </video>
@@ -215,26 +215,14 @@ export default function BookContent() {
           <div className="grid gap-16 lg:grid-cols-2 items-center">
 
             {/* Book cover — left */}
-            {/* TODO: Add real book cover image when Suzanne provides it */}
             <motion.div {...scrollFadeUp(0)} className="flex justify-center">
-              <div className="relative w-64 lg:w-72 aspect-[2/3] rounded-card overflow-hidden shadow-[0_24px_64px_rgba(1,43,67,0.18)]">
-                <div className="absolute inset-0 bg-gradient-to-br from-brand-primary to-brand-primary-700" />
-                <div className="absolute inset-0 bg-gradient-to-tr from-brand-accent/20 via-transparent to-transparent" />
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                  <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
-                    Dr. Suzanne Ravenall
-                  </p>
-                  <div className="w-8 h-px bg-brand-accent/40 mb-6" />
-                  <h3 aria-hidden="true" className="text-2xl lg:text-3xl font-light text-white leading-tight mb-3">
-                    Breakthrough
-                  </h3>
-                  <h3 aria-hidden="true" className="text-2xl lg:text-3xl font-light text-white leading-tight mb-6">
-                    Trilogy
-                  </h3>
-                  <div className="w-8 h-px bg-brand-accent/40 mb-6" />
-                  <p className="text-xs text-white/50 uppercase tracking-widest">The Complete Series</p>
-                </div>
-              </div>
+              <Image
+                src="/images/book-cover.png"
+                alt="Breakthrough Trilogy by Dr. Suzanne Ravenall"
+                width={400}
+                height={600}
+                className="rounded-card shadow-2xl"
+              />
             </motion.div>
 
             {/* Description — right */}
@@ -257,7 +245,7 @@ export default function BookContent() {
                 {...scrollFadeUp(0.15)}
                 className="text-xl text-gray-400 font-light mb-8"
               >
-                The Complete Series
+                Overcoming the Impossible &amp; Living Life Beyond Limitation
               </motion.p>
 
               <motion.p {...scrollFadeUp(0.2)} className="text-gray-600 leading-relaxed mb-10">
