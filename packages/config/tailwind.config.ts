@@ -96,6 +96,15 @@ const config = {
         card: '0.5rem',
         button: '0.75rem',
       },
+      keyframes: {
+        'pulse-glow': {
+          '0%, 100%': { boxShadow: '0 0 20px 0 rgb(23 25 244 / 0.4)' },
+          '50%': { boxShadow: '0 0 40px 8px rgb(23 25 244 / 0.6)' },
+        },
+      },
+      animation: {
+        'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
+      },
     },
   },
 } satisfies Partial<Config>

@@ -101,8 +101,7 @@ const nextConfig = {
       { source: '/masterclass-test-page', destination: '/', permanent: true },
 
 { source: '/what-i-do',                   destination: '/services', permanent: true },
-      { source: '/speaking',                     destination: '/about',    permanent: true },
-      { source: '/speaking-info',                destination: '/about',    permanent: true },
+
       { source: '/qualifications',               destination: '/about',    permanent: true },
       { source: '/media',                        destination: '/about',    permanent: true },
       { source: '/awards',                       destination: '/about',    permanent: true },

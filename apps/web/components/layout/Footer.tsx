@@ -9,6 +9,7 @@ const footerLinks = {
       { label: 'Group Coaching', href: '/services' },
       { label: 'Executive Coaching', href: '/services' },
       { label: 'Corporate Programs', href: '/services' },
+      { label: 'Speaking', href: '/speaking' },
     ],
   },
   programs: {

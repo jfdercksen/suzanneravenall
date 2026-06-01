@@ -31,6 +31,7 @@ const navItems: NavItem[] = [
     label: 'Work With Me',
     children: [
       { label: 'Services', href: '/services' },
+      { label: 'Speaking', href: '/speaking' },
       { label: 'Programs', href: '/programs' },
       { label: 'Shop', href: '/shop' },
       { label: 'Masterclass', href: '/masterclass' },
