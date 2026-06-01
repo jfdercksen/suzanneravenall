@@ -225,10 +225,10 @@ export default function BookContent() {
                     Dr. Suzanne Ravenall
                   </p>
                   <div className="w-8 h-px bg-brand-accent/40 mb-6" />
-                  <h3 className="text-2xl lg:text-3xl font-light text-white leading-tight mb-3">
+                  <h3 aria-hidden="true" className="text-2xl lg:text-3xl font-light text-white leading-tight mb-3">
                     Breakthrough
                   </h3>
-                  <h3 className="text-2xl lg:text-3xl font-light text-white leading-tight mb-6">
+                  <h3 aria-hidden="true" className="text-2xl lg:text-3xl font-light text-white leading-tight mb-6">
                     Trilogy
                   </h3>
                   <div className="w-8 h-px bg-brand-accent/40 mb-6" />
@@ -381,7 +381,11 @@ export default function BookContent() {
             </motion.h2>
 
             {/* Pull quote */}
-            <motion.blockquote {...scrollFadeUp(0.2)} className="mb-12">
+            <motion.blockquote
+              {...scrollFadeUp(0.2)}
+              className="mb-12"
+              aria-label="Book excerpt from Breakthrough Trilogy"
+            >
               <div
                 className="text-brand-accent/40 text-8xl font-serif leading-none mb-2 select-none"
                 aria-hidden="true"
@@ -529,13 +533,12 @@ export default function BookContent() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((t, i) => (
               <motion.div
-                key={t.name}
+                key={`${t.name}-${i}`}
                 {...scrollFadeUp(i * 0.1)}
                 className="group bg-gray-50 hover:bg-white border border-gray-100 hover:border-gray-200 rounded-card p-8 hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1"
               >
                 {/* Stars */}
-                <div className="flex gap-1 mb-6" role="img">
-                  <span className="sr-only">5 out of 5 stars</span>
+                <div className="flex gap-1 mb-6" role="img" aria-label="5 out of 5 stars">
                   {Array.from({ length: 5 }).map((_, j) => (
                     <svg
                       key={j}
@@ -565,10 +568,10 @@ export default function BookContent() {
         aria-labelledby="preorder-heading"
         className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
       >
-        {/* Radial fade edges */}
+        {/* Vignette overlay */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgb(1,43,67,0.6)_100%)]"
+          className="pointer-events-none absolute inset-0 bg-brand-primary-900/50"
         />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
