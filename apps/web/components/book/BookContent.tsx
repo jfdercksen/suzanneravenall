@@ -142,18 +142,16 @@ export default function BookContent() {
         aria-labelledby="book-hero-heading"
         className="relative w-full overflow-hidden min-h-screen flex items-center"
       >
-        {/* Video background — brain/neural theme matches mindset transformation subject */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
+        {/* Hero background — Suzanne holding the book */}
+        <Image
+          src="/images/suzanne-holding-book.jpg"
+          alt=""
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
           aria-hidden="true"
-          className="absolute inset-0 z-0 w-full h-full object-cover"
-          poster="/images/suzanne-holding-book.jpg"
-        >
-          <source src="/videos/generated/hero-brain-video.mp4" type="video/mp4" />
-        </video>
+        />
 
         {/* Gradient overlay */}
         <div
