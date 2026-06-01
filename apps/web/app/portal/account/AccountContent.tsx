@@ -11,6 +11,9 @@ interface AccountContentProps {
   lastName: string
   phone: string
   tierName: string
+  sku: string | null
+  track: string | null
+  accessLevel: number
   memberSince: string | null
   memberUntil: string | null
 }
@@ -26,12 +29,23 @@ function formatDate(dateStr: string | null): string {
   })
 }
 
+function formatTrack(track: string | null): string {
+  if (!track || track === 'general') return ''
+  if (track === 'energy-clearing') return 'Energy Clearing'
+  if (track === 'akashic') return 'Akashic'
+  if (track === 'both') return 'Akashic & Energy Clearing'
+  return track
+}
+
 export default function AccountContent({
   email,
   firstName: initialFirstName,
   lastName: initialLastName,
   phone: initialPhone,
   tierName,
+  sku,
+  track,
+  accessLevel,
   memberSince,
   memberUntil,
 }: AccountContentProps) {
@@ -307,20 +321,34 @@ export default function AccountContent({
               <dt className="text-white/50 text-sm">Current tier</dt>
               <dd className="text-white font-semibold text-sm">{tierName}</dd>
             </div>
+            {sku && (
+              <div className="flex justify-between items-center py-3 border-b border-white/[0.06]">
+                <dt className="text-white/50 text-sm">Membership code</dt>
+                <dd className="text-white font-semibold text-sm font-mono">{sku}</dd>
+              </div>
+            )}
+            {formatTrack(track) && (
+              <div className="flex justify-between items-center py-3 border-b border-white/[0.06]">
+                <dt className="text-white/50 text-sm">Track</dt>
+                <dd className="text-white font-semibold text-sm">{formatTrack(track)}</dd>
+              </div>
+            )}
+            <div className="flex justify-between items-center py-3 border-b border-white/[0.06]">
+              <dt className="text-white/50 text-sm">Access level</dt>
+              <dd className="text-white font-semibold text-sm">Level {accessLevel} of 10</dd>
+            </div>
             <div className="flex justify-between items-center py-3 border-b border-white/[0.06]">
               <dt className="text-white/50 text-sm">Member since</dt>
               <dd className="text-white font-semibold text-sm">{formatDate(memberSince)}</dd>
             </div>
             <div className="flex justify-between items-center py-3">
-              <dt className="text-white/50 text-sm">Next renewal</dt>
+              <dt className="text-white/50 text-sm">Annual renewal</dt>
               <dd className="text-white font-semibold text-sm">{formatDate(memberUntil)}</dd>
             </div>
           </dl>
           <div className="mt-5">
-            {/* TODO: Build /portal/upgrade page */}
-            {/* Temporarily linking to shop membership collection */}
             <Link
-              href="/shop?collection=membership"
+              href="/portal/upgrade"
               className="inline-flex items-center gap-2 text-brand-accent text-sm font-medium hover:underline"
             >
               View upgrade options

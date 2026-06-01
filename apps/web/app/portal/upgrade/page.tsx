@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
-import { getMemberTier } from '@/lib/access/check-access'
-import { type TierSlug } from '@/lib/access/tiers'
+import { getMemberAccessLevel } from '@/lib/access/check-access'
+import type { MembershipTrack } from '@/lib/access/tiers'
 import UpgradeContent from './UpgradeContent'
 
 export const metadata = {
@@ -27,12 +27,43 @@ export default async function UpgradePage({
     data: { user },
   } = await supabase.auth.getUser()
 
-  const tier: TierSlug = user ? await getMemberTier(supabase) : 'free'
+  let currentAccessLevel = 1
+  let currentTrack: MembershipTrack | 'both' = 'general'
+  let currentSku: string | null = null
+  let currentTierName = 'Guest Membership'
+
+  if (user) {
+    const accessInfo = await getMemberAccessLevel(supabase)
+    currentAccessLevel = accessInfo.accessLevel
+    currentTrack = accessInfo.track
+    currentSku = accessInfo.sku
+
+    // Resolve display name from membership_tiers relation
+    const { data: sub } = await supabase
+      .from('member_subscriptions')
+      .select('membership_tiers(name)')
+      .eq('user_id', user.id)
+      .eq('status', 'active')
+      .order('start_date', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    const tierData = (sub as { membership_tiers: { name: string } | null } | null)
+      ?.membership_tiers
+    if (tierData?.name) currentTierName = tierData.name
+  }
 
   const { from } = await searchParams
-  // Only accept relative paths to prevent open-redirect abuse via the `from` param
   const safePath = from && from.startsWith('/') ? decodeURIComponent(from) : null
   const fromLabel = safePath ? (FROM_LABELS[safePath] ?? null) : null
 
-  return <UpgradeContent currentTier={tier} fromLabel={fromLabel} />
+  return (
+    <UpgradeContent
+      currentAccessLevel={currentAccessLevel}
+      currentTrack={currentTrack}
+      currentSku={currentSku}
+      currentTierName={currentTierName}
+      fromLabel={fromLabel}
+    />
+  )
 }
