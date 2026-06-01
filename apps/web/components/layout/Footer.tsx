@@ -18,6 +18,7 @@ const footerLinks = {
       { label: 'Online Courses', href: '/programs' },
       { label: 'Masterclass', href: '/masterclass' },
       { label: 'Shop', href: '/shop' },
+      { label: 'The Book', href: '/book' },
       { label: 'Workshops', href: '/programs' },
     ],
   },
