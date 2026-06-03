@@ -77,6 +77,8 @@ services:
     restart: unless-stopped
     expose:
       - "9000"
+    volumes:
+      - medusa_uploads:/app/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -355,6 +357,7 @@ volumes:
   postgres_data:
   meilisearch_data:
   n8n_data:
+  medusa_uploads:
 
 # -----------------------------------------------------------------------------
 # Networks

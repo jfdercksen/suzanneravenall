@@ -21,6 +21,13 @@ module.exports = defineConfig({
   },
   modules: [
     {
+      resolve: "@medusajs/file-local",
+      options: {
+        upload_dir: "/app/uploads",
+        backend_url: process.env.NEXT_PUBLIC_SITE_URL || "http://169.239.180.49",
+      },
+    },
+    {
       // key avoids defineConfig calling require() on TypeScript source during build
       key: "programsModule",
       resolve: "./src/modules/programs",
