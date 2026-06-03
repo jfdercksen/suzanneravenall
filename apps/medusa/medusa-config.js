@@ -21,10 +21,19 @@ module.exports = defineConfig({
   },
   modules: [
     {
-      resolve: "@medusajs/file-local",
+      resolve: "@medusajs/medusa/file",
       options: {
-        upload_dir: "/app/uploads",
-        backend_url: process.env.NEXT_PUBLIC_SITE_URL || "http://169.239.180.49",
+        providers: [
+          {
+            resolve: "@medusajs/medusa/file-local",
+            id: "local",
+            options: {
+              upload_dir: "uploads",
+              backend_url:
+                (process.env.NEXT_PUBLIC_SITE_URL || "http://169.239.180.49") + "/uploads",
+            },
+          },
+        ],
       },
     },
     {
