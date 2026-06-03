@@ -142,16 +142,17 @@ export default function BookContent() {
         aria-labelledby="book-hero-heading"
         className="relative w-full overflow-hidden min-h-screen flex items-center"
       >
-        {/* Hero background — Suzanne holding the book */}
-        <Image
-          src="/images/suzanne-holding-book.jpg"
-          alt=""
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
+        {/* Video background */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
           aria-hidden="true"
-        />
+          className="absolute inset-0 z-0 w-full h-full object-cover"
+        >
+          <source src="/videos/generated/hero-brain-video.mp4" type="video/mp4" />
+        </video>
 
         {/* Gradient overlay */}
         <div
@@ -164,45 +165,80 @@ export default function BookContent() {
           <div className="absolute bg-brand-accent/10 blur-[160px] rounded-full w-[600px] h-[600px] top-1/3 left-1/2 -translate-x-1/2" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-48">
-          <div className="max-w-3xl">
-            <motion.p
-              {...fadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
-            >
-              The Breakthrough Trilogy
-            </motion.p>
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-48">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
 
-            <motion.h1
-              id="book-hero-heading"
-              {...fadeUp(0.1)}
-              className="text-4xl lg:text-7xl font-light text-white leading-[1.05] mb-8"
-            >
-              A Quest to Find an Upgraded Version of You
-            </motion.h1>
-
-            <motion.p
-              {...fadeUp(0.2)}
-              className="text-lg lg:text-xl text-white/75 leading-relaxed mb-10 max-w-2xl"
-            >
-              Three books. One journey. The complete roadmap to decoding the patterns that keep you
-              stuck — and upgrading every area of your life.
-            </motion.p>
-
-            <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/shop/the-latest-book-by-suzanne"
-                className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 animate-pulse-glow"
+            {/* Left: text */}
+            <div>
+              <motion.p
+                {...fadeUp(0)}
+                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
               >
-                Pre-Order Now
-              </Link>
-              <a
-                href="#excerpt"
-                className="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white hover:bg-white/10 font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300"
+                The Breakthrough Trilogy
+              </motion.p>
+
+              <motion.h1
+                id="book-hero-heading"
+                {...fadeUp(0.1)}
+                className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-4"
               >
-                Read an Excerpt ↓
-              </a>
+                Overcoming the Impossible &amp; Living Life Beyond Limitation
+              </motion.h1>
+
+              <motion.p
+                {...fadeUp(0.2)}
+                className="text-xl lg:text-2xl font-light text-brand-accent/80 italic mb-6"
+              >
+                A Quest to Find an Upgraded Version of You
+              </motion.p>
+
+              <motion.p
+                {...fadeUp(0.25)}
+                className="text-lg text-white/75 leading-relaxed mb-10 max-w-xl"
+              >
+                Three books. One journey. The complete roadmap to decoding the patterns that keep
+                you stuck — and upgrading every area of your life.
+              </motion.p>
+
+              <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/shop/the-latest-book-by-suzanne"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 animate-pulse-glow"
+                >
+                  Pre-Order Now
+                </Link>
+                <a
+                  href="#excerpt"
+                  className="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white hover:bg-white/10 font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300"
+                >
+                  Read an Excerpt ↓
+                </a>
+              </motion.div>
+            </div>
+
+            {/* Right: floating book mockup — hidden on mobile */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
+              className="hidden lg:flex justify-center items-center"
+            >
+              <motion.div
+                animate={{ y: [0, -14, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+                className="drop-shadow-[0_32px_56px_rgba(0,0,0,0.7)]"
+              >
+                <Image
+                  src="/images/book-cover.png"
+                  alt="Breakthrough Trilogy by Dr. Suzanne Ravenall"
+                  width={380}
+                  height={500}
+                  priority
+                  className="rounded-card"
+                />
+              </motion.div>
             </motion.div>
+
           </div>
         </div>
       </section>
@@ -246,11 +282,25 @@ export default function BookContent() {
                 Overcoming the Impossible &amp; Living Life Beyond Limitation
               </motion.p>
 
-              <motion.p {...scrollFadeUp(0.2)} className="text-gray-600 leading-relaxed mb-10">
-                For a moment, just one moment, imagine you had the ability to alter your relationship
-                with everything happening in your life. Imagine having the ability to deeply understand
-                it, improve how you respond to it and how to navigate it successfully.
-              </motion.p>
+              <div className="space-y-4 mb-10">
+                <motion.p {...scrollFadeUp(0.2)} className="text-gray-600 leading-relaxed">
+                  Consciousness is a meaning field. The mind adapts to the worldview imposed on it.
+                  When this system is interrogated, it reveals a series of challenges — depression,
+                  illness, addiction, broken relationships.
+                </motion.p>
+                <motion.p {...scrollFadeUp(0.25)} className="text-gray-600 leading-relaxed">
+                  Brain development is much more than a story about biology. From our earliest years,
+                  relationships with others play a key role in shaping how our brain grows and develops.
+                </motion.p>
+                <motion.p {...scrollFadeUp(0.3)} className="text-gray-600 leading-relaxed">
+                  For a moment, just one moment, imagine you had the ability to alter your relationship
+                  with everything happening in your life. Imagine having the ability to deeply
+                  understand it, improve how you respond to it and how to navigate it successfully.
+                </motion.p>
+                <motion.p {...scrollFadeUp(0.35)} className="text-gray-600 leading-relaxed font-medium text-brand-primary">
+                  The Breakthrough Trilogy is your roadmap to finding an upgraded version of you.
+                </motion.p>
+              </div>
 
               {/* 3 key themes */}
               <div className="space-y-6 mb-10">
@@ -379,8 +429,9 @@ export default function BookContent() {
                 &ldquo;
               </div>
               <p className="text-2xl lg:text-3xl font-light text-gray-700 leading-relaxed italic mb-8">
-                For a moment, just one moment, imagine you had the ability to alter your relationship
-                with everything happening in your life.
+                Consciousness is a meaning field. The mind adapts to the worldview imposed on it.
+                When this system is interrogated, it reveals a series of challenges — depression,
+                illness, addiction, broken relationships.
               </p>
               <footer className="text-sm font-medium text-gray-400 uppercase tracking-widest">
                 — Dr. Suzanne Ravenall, Breakthrough Trilogy
