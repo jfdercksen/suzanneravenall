@@ -19,6 +19,7 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /var/www/certbot:/var/www/certbot:ro
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - medusa_uploads:/app/uploads:ro
     depends_on:
       web:
         condition: service_healthy
