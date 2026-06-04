@@ -56,6 +56,14 @@ function sortProducts(products: MedusaProduct[], sort: SortOption): MedusaProduc
   return products
 }
 
+function getCategoryAndDescendantIds(
+  categoryId: string,
+  allCategories: MedusaCategory[]
+): string[] {
+  const children = allCategories.filter((c) => c.parent_category_id === categoryId)
+  return [categoryId, ...children.flatMap((c) => getCategoryAndDescendantIds(c.id, allCategories))]
+}
+
 function searchHitToProduct(hit: ProductSearchHit): MedusaProduct {
   return {
     id: hit.id,
@@ -121,7 +129,8 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
       })
 
       if (filters.categoryId) {
-        params.append('category_id[]', filters.categoryId)
+        const ids = getCategoryAndDescendantIds(filters.categoryId, initialCategories)
+        ids.forEach((id) => params.append('category_id[]', id))
       }
 
       const collectionId = filters.collectionHandle ? collectionIdMap[filters.collectionHandle] : undefined
@@ -143,7 +152,7 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
     } finally {
       setLoading(false)
     }
-  }, [page, filters, collectionIdMap])
+  }, [page, filters, collectionIdMap, initialCategories])
 
   useEffect(() => {
     void fetchProducts()
