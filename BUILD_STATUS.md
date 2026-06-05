@@ -1,9 +1,9 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 5 — QA and Launch
-Current Task: Task 5.5a — Manual VPS Steps (in progress)
-Current Branch: main
-Last Updated: 2026-05-25
+Current Task: Post-purchase delivery fixes + shop design improvements (feature/shop-and-delivery-fixes)
+Current Branch: feature/shop-and-delivery-fixes
+Last Updated: 2026-06-05
 Last Updated By: Johan
 
 ---
@@ -63,7 +63,7 @@ These items are built but cannot be validated without external credentials or ac
 
 ## Phase 3 — Task Status
 
-- ✅ Task 3.1 — Membership Products in Medusa (complete — 4 tiers seeded: Free, Silver, Gold, Practitioner)
+- ✅ Task 3.1 — Membership Products in Medusa (complete — 29 real Wild Apricot tiers seeded: S0211–S0239, access_level 1–10, Akashic + Energy Clearing tracks)
 - ✅ Task 3.2 — Supabase Auth Configuration (complete)
 - ✅ Task 3.3 — Member Content Access Control (complete)
 - ✅ Task 3.4 — Discourse Community (deferred — VPS RAM constraint, D014, KI011; placeholder /community page with email capture in place)
@@ -157,7 +157,8 @@ Navigation audit complete — all broken links fixed. Merged from `feature/nav-c
 - [x] KI018 — PAYFAST_SANDBOX=true + PAYPAL_SANDBOX=true set on VPS (change to false at DNS cutover)
 - [x] KI019 — VPS web container rebuilt (9ff4317/a6088e0) — /about, /contact, /blog, /community, /legal/* all return 200
 - [ ] KI020 — Run MeiliSearch seed script on VPS (node infra/scripts/migrations/seed-meilisearch.js)
-- [ ] KI021 — Wire social media links in Contact page and Footer to Suzanne's real profiles
+- [x] KI021 — Social media links updated (Facebook, LinkedIn, Instagram, address, support email) — commit e72122a
+- [x] KI022 — 29 real Wild Apricot membership tiers implemented and seeded (S0211–S0239, access_level 1–10, Supabase migration applied, Medusa seeded) — commit b7fe54a / 78e2038
 
 ### Task 5.3 QA — Code items ✅ (from QA run 2026-05-13)
 - [x] All /portal/* routes protected by middleware (redirect to /portal/login with encoded redirect param)
@@ -248,6 +249,10 @@ curl -s -o /dev/null -w "/api/search → %{http_code}\n" "http://169.239.180.49/
 ---
 
 ## Session Notes
+
+- **2026-06-05 (Post-purchase delivery fixes + shop design — feature/shop-and-delivery-fixes):** Three pre-launch post-purchase delivery gaps fixed. (1) Private sessions: `order-placed.ts` subscriber now detects session-type products from category handles (CATEGORY_ACCESS_MAP) and passes `calBookingUrl: https://cal.com/suzanneravenall/discovery-call` to the order confirmation email; `OrderConfirmation.tsx` renders a prominent navy "Book Your Session Now" section with the Cal.com button when `calBookingUrl` is present. (2) Self-paced/live programmes: subscriber now calls `handlePortalAccessGrant` which upgrades `member_subscriptions.access_level` in Supabase for the purchasing user (or inserts a free-tier base row if no subscription exists); uses CATEGORY_ACCESS_MAP to determine access level and track. (3) Order confirmation email now has dynamic "What Happens Next" steps based on `productType` (session/self-paced/live/group/other) — each product type gets tailored instructions instead of generic placeholders. New file: `apps/web/lib/access/product-access.ts` (CATEGORY_ACCESS_MAP + helpers, used by frontend). CATEGORY_ACCESS_MAP mirrored inline in subscriber (cross-app imports not supported in monorepo without shared package). Shop design: 7 improvements applied — ProductCard aspect-video→4/3 (taller images), overlay reversed (light default/dark hover), root category shown instead of leaf sub-category, CTA text "Explore & Enrol →", CategoryFilterBar pills larger + stronger inactive state, collection tier filter row removed (was confusing), ShopHeroBanner credibility stats row added (2,000+ lives, 20+ years, 30+ countries). Code review: 2 High issues fixed (productType input validation in route.ts, lookupSupabaseUserId pagination beyond 1000 users), 1 Low fixed (isMembershipOrder extracted as shared helper). 88 pages building clean. SETUP REQUIRED: Add `CALCOM_SESSION_BOOKING_URL` to `infra/.env` if a different booking URL is needed (default: https://cal.com/suzanneravenall/discovery-call). NOTE: `syncPortalAccess` inserts with `tier_id='free'` — confirmed valid as long as `membership_tiers` table has a row with id='free' (seeded in Task 3.1). NOTE: Portal access is not automatically granted when a user creates their Supabase account *after* purchasing a programme (no Supabase account existed at purchase time) — this is a known gap requiring a future email↔purchase linking mechanism.
+
+- **2026-06-01 (Membership tiers deployed):** feature/membership-tiers-real merged to main (78e2038). VPS rebuilt (web + medusa containers). Supabase migration 20260526_membership_tiers.sql applied manually (adds track, sku, access_level, annual_renewal_date to member_subscriptions). Seed script run inside medusa container — 29 membership tiers created (S0211–S0239) in new "membership" Medusa collection (pcol_01KT161J0Z66HV801K21D0SVRX). All 29 verified via admin API. Portal /account now shows SKU, track, access level, annual renewal. Portal /upgrade now shows full tier matrix in two tracks. KI021 closed (social links), KI022 closed (tiers). Old 4 placeholder products (Free/Silver/Gold/Practitioner) still in Medusa — remove manually if no longer needed.
 
 - **2026-05-25 (n8n routing fixed):** n8n sub-path routing confirmed working on VPS. Fixes applied: N8N_PATH trailing slash resolved /n8nassets/ path collision, nginx rewrite removed (N8N_PATH handles routing), Docker DNS resolver added to nginx, N8N_SECURE_COOKIE=false for HTTP IP-testing phase. n8n UI accessible at http://169.239.180.49/n8n/. Task 5.5a Step 2 fully confirmed. Remaining blockers: Step 1 (MeiliSearch — needs MEDUSA_API_TOKEN), Step 3 (Sentry — needs account creation), Vibe Marketing Sync Monitor workflow — needs SMTP credential in n8n UI.
 

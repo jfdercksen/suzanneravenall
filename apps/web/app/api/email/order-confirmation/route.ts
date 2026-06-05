@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { timingSafeEqual, createHash } from 'crypto'
 import { sendOrderConfirmationEmail } from '@/lib/email/order-confirmation'
-import type { OrderEmailData } from '@/lib/email/types'
+import type { OrderEmailData, OrderProductType } from '@/lib/email/types'
 
 interface MedusaOrderItem {
   id: string
@@ -58,13 +58,26 @@ export async function POST(req: NextRequest) {
 
   let orderId: string
   let invoiceUrl: string | null
+  let productType: OrderProductType | undefined
+  let calBookingUrl: string | null
   try {
-    const body = (await req.json()) as { orderId?: unknown; invoiceUrl?: unknown }
+    const body = (await req.json()) as {
+      orderId?: unknown
+      invoiceUrl?: unknown
+      productType?: unknown
+      calBookingUrl?: unknown
+    }
     if (!body.orderId || typeof body.orderId !== 'string') {
       return NextResponse.json({ error: 'orderId is required' }, { status: 400 })
     }
     orderId = body.orderId
     invoiceUrl = typeof body.invoiceUrl === 'string' ? body.invoiceUrl : null
+    const VALID_PRODUCT_TYPES: OrderProductType[] = ['session', 'self-paced', 'live', 'group', 'other']
+    productType =
+      typeof body.productType === 'string' && VALID_PRODUCT_TYPES.includes(body.productType as OrderProductType)
+        ? (body.productType as OrderProductType)
+        : undefined
+    calBookingUrl = typeof body.calBookingUrl === 'string' ? body.calBookingUrl : null
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
@@ -125,6 +138,8 @@ export async function POST(req: NextRequest) {
     subtotal: order.subtotal,
     taxTotal: order.tax_total,
     total: order.total,
+    productType,
+    calBookingUrl,
   }
 
   try {

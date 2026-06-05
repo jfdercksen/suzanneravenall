@@ -34,6 +34,8 @@ export interface MembershipEmailData {
   siteUrl: string
 }
 
+export type OrderProductType = 'session' | 'self-paced' | 'live' | 'group' | 'other'
+
 export interface OrderEmailData {
   id: string
   displayId: number
@@ -45,4 +47,6 @@ export interface OrderEmailData {
   subtotal: number
   taxTotal: number
   total: number
+  productType?: OrderProductType
+  calBookingUrl?: string | null
 }

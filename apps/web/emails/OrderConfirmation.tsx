@@ -13,7 +13,7 @@ import {
   Section,
   Text,
 } from '@react-email/components'
-import type { OrderEmailData } from '../lib/email/types'
+import type { OrderEmailData, OrderProductType } from '../lib/email/types'
 import { formatAmount } from '../lib/email/utils'
 
 const NAVY = '#012B43'
@@ -26,6 +26,46 @@ interface OrderConfirmationProps extends OrderEmailData {
   invoiceUrl: string | null
 }
 
+interface NextStep {
+  step: string
+  text: string
+}
+
+function getNextSteps(productType: OrderProductType | undefined): NextStep[] {
+  switch (productType) {
+    case 'session':
+      return [
+        { step: '01', text: 'Your booking link is above — schedule your session at your convenience.' },
+        { step: '02', text: 'Prepare any questions, topics, or intentions you want to explore.' },
+        { step: '03', text: 'Join your session — Suzanne will guide the rest.' },
+      ]
+    case 'self-paced':
+      return [
+        { step: '01', text: 'Create your member portal account at suzanneravenall.com/portal — your programme content will be waiting.' },
+        { step: '02', text: 'Work through the materials at your own pace — no deadlines, no pressure.' },
+        { step: '03', text: 'Reach out to support@ravenallinstitute.com any time you need guidance.' },
+      ]
+    case 'live':
+      return [
+        { step: '01', text: 'Watch your email for joining instructions and Zoom details.' },
+        { step: '02', text: 'Joining instructions are sent 48 hours before your first session.' },
+        { step: '03', text: 'Join the live session — Suzanne will be there to guide you through every step.' },
+      ]
+    case 'group':
+      return [
+        { step: '01', text: 'Your Zoom link will be emailed 24 hours before the session.' },
+        { step: '02', text: 'Sessions are recorded — you will receive the recording link after.' },
+        { step: '03', text: 'Reach out if you have any questions before the session.' },
+      ]
+    default:
+      return [
+        { step: '01', text: 'You will receive access details and confirmation within 24 hours.' },
+        { step: '02', text: 'Check your email for further details and instructions.' },
+        { step: '03', text: 'Reach out to support@ravenallinstitute.com with any questions.' },
+      ]
+  }
+}
+
 export default function OrderConfirmation({
   displayId,
   createdAt,
@@ -36,6 +76,8 @@ export default function OrderConfirmation({
   taxTotal,
   total,
   invoiceUrl,
+  productType,
+  calBookingUrl,
 }: OrderConfirmationProps) {
   const greeting = `Dear ${firstName ?? 'valued customer'},`
   const formattedDate = new Date(createdAt).toLocaleDateString('en-ZA', {
@@ -43,6 +85,8 @@ export default function OrderConfirmation({
     month: 'long',
     year: 'numeric',
   })
+
+  const nextSteps = getNextSteps(productType)
 
   return (
     <Html lang="en">
@@ -79,8 +123,47 @@ export default function OrderConfirmation({
             </Text>
           </Section>
 
+          {/* Cal.com booking — only shown for private session purchases */}
+          {calBookingUrl && (
+            <Section style={{ backgroundColor: NAVY, padding: '32px 40px', marginBottom: '0' }}>
+              <Text style={{ color: BLUE, fontSize: '11px', fontWeight: '700', letterSpacing: '0.15em', textTransform: 'uppercase', margin: '0 0 12px' }}>
+                Book Your Session
+              </Text>
+              <Text style={{ color: '#ffffff', fontSize: '16px', fontWeight: '600', margin: '0 0 8px' }}>
+                Your payment is confirmed — schedule now
+              </Text>
+              <Text style={{ color: '#94a3b8', fontSize: '14px', lineHeight: '1.6', margin: '0 0 24px' }}>
+                Click below to choose a date and time that works for you.
+                Sessions are typically available within 2–3 business days.
+              </Text>
+              <Section style={{ textAlign: 'center', marginBottom: '16px' }}>
+                <Button
+                  href={calBookingUrl}
+                  style={{
+                    backgroundColor: BLUE,
+                    color: '#ffffff',
+                    fontSize: '15px',
+                    fontWeight: '700',
+                    padding: '14px 36px',
+                    borderRadius: '4px',
+                    textDecoration: 'none',
+                    display: 'inline-block',
+                  }}
+                >
+                  Book Your Session Now →
+                </Button>
+              </Section>
+              <Text style={{ color: '#64748b', fontSize: '12px', textAlign: 'center', margin: 0 }}>
+                Or copy this link:{' '}
+                <Link href={calBookingUrl} style={{ color: BLUE, textDecoration: 'none' }}>
+                  {calBookingUrl}
+                </Link>
+              </Text>
+            </Section>
+          )}
+
           {/* Order Summary */}
-          <Section style={{ padding: '0 40px' }}>
+          <Section style={{ padding: '32px 40px 0' }}>
             <Text style={{ color: MEDIUM_GRAY, fontSize: '11px', fontWeight: '700', letterSpacing: '0.15em', textTransform: 'uppercase', margin: '0 0 16px' }}>
               Order Summary
             </Text>
@@ -183,48 +266,12 @@ export default function OrderConfirmation({
             </Section>
           </Section>
 
-          {/* What You Purchased */}
-          <Section style={{ padding: '0 40px 32px' }}>
-            <Text style={{ color: MEDIUM_GRAY, fontSize: '11px', fontWeight: '700', letterSpacing: '0.15em', textTransform: 'uppercase', margin: '0 0 16px' }}>
-              What You Purchased
-            </Text>
-            {items.map((item) => (
-              <Row key={item.id} style={{ marginBottom: '12px' }}>
-                <Column>
-                  <Text style={{ color: NAVY, fontSize: '14px', fontWeight: '600', margin: '0 0 2px' }}>
-                    {item.title}
-                  </Text>
-                  {/* TODO: Suzanne — add a one-line description for each programme here */}
-                  <Text style={{ color: MEDIUM_GRAY, fontSize: '13px', lineHeight: '1.5', margin: 0 }}>
-                    Your personalised programme details and access information will follow.
-                  </Text>
-                </Column>
-              </Row>
-            ))}
-          </Section>
-
-          {/* What Happens Next */}
+          {/* What Happens Next — dynamic per product type */}
           <Section style={{ backgroundColor: LIGHT_GRAY, padding: '32px 40px', marginBottom: '0' }}>
             <Text style={{ color: MEDIUM_GRAY, fontSize: '11px', fontWeight: '700', letterSpacing: '0.15em', textTransform: 'uppercase', margin: '0 0 20px' }}>
               What Happens Next
             </Text>
-            {[
-              {
-                step: '01',
-                // TODO: Suzanne — customise step 1 copy per programme
-                text: 'You will receive your access details and joining instructions within 24 hours.',
-              },
-              {
-                step: '02',
-                // TODO: Suzanne — customise step 2 copy per programme
-                text: 'Check your inbox for a welcome email with everything you need to get started.',
-              },
-              {
-                step: '03',
-                // TODO: Suzanne — customise step 3 copy per programme
-                text: "Reach out any time — we're here to support you every step of the way.",
-              },
-            ].map(({ step, text }) => (
+            {nextSteps.map(({ step, text }) => (
               <Row key={step} style={{ marginBottom: '16px' }}>
                 <Column style={{ width: '48px', verticalAlign: 'top' }}>
                   <Text style={{ color: BLUE, fontSize: '18px', fontWeight: '700', margin: 0 }}>
@@ -287,10 +334,10 @@ export default function OrderConfirmation({
             <Text style={{ color: DARK_TEXT, fontSize: '14px', lineHeight: '1.6', margin: '0 0 8px' }}>
               Email:{' '}
               <Link
-                href="mailto:sravenall@suzanneravenall.com"
+                href="mailto:support@ravenallinstitute.com"
                 style={{ color: BLUE, textDecoration: 'none' }}
               >
-                sravenall@suzanneravenall.com
+                support@ravenallinstitute.com
               </Link>
             </Text>
             <Text style={{ color: DARK_TEXT, fontSize: '14px', margin: 0 }}>

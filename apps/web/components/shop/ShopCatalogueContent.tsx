@@ -262,7 +262,7 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
               {!searchLoading && searchResults.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {searchResults.map((product, index) => (
-                    <ProductCard key={product.id} product={product} index={index} />
+                    <ProductCard key={product.id} product={product} index={index} allCategories={initialCategories} />
                   ))}
                 </div>
               )}
@@ -300,7 +300,7 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
               {!loading && !error && sortedProducts.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {sortedProducts.map((product, index) => (
-                    <ProductCard key={product.id} product={product} index={index} />
+                    <ProductCard key={product.id} product={product} index={index} allCategories={initialCategories} />
                   ))}
                 </div>
               )}

@@ -54,10 +54,29 @@ export function ShopHeroBanner() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-lg text-white/70 leading-relaxed mb-10 max-w-xl"
+          className="text-lg text-white/70 leading-relaxed mb-8 max-w-xl"
         >
           Private sessions, guided programmes, and group coaching designed to create lasting change.
         </motion.p>
+
+        {/* Credibility stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="flex flex-wrap gap-8 mb-10"
+        >
+          {[
+            { value: '2,000+', label: 'Lives transformed' },
+            { value: '20+',    label: 'Years experience' },
+            { value: '30+',    label: 'Countries reached' },
+          ].map(({ value, label }) => (
+            <div key={label}>
+              <span className="block text-3xl font-bold text-white">{value}</span>
+              <span className="block text-sm text-white/60 mt-0.5">{label}</span>
+            </div>
+          ))}
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

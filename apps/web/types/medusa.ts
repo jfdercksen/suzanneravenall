@@ -23,7 +23,7 @@ export interface MedusaProduct {
   thumbnail: string | null
   metadata?: Record<string, unknown> | null
   variants: ProductVariant[]
-  categories: Array<{ id: string; handle: string; name: string }>
+  categories: Array<{ id: string; handle: string; name: string; parent_category_id: string | null }>
   collection: { id: string; handle: string; title: string } | null
 }
 

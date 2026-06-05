@@ -5,6 +5,13 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { MedusaProduct, ProductVariant } from '@/types/medusa'
 
+interface CategoryNode {
+  id: string
+  handle: string
+  name: string
+  parent_category_id: string | null
+}
+
 interface DeliveryBadge {
   label: string
   className: string
@@ -27,6 +34,33 @@ function getDeliveryBadge(handle: string, title: string): DeliveryBadge {
   }
 
   return { label: 'Session', className: 'bg-gray-800 text-gray-300' }
+}
+
+/**
+ * Walks the category tree to return the root (top-level) category for the
+ * first directly-assigned category on the product.
+ * Uses allCategories (the full tree from the page fetch) to resolve parents.
+ */
+function getRootCategory(
+  productCategories: CategoryNode[],
+  allCategories: CategoryNode[]
+): CategoryNode | null {
+  if (productCategories.length === 0) return null
+
+  const lookup = new Map(allCategories.map((c) => [c.id, c]))
+
+  for (const cat of productCategories) {
+    let current: CategoryNode | undefined = lookup.get(cat.id) ?? cat
+    // Walk up until we reach a root (parent_category_id === null)
+    while (current && current.parent_category_id !== null) {
+      const parent = lookup.get(current.parent_category_id)
+      if (!parent) break
+      current = parent
+    }
+    if (current) return current
+  }
+
+  return productCategories[0] ?? null
 }
 
 function getLowestZarPrice(variants: ProductVariant[]): number | null {
@@ -61,11 +95,12 @@ function PriceDisplay({ variants }: { variants: ProductVariant[] }) {
 interface ProductCardProps {
   product: MedusaProduct
   index: number
+  allCategories?: CategoryNode[]
 }
 
-export function ProductCard({ product, index }: ProductCardProps) {
+export function ProductCard({ product, index, allCategories = [] }: ProductCardProps) {
   const badge = getDeliveryBadge(product.handle, product.title)
-  const primaryCategory = product.categories[0]
+  const rootCategory = getRootCategory(product.categories, allCategories)
 
   return (
     <motion.div
@@ -76,7 +111,8 @@ export function ProductCard({ product, index }: ProductCardProps) {
     >
       <Link href={`/shop/${product.handle}`} className="block group">
         <div className="bg-gray-900 rounded-card overflow-hidden border border-white/5 hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500">
-          <div className="relative aspect-video overflow-hidden">
+          {/* Change 1: aspect-[4/3] instead of aspect-video for taller, more impactful images */}
+          <div className="relative aspect-[4/3] overflow-hidden">
             <Image
               src={product.thumbnail ?? '/images/blog-placeholder.jpg'}
               alt={product.title}
@@ -84,13 +120,15 @@ export function ProductCard({ product, index }: ProductCardProps) {
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-opacity duration-500" />
+            {/* Change 3: Overlay starts light (image is vivid), darkens on hover */}
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-300" />
           </div>
 
           <div className="p-6 flex flex-col gap-3">
-            {primaryCategory && (
+            {/* Change 2: Show root category name (e.g. "Private Sessions"), not the leaf sub-category */}
+            {rootCategory && (
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent">
-                {primaryCategory.name}
+                {rootCategory.name}
               </p>
             )}
 
@@ -105,8 +143,9 @@ export function ProductCard({ product, index }: ProductCardProps) {
               </span>
             </div>
 
+            {/* Change 6: Stronger, action-oriented CTA */}
             <p className="mt-2 text-sm font-medium text-white/50 group-hover:text-brand-accent transition-colors duration-300">
-              View Programme →
+              Explore &amp; Enrol →
             </p>
           </div>
         </div>
