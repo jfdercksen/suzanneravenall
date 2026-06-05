@@ -187,6 +187,33 @@ interface SupabaseUpsertTable {
   ): Promise<{ error: { message: string } | null }>
 }
 
+// Minimal builder interfaces to bypass Supabase's strict generics when the
+// Database type doesn't include member_subscriptions (no generated types in Medusa).
+interface PortalSelectQuery {
+  eq(col: string, val: string): PortalSelectQuery
+  order(col: string, opts: { ascending: boolean }): PortalSelectQuery
+  limit(n: number): PortalSelectQuery
+  maybeSingle(): Promise<{ data: { access_level: number | null; track: string | null } | null; error: { message: string } | null }>
+}
+
+// Awaitable update/insert: supabase builders implement PromiseLike natively
+interface PortalWriteResult {
+  then<R>(onfulfilled: (value: { error: { message: string } | null }) => R): Promise<R>
+}
+
+interface PortalUpdateQuery {
+  eq(col: string, val: string): PortalUpdateQuery & PortalWriteResult
+}
+
+interface PortalSubscriptionTable {
+  select(cols: string): PortalSelectQuery
+  update(values: { access_level: number; track: string }): PortalUpdateQuery & PortalWriteResult
+  insert(values: {
+    user_id: string; tier_id: string; status: string;
+    start_date: string; end_date: null; access_level: number; track: string
+  }): PortalWriteResult
+}
+
 async function syncSupabaseMembership(
   supabase: ReturnType<typeof createClient>,
   supabaseUserId: string,
@@ -230,9 +257,12 @@ async function syncPortalAccess(
   accessLevel: number,
   track: 'akashic' | 'energy-clearing' | 'general'
 ): Promise<void> {
+  // Cast to bypass Supabase's strict generics — same pattern as SupabaseUpsertTable above.
+  // tier_id='free' is a valid FK value: the free tier row is seeded in Task 3.1.
+  const table = supabase.from('member_subscriptions') as unknown as PortalSubscriptionTable
+
   // Fetch current active subscription to avoid downgrading
-  const { data: existing, error: fetchError } = await supabase
-    .from('member_subscriptions')
+  const { data: existing, error: fetchError } = await table
     .select('access_level, track')
     .eq('user_id', supabaseUserId)
     .eq('status', 'active')
@@ -246,12 +276,10 @@ async function syncPortalAccess(
   }
 
   if (existing) {
-    const row = existing as { access_level: number | null; track: string | null }
-    const currentLevel = row.access_level ?? 0
+    const currentLevel = existing.access_level ?? 0
 
     if (accessLevel > currentLevel) {
-      const { error: updateError } = await supabase
-        .from('member_subscriptions')
+      const { error: updateError } = await table
         .update({ access_level: accessLevel, track })
         .eq('user_id', supabaseUserId)
         .eq('status', 'active')
@@ -266,17 +294,15 @@ async function syncPortalAccess(
     }
   } else {
     // No active subscription — insert a free-tier base with the programme's access level
-    const { error: insertError } = await supabase
-      .from('member_subscriptions')
-      .insert({
-        user_id: supabaseUserId,
-        tier_id: 'free',
-        status: 'active',
-        start_date: new Date().toISOString(),
-        end_date: null,
-        access_level: accessLevel,
-        track,
-      })
+    const { error: insertError } = await table.insert({
+      user_id: supabaseUserId,
+      tier_id: 'free',
+      status: 'active',
+      start_date: new Date().toISOString(),
+      end_date: null,
+      access_level: accessLevel,
+      track,
+    })
 
     if (insertError) {
       console.error(`[order-placed] portal access insert failed for user ${supabaseUserId}: ${insertError.message}`)
