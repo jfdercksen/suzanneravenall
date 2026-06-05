@@ -5,6 +5,33 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { MedusaProduct, ProductVariant } from '@/types/medusa'
 
+const CATEGORY_IMAGE_MAP: Record<string, string> = {
+  'private-sessions':              '/images/generated/session-coaching.webp',
+  'akashic-coaching':              '/images/generated/explore-akashic.webp',
+  'executive-coaching':            '/images/generated/session-coaching.webp',
+  'rapid-repatterning':            '/images/generated/explore-repatterning.webp',
+  'resonance-repatterning-sessions': '/images/generated/explore-repatterning.webp',
+  'transformation-coaching':       '/images/generated/explore-transformation.webp',
+  'energetic-clearing':            '/images/generated/explore-energy.webp',
+  'exploring-the-alpha-mind':      '/images/generated/explore-mindfulness.webp',
+  'rapid-transformation-therapy':  '/images/generated/session-coaching.webp',
+  'family-coaching':               '/images/generated/group-coaching-real.webp',
+  'group-sessions':                '/images/generated/group-coaching-real.webp',
+  'group-sessions-live':           '/images/generated/group-coaching-real.webp',
+  'group-sessions-recorded':       '/images/generated/group-coaching-real.webp',
+  'rp-live':                       '/images/generated/explore-repatterning.webp',
+  'rp-self-paced':                 '/images/generated/explore-repatterning.webp',
+  'akashic-live':                  '/images/generated/explore-akashic.webp',
+  'akashic-self-paced':            '/images/generated/explore-akashic.webp',
+  'energy-clearing-live':          '/images/generated/explore-energy.webp',
+  'energy-clearing-self-paced':    '/images/generated/explore-energy.webp',
+  'life-enhancing-live':           '/images/generated/explore-transformation.webp',
+  'life-enhancing-self-paced':     '/images/generated/explore-transformation.webp',
+  'meditation-programmes':         '/images/generated/explore-mindfulness.webp',
+  'books':                         '/images/book-cover.png',
+  'digital-downloads':             '/images/generated/explore-resonance.webp',
+}
+
 interface CategoryNode {
   id: string
   handle: string
@@ -100,7 +127,14 @@ interface ProductCardProps {
 
 export function ProductCard({ product, index, allCategories = [] }: ProductCardProps) {
   const badge = getDeliveryBadge(product.handle, product.title)
+  const leafCategory = product.categories[0] ?? null
   const rootCategory = getRootCategory(product.categories, allCategories)
+
+  const productImage =
+    product.thumbnail ??
+    (leafCategory !== null ? CATEGORY_IMAGE_MAP[leafCategory.handle] : undefined) ??
+    (rootCategory !== null ? CATEGORY_IMAGE_MAP[rootCategory.handle] : undefined) ??
+    '/images/generated/explore-vitality.webp'
 
   return (
     <motion.div
@@ -114,7 +148,7 @@ export function ProductCard({ product, index, allCategories = [] }: ProductCardP
           {/* Change 1: aspect-[4/3] instead of aspect-video for taller, more impactful images */}
           <div className="relative aspect-[4/3] overflow-hidden">
             <Image
-              src={product.thumbnail ?? '/images/blog-placeholder.jpg'}
+              src={productImage}
               alt={product.title}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
