@@ -123,7 +123,7 @@ async function main() {
 
   // 1. Auth
   console.log('1. Authenticating...')
-  const authRes = await fetchJson(`${MEDUSA_URL}/auth/admin/emailpass`, {
+  const authRes = await fetchJson(`${MEDUSA_URL}/auth/user/emailpass`, {
     method: 'POST',
     body: JSON.stringify({ email: EMAIL, password: PASSWORD }),
   })

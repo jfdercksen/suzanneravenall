@@ -49,8 +49,9 @@ const KIE_API_BASE = 'https://api.kie.ai/api/v1'
 const OUTPUT_DIR = path.join(ROOT, 'apps/web/public/images/products')
 const LOG_FILE = path.join(__dirname, 'product-images-log.json')
 
-const BATCH_SIZE = 3
-const BATCH_DELAY_MS = 3000
+// 10 concurrent tasks × 1 poll/5s = 2 polls/s = 20 polls/10s — stays at rate limit
+const CONCURRENT = 10
+const BATCH_DELAY_MS = 10000
 
 // ── Prompt map (keyed by exact Medusa product handle) ───────────────────────
 // Products without an explicit entry fall back to their category prompt.
@@ -268,8 +269,10 @@ function uploadToMedusa(token, filePath) {
     const parsed = new URL(`${MEDUSA_URL}/admin/uploads`)
     const lib = parsed.protocol === 'https:' ? https : http
 
+    const ext = filename.split('.').pop()?.toLowerCase() ?? 'jpg'
+    const mimeType = ext === 'webp' ? 'image/webp' : ext === 'png' ? 'image/png' : 'image/jpeg'
     const header = Buffer.from(
-      `--${boundary}\r\nContent-Disposition: form-data; name="files"; filename="${filename}"\r\nContent-Type: image/webp\r\n\r\n`
+      `--${boundary}\r\nContent-Disposition: form-data; name="files"; filename="${filename}"\r\nContent-Type: ${mimeType}\r\n\r\n`
     )
     const footer = Buffer.from(`\r\n--${boundary}--\r\n`)
     const totalLength = header.length + fileContent.length + footer.length
@@ -311,12 +314,10 @@ function sleep(ms) {
 
 async function submitKieTask(prompt) {
   const body = JSON.stringify({
-    model: 'google/nano-banana-pro',
+    model: 'nano-banana-2',
     input: {
       prompt,
       aspect_ratio: '4:3',
-      resolution: '2K',
-      output_format: 'webp',
     },
   })
   const res = await fetchJson(`${KIE_API_BASE}/jobs/createTask`, {
@@ -329,7 +330,7 @@ async function submitKieTask(prompt) {
   return taskId
 }
 
-async function pollKieTask(taskId) {
+async function pollKieTask(taskId, tag = '') {
   const maxAttempts = 72 // 6 minutes max (5s per attempt)
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     await sleep(5000)
@@ -354,7 +355,7 @@ async function pollKieTask(taskId) {
     }
 
     if (attempt % 6 === 5) {
-      process.stdout.write(` ${Math.round((attempt + 1) * 5)}s...`)
+      console.log(`${tag} POLL    ${Math.round((attempt + 1) * 5)}s elapsed...`)
     }
   }
   throw new Error(`Task ${taskId} timed out after ${maxAttempts * 5}s`)
@@ -363,7 +364,7 @@ async function pollKieTask(taskId) {
 // ── Medusa utilities ─────────────────────────────────────────────────────────
 
 async function authenticateMedusa() {
-  const res = await fetchJson(`${MEDUSA_URL}/auth/admin/emailpass`, {
+  const res = await fetchJson(`${MEDUSA_URL}/auth/user/emailpass`, {
     method: 'POST',
     body: JSON.stringify({ email: MEDUSA_EMAIL, password: MEDUSA_PASSWORD }),
   })
@@ -424,16 +425,81 @@ function getPromptForProduct(product) {
   return 'Spiritual transformation and healing visualization, golden light energy, dark atmospheric background, cinematic photography, no text'
 }
 
+// ── Per-product worker ───────────────────────────────────────────────────────
+
+async function processProduct(product, token, log, globalIndex, total) {
+  const prompt = getPromptForProduct(product)
+  // Extension determined after generation — default jpg, updated once URL is known
+  let destFilename = `${product.handle}.jpg`
+  let destPath = path.join(OUTPUT_DIR, destFilename)
+  const tag = `[${String(globalIndex).padStart(2)}/${total}]`
+
+  console.log(`${tag} START  ${product.handle}`)
+
+  try {
+    // Step 1: Generate image via Kie.ai (skip if local file already exists)
+    const localJpg = path.join(OUTPUT_DIR, `${product.handle}.jpg`)
+    const localWebp = path.join(OUTPUT_DIR, `${product.handle}.webp`)
+    const existingLocal = fs.existsSync(localJpg) ? localJpg : fs.existsSync(localWebp) ? localWebp : null
+
+    if (!FORCE && existingLocal) {
+      destPath = existingLocal
+      destFilename = path.basename(existingLocal)
+      console.log(`${tag} LOCAL   ${destFilename} — skipping generation, re-uploading`)
+    } else {
+      const taskId = await submitKieTask(prompt)
+      console.log(`${tag} TASK    ${taskId.slice(0, 16)}`)
+      const imageUrl = await pollKieTask(taskId, tag)
+      console.log(`${tag} DONE    ${imageUrl.slice(0, 60)}`)
+
+      // Use actual extension from URL (API returns .jpeg)
+      const urlExt = imageUrl.split('.').pop()?.split('?')[0] ?? 'jpg'
+      destFilename = `${product.handle}.${urlExt}`
+      destPath = path.join(OUTPUT_DIR, destFilename)
+
+      await downloadFile(imageUrl, destPath)
+      const sizeKB = Math.round(fs.statSync(destPath).size / 1024)
+      console.log(`${tag} SAVED   ${destFilename} (${sizeKB} KB)`)
+    }
+
+    // Step 2: Upload to Medusa
+    const uploadRes = await uploadToMedusa(token, destPath)
+    const fileUrl = uploadRes?.data?.files?.[0]?.url
+    if (!fileUrl) {
+      throw new Error(`Upload returned no URL: ${JSON.stringify(uploadRes).slice(0, 200)}`)
+    }
+    console.log(`${tag} UPLOAD  ${fileUrl}`)
+
+    // Step 3: Set as product thumbnail
+    const updateRes = await setProductThumbnail(token, product.id, fileUrl)
+    if (updateRes.status !== 200) {
+      throw new Error(`Thumbnail update (${updateRes.status}): ${JSON.stringify(updateRes.data).slice(0, 200)}`)
+    }
+    console.log(`${tag} THUMB   OK`)
+
+    log[product.handle] = { status: 'done', url: fileUrl, completedAt: new Date().toISOString() }
+    saveLog(log)
+    return { ok: true }
+
+  } catch (err) {
+    console.error(`${tag} ERROR   ${err.message}`)
+    log[product.handle] = { status: 'error', error: err.message, failedAt: new Date().toISOString() }
+    saveLog(log)
+    return { ok: false, error: err.message }
+  }
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true })
 
   console.log('── generate-product-images ──────────────────────────────────────')
-  console.log(`  Medusa URL: ${MEDUSA_URL}`)
-  console.log(`  Output dir: apps/web/public/images/products/`)
-  console.log(`  Progress log: infra/scripts/product-images-log.json`)
-  console.log(`  Force regenerate: ${FORCE ? 'yes (FORCE=1)' : 'no'}`)
+  console.log(`  Medusa URL:    ${MEDUSA_URL}`)
+  console.log(`  Concurrent:    ${CONCURRENT} tasks/batch`)
+  console.log(`  Rate limit:    20 req/10s (${CONCURRENT} × 1 poll/5s = ${CONCURRENT * 2}/10s)`)
+  console.log(`  Batch delay:   ${BATCH_DELAY_MS / 1000}s between batches`)
+  console.log(`  Force regen:   ${FORCE ? 'yes (FORCE=1)' : 'no'}`)
   console.log('')
 
   // 1. Authenticate with Medusa
@@ -458,97 +524,66 @@ async function main() {
   const toProcess = allProducts.filter((p) => {
     if (log[p.handle]?.status === 'done' && !FORCE) return false
     if (p.thumbnail && !FORCE) {
-      console.log(`  Skipping ${p.handle} — already has thumbnail`)
+      console.log(`  Skip (has thumbnail): ${p.handle}`)
       return false
     }
     return true
   })
 
-  console.log(`Processing ${toProcess.length} products (skipping ${allProducts.length - toProcess.length})`)
+  if (toProcess.length === 0) {
+    console.log('All products already have thumbnails — nothing to do.')
+    return
+  }
+
+  const batchCount = Math.ceil(toProcess.length / CONCURRENT)
+  console.log(`Processing ${toProcess.length} products in ${batchCount} batch${batchCount > 1 ? 'es' : ''} of ${CONCURRENT}`)
   console.log('─'.repeat(64))
   console.log('')
 
   let successCount = 0
   let errorCount = 0
 
-  for (let i = 0; i < toProcess.length; i++) {
-    const product = toProcess[i]
-    const prompt = getPromptForProduct(product)
-    const destFilename = `${product.handle}.webp`
-    const destPath = path.join(OUTPUT_DIR, destFilename)
+  for (let b = 0; b < batchCount; b++) {
+    const batchStart = b * CONCURRENT
+    const batch = toProcess.slice(batchStart, batchStart + CONCURRENT)
 
-    console.log(`[${i + 1}/${toProcess.length}] ${product.handle}`)
-    console.log(`  Prompt: ${prompt.slice(0, 80)}...`)
+    if (b > 0) {
+      console.log(`── Batch ${b + 1}/${batchCount} — waiting ${BATCH_DELAY_MS / 1000}s before starting ──`)
+      await sleep(BATCH_DELAY_MS)
+    } else {
+      console.log(`── Batch 1/${batchCount} ──`)
+    }
+    console.log('')
 
-    try {
-      // Step 1: Generate image via Kie.ai
-      let imageUrl
+    const results = await Promise.allSettled(
+      batch.map((product, j) =>
+        processProduct(product, token, log, batchStart + j + 1, toProcess.length)
+      )
+    )
 
-      if (!FORCE && fs.existsSync(destPath)) {
-        console.log('  Local file exists — skipping generation, re-uploading')
+    for (const result of results) {
+      if (result.status === 'fulfilled' && result.value.ok) {
+        successCount++
       } else {
-        process.stdout.write('  Generating via Kie.ai...')
-        const taskId = await submitKieTask(prompt)
-        process.stdout.write(` task ${taskId.slice(0, 12)}... polling`)
-        imageUrl = await pollKieTask(taskId)
-        console.log(' done')
-
-        // Step 2: Download image locally
-        process.stdout.write('  Downloading image...')
-        await downloadFile(imageUrl, destPath)
-        const sizeKB = Math.round(fs.statSync(destPath).size / 1024)
-        console.log(` ${destFilename} (${sizeKB} KB)`)
+        errorCount++
       }
-
-      // Step 3: Upload to Medusa
-      process.stdout.write('  Uploading to Medusa...')
-      const uploadRes = await uploadToMedusa(token, destPath)
-      const fileUrl = uploadRes?.data?.files?.[0]?.url
-      if (!fileUrl) {
-        throw new Error(`Upload returned no URL: ${JSON.stringify(uploadRes).slice(0, 200)}`)
-      }
-      console.log(` ${fileUrl}`)
-
-      // Step 4: Set as product thumbnail
-      process.stdout.write('  Setting thumbnail...')
-      const updateRes = await setProductThumbnail(token, product.id, fileUrl)
-      if (updateRes.status !== 200) {
-        throw new Error(`Thumbnail update failed (${updateRes.status}): ${JSON.stringify(updateRes.data).slice(0, 200)}`)
-      }
-      console.log(' OK')
-
-      // Update log
-      log[product.handle] = { status: 'done', url: fileUrl, completedAt: new Date().toISOString() }
-      saveLog(log)
-      successCount++
-
-    } catch (err) {
-      console.error(`  ERROR: ${err.message}`)
-      log[product.handle] = { status: 'error', error: err.message, failedAt: new Date().toISOString() }
-      saveLog(log)
-      errorCount++
     }
 
     console.log('')
-
-    // Batch delay: pause after every BATCH_SIZE products (except after the last)
-    if ((i + 1) % BATCH_SIZE === 0 && i + 1 < toProcess.length) {
-      console.log(`  (batch of ${BATCH_SIZE} complete — pausing ${BATCH_DELAY_MS / 1000}s before next batch)`)
-      await sleep(BATCH_DELAY_MS)
-      console.log('')
-    }
+    console.log(`── Batch ${b + 1} done: ${results.filter(r => r.status === 'fulfilled' && r.value?.ok).length} ok, ${results.filter(r => r.status !== 'fulfilled' || !r.value?.ok).length} failed ──`)
+    console.log('')
   }
 
-  console.log('─'.repeat(64))
-  console.log(`Complete: ${successCount} succeeded, ${errorCount} failed`)
+  console.log('═'.repeat(64))
+  console.log(`Complete: ${successCount} succeeded, ${errorCount} failed out of ${toProcess.length}`)
   if (errorCount > 0) {
-    console.log(`Re-run to retry failed products (they are logged in product-images-log.json)`)
+    console.log('Re-run to retry failed products — completed ones are skipped automatically')
   }
   console.log('')
   console.log('Next steps:')
   console.log('  1. git add apps/web/public/images/products/')
   console.log('  2. git commit -m "feat: AI-generated product images"')
-  console.log('  3. The shop will use Medusa thumbnails automatically — no deploy needed')
+  console.log('  3. Shop cards now use Medusa thumbnails — no redeploy needed')
 }
 
 main().catch((err) => {
