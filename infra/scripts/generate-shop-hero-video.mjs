@@ -116,12 +116,14 @@ function sleep(ms) {
 
 async function submitTask() {
   const body = JSON.stringify({
-    model: 'kling-3.0/text-to-video',
+    model: 'bytedance/seedance-2',
     input: {
       prompt: PROMPT,
       duration: 10,
       aspect_ratio: '16:9',
       resolution: '1080p',
+      generate_audio: false,
+      web_search: false,
     },
   })
 
@@ -191,7 +193,7 @@ async function main() {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true })
 
   console.log('── generate-shop-hero-video ──────────────────────────────────────')
-  console.log('  Model:    kling-3.0/text-to-video')
+  console.log('  Model:    bytedance/seedance-2 (text-to-video)')
   console.log('  Duration: 10s')
   console.log('  Output:   apps/web/public/videos/generated/hero-shop.mp4')
   console.log('  Poll:     every 15s')
