@@ -53,7 +53,7 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
   return (
     <div
       ref={barRef}
-      className={`sticky top-0 z-40 w-full bg-gray-950 border-b transition-shadow duration-300 ${
+      className={`sticky top-16 lg:top-20 z-40 w-full bg-gray-950 border-b transition-shadow duration-300 ${
         isSticky ? 'border-white/10 shadow-lg shadow-black/40' : 'border-transparent'
       }`}
     >
