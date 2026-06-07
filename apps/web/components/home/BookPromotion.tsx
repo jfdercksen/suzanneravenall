@@ -15,11 +15,11 @@ export default function BookPromotion() {
       />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-          {/* LEFT — Book visual (2 / 5 cols = ~40%) */}
+          {/* LEFT — Book visual */}
           <motion.div
-            className="lg:col-span-2 flex flex-col items-center lg:items-start"
+            className="flex flex-col items-center lg:items-start"
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-100px' }}
@@ -38,25 +38,27 @@ export default function BookPromotion() {
               </span>
             </motion.div>
 
-            {/* Floating book cover */}
+            {/* Floating book cover — image is 1092×852 landscape with 3D perspective baked in */}
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              className="w-full"
             >
-              <div className="rotate-[-6deg] shadow-[0_25px_60px_rgba(0,0,0,0.25)]">
+              <div className="shadow-[0_20px_50px_rgba(0,0,0,0.18)]">
                 <Image
                   src="/images/book-cover.png"
                   alt="The Breakthrough Trilogy by Dr. Suzanne Ravenall"
-                  width={260}
-                  height={390}
-                  className="rounded-sm object-contain"
+                  width={1092}
+                  height={852}
+                  className="w-full h-auto object-contain"
+                  priority={false}
                 />
               </div>
             </motion.div>
           </motion.div>
 
-          {/* RIGHT — Copy (3 / 5 cols = ~60%) */}
-          <div className="lg:col-span-3">
+          {/* RIGHT — Copy */}
+          <div>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
