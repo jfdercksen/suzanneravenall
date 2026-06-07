@@ -6,59 +6,58 @@ import { motion } from 'framer-motion'
 
 export default function BookPromotion() {
   return (
-    <section aria-labelledby="book-heading" className="relative bg-gray-50 py-20 lg:py-32 overflow-hidden">
+    <section aria-labelledby="book-heading" className="relative overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-2">
 
-      {/* Ambient glow */}
-      <div
-        aria-hidden="true"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-brand-accent/5 blur-[140px] pointer-events-none"
-      />
+        {/* LEFT — Full-bleed book panel (navy bg makes cover pop) */}
+        <motion.div
+          className="relative bg-brand-primary flex flex-col items-center justify-center py-20 lg:py-32 px-8 lg:px-16 overflow-hidden min-h-[400px] lg:min-h-[680px]"
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+        >
+          {/* Ambient glow behind cover */}
+          <div
+            aria-hidden="true"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-brand-accent/10 blur-[120px] pointer-events-none"
+          />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-
-          {/* LEFT — Book visual */}
+          {/* Available Now badge */}
           <motion.div
-            className="flex flex-col items-center lg:items-start"
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, ease: 'easeOut' }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="relative mb-8 z-10"
           >
-            {/* Available Now badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="mb-6"
-            >
-              <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-brand-accent text-white text-xs font-semibold uppercase tracking-wider">
-                Available Now
-              </span>
-            </motion.div>
-
-            {/* Floating book cover — image is 1092×852 landscape with 3D perspective baked in */}
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              className="w-full"
-            >
-              <div className="shadow-[0_20px_50px_rgba(0,0,0,0.18)]">
-                <Image
-                  src="/images/book-cover.png"
-                  alt="The Breakthrough Trilogy by Dr. Suzanne Ravenall"
-                  width={1092}
-                  height={852}
-                  className="w-full h-auto object-contain"
-                  priority={false}
-                />
-              </div>
-            </motion.div>
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-brand-accent text-white text-xs font-semibold uppercase tracking-wider">
+              Available Now
+            </span>
           </motion.div>
 
-          {/* RIGHT — Copy */}
-          <div>
+          {/* Floating book cover — 1092×852 landscape, 3D perspective baked in */}
+          <motion.div
+            animate={{ y: [0, -12, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative z-10 w-full max-w-lg"
+          >
+            <div className="shadow-[0_30px_80px_rgba(0,0,0,0.5)]">
+              <Image
+                src="/images/book-cover.png"
+                alt="The Breakthrough Trilogy by Dr. Suzanne Ravenall"
+                width={1092}
+                height={852}
+                className="w-full h-auto"
+                priority={false}
+              />
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* RIGHT — Copy panel */}
+        <div className="bg-gray-50 flex items-center">
+          <div className="w-full max-w-xl mx-auto py-20 lg:py-32 px-8 lg:px-16">
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -76,7 +75,7 @@ export default function BookPromotion() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-6"
+              className="text-4xl lg:text-5xl font-light text-brand-primary leading-tight mb-6"
             >
               Before you change your life — understand the architecture holding you back.
             </motion.h2>
@@ -104,7 +103,7 @@ export default function BookPromotion() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="border-l-2 border-brand-accent pl-6 mb-8"
             >
-              <p className="text-lg lg:text-xl font-light italic text-brand-primary leading-relaxed">
+              <p className="text-lg font-light italic text-brand-primary leading-relaxed">
                 &ldquo;When we decode hidden patterns, we transform in unimaginable ways. That shift radiates outward — into how we lead, grow, relate, love, and show up.&rdquo;
               </p>
               <footer className="mt-3 text-sm text-gray-400 uppercase tracking-wider not-italic">
@@ -136,6 +135,7 @@ export default function BookPromotion() {
 
           </div>
         </div>
+
       </div>
     </section>
   )
