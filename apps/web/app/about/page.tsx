@@ -7,6 +7,7 @@ import HowItWorks from '@/components/about/HowItWorks'
 import TheEcosystem from '@/components/about/TheEcosystem'
 import AboutFinalCTA from '@/components/about/AboutFinalCTA'
 import MediaLogos from '@/components/home/MediaLogos'
+import VideoTestimonials from '@/components/shared/VideoTestimonials'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -29,6 +30,7 @@ export default function AboutPage() {
         quoteAttribution="Dr. Suzanne Ravenall"
       />
       <TheEcosystem />
+      <VideoTestimonials />
       <AboutFinalCTA />
     </>
   )

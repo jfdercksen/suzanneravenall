@@ -7,9 +7,9 @@ import TransformationQuote from '../components/home/TransformationQuote'
 import FocusAreas from '../components/home/FocusAreas'
 import TestimonialSpotlight from '../components/home/TestimonialSpotlight'
 import BookPromotion from '../components/home/BookPromotion'
+import VideoTestimonials from '../components/shared/VideoTestimonials'
 import FeaturedPrograms from '../components/home/FeaturedPrograms'
 import LeadMagnet from '../components/home/LeadMagnet'
-import TestimonialsSection from '../components/home/TestimonialsSection'
 import FinalCTA from '../components/home/FinalCTA'
 
 export const metadata: Metadata = {
@@ -87,9 +87,9 @@ export default function HomePage() {
       <FocusAreas />
       <TestimonialSpotlight />
       <BookPromotion />
+      <VideoTestimonials />
       <FeaturedPrograms />
       <LeadMagnet />
-      <TestimonialsSection />
       <FinalCTA />
     </>
   )

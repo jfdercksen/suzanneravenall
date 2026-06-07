@@ -39,7 +39,7 @@ const programs = [
 
 export default function FeaturedPrograms() {
   return (
-    <section aria-labelledby="programs-heading" className="py-20 lg:py-32 bg-brand-primary">
+    <section aria-labelledby="programs-heading" className="py-20 lg:py-32 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <motion.div
@@ -52,7 +52,7 @@ export default function FeaturedPrograms() {
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             Featured Programs
           </p>
-          <h2 id="programs-heading" className="text-4xl lg:text-6xl font-light text-white">
+          <h2 id="programs-heading" className="text-4xl lg:text-6xl font-light text-brand-primary">
             The fastest path to your breakthrough
           </h2>
         </motion.div>
@@ -61,7 +61,7 @@ export default function FeaturedPrograms() {
           {programs.map(({ title, subtitle, description, price, image, href, badge, urgency }, i) => (
             <motion.div
               key={title}
-              className="group relative bg-white/5 border border-white/10 rounded-card overflow-hidden hover:border-brand-accent/40 hover:bg-white/10 transition-all duration-500 hover:-translate-y-1 flex flex-col"
+              className="group relative bg-gray-50 border border-gray-100 rounded-card overflow-hidden hover:border-brand-accent/30 hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1 flex flex-col"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
@@ -75,7 +75,7 @@ export default function FeaturedPrograms() {
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-primary/80 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 {badge && (
                   <div className="absolute top-4 left-4">
                     <span className="inline-flex items-center px-3 py-1 rounded-full bg-brand-accent text-white text-xs font-semibold uppercase tracking-wide">
@@ -87,13 +87,13 @@ export default function FeaturedPrograms() {
 
               <div className="p-6 flex flex-col flex-1">
                 <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.2em] mb-1">{subtitle}</p>
-                <h3 className="text-xl font-semibold text-white">{title}</h3>
-                <p className="mt-3 text-white/60 text-sm leading-relaxed flex-1">{description}</p>
+                <h3 className="text-xl font-semibold text-brand-primary">{title}</h3>
+                <p className="mt-3 text-gray-600 text-sm leading-relaxed flex-1">{description}</p>
                 {urgency && (
                   <p className="mt-3 text-xs text-brand-accent font-medium">{urgency}</p>
                 )}
                 <div className="mt-6 flex items-center justify-between">
-                  <span className="text-white font-semibold">{price}</span>
+                  <span className="text-brand-primary font-semibold">{price}</span>
                   <Link
                     href={href}
                     className="inline-flex items-center justify-center px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm rounded-button transition-colors duration-150"
