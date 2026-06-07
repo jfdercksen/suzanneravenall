@@ -19,6 +19,7 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /var/www/certbot:/var/www/certbot:ro
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - medusa_uploads:/app/uploads:ro
     depends_on:
       web:
         condition: service_healthy
@@ -77,6 +78,8 @@ services:
     restart: unless-stopped
     expose:
       - "9000"
+    volumes:
+      - medusa_uploads:/app/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -355,6 +358,7 @@ volumes:
   postgres_data:
   meilisearch_data:
   n8n_data:
+  medusa_uploads:
 
 # -----------------------------------------------------------------------------
 # Networks

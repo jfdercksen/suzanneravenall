@@ -21,6 +21,22 @@ module.exports = defineConfig({
   },
   modules: [
     {
+      resolve: "@medusajs/medusa/file",
+      options: {
+        providers: [
+          {
+            resolve: "@medusajs/medusa/file-local",
+            id: "local",
+            options: {
+              upload_dir: "uploads",
+              backend_url:
+                (process.env.NEXT_PUBLIC_SITE_URL || "http://169.239.180.49") + "/uploads",
+            },
+          },
+        ],
+      },
+    },
+    {
       // key avoids defineConfig calling require() on TypeScript source during build
       key: "programsModule",
       resolve: "./src/modules/programs",

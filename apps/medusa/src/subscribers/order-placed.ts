@@ -3,11 +3,11 @@ import { createClient } from '@supabase/supabase-js'
 import { MEMBERSHIPS_MODULE } from '../modules/memberships'
 import type MembershipsModuleService from '../modules/memberships/service'
 
-// Strip trailing slash so URL construction never produces double slashes
 const N8N_BASE_URL = (process.env.N8N_WEBHOOK_URL ?? 'http://n8n:5678').replace(/\/$/, '')
 const N8N_WEBHOOK_SECRET = process.env.N8N_WEBHOOK_SECRET ?? ''
 const WEB_BASE_URL = (process.env.WEB_BASE_URL ?? 'http://web:3000').replace(/\/$/, '')
 const VIBE_MARKETING_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
+const CALCOM_SESSION_BOOKING_URL = process.env.CALCOM_SESSION_BOOKING_URL ?? 'https://cal.com/suzanneravenall/discovery-call'
 
 if (!N8N_WEBHOOK_SECRET) {
   console.warn('[order-placed] N8N_WEBHOOK_SECRET is not set — outgoing webhooks will have no secret header')
@@ -15,16 +15,28 @@ if (!N8N_WEBHOOK_SECRET) {
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
+interface OrderCategory {
+  handle: string
+}
+
+interface OrderItemProduct {
+  metadata?: Record<string, unknown>
+  categories?: OrderCategory[]
+  handle?: string
+}
+
+interface OrderItemVariant {
+  product?: OrderItemProduct
+}
+
 interface OrderItem {
-  variant?: {
-    product?: {
-      metadata?: Record<string, unknown>
-    }
-  }
+  variant?: OrderItemVariant
 }
 
 interface OrderCustomer {
   email?: string
+  first_name?: string
+  last_name?: string
 }
 
 interface RetrievedOrder {
@@ -35,19 +47,95 @@ interface RetrievedOrder {
   [key: string]: unknown
 }
 
+// ── Product type detection ────────────────────────────────────────────────────
+
+type ProductType = 'session' | 'self-paced' | 'live' | 'group' | 'other'
+
+interface CategoryAccess {
+  access_level: number
+  track: 'akashic' | 'energy-clearing' | 'general'
+  product_type: ProductType
+}
+
+// Mirror of apps/web/lib/access/product-access.ts — kept in sync manually.
+// Cannot import cross-app in this monorepo without a shared package.
+const CATEGORY_ACCESS_MAP: Record<string, CategoryAccess> = {
+  'rp-self-paced':              { access_level: 3, track: 'general',         product_type: 'self-paced' },
+  'rp-live':                    { access_level: 3, track: 'general',         product_type: 'live' },
+  'akashic-live':               { access_level: 3, track: 'akashic',         product_type: 'live' },
+  'akashic-self-paced':         { access_level: 3, track: 'akashic',         product_type: 'self-paced' },
+  'energy-clearing-live':       { access_level: 3, track: 'energy-clearing', product_type: 'live' },
+  'energy-clearing-self-paced': { access_level: 3, track: 'energy-clearing', product_type: 'self-paced' },
+  'life-enhancing-live':        { access_level: 3, track: 'general',         product_type: 'live' },
+  'life-enhancing-self-paced':  { access_level: 3, track: 'general',         product_type: 'self-paced' },
+  'group-sessions-live':        { access_level: 2, track: 'general',         product_type: 'group' },
+  'group-sessions-recorded':    { access_level: 2, track: 'general',         product_type: 'self-paced' },
+  'private-sessions':           { access_level: 1, track: 'general',         product_type: 'session' },
+  'meditation-programmes':      { access_level: 3, track: 'general',         product_type: 'self-paced' },
+  'books':                      { access_level: 1, track: 'general',         product_type: 'other' },
+  'digital-downloads':          { access_level: 1, track: 'general',         product_type: 'other' },
+}
+
+function isMembershipOrder(items: OrderItem[]): boolean {
+  return items.some((item) => {
+    const meta = item?.variant?.product?.metadata
+    return meta && (meta as Record<string, unknown>).product_type === 'membership'
+  })
+}
+
+function detectOrderProductType(items: OrderItem[]): ProductType {
+  const categories = items.flatMap((item) => item.variant?.product?.categories ?? [])
+
+  // Direct map lookup
+  for (const cat of categories) {
+    const match = CATEGORY_ACCESS_MAP[cat.handle]
+    if (match) return match.product_type
+  }
+
+  // Pattern-matching fallback
+  for (const cat of categories) {
+    const h = cat.handle
+    if (h === 'private-sessions' || h.includes('coaching') || h.includes('therapy')) return 'session'
+    if (h.includes('self-paced') || h.includes('self-study') || h.includes('recorded')) return 'self-paced'
+    if (h.includes('live-via-zoom') || (h.includes('-live') && !h.includes('group'))) return 'live'
+    if (h.includes('group')) return 'group'
+  }
+
+  // Last resort: check product handle
+  for (const item of items) {
+    const handle = item.variant?.product?.handle ?? ''
+    if (handle.includes('session') || handle.includes('coaching')) return 'session'
+    if (handle.includes('self-paced') || handle.includes('self-study')) return 'self-paced'
+    if (handle.includes('-live')) return 'live'
+    if (handle.includes('group')) return 'group'
+  }
+
+  return 'other'
+}
+
+function getHighestCategoryAccess(items: OrderItem[]): CategoryAccess | null {
+  const categories = items.flatMap((item) => item.variant?.product?.categories ?? [])
+  let best: CategoryAccess | null = null
+
+  for (const cat of categories) {
+    const match = CATEGORY_ACCESS_MAP[cat.handle]
+    if (match && (!best || match.access_level > best.access_level)) {
+      best = match
+    }
+  }
+
+  return best
+}
+
 // ── Supabase helpers ──────────────────────────────────────────────────────────
 
-/**
- * Builds a Supabase admin client using the service role key.
- * Returns null and logs a warning when configuration is missing.
- */
 function buildSupabaseAdmin(): ReturnType<typeof createClient> | null {
   const supabaseUrl = process.env.SUPABASE_URL
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
   if (!supabaseUrl || !serviceRoleKey) {
     console.warn(
-      '[order-placed] SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is not set — Supabase member_subscriptions sync will be skipped'
+      '[order-placed] SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is not set — Supabase sync will be skipped'
     )
     return null
   }
@@ -57,34 +145,31 @@ function buildSupabaseAdmin(): ReturnType<typeof createClient> | null {
   })
 }
 
-/**
- * Looks up the Supabase auth.users id by email.
- * Uses the Admin Auth API with the service role key — the profiles table does
- * not have an email column (email lives on auth.users).
- * NOTE: listUsers fetches up to 1000 users per page. For large member bases,
- * add an email column to profiles (with a sync trigger) in Task 3.2.
- */
 async function lookupSupabaseUserId(
   supabase: ReturnType<typeof createClient>,
   email: string
 ): Promise<string | null> {
   const normalised = email.toLowerCase()
-  const { data, error } = await supabase.auth.admin.listUsers({
-    page: 1,
-    perPage: 1000,
-  })
-
-  if (error) {
-    console.error(`[order-placed] Supabase auth.admin.listUsers failed: ${error.message}`)
-    return null
-  }
-
-  // supabase-js without a generated schema: data.users is typed as never[] in the
-  // error union branch. Cast to a minimal shape after the error guard.
   type AuthUserMinimal = { id: string; email?: string | null }
-  const users = data.users as AuthUserMinimal[]
-  const user = users.find((u) => u.email?.toLowerCase() === normalised)
-  return user?.id ?? null
+  const PER_PAGE = 1000
+  let page = 1
+
+  // Paginate to avoid silently missing users beyond the first 1000.
+  while (true) {
+    const { data, error } = await supabase.auth.admin.listUsers({ page, perPage: PER_PAGE })
+
+    if (error) {
+      console.error(`[order-placed] Supabase auth.admin.listUsers failed (page ${page}): ${error.message}`)
+      return null
+    }
+
+    const users = data.users as AuthUserMinimal[]
+    const user = users.find((u) => u.email?.toLowerCase() === normalised)
+    if (user) return user.id
+
+    if (users.length < PER_PAGE) return null // Last page reached — not found
+    page++
+  }
 }
 
 interface MemberSubscriptionUpsert {
@@ -95,7 +180,6 @@ interface MemberSubscriptionUpsert {
   end_date: string | null
 }
 
-// Minimal table shape used to type the upsert call without generated Supabase types
 interface SupabaseUpsertTable {
   upsert(
     values: MemberSubscriptionUpsert,
@@ -103,11 +187,33 @@ interface SupabaseUpsertTable {
   ): Promise<{ error: { message: string } | null }>
 }
 
-/**
- * Upserts the member_subscriptions row for the given Supabase user.
- * Uses null end_date for the free tier (no expiry).
- * Never throws — failures are logged so the order is never blocked.
- */
+// Minimal builder interfaces to bypass Supabase's strict generics when the
+// Database type doesn't include member_subscriptions (no generated types in Medusa).
+interface PortalSelectQuery {
+  eq(col: string, val: string): PortalSelectQuery
+  order(col: string, opts: { ascending: boolean }): PortalSelectQuery
+  limit(n: number): PortalSelectQuery
+  maybeSingle(): Promise<{ data: { access_level: number | null; track: string | null } | null; error: { message: string } | null }>
+}
+
+// Awaitable update/insert: supabase builders implement PromiseLike natively
+interface PortalWriteResult {
+  then<R>(onfulfilled: (value: { error: { message: string } | null }) => R): Promise<R>
+}
+
+interface PortalUpdateQuery {
+  eq(col: string, val: string): PortalUpdateQuery & PortalWriteResult
+}
+
+interface PortalSubscriptionTable {
+  select(cols: string): PortalSelectQuery
+  update(values: { access_level: number; track: string }): PortalUpdateQuery & PortalWriteResult
+  insert(values: {
+    user_id: string; tier_id: string; status: string;
+    start_date: string; end_date: null; access_level: number; track: string
+  }): PortalWriteResult
+}
+
 async function syncSupabaseMembership(
   supabase: ReturnType<typeof createClient>,
   supabaseUserId: string,
@@ -126,8 +232,6 @@ async function syncSupabaseMembership(
     end_date: endDate,
   }
 
-  // supabase-js without generated types: cast to a locally-typed interface so the
-  // payload shape is still verified at compile time without using 'any'
   const table = supabase.from('member_subscriptions') as unknown as SupabaseUpsertTable
   const { error } = await table.upsert(payload, { onConflict: 'user_id' })
 
@@ -142,29 +246,87 @@ async function syncSupabaseMembership(
   }
 }
 
+/**
+ * Grants or upgrades portal access_level for a programme purchase.
+ * Never downgrades an existing higher access level.
+ * If the user has no subscription row, inserts one with tier_id='free' as the base.
+ */
+async function syncPortalAccess(
+  supabase: ReturnType<typeof createClient>,
+  supabaseUserId: string,
+  accessLevel: number,
+  track: 'akashic' | 'energy-clearing' | 'general'
+): Promise<void> {
+  // Cast to bypass Supabase's strict generics — same pattern as SupabaseUpsertTable above.
+  // tier_id='free' is a valid FK value: the free tier row is seeded in Task 3.1.
+  const table = supabase.from('member_subscriptions') as unknown as PortalSubscriptionTable
+
+  // Fetch current active subscription to avoid downgrading
+  const { data: existing, error: fetchError } = await table
+    .select('access_level, track')
+    .eq('user_id', supabaseUserId)
+    .eq('status', 'active')
+    .order('access_level', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (fetchError) {
+    console.error(`[order-placed] portal access fetch failed for user ${supabaseUserId}: ${fetchError.message}`)
+    return
+  }
+
+  if (existing) {
+    const currentLevel = existing.access_level ?? 0
+
+    if (accessLevel > currentLevel) {
+      const { error: updateError } = await table
+        .update({ access_level: accessLevel, track })
+        .eq('user_id', supabaseUserId)
+        .eq('status', 'active')
+
+      if (updateError) {
+        console.error(`[order-placed] portal access update failed for user ${supabaseUserId}: ${updateError.message}`)
+      } else {
+        console.log(`[order-placed] portal access upgraded for user ${supabaseUserId} → level=${accessLevel} track=${track}`)
+      }
+    } else {
+      console.log(`[order-placed] portal access already at level ${currentLevel} for user ${supabaseUserId} — no change`)
+    }
+  } else {
+    // No active subscription — insert a free-tier base with the programme's access level
+    const { error: insertError } = await table.insert({
+      user_id: supabaseUserId,
+      tier_id: 'free',
+      status: 'active',
+      start_date: new Date().toISOString(),
+      end_date: null,
+      access_level: accessLevel,
+      track,
+    })
+
+    if (insertError) {
+      console.error(`[order-placed] portal access insert failed for user ${supabaseUserId}: ${insertError.message}`)
+    } else {
+      console.log(`[order-placed] portal access created for user ${supabaseUserId} → level=${accessLevel} track=${track}`)
+    }
+  }
+}
+
 // ── Membership activation ─────────────────────────────────────────────────────
 
-/**
- * Inspects the order's line items for a membership product, activates the
- * Medusa membership record, and syncs Supabase member_subscriptions.
- *
- * All Supabase I/O is fire-and-forget — failures never block the order.
- * The Medusa membership record is the source of truth; Supabase is a mirror.
- */
 async function handleMembershipActivation(
   order: RetrievedOrder,
   container: SubscriberArgs<unknown>['container']
 ): Promise<void> {
   const items = order.items ?? []
 
-  // Find the first line item whose product metadata marks it as a membership
   const membershipItem = items.find((item) => {
     const meta = item?.variant?.product?.metadata
     return meta && (meta as Record<string, unknown>).product_type === 'membership'
   })
 
   if (!membershipItem) {
-    return // Order contains no membership products — nothing to do
+    return
   }
 
   const meta = membershipItem.variant?.product?.metadata as Record<string, unknown>
@@ -181,12 +343,10 @@ async function handleMembershipActivation(
     `[order-placed] Activating membership tier="${tier}" for customer ${order.customer_id} (order ${order.id})`
   )
 
-  // 1. Activate membership in the Medusa module (source of truth)
   const membershipsService = container.resolve<MembershipsModuleService>(MEMBERSHIPS_MODULE)
 
   let supabaseUserId: string | null = null
 
-  // 2. Attempt Supabase sync — wrapped in try/catch so any failure is non-fatal
   try {
     const supabase = buildSupabaseAdmin()
 
@@ -197,7 +357,6 @@ async function handleMembershipActivation(
       }
 
       if (supabaseUserId) {
-        // Fire-and-forget — do not await here so it never blocks Medusa activation
         void syncSupabaseMembership(supabase, supabaseUserId, tier).catch(
           (err: unknown) => {
             const message = err instanceof Error ? err.message : String(err)
@@ -215,7 +374,6 @@ async function handleMembershipActivation(
     console.error(`[order-placed] Supabase setup error for order ${order.id}: ${message}`)
   }
 
-  // Medusa activation is always attempted even if Supabase lookup failed
   await membershipsService.activateMembership(
     order.customer_id,
     tier,
@@ -227,7 +385,6 @@ async function handleMembershipActivation(
     `[order-placed] Membership activated in Medusa for customer ${order.customer_id} → tier=${tier}`
   )
 
-  // 3. Send membership welcome email — fire-and-forget
   const email = order.customer?.email
   if (email) {
     const customerAny = order.customer as Record<string, unknown>
@@ -243,15 +400,45 @@ async function handleMembershipActivation(
   }
 }
 
+// ── Portal access grant for programme purchases ───────────────────────────────
+
+async function handlePortalAccessGrant(order: RetrievedOrder): Promise<void> {
+  const items = order.items ?? []
+
+  if (isMembershipOrder(items)) return // Membership orders handled by handleMembershipActivation
+
+  const accessGrant = getHighestCategoryAccess(items)
+  if (!accessGrant || accessGrant.access_level <= 1) return // No meaningful access to grant
+
+  const email = order.customer?.email
+  if (!email) {
+    console.warn(`[order-placed] order ${order.id} has no customer email — portal access grant skipped`)
+    return
+  }
+
+  const supabase = buildSupabaseAdmin()
+  if (!supabase) return
+
+  const supabaseUserId = await lookupSupabaseUserId(supabase, email)
+  if (!supabaseUserId) {
+    console.log(
+      `[order-placed] No Supabase account for ${email} — portal access at level ${accessGrant.access_level} will apply when they create an account`
+    )
+    return
+  }
+
+  await syncPortalAccess(supabase, supabaseUserId, accessGrant.access_level, accessGrant.track)
+}
+
 // ── Subscriber ────────────────────────────────────────────────────────────────
 
-// The subscriber fires fire-and-forget side effects on order placement:
-// 1. n8n webhook → Sage invoice creation (medusa-order-to-sage workflow)
-// 1b. n8n webhook → Vtiger CRM contact/activity update
-// 2. web app → PDF invoice generation → order confirmation email (chained sequentially)
-// 3. Membership activation (Medusa module + Supabase mirror) when order contains a membership product
-// 4. Vibe Marketing post-purchase onboarding for first-time non-membership customers
-// None must ever block order completion.
+// Side effects on order placement (all fire-and-forget, never block order completion):
+// 1. n8n webhook → Sage invoice creation
+// 1b. n8n webhook → Vtiger CRM
+// 2. Invoice generation → order confirmation email (chained; email includes productType + calBookingUrl)
+// 3. Membership activation (Medusa module + Supabase mirror) for membership products
+// 4. Portal access grant for programme purchases (Supabase access_level upgrade)
+// 5. Vibe Marketing post-purchase onboarding for first-time non-membership customers
 export default async function orderPlacedHandler({
   event: { data },
   container,
@@ -266,7 +453,13 @@ export default async function orderPlacedHandler({
     }
 
     const order = await orderService.retrieveOrder(orderId, {
-      relations: ['items', 'items.variant', 'items.variant.product', 'customer'],
+      relations: [
+        'items',
+        'items.variant',
+        'items.variant.product',
+        'items.variant.product.categories',
+        'customer',
+      ],
     }) as RetrievedOrder
 
     const headers: Record<string, string> = {
@@ -274,7 +467,13 @@ export default async function orderPlacedHandler({
       ...(N8N_WEBHOOK_SECRET ? { 'x-webhook-secret': N8N_WEBHOOK_SECRET } : {}),
     }
 
-    // 1. n8n → Sage: fire-and-forget, independent of invoice + email chain
+    // Detect product type for email personalisation and Cal.com link
+    const items = order.items ?? []
+    const productType = detectOrderProductType(items)
+    const isSessionOrder = productType === 'session'
+    const calBookingUrl = isSessionOrder ? CALCOM_SESSION_BOOKING_URL : null
+
+    // 1. n8n → Sage: fire-and-forget
     void fetch(`${N8N_BASE_URL}/webhook/medusa-order-placed`, {
       method: 'POST',
       headers,
@@ -284,7 +483,7 @@ export default async function orderPlacedHandler({
       console.error(`[order-placed] n8n webhook failed for order ${orderId}: ${message}`)
     })
 
-    // 1b. n8n → Vtiger: fire-and-forget, separate from Sage workflow
+    // 1b. n8n → Vtiger: fire-and-forget
     void fetch(`${N8N_BASE_URL}/webhook/medusa-order-vtiger`, {
       method: 'POST',
       headers,
@@ -294,9 +493,7 @@ export default async function orderPlacedHandler({
       console.error(`[order-placed] vtiger webhook failed for order ${orderId}: ${message}`)
     })
 
-    // 2. Invoice generation → order confirmation email
-    // Chained sequentially so the invoice URL is available when the email is sent.
-    // The entire chain is fire-and-forget — any failure is logged, never propagated.
+    // 2. Invoice generation → order confirmation email (chained sequentially)
     void (async () => {
       let invoiceUrl: string | null = null
 
@@ -320,13 +517,11 @@ export default async function orderPlacedHandler({
         console.error(`[order-placed] invoice generation error for order ${orderId}: ${message}`)
       }
 
-      // Send confirmation email regardless of whether invoice generation succeeded.
-      // invoiceUrl will be null if generation failed — the email handles both cases.
       try {
         const confirmRes = await fetch(`${WEB_BASE_URL}/api/email/order-confirmation`, {
           method: 'POST',
           headers,
-          body: JSON.stringify({ orderId, invoiceUrl }),
+          body: JSON.stringify({ orderId, invoiceUrl, productType, calBookingUrl }),
         })
         if (!confirmRes.ok) {
           console.error(
@@ -342,25 +537,22 @@ export default async function orderPlacedHandler({
       console.error(`[order-placed] invoice+email chain error for order ${orderId}: ${message}`)
     })
 
-    // 3. Membership activation — fire-and-forget, never blocks order completion
+    // 3. Membership activation — fire-and-forget
     void handleMembershipActivation(order, container).catch((err: unknown) => {
       const message = err instanceof Error ? err.message : String(err)
       console.error(`[order-placed] membership activation error for order ${orderId}: ${message}`)
     })
 
-    // 4. Vibe Marketing — post-purchase onboarding for first-time customers.
-    // Skipped for membership orders (Task 3.9 welcome email handles those).
-    // Skipped when VIBE_MARKETING_WEBHOOK_URL is not set (graceful degradation).
-    const isMembershipOrder = (order.items ?? []).some((item) => {
-      const meta = item?.variant?.product?.metadata
-      return meta && (meta as Record<string, unknown>).product_type === 'membership'
+    // 4. Portal access grant for programme purchases — fire-and-forget
+    void handlePortalAccessGrant(order).catch((err: unknown) => {
+      const message = err instanceof Error ? err.message : String(err)
+      console.error(`[order-placed] portal access grant error for order ${orderId}: ${message}`)
     })
 
-    if (!isMembershipOrder && VIBE_MARKETING_WEBHOOK_URL) {
+    // 5. Vibe Marketing — first-time non-membership customers
+    if (!isMembershipOrder(items) && VIBE_MARKETING_WEBHOOK_URL) {
       void (async () => {
         try {
-          // Fetch up to 2 of the customer's orders — if count is 1, this is their first.
-          // Guard: > 1 (not !== 1) so a 0-result edge case fires Vibe rather than silently skips.
           const customerOrders = await orderService.listOrders(
             { customer_id: order.customer_id },
             { take: 2 }
@@ -372,7 +564,7 @@ export default async function orderPlacedHandler({
 
           const customer = order.customer as Record<string, unknown>
           const orderAny = order as Record<string, unknown>
-          const productNames = (order.items ?? [])
+          const productNames = items
             .map((item) => {
               const itemAny = item as Record<string, unknown>
               return typeof itemAny.title === 'string' ? itemAny.title : null
@@ -411,7 +603,6 @@ export default async function orderPlacedHandler({
     }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err)
-    // Log but never throw — side-effect failures must not block order completion
     console.error(`[order-placed] failed to retrieve order ${orderId}: ${message}`)
   }
 }

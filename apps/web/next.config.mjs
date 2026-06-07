@@ -5,6 +5,26 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+// Derive the Medusa upload hostname from NEXT_PUBLIC_SITE_URL (declared as ARG/ENV in
+// the Dockerfile so it is available at build time). Medusa file-local storage uses
+// ${SITE_URL}/uploads as backend_url, so the hostname must be in remotePatterns.
+function buildMedusaUploadPattern() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  if (!siteUrl) return null
+  try {
+    const { protocol, hostname, port } = new URL(siteUrl)
+    return {
+      protocol: /** @type {'http' | 'https'} */ (protocol.replace(':', '')),
+      hostname,
+      port: port || '',
+      pathname: '/uploads/**',
+    }
+  } catch {
+    return null
+  }
+}
+const medusaUploadPattern = buildMedusaUploadPattern()
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
@@ -43,6 +63,7 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      ...(medusaUploadPattern ? [medusaUploadPattern] : []),
     ],
   },
 

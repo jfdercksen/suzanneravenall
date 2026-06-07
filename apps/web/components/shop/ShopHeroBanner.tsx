@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Image from 'next/image'
 import Link from 'next/link'
 
 export function ShopHeroBanner() {
@@ -10,17 +9,19 @@ export function ShopHeroBanner() {
       aria-labelledby="shop-hero-heading"
       className="relative w-full bg-brand-primary min-h-screen flex items-center py-20 lg:py-32 overflow-hidden"
     >
-      {/* Background image with overlay */}
-      <div className="absolute inset-0" aria-hidden="true">
-        <Image
-          src="/images/hero-bg-suzanne-ravenall.jpg"
-          alt=""
-          fill
-          className="object-cover object-center"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/90 via-brand-primary/70 to-brand-primary/40" />
-      </div>
+      {/* Background video — poster handles static fallback */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover"
+        poster="/images/hero-bg-suzanne-ravenall.jpg"
+      >
+        <source src="/videos/generated/hero-shop.mp4" type="video/mp4" />
+      </video>
+      <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/90 via-brand-primary/70 to-brand-primary/40" />
 
       {/* Ambient glow */}
       <div
@@ -45,19 +46,38 @@ export function ShopHeroBanner() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-4xl lg:text-6xl font-light text-white mb-6 leading-tight max-w-3xl"
         >
-          Invest in Your
+          Your Breakthrough
           <br />
-          <span className="text-brand-accent">Transformation</span>
+          <span className="text-brand-accent">Starts Here</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-lg text-white/70 leading-relaxed mb-10 max-w-xl"
+          className="text-lg text-white/70 leading-relaxed mb-8 max-w-xl"
         >
-          Private sessions, guided programmes, and group coaching designed to create lasting change.
+          48 programmes. One destination. The tools Suzanne has used to transform 2,000+ lives — now available to you.
         </motion.p>
+
+        {/* Credibility stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="flex flex-wrap gap-8 mb-10"
+        >
+          {[
+            { value: '2,000+', label: 'Lives transformed' },
+            { value: '20+',    label: 'Years experience' },
+            { value: '30+',    label: 'Countries reached' },
+          ].map(({ value, label }) => (
+            <div key={label}>
+              <span className="block text-3xl font-bold text-white">{value}</span>
+              <span className="block text-sm text-white/60 mt-0.5">{label}</span>
+            </div>
+          ))}
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

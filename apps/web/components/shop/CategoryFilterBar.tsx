@@ -27,14 +27,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   'products-tools': 'Products & Tools',
 }
 
-const COLLECTIONS = [
-  { handle: '', label: 'All Tiers' },
-  { handle: 'start-here', label: 'Start Here' },
-  { handle: 'deep-dive', label: 'Deep Dive' },
-  { handle: 'master-level', label: 'Master Level' },
-  { handle: 'practitioner', label: 'Practitioner' },
-]
-
 export function CategoryFilterBar({ categories, filters, onFiltersChange }: CategoryFilterBarProps) {
   const barRef = useRef<HTMLDivElement>(null)
   const [isSticky, setIsSticky] = useState(false)
@@ -55,18 +47,18 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
 
   const topLevelCategories = categories.filter((c) => c.parent_category_id === null)
 
-  const setCategoryId = (id: string) => onFiltersChange({ ...filters, categoryId: id })
-  const setCollectionHandle = (handle: string) => onFiltersChange({ ...filters, collectionHandle: handle })
+  const setCategoryId = (id: string) =>
+    onFiltersChange({ ...filters, categoryId: id, collectionHandle: '' })
 
   return (
     <div
       ref={barRef}
-      className={`sticky top-0 z-40 w-full bg-gray-950 border-b transition-shadow duration-300 ${
+      className={`sticky top-16 lg:top-20 z-40 w-full bg-gray-950 border-b transition-shadow duration-300 ${
         isSticky ? 'border-white/10 shadow-lg shadow-black/40' : 'border-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-3">
-        <div className="flex flex-wrap gap-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <div className="flex flex-wrap gap-3">
           <FilterPill
             label="All"
             active={filters.categoryId === ''}
@@ -81,18 +73,6 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
             />
           ))}
         </div>
-
-        <div className="flex flex-wrap gap-2">
-          {COLLECTIONS.map((col) => (
-            <FilterPill
-              key={col.handle}
-              label={col.label}
-              active={filters.collectionHandle === col.handle}
-              onClick={() => setCollectionHandle(col.handle)}
-              small
-            />
-          ))}
-        </div>
       </div>
     </div>
   )
@@ -102,20 +82,17 @@ interface FilterPillProps {
   label: string
   active: boolean
   onClick: () => void
-  small?: boolean
 }
 
-function FilterPill({ label, active, onClick, small = false }: FilterPillProps) {
+function FilterPill({ label, active, onClick }: FilterPillProps) {
   return (
     <button
       onClick={onClick}
       aria-pressed={active}
-      className={`rounded-full font-medium transition-all duration-200 whitespace-nowrap ${
-        small ? 'px-3 py-1 text-xs' : 'px-4 py-2 text-sm'
-      } ${
+      className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
         active
-          ? 'bg-brand-accent-600 text-white'
-          : 'bg-gray-900 text-gray-400 hover:text-white hover:bg-gray-800'
+          ? 'bg-brand-accent text-white shadow-lg shadow-brand-accent/25'
+          : 'bg-gray-900 text-gray-300 hover:text-white hover:bg-gray-800 hover:border-brand-accent border border-transparent'
       }`}
     >
       {label}
