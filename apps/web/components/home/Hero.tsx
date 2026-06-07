@@ -43,9 +43,17 @@ export default function Hero() {
       <div className="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col justify-center h-full max-w-2xl">
 
-          {/* Eyebrow */}
+          {/* Name */}
           <motion.p
             {...fadeUp(0)}
+            className="text-brand-accent text-sm lg:text-base font-medium tracking-[0.3em] uppercase mb-2"
+          >
+            Dr. Suzanne Ravenall
+          </motion.p>
+
+          {/* Eyebrow */}
+          <motion.p
+            {...fadeUp(0.1)}
             className="text-xs tracking-[0.3em] text-white/60 uppercase font-medium mb-6"
           >
             Transformation Coach · Neuroscience · Results
@@ -54,7 +62,7 @@ export default function Hero() {
           {/* Headline */}
           <motion.h1
             id="hero-heading"
-            {...fadeUp(0.2)}
+            {...fadeUp(0.25)}
             className="text-5xl lg:text-7xl xl:text-8xl font-display text-white leading-[1.05] mb-6"
           >
             Unlock Your Most{' '}
@@ -63,7 +71,7 @@ export default function Hero() {
 
           {/* Subheadline */}
           <motion.p
-            {...fadeUp(0.4)}
+            {...fadeUp(0.45)}
             className="text-lg lg:text-xl text-white/70 font-light max-w-md mb-10"
           >
             Break the patterns. Rewrite the story. Become unstoppable.
@@ -71,7 +79,7 @@ export default function Hero() {
 
           {/* CTA row */}
           <motion.div
-            {...fadeUp(0.6)}
+            {...fadeUp(0.65)}
             className="flex flex-col sm:flex-row gap-4"
           >
             <Link
@@ -83,10 +91,10 @@ export default function Hero() {
             </Link>
             <Link
               href="#lead-magnet"
-              aria-label="Access the free transformation masterclass"
+              aria-label="Download Chapter 1 of The Breakthrough Trilogy — free"
               className="inline-flex items-center justify-center px-8 py-4 border border-white/50 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10"
             >
-              Free Masterclass
+              Free Chapter
             </Link>
           </motion.div>
 

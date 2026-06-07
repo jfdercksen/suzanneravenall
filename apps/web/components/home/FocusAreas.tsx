@@ -91,7 +91,7 @@ export default function FocusAreas() {
               return (
                 <li key={area.title}>
                   <div
-                    className={`flex items-center justify-between py-6 transition-all duration-300 ${isActive ? 'text-brand-primary' : 'text-gray-300'
+                    className={`flex items-center justify-between py-6 transition-all duration-300 ${isActive ? 'text-brand-primary' : 'text-gray-400'
                       }`}
                   >
                     {/* Button: selects the area (no navigation) */}

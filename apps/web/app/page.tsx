@@ -1,16 +1,15 @@
 import type { Metadata } from 'next'
 import Hero from '../components/home/Hero'
-import MediaLogos from '../components/home/MediaLogos'
 import TrustBar from '../components/home/TrustBar'
-import UpcomingPrograms from '../components/home/UpcomingPrograms'
+import MediaLogos from '../components/home/MediaLogos'
+import AboutTeaser from '../components/home/AboutTeaser'
 import TransformationQuote from '../components/home/TransformationQuote'
 import FocusAreas from '../components/home/FocusAreas'
-import ServicesSection from '../components/home/ServicesSection'
 import TestimonialSpotlight from '../components/home/TestimonialSpotlight'
+import BookPromotion from '../components/home/BookPromotion'
 import FeaturedPrograms from '../components/home/FeaturedPrograms'
-import TestimonialsSection from '../components/home/TestimonialsSection'
-import AboutTeaser from '../components/home/AboutTeaser'
 import LeadMagnet from '../components/home/LeadMagnet'
+import TestimonialsSection from '../components/home/TestimonialsSection'
 import FinalCTA from '../components/home/FinalCTA'
 
 export const metadata: Metadata = {
@@ -81,17 +80,16 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
       <Hero />
-      <MediaLogos id="media-logos" />
       <TrustBar />
+      <MediaLogos id="media-logos" />
+      <AboutTeaser />
       <TransformationQuote />
       <FocusAreas />
-      <UpcomingPrograms />
-      <ServicesSection />
       <TestimonialSpotlight />
+      <BookPromotion />
       <FeaturedPrograms />
       <LeadMagnet />
       <TestimonialsSection />
-      <AboutTeaser />
       <FinalCTA />
     </>
   )
