@@ -176,6 +176,87 @@ const PRODUCT_DESCRIPTIONS = {
       'Applying the fundamentals will give you the capacity to bring your frequencies back into sync or coherence at a fundamental level. Continuing the journey with the seminars you will regain your optimal frequency and as you apply the tools in everyday life, feel a heightened sense of happiness, joy and wellbeing on all levels as well as a sense of balance within yourself as you handle the outer stresses and strains of life.',
   },
 
+  // ── Previously-skipped standalone products ─────────────────────────────────
+
+  'rapid-repatterning-session': {
+    subtitle: 'Rapid Repatterning® Private Session',
+    description:
+      'Rapid Repatterning® helps bring subconscious patterns into conscious awareness so they are understood and addressed by new awareness, energy and actions. This is the first step in helping to clear these patterns and eliminating interference so that we can easily and naturally move towards a state of greater balance, aliveness, harmony, performance, and alignment with goals.\n\n' +
+      'Through this process we uncover the unconscious patterns, clear the static, and through a combination of hypnotherapy and coaching create a new understanding that provides a gap for new action to take place.\n\n' +
+      'All sessions are completed via Zoom. Topics covered include: health, weight, relationships, career, finances, addiction, sports performance and any area of life.',
+  },
+
+  'love-relationships-live': {
+    subtitle: 'Love & Relationships Programme',
+    description:
+      'This programme uses Rapid Repatterning® and coaching to help you decode the unconscious patterns affecting your relationships. We attract people at our common level of emotional health — this programme helps you shift that level so you can create and sustain the loving, fulfilling relationships you desire.\n\n' +
+      'We address: attachment patterns, communication blocks, emotional triggers, self-worth and the beliefs about love that were formed in childhood.',
+  },
+
+  'intuition-in-my-personal-capacity-live': {
+    subtitle: 'Intuition in My Personal Capacity',
+    description:
+      'Your intuition is not a mystical gift — it is intelligence your nervous system has been collecting your entire life. This programme teaches you to access, trust and act on your intuitive intelligence in your personal life, relationships and decision-making.\n\n' +
+      'Using Rapid Repatterning® and energy psychology, we clear the blocks (fear, self-doubt, overthinking) that prevent you from accessing your natural intuitive knowing.',
+  },
+
+  'coherence-muscle-testing-self-study-online-2': {
+    subtitle: 'Coherence Muscle Testing — Self Study',
+    description:
+      'Coherence muscle testing (applied kinesiology) is the foundation of Rapid Repatterning® — it is the tool that allows us to bypass the conscious mind and communicate directly with the subconscious body-mind system.\n\n' +
+      'This self-study programme teaches you how to muscle check accurately and use it as a daily tool for decision-making, identifying what your body needs, and assessing energetic coherence.',
+  },
+
+  'post-traumatic-growth-self-study-online': {
+    subtitle: 'Post Traumatic Growth — Self Study',
+    description:
+      'Post-traumatic growth is the positive psychological change that can emerge from the struggle with highly challenging life circumstances. This programme helps you shift from surviving trauma to growing through it — moving beyond coping into genuine transformation.\n\n' +
+      'Using neuroscience, Rapid Repatterning® and coaching, you will learn to rewire the neural pathways that keep you stuck in survival mode and activate the growth that is possible on the other side.',
+  },
+
+  'quantum-healing-codes-ebook-audio-download': {
+    subtitle: 'Quantum Healing Codes — eBook & Audio',
+    description:
+      'The Quantum Healing Codes are a system of energetic frequencies delivered through specific sound codes and visual symbols that work directly with the quantum field to shift stuck patterns and activate healing.\n\n' +
+      'This digital download includes the eBook explaining the system and the audio recordings of the codes for daily use.',
+  },
+
+  'bringing-your-energy-back': {
+    subtitle: 'Bringing Your Energy Back',
+    description:
+      'When life drains your energy — through stress, illness, difficult relationships or emotional overwhelm — this programme gives you practical, science-backed tools to restore your vitality and reclaim your natural aliveness.\n\n' +
+      'Using Rapid Repatterning® and energy psychology techniques, you will identify what is depleting your energy at a subconscious level and shift those patterns.',
+  },
+
+  'energetic-alignment-inner-neutrality': {
+    subtitle: 'Energetic Alignment & Inner Neutrality',
+    description:
+      'Inner neutrality is the state of being fully present with what is — without resistance, judgment or emotional charge. From this state, clear perception and wise action become possible.\n\n' +
+      'This programme uses Rapid Repatterning® to help you achieve energetic alignment — where your thoughts, emotions, body and energy field are all moving in the same direction.',
+  },
+
+  'relaxation-energy-reclamation': {
+    subtitle: 'Relaxation & Energy Reclamation',
+    description:
+      'Deep relaxation is not a luxury — it is a physiological necessity for healing, creativity and high performance. This programme teaches you to access genuine deep relaxation and use it as a tool for energy reclamation.\n\n' +
+      'Includes guided relaxation sessions, energy reclamation techniques and Rapid Repatterning® tools for releasing the tension patterns held in the body.',
+  },
+
+  'getting-unstuck-self-study': {
+    subtitle: 'Getting Unstuck — Self Study',
+    description:
+      'Feeling stuck is a pattern — not a personality trait. This self-study programme uses Rapid Repatterning® principles to help you identify exactly what is keeping you stuck and shift it.\n\n' +
+      'Covers: procrastination patterns, fear of failure, perfectionism, self-sabotage, decision paralysis and the unconscious programmes that make forward movement feel impossible.',
+  },
+
+  'the-latest-book-by-suzanne': {
+    subtitle: 'Breakthrough Trilogy by Dr. Suzanne Ravenall',
+    description:
+      'Consciousness is a meaning field. The mind adapts to the worldview imposed on it. When this system is interrogated, it reveals the patterns — at best a series of challenges, at worst depression, illness, addiction and broken relationships.\n\n' +
+      'The Breakthrough Trilogy is your roadmap to finding an upgraded version of you. Three books that take you on a journey from decoding the patterns keeping you stuck, to upgrading your response to life, to becoming an unstoppable force.\n\n' +
+      'Overcoming the Impossible & Living Life Beyond Limitation.',
+  },
+
 }
 
 // ── Category pattern matching ─────────────────────────────────────────────────
@@ -229,7 +310,7 @@ async function fetchAllProducts(token) {
 
   while (true) {
     const res = await fetchJson(
-      `${MEDUSA_URL}/admin/products?limit=${limit}&offset=${offset}&fields=id,handle,title,status`,
+      `${MEDUSA_URL}/admin/products?limit=${limit}&offset=${offset}&fields=id,handle,title,status,description`,
       { token }
     )
     if (res.status !== 200) {
@@ -274,12 +355,21 @@ async function main() {
 
   const results = []
   let updated = 0
+  let alreadyUpdated = 0
   let skipped = 0
   let failed = 0
 
   for (let i = 0; i < products.length; i++) {
-    const { id, handle, title } = products[i]
+    const { id, handle, title, description: existingDescription } = products[i]
     const prefix = `[${i + 1}/${products.length}]`
+
+    // Skip products that already have a description (idempotent re-runs)
+    if (existingDescription && existingDescription.trim().length > 0) {
+      console.log(`${prefix} ALREADY_UPDATED (skipping): ${handle}`)
+      results.push({ handle, title, status: 'already_updated' })
+      alreadyUpdated++
+      continue
+    }
 
     // Exact match first, then category pattern fallback
     const data = PRODUCT_DESCRIPTIONS[handle] ?? getCategoryData(handle)
@@ -323,16 +413,17 @@ async function main() {
   const log = {
     run_at: new Date().toISOString(),
     medusa_url: MEDUSA_URL,
-    summary: { total: products.length, updated, skipped, failed },
+    summary: { total: products.length, updated, already_updated: alreadyUpdated, skipped, failed },
     results,
   }
   fs.writeFileSync(LOG_PATH, JSON.stringify(log, null, 2))
 
   console.log('\n--- Summary ---')
-  console.log(`Total:   ${products.length}`)
-  console.log(`Updated: ${updated}`)
-  console.log(`Skipped: ${skipped}`)
-  console.log(`Failed:  ${failed}`)
+  console.log(`Total:           ${products.length}`)
+  console.log(`Updated:         ${updated}`)
+  console.log(`Already updated: ${alreadyUpdated} (skipped — description already set)`)
+  console.log(`Skipped:         ${skipped} (no description mapped)`)
+  console.log(`Failed:          ${failed}`)
   console.log(`\nLog saved to: ${LOG_PATH}`)
 
   if (failed > 0) process.exit(1)
