@@ -1,9 +1,9 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 5 — QA and Launch
-Current Task: Post-purchase delivery fixes + shop design improvements (feature/shop-and-delivery-fixes)
-Current Branch: feature/shop-and-delivery-fixes
-Last Updated: 2026-06-05
+Current Task: Pre-DNS-cutover — awaiting Suzanne review + external credentials
+Current Branch: main
+Last Updated: 2026-06-07
 Last Updated By: Johan
 
 ---
@@ -186,8 +186,9 @@ Navigation audit complete — all broken links fixed. Merged from `feature/nav-c
 - [ ] Sage integration tested (waiting on credentials)
 - [ ] Resend domain verified for suzanneravenall.com
 - [ ] Wild Apricot migration decision from Suzanne
-- [ ] Hero video provided by Suzanne
-- [ ] Real product descriptions added by Suzanne
+- [x] Hero video — AI-generated shop hero video live (hero-shop.mp4, Seedance 2)
+- [x] Product thumbnails — 76 unique AI-generated images, all products have thumbnails
+- [x] Product descriptions — 48 products updated with real WordPress copy + category-based descriptions
 - [ ] Real testimonials added by Suzanne
 - [ ] VAT registration number added to invoice template
 - [ ] Physical address added to email footer (POPIA)
@@ -207,6 +208,7 @@ Navigation audit complete — all broken links fixed. Merged from `feature/nav-c
 - ✅ Task 5.3 — Cross-Device QA (complete — all pages return 200 on VPS; KI019 resolved; auth middleware confirmed protecting /portal/*; security headers live)
 - ✅ Task 5.4 — Load Testing (complete — all pages sub-100ms, no container memory pressure, search 503 is pre-existing KI020)
 - ✅ Task 5.5 — Pre-Launch Checklist Review (complete — all 🔧 items done; 14 items remain blocked on Suzanne/credentials; Pre-Launch Status Report produced)
+- ✅ Task 5.6a — Shop Design + Product Data (complete 2026-06-07 — 76 unique AI-generated product thumbnails; 48 products with descriptions; post-purchase delivery flow fixed; shop hero video; category filter; book page /book; speaking page /speaking merged to main)
 - ⏳ Task 5.5a — Manual VPS Steps (2 of 3 done — Step 2 n8n complete 11/12; Step 1 MeiliSearch + Step 3 Sentry blocked on Johan credentials)
 - ⏳ Task 5.6 — DNS Cutover (not started — requires Task 5.5a complete + Suzanne sign-off)
 - ⏳ Task 5.7 — Handover (not started)
