@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Image from 'next/image'
 import Link from 'next/link'
 
 export function ShopHeroBanner() {
@@ -10,28 +9,19 @@ export function ShopHeroBanner() {
       aria-labelledby="shop-hero-heading"
       className="relative w-full bg-brand-primary min-h-screen flex items-center py-20 lg:py-32 overflow-hidden"
     >
-      {/* Background video with image fallback */}
-      <div className="absolute inset-0" aria-hidden="true">
-        <Image
-          src="/images/hero-bg-suzanne-ravenall.jpg"
-          alt=""
-          fill
-          className="object-cover object-center"
-          priority
-        />
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover"
-          poster="/images/hero-bg-suzanne-ravenall.jpg"
-        >
-          <source src="/videos/generated/hero-shop.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/90 via-brand-primary/70 to-brand-primary/40" />
-      </div>
+      {/* Background video — poster handles static fallback */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover"
+        poster="/images/hero-bg-suzanne-ravenall.jpg"
+      >
+        <source src="/videos/generated/hero-shop.mp4" type="video/mp4" />
+      </video>
+      <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/90 via-brand-primary/70 to-brand-primary/40" />
 
       {/* Ambient glow */}
       <div
