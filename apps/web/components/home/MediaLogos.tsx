@@ -95,7 +95,7 @@ export default function MediaLogos({
         className="max-w-7xl mx-auto px-4 mb-6"
       >
         <p className="text-center text-xs font-medium tracking-[0.3em] uppercase text-white/50">
-          As seen on
+          As seen in
         </p>
       </motion.div>
 

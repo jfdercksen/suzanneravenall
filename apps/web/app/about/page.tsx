@@ -7,6 +7,7 @@ import HowItWorks from '@/components/about/HowItWorks'
 import TheEcosystem from '@/components/about/TheEcosystem'
 import AboutFinalCTA from '@/components/about/AboutFinalCTA'
 import MediaLogos from '@/components/home/MediaLogos'
+import { MagazineCovers } from '@/components/shared/MagazineCovers'
 import VideoTestimonials from '@/components/shared/VideoTestimonials'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -24,6 +25,7 @@ export default function AboutPage() {
       <TheMethod />
       <TheStory />
       <Credentials />
+      <MagazineCovers />
       <HowItWorks />
       <MediaLogos
         quote="&#8220;When we find and disrupt the patterns that keep us stuck, we don&#8217;t just change &#8212; we become.&#8221;"

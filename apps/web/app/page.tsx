@@ -7,6 +7,7 @@ import TransformationQuote from '../components/home/TransformationQuote'
 import FocusAreas from '../components/home/FocusAreas'
 import TestimonialSpotlight from '../components/home/TestimonialSpotlight'
 import BookPromotion from '../components/home/BookPromotion'
+import { MagazineCovers } from '../components/shared/MagazineCovers'
 import VideoTestimonials from '../components/shared/VideoTestimonials'
 import FeaturedPrograms from '../components/home/FeaturedPrograms'
 import LeadMagnet from '../components/home/LeadMagnet'
@@ -82,6 +83,7 @@ export default function HomePage() {
       <Hero />
       <TrustBar />
       <MediaLogos id="media-logos" />
+      <MagazineCovers />
       <AboutTeaser />
       <TransformationQuote />
       <FocusAreas />
