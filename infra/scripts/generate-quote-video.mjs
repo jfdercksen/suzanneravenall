@@ -2,9 +2,12 @@
 /**
  * generate-quote-video.mjs
  *
- * Generates an abstract energy transformation video for the TransformationQuote
- * section background using Kling 3.0 text-to-video via Kie.ai.
- * Polls every 15 seconds until complete, then downloads.
+ * Generates a slow cinematic video from explore-transformation.webp using
+ * Seedance-2 image-to-video via Kie.ai, for the TransformationQuote section
+ * background on the homepage.
+ *
+ * Since Seedance-2 requires a real HTTPS URL (not base64), the image is first
+ * uploaded to a temporary public host. Tries transfer.sh then file.io.
  *
  * Output: apps/web/public/videos/generated/transformation-quote.mp4
  *
@@ -14,8 +17,8 @@
  * Usage (bash):
  *   KIE_API_KEY=<your-key> node infra/scripts/generate-quote-video.mjs
  *
- * After video is generated, wire it into TransformationQuote.tsx (already done).
- * Commit the video file and deploy.
+ * After video is generated, commit the file and deploy — it is already wired
+ * into TransformationQuote.tsx via <source src="/videos/generated/transformation-quote.mp4">.
  */
 
 import fs from 'fs'
@@ -36,18 +39,152 @@ if (!KIE_API_KEY) {
 }
 
 const API_BASE = 'https://api.kie.ai/api/v1'
+const SOURCE_IMAGE_PATH = path.join(ROOT, 'apps/web/public/images/generated/explore-transformation.webp')
 const OUTPUT_DIR = path.join(ROOT, 'apps/web/public/videos/generated')
 const OUTPUT_FILE = path.join(OUTPUT_DIR, 'transformation-quote.mp4')
 const POLL_INTERVAL_MS = 15000
-const MAX_POLL_ATTEMPTS = 120 // 30 minutes max
+const MAX_POLL_ATTEMPTS = 120
 
+// Motion guidance prompt — describes animation, not scene content
 const PROMPT =
-  'Abstract energy transformation visualization, ' +
-  'golden light particles flowing and transforming, ' +
-  'neural patterns dissolving and reforming into new shapes, ' +
-  'slow cinematic movement, dark background, ' +
-  'ethereal and powerful, no text, no people, ' +
-  '8 seconds, 16:9 cinematic'
+  'Slow ethereal drift, soft golden light particles floating upward, ' +
+  'gentle atmospheric haze, meditative stillness, ' +
+  'cinematic slow motion, no camera shake, no text, no people'
+
+// ---------------------------------------------------------------------------
+// Upload helpers — Seedance-2 needs a real HTTPS URL, not base64
+
+function uploadToTransferSh(filePath) {
+  return new Promise((resolve, reject) => {
+    const fileData = fs.readFileSync(filePath)
+    const filename = path.basename(filePath)
+    const options = {
+      hostname: 'transfer.sh',
+      path: `/${encodeURIComponent(filename)}`,
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'image/webp',
+        'Content-Length': fileData.length,
+        'User-Agent': 'generate-quote-video/1.0',
+        'Max-Downloads': '5',
+        'Max-Days': '1',
+      },
+    }
+    const req = https.request(options, (res) => {
+      let data = ''
+      res.on('data', (chunk) => { data += chunk })
+      res.on('end', () => {
+        const url = data.trim()
+        if (res.statusCode >= 200 && res.statusCode < 300 && url.startsWith('http')) {
+          resolve(url)
+        } else {
+          reject(new Error(`HTTP ${res.statusCode}: ${data.slice(0, 120)}`))
+        }
+      })
+    })
+    req.on('error', reject)
+    req.write(fileData)
+    req.end()
+  })
+}
+
+function uploadToFileIo(filePath) {
+  return new Promise((resolve, reject) => {
+    const fileData = fs.readFileSync(filePath)
+    const filename = path.basename(filePath)
+    const boundary = `----Boundary${Date.now().toString(16)}`
+    const header = Buffer.from(
+      `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="${filename}"\r\nContent-Type: image/webp\r\n\r\n`
+    )
+    const footer = Buffer.from(`\r\n--${boundary}--\r\n`)
+    const body = Buffer.concat([header, fileData, footer])
+    const options = {
+      hostname: 'www.file.io',
+      path: '/?expires=1d',
+      method: 'POST',
+      headers: {
+        'Content-Type': `multipart/form-data; boundary=${boundary}`,
+        'Content-Length': body.length,
+        'User-Agent': 'generate-quote-video/1.0',
+      },
+    }
+    const req = https.request(options, (res) => {
+      let data = ''
+      res.on('data', (chunk) => { data += chunk })
+      res.on('end', () => {
+        try {
+          const json = JSON.parse(data)
+          if (json.success && json.link) {
+            resolve(json.link)
+          } else {
+            reject(new Error(`${data.slice(0, 120)}`))
+          }
+        } catch {
+          reject(new Error(`parse error: ${data.slice(0, 120)}`))
+        }
+      })
+    })
+    req.on('error', reject)
+    req.write(body)
+    req.end()
+  })
+}
+
+function uploadToLitterbox(filePath) {
+  return new Promise((resolve, reject) => {
+    const fileData = fs.readFileSync(filePath)
+    const filename = path.basename(filePath)
+    const boundary = `----Boundary${Date.now().toString(16)}`
+    // multipart fields: reqtype, time, fileToUpload
+    const parts = [
+      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="reqtype"\r\n\r\nfileupload\r\n`),
+      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="time"\r\n\r\n24h\r\n`),
+      Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="fileToUpload"; filename="${filename}"\r\nContent-Type: image/webp\r\n\r\n`),
+      fileData,
+      Buffer.from(`\r\n--${boundary}--\r\n`),
+    ]
+    const body = Buffer.concat(parts)
+    const options = {
+      hostname: 'litterbox.catbox.moe',
+      path: '/resources/internals/api.php',
+      method: 'POST',
+      headers: {
+        'Content-Type': `multipart/form-data; boundary=${boundary}`,
+        'Content-Length': body.length,
+        'User-Agent': 'generate-quote-video/1.0',
+      },
+    }
+    const req = https.request(options, (res) => {
+      let data = ''
+      res.on('data', (chunk) => { data += chunk })
+      res.on('end', () => {
+        const url = data.trim()
+        if (res.statusCode >= 200 && res.statusCode < 300 && url.startsWith('http')) {
+          resolve(url)
+        } else {
+          reject(new Error(`HTTP ${res.statusCode}: ${data.slice(0, 120)}`))
+        }
+      })
+    })
+    req.on('error', reject)
+    req.write(body)
+    req.end()
+  })
+}
+
+async function uploadImage(filePath) {
+  for (const [name, fn] of [['transfer.sh', uploadToTransferSh], ['file.io', uploadToFileIo], ['litterbox.catbox.moe', uploadToLitterbox]]) {
+    try {
+      process.stdout.write(`  Trying ${name}... `)
+      const url = await fn(filePath)
+      console.log(`OK → ${url}`)
+      return url
+    } catch (err) {
+      console.log(`failed: ${err.message.slice(0, 80)}`)
+    }
+  }
+  throw new Error('All upload services failed — check network connectivity.')
+}
 
 // ---------------------------------------------------------------------------
 
@@ -115,21 +252,21 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-async function submitTask() {
+async function submitTask(imageUrl) {
   const body = JSON.stringify({
     model: 'bytedance/seedance-2',
     input: {
       prompt: PROMPT,
-      duration: 8,
+      first_frame_url: imageUrl,
+      duration: 5,
       aspect_ratio: '16:9',
-      resolution: '1080p',
+      resolution: '720p',
       generate_audio: false,
-      web_search: false,
     },
   })
 
-  console.log('Submitting Kling 3.0 text-to-video task...')
-  console.log(`Prompt: ${PROMPT.slice(0, 80)}...`)
+  console.log('\nSubmitting Seedance-2 image-to-video task...')
+  console.log(`Motion prompt: ${PROMPT.slice(0, 80)}...`)
 
   const res = await fetchJson(`${API_BASE}/jobs/createTask`, { method: 'POST', body })
 
@@ -194,18 +331,26 @@ async function main() {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true })
 
   console.log('── generate-quote-video ──────────────────────────────────────────')
-  console.log('  Model:    bytedance/seedance-2 (text-to-video)')
-  console.log('  Duration: 8s')
+  console.log('  Model:    bytedance/seedance-2 (image-to-video)')
+  console.log('  Source:   apps/web/public/images/generated/explore-transformation.webp')
+  console.log('  Duration: 5s  |  Ratio: 16:9  |  Resolution: 720p')
   console.log('  Output:   apps/web/public/videos/generated/transformation-quote.mp4')
-  console.log('  Poll:     every 15s')
   console.log('─────────────────────────────────────────────────────────────────\n')
+
+  if (!fs.existsSync(SOURCE_IMAGE_PATH)) {
+    throw new Error(`Source image not found: ${SOURCE_IMAGE_PATH}`)
+  }
 
   if (fs.existsSync(OUTPUT_FILE)) {
     const sizeMB = (fs.statSync(OUTPUT_FILE).size / 1024 / 1024).toFixed(1)
-    console.log(`Note: transformation-quote.mp4 already exists (${sizeMB} MB). Re-generating and overwriting.`)
+    console.log(`Note: transformation-quote.mp4 already exists (${sizeMB} MB). Re-generating and overwriting.\n`)
   }
 
-  const taskId = await submitTask()
+  const imageSizeKB = Math.round(fs.statSync(SOURCE_IMAGE_PATH).size / 1024)
+  console.log(`Uploading source image (${imageSizeKB} KB) to temp host...`)
+  const imageUrl = await uploadImage(SOURCE_IMAGE_PATH)
+
+  const taskId = await submitTask(imageUrl)
   const videoUrl = await pollUntilDone(taskId)
 
   console.log(`\nVideo ready. Downloading from:\n  ${videoUrl}\n`)
@@ -215,7 +360,7 @@ async function main() {
   console.log(`Saved: apps/web/public/videos/generated/transformation-quote.mp4 (${sizeMB} MB)`)
   console.log('\nNext steps:')
   console.log('  1. git add apps/web/public/videos/generated/transformation-quote.mp4')
-  console.log('  2. git commit -m "feat: AI-generated transformation quote video background"')
+  console.log('  2. git commit -m "feat: AI-generated transformation quote video background (explore-transformation)"')
   console.log('  3. The video is already wired into TransformationQuote.tsx — deploy and verify.')
 }
 
