@@ -26,7 +26,7 @@ export default function VideoTestimonials() {
   }
 
   return (
-    <section aria-labelledby="video-testimonials-heading" className="bg-gray-950 py-20 lg:py-32">
+    <section aria-labelledby="video-testimonials-heading" className="bg-white py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -40,10 +40,10 @@ export default function VideoTestimonials() {
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             What Clients Say
           </p>
-          <h2 id="video-testimonials-heading" className="text-4xl lg:text-6xl font-light text-white mb-4">
+          <h2 id="video-testimonials-heading" className="text-4xl lg:text-6xl font-light text-brand-primary mb-4">
             Real transformations. Real people.
           </h2>
-          <p className="text-white/60 text-lg font-light max-w-2xl mx-auto">
+          <p className="text-gray-500 text-lg font-light max-w-2xl mx-auto">
             Hear directly from clients who have experienced the Rapid Repatterning® process with Suzanne.
           </p>
         </motion.div>
@@ -92,7 +92,7 @@ export default function VideoTestimonials() {
                   fill
                   sizes="(max-width: 1024px) 100vw, 896px"
                   className="object-cover"
-                  priority
+                  priority={activeIndex === 0}
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-300" />
 
@@ -121,7 +121,7 @@ export default function VideoTestimonials() {
 
         {/* Thumbnail strip — parent handles entrance; each button controls its own opacity via animate */}
         <motion.div
-          role="group"
+          role="radiogroup"
           aria-label="Video testimonials"
           className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:grid lg:grid-cols-6 lg:gap-4"
           initial={{ opacity: 0, y: 20 }}
@@ -134,11 +134,12 @@ export default function VideoTestimonials() {
               key={video.id}
               type="button"
               onClick={() => selectVideo(i)}
+              role="radio"
               aria-label={`Watch ${video.name}`}
-              aria-pressed={i === activeIndex}
+              aria-checked={i === activeIndex}
               className={`relative flex-none w-40 lg:w-auto aspect-video rounded-sm overflow-hidden transition-shadow duration-300 ${
                 i === activeIndex
-                  ? 'ring-2 ring-brand-accent ring-offset-2 ring-offset-gray-950'
+                  ? 'ring-2 ring-brand-accent ring-offset-2 ring-offset-white'
                   : ''
               }`}
               animate={{ opacity: i === activeIndex ? 1 : 0.5 }}

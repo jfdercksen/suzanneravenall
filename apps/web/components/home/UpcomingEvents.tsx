@@ -1,0 +1,129 @@
+'use client'
+
+import Link from 'next/link'
+import { motion } from 'framer-motion'
+
+// TODO: Suzanne to provide real upcoming event dates
+// Replace hardcoded cards with dynamic data from Payload CMS
+// when real programme schedule is confirmed
+
+type BadgeVariant = 'free' | 'group' | 'book'
+
+interface Opportunity {
+  type: 'FREE' | 'GROUP' | 'BOOK'
+  variant: BadgeVariant
+  title: string
+  description: string
+  cta: string
+  href: string
+  badge: string
+  price?: string
+}
+
+const opportunities: Opportunity[] = [
+  {
+    type: 'FREE',
+    variant: 'free',
+    title: 'Discovery Call',
+    description:
+      '30-minute complimentary call to map your patterns and find the right programme for you.',
+    cta: 'Book Now',
+    href: '/contact',
+    badge: 'Available this week',
+  },
+  {
+    type: 'GROUP',
+    variant: 'group',
+    title: 'Group Transformation Session',
+    description:
+      'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
+    cta: 'Join Waitlist',
+    href: '/contact',
+    badge: 'Next intake opening soon',
+  },
+  {
+    type: 'BOOK',
+    variant: 'book',
+    title: 'Breakthrough Trilogy',
+    description:
+      "Start your transformation journey with Suzanne's complete guide to decoding your patterns.",
+    price: 'R165',
+    cta: 'Pre-Order Now',
+    href: '/shop/the-latest-book-by-suzanne',
+    badge: 'Available now',
+  },
+]
+
+const variantStyles: Record<BadgeVariant, string> = {
+  free: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
+  group: 'bg-brand-accent/15 text-brand-accent border border-brand-accent/30',
+  book: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
+}
+
+export default function UpcomingEvents() {
+  return (
+    <section aria-labelledby="upcoming-events-heading" className="bg-gray-50 py-20 lg:py-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <motion.div
+          className="text-center mb-12 lg:mb-16"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
+            Upcoming Opportunities
+          </p>
+          <h2
+            id="upcoming-events-heading"
+            className="text-4xl lg:text-6xl font-light text-brand-primary"
+          >
+            Your next step starts here
+          </h2>
+        </motion.div>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {opportunities.map(({ type, variant, title, description, cta, href, badge, price }, i) => (
+            <motion.div
+              key={title}
+              className="group bg-white border border-gray-200 rounded-card overflow-hidden hover:border-brand-accent/30 hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1 flex flex-col"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
+            >
+              <div className="p-6 flex flex-col flex-1">
+                <div className="flex items-start justify-between mb-4">
+                  <span
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${variantStyles[variant]}`}
+                  >
+                    {type}
+                  </span>
+                  <span className="text-gray-400 text-xs text-right max-w-[120px]">{badge}</span>
+                </div>
+
+                <h3 className="text-xl font-semibold text-brand-primary mb-3">{title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed flex-1">{description}</p>
+
+                <div className="mt-6 flex items-center justify-between">
+                  {price ? (
+                    <span className="text-brand-primary font-semibold">{price}</span>
+                  ) : (
+                    <span className="text-emerald-600 text-sm font-medium">Complimentary</span>
+                  )}
+                  <Link
+                    href={href}
+                    className="inline-flex items-center justify-center px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm rounded-button transition-colors duration-150"
+                  >
+                    {cta}
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

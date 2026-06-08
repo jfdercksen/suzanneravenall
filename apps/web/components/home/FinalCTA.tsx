@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 
 export default function FinalCTA() {
   return (
-    <section aria-labelledby="finalcta-heading" className="py-28 lg:py-36 bg-white border-t border-gray-100">
+    <section aria-labelledby="finalcta-heading" className="py-28 lg:py-36 bg-brand-primary">
       <motion.div
         className="max-w-3xl mx-auto px-4 text-center"
         initial={{ opacity: 0, y: 50 }}
@@ -16,11 +16,11 @@ export default function FinalCTA() {
         <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-6">
           Take The First Step
         </p>
-        <h2 id="finalcta-heading" className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight">
+        <h2 id="finalcta-heading" className="text-4xl lg:text-6xl font-light text-white leading-tight">
           Your breakthrough is one conversation away
         </h2>
         <motion.p
-          className="mt-6 text-gray-500 text-lg leading-relaxed max-w-xl mx-auto"
+          className="mt-6 text-white/60 text-lg leading-relaxed max-w-xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
@@ -40,7 +40,7 @@ export default function FinalCTA() {
           >
             Book Discovery Call
           </Link>
-          <p className="mt-4 text-gray-400 text-sm">Complimentary 30-minute session · No obligation</p>
+          <p className="mt-4 text-white/40 text-sm">Complimentary 30-minute session · No obligation</p>
         </motion.div>
       </motion.div>
     </section>

@@ -10,36 +10,13 @@ export default function AboutTeaser() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-          {/* Image — left on desktop */}
+          {/* Text — left on desktop, below image on mobile */}
           <motion.div
-            className="relative"
+            className="order-2 lg:order-1 lg:pr-4"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
-          >
-            <div className="relative aspect-[4/5] rounded-card overflow-hidden shadow-card-hover">
-              <Image
-                src="/images/suzanne-casual.jpg"
-                alt="Dr. Suzanne Ravenall"
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-top"
-              />
-            </div>
-            <div className="mt-4 lg:mt-0 lg:absolute lg:-bottom-4 lg:-right-8 bg-white border border-gray-100 text-brand-primary rounded-card p-4 shadow-card-hover inline-block lg:block">
-              <p className="text-xs text-brand-primary/50 uppercase tracking-wider mb-0.5">Academic credentials</p>
-              <p className="font-semibold text-sm text-brand-primary">B.Msc · M.Msc · Msc.D.</p>
-            </div>
-          </motion.div>
-
-          {/* Text — right on desktop */}
-          <motion.div
-            className="lg:pl-4"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
           >
             <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
               Meet Your Guide
@@ -70,6 +47,29 @@ export default function AboutTeaser() {
               >
                 View Services
               </Link>
+            </div>
+          </motion.div>
+
+          {/* Image — right on desktop, above text on mobile */}
+          <motion.div
+            className="order-1 lg:order-2 relative"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
+          >
+            <div className="relative aspect-[4/5] rounded-card overflow-hidden shadow-card-hover">
+              <Image
+                src="/images/suzanne-casual.jpg"
+                alt="Dr. Suzanne Ravenall"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover object-top"
+              />
+            </div>
+            <div className="mt-4 lg:mt-0 lg:absolute lg:-bottom-4 lg:-left-8 bg-white border border-gray-100 text-brand-primary rounded-card p-4 shadow-card-hover inline-block lg:block">
+              <p className="text-xs text-brand-primary/50 uppercase tracking-wider mb-0.5">Academic credentials</p>
+              <p className="font-semibold text-sm text-brand-primary">B.Msc · M.Msc · Msc.D.</p>
             </div>
           </motion.div>
 
