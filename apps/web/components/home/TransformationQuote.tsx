@@ -28,7 +28,7 @@ export default function TransformationQuote() {
       </video>
 
       {/* Layer 2 — Heavy dark overlay */}
-      <div aria-hidden="true" className="absolute inset-0 bg-black/60" />
+      <div aria-hidden="true" className="absolute inset-0 bg-black/40" />
 
       {/* Layer 3 — Content */}
       <div className="relative z-10 w-full max-w-4xl mx-auto px-4 text-center py-20">
