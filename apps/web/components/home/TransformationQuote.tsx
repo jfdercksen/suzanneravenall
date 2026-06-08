@@ -21,14 +21,14 @@ export default function TransformationQuote() {
         loop
         playsInline
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover opacity-40"
+        className="absolute inset-0 w-full h-full object-cover opacity-80"
         poster="/images/suzanne-ravenall.jpg"
       >
         <source src="/videos/generated/transformation-quote.mp4" type="video/mp4" />
       </video>
 
       {/* Layer 2 — Heavy dark overlay */}
-      <div aria-hidden="true" className="absolute inset-0 bg-black/40" />
+      <div aria-hidden="true" className="absolute inset-0 bg-black/25" />
 
       {/* Layer 3 — Content */}
       <div className="relative z-10 w-full max-w-4xl mx-auto px-4 text-center py-20">
