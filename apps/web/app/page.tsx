@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Hero from '../components/home/Hero'
 import TrustBar from '../components/home/TrustBar'
 import MediaLogos from '../components/home/MediaLogos'
+import UpcomingPrograms from '../components/home/UpcomingPrograms'
 import { MagazineCovers } from '../components/shared/MagazineCovers'
 import AboutTeaser from '../components/home/AboutTeaser'
 import FeaturedPrograms from '../components/home/FeaturedPrograms'
@@ -87,7 +88,9 @@ export default function HomePage() {
       <TrustBar />
       {/* 3 — dark (bg-gray-950) */}
       <MediaLogos id="media-logos" />
-      {/* 4 — light (bg-white) */}
+      {/* 4 — dark (bg-brand-primary) */}
+      <UpcomingPrograms />
+      {/* 5 — light (bg-white) */}
       <MagazineCovers />
       {/* 5 — light (bg-gray-50) */}
       <AboutTeaser />
