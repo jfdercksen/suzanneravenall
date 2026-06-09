@@ -3,7 +3,7 @@
 Current Phase: Phase 5 — QA and Launch
 Current Task: Pre-DNS-cutover — awaiting Suzanne review + external credentials
 Current Branch: main
-Last Updated: 2026-06-07
+Last Updated: 2026-06-09
 Last Updated By: Johan
 
 ---
@@ -77,7 +77,7 @@ These items are built but cannot be validated without external credentials or ac
 
 ## Phase 4 — Task Status
 
-- ✅ Task 4.1 — Vtiger CRM Configuration
+- ✅ Task 4.1 — Vtiger CRM Configuration (credentials added to VPS 2026-06-09; n8n container rebuild required)
 - ✅ Task 4.2 — Vtiger Automation Workflows
 - ✅ Task 4.3 — Vibe Marketing Connection
 - ✅ Task 4.4 — Remaining n8n Workflows
@@ -251,6 +251,8 @@ curl -s -o /dev/null -w "/api/search → %{http_code}\n" "http://169.239.180.49/
 ---
 
 ## Session Notes
+
+- **2026-06-09 (Vtiger credentials configured):** KI013 resolved. VTIGER_URL, VTIGER_USERNAME, VTIGER_ACCESS_KEY added to infra/.env on VPS by Johan. VTIGER_* vars also added to n8n service environment in docker-compose.yml — they were missing (only medusa service had them; n8n Vtiger workflows read via `$env.*` so they require n8n container to have the vars). All 3 Vtiger n8n workflows (calcom-booking-to-vtiger, medusa-order-to-vtiger, lead-magnet-to-vtiger) use Vtiger's own challenge→MD5→session auth pattern via env vars — no n8n credentials object required. NEXT STEPS: (1) Rebuild n8n container on VPS: `docker compose -f docker-compose.yml up -d n8n`. (2) Create Vtiger custom text fields in Vtiger admin → Module Manager → Contacts: cf_pipeline_stage, cf_membership_tier, cf_total_spend_zar, cf_last_purchase_date, cf_discovery_call_date. (3) Test by triggering a Cal.com booking and verifying a Vtiger Activity is created.
 
 - **2026-06-05 (Post-purchase delivery fixes + shop design — feature/shop-and-delivery-fixes):** Three pre-launch post-purchase delivery gaps fixed. (1) Private sessions: `order-placed.ts` subscriber now detects session-type products from category handles (CATEGORY_ACCESS_MAP) and passes `calBookingUrl: https://cal.com/suzanneravenall/discovery-call` to the order confirmation email; `OrderConfirmation.tsx` renders a prominent navy "Book Your Session Now" section with the Cal.com button when `calBookingUrl` is present. (2) Self-paced/live programmes: subscriber now calls `handlePortalAccessGrant` which upgrades `member_subscriptions.access_level` in Supabase for the purchasing user (or inserts a free-tier base row if no subscription exists); uses CATEGORY_ACCESS_MAP to determine access level and track. (3) Order confirmation email now has dynamic "What Happens Next" steps based on `productType` (session/self-paced/live/group/other) — each product type gets tailored instructions instead of generic placeholders. New file: `apps/web/lib/access/product-access.ts` (CATEGORY_ACCESS_MAP + helpers, used by frontend). CATEGORY_ACCESS_MAP mirrored inline in subscriber (cross-app imports not supported in monorepo without shared package). Shop design: 7 improvements applied — ProductCard aspect-video→4/3 (taller images), overlay reversed (light default/dark hover), root category shown instead of leaf sub-category, CTA text "Explore & Enrol →", CategoryFilterBar pills larger + stronger inactive state, collection tier filter row removed (was confusing), ShopHeroBanner credibility stats row added (2,000+ lives, 20+ years, 30+ countries). Code review: 2 High issues fixed (productType input validation in route.ts, lookupSupabaseUserId pagination beyond 1000 users), 1 Low fixed (isMembershipOrder extracted as shared helper). 88 pages building clean. SETUP REQUIRED: Add `CALCOM_SESSION_BOOKING_URL` to `infra/.env` if a different booking URL is needed (default: https://cal.com/suzanneravenall/discovery-call). NOTE: `syncPortalAccess` inserts with `tier_id='free'` — confirmed valid as long as `membership_tiers` table has a row with id='free' (seeded in Task 3.1). NOTE: Portal access is not automatically granted when a user creates their Supabase account *after* purchasing a programme (no Supabase account existed at purchase time) — this is a known gap requiring a future email↔purchase linking mechanism.
 
