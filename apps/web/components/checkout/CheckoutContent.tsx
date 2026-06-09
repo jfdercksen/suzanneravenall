@@ -122,7 +122,7 @@ function OrderSideBar() {
               <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
             </div>
             <p className="text-xs font-semibold text-gray-900 tabular-nums flex-shrink-0">
-              {formatPrice(item.subtotal)}
+              {formatPrice(item.subtotal, cart.currency_code)}
             </p>
           </li>
         ))}
@@ -130,17 +130,17 @@ function OrderSideBar() {
       <div className="border-t border-gray-200 pt-4 space-y-2 text-sm">
         <div className="flex justify-between text-gray-500">
           <span>Subtotal</span>
-          <span className="tabular-nums">{formatPrice(cart.subtotal)}</span>
+          <span className="tabular-nums">{formatPrice(cart.subtotal, cart.currency_code)}</span>
         </div>
         {cart.tax_total > 0 && (
           <div className="flex justify-between text-gray-500">
             <span>Tax</span>
-            <span className="tabular-nums">{formatPrice(cart.tax_total)}</span>
+            <span className="tabular-nums">{formatPrice(cart.tax_total, cart.currency_code)}</span>
           </div>
         )}
         <div className="flex justify-between font-semibold text-gray-900 pt-1">
           <span>Total</span>
-          <span className="tabular-nums">{formatPrice(cart.total)}</span>
+          <span className="tabular-nums">{formatPrice(cart.total, cart.currency_code)}</span>
         </div>
       </div>
     </div>

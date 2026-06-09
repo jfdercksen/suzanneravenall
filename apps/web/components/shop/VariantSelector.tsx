@@ -5,12 +5,19 @@ import Link from 'next/link'
 import { useCart } from '@/lib/cart'
 import type { MedusaVariant } from '@/types/medusa'
 
-function getZarPrice(variant: MedusaVariant): number | null {
-  const price = (variant.prices ?? []).find((p) => p.currency_code === 'zar')
-  return price ? price.amount / 100 : null
+function getPriceForCurrency(variant: MedusaVariant, currencyCode: string): number | null {
+  const prices = variant.prices ?? []
+  const match = prices.find((p) => p.currency_code === currencyCode)
+  if (match) return match.amount / 100
+  // Fall back to ZAR if the requested currency has no price
+  const zar = prices.find((p) => p.currency_code === 'zar')
+  return zar ? zar.amount / 100 : null
 }
 
-function formatPrice(amount: number): string {
+function formatVariantPrice(amount: number, currencyCode: string): string {
+  if (currencyCode === 'usd') {
+    return `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  }
   return `R${amount.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
@@ -29,7 +36,8 @@ export function VariantSelector({
   dark = false,
 }: VariantSelectorProps) {
   const [buttonState, setButtonState] = useState<'idle' | 'loading' | 'added' | 'error'>('idle')
-  const { addItem } = useCart()
+  const { addItem, cart } = useCart()
+  const cartCurrency = cart?.currency_code ?? 'zar'
 
   if (variants.length === 0) {
     return (
@@ -43,7 +51,7 @@ export function VariantSelector({
   }
 
   const selectedVariant = variants.find((v) => v.id === selectedVariantId) ?? variants[0]
-  const selectedPrice = selectedVariant ? getZarPrice(selectedVariant) : null
+  const selectedPrice = selectedVariant ? getPriceForCurrency(selectedVariant, cartCurrency) : null
   const hasMultipleVariants = variants.length > 1
 
   const headingClass = dark ? 'text-white' : 'text-gray-900'
@@ -97,7 +105,7 @@ export function VariantSelector({
       <div>
         {selectedPrice !== null ? (
           <p className={`text-4xl font-light ${priceClass}`}>
-            {formatPrice(selectedPrice)}
+            {formatVariantPrice(selectedPrice, cartCurrency)}
           </p>
         ) : (
           <p className={`text-xl font-light ${headingClass} opacity-60`}>

@@ -135,6 +135,7 @@ export default function CartPageContent() {
                     <CartItemRow
                       key={item.id}
                       item={item}
+                      currencyCode={cart.currency_code}
                       onIncrease={() => updateItem(item.id, item.quantity + 1)}
                       onDecrease={() => updateItem(item.id, item.quantity - 1)}
                       onRemove={() => removeItem(item.id)}
@@ -166,11 +167,13 @@ export default function CartPageContent() {
 
 function CartItemRow({
   item,
+  currencyCode,
   onIncrease,
   onDecrease,
   onRemove,
 }: {
   item: import('@/lib/cart').CartItem
+  currencyCode: string
   onIncrease: () => void
   onDecrease: () => void
   onRemove: () => void
@@ -213,7 +216,7 @@ function CartItemRow({
           <p className="text-xs text-gray-500 mt-0.5">{item.subtitle}</p>
         )}
         <p className="text-sm font-medium text-gray-700 mt-2">
-          {formatPrice(item.unit_price)}
+          {formatPrice(item.unit_price, currencyCode)}
         </p>
 
         <div className="flex items-center gap-4 mt-3">
@@ -236,7 +239,7 @@ function CartItemRow({
       {/* Line total */}
       <div className="flex-shrink-0 text-right">
         <p className="text-sm font-semibold text-gray-900 tabular-nums">
-          {formatPrice(item.subtotal)}
+          {formatPrice(item.subtotal, currencyCode)}
         </p>
       </div>
     </motion.li>
@@ -252,7 +255,7 @@ function OrderSummary({ cart }: { cart: import('@/lib/cart').Cart }) {
         <div className="flex justify-between">
           <span className="text-gray-500">Subtotal</span>
           <span className="font-medium text-gray-900 tabular-nums">
-            {formatPrice(cart.subtotal)}
+            {formatPrice(cart.subtotal, cart.currency_code)}
           </span>
         </div>
         <div className="flex justify-between">
@@ -263,7 +266,7 @@ function OrderSummary({ cart }: { cart: import('@/lib/cart').Cart }) {
           <div className="flex justify-between">
             <span className="text-gray-500">Tax</span>
             <span className="font-medium text-gray-900 tabular-nums">
-              {formatPrice(cart.tax_total)}
+              {formatPrice(cart.tax_total, cart.currency_code)}
             </span>
           </div>
         )}
@@ -272,7 +275,7 @@ function OrderSummary({ cart }: { cart: import('@/lib/cart').Cart }) {
       <div className="border-t border-gray-200 pt-4 flex justify-between">
         <span className="font-semibold text-gray-900">Total</span>
         <span className="font-bold text-xl text-gray-900 tabular-nums">
-          {formatPrice(cart.total)}
+          {formatPrice(cart.total, cart.currency_code)}
         </span>
       </div>
 
