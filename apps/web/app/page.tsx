@@ -87,22 +87,22 @@ export default function HomePage() {
       <TrustBar />
       {/* 3 — dark (bg-gray-950) */}
       <MediaLogos id="media-logos" />
-      {/* 4 — light (bg-white) */}
-      <MagazineCovers />
-      {/* 5 — light (bg-gray-50) */}
-      <AboutTeaser />
-      {/* 6 — light (bg-white) */}
-      <FeaturedPrograms />
-      {/* 7 — dark (full-bleed video) */}
-      <TransformationQuote />
-      {/* 8 — dark (bg-gray-950) */}
-      <FocusAreas />
-      {/* 9 — dark */}
-      <TestimonialSpotlight />
-      {/* 10 — mixed dark/light (BookPromotion split layout) */}
-      <BookPromotion />
-      {/* 11 — light (bg-gray-50) */}
+      {/* 4 — light (bg-gray-50) */}
       <UpcomingEvents />
+      {/* 5 — light (bg-white) */}
+      <MagazineCovers />
+      {/* 6 — light (bg-gray-50) */}
+      <AboutTeaser />
+      {/* 7 — light (bg-white) */}
+      <FeaturedPrograms />
+      {/* 8 — dark (full-bleed video) */}
+      <TransformationQuote />
+      {/* 9 — dark (bg-gray-950) */}
+      <FocusAreas />
+      {/* 10 — dark */}
+      <TestimonialSpotlight />
+      {/* 11 — mixed dark/light (BookPromotion split layout) */}
+      <BookPromotion />
       {/* 12 — dark (bg-brand-primary) */}
       <LeadMagnet />
       {/* 13 — light (bg-white) */}
