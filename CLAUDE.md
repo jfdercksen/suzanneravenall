@@ -98,42 +98,21 @@ git push origin main
 
 | Environment | Branch | Domain | Purpose |
 |---|---|---|---|
-| Local | feature/* | localhost | Development and testing |
-| Staging | staging | staging.suzanneravenall.com | Client review and feedback |
-| Production | main | suzanneravenall.com | Live site |
+| Development | feature/* | suzanneravenall.com (VPS) | Development — deployed to VPS for client review |
+| Production | main | suzanneravenall.com | Live — DNS cutover after Suzanne approves |
 
 ### Branch workflow
 ```
 feature/task-name
-↓ PR reviewed and approved
-staging branch
-↓ Auto-deploys to staging VPS
-↓ Suzanne reviews and approves
-main branch
-↓ Auto-deploys to production VPS
+↓ Push to VPS (deploy manually or via CI)
+↓ Suzanne reviews on the live VPS
+↓ PR merged to main
+↓ DNS cutover → site goes live
 ```
 
-### Local development
+### VPS commands
 
-Run from the `infra/` directory. Always include both `-f` flags locally.
-
-```bash
-# Start all services locally (bind mounts + hot reload)
-docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
-
-# View logs
-docker compose -f docker-compose.yml -f docker-compose.local.yml logs -f web
-
-# Stop everything
-docker compose -f docker-compose.yml -f docker-compose.local.yml down
-
-# Rebuild after dependency changes
-docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build web
-```
-
-### VPS (production) commands
-
-Run from the `infra/` directory. Never load `docker-compose.local.yml` on the VPS.
+Run from the `infra/` directory.
 
 ```bash
 # Start / restart all services
@@ -144,19 +123,13 @@ docker compose -f docker-compose.yml pull && docker compose -f docker-compose.ym
 
 # Check status
 docker compose -f docker-compose.yml ps
+
+# View logs
+docker compose -f docker-compose.yml logs -f web
 ```
 
 ### GitHub Secrets required
 Add these in GitHub → Settings → Secrets and variables → Actions:
-
-**Staging secrets:**
-- `STAGING_VPS_HOST`
-- `STAGING_VPS_USER`
-- `STAGING_SSH_PRIVATE_KEY`
-- `STAGING_NEXT_PUBLIC_SITE_URL`
-- `STAGING_NEXT_PUBLIC_SUPABASE_URL`
-- `STAGING_NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `STAGING_NEXT_PUBLIC_MEDUSA_URL`
 
 **Production secrets:**
 - `VPS_HOST`

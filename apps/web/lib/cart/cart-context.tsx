@@ -58,11 +58,12 @@ export function useCart(): CartContextType {
   return ctx
 }
 
-export function formatPrice(amountInCents: number): string {
-  return `R${(amountInCents / 100).toLocaleString('en-ZA', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`
+export function formatPrice(amountInCents: number, currencyCode = 'zar'): string {
+  const amount = amountInCents / 100
+  if (currencyCode.toLowerCase() === 'usd') {
+    return `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  }
+  return `R${amount.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 function getMedusaBase(): string {
@@ -77,13 +78,31 @@ function getMedusaHeaders(): HeadersInit {
 }
 
 async function fetchRegionId(): Promise<string | null> {
+  // Ask the server which region this visitor should use (Cloudflare country detection)
   try {
-    const res = await fetch(`${getMedusaBase()}/store/regions?limit=1`, {
+    const res = await fetch('/api/region')
+    if (res.ok) {
+      const data = (await res.json()) as { regionId?: string }
+      if (data.regionId) return data.regionId
+    }
+  } catch {
+    // fall through to env var fallback
+  }
+
+  // Fallback: use the pinned ZAR region baked in at build time
+  const pinned = process.env.NEXT_PUBLIC_MEDUSA_REGION_ID
+  if (pinned) return pinned
+
+  // Last resort: fetch regions from Medusa and find ZAR
+  try {
+    const res = await fetch(`${getMedusaBase()}/store/regions?limit=50`, {
       headers: getMedusaHeaders(),
     })
     if (!res.ok) return null
-    const data = (await res.json()) as { regions?: Array<{ id: string }> }
-    return data.regions?.[0]?.id ?? null
+    const data = (await res.json()) as { regions?: Array<{ id: string; currency_code: string }> }
+    const regions = data.regions ?? []
+    const zar = regions.find((r) => r.currency_code === 'zar')
+    return zar?.id ?? regions[0]?.id ?? null
   } catch {
     return null
   }
@@ -127,7 +146,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const cartId = localStorage.getItem(CART_ID_KEY)
       if (cartId) {
         const existing = await fetchCart(cartId)
-        if (existing) {
+        const validRegions = [
+          process.env.NEXT_PUBLIC_MEDUSA_REGION_ID,
+          process.env.NEXT_PUBLIC_MEDUSA_REGION_USD_ID,
+        ].filter(Boolean) as string[]
+        if (existing && (validRegions.length === 0 || validRegions.includes(existing.region_id))) {
           setCart(existing)
           setIsLoading(false)
           return
@@ -160,23 +183,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addItem = useCallback(
     async (variantId: string, quantity = 1) => {
       const currentCart = await getOrCreateCart()
-      if (!currentCart) return
+      if (!currentCart) throw new Error('Could not create cart')
 
-      try {
-        const res = await fetch(
-          `${getMedusaBase()}/store/carts/${currentCart.id}/line-items`,
-          {
-            method: 'POST',
-            headers: getMedusaHeaders(),
-            body: JSON.stringify({ variant_id: variantId, quantity }),
-          }
-        )
-        if (!res.ok) return
-        const data = (await res.json()) as { cart: Cart }
-        setCart(data.cart)
-      } catch {
-        // silently fail — cart state unchanged
+      const res = await fetch(
+        `${getMedusaBase()}/store/carts/${currentCart.id}/line-items`,
+        {
+          method: 'POST',
+          headers: getMedusaHeaders(),
+          body: JSON.stringify({ variant_id: variantId, quantity }),
+        }
+      )
+      if (!res.ok) {
+        const err = (await res.json().catch(() => ({}))) as { message?: string }
+        throw new Error(err.message ?? `Add to cart failed (${res.status})`)
       }
+      const data = (await res.json()) as { cart: Cart }
+      setCart(data.cart)
     },
     [getOrCreateCart]
   )

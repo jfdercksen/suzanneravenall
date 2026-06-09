@@ -10,9 +10,10 @@ const programs = [
     subtitle: '3-Day Private Immersion',
     description: 'Three days of deep 1:1 work to uncover and dissolve the core pattern driving every obstacle in your life.',
     price: 'From R15,000',
-    image: '/images/suzanne-casual.jpg',
+    image: '/images/generated/session-coaching.webp',
     href: '/services',
     badge: 'Most Powerful',
+    urgency: null,
   },
   {
     title: 'Group Transformation',
@@ -22,22 +23,24 @@ const programs = [
     image: '/images/generated/group-coaching-real.webp',
     href: '/services',
     badge: 'Most Popular',
+    urgency: 'Next intake opening soon — join the waitlist',
   },
   {
     title: 'Practitioner Certification',
     subtitle: 'Professional Licensing',
     description: 'Become a certified Neuro-Repatterning® practitioner. Learn the methodology. Build your coaching practice.',
     price: 'From R18,000',
-    image: '/images/program-feature.png',
+    image: '/images/generated/explore-akashic.webp',
     href: '/services',
     badge: null,
+    urgency: null,
   },
 ]
 
 export default function FeaturedPrograms() {
   return (
     <section aria-labelledby="programs-heading" className="py-20 lg:py-32 bg-white">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <motion.div
           className="text-center mb-12 lg:mb-16"
@@ -55,10 +58,10 @@ export default function FeaturedPrograms() {
         </motion.div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {programs.map(({ title, subtitle, description, price, image, href, badge }, i) => (
+          {programs.map(({ title, subtitle, description, price, image, href, badge, urgency }, i) => (
             <motion.div
               key={title}
-              className="group relative bg-gray-50 border border-gray-100 rounded-card overflow-hidden hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1 flex flex-col"
+              className="group relative bg-gray-50 border border-gray-100 rounded-card overflow-hidden hover:border-brand-accent/30 hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1 flex flex-col"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
@@ -72,7 +75,7 @@ export default function FeaturedPrograms() {
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-primary/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 {badge && (
                   <div className="absolute top-4 left-4">
                     <span className="inline-flex items-center px-3 py-1 rounded-full bg-brand-accent text-white text-xs font-semibold uppercase tracking-wide">
@@ -86,6 +89,9 @@ export default function FeaturedPrograms() {
                 <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.2em] mb-1">{subtitle}</p>
                 <h3 className="text-xl font-semibold text-brand-primary">{title}</h3>
                 <p className="mt-3 text-gray-600 text-sm leading-relaxed flex-1">{description}</p>
+                {urgency && (
+                  <p className="mt-3 text-xs text-brand-accent font-medium">{urgency}</p>
+                )}
                 <div className="mt-6 flex items-center justify-between">
                   <span className="text-brand-primary font-semibold">{price}</span>
                   <Link

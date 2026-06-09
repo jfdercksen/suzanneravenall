@@ -12,7 +12,7 @@ interface Stat {
 
 const stats: Stat[] = [
   { value: '20+',   label: 'Years Experience',        numeric: 20,   suffix: '+' },
-  { value: '1,000+', label: 'Lives Transformed',      numeric: 1000, suffix: '+' },
+  { value: '2,000+', label: 'Lives Transformed',      numeric: 2000, suffix: '+' },
   { value: '30+',   label: 'Countries',               numeric: 30,   suffix: '+' },
   { value: 'Dr.',   label: 'B.Msc · M.Msc · Msc.D.', numeric: null, suffix: '' },
 ]

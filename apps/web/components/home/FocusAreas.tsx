@@ -1,161 +1,226 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronRight } from 'lucide-react'
 
-// TODO: Replace placeholder images with real focus area photos from Suzanne
 const areas = [
   {
-    title: 'Mindset & Beliefs',
-    description: 'Rewire the patterns holding you back',
-    image: '/images/focus/mindset.webp',
-    href: '/services#mindset',
+    number: '01',
+    title: 'Emotional & Nervous System',
+    slug: 'emotional-nervous-system-mastery',
+    outcome: 'Rewire from anxiety to sustainable calm',
+    image: '/images/focus/neuro.jpg',
   },
   {
-    title: 'Neuro-Repatterning™',
-    description: "Suzanne's proprietary methodology",
-    image: '/images/suzanne-ravenall.jpg',
-    href: '/services#neuro',
-  },
-  {
-    title: 'Relationships',
-    description: 'Build connections that elevate you',
+    number: '02',
+    title: 'Relationships & Attachment',
+    slug: 'relationships-attachment-patterns',
+    outcome: 'Break the pattern. Choose differently.',
     image: '/images/focus/relationships.webp',
-    href: '/services#relationships',
   },
   {
-    title: 'Business & Leadership',
-    description: 'Lead with clarity and conviction',
+    number: '03',
+    title: 'Health & Vitality',
+    slug: 'next-level-health-vitality-longevity',
+    outcome: 'Your body follows your energy field',
+    image: '/images/generated/explore-energy.webp',
+  },
+  {
+    number: '04',
+    title: 'Leadership & Performance',
+    slug: 'leadership-high-performance',
+    outcome: 'Your ceiling is a pattern, not a limit',
     image: '/images/focus/business.jpg',
-    href: '/services#business',
   },
   {
-    title: 'Health & Wellbeing',
-    description: 'Energy, vitality and lasting resilience',
-    image: '/images/focus/health.webp',
-    href: '/services#health',
+    number: '05',
+    title: 'Life Transitions',
+    slug: 'life-transitions-reinvention',
+    outcome: "You're not lost. You're between identities.",
+    image: '/images/generated/explore-transformation.webp',
   },
   {
-    title: 'Life Purpose',
-    description: 'Align every decision with your why',
+    number: '06',
+    title: 'Identity & Purpose',
+    slug: 'identity-purpose-activation',
+    outcome: "Purpose isn't found. It's uncovered.",
     image: '/images/focus/purpose.webp',
-    href: '/services#purpose',
   },
 ]
 
 export default function FocusAreas() {
-  const [activeArea, setActiveArea] = useState(0)
-  const activeItem = areas[activeArea] ?? areas[0]!
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+
+  const areasLength = areas.length
+
+  useEffect(() => {
+    if (isPaused) return
+    const id = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % areasLength)
+    }, 3000)
+    return () => clearInterval(id)
+  }, [isPaused, activeIndex, areasLength])
+
+  const activeArea = areas[activeIndex]!
 
   return (
-    <section aria-label="Areas of Focus" className="bg-white py-20 lg:py-32">
+    <section
+      aria-label="Areas of Focus"
+      className="bg-gray-950 py-20 lg:py-32"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <h2 className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-16">
-          Areas of Focus
-        </h2>
+        {/* Section header */}
+        <motion.div
+          className="mb-12 lg:mb-16"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
+            Areas of Focus
+          </p>
+          <h2 className="text-4xl lg:text-6xl font-light text-white">
+            Where do you need the breakthrough?
+          </h2>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-          {/* Mobile-only: active image above list — AnimatePresence key-swap (one image in DOM) */}
-          <div className="relative aspect-[16/9] overflow-hidden rounded-sm lg:hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeArea}
-                className="absolute inset-0"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4, ease: 'easeInOut' as const }}
-              >
-                <Image
-                  src={activeItem.image}
-                  alt={activeItem.title}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* LEFT — stacked pillar list
-              Row is split into a <button> (select) + <Link> (navigate) so that
-              tapping on mobile sets the active state without immediately navigating. */}
-          <ul className="space-y-0 divide-y divide-gray-200">
+        {/* Desktop: two-panel layout */}
+        <motion.div
+          className="hidden lg:flex h-[620px] rounded-card overflow-hidden"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+        >
+          {/* Left panel — 35% — numbered list */}
+          <div className="w-[35%] bg-gray-900 flex flex-col justify-center overflow-y-auto">
             {areas.map((area, i) => {
-              const isActive = activeArea === i
+              const isActive = activeIndex === i
               return (
-                <li key={area.title}>
-                  <div
-                    className={`flex items-center justify-between py-6 transition-all duration-300 ${isActive ? 'text-brand-primary' : 'text-gray-300'
+                <button
+                  key={area.slug}
+                  type="button"
+                  onClick={() => setActiveIndex(i)}
+                  aria-current={isActive ? 'true' : undefined}
+                  className={`flex items-start gap-4 w-full px-8 py-5 border-l-2 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-inset ${
+                    isActive
+                      ? 'border-brand-accent bg-white/5 opacity-100'
+                      : 'border-transparent hover:bg-white/5 opacity-50 hover:opacity-75'
+                  }`}
+                >
+                  <span className="text-brand-accent text-xs font-mono font-semibold mt-1 flex-shrink-0">
+                    {area.number}
+                  </span>
+                  <div>
+                    <p className="text-white font-semibold text-base leading-snug">{area.title}</p>
+                    <p
+                      className={`text-white/50 text-sm mt-1 leading-snug transition-all duration-300 ${
+                        isActive ? 'opacity-100 max-h-10' : 'opacity-0 max-h-0 overflow-hidden'
                       }`}
-                  >
-                    {/* Button: selects the area (no navigation) */}
-                    <button
-                      type="button"
-                      onMouseEnter={() => setActiveArea(i)}
-                      onClick={() => setActiveArea(i)}
-                      aria-current={isActive ? 'true' : undefined}
-                      className="text-left flex-1 group hover:text-gray-500 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                     >
-                      <span className="text-2xl lg:text-4xl font-light tracking-tight block">
-                        {area.title}
-                      </span>
-                      <span
-                        aria-hidden={!isActive}
-                        className={`text-sm text-gray-500 mt-1 block transition-all duration-300 ${isActive ? 'opacity-100' : 'opacity-0'
-                          }`}
-                      >
-                        {area.description}
-                      </span>
-                    </button>
-
-                    {/* Link: explicit navigate affordance */}
-                    <Link
-                      href={area.href}
-                      aria-label={`Explore ${area.title}`}
-                      className="ml-4 flex-shrink-0"
-                    >
-                      <ChevronRight
-                        className={`w-5 h-5 transition-all duration-300 ${isActive
-                          ? 'text-brand-accent translate-x-1'
-                          : 'text-gray-300 hover:text-gray-400'
-                          }`}
-                      />
-                    </Link>
+                      {area.outcome}
+                    </p>
                   </div>
-                </li>
+                </button>
               )
             })}
-          </ul>
+          </div>
 
-          {/* RIGHT — image panel, desktop only — AnimatePresence key-swap (one image in DOM) */}
-          <div className="relative aspect-[4/5] overflow-hidden rounded-sm hidden lg:block">
+          {/* Right panel — 65% — full-height image */}
+          <div className="relative flex-1 overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
-                key={activeArea}
+                key={activeIndex}
                 className="absolute inset-0"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.4, ease: 'easeInOut' as const }}
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
               >
                 <Image
-                  src={activeItem.image}
-                  alt={activeItem.title}
+                  src={activeArea.image}
+                  alt={activeArea.title}
                   fill
+                  sizes="65vw"
                   className="object-cover"
+                  priority={activeIndex === 0}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Panel content — fades with image */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`content-${activeIndex}`}
+                className="absolute bottom-0 left-0 right-0 p-10"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+              >
+                <p className="text-brand-accent text-xs font-mono uppercase tracking-[0.3em] mb-3">
+                  {activeArea.number}
+                </p>
+                <h3 className="text-4xl lg:text-5xl font-light text-white mb-4 leading-tight">
+                  {activeArea.title}
+                </h3>
+                <p className="text-white/70 text-lg mb-8 leading-relaxed">
+                  {activeArea.outcome}
+                </p>
+                <Link
+                  href={`/explore/${activeArea.slug}`}
+                  className="inline-flex items-center gap-2 text-white text-sm font-semibold uppercase tracking-widest border-b border-white/40 hover:border-white pb-0.5 transition-colors duration-200"
+                >
+                  Explore {activeArea.title}
+                  <span aria-hidden="true">→</span>
+                </Link>
               </motion.div>
             </AnimatePresence>
           </div>
+        </motion.div>
 
+        {/* Mobile: stacked cards */}
+        <div className="lg:hidden space-y-4">
+          {areas.map((area, i) => (
+            <motion.div
+              key={area.slug}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.5, delay: i * 0.07, ease: 'easeOut' }}
+            >
+              <Link
+                href={`/explore/${area.slug}`}
+                className="relative block aspect-[3/2] rounded-card overflow-hidden group"
+              >
+                <Image
+                  src={area.image}
+                  alt={area.title}
+                  fill
+                  sizes="100vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-5">
+                  <p className="text-brand-accent text-xs font-mono uppercase tracking-[0.3em] mb-1">
+                    {area.number}
+                  </p>
+                  <h3 className="text-xl font-semibold text-white leading-tight">{area.title}</h3>
+                  <p className="text-white/60 text-sm mt-1">{area.outcome}</p>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
         </div>
+
       </div>
     </section>
   )

@@ -2,17 +2,12 @@
 
 import { motion } from 'framer-motion'
 
-// NOTE: the `color` field below uses full Tailwind class strings (not interpolated).
-// Tailwind's JIT scanner requires complete class names — never build them dynamically.
+// TODO (pre-launch blocker): Replace ALL placeholder testimonials with real client quotes
+// before DNS cutover. Required per entry: full name, role, company, city, and a headshot photo.
+// Avatars must NOT be initials-only — use real photos for credibility.
+
+// NOTE: Tailwind JIT requires complete class names — never interpolate these strings.
 const testimonials = [
-  {
-    quote: "In three sessions I dismantled a self-sabotage pattern I'd carried for 30 years. My business doubled in the following six months.",
-    name: 'Sarah M.',
-    title: 'CEO, Cape Town',
-    result: 'Revenue doubled in 6 months',
-    initials: 'SM',
-    color: 'bg-brand-accent',
-  },
   {
     quote: "Dr. Suzanne's Neuro-Repatterning® method is unlike anything I've experienced. The shift was immediate and it has lasted.",
     name: 'James T.',
@@ -29,11 +24,20 @@ const testimonials = [
     initials: 'PK',
     color: 'bg-brand-primary-600',
   },
+  {
+    // TODO: Real client testimonial — replace this placeholder before launch
+    quote: 'TODO: Real testimonial from Suzanne\'s client files.',
+    name: 'TODO: Real client name',
+    title: 'TODO: Role, Company, City',
+    result: 'TODO: Specific measurable result',
+    initials: 'XX',
+    color: 'bg-brand-accent',
+  },
 ]
 
 export default function TestimonialsSection() {
   return (
-    <section aria-labelledby="testimonials-heading" className="py-20 lg:py-32 bg-white">
+    <section aria-labelledby="testimonials-heading" className="py-20 lg:py-32 bg-gray-950">
       <div className="max-w-7xl mx-auto px-4">
 
         <motion.div
@@ -46,7 +50,7 @@ export default function TestimonialsSection() {
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             Client Results
           </p>
-          <h2 id="testimonials-heading" className="text-4xl lg:text-6xl font-light text-brand-primary">
+          <h2 id="testimonials-heading" className="text-4xl lg:text-6xl font-light text-white">
             Real people. Real breakthroughs.
           </h2>
         </motion.div>
@@ -55,15 +59,15 @@ export default function TestimonialsSection() {
           {testimonials.map(({ quote, name, title, result, initials, color }, i) => (
             <motion.figure
               key={name}
-              className="relative flex flex-col bg-gray-50 rounded-card p-8 shadow-card hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1"
+              className="relative flex flex-col bg-white/5 border border-white/10 rounded-card p-8 hover:border-brand-accent/30 hover:bg-white/10 transition-all duration-500 hover:-translate-y-1"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
             >
-              <div className="text-brand-accent/20 text-8xl font-serif leading-none select-none absolute top-4 left-6">&ldquo;</div>
+              <div className="text-brand-accent/30 text-8xl font-serif leading-none select-none absolute top-4 left-6">&ldquo;</div>
 
-              <blockquote className="relative text-gray-700 text-base leading-relaxed flex-1 mt-4">
+              <blockquote className="relative text-white/80 text-base leading-relaxed flex-1 mt-4">
                 {quote}
               </blockquote>
 
@@ -79,8 +83,8 @@ export default function TestimonialsSection() {
                     <span className="text-white text-sm font-semibold">{initials}</span>
                   </div>
                   <div>
-                    <p className="font-semibold text-brand-primary text-sm">{name}</p>
-                    <p className="text-gray-500 text-xs">{title}</p>
+                    <p className="font-semibold text-white text-sm">{name}</p>
+                    <p className="text-white/50 text-xs">{title}</p>
                   </div>
                 </div>
               </figcaption>

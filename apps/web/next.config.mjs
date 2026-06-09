@@ -64,6 +64,18 @@ const nextConfig = {
         pathname: '/**',
       },
       ...(medusaUploadPattern ? [medusaUploadPattern] : []),
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+        port: '',
+        pathname: '/vi/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 

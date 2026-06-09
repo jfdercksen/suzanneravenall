@@ -1,16 +1,17 @@
 import type { Metadata } from 'next'
 import Hero from '../components/home/Hero'
-import MediaLogos from '../components/home/MediaLogos'
 import TrustBar from '../components/home/TrustBar'
-import UpcomingPrograms from '../components/home/UpcomingPrograms'
+import MediaLogos from '../components/home/MediaLogos'
+import { MagazineCovers } from '../components/shared/MagazineCovers'
+import AboutTeaser from '../components/home/AboutTeaser'
+import FeaturedPrograms from '../components/home/FeaturedPrograms'
 import TransformationQuote from '../components/home/TransformationQuote'
 import FocusAreas from '../components/home/FocusAreas'
-import ServicesSection from '../components/home/ServicesSection'
 import TestimonialSpotlight from '../components/home/TestimonialSpotlight'
-import FeaturedPrograms from '../components/home/FeaturedPrograms'
-import TestimonialsSection from '../components/home/TestimonialsSection'
-import AboutTeaser from '../components/home/AboutTeaser'
+import BookPromotion from '../components/home/BookPromotion'
+import UpcomingEvents from '../components/home/UpcomingEvents'
 import LeadMagnet from '../components/home/LeadMagnet'
+import VideoTestimonials from '../components/shared/VideoTestimonials'
 import FinalCTA from '../components/home/FinalCTA'
 
 export const metadata: Metadata = {
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
     absolute: 'Dr. Suzanne Ravenall — Transformation Coaching',
   },
   description:
-    "Break the childhood patterns holding you back. Dr. Suzanne Ravenall's Neuro-Repatterning\u00ae methodology delivers permanent, measurable change for high-achievers ready to unlock their extraordinary life.",
+    "Break the childhood patterns holding you back. Dr. Suzanne Ravenall's Neuro-Repatterning® methodology delivers permanent, measurable change for high-achievers ready to unlock their extraordinary life.",
   openGraph: {
     title: 'Dr. Suzanne Ravenall — Transformation Coaching',
     description:
@@ -58,7 +59,7 @@ const personJsonLd = {
   image: 'https://suzanneravenall.com/images/suzanne-portrait.jpg',
   jobTitle: 'Transformation Coach',
   description:
-    "Neuro-Repatterning\u00ae pioneer helping high-achievers break childhood patterns for permanent, measurable change.",
+    "Neuro-Repatterning® pioneer helping high-achievers break childhood patterns for permanent, measurable change.",
   alumniOf: {
     '@type': 'Organization',
     name: 'University (credentials pending confirmation)',
@@ -80,18 +81,33 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
+      {/* 1 — dark */}
       <Hero />
-      <MediaLogos id="media-logos" />
+      {/* 2 — light */}
       <TrustBar />
-      <TransformationQuote />
-      <FocusAreas />
-      <UpcomingPrograms />
-      <ServicesSection />
-      <TestimonialSpotlight />
-      <FeaturedPrograms />
-      <LeadMagnet />
-      <TestimonialsSection />
+      {/* 3 — dark (bg-gray-950) */}
+      <MediaLogos id="media-logos" />
+      {/* 4 — light (bg-white) */}
+      <MagazineCovers />
+      {/* 5 — light (bg-gray-50) */}
       <AboutTeaser />
+      {/* 6 — light (bg-white) */}
+      <FeaturedPrograms />
+      {/* 7 — dark (full-bleed video) */}
+      <TransformationQuote />
+      {/* 8 — dark (bg-gray-950) */}
+      <FocusAreas />
+      {/* 9 — dark */}
+      <TestimonialSpotlight />
+      {/* 10 — mixed dark/light (BookPromotion split layout) */}
+      <BookPromotion />
+      {/* 11 — light (bg-gray-50) */}
+      <UpcomingEvents />
+      {/* 12 — dark (bg-brand-primary) */}
+      <LeadMagnet />
+      {/* 13 — light (bg-white) */}
+      <VideoTestimonials />
+      {/* 14 — dark (bg-brand-primary) */}
       <FinalCTA />
     </>
   )

@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
@@ -12,33 +11,34 @@ const fadeUp = (delay: number) => ({
 })
 
 export default function TransformationQuote() {
-  // TODO: Replace Image with <video> when Suzanne provides reel
   return (
-    <section aria-labelledby="quote-heading" className="relative min-h-[70vh] flex items-center overflow-hidden">
-      {/* Layer 1 — Background (same photo as hero, different crop) */}
-      <Image
-        src="/images/suzanne-ravenall.jpg"
-        alt=""
-        fill
-        priority={false}
-        sizes="100vw"
-        className="object-cover object-center"
+    <section aria-label="The Method — Dr. Suzanne Ravenall" className="relative min-h-[70vh] flex items-center overflow-hidden">
+
+      {/* Layer 1 — Background video (generate with: node infra/scripts/generate-quote-video.mjs) */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
         aria-hidden="true"
-      />
+        className="absolute inset-0 w-full h-full object-cover opacity-80"
+        poster="/images/suzanne-ravenall.jpg"
+      >
+        <source src="/videos/generated/transformation-quote.mp4" type="video/mp4" />
+      </video>
 
       {/* Layer 2 — Heavy dark overlay */}
-      <div aria-hidden="true" className="absolute inset-0 bg-black/60" />
+      <div aria-hidden="true" className="absolute inset-0 bg-black/25" />
 
       {/* Layer 3 — Content */}
       <div className="relative z-10 w-full max-w-4xl mx-auto px-4 text-center py-20">
 
-        <motion.h2
-          id="quote-heading"
+        <motion.p
           {...fadeUp(0)}
           className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-8"
         >
           The Method
-        </motion.h2>
+        </motion.p>
 
         <motion.blockquote {...fadeUp(0.2)}>
           <p className="text-3xl lg:text-5xl xl:text-6xl font-display text-white leading-[1.2] italic mb-8">
