@@ -28,7 +28,7 @@ export function VariantSelector({
   onSelect,
   dark = false,
 }: VariantSelectorProps) {
-  const [buttonState, setButtonState] = useState<'idle' | 'loading' | 'added'>('idle')
+  const [buttonState, setButtonState] = useState<'idle' | 'loading' | 'added' | 'error'>('idle')
   const { addItem } = useCart()
 
   if (variants.length === 0) {
@@ -58,7 +58,8 @@ export function VariantSelector({
       setButtonState('added')
       setTimeout(() => setButtonState('idle'), 2500)
     } catch {
-      setButtonState('idle')
+      setButtonState('error')
+      setTimeout(() => setButtonState('idle'), 3000)
     }
   }
 
@@ -114,16 +115,20 @@ export function VariantSelector({
             className={`w-full sm:w-auto sm:min-w-[240px] py-4 px-8 rounded-button text-base font-semibold transition-all duration-300 ${
               buttonState === 'added'
                 ? 'bg-emerald-600 text-white cursor-default'
-                : buttonState === 'loading'
-                  ? 'bg-brand-accent-600 text-white/60 cursor-wait'
-                  : 'bg-brand-accent-600 hover:bg-brand-accent-700 text-white hover:-translate-y-0.5 hover:shadow-lg'
+                : buttonState === 'error'
+                  ? 'bg-red-600 text-white cursor-default'
+                  : buttonState === 'loading'
+                    ? 'bg-brand-accent-600 text-white/60 cursor-wait'
+                    : 'bg-brand-accent-600 hover:bg-brand-accent-700 text-white hover:-translate-y-0.5 hover:shadow-lg'
             }`}
           >
             {buttonState === 'loading'
               ? 'Adding...'
               : buttonState === 'added'
                 ? 'Added to cart ✓'
-                : 'Add to Cart'}
+                : buttonState === 'error'
+                  ? 'Could not add — try again'
+                  : 'Add to Cart'}
           </button>
           {buttonState === 'added' ? (
             <Link

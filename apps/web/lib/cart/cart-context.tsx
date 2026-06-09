@@ -78,12 +78,14 @@ function getMedusaHeaders(): HeadersInit {
 
 async function fetchRegionId(): Promise<string | null> {
   try {
-    const res = await fetch(`${getMedusaBase()}/store/regions?limit=1`, {
+    const res = await fetch(`${getMedusaBase()}/store/regions?limit=50`, {
       headers: getMedusaHeaders(),
     })
     if (!res.ok) return null
-    const data = (await res.json()) as { regions?: Array<{ id: string }> }
-    return data.regions?.[0]?.id ?? null
+    const data = (await res.json()) as { regions?: Array<{ id: string; currency_code: string }> }
+    const regions = data.regions ?? []
+    const zar = regions.find((r) => r.currency_code === 'zar')
+    return zar?.id ?? regions[0]?.id ?? null
   } catch {
     return null
   }
@@ -160,23 +162,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addItem = useCallback(
     async (variantId: string, quantity = 1) => {
       const currentCart = await getOrCreateCart()
-      if (!currentCart) return
+      if (!currentCart) throw new Error('Could not create cart')
 
-      try {
-        const res = await fetch(
-          `${getMedusaBase()}/store/carts/${currentCart.id}/line-items`,
-          {
-            method: 'POST',
-            headers: getMedusaHeaders(),
-            body: JSON.stringify({ variant_id: variantId, quantity }),
-          }
-        )
-        if (!res.ok) return
-        const data = (await res.json()) as { cart: Cart }
-        setCart(data.cart)
-      } catch {
-        // silently fail — cart state unchanged
+      const res = await fetch(
+        `${getMedusaBase()}/store/carts/${currentCart.id}/line-items`,
+        {
+          method: 'POST',
+          headers: getMedusaHeaders(),
+          body: JSON.stringify({ variant_id: variantId, quantity }),
+        }
+      )
+      if (!res.ok) {
+        const err = (await res.json().catch(() => ({}))) as { message?: string }
+        throw new Error(err.message ?? `Add to cart failed (${res.status})`)
       }
+      const data = (await res.json()) as { cart: Cart }
+      setCart(data.cart)
     },
     [getOrCreateCart]
   )
