@@ -132,7 +132,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const cartId = localStorage.getItem(CART_ID_KEY)
       if (cartId) {
         const existing = await fetchCart(cartId)
-        if (existing) {
+        const expectedRegion = process.env.NEXT_PUBLIC_MEDUSA_REGION_ID
+        if (existing && (!expectedRegion || existing.region_id === expectedRegion)) {
           setCart(existing)
           setIsLoading(false)
           return
