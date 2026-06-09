@@ -25,7 +25,7 @@ export default function TheStory() {
               alt="Dr. Suzanne Ravenall"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover object-right-top"
+              className="object-cover object-left-top"
             />
           </motion.div>
 
