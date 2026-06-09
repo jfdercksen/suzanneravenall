@@ -3,6 +3,7 @@ import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
 
 const VIBE_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
+const N8N_BASE_URL = (process.env.N8N_BASE_URL ?? 'http://n8n:5678').replace(/\/$/, '')
 
 const LeadMagnetSchema = z.object({
   email: z.string().email(),
@@ -25,6 +26,27 @@ export async function POST(request: Request) {
   }
 
   const { email, firstName, source } = parsed.data
+  const timestamp = new Date().toISOString()
+  // Fall back to the local-part of the email so the n8n workflow's firstName
+  // validation always passes even when the form doesn't collect a name.
+  const resolvedFirstName = firstName ?? email.split('@')[0]
+
+  // Fire-and-forget: POST to n8n lead-magnet-to-vtiger workflow.
+  // Path must match the webhook trigger node: path = "lead-magnet-submission"
+  void fetch(`${N8N_BASE_URL}/webhook/lead-magnet-submission`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email,
+      firstName: resolvedFirstName,
+      source: source ?? 'homepage',
+      timestamp,
+    }),
+  }).catch((err: unknown) => {
+    const message = err instanceof Error ? err.message : String(err)
+    console.error(`[lead-magnet] n8n webhook failed: ${message}`)
+    Sentry.captureException(err, { extra: { source } })
+  })
 
   // Forward to Vibe Marketing — fire-and-forget, never blocks the response.
   // Only fires when VIBE_MARKETING_WEBHOOK_URL is configured (graceful degradation).
@@ -36,7 +58,7 @@ export async function POST(request: Request) {
         email,
         firstName: firstName ?? null,
         source: source ?? null,
-        timestamp: new Date().toISOString(),
+        timestamp,
         platform: 'suzanneravenall',
       }),
     }).catch((err: unknown) => {
@@ -47,11 +69,5 @@ export async function POST(request: Request) {
     })
   }
 
-  // TODO (Task 1.7): integrate with Resend once the account is verified.
-  // Email is intentionally not logged here — email addresses are PII (POPIA).
-  // Returning 202 Accepted to signal the request is queued but not yet processed.
-  return NextResponse.json(
-    { success: true, message: 'Received — integration pending.' },
-    { status: 202 }
-  )
+  return NextResponse.json({ success: true })
 }
