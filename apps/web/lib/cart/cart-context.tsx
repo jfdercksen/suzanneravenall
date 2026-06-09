@@ -77,6 +77,9 @@ function getMedusaHeaders(): HeadersInit {
 }
 
 async function fetchRegionId(): Promise<string | null> {
+  const pinned = process.env.NEXT_PUBLIC_MEDUSA_REGION_ID
+  if (pinned) return pinned
+
   try {
     const res = await fetch(`${getMedusaBase()}/store/regions?limit=50`, {
       headers: getMedusaHeaders(),
