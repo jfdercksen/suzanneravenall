@@ -15,7 +15,21 @@ export default function TheStory() {
     <section aria-labelledby="story-heading" className="bg-gray-50 py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-          {/* Narrative left */}
+          {/* Image left */}
+          <motion.div
+            {...sectionReveal}
+            className="relative aspect-[4/5] rounded-card overflow-hidden shadow-card-hover"
+          >
+            <Image
+              src="/images/suzanne-portrait.jpg"
+              alt="Dr. Suzanne Ravenall"
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover object-right-top"
+            />
+          </motion.div>
+
+          {/* Narrative right */}
           <div>
             <motion.p
               {...sectionReveal}
@@ -90,19 +104,6 @@ export default function TheStory() {
             </motion.blockquote>
           </div>
 
-          {/* Image right */}
-          <motion.div
-            {...sectionReveal}
-            className="relative aspect-[4/5] rounded-card overflow-hidden shadow-card-hover"
-          >
-            <Image
-              src="/images/suzanne-portrait.jpg"
-              alt="Dr. Suzanne Ravenall"
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover object-top"
-            />
-          </motion.div>
         </div>
       </div>
     </section>
