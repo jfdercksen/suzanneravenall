@@ -67,9 +67,8 @@ function DarkProgramCard({ program }: { program: Program }) {
       variants={childVariants}
       className="group relative overflow-hidden min-h-[320px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl flex flex-col"
     >
-      {/* TODO: Replace with programme-specific image — Suzanne to provide */}
       <Image
-        src="/images/hero-bg-suzanne-ravenall.jpg"
+        src={program.image ?? '/images/generated/explore-repatterning.webp'}
         alt=""
         fill
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -147,13 +146,13 @@ export default function ProgramsPageClient() {
 
   return (
     <>
-      {/* Hero — TODO: Replace with real group coaching photo */}
+      {/* Hero */}
       <section
         aria-labelledby="programs-hero-heading"
         className="relative h-screen min-h-[640px] flex items-center overflow-hidden"
       >
         <Image
-          src="/images/hero-bg-suzanne-ravenall.jpg"
+          src="/images/generated/group-coaching-real.webp"
           alt=""
           fill
           priority

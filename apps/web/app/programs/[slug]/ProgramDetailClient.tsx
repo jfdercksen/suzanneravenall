@@ -144,9 +144,8 @@ function RelatedProgramCard({ program }: { program: Program }) {
       variants={childVariants}
       className="group relative overflow-hidden min-h-[280px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl flex flex-col"
     >
-      {/* TODO: Replace with programme-specific image — Suzanne to provide */}
       <Image
-        src="/images/hero-bg-suzanne-ravenall.jpg"
+        src={program.image ?? '/images/hero-bg-suzanne-ravenall.jpg'}
         alt=""
         fill
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -189,9 +188,8 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         aria-labelledby="program-hero-heading"
         className="relative h-screen min-h-[640px] flex items-center overflow-hidden"
       >
-        {/* TODO: Replace with programme-specific image — Suzanne to provide per-programme photography */}
         <Image
-          src="/images/hero-bg-suzanne-ravenall.jpg"
+          src={program.image ?? '/images/hero-bg-suzanne-ravenall.jpg'}
           alt=""
           fill
           priority
