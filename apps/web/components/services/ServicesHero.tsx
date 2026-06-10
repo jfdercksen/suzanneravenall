@@ -18,7 +18,7 @@ export default function ServicesHero() {
       aria-labelledby="services-hero-heading"
       className="relative h-screen min-h-[640px] flex items-center overflow-hidden"
     >
-      {/* Cinematic background video — Suzanne on stage */}
+      {/* Cinematic background video — client transformation montage (faces, crossfading) */}
       <video
         autoPlay
         muted
@@ -28,7 +28,7 @@ export default function ServicesHero() {
         className="absolute inset-0 w-full h-full object-cover"
         poster="/images/hero-bg-suzanne-ravenall.jpg"
       >
-        <source src="/videos/generated/hero-stage-video.mp4" type="video/mp4" />
+        <source src="/videos/generated/hero-services-testimonials.mp4" type="video/mp4" />
       </video>
 
       {/* Dark gradient overlay */}
