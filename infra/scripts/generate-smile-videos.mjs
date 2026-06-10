@@ -37,6 +37,7 @@ if (!KIE_API_KEY) {
 }
 
 const API_BASE = 'https://api.kie.ai/api/v1'
+const UPLOAD_URL = 'https://api.kie.ai/api/file-base64-upload'
 const PORTRAIT_DIR = path.join(ROOT, 'apps/web/public/images/portraits')
 const OUTPUT_DIR = path.join(ROOT, 'apps/web/public/videos/portraits')
 const POLL_INTERVAL_MS = 15000
@@ -141,14 +142,35 @@ function toDataUri(filePath) {
   return `data:${mime};base64,${buf.toString('base64')}`
 }
 
+// Kling 3.0 requires a public image URL (no base64/data URIs), so upload the
+// portrait to Kie.ai's temp file host first. Returns a hosted URL (valid ~3 days).
+async function uploadImage(dataUri, fileName) {
+  const body = JSON.stringify({
+    base64Data: dataUri,
+    uploadPath: 'images/portraits',
+    fileName,
+  })
+  const res = await fetchJson(UPLOAD_URL, { method: 'POST', body })
+  if (res.data?.code && res.data.code !== 200) {
+    throw new Error(`Upload error ${res.data.code}: ${res.data.msg || JSON.stringify(res.data).slice(0, 200)}`)
+  }
+  const url = res.data?.data?.downloadUrl
+  if (!url) throw new Error(`Upload returned no downloadUrl: ${JSON.stringify(res.data).slice(0, 300)}`)
+  return url
+}
+
 async function submitTask(imageUrl) {
   const body = JSON.stringify({
-    model: 'kling-3.0/image-to-video',
+    model: 'kling-3.0/video',
     input: {
-      image_url: imageUrl,
       prompt: SMILE_PROMPT,
-      duration: 4,
+      image_urls: [imageUrl],
+      duration: '4',
       aspect_ratio: '9:16',
+      mode: 'std',
+      sound: false,
+      multi_shots: false,
+      multi_prompt: [],
     },
   })
   const res = await fetchJson(`${API_BASE}/jobs/createTask`, { method: 'POST', body })
@@ -194,7 +216,7 @@ async function main() {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true })
 
   console.log('── generate-smile-videos ─────────────────────────────────────────')
-  console.log('  Model:    kling-3.0/image-to-video')
+  console.log('  Model:    kling-3.0/video (image-to-video via image_urls)')
   console.log('  Count:    6 clips, 4s, 9:16')
   console.log('  Input:    apps/web/public/images/portraits/')
   console.log('  Output:   apps/web/public/videos/portraits/')
@@ -216,7 +238,8 @@ async function main() {
     const destPath = path.join(OUTPUT_DIR, `smile-${n}.mp4`)
     try {
       const dataUri = toDataUri(portraitPath)
-      const taskId = await submitTask(dataUri)
+      const hostedUrl = await uploadImage(dataUri, `portrait-${n}.jpg`)
+      const taskId = await submitTask(hostedUrl)
       const videoUrl = await pollUntilDone(taskId, n)
       await downloadFile(videoUrl, destPath)
       const sizeMB = (fs.statSync(destPath).size / 1024 / 1024).toFixed(1)
