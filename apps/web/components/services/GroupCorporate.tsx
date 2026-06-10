@@ -7,46 +7,55 @@ import { motion } from 'framer-motion'
 const groupOfferings = [
   {
     name: 'Money Mastery',
+    image: '/images/focus/business.jpg',
     description:
       'Given the opportunity, everyone would love to accumulate more wealth and live a more abundant life. Many people have a poor relationship with money and as a result struggle to manifest the financial success they desire. Change that — at the root.',
   },
   {
     name: 'Love & Relationships',
+    image: '/images/generated/group-coaching-real.webp',
     description:
       'We attract people at our common level of woundedness or emotional health. To attract a healthy, loving partner you need to become that healthy person first. The energy you project has everything to do with the person you attract.',
   },
   {
     name: 'Career Progression',
+    image: '/images/focus/business.jpg',
     description:
       'To activate the Law of Attraction in your career, you must identify and change the limiting beliefs that have been internalised since childhood — and accepted as true even when they are not.',
   },
   {
     name: 'Shedding Excess Weight',
+    image: '/images/generated/group-coaching-real.webp',
     description:
       'We hold onto excess weight because our earlier childhood needs were not met. We build survival strategies, bury them, and carry them quietly into adulthood. This series brings them into the light so the body can let go.',
   },
   {
     name: 'Overcoming the Need to Fix Others',
+    image: '/images/generated/session-coaching.webp',
     description:
       'We respond to a lack of unconditional love by wanting to make everything okay — learning as small children it is safe to fix others’ problems. A 4-week repatterning series: part coaching, part class, full release.',
   },
   {
     name: 'Being a Great Boundary Setter',
+    image: '/images/generated/session-coaching.webp',
     description:
       'Setting boundaries is one of the most challenging aspects of being human — and something 99% of us were never taught. A 4-week series to understand what a boundary is, when it has been transgressed, and how to hold one in place.',
   },
   {
     name: 'Nice or Not Nice Communication',
+    image: '/images/generated/group-coaching-real.webp',
     description:
       'We learn in early childhood to receive love and acceptance only by being nice or agreeable — a pattern with a flipside of cutting anger when it becomes too much. A 4-week series to move into a new way of being.',
   },
   {
     name: 'Attraction Frequency',
+    image: '/images/generated/group-coaching-real.webp',
     description:
       'A vibration is a state of being — the energetic quality of a person, place, thought, or thing. In this Group Repatterning class, resonate with the attraction frequency and manifest your own positivity, light, and love.',
   },
   {
     name: 'Develop Super Confidence',
+    image: '/images/focus/business.jpg',
     description:
       'Confidence within oneself is a complete game changer. As Henry Ford said: “Whether you think you can, or you think you can’t — you’re right.” This series builds the belief that underwrites every game-changing choice.',
   },
@@ -94,7 +103,7 @@ export default function GroupCorporate() {
               className="group relative overflow-hidden min-h-[220px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
               <Image
-                src="/images/generated/group-coaching-real.webp"
+                src={offering.image}
                 alt=""
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

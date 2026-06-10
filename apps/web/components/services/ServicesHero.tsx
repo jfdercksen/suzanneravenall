@@ -18,15 +18,18 @@ export default function ServicesHero() {
       aria-labelledby="services-hero-heading"
       className="relative h-screen min-h-[640px] flex items-center overflow-hidden"
     >
-      {/* Cinematic background image */}
-      <Image
-        src="/images/hero-bg-suzanne-ravenall.jpg"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
+      {/* Cinematic background video — Suzanne on stage */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover"
+        poster="/images/hero-bg-suzanne-ravenall.jpg"
+      >
+        <source src="/videos/generated/hero-stage-video.mp4" type="video/mp4" />
+      </video>
 
       {/* Dark gradient overlay */}
       <div
