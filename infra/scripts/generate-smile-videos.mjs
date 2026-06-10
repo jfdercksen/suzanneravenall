@@ -37,7 +37,8 @@ if (!KIE_API_KEY) {
 }
 
 const API_BASE = 'https://api.kie.ai/api/v1'
-const UPLOAD_URL = 'https://api.kie.ai/api/file-base64-upload'
+// File upload API lives on a separate host (kieai.redpandaai.co), NOT api.kie.ai
+const UPLOAD_URL = 'https://kieai.redpandaai.co/api/file-base64-upload'
 const PORTRAIT_DIR = path.join(ROOT, 'apps/web/public/images/portraits')
 const OUTPUT_DIR = path.join(ROOT, 'apps/web/public/videos/portraits')
 const POLL_INTERVAL_MS = 15000
