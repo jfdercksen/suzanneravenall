@@ -91,12 +91,12 @@ export default function ServicesHero() {
             </motion.div>
           </div>
 
-          {/* Right — Suzanne portrait */}
+          {/* Right — Suzanne portrait. Desktop only; right column, vertically centered. */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
-            className="hidden lg:flex justify-center items-end"
+            className="hidden lg:flex justify-end items-center"
           >
             <div className="relative w-[420px] h-[520px] rounded-card overflow-hidden shadow-2xl border border-white/10">
               <Image
@@ -104,6 +104,7 @@ export default function ServicesHero() {
                 alt="Dr. Suzanne Ravenall"
                 fill
                 sizes="420px"
+                // object-top keeps Suzanne's face (top-centre of the frame) visible at every crop
                 className="object-cover object-top"
               />
               <div
