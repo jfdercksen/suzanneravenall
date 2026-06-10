@@ -1,5 +1,6 @@
 export type Program = {
   slug: string
+  image: string
   name: string
   category: 'practitioner' | 'self-paced' | 'live' | 'group'
   shortDescription: string
@@ -16,6 +17,7 @@ export const PROGRAMS: Program[] = [
   // PRACTITIONER PROGRAMMES
   {
     slug: 'resonance-repatterning-basic-5-series',
+    image: '/images/products/resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg',
     name: 'Resonance Repatterning Basic 5 Series',
     category: 'practitioner',
     shortDescription:
@@ -36,6 +38,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'resonance-repatterning-06-inner-cultivation',
+    image: '/images/generated/explore-repatterning.webp',
     name: 'Resonance Repatterning 06: Inner Cultivation',
     category: 'practitioner',
     shortDescription:
@@ -56,6 +59,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'resonance-repatterning-08-principles-of-relationship',
+    image: '/images/products/resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study.jpeg',
     name: 'Resonance Repatterning 08: Principles of Relationship',
     category: 'practitioner',
     shortDescription:
@@ -76,6 +80,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'resonance-repatterning-09-energetics-of-relationship',
+    image: '/images/products/resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study.jpeg',
     name: 'Resonance Repatterning 09: Energetics of Relationship',
     category: 'practitioner',
     shortDescription:
@@ -96,6 +101,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'energy-clearing-basic',
+    image: '/images/products/deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom.png',
     name: 'Energy Clearing: Self Clearing Level 1 (Basic)',
     category: 'practitioner',
     shortDescription:
@@ -116,6 +122,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'energy-clearing-advanced',
+    image: '/images/products/deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom.png',
     name: 'Energy Clearing: Clearing Others Level 2 (Advanced)',
     category: 'practitioner',
     shortDescription:
@@ -136,6 +143,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'akashic-navigator-basic',
+    image: '/images/products/akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom.png',
     name: 'Akashic Navigator: Basic',
     category: 'practitioner',
     shortDescription:
@@ -156,6 +164,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'akashic-navigator-advanced',
+    image: '/images/products/akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom.jpeg',
     name: 'Akashic Navigator: Advanced',
     category: 'practitioner',
     shortDescription:
@@ -178,6 +187,7 @@ export const PROGRAMS: Program[] = [
   // SELF-PACED PROGRAMMES
   {
     slug: 'trauma-to-transcendence',
+    image: '/images/products/trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg',
     name: 'Trauma to Transcendence',
     category: 'self-paced',
     shortDescription:
@@ -201,6 +211,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'love-and-relationships',
+    image: '/images/products/love-relationships-live.jpeg',
     name: 'Love & Relationships',
     category: 'self-paced',
     shortDescription:
@@ -221,6 +232,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'intuition-in-my-personal-capacity',
+    image: '/images/products/intuition-in-my-personal-capacity-live.png',
     name: 'Intuition in My Personal Capacity',
     category: 'self-paced',
     shortDescription:
@@ -241,6 +253,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'intuition-in-business',
+    image: '/images/focus/mindset.webp',
     name: 'Intuition in Business',
     category: 'self-paced',
     shortDescription:
@@ -261,6 +274,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'become-an-energy-ninja',
+    image: '/images/products/be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live.jpeg',
     name: 'Become an Energy Ninja',
     category: 'self-paced',
     shortDescription:
@@ -281,6 +295,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'getting-unstuck',
+    image: '/images/products/getting-unstuck-self-study.png',
     name: 'Getting Unstuck',
     category: 'self-paced',
     shortDescription:
@@ -301,6 +316,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'finding-my-purpose',
+    image: '/images/products/finding-my-life-purpose-live.png',
     name: 'Finding My Purpose',
     category: 'self-paced',
     shortDescription:
@@ -323,6 +339,7 @@ export const PROGRAMS: Program[] = [
   // LIVE PROGRAMMES
   {
     slug: 'mindfulness',
+    image: '/images/products/mindfulness-live.png',
     name: 'Mindfulness',
     category: 'live',
     shortDescription:
@@ -343,6 +360,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'meditation',
+    image: '/images/products/meditation-live-via-zoom.jpeg',
     name: 'Meditation',
     category: 'live',
     shortDescription:
@@ -365,6 +383,7 @@ export const PROGRAMS: Program[] = [
   // GROUP PROGRAMMES
   {
     slug: 'money-mastery',
+    image: '/images/products/money-mastery-group-session.png',
     name: 'Money Mastery',
     category: 'group',
     shortDescription:
@@ -385,6 +404,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'career-progression',
+    image: '/images/products/career-progression-group-session.png',
     name: 'Career Progression',
     category: 'group',
     shortDescription:
@@ -405,6 +425,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'attraction-frequency',
+    image: '/images/products/group-session-attraction-frequency-recorded.png',
     name: 'Attraction Frequency',
     category: 'group',
     shortDescription:
@@ -425,6 +446,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'develop-super-confidence',
+    image: '/images/products/group-session-develop-super-confidence.png',
     name: 'Develop Super Confidence',
     category: 'group',
     shortDescription:
@@ -445,6 +467,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'shedding-excess-weight',
+    image: '/images/products/group-session-shedding-excess-weight.png',
     name: 'Shedding Excess Weight',
     category: 'group',
     shortDescription:
@@ -465,6 +488,7 @@ export const PROGRAMS: Program[] = [
   },
   {
     slug: 'being-a-great-boundary-setter',
+    image: '/images/products/group-session-being-a-great-boundary-setter-booked-as-a-series-only.png',
     name: 'Being a Great Boundary Setter',
     category: 'group',
     shortDescription:

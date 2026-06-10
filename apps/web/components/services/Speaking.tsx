@@ -8,21 +8,25 @@ import { motion } from 'framer-motion'
 const topics = [
   {
     name: 'Conversations with My Brain',
+    image: '/images/hero-bg-suzanne-ravenall.jpg',
     description:
       'After suffering a traumatic brain injury, stroke and several life-or-death traumas, Suzanne is living proof that you can re-train your brain. We learn beliefs in early childhood that get buried deep in the unconscious — and wonder years later why the same patterns of failure, pain or trauma keep reoccurring.',
   },
   {
     name: 'Recycling My Soul',
+    image: '/images/generated/explore-transformation.webp',
     description:
       'With all this talk of consciousness in the world — what does it mean? In the context of my life and work, how does my consciousness impact another? How does it impact me? In practical terms, how does my behaviour and my level of consciousness draw my experiences to me? The science of entanglement.',
   },
   {
     name: 'Second Time Around',
+    image: '/images/generated/explore-repatterning.webp',
     description:
       'In this keynote we learn how our early lives define our choices, decisions and beliefs — why we seem unable to move forward, and critically, what it takes to have a restart. A "second time around": a new way of being where all possibilities are available — it is just learning how to navigate and tap into your innate potential.',
   },
   {
     name: 'Trauma to Transcendence',
+    image: '/images/focus/business.jpg',
     description:
       'Suzanne weaves her way through this challenging topic — helping us understand where buried trauma comes from, how it shows up, how your nervous system responds or breaks down, and how to turn trauma into transcendence: changing your body/mind and bringing homeostasis back to your system.',
   },
@@ -64,13 +68,14 @@ export default function Speaking() {
           </p>
         </div>
 
-        {/* TODO (Suzanne to confirm): Is this Helen Keller quote intentional or should it be replaced with one of Suzanne's own quotes? */}
         <figure className="max-w-4xl mb-16 border-l-2 border-brand-accent pl-6">
           <blockquote className="text-2xl lg:text-3xl font-light italic text-brand-primary leading-snug">
-            &ldquo;Life is an adventure or nothing at all.&rdquo;
+            &ldquo;When we decode hidden patterns, we transform in unimaginable ways.
+            That shift radiates outward — into how we lead, grow, relate, love, and
+            show up.&rdquo;
           </blockquote>
           <figcaption className="mt-4 text-xs uppercase tracking-[0.3em] font-medium text-gray-600">
-            Helen Keller
+            Dr. Suzanne Ravenall
           </figcaption>
         </figure>
 
@@ -90,9 +95,8 @@ export default function Speaking() {
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               className="group relative overflow-hidden min-h-[280px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
-              {/* TODO: Replace with keynote-specific image — Suzanne to provide: photographs from keynote events or speaking engagements */}
               <Image
-                src="/images/hero-bg-suzanne-ravenall.jpg"
+                src={topic.image}
                 alt=""
                 fill
                 sizes="(max-width: 640px) 100vw, 50vw"

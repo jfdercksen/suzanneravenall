@@ -7,41 +7,49 @@ import { motion } from 'framer-motion'
 const sessionTypes = [
   {
     name: 'Resonance Repatterning',
+    image: '/images/generated/explore-repatterning.webp',
     description:
       'We attract people at our common level of woundedness or our common level of emotional health. The kind of energy you project has everything to do with the kind of person you attract — become the healthy self you want to meet.',
   },
   {
     name: 'Transformation, Behaviour & Executive Coaching',
+    image: '/images/generated/explore-transformation.webp',
     description:
       'Transformational Coaching has evolved as a more complete approach — shifting from a simple performance-focused tool to a holistic, humanistic and psychological focus. This process focuses on the whole person, not just what is noticeable on the surface.',
   },
   {
     name: 'Rapid Transformation Therapy®',
+    image: '/images/generated/explore-resonance.webp',
     description:
       'A hybrid therapy combining the most beneficial principles of Hypnotherapy, CBT (Cognitive Behavioral Therapy), Psychotherapy, NLP (Neuro Linguistic Programming) and Regression Therapy.',
   },
   {
     name: 'Rapid Repatterning®',
+    image: '/images/generated/explore-repatterning.webp',
     description:
       'We think 60–70,000 thoughts a day — 90% of them the same as yesterday, driven by memorised beliefs and programmes. Those thoughts lead to the same choices, behaviours and emotions. Rapid Repatterning interrupts the loop at its root.',
   },
   {
     name: 'Akashic Intuitive Mastery',
+    image: '/images/generated/explore-akashic.webp',
     description:
       'Access and rewrite your life’s blueprint. Alter your relationship with success and improve your intuition to such an extent that you receive daily guidance in the direction you are moving in — it is completely possible.',
   },
   {
     name: 'Group Family Coaching',
+    image: '/images/generated/group-coaching-real.webp',
     description:
       'Some family challenges are difficult to resolve without outside assistance. When we understand how our earliest perceptions and beliefs shape who we are, we can see how our make-up shows up in family dynamics — sometimes in helpful, sometimes in harmful ways.',
   },
   {
     name: 'Exploring the Alpha Mind',
+    image: '/images/generated/explore-mindfulness.webp',
     description:
       'A deep practice for accessing the alpha brainwave state — the gateway between conscious awareness and the unconscious programmes running your daily life.',
   },
   {
     name: 'Energetic Realignment & Optimisation',
+    image: '/images/generated/explore-energy.webp',
     description:
       'Clearings for people, dwellings, businesses, animals, and properties worldwide. These clearings remove negative, imbalanced or stagnated energies. All clearings are performed remotely — a person does not need to be physically present.',
   },
@@ -86,9 +94,8 @@ export default function PrivateSessions() {
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               className="group relative overflow-hidden min-h-[280px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
-              {/* TODO: Replace with service-specific image — Suzanne to provide: photograph representing each session type (e.g. 1-on-1 coaching, energy work, hypnotherapy) */}
               <Image
-                src="/images/hero-bg-suzanne-ravenall.jpg"
+                src={session.image}
                 alt=""
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

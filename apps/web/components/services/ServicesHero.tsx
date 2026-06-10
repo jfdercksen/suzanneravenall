@@ -18,15 +18,18 @@ export default function ServicesHero() {
       aria-labelledby="services-hero-heading"
       className="relative h-screen min-h-[640px] flex items-center overflow-hidden"
     >
-      {/* Cinematic background image */}
-      <Image
-        src="/images/hero-bg-suzanne-ravenall.jpg"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
+      {/* Cinematic background video — client transformation montage (faces, crossfading) */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover"
+        poster="/images/hero-bg-suzanne-ravenall.jpg"
+      >
+        <source src="/videos/generated/hero-services-testimonials.mp4" type="video/mp4" />
+      </video>
 
       {/* Dark gradient overlay */}
       <div
@@ -88,12 +91,12 @@ export default function ServicesHero() {
             </motion.div>
           </div>
 
-          {/* Right — Suzanne portrait */}
+          {/* Right — Suzanne portrait. Desktop only; right column, vertically centered. */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
-            className="hidden lg:flex justify-center items-end"
+            className="hidden lg:flex justify-end items-center"
           >
             <div className="relative w-[420px] h-[520px] rounded-card overflow-hidden shadow-2xl border border-white/10">
               <Image
@@ -101,6 +104,7 @@ export default function ServicesHero() {
                 alt="Dr. Suzanne Ravenall"
                 fill
                 sizes="420px"
+                // object-top keeps Suzanne's face (top-centre of the frame) visible at every crop
                 className="object-cover object-top"
               />
               <div

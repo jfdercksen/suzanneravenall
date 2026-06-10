@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { getCurrencySymbol } from '@/lib/currency'
 import { getProgramsByCategory, type Program } from '@/data/programs'
 
 const CATEGORIES = [
@@ -67,9 +68,8 @@ function DarkProgramCard({ program }: { program: Program }) {
       variants={childVariants}
       className="group relative overflow-hidden min-h-[320px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl flex flex-col"
     >
-      {/* TODO: Replace with programme-specific image — Suzanne to provide */}
       <Image
-        src="/images/hero-bg-suzanne-ravenall.jpg"
+        src={program.image ?? '/images/generated/explore-repatterning.webp'}
         alt=""
         fill
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -92,7 +92,7 @@ function DarkProgramCard({ program }: { program: Program }) {
           </p>
           {program.price && (
             <p className="text-brand-accent font-semibold text-lg mb-2">
-              {program.currency === 'USD' ? '$' : 'R'}
+              {getCurrencySymbol(program.currency)}
               {program.price}
               {program.currency && (
                 <span className="text-gray-500 text-sm font-normal ml-1">
@@ -147,13 +147,13 @@ export default function ProgramsPageClient() {
 
   return (
     <>
-      {/* Hero — TODO: Replace with real group coaching photo */}
+      {/* Hero */}
       <section
         aria-labelledby="programs-hero-heading"
         className="relative h-screen min-h-[640px] flex items-center overflow-hidden"
       >
         <Image
-          src="/images/hero-bg-suzanne-ravenall.jpg"
+          src="/images/generated/group-coaching-real.webp"
           alt=""
           fill
           priority
