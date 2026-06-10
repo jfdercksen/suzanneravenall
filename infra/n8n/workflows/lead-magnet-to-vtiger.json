@@ -28,19 +28,19 @@
           "conditions": [
             {
               "id": "check-email",
-              "leftValue": "={{ $json.email }}",
+              "leftValue": "={{ $json.body.email }}",
               "rightValue": "",
               "operator": { "type": "string", "operation": "notEmpty" }
             },
             {
               "id": "check-first-name",
-              "leftValue": "={{ $json.first_name ?? $json.firstName }}",
+              "leftValue": "={{ $json.body.first_name ?? $json.body.firstName }}",
               "rightValue": "",
               "operator": { "type": "string", "operation": "notEmpty" }
             },
             {
               "id": "check-source",
-              "leftValue": "={{ $json.source }}",
+              "leftValue": "={{ $json.body.source }}",
               "rightValue": "",
               "operator": { "type": "string", "operation": "notEmpty" }
             }
@@ -56,7 +56,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const body = $input.first().json;\nconst email = (body.email ?? '').toLowerCase().trim();\nconst firstName = body.first_name ?? body.firstName ?? email.split('@')[0];\nconst lastName = body.last_name ?? body.lastName ?? '';\nconst source = body.source ?? 'Lead Magnet';\n\nconst vtigerUrl = $env.VTIGER_URL?.replace(/\\/$/, '') ?? '';\nconst vtigerUser = $env.VTIGER_USERNAME ?? '';\nconst vtigerKey = $env.VTIGER_ACCESS_KEY ?? '';\n\nif (!vtigerUrl || !vtigerUser || !vtigerKey) {\n  throw new Error('Vtiger env vars not set in n8n');\n}\n\nreturn [{ json: { email, firstName, lastName, source, vtigerUrl, vtigerUser, vtigerKey } }];"
+        "jsCode": "const raw = $input.first().json;\nconst body = raw.body ?? raw;\nconst email = (body.email ?? '').toLowerCase().trim();\nconst firstName = body.first_name ?? body.firstName ?? email.split('@')[0];\nconst lastName = body.last_name ?? body.lastName ?? '';\nconst source = body.source ?? 'Lead Magnet';\n\nconst vtigerUrl = $env.VTIGER_URL?.replace(/\\/$/, '') ?? '';\nconst vtigerUser = $env.VTIGER_USERNAME ?? '';\nconst vtigerKey = $env.VTIGER_ACCESS_KEY ?? '';\n\nif (!vtigerUrl || !vtigerUser || !vtigerKey) {\n  throw new Error('Vtiger env vars not set in n8n');\n}\n\nreturn [{ json: { email, firstName, lastName, source, vtigerUrl, vtigerUser, vtigerKey } }];"
       },
       "id": "lm2v-0003-0000-0000-000000000003",
       "name": "Prepare: Extract Submission Data",
