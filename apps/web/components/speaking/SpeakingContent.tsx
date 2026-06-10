@@ -602,7 +602,7 @@ export default function SpeakingContent() {
                   alt="Dr. Suzanne Ravenall"
                   width={480}
                   height={600}
-                  className="w-full object-cover object-top"
+                  className="w-full object-cover object-left-top"
                   sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 480px"
                 />
                 <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-brand-primary-900/60 via-transparent to-transparent" />

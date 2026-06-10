@@ -9,6 +9,8 @@ const services = [
     title: '1-on-1 Coaching',
     promise: 'Eliminate the hidden patterns blocking your success',
     image: '/images/suzanne-portrait.jpg',
+    // Suzanne sits in the upper-left of this landscape portrait — keep her face in frame
+    imagePosition: 'object-left-top',
     href: '/services',
     cta: 'Learn More',
   },
@@ -16,6 +18,7 @@ const services = [
     title: 'Group Programs',
     promise: 'Transform alongside others committed to real change',
     image: '/images/generated/group-coaching-real.webp',
+    imagePosition: 'object-top',
     href: '/services',
     cta: 'View Programs',
   },
@@ -24,6 +27,7 @@ const services = [
     promise: 'Master Neuro-Repatterning® and change lives professionally',
     // TODO: Replace with real 1-on-1 coaching session photo
     image: '/images/suzanne-portrait.jpg',
+    imagePosition: 'object-left-top',
     href: '/services',
     cta: 'Get Certified',
   },
@@ -50,7 +54,7 @@ export default function ServicesSection() {
         </motion.div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map(({ title, promise, image, href, cta }, i) => (
+          {services.map(({ title, promise, image, imagePosition, href, cta }, i) => (
             <motion.div
               key={title}
               className="group relative bg-white rounded-card overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1"
@@ -65,7 +69,7 @@ export default function ServicesSection() {
                   alt={title}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  className={`object-cover ${imagePosition} transition-transform duration-500 group-hover:scale-105`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-primary/60 to-transparent" />
               </div>

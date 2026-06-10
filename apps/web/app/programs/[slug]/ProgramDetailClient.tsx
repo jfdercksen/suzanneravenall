@@ -438,7 +438,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                   alt="Dr. Suzanne Ravenall"
                   fill
                   sizes="(max-width: 1024px) 384px, 400px"
-                  className="object-cover object-top"
+                  className="object-cover object-left-top"
                 />
                 <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
               </div>

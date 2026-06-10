@@ -104,8 +104,8 @@ export default function ServicesHero() {
                 alt="Dr. Suzanne Ravenall"
                 fill
                 sizes="420px"
-                // object-top keeps Suzanne's face (top-centre of the frame) visible at every crop
-                className="object-cover object-top"
+                // Suzanne sits upper-left in this landscape portrait — left-top keeps her face in frame
+                className="object-cover object-left-top"
               />
               <div
                 aria-hidden="true"

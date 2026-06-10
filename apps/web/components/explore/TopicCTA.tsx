@@ -104,7 +104,7 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
                 alt="Dr. Suzanne Ravenall"
                 fill
                 sizes="(max-width: 1280px) 50vw, 640px"
-                className="object-cover object-center"
+                className="object-cover object-left-top"
               />
               {/* Inner gradient — fade to brand at bottom */}
               <div

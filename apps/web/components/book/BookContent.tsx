@@ -534,7 +534,7 @@ export default function BookContent() {
                   src="/images/suzanne-portrait.jpg"
                   alt="Dr. Suzanne Ravenall, author of the Breakthrough Trilogy"
                   fill
-                  className="object-cover"
+                  className="object-cover object-left-top"
                   sizes="(max-width: 1024px) 288px, 384px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-primary/50 to-transparent" />
