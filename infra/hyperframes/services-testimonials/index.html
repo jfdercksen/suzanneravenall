@@ -65,21 +65,39 @@
     </div>
 
     <script>
+      // Single, explicit GSAP timeline (paused — HyperFrames seeks it frame by frame).
+      // Total length is pinned to 24s so the render stops exactly at the last frame.
+      // Each person holds ~4s; adjacent scenes crossfade over 0.8s at every boundary.
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
+      const FADE = 0.8;
+      const E = 'power1.inOut';
 
-      // Each person holds for 4s; adjacent scenes crossfade over 0.8s.
-      const starts = [0, 4, 8, 12, 16, 20];
-      starts.forEach((t0, i) => {
-        tl.fromTo(`#scene-${i}`, { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power1.inOut' }, t0);
-        if (i < starts.length - 1) {
-          // fade out as the next scene fades in (crossfade)
-          tl.to(`#scene-${i}`, { opacity: 0, duration: 0.8, ease: 'power1.inOut' }, t0 + 4);
-        } else {
-          // last scene fades out at the very end
-          tl.to(`#scene-${i}`, { opacity: 0, duration: 0.8, ease: 'power1.inOut' }, 23.2);
-        }
-      });
+      // Start every scene hidden.
+      tl.set(['#scene-0', '#scene-1', '#scene-2', '#scene-3', '#scene-4', '#scene-5'], { opacity: 0 }, 0);
+
+      // Scene 1 — 0–4s
+      tl.to('#scene-0', { opacity: 1, duration: FADE, ease: E }, 0);
+      // Crossfade 1 → 2 at 4s (4–8s)
+      tl.to('#scene-0', { opacity: 0, duration: FADE, ease: E }, 4);
+      tl.to('#scene-1', { opacity: 1, duration: FADE, ease: E }, 4);
+      // Crossfade 2 → 3 at 8s (8–12s)
+      tl.to('#scene-1', { opacity: 0, duration: FADE, ease: E }, 8);
+      tl.to('#scene-2', { opacity: 1, duration: FADE, ease: E }, 8);
+      // Crossfade 3 → 4 at 12s (12–16s)
+      tl.to('#scene-2', { opacity: 0, duration: FADE, ease: E }, 12);
+      tl.to('#scene-3', { opacity: 1, duration: FADE, ease: E }, 12);
+      // Crossfade 4 → 5 at 16s (16–20s)
+      tl.to('#scene-3', { opacity: 0, duration: FADE, ease: E }, 16);
+      tl.to('#scene-4', { opacity: 1, duration: FADE, ease: E }, 16);
+      // Crossfade 5 → 6 at 20s (20–24s)
+      tl.to('#scene-4', { opacity: 0, duration: FADE, ease: E }, 20);
+      tl.to('#scene-5', { opacity: 1, duration: FADE, ease: E }, 20);
+      // Scene 6 fades out to black, ending exactly at 24s.
+      tl.to('#scene-5', { opacity: 0, duration: FADE, ease: E }, 23.2);
+
+      // Pin the timeline's end to 24s so its total duration is unambiguous.
+      tl.set({}, {}, 24);
 
       window.__timelines['services-testimonials'] = tl;
     </script>
