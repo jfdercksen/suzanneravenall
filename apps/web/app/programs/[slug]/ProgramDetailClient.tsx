@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { getCurrencySymbol } from '@/lib/currency'
 import type { Program } from '@/data/programs'
 
 type Props = {
@@ -24,19 +25,6 @@ const DELIVERY_METHODS: Record<Program['category'], string> = {
   'self-paced': 'Self-Paced Online — Access Anytime',
   live: 'Live via Zoom with Suzanne',
   group: 'Group Sessions via Zoom',
-}
-
-const CURRENCY_SYMBOLS: Record<string, string> = {
-  USD: '$',
-  ZAR: 'R',
-  EUR: '€',
-  GBP: '£',
-  AUD: 'A$',
-}
-
-function getCurrencySymbol(currency: string | undefined): string {
-  if (!currency) return 'R'
-  return CURRENCY_SYMBOLS[currency] ?? currency
 }
 
 function getCtaProps(program: Program): { label: string; href: string } {

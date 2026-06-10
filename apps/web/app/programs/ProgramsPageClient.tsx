@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { getCurrencySymbol } from '@/lib/currency'
 import { getProgramsByCategory, type Program } from '@/data/programs'
 
 const CATEGORIES = [
@@ -91,7 +92,7 @@ function DarkProgramCard({ program }: { program: Program }) {
           </p>
           {program.price && (
             <p className="text-brand-accent font-semibold text-lg mb-2">
-              {program.currency === 'USD' ? '$' : 'R'}
+              {getCurrencySymbol(program.currency)}
               {program.price}
               {program.currency && (
                 <span className="text-gray-500 text-sm font-normal ml-1">
