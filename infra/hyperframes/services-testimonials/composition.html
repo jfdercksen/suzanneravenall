@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=1920, height=1080">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1920px; height: 1080px;
+      background: #012B43;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .scene.active { opacity: 1; }
+
+    .video-side {
+      width: 50%;
+      height: 100%;
+      position: relative;
+    }
+
+    .video-side video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .quote-side {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px;
+      background: var(--bg);
+    }
+
+    .label {
+      font-size: 14px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #1719F4;
+      margin-bottom: 24px;
+    }
+
+    .quote {
+      font-size: 42px;
+      font-weight: 300;
+      color: white;
+      line-height: 1.3;
+      margin-bottom: 32px;
+    }
+
+    .name {
+      font-size: 18px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .result {
+      font-size: 16px;
+      color: #1719F4;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Scene 1 -->
+<div class="scene" id="scene-1" style="--bg: #012B43">
+  <div class="video-side">
+    <video src="../../apps/web/public/videos/portraits/smile-1.mp4"
+           muted playsinline></video>
+  </div>
+  <div class="quote-side">
+    <p class="label">Client Transformation</p>
+    <p class="quote">"I went from anxious and stuck to clear and
+    confident in ways I never thought possible."</p>
+    <p class="name">Nomsa M.</p>
+    <p class="result">Executive, Johannesburg</p>
+  </div>
+</div>
+
+<!-- Scene 2 -->
+<div class="scene" id="scene-2" style="--bg: #0A1628">
+  <div class="video-side">
+    <video src="../../apps/web/public/videos/portraits/smile-2.mp4"
+           muted playsinline></video>
+  </div>
+  <div class="quote-side">
+    <p class="label">Client Transformation</p>
+    <p class="quote">"The patterns I'd carried for 20 years
+    dissolved in a few sessions. My team noticed the difference."</p>
+    <p class="name">David K.</p>
+    <p class="result">CEO, Cape Town</p>
+  </div>
+</div>
+
+<!-- Scene 3 -->
+<div class="scene" id="scene-3" style="--bg: #051225">
+  <div class="video-side">
+    <video src="../../apps/web/public/videos/portraits/smile-3.mp4"
+           muted playsinline></video>
+  </div>
+  <div class="quote-side">
+    <p class="label">Client Transformation</p>
+    <p class="quote">"I finally understood why I kept self-sabotaging.
+    Now I don't. It's that simple."</p>
+    <p class="name">Sarah L.</p>
+    <p class="result">Entrepreneur, Pretoria</p>
+  </div>
+</div>
+
+<!-- Scene 4 -->
+<div class="scene" id="scene-4" style="--bg: #012B43">
+  <div class="video-side">
+    <video src="../../apps/web/public/videos/portraits/smile-4.mp4"
+           muted playsinline></video>
+  </div>
+  <div class="quote-side">
+    <p class="label">Client Transformation</p>
+    <p class="quote">"At 55 I thought I was too set in my ways.
+    Suzanne proved me completely wrong."</p>
+    <p class="name">Margaret T.</p>
+    <p class="result">Retired Teacher, Durban</p>
+  </div>
+</div>
+
+<!-- Scene 5 -->
+<div class="scene" id="scene-5" style="--bg: #0A1628">
+  <div class="video-side">
+    <video src="../../apps/web/public/videos/portraits/smile-5.mp4"
+           muted playsinline></video>
+  </div>
+  <div class="quote-side">
+    <p class="label">Client Transformation</p>
+    <p class="quote">"I booked one session out of curiosity.
+    18 months later I'm a completely different person."</p>
+    <p class="name">Aisha B.</p>
+    <p class="result">Marketing Manager, Sandton</p>
+  </div>
+</div>
+
+<!-- Scene 6 -->
+<div class="scene" id="scene-6" style="--bg: #051225">
+  <div class="video-side">
+    <video src="../../apps/web/public/videos/portraits/smile-6.mp4"
+           muted playsinline></video>
+  </div>
+  <div class="quote-side">
+    <p class="label">Client Transformation</p>
+    <p class="quote">"The ROI on working with Suzanne is immeasurable.
+    My business doubled. My stress halved."</p>
+    <p class="name">James O.</p>
+    <p class="result">Business Owner, Cape Town</p>
+  </div>
+</div>
+
+<script>
+  const scenes = document.querySelectorAll('.scene');
+  let current = 0;
+
+  // Show first scene
+  scenes[0].classList.add('active');
+  scenes[0].querySelector('video').play();
+
+  function nextScene() {
+    scenes[current].classList.remove('active');
+    current = (current + 1) % scenes.length;
+    scenes[current].classList.add('active');
+    const video = scenes[current].querySelector('video');
+    video.currentTime = 0;
+    video.play();
+  }
+
+  // Change every 4 seconds (matching video duration)
+  setInterval(nextScene, 4000);
+</script>
+</body>
+</html>
