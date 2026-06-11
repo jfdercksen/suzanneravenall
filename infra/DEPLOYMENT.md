@@ -109,7 +109,9 @@ Must match the URL where Payload admin is actually accessible:
 - **IP testing**: `http://169.239.180.49/cms`
 - **Production (after DNS cutover)**: `https://suzanneravenall.com/cms`
 
-A mismatch causes React hydration error #418 and broken login redirects.
+A mismatch causes broken login redirects and wrong absolute URLs (email links, OG images).
+
+> Note: React hydration error #418 was a **separate** bug, not a `PAYLOAD_URL` issue. It was caused by duplicate root layouts rendering nested `<html>` tags and was fixed in commit `e7139ee` (root `app/layout.tsx` made a pass-through). See Troubleshooting below.
 
 ---
 
@@ -267,10 +269,16 @@ Book a test meeting in Cal.com and confirm:
 
 ## Troubleshooting
 
-### Payload admin loads unstyled / hydration error #418
+### Payload admin loads unstyled
 - Check `PAYLOAD_URL` in `.env` matches the URL you're accessing `/cms` at
-- Check `basePath: '/cms'` is in `apps/payload/next.config.ts` (committed, not just working copy)
+- Check `basePath: '/cms'` is in `apps/payload/next.config.mjs` (committed, not just working copy)
 - Rebuild payload container after fixing
+
+### Payload admin hydration error #418 ("server rendered text didn't match the client")
+- Root cause (resolved in `e7139ee`): the admin page rendered **two nested `<html>` tags** because both the root `apps/payload/src/app/layout.tsx` and the `(payload)` group's `RootLayout` rendered `<html>/<body>`.
+- Fix: the root `app/layout.tsx` must be a pass-through (`return children`); Payload's `RootLayout` in the `(payload)` group is the **sole** owner of `<html>/<body>`.
+- Verify: `curl -s http://localhost/cms/admin/login | grep -oE '<html[^>]*>' | wc -l` must return `1`.
+- This is NOT caused by `PAYLOAD_URL` / `PAYLOAD_PUBLIC_SERVER_URL` (`serverURL` reads `PAYLOAD_URL`; `PAYLOAD_PUBLIC_SERVER_URL` is only used in the CORS array).
 
 ### Medusa admin loads unstyled
 - Medusa admin is served at `/medusa` — ensure Nginx `location /medusa` proxies to `medusa:9000`
@@ -283,3 +291,25 @@ Book a test meeting in Cal.com and confirm:
 ### NEXT_PUBLIC_MEDUSA_URL baked as wrong value
 - This requires a full `docker compose build web` — env-only restart is not enough
 - Verify the value was correct at build time: check `docker inspect` on the web container's build args
+
+---
+
+## CMS Admin Accounts
+
+Payload admin users for the Suzanne Ravenall CMS (`/cms/admin`). Passwords are
+**never** committed to git — store them in the agency password manager and share
+with the account owner out-of-band.
+
+> The standalone Payload Docker image does **not** include the `payload` CLI
+> (`npx payload create-user` is unavailable). Create/reset/delete admin users
+> either through the Payload admin UI (Users collection) or, for bootstrapping,
+> via a pbkdf2 credential inserted into `payload.users` (pbkdf2-sha256, 25000
+> iterations, keylen 512, hex; 32-byte hex salt).
+
+| Email | Role | Created | Password location |
+|---|---|---|---|
+| johan@aiautomations.co.za | (dev/admin) | 2026-04-23 | Agency password manager |
+| sravenall@suzanneravenall.com | admin | 2026-06-11 | Generated on account creation — stored in agency password manager, delivered to Suzanne out-of-band. NOT in git. |
+
+> A temporary test account `admin@suzanneravenall.com` was created during the
+> 2026-06-11 login/hydration debugging and **deleted** the same day.
