@@ -4,13 +4,11 @@ export const metadata = {
   title: 'Suzanne Ravenall CMS',
 }
 
-// Minimal root layout required by Next.js.
-// Payload admin routes use (payload)/layout.tsx which provides the full
-// RootLayout with providers. This wrapper just satisfies Next.js requirements.
+// Pass-through root layout. The (payload) route group provides the real
+// <html>/<body> via Payload's RootLayout. Rendering <html>/<body> here too
+// produced nested <html> tags, which broke React hydration (error #418).
+// The only root-level page (page.tsx) just redirects, so it never needs
+// an <html>/<body> from this layout.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  )
+  return children
 }
