@@ -9,6 +9,8 @@ const LeadMagnetSchema = z.object({
   email: z.string().email(),
   firstName: z.string().max(100).optional(),
   source: z.string().max(200).optional(),
+  // Set by the Explore diagnostic quizzes — the user's dominant pattern.
+  quizResult: z.enum(['fight', 'flight', 'freeze', 'mixed']).optional(),
 })
 
 export async function POST(request: Request) {
@@ -25,7 +27,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 422 })
   }
 
-  const { email, firstName, source } = parsed.data
+  const { email, firstName, source, quizResult } = parsed.data
   const timestamp = new Date().toISOString()
   // Fall back to the local-part of the email so the n8n workflow's firstName
   // validation always passes even when the form doesn't collect a name.
@@ -40,6 +42,7 @@ export async function POST(request: Request) {
       email,
       firstName: resolvedFirstName,
       source: source ?? 'homepage',
+      quizResult: quizResult ?? null,
       timestamp,
     }),
   }).catch((err: unknown) => {
@@ -58,6 +61,7 @@ export async function POST(request: Request) {
         email,
         firstName: firstName ?? null,
         source: source ?? null,
+        quizResult: quizResult ?? null,
         timestamp,
         platform: 'suzanneravenall',
       }),

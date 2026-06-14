@@ -40,6 +40,23 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
               Work With Suzanne
             </motion.p>
 
+            {/* Diagnostic quiz CTA — only the nervous-system topic has a quiz
+                today. Other topics omit this to avoid dead links until their
+                quizzes are built. */}
+            {topic.slug === 'emotional-nervous-system-mastery' && (
+              <motion.div {...fadeUp(0.05)} className="mb-8">
+                <Link
+                  href={`/explore/${topic.slug}/quiz`}
+                  className="group inline-flex items-center gap-3 rounded-button border border-brand-accent/50 bg-brand-accent/10 px-6 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:border-brand-accent hover:bg-brand-accent/20"
+                >
+                  Take the 2-Minute Pattern Diagnostic
+                  <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                  </span>
+                </Link>
+              </motion.div>
+            )}
+
             {/* ctaHook replaces the awkward "Work on [title] with Suzanne" concatenation */}
             <motion.h2
               id="topic-cta-heading"

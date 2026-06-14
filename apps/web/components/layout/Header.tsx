@@ -8,6 +8,8 @@ import { SearchBar } from '../search/SearchBar'
 export interface NavLink {
   label: string
   href: string
+  /** When true, render as a target="_blank" external link with an external-link icon. */
+  external?: boolean
 }
 
 export interface NavGroup {
@@ -39,6 +41,14 @@ const navItems: NavItem[] = [
   { label: 'Shop', href: '/shop' },
   { label: 'Contact', href: '/contact' },
   { label: 'Member Portal', href: '/portal' },
+  // Pattern Coach is a separate Thinkific subscription product that runs
+  // independently of this site — link out in a new tab.
+  // TODO: Confirm final Thinkific URL with Suzanne
+  {
+    label: 'Pattern Coach App',
+    href: 'https://ravenallinstitute-9629.thinkific.com/',
+    external: true,
+  },
 ]
 
 function getMobileLinks(items: NavItem[]): NavLink[] {

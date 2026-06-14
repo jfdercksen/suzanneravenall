@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { ExternalLink } from 'lucide-react'
 import type { NavLink } from './Header'
 
 interface MobileNavProps {
@@ -146,16 +147,31 @@ export default function MobileNav({ links }: MobileNavProps) {
 
           {/* Nav links */}
           <nav aria-label="Mobile navigation" className="flex-1 flex flex-col justify-center px-8 gap-2">
-            {links.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                onClick={close}
-                className="text-white font-semibold text-3xl py-3 border-b border-white/10 hover:text-brand-accent-300 transition-colors duration-150"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {links.map((link) =>
+              link.external ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={close}
+                  className="flex items-center gap-3 text-white font-semibold text-3xl py-3 border-b border-white/10 hover:text-brand-accent-300 transition-colors duration-150"
+                >
+                  {link.label}
+                  <ExternalLink size={22} aria-hidden="true" />
+                  <span className="sr-only">(opens in new tab)</span>
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  onClick={close}
+                  className="text-white font-semibold text-3xl py-3 border-b border-white/10 hover:text-brand-accent-300 transition-colors duration-150"
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
           </nav>
 
           {/* CTA at bottom */}

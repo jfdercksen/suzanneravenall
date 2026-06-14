@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { ExternalLink } from 'lucide-react'
 import type { NavItem, NavGroup, NavLink } from './Header'
 
 function isNavGroup(item: NavItem): item is NavGroup {
@@ -91,13 +92,30 @@ export default function DesktopNav({ items }: DesktopNavProps) {
           )
         }
 
+        const link = item as NavLink
+        if (link.external) {
+          return (
+            <a
+              key={link.label}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
+            >
+              {link.label}
+              <ExternalLink size={14} aria-hidden="true" />
+              <span className="sr-only">(opens in new tab)</span>
+            </a>
+          )
+        }
+
         return (
           <Link
-            key={item.label}
-            href={(item as NavLink).href}
+            key={link.label}
+            href={link.href}
             className="text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
           >
-            {item.label}
+            {link.label}
           </Link>
         )
       })}
