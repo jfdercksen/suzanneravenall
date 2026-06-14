@@ -33,10 +33,10 @@ const navItems: NavItem[] = [
       { label: 'Services', href: '/services' },
       { label: 'Speaking', href: '/speaking' },
       { label: 'Programs', href: '/programs' },
-      { label: 'Shop', href: '/shop' },
       { label: 'Masterclass', href: '/masterclass' },
     ],
   },
+  { label: 'Shop', href: '/shop' },
   { label: 'Contact', href: '/contact' },
   { label: 'Member Portal', href: '/portal' },
 ]
