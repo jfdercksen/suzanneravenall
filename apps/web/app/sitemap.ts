@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { topics } from '@/app/explore/topics'
+import { pathways } from '@/data/pathways'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl =
@@ -47,6 +48,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/transformation-pathways`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
     },
     {
       url: `${siteUrl}/resources`,
@@ -123,5 +130,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }))
 
-  return [...staticRoutes, ...exploreRoutes]
+  const pathwayRoutes: MetadataRoute.Sitemap = pathways.map((pathway) => ({
+    url: `${siteUrl}/transformation-pathways/${pathway.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
+  return [...staticRoutes, ...exploreRoutes, ...pathwayRoutes]
 }
