@@ -57,7 +57,7 @@ export default function DesktopNav({ items }: DesktopNavProps) {
                 aria-haspopup="true"
                 aria-expanded={isOpen}
                 onClick={() => setOpenGroup(isOpen ? null : item.label)}
-                className="flex items-center gap-1 text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
+                className="flex items-center gap-1 whitespace-nowrap text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
               >
                 {item.label}
                 <svg
@@ -113,7 +113,7 @@ export default function DesktopNav({ items }: DesktopNavProps) {
           <Link
             key={link.label}
             href={link.href}
-            className="text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
+            className="whitespace-nowrap text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
           >
             {link.label}
           </Link>

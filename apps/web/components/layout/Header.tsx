@@ -29,6 +29,9 @@ const navItems: NavItem[] = [
       { label: 'Resources', href: '/resources' },
     ],
   },
+  // Top-level entry placed between the Learn group (which contains Explore)
+  // and the Work With Me group (which contains Services).
+  { label: 'Transformation Pathways', href: '/transformation-pathways' },
   {
     label: 'Work With Me',
     children: [
