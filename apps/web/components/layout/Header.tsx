@@ -42,13 +42,14 @@ const navItems: NavItem[] = [
   { label: 'Contact', href: '/contact' },
   { label: 'Member Portal', href: '/portal' },
   // Pattern Coach is a separate Thinkific subscription product that runs
-  // independently of this site — link out in a new tab.
-  // TODO: Confirm final Thinkific URL with Suzanne
-  {
-    label: 'Pattern Coach App',
-    href: 'https://ravenallinstitute-9629.thinkific.com/',
-    external: true,
-  },
+  // independently of this site. Hidden from the nav until the correct app
+  // URL is confirmed — the current Thinkific link points to the wrong place.
+  // TODO: Awaiting correct Pattern Coach app URL from Suzanne
+  // {
+  //   label: 'Pattern Coach App',
+  //   href: 'https://ravenallinstitute-9629.thinkific.com/',
+  //   external: true,
+  // },
 ]
 
 function getMobileLinks(items: NavItem[]): NavLink[] {
