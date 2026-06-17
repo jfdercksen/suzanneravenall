@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { topics } from '@/app/explore/topics'
 import { pathways } from '@/data/pathways'
+import { allPrivateSessions } from '@/data/privateSessions'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl =
@@ -24,6 +25,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/services/private-sessions`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
     },
     {
       url: `${siteUrl}/speaking`,
@@ -137,5 +144,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }))
 
-  return [...staticRoutes, ...exploreRoutes, ...pathwayRoutes]
+  const privateSessionRoutes: MetadataRoute.Sitemap = allPrivateSessions.map(
+    (session) => ({
+      url: `${siteUrl}/services/private-sessions/${session.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    }),
+  )
+
+  return [
+    ...staticRoutes,
+    ...exploreRoutes,
+    ...pathwayRoutes,
+    ...privateSessionRoutes,
+  ]
 }

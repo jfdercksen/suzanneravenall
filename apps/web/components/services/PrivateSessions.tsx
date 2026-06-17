@@ -3,57 +3,23 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { allPrivateSessions } from '@/data/privateSessions'
 
-const sessionTypes = [
-  {
-    name: 'Resonance Repatterning',
-    image: '/images/generated/explore-repatterning.webp',
-    description:
-      'We attract people at our common level of woundedness or our common level of emotional health. The kind of energy you project has everything to do with the kind of person you attract — become the healthy self you want to meet.',
-  },
-  {
-    name: 'Transformation, Behaviour & Executive Coaching',
-    image: '/images/generated/explore-transformation.webp',
-    description:
-      'Transformational Coaching has evolved as a more complete approach — shifting from a simple performance-focused tool to a holistic, humanistic and psychological focus. This process focuses on the whole person, not just what is noticeable on the surface.',
-  },
-  {
-    name: 'Rapid Transformation Therapy®',
-    image: '/images/generated/explore-resonance.webp',
-    description:
-      'A hybrid therapy combining the most beneficial principles of Hypnotherapy, CBT (Cognitive Behavioral Therapy), Psychotherapy, NLP (Neuro Linguistic Programming) and Regression Therapy.',
-  },
-  {
-    name: 'Rapid Repatterning®',
-    image: '/images/generated/explore-repatterning.webp',
-    description:
-      'We think 60–70,000 thoughts a day — 90% of them the same as yesterday, driven by memorised beliefs and programmes. Those thoughts lead to the same choices, behaviours and emotions. Rapid Repatterning interrupts the loop at its root.',
-  },
-  {
-    name: 'Akashic Intuitive Mastery',
-    image: '/images/generated/explore-akashic.webp',
-    description:
-      'Access and rewrite your life’s blueprint. Alter your relationship with success and improve your intuition to such an extent that you receive daily guidance in the direction you are moving in — it is completely possible.',
-  },
-  {
-    name: 'Group Family Coaching',
-    image: '/images/generated/group-coaching-real.webp',
-    description:
-      'Some family challenges are difficult to resolve without outside assistance. When we understand how our earliest perceptions and beliefs shape who we are, we can see how our make-up shows up in family dynamics — sometimes in helpful, sometimes in harmful ways.',
-  },
-  {
-    name: 'Exploring the Alpha Mind',
-    image: '/images/generated/explore-mindfulness.webp',
-    description:
-      'A deep practice for accessing the alpha brainwave state — the gateway between conscious awareness and the unconscious programmes running your daily life.',
-  },
-  {
-    name: 'Energetic Realignment & Optimisation',
-    image: '/images/generated/explore-energy.webp',
-    description:
-      'Clearings for people, dwellings, businesses, animals, and properties worldwide. These clearings remove negative, imbalanced or stagnated energies. All clearings are performed remotely — a person does not need to be physically present.',
-  },
-]
+// Card background image per session, keyed by slug. Kept here (not in the data
+// file) because images are a presentation concern of this section.
+const sessionImages: Record<string, string> = {
+  'resonance-repatterning': '/images/generated/explore-repatterning.webp',
+  'transformational-coaching': '/images/generated/explore-transformation.webp',
+  'executive-coaching': '/images/generated/explore-transformation.webp',
+  'rapid-transformational-therapy': '/images/generated/explore-resonance.webp',
+  'rapid-repatterning': '/images/generated/explore-repatterning.webp',
+  'akashic-intuitive-mastery': '/images/generated/explore-akashic.webp',
+  'group-family-coaching': '/images/generated/group-coaching-real.webp',
+  'exploring-the-alpha-mind': '/images/generated/explore-mindfulness.webp',
+  'energetic-realignment-optimisation': '/images/generated/explore-energy.webp',
+}
+
+const fallbackImage = '/images/generated/explore-repatterning.webp'
 
 export default function PrivateSessions() {
   return (
@@ -85,9 +51,9 @@ export default function PrivateSessions() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {sessionTypes.map((session, idx) => (
+          {allPrivateSessions.map((session, idx) => (
             <motion.article
-              key={session.name}
+              key={session.slug}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
@@ -95,7 +61,7 @@ export default function PrivateSessions() {
               className="group relative overflow-hidden min-h-[280px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
               <Image
-                src={session.image}
+                src={sessionImages[session.slug] ?? fallbackImage}
                 alt=""
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -105,13 +71,25 @@ export default function PrivateSessions() {
                 aria-hidden="true"
                 className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
               />
-              <div className="relative z-10 p-8">
+              <div className="relative z-10 flex h-full flex-col p-8">
                 <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-brand-accent transition-colors duration-300">
-                  {session.name}
+                  {session.title}
                 </h3>
                 <p className="text-sm text-white/65 font-light leading-relaxed">
-                  {session.description}
+                  {session.shortDescription}
                 </p>
+                <Link
+                  href={`/services/private-sessions/${session.slug}`}
+                  className="mt-auto pt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-accent transition-colors duration-300 hover:text-white"
+                >
+                  More Information
+                  <span
+                    aria-hidden="true"
+                    className="inline-block transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </Link>
               </div>
             </motion.article>
           ))}
