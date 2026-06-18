@@ -4,16 +4,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { useCart } from '@/lib/cart'
-
-export interface Course {
-  id: string
-  handle: string
-  title: string
-  description: string | null
-  /** metadata.category from Medusa, e.g. "resonance-repatterning" | "bundle" */
-  category: string
-  prices: Array<{ currency_code: string; amount: number }>
-}
+import type { Course } from '@/types/courses'
 
 // Filter tabs (client-side, no reload). "bundle" courses have no dedicated tab —
 // they surface only under "All", which matches the requested tab set.
@@ -35,8 +26,9 @@ const CATEGORY_LABELS: Record<string, string> = {
   bundle: 'Bundle',
 }
 
-// Region-aware price: pick the price matching the visitor's cart currency,
-// fall back to ZAR. Amounts are stored in minor units (cents) — divide by 100.
+// Region-aware price: pick the price matching the visitor's currency, fall back
+// to ZAR. Amounts are stored in minor units (cents) — divide by 100. Course
+// prices are always whole units, so they display without decimals by design.
 function formatCoursePrice(prices: Course['prices'], currency: string): string | null {
   if (!prices || prices.length === 0) return null
   const match =
@@ -57,10 +49,18 @@ const fadeUp = (delay: number) => ({
   transition: { duration: 0.5, delay, ease: 'easeOut' as const },
 })
 
-export function OnlineCoursesSection({ courses }: { courses: Course[] }) {
+export function OnlineCoursesSection({
+  courses,
+  defaultCurrency = 'zar',
+}: {
+  courses: Course[]
+  /** Currency resolved from the visitor's region at SSR (before a cart exists). */
+  defaultCurrency?: string
+}) {
   const [active, setActive] = useState('all')
   const { cart } = useCart()
-  const currency = cart?.currency_code ?? 'zar'
+  // Once a cart exists, honour its currency; otherwise use the region default.
+  const currency = cart?.currency_code ?? defaultCurrency
 
   const filtered = active === 'all' ? courses : courses.filter((c) => c.category === active)
 
@@ -97,8 +97,8 @@ export function OnlineCoursesSection({ courses }: { courses: Course[] }) {
             <motion.div
               {...fadeUp(0.05)}
               className="flex flex-wrap gap-3 mb-12"
-              role="tablist"
-              aria-label="Course categories"
+              role="group"
+              aria-label="Filter courses by category"
             >
               {TABS.map((tab) => {
                 const isActive = active === tab.key
@@ -106,10 +106,9 @@ export function OnlineCoursesSection({ courses }: { courses: Course[] }) {
                   <button
                     key={tab.key}
                     type="button"
-                    role="tab"
-                    aria-selected={isActive}
+                    aria-pressed={isActive}
                     onClick={() => setActive(tab.key)}
-                    className={`rounded-button px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
+                    className={`rounded-button px-5 py-3 text-sm font-medium transition-all duration-300 ${
                       isActive
                         ? 'bg-brand-accent text-white shadow-lg shadow-brand-accent/30'
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-brand-primary'
@@ -149,7 +148,7 @@ export function OnlineCoursesSection({ courses }: { courses: Course[] }) {
                       )}
                       <Link
                         href={`/shop/${course.handle}`}
-                        className="inline-flex items-center justify-center rounded-button bg-brand-accent px-5 py-2.5 text-sm font-medium text-white transition-colors duration-300 hover:bg-brand-accent-700"
+                        className="inline-flex items-center justify-center min-h-[44px] rounded-button bg-brand-accent px-5 py-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-brand-accent-700"
                       >
                         Enroll Now
                       </Link>

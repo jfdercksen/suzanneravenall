@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import ProgramsPageClient from './ProgramsPageClient'
-import { OnlineCoursesSection, type Course } from './OnlineCoursesSection'
+import { OnlineCoursesSection } from './OnlineCoursesSection'
 import { PROGRAMS } from '@/data/programs'
+import type { Course } from '@/types/courses'
 
 export const metadata: Metadata = {
   title: 'Programmes | Dr. Suzanne Ravenall',
@@ -56,7 +58,9 @@ async function fetchProgrammeCourses(): Promise<Course[]> {
     )
     if (!colRes.ok) return []
     const colData = (await colRes.json()) as { collections?: StoreCollection[] }
-    const programmes = (colData.collections ?? []).find((c) => c.title === 'Programmes')
+    const programmes = (colData.collections ?? []).find(
+      (c) => c.title.toLowerCase() === 'programmes',
+    )
     if (!programmes) return []
 
     const prodRes = await fetch(
@@ -78,6 +82,7 @@ async function fetchProgrammeCourses(): Promise<Course[]> {
         description: stripHtml(p.description) || null,
         category:
           typeof p.metadata?.category === 'string' ? p.metadata.category : 'other',
+        // Courses are single-variant products; revisit if multi-variant is added.
         prices: p.variants?.[0]?.prices ?? [],
       }))
       .sort((a, b) => a.title.localeCompare(b.title))
@@ -89,10 +94,15 @@ async function fetchProgrammeCourses(): Promise<Course[]> {
 export default async function ProgramsPage() {
   const courses = await fetchProgrammeCourses()
 
+  // Resolve the visitor's currency from Cloudflare geo at request time so prices
+  // show correctly before a cart exists (mirrors /api/region: ZA → ZAR, else USD).
+  const country = (await headers()).get('CF-IPCountry') ?? ''
+  const defaultCurrency = country === 'ZA' ? 'zar' : 'usd'
+
   return (
     <>
       <ProgramsPageClient />
-      <OnlineCoursesSection courses={courses} />
+      <OnlineCoursesSection courses={courses} defaultCurrency={defaultCurrency} />
     </>
   )
 }
