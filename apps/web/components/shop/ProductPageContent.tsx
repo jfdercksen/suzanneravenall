@@ -104,8 +104,10 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
     product.variants[0]?.id ?? ''
   )
 
+  // thinkific_course_id is seeded as a number (e.g. 1284792) — check for any truthy non-zero value.
   const isThinkificCourse =
-    typeof product.metadata?.thinkific_course_id === 'string' &&
+    product.metadata?.thinkific_course_id != null &&
+    product.metadata.thinkific_course_id !== 0 &&
     product.metadata.thinkific_course_id !== ''
 
   const badge = isThinkificCourse
