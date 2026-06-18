@@ -104,7 +104,28 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
     product.variants[0]?.id ?? ''
   )
 
-  const badge = getDeliveryBadge(product.handle, product.title)
+  const isThinkificCourse =
+    typeof product.metadata?.thinkific_course_id === 'string' &&
+    product.metadata.thinkific_course_id !== ''
+
+  const badge = isThinkificCourse
+    ? { label: 'Self-Paced', className: 'bg-emerald-900/40 text-emerald-400 border border-emerald-800' }
+    : getDeliveryBadge(product.handle, product.title)
+
+  const includedItems = isThinkificCourse
+    ? [
+        'Self-paced online course',
+        'Lifetime access via the Ravenall Institute',
+        'Course materials and resources',
+        'Study at your own pace, anywhere',
+      ]
+    : [
+        'Live sessions via Zoom',
+        'Session recordings',
+        'Course materials',
+        'Email support between sessions',
+      ]
+
   const primaryCategory = product.categories[0]
 
   return (
@@ -126,6 +147,24 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               selectedVariantId={selectedVariantId}
               onSelect={setSelectedVariantId}
             />
+
+            {isThinkificCourse && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="mt-8 flex gap-3 rounded-card bg-brand-accent/5 border border-brand-accent/20 p-5"
+              >
+                <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-brand-accent/15 flex items-center justify-center">
+                  <Check className="w-3 h-3 text-brand-accent" />
+                </span>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  After purchase, you&apos;ll receive instant access to this course via the Ravenall
+                  Institute. A welcome email with your login details will be sent to your registered
+                  email address.
+                </p>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </section>
@@ -142,7 +181,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {OUTCOME_CARDS.map((card, i) => {
               const Icon = card.icon
               return (
@@ -242,14 +281,8 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               <h3 className="text-xl font-semibold text-gray-900 mb-6">
                 What&apos;s Included
               </h3>
-              {/* TODO: Replace with actual included items from Medusa product metadata */}
               <ul className="space-y-4">
-                {[
-                  'Live sessions via Zoom',
-                  'Session recordings',
-                  'Course materials',
-                  'Email support between sessions',
-                ].map((item) => (
+                {includedItems.map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <div className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-brand-accent/10 flex items-center justify-center">
                       <Check className="w-3 h-3 text-brand-accent" />

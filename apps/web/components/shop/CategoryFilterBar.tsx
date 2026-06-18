@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 interface MedusaCategory {
   id: string
@@ -47,8 +48,14 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
 
   const topLevelCategories = categories.filter((c) => c.parent_category_id === null)
 
+  // Category and collection filters are mutually exclusive — selecting one clears the other.
   const setCategoryId = (id: string) =>
-    onFiltersChange({ ...filters, categoryId: id, collectionHandle: '' })
+    onFiltersChange({ categoryId: id, collectionHandle: '' })
+
+  const setCollectionHandle = (handle: string) =>
+    onFiltersChange({ categoryId: '', collectionHandle: handle })
+
+  const isOnlineCourses = filters.collectionHandle === 'programmes'
 
   return (
     <div
@@ -61,7 +68,7 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
         <div className="flex flex-wrap gap-3">
           <FilterPill
             label="All"
-            active={filters.categoryId === ''}
+            active={filters.categoryId === '' && filters.collectionHandle === ''}
             onClick={() => setCategoryId('')}
           />
           {topLevelCategories.map((cat) => (
@@ -72,7 +79,27 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
               onClick={() => setCategoryId(cat.id)}
             />
           ))}
+          <FilterPill
+            label="Online Courses"
+            active={isOnlineCourses}
+            onClick={() => setCollectionHandle(isOnlineCourses ? '' : 'programmes')}
+          />
         </div>
+
+        <AnimatePresence>
+          {isOnlineCourses && (
+            <motion.p
+              key="courses-subtitle"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.2 }}
+              className="mt-3 text-xs text-white/40 font-light"
+            >
+              Self-paced courses delivered via the Ravenall Institute
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )

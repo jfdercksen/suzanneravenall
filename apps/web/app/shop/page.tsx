@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { ShopCatalogueContent } from '@/components/shop/ShopCatalogueContent'
 
 export const metadata: Metadata = {
@@ -6,6 +7,9 @@ export const metadata: Metadata = {
   description:
     'Private sessions, guided programmes, and group coaching designed to create lasting change. Browse and invest in your transformation.',
 }
+
+// CF-IPCountry is only available at request time — force dynamic to read it.
+export const dynamic = 'force-dynamic'
 
 interface MedusaCategory {
   id: string
@@ -38,7 +42,9 @@ async function fetchCategories(): Promise<MedusaCategory[]> {
 }
 
 export default async function ShopPage() {
-  const categories = await fetchCategories()
+  const [categories, reqHeaders] = await Promise.all([fetchCategories(), headers()])
+  const country = reqHeaders.get('CF-IPCountry') ?? ''
+  const defaultCurrency = country === 'ZA' ? 'zar' : 'usd'
 
-  return <ShopCatalogueContent initialCategories={categories} />
+  return <ShopCatalogueContent initialCategories={categories} defaultCurrency={defaultCurrency} />
 }

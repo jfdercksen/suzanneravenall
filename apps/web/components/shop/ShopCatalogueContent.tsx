@@ -37,21 +37,20 @@ const PAGE_SIZE = 12
 
 const medusaHeaders = { 'x-publishable-api-key': MEDUSA_PUB_KEY }
 
-function getLowestZarPrice(product: MedusaProduct): number {
-  const prices = product.variants
-    .flatMap((v) => v.prices)
-    .filter((p) => p.currency_code === 'zar')
-    .map((p) => p.amount)
-
-  return prices.length > 0 ? Math.min(...prices) : Infinity
+function getLowestPriceForSort(product: MedusaProduct, currency: string): number {
+  const allPrices = product.variants.flatMap((v) => v.prices)
+  const inCurrency = allPrices.filter((p) => p.currency_code === currency).map((p) => p.amount)
+  if (inCurrency.length > 0) return Math.min(...inCurrency)
+  const inZar = allPrices.filter((p) => p.currency_code === 'zar').map((p) => p.amount)
+  return inZar.length > 0 ? Math.min(...inZar) : Infinity
 }
 
-function sortProducts(products: MedusaProduct[], sort: SortOption): MedusaProduct[] {
+function sortProducts(products: MedusaProduct[], sort: SortOption, currency: string): MedusaProduct[] {
   if (sort === 'price_asc') {
-    return [...products].sort((a, b) => getLowestZarPrice(a) - getLowestZarPrice(b))
+    return [...products].sort((a, b) => getLowestPriceForSort(a, currency) - getLowestPriceForSort(b, currency))
   }
   if (sort === 'price_desc') {
-    return [...products].sort((a, b) => getLowestZarPrice(b) - getLowestZarPrice(a))
+    return [...products].sort((a, b) => getLowestPriceForSort(b, currency) - getLowestPriceForSort(a, currency))
   }
   return products
 }
@@ -84,9 +83,10 @@ function searchHitToProduct(hit: ProductSearchHit): MedusaProduct {
 
 interface ShopCatalogueContentProps {
   initialCategories: MedusaCategory[]
+  defaultCurrency?: string
 }
 
-export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContentProps) {
+export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar' }: ShopCatalogueContentProps) {
   const [products, setProducts] = useState<MedusaProduct[]>([])
   const [totalCount, setTotalCount] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -183,7 +183,10 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
   }, [searchQuery])
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
-  const sortedProducts = useMemo(() => sortProducts(products, sort), [products, sort])
+  const sortedProducts = useMemo(
+    () => sortProducts(products, sort, defaultCurrency),
+    [products, sort, defaultCurrency],
+  )
 
   return (
     <main className="min-h-screen">
@@ -262,7 +265,7 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
               {!searchLoading && searchResults.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {searchResults.map((product, index) => (
-                    <ProductCard key={product.id} product={product} index={index} allCategories={initialCategories} />
+                    <ProductCard key={product.id} product={product} index={index} allCategories={initialCategories} defaultCurrency={defaultCurrency} />
                   ))}
                 </div>
               )}
@@ -300,7 +303,7 @@ export function ShopCatalogueContent({ initialCategories }: ShopCatalogueContent
               {!loading && !error && sortedProducts.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {sortedProducts.map((product, index) => (
-                    <ProductCard key={product.id} product={product} index={index} allCategories={initialCategories} />
+                    <ProductCard key={product.id} product={product} index={index} allCategories={initialCategories} defaultCurrency={defaultCurrency} />
                   ))}
                 </div>
               )}

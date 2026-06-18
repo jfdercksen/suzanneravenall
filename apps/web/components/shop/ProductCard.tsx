@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useCart } from '@/lib/cart'
 import type { MedusaProduct, ProductVariant } from '@/types/medusa'
 
 const CATEGORY_IMAGE_MAP: Record<string, string> = {
@@ -90,31 +91,50 @@ function getRootCategory(
   return productCategories[0] ?? null
 }
 
-function getLowestZarPrice(variants: ProductVariant[]): number | null {
-  const zarPrices = variants
-    .flatMap((v) => v.prices)
-    .filter((p) => p.currency_code === 'zar')
-    .map((p) => p.amount)
-
-  if (zarPrices.length === 0) return null
-
-  return Math.min(...zarPrices)
+interface LowestPrice {
+  amount: number
+  currency_code: string
 }
 
-function PriceDisplay({ variants }: { variants: ProductVariant[] }) {
-  const lowestCents = getLowestZarPrice(variants)
+function getLowestPriceForCurrency(variants: ProductVariant[], currency: string): LowestPrice | null {
+  const allPrices = variants.flatMap((v) => v.prices)
 
-  if (lowestCents === null) {
+  // Try the visitor's currency first; fall back to ZAR.
+  const inCurrency = allPrices.filter((p) => p.currency_code === currency)
+  if (inCurrency.length > 0) {
+    return { amount: Math.min(...inCurrency.map((p) => p.amount)), currency_code: currency }
+  }
+
+  const inZar = allPrices.filter((p) => p.currency_code === 'zar')
+  if (inZar.length > 0) {
+    return { amount: Math.min(...inZar.map((p) => p.amount)), currency_code: 'zar' }
+  }
+
+  return null
+}
+
+function PriceDisplay({ variants, currency }: { variants: ProductVariant[]; currency: string }) {
+  const lowest = getLowestPriceForCurrency(variants, currency)
+
+  if (!lowest) {
     return <span className="text-2xl font-light text-white/60">Contact us</span>
   }
 
-  const rands = lowestCents / 100
+  const amount = lowest.amount / 100
   const hasMultipleVariants = variants.length > 1
-  const formatted = new Intl.NumberFormat('en-ZA').format(rands)
+  const prefix = hasMultipleVariants ? 'from ' : ''
+
+  if (lowest.currency_code === 'usd') {
+    return (
+      <span className="text-2xl font-light text-white">
+        {prefix}${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+      </span>
+    )
+  }
 
   return (
     <span className="text-2xl font-light text-white">
-      {hasMultipleVariants ? 'from ' : ''}R{formatted}
+      {prefix}R{amount.toLocaleString('en-ZA', { maximumFractionDigits: 0 })}
     </span>
   )
 }
@@ -123,9 +143,13 @@ interface ProductCardProps {
   product: MedusaProduct
   index: number
   allCategories?: CategoryNode[]
+  defaultCurrency?: string
 }
 
-export function ProductCard({ product, index, allCategories = [] }: ProductCardProps) {
+export function ProductCard({ product, index, allCategories = [], defaultCurrency = 'zar' }: ProductCardProps) {
+  const { cart } = useCart()
+  const currency = cart?.currency_code ?? defaultCurrency
+
   const badge = getDeliveryBadge(product.handle, product.title)
   const leafCategory = product.categories[0] ?? null
   const rootCategory = getRootCategory(product.categories, allCategories)
@@ -171,7 +195,7 @@ export function ProductCard({ product, index, allCategories = [] }: ProductCardP
             </h3>
 
             <div className="flex items-center justify-between gap-3 mt-1">
-              <PriceDisplay variants={product.variants} />
+              <PriceDisplay variants={product.variants} currency={currency} />
               <span className={`text-xs font-medium px-3 py-1 rounded-full whitespace-nowrap ${badge.className}`}>
                 {badge.label}
               </span>
