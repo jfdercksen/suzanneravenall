@@ -65,7 +65,7 @@ export default function PrivateSessions() {
                 alt=""
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-500"
+                className="object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500"
               />
               <div
                 aria-hidden="true"

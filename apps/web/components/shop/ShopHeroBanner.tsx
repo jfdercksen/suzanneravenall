@@ -7,7 +7,7 @@ export function ShopHeroBanner() {
   return (
     <section
       aria-labelledby="shop-hero-heading"
-      className="relative w-full bg-brand-primary min-h-screen flex items-center py-20 lg:py-32 overflow-hidden"
+      className="relative w-full bg-brand-primary min-h-[50vh] flex items-center py-16 lg:py-32 overflow-hidden"
     >
       {/* Background video — poster handles static fallback */}
       <video
@@ -65,7 +65,7 @@ export function ShopHeroBanner() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35 }}
-          className="flex flex-wrap gap-8 mb-10"
+          className="flex gap-4 sm:gap-8 mb-8 sm:mb-10"
         >
           {[
             { value: '2,000+', label: 'Lives transformed' },

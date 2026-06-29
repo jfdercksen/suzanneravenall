@@ -59,7 +59,7 @@ export default function ServicesHero() {
             <motion.h1
               id="services-hero-heading"
               {...fadeUp(0.15)}
-              className="text-4xl lg:text-7xl font-light text-white leading-[1.05] mb-8"
+              className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
             >
               Unlock your life{' '}
               <span className="text-brand-accent">and potential.</span>

@@ -85,7 +85,7 @@ export default function MasterclassContent() {
   return (
     <>
       {/* ── Section 1: Hero (dark) ───────────────────────────────────────── */}
-      <section className="relative w-full bg-brand-primary min-h-screen flex items-center py-24 lg:py-40 overflow-hidden">
+      <section className="relative w-full bg-brand-primary min-h-[60vh] flex items-center py-24 overflow-hidden">
         <video
           autoPlay
           muted

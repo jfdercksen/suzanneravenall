@@ -42,7 +42,7 @@ export default function AboutHero() {
           <motion.h1
             id="about-hero-heading"
             {...fadeUp(0.2)}
-            className="text-4xl lg:text-7xl font-light text-white leading-[1.08] mb-8"
+            className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
           >
             Championing the change in the human condition{' '}
             <span className="text-brand-accent">one person at a time</span>

@@ -36,7 +36,7 @@ export default function PathwaysHero() {
           <motion.h1
             id="pathways-hero-heading"
             {...fadeUp(0.1)}
-            className="text-4xl lg:text-7xl font-light text-white leading-[1.05] mb-8"
+            className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
           >
             Structured pathways for deep, lasting{' '}
             <span className="text-brand-accent">transformation</span>

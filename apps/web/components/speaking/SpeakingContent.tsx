@@ -146,7 +146,7 @@ export default function SpeakingContent() {
             <motion.h1
               id="speaking-hero-heading"
               {...fadeUp(0.1)}
-              className="text-4xl lg:text-7xl font-light text-white leading-[1.05] mb-8"
+              className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
             >
               Transform Your Audience{' '}
               <span className="text-brand-accent">From the Inside Out</span>

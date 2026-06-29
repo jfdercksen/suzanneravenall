@@ -29,7 +29,7 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
             to next.config.mjs remotePatterns */}
         <div className="absolute inset-0">
           <Image
-            src="/images/blog-placeholder.jpg"
+            src="/images/suzanne-ravenall.jpg"
             alt={post.featuredImage?.alt ?? post.title}
             fill
             className="object-cover"
@@ -140,7 +140,7 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
                   <Link href={`/blog/${related.slug}`} className="block relative aspect-[16/9] overflow-hidden">
                     {/* TODO: Replace placeholder with actual Payload image once remotePatterns is updated */}
                     <Image
-                      src="/images/blog-placeholder.jpg"
+                      src="/images/suzanne-ravenall.jpg"
                       alt={related.featuredImage?.alt ?? related.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"

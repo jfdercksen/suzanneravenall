@@ -63,7 +63,7 @@ export default function Hero() {
           <motion.h1
             id="hero-heading"
             {...fadeUp(0.25)}
-            className="text-5xl lg:text-7xl xl:text-8xl font-display text-white leading-[1.05] mb-6"
+            className="text-5xl lg:text-6xl font-display text-white leading-[1.05] mb-6"
           >
             Unlock Your Most{' '}
             <span className="text-brand-accent">Extraordinary Self</span>

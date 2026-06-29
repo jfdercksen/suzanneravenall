@@ -16,8 +16,11 @@ const cardVariants = {
 
 const badgeClasses = (category: PathwayCategory): string =>
   category === 'youth'
-    ? 'bg-white/10 text-white/70 border border-white/20'
-    : 'bg-brand-accent/15 text-brand-accent border border-brand-accent/30'
+    ? 'bg-emerald-500/20 text-emerald-400'
+    : 'bg-brand-accent/20 text-brand-accent'
+
+const cardAccentClass = (category: PathwayCategory): string =>
+  category === 'youth' ? 'border-l-emerald-500' : 'border-l-brand-accent'
 
 export default function PathwaysGrid() {
   return (
@@ -57,7 +60,7 @@ export default function PathwaysGrid() {
             <motion.li key={pathway.slug} variants={cardVariants}>
               <Link
                 href={`/transformation-pathways/${pathway.slug}`}
-                className="group flex h-full flex-col rounded-card bg-white/5 border border-white/10 p-7 transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:bg-white/[0.07] hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-primary-900"
+                className={`group flex h-full flex-col rounded-card bg-white/5 border border-white/10 border-l-2 ${cardAccentClass(pathway.category)} p-7 transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:bg-white/[0.07] hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-primary-900`}
               >
                 <span
                   className={`inline-flex w-fit items-center rounded-button px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold mb-5 ${badgeClasses(

@@ -53,7 +53,7 @@ export default function ExploreHero() {
           <motion.h1
             id="explore-hero-heading"
             {...fadeUp(0.1)}
-            className="text-4xl lg:text-7xl font-light text-white leading-[1.05] mb-8"
+            className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
           >
             Every area of your life,{' '}
             <span className="text-brand-accent">transformed</span>

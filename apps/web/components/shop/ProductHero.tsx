@@ -18,7 +18,7 @@ export function ProductHero({ product }: ProductHeroProps) {
   const transformationPromise = rawSentence ? `${rawSentence}.` : 'Transform how you experience life.'
 
   return (
-    <section className="relative w-full min-h-screen flex items-end bg-brand-primary overflow-hidden">
+    <section className="relative w-full min-h-[60vh] flex items-end bg-brand-primary overflow-hidden">
       {/* Background image */}
       {product.thumbnail && (
         <div className="absolute inset-0">

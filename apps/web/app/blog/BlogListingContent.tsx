@@ -250,7 +250,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
                     {/* TODO: Replace placeholder with actual Payload image once payload:3001 is added
                         to next.config.mjs remotePatterns */}
                     <Image
-                      src="/images/blog-placeholder.jpg"
+                      src="/images/suzanne-ravenall.jpg"
                       alt={post.featuredImage?.alt ?? post.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
