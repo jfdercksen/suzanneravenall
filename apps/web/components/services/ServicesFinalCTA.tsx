@@ -7,9 +7,9 @@ export default function ServicesFinalCTA() {
   return (
     <motion.section
       aria-labelledby="services-cta-heading"
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-100px' }}
+      viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.6 }}
       className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
     >
@@ -22,7 +22,7 @@ export default function ServicesFinalCTA() {
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
         >
@@ -33,7 +33,7 @@ export default function ServicesFinalCTA() {
           id="services-cta-heading"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-4xl lg:text-6xl font-light text-white leading-tight mb-6"
         >
@@ -43,7 +43,7 @@ export default function ServicesFinalCTA() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="text-lg lg:text-xl text-white/70 font-light max-w-2xl mx-auto mb-12 leading-relaxed"
         >
@@ -55,7 +55,7 @@ export default function ServicesFinalCTA() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <Link

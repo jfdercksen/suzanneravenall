@@ -223,7 +223,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-12"
@@ -284,7 +284,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
                   key={video.id}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-100px' }}
+                  viewport={{ once: true, margin: '0px' }}
                   transition={{ duration: 0.4, delay: i * 0.08 }}
                 >
                   <VideoCard
@@ -302,7 +302,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
             className="mt-16 relative overflow-hidden rounded-card bg-gray-900 p-8 lg:p-12"
           >

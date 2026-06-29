@@ -6,15 +6,15 @@ import type { PrivateSession } from '@/data/privateSessions'
 
 // Above-the-fold hero uses `animate`; everything below uses `whileInView`.
 const fadeUpAnimate = (delay: number) => ({
-  initial: { opacity: 0, y: 50 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.6, delay, ease: 'easeOut' as const },
 })
 
 const fadeUpInView = (delay: number) => ({
-  initial: { opacity: 0, y: 50 },
+  initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-100px' },
+  viewport: { once: true, margin: '0px' },
   transition: { duration: 0.6, delay, ease: 'easeOut' as const },
 })
 

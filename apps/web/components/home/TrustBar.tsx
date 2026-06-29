@@ -51,7 +51,7 @@ function CountUp({ target, suffix, isInView }: { target: number; suffix: string;
 
 export default function TrustBar() {
   const sectionRef = useRef<HTMLElement>(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
+  const isInView = useInView(sectionRef, { once: true, margin: '0px' })
 
   return (
     <section ref={sectionRef} aria-label="Trust indicators" className="bg-white py-12 lg:py-16 border-y border-gray-100">
@@ -63,7 +63,7 @@ export default function TrustBar() {
               className="text-center lg:px-8"
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.5, delay: i * 0.1, ease: 'easeOut' }}
             >
               <dd className="text-4xl lg:text-5xl font-light text-brand-primary">

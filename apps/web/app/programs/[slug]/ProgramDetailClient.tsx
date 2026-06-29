@@ -39,13 +39,13 @@ function getCtaProps(program: Program): { label: string; href: string } {
 // -- motion variants --
 
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.8, delay, ease: 'easeOut' as const },
 })
 
 const sectionVariants = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 }
 
@@ -59,7 +59,7 @@ const childVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 }
 
-const viewport = { once: true, margin: '-100px' } as const
+const viewport = { once: true, margin: '0px' } as const
 
 // -- icons (inline SVG — no external icon dependency) --
 

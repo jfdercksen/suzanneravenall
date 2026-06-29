@@ -8,17 +8,17 @@ import ContactForm from './ContactForm'
 const CAL_URL = process.env.NEXT_PUBLIC_CAL_URL ?? 'https://cal.suzanneravenall.com'
 
 const sectionReveal = {
-  initial: { opacity: 0, y: 50 },
+  initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-100px' } as const,
+  viewport: { once: true, margin: '0px' } as const,
   transition: { duration: 0.6, ease: 'easeOut' as const },
 }
 
 function cardReveal(delay: number) {
   return {
-    initial: { opacity: 0, y: 40 },
+    initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: '-100px' } as const,
+    viewport: { once: true, margin: '0px' } as const,
     transition: { duration: 0.6, delay, ease: 'easeOut' as const },
   }
 }

@@ -77,7 +77,7 @@ const containerVariants = {
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
 }
 
@@ -86,9 +86,9 @@ export default function ResourcesCategories() {
     <section aria-labelledby="categories-heading" className="w-full bg-white py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6 }}
           className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
         >
@@ -97,9 +97,9 @@ export default function ResourcesCategories() {
 
         <motion.h2
           id="categories-heading"
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-4xl lg:text-5xl font-light text-gray-900 mb-12"
         >
@@ -110,7 +110,7 @@ export default function ResourcesCategories() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {categories.map(({ href, icon: Icon, label, title, description, badge }) => (

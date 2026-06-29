@@ -10,9 +10,9 @@ import Link from 'next/link'
 import type { MedusaProduct } from '@/types/medusa'
 
 const fadeUp = {
-  initial: { opacity: 0, y: 50 },
+  initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-100px' },
+  viewport: { once: true, margin: '0px' },
   transition: { duration: 0.6 },
 }
 
@@ -139,7 +139,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       <section className="w-full bg-white py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="max-w-2xl mx-auto"
@@ -189,9 +189,9 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               return (
                 <motion.div
                   key={card.title}
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-100px' }}
+                  viewport={{ once: true, margin: '0px' }}
                   transition={{ duration: 0.6, delay: i * 0.1 }}
                   className="group relative bg-gray-900 rounded-card p-8 border border-white/5 hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500"
                 >
@@ -224,7 +224,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6 }}
               className="space-y-6"
             >
@@ -277,7 +277,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6 }}
             >
               <h3 className="text-xl font-semibold text-gray-900 mb-6">
@@ -320,9 +320,9 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             {TESTIMONIALS.map((t, i) => (
               <motion.div
                 key={t.name}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
+                viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 className="bg-brand-primary-700 rounded-card p-8 border border-white/10"
               >
@@ -360,7 +360,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="max-w-3xl"
           >
@@ -387,7 +387,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="max-w-2xl mx-auto"
           >
@@ -402,7 +402,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-center mt-12 space-y-3"
           >

@@ -66,9 +66,9 @@ export default function GroupCorporate() {
     <motion.section
       id="group"
       aria-labelledby="group-heading"
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-100px' }}
+      viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.6 }}
       className="relative w-full bg-gray-950 py-20 lg:py-32"
     >
@@ -98,7 +98,7 @@ export default function GroupCorporate() {
               key={offering.name}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               className="group relative overflow-hidden min-h-[220px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >

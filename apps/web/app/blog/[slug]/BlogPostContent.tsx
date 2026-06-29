@@ -41,9 +41,9 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 w-full">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
           >
             <Link
@@ -86,9 +86,9 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
       <section className="py-20 lg:py-32 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
           >
             {/* SEO description teaser — shown until rich text renderer is wired up */}
@@ -115,9 +115,9 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
         <section className="py-20 lg:py-32 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6 }}
               className="text-center mb-14"
             >
@@ -131,9 +131,9 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
               {relatedPosts.map((related, index) => (
                 <motion.article
                   key={related.id}
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-100px' }}
+                  viewport={{ once: true, margin: '0px' }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
                 >

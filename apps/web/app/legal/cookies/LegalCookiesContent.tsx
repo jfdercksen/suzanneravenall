@@ -12,9 +12,9 @@ export default function LegalCookiesContent() {
       <section className="py-20 lg:py-32 bg-brand-primary-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
           >
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
@@ -32,9 +32,9 @@ export default function LegalCookiesContent() {
       <section className="py-20 lg:py-32 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
             className="space-y-12"
           >

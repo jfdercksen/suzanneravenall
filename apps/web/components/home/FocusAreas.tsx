@@ -78,9 +78,9 @@ export default function FocusAreas() {
         {/* Section header */}
         <motion.div
           className="mb-12 lg:mb-16"
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
@@ -96,7 +96,7 @@ export default function FocusAreas() {
           className="hidden lg:flex h-[620px] rounded-card overflow-hidden"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
           {/* Left panel — 35% — numbered list */}
@@ -194,7 +194,7 @@ export default function FocusAreas() {
               key={area.slug}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.5, delay: i * 0.07, ease: 'easeOut' }}
             >
               <Link

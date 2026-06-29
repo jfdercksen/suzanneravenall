@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 // Hero is always in the initial viewport — use animate (mount), not whileInView.
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.7, delay, ease: 'easeOut' as const },
 })

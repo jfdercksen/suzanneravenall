@@ -16,9 +16,9 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="max-w-3xl mb-16 lg:mb-20"
         >
@@ -44,7 +44,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
             className="relative flex items-start gap-0 mb-12"
           >
@@ -128,7 +128,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
                 key={stage.step}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
+                viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.5, delay: index * 0.08, ease: 'easeOut' }}
               >
                 <button

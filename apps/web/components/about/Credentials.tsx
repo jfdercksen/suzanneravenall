@@ -4,9 +4,9 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const sectionReveal = {
-  initial: { opacity: 0, y: 50 },
+  initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-100px' },
+  viewport: { once: true, margin: '0px' },
   transition: { duration: 0.6, ease: 'easeOut' as const },
 }
 
@@ -44,7 +44,7 @@ function AnimatedStat({ target, suffix, label, delay }: {
   const [count, setCount] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
   const rafRef = useRef<number>(0)
-  const inView = useInView(ref, { once: true, margin: '-100px' })
+  const inView = useInView(ref, { once: true, margin: '0px' })
 
   useEffect(() => {
     if (!inView) return
@@ -75,7 +75,7 @@ function AnimatedStat({ target, suffix, label, delay }: {
       ref={ref}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-100px' }}
+      viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.6, delay, ease: 'easeOut' as const }}
       className="border-t border-white/15 pt-6 min-w-[140px]"
     >
@@ -131,7 +131,7 @@ export default function Credentials() {
               key={tag}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{
                 duration: 0.5,
                 delay: i * 0.05,

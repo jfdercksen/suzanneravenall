@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 
 // Hero animations fire on mount (not scroll) — intentional for the first section on screen.
 const fadeUp = (delay: number) => ({
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.8, delay, ease: 'easeOut' as const },
 })

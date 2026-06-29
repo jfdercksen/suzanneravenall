@@ -31,7 +31,7 @@ export default function TestimonialSpotlight() {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.7, ease: 'easeOut' as const }}
           >
             <div className="mb-8">
@@ -61,7 +61,7 @@ export default function TestimonialSpotlight() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' as const }}
             className="flex flex-col justify-between"
           >

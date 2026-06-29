@@ -24,9 +24,9 @@ export default function AssessmentsContent() {
       <section className="w-full bg-brand-primary min-h-[70vh] flex items-center py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
@@ -44,9 +44,9 @@ export default function AssessmentsContent() {
       <section className="w-full bg-gray-950 py-20 md:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
             className="text-center mb-10"
           >
@@ -57,7 +57,7 @@ export default function AssessmentsContent() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.15 }}
           >
             <EmailNotifyForm />
@@ -68,9 +68,9 @@ export default function AssessmentsContent() {
       <section className="w-full bg-white py-20 md:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
             className="text-center mb-14"
           >
@@ -84,9 +84,9 @@ export default function AssessmentsContent() {
             {assessmentTypes.map(({ title, description }, index) => (
               <motion.div
                 key={title}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
+                viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="bg-gray-50 rounded-2xl p-8"
               >

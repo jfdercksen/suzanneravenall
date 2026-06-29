@@ -59,9 +59,9 @@ export default function UpcomingPrograms() {
           {/* TIER 1 — Featured cohort (spans 2 cols) */}
           <motion.div
             className="lg:col-span-2 relative overflow-hidden bg-gray-900 border border-white/5 shadow-2xl group"
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, ease: 'easeOut' as const }}
             whileHover={{ y: -4 }}
           >
@@ -132,9 +132,9 @@ export default function UpcomingPrograms() {
           {/* TIER 2 — 1-on-1 card (spans 1 col) */}
           <motion.div
             className="relative overflow-hidden bg-gray-950 border border-white/10 group hover:border-brand-accent/40 transition-colors duration-500"
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.15, ease: 'easeOut' as const }}
             whileHover={{ y: -4 }}
           >

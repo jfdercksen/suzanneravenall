@@ -44,9 +44,9 @@ export default function FeaturedPrograms() {
 
         <motion.div
           className="text-center mb-12 lg:mb-16"
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
@@ -62,9 +62,9 @@ export default function FeaturedPrograms() {
             <motion.div
               key={title}
               className="group relative bg-gray-50 border border-gray-100 rounded-card overflow-hidden hover:border-brand-accent/30 hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1 flex flex-col"
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
             >
               <div className="relative h-52 overflow-hidden">

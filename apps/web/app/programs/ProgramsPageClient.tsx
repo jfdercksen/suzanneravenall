@@ -18,7 +18,7 @@ const getCategoryLabel = (category: string) =>
   CATEGORIES.find((c) => c.id === category)?.label ?? category
 
 const sectionVariants = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 }
 
@@ -175,7 +175,7 @@ export default function ProgramsPageClient() {
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
@@ -246,7 +246,7 @@ export default function ProgramsPageClient() {
             variants={sectionVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
           >
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Practitioner Programmes
@@ -264,7 +264,7 @@ export default function ProgramsPageClient() {
             variants={staggerChildren}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {practitionerPrograms.map((program) => (
@@ -287,7 +287,7 @@ export default function ProgramsPageClient() {
             variants={sectionVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
           >
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Self-Paced Programmes
@@ -304,7 +304,7 @@ export default function ProgramsPageClient() {
             variants={staggerChildren}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {selfPacedPrograms.map((program) => (
@@ -327,7 +327,7 @@ export default function ProgramsPageClient() {
             variants={sectionVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
           >
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Live Programmes
@@ -345,7 +345,7 @@ export default function ProgramsPageClient() {
             variants={staggerChildren}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             className="grid grid-cols-1 sm:grid-cols-2 gap-6"
           >
             {livePrograms.map((program) => (
@@ -398,7 +398,7 @@ export default function ProgramsPageClient() {
             variants={sectionVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
           >
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Group &amp; Corporate
@@ -422,7 +422,7 @@ export default function ProgramsPageClient() {
             variants={staggerChildren}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
           >
             {groupPrograms.map((program) => (
@@ -435,7 +435,7 @@ export default function ProgramsPageClient() {
             variants={sectionVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             className="bg-brand-primary rounded-3xl p-10 lg:p-16 flex flex-col lg:flex-row items-center justify-between gap-8"
           >
             <div>
@@ -468,7 +468,7 @@ export default function ProgramsPageClient() {
             variants={sectionVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
           >
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
               Not Sure Where to Start?

@@ -17,9 +17,9 @@ export default function TopicRelated({ slug }: { slug: TopicSlug }) {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="max-w-3xl mb-16 lg:mb-20"
         >
@@ -39,9 +39,9 @@ export default function TopicRelated({ slug }: { slug: TopicSlug }) {
           {related.map((topic, index) => (
             <motion.li
               key={topic.slug}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
             >
               <Link

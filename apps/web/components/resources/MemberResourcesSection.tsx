@@ -47,9 +47,9 @@ export default function MemberResourcesSection({ tier }: MemberResourcesSectionP
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6 }}
           className="flex flex-wrap items-end justify-between gap-6 mb-12"
         >
@@ -92,7 +92,7 @@ export default function MemberResourcesSection({ tier }: MemberResourcesSectionP
                 key={item.title}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
+                viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
                 {unlocked ? (

@@ -74,7 +74,7 @@ export default function MediaLogos({
       <motion.blockquote
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-50px' }}
+        viewport={{ once: true, margin: '0px' }}
         transition={{ duration: 0.8, ease: 'easeOut' as const }}
         className="text-center max-w-3xl mx-auto px-4 mb-12"
       >
@@ -90,7 +90,7 @@ export default function MediaLogos({
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-50px' }}
+        viewport={{ once: true, margin: '0px' }}
         transition={{ duration: 0.6, ease: 'easeOut' as const }}
         className="max-w-7xl mx-auto px-4 mb-6"
       >

@@ -13,9 +13,9 @@ export default function AboutTeaser() {
           {/* Text — left on desktop, below image on mobile */}
           <motion.div
             className="order-2 lg:order-1 lg:pr-4"
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
             <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
@@ -53,9 +53,9 @@ export default function AboutTeaser() {
           {/* Image — right on desktop, above text on mobile */}
           <motion.div
             className="order-1 lg:order-2 relative"
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
           >
             <div className="relative aspect-[4/5] rounded-card overflow-hidden shadow-card-hover">

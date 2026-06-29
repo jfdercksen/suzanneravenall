@@ -52,7 +52,7 @@ export function ComingSoonSection() {
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
@@ -88,9 +88,9 @@ export function ComingSoonSection() {
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
           >
@@ -99,9 +99,9 @@ export function ComingSoonSection() {
 
           <motion.h2
             id="coming-soon-cta-heading"
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] mb-6"
           >
@@ -109,9 +109,9 @@ export function ComingSoonSection() {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-gray-600 text-lg font-light leading-relaxed mb-10"
           >
@@ -119,9 +119,9 @@ export function ComingSoonSection() {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
@@ -172,7 +172,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
       <motion.section
         aria-labelledby="blog-hero-heading"
         className="relative py-20 lg:py-32 bg-brand-primary-900 overflow-hidden"
-        initial={{ opacity: 0, y: 50 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
@@ -239,9 +239,9 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
               {filtered.map((post, index) => (
                 <motion.article
                   key={post.id}
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-100px' }}
+                  viewport={{ once: true, margin: '0px' }}
                   transition={{ duration: 0.6, delay: (index % 3) * 0.1 }}
                   className="group bg-white rounded-card overflow-hidden border border-gray-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
                 >
@@ -319,9 +319,9 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
           >
@@ -330,9 +330,9 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
 
           <motion.h2
             id="blog-cta-heading"
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-6"
           >
@@ -340,9 +340,9 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-gray-300 text-lg font-light leading-relaxed mb-10"
           >
@@ -350,9 +350,9 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >

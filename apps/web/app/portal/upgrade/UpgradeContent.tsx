@@ -27,7 +27,7 @@ function TierCard({ tier, isCurrentTier, isUpgrade }: TierCardProps) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
+      viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.35 }}
       className={`relative flex flex-col rounded-xl p-5 transition-all duration-300 ${
         isCurrentTier
@@ -138,7 +138,7 @@ export default function UpgradeContent({
       <section className="w-full bg-brand-primary py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
@@ -173,9 +173,9 @@ export default function UpgradeContent({
       <section className="w-full bg-gray-950 py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.5 }}
             className="mb-10"
           >
@@ -204,9 +204,9 @@ export default function UpgradeContent({
       <section className="w-full bg-brand-primary py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.5 }}
             className="mb-12"
           >

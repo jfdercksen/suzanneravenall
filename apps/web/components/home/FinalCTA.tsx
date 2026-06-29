@@ -8,9 +8,9 @@ export default function FinalCTA() {
     <section aria-labelledby="finalcta-heading" className="py-28 lg:py-36 bg-brand-primary">
       <motion.div
         className="max-w-3xl mx-auto px-4 text-center"
-        initial={{ opacity: 0, y: 50 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
+        viewport={{ once: true, margin: '0px' }}
         transition={{ duration: 0.7, ease: 'easeOut' }}
       >
         <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-6">
@@ -23,7 +23,7 @@ export default function FinalCTA() {
           className="mt-6 text-white/60 text-lg leading-relaxed max-w-xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
         >
           Schedule a complimentary discovery call. No obligation — just clarity on where you are, where you want to be, and whether working together is the right fit.
@@ -31,7 +31,7 @@ export default function FinalCTA() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.35, ease: 'easeOut' }}
         >
           <Link

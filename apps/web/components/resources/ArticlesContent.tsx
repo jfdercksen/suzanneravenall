@@ -93,7 +93,7 @@ const containerVariants = {
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
 }
 
@@ -107,7 +107,7 @@ export default function ArticlesContent() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
@@ -117,7 +117,7 @@ export default function ArticlesContent() {
 
           <motion.h1
             id="articles-hero-heading"
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
             className="text-4xl lg:text-6xl font-light text-white leading-[1.1] max-w-3xl mb-6"
@@ -126,7 +126,7 @@ export default function ArticlesContent() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-lg text-white/70 font-light max-w-xl leading-relaxed"
@@ -145,9 +145,9 @@ export default function ArticlesContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
             id="articles-grid-heading"
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
             className="text-3xl lg:text-4xl font-light text-gray-900 mb-12"
           >
@@ -158,7 +158,7 @@ export default function ArticlesContent() {
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             className="grid grid-cols-1 sm:grid-cols-2 gap-6"
           >
             {articles.map((article) => (
@@ -207,9 +207,9 @@ export default function ArticlesContent() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
           >
@@ -218,9 +218,9 @@ export default function ArticlesContent() {
 
           <motion.h2
             id="articles-newsletter-cta-heading"
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl lg:text-5xl font-light text-white mb-6"
           >
@@ -228,9 +228,9 @@ export default function ArticlesContent() {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-white/70 font-light max-w-xl mx-auto mb-10 leading-relaxed"
           >
@@ -240,9 +240,9 @@ export default function ArticlesContent() {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <Link

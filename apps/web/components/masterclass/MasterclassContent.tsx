@@ -75,9 +75,9 @@ const testimonials = [
 ]
 
 const sectionFadeUp = {
-  initial: { opacity: 0, y: 50 },
+  initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-100px' },
+  viewport: { once: true, margin: '0px' },
   transition: { duration: 0.6 },
 } as const
 
@@ -103,7 +103,7 @@ export default function MasterclassContent() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-2xl">
             <motion.p
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
@@ -112,7 +112,7 @@ export default function MasterclassContent() {
             </motion.p>
 
             <motion.h1
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-4xl lg:text-6xl font-light text-white leading-tight mb-6"
@@ -122,7 +122,7 @@ export default function MasterclassContent() {
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-xl text-gray-300 mt-4 max-w-2xl mb-10"
@@ -132,7 +132,7 @@ export default function MasterclassContent() {
             </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
@@ -158,9 +158,9 @@ export default function MasterclassContent() {
             {outcomes.map((item, i) => (
               <motion.div
                 key={item.number}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
+                viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 className="relative p-8 rounded-card bg-gray-50 group hover:shadow-lg hover:-translate-y-1 transition-all duration-500"
               >
@@ -199,9 +199,9 @@ export default function MasterclassContent() {
             {audience.map(({ icon: Icon, title, description }, i) => (
               <motion.div
                 key={title}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
+                viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 className="bg-gray-900 rounded-card p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
               >
@@ -271,9 +271,9 @@ export default function MasterclassContent() {
             {testimonials.map(({ quote, name, location }, i) => (
               <motion.figure
                 key={name + location}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
+                viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 className="bg-gray-900 rounded-card p-8"
               >

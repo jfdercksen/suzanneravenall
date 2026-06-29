@@ -44,9 +44,9 @@ export default function LeadMagnet() {
     <section id="lead-magnet" aria-labelledby="leadmagnet-heading" className="py-20 lg:py-32 bg-brand-primary">
       <div className="max-w-3xl mx-auto px-4 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-4">
@@ -63,7 +63,7 @@ export default function LeadMagnet() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
         >
           {status === 'success' ? (

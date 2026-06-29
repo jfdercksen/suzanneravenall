@@ -14,7 +14,7 @@ export default function BookPromotion() {
           className="relative bg-brand-primary flex flex-col items-center justify-center py-20 lg:py-32 px-8 lg:px-16 overflow-hidden min-h-[400px] lg:min-h-[680px]"
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
           {/* Ambient glow behind cover */}
@@ -27,7 +27,7 @@ export default function BookPromotion() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.5, delay: 0.15 }}
             className="relative mb-8 z-10"
           >
@@ -62,7 +62,7 @@ export default function BookPromotion() {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6, delay: 0.15 }}
               className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
             >
@@ -73,7 +73,7 @@ export default function BookPromotion() {
               id="book-heading"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.7, delay: 0.2 }}
               className="text-4xl lg:text-5xl font-light text-brand-primary leading-tight mb-6"
             >
@@ -83,7 +83,7 @@ export default function BookPromotion() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="space-y-4 text-gray-600 leading-relaxed mb-8"
             >
@@ -99,7 +99,7 @@ export default function BookPromotion() {
             <motion.blockquote
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6, delay: 0.4 }}
               className="border-l-2 border-brand-accent pl-6 mb-8"
             >
@@ -114,7 +114,7 @@ export default function BookPromotion() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6, delay: 0.5 }}
               className="flex flex-col sm:flex-row gap-4"
             >

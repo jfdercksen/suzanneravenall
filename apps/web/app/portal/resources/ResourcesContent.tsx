@@ -288,7 +288,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-16"
@@ -313,7 +313,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
                 key={category.title}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
+                viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.5, delay: catIndex * 0.05 }}
               >
                 <div className="flex items-center gap-3 mb-6">
@@ -346,7 +346,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
             className="mt-20 relative overflow-hidden rounded-card bg-gray-900 p-8 lg:p-12"
           >

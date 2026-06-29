@@ -40,9 +40,9 @@ export default function ServicesSection() {
 
         <motion.div
           className="text-center mb-12 lg:mb-16"
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
@@ -58,9 +58,9 @@ export default function ServicesSection() {
             <motion.div
               key={title}
               className="group relative bg-white rounded-card overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1"
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
             >
               <div className="relative h-64 overflow-hidden">

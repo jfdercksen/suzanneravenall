@@ -10,7 +10,7 @@ const containerVariants = {
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
 }
 
@@ -28,9 +28,9 @@ export default function PathwaysGrid() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6 }}
           className="mb-12 lg:mb-16"
         >
@@ -50,7 +50,7 @@ export default function PathwaysGrid() {
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: '-80px' }}
+          viewport={{ once: true, margin: '0px' }}
           className="grid grid-cols-1 lg:grid-cols-3 gap-6"
         >
           {pathways.map((pathway) => (

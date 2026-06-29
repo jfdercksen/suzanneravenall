@@ -70,7 +70,7 @@ export default function DashboardContent({
 
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-10"
@@ -95,7 +95,7 @@ export default function DashboardContent({
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.05 }}
           className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-10"
         >
@@ -126,7 +126,7 @@ export default function DashboardContent({
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mb-10"
           >
@@ -201,7 +201,7 @@ export default function DashboardContent({
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.15 }}
           className="mb-10"
         >
@@ -252,7 +252,7 @@ export default function DashboardContent({
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10"
         >
@@ -310,7 +310,7 @@ export default function DashboardContent({
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.25 }}
           className="mb-10 p-6 bg-gray-900/50 border border-white/5 rounded-card"
         >
@@ -329,7 +329,7 @@ export default function DashboardContent({
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="relative overflow-hidden rounded-card bg-gray-900 p-8 lg:p-10"
           >

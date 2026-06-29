@@ -33,9 +33,9 @@ export default function CalBookingSection() {
   return (
     <motion.section
       aria-labelledby="booking-heading"
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-100px' }}
+      viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.6 }}
       className="relative w-full bg-white py-20 lg:py-32"
     >
@@ -43,7 +43,7 @@ export default function CalBookingSection() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
         >
@@ -54,7 +54,7 @@ export default function CalBookingSection() {
           id="booking-heading"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-6"
         >
@@ -64,7 +64,7 @@ export default function CalBookingSection() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-lg text-gray-600 font-light max-w-xl mx-auto mb-12"
         >
@@ -74,7 +74,7 @@ export default function CalBookingSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <button

@@ -38,9 +38,9 @@ export function MagazineCovers() {
         {/* Header */}
         <motion.div
           className="text-center mb-16 lg:mb-20"
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
@@ -57,9 +57,9 @@ export function MagazineCovers() {
             <motion.div
               key={cover.src}
               className="flex flex-col items-center gap-4"
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
             >
               <motion.div

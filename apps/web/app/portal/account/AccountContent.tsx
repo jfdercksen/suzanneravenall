@@ -139,7 +139,7 @@ export default function AccountContent({
 
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-10"
@@ -155,7 +155,7 @@ export default function AccountContent({
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.05 }}
           className="mb-8 p-6 lg:p-8 bg-gray-900 rounded-card"
           aria-labelledby="profile-heading"
@@ -245,7 +245,7 @@ export default function AccountContent({
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mb-8 p-6 lg:p-8 bg-gray-900 rounded-card"
           aria-labelledby="password-heading"
@@ -310,7 +310,7 @@ export default function AccountContent({
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.15 }}
           className="mb-8 p-6 lg:p-8 bg-gray-900 rounded-card"
           aria-labelledby="membership-heading"
@@ -363,7 +363,7 @@ export default function AccountContent({
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="p-6 lg:p-8 bg-gray-900 rounded-card border border-red-900/30"
           aria-labelledby="danger-heading"

@@ -32,9 +32,9 @@ export default function VideoTestimonials() {
         {/* Header */}
         <motion.div
           className="text-center mb-12 lg:mb-16"
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
@@ -53,7 +53,7 @@ export default function VideoTestimonials() {
           className="relative aspect-video w-full max-w-4xl mx-auto rounded-card overflow-hidden bg-black mb-8 lg:mb-10"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
           <AnimatePresence mode="wait">
@@ -126,7 +126,7 @@ export default function VideoTestimonials() {
           className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:grid lg:grid-cols-6 lg:gap-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
         >
           {videos.map((video, i) => (

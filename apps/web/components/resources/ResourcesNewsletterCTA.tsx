@@ -45,9 +45,9 @@ export default function ResourcesNewsletterCTA() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center">
           <motion.p
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
           >
@@ -56,9 +56,9 @@ export default function ResourcesNewsletterCTA() {
 
           <motion.h2
             id="newsletter-cta-heading"
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl lg:text-5xl font-light text-gray-900 mb-6"
           >
@@ -66,9 +66,9 @@ export default function ResourcesNewsletterCTA() {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-gray-600 font-light leading-relaxed mb-10"
           >
@@ -91,9 +91,9 @@ export default function ResourcesNewsletterCTA() {
             </motion.div>
           ) : (
             <motion.form
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6, delay: 0.3 }}
               onSubmit={handleSubmit}
               className="flex flex-col sm:flex-row gap-3"
@@ -137,7 +137,7 @@ export default function ResourcesNewsletterCTA() {
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-4 text-xs text-gray-400 font-light"
           >

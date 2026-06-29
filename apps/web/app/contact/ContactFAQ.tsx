@@ -5,9 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 
 const sectionReveal = {
-  initial: { opacity: 0, y: 50 },
+  initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-100px' } as const,
+  viewport: { once: true, margin: '0px' } as const,
   transition: { duration: 0.6, ease: 'easeOut' as const },
 }
 
@@ -65,7 +65,7 @@ function FAQItem({
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-100px' }}
+      viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.5, delay, ease: 'easeOut' }}
       className="border-b border-white/20 last:border-b-0"
     >

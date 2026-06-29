@@ -18,9 +18,9 @@ export function ShopFinalCTA() {
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.p
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6 }}
           className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
         >
@@ -29,9 +29,9 @@ export function ShopFinalCTA() {
 
         <motion.h2
           id="shop-cta-heading"
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-6"
         >
@@ -39,9 +39,9 @@ export function ShopFinalCTA() {
         </motion.h2>
 
         <motion.p
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-gray-300 text-lg font-light leading-relaxed mb-10"
         >
@@ -50,9 +50,9 @@ export function ShopFinalCTA() {
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
