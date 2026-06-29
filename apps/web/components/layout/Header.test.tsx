@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import Header from './Header'
@@ -19,6 +20,13 @@ vi.mock('@suzanne/ui', () => ({
 vi.mock('./MobileNav', () => ({
   default: ({ links }: { links: unknown[] }) => (
     <div data-testid="mobile-nav" data-link-count={links.length} />
+  ),
+}))
+
+// Mock DesktopNav — uses usePathname which requires App Router context
+vi.mock('./DesktopNav', () => ({
+  default: ({ items }: { items: unknown[] }) => (
+    <nav aria-label="Main navigation" data-testid="desktop-nav" data-item-count={items.length} />
   ),
 }))
 
@@ -55,23 +63,12 @@ describe('Header', () => {
     expect(logo).toBeInTheDocument()
   })
 
-  it('renders all seven desktop nav links', () => {
+  it('renders the DesktopNav with 7 top-level items', () => {
     render(<Header />)
-    const expectedLinks = [
-      { label: 'Home', href: '/' },
-      { label: 'About', href: '/about' },
-      { label: 'Services', href: '/services' },
-      { label: 'Programs', href: '/services' },
-      { label: 'Blog', href: '/blog' },
-      { label: 'Contact', href: '/contact' },
-      { label: 'Member Portal', href: '/portal' },
-    ]
-
-    for (const { label, href } of expectedLinks) {
-      const link = screen.getByRole('link', { name: label })
-      expect(link).toBeInTheDocument()
-      expect(link).toHaveAttribute('href', href)
-    }
+    const desktopNav = screen.getByTestId('desktop-nav')
+    expect(desktopNav).toBeInTheDocument()
+    // 3 groups (About, Explore, Work With Me) + 4 standalone links
+    expect(desktopNav).toHaveAttribute('data-item-count', '7')
   })
 
   it('renders "Book a Discovery Call" CTA link pointing to /contact', () => {
@@ -95,10 +92,11 @@ describe('Header', () => {
     expect(mobileNav).toBeInTheDocument()
   })
 
-  it('passes all nav links to MobileNav', () => {
+  it('passes all nav links to MobileNav (12 leaf links)', () => {
     render(<Header />)
     const mobileNav = screen.getByTestId('mobile-nav')
-    expect(mobileNav).toHaveAttribute('data-link-count', '7')
+    // About(1) + Explore(3) + WorkWithMe(4) + Masterclass + Shop + Contact + Portal = 12
+    expect(mobileNav).toHaveAttribute('data-link-count', '12')
   })
 
   it('renders a <nav> with aria-label "Main navigation"', () => {

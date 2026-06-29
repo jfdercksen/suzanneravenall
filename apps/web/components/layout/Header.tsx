@@ -21,26 +21,29 @@ export type NavItem = NavLink | NavGroup
 
 const navItems: NavItem[] = [
   {
-    label: 'Learn',
+    label: 'About',
     children: [
-      { label: 'About', href: '/about' },
-      { label: 'Blog', href: '/blog' },
-      { label: 'Explore', href: '/explore' },
-      { label: 'Resources', href: '/resources' },
+      { label: 'About Suzanne', href: '/about' },
     ],
   },
-  // Top-level entry placed between the Learn group (which contains Explore)
-  // and the Work With Me group (which contains Services).
-  { label: 'Transformation Pathways', href: '/transformation-pathways' },
+  {
+    label: 'Explore',
+    children: [
+      { label: 'Explore', href: '/explore' },
+      { label: 'Resources', href: '/resources' },
+      { label: 'Blog', href: '/blog' },
+    ],
+  },
   {
     label: 'Work With Me',
     children: [
-      { label: 'Services', href: '/services' },
+      { label: 'Transformation Pathways', href: '/transformation-pathways' },
+      { label: 'Precision Sessions', href: '/services' },
       { label: 'Speaking', href: '/speaking' },
       { label: 'Programs', href: '/programs' },
-      { label: 'Masterclass', href: '/masterclass' },
     ],
   },
+  { label: 'Masterclass', href: '/masterclass' },
   { label: 'Shop', href: '/shop' },
   { label: 'Contact', href: '/contact' },
   { label: 'Member Portal', href: '/portal' },
