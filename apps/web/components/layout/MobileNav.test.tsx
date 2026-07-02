@@ -191,6 +191,38 @@ describe('MobileNav', () => {
       expect(cta).toBeInTheDocument()
       expect(cta).toHaveAttribute('href', '/contact')
     })
+
+    it('renders "Discover Your Pattern" CTA inside overlay', () => {
+      render(<MobileNav links={sampleLinks} />)
+      const cta = screen.getByRole('link', { name: 'Discover Your Pattern' })
+      expect(cta).toBeInTheDocument()
+      expect(cta).toHaveAttribute('href', '/discover-your-pattern')
+    })
+
+    it('renders both bottom CTAs together, "Discover Your Pattern" before "Book a Discovery Call"', () => {
+      render(<MobileNav links={sampleLinks} />)
+      const ctaLinks = [
+        screen.getByRole('link', { name: 'Discover Your Pattern' }),
+        screen.getByRole('link', { name: 'Book a Discovery Call' }),
+      ]
+      expect(ctaLinks[0]).toBeInTheDocument()
+      expect(ctaLinks[1]).toBeInTheDocument()
+      // Confirm document order: Discover Your Pattern precedes Book a Discovery Call
+      const position = ctaLinks[0]!.compareDocumentPosition(ctaLinks[1]!)
+      // eslint-disable-next-line no-bitwise
+      expect(position & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    })
+
+    it('closes the overlay when "Discover Your Pattern" CTA is clicked', async () => {
+      const user = userEvent.setup()
+      render(<MobileNav links={sampleLinks} />)
+
+      await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
+      expect(screen.getByRole('button', { name: 'Open navigation menu' })).toHaveAttribute('aria-expanded', 'true')
+
+      await user.click(screen.getByRole('link', { name: 'Discover Your Pattern' }))
+      expect(screen.getByRole('button', { name: 'Open navigation menu' })).toHaveAttribute('aria-expanded', 'false')
+    })
   })
 
   describe('route change', () => {

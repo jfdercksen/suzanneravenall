@@ -62,8 +62,12 @@ const safeClarityId = CLARITY_ID_PATTERN.test(clarityId) ? clarityId : ''
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={poppins.variable}>
-      <body className="font-sans antialiased">
+    <html lang="en" className={poppins.variable} suppressHydrationWarning>
+      {/* suppressHydrationWarning: the /discover-your-pattern page injects a
+          beforeInteractive inline script that sets --pattern-bar-offset and
+          padding-top before hydration to avoid a layout flash — this
+          deliberately differs from the server-rendered markup on that route. */}
+      <body className="font-sans antialiased" suppressHydrationWarning>
         {/* Skip link — visible on focus for keyboard users, hidden visually otherwise */}
         <a
           href="#main-content"

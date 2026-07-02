@@ -81,12 +81,16 @@ function getMobileLinks(items: NavItem[]): NavLink[] {
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-brand-primary" role="banner">
+    <header
+      className="sticky top-0 z-50 bg-brand-primary"
+      style={{ top: 'var(--pattern-bar-offset, 0px)' }}
+      role="banner"
+    >
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-20">
 
-          {/* Logo */}
-          <Link href="/" aria-label="Dr. Suzanne Ravenall — return to homepage">
+          {/* Logo — shrink-0 so the flex row never crushes it to make room for nav/CTAs */}
+          <Link href="/" aria-label="Dr. Suzanne Ravenall — return to homepage" className="shrink-0">
             <Image
                 src="/logos/suzanne-white-logo.png"
                 alt="Dr. Suzanne Ravenall"
@@ -100,12 +104,24 @@ export default function Header() {
           <DesktopNav items={navItems} />
 
           {/* Desktop CTA + cart + search + mobile hamburger */}
-          <div className="flex items-center gap-2 lg:gap-4">
+          <div className="flex items-center gap-1 lg:gap-2 shrink-0">
             <SearchBar />
             <CartIcon />
+            {/* xl: not lg: — at 1024-1279px there isn't room for full nav + both
+                CTAs without crushing the logo or nav; the container itself is
+                capped at 1280px (see tailwind.config container.screens), so
+                gating on Tailwind's built-in xl breakpoint (1280px) exactly
+                matches where the header has verified room for both buttons.
+                Mobile nav still surfaces this link below lg: regardless. */}
+            <Link
+              href="/discover-your-pattern"
+              className="hidden xl:inline-flex items-center px-3 py-2.5 border-2 border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white font-medium text-sm rounded-button transition-colors duration-150 whitespace-nowrap"
+            >
+              Discover Your Pattern
+            </Link>
             <Link
               href="/contact"
-              className="hidden lg:inline-flex items-center px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white font-medium text-sm rounded-button transition-colors duration-150 whitespace-nowrap"
+              className="hidden lg:inline-flex items-center px-3 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white font-medium text-sm rounded-button transition-colors duration-150 whitespace-nowrap"
             >
               Book a Discovery Call
             </Link>

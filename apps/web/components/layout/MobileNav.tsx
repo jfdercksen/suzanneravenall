@@ -35,6 +35,15 @@ export default function MobileNav({ links }: MobileNavProps) {
     }
   }, [isOpen])
 
+  // Page-scoped widgets (e.g. the pattern-hub sticky announcement bar) render
+  // outside this overlay's DOM subtree at a higher z-index than our focus
+  // trap accounts for — broadcast open state so they can hide themselves.
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent('pattern-hub:mobile-nav-toggle', { detail: { open: isOpen } })
+    )
+  }, [isOpen])
+
   // Move focus to close button on open; restore to hamburger on close
   useEffect(() => {
     if (isOpen) {
@@ -175,7 +184,14 @@ export default function MobileNav({ links }: MobileNavProps) {
           </nav>
 
           {/* CTA at bottom */}
-          <div className="px-8 pb-12">
+          <div className="px-8 pb-12 flex flex-col gap-3">
+            <Link
+              href="/discover-your-pattern"
+              onClick={close}
+              className="flex items-center justify-center w-full px-6 py-4 border-2 border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white font-semibold text-lg rounded-button transition-colors duration-150"
+            >
+              Discover Your Pattern
+            </Link>
             <Link
               href="/contact"
               onClick={close}

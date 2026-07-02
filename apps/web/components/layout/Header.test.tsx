@@ -86,6 +86,30 @@ describe('Header', () => {
     expect(cta.className).toContain('lg:inline-flex')
   })
 
+  it('renders "Discover Your Pattern" CTA link pointing to /discover-your-pattern', () => {
+    render(<Header />)
+    const cta = screen.getByRole('link', { name: 'Discover Your Pattern' })
+    expect(cta).toBeInTheDocument()
+    expect(cta).toHaveAttribute('href', '/discover-your-pattern')
+  })
+
+  it('"Discover Your Pattern" CTA is hidden below the xl breakpoint', () => {
+    render(<Header />)
+    const cta = screen.getByRole('link', { name: 'Discover Your Pattern' })
+    // Tailwind: hidden xl:inline-flex — not lg:, because at 1024-1279px there
+    // isn't room for the full nav plus both CTAs without crushing the logo
+    // (verified via direct viewport measurement); xl (1280px) matches the
+    // header container's own max-width cap in tailwind.config.
+    expect(cta.className).toContain('hidden')
+    expect(cta.className).toContain('xl:inline-flex')
+  })
+
+  it('renders both "Discover Your Pattern" and "Book a Discovery Call" CTAs together', () => {
+    render(<Header />)
+    expect(screen.getByRole('link', { name: 'Discover Your Pattern' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Book a Discovery Call' })).toBeInTheDocument()
+  })
+
   it('renders the MobileNav component', () => {
     render(<Header />)
     const mobileNav = screen.getByTestId('mobile-nav')
