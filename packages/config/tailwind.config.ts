@@ -107,10 +107,10 @@ const config = {
         },
         'brain-pulse': {
           '0%, 100%': {
-            filter: 'drop-shadow(0 0 6px #1719F4) drop-shadow(0 0 12px rgba(23,25,244,0.4))',
+            filter: 'drop-shadow(0 0 8px #1719F4) drop-shadow(0 0 16px rgba(23,25,244,0.4))',
           },
           '50%': {
-            filter: 'drop-shadow(0 0 16px #1719F4) drop-shadow(0 0 32px rgba(23,25,244,0.7)) drop-shadow(0 0 48px rgba(23,25,244,0.3))',
+            filter: 'drop-shadow(0 0 20px #1719F4) drop-shadow(0 0 40px rgba(23,25,244,0.8)) drop-shadow(0 0 60px rgba(23,25,244,0.3))',
           },
         },
       },
