@@ -8,6 +8,7 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     '../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: ['animate-brain-pulse', 'motion-safe:animate-brain-pulse'],
   plugins: [],
 }
 

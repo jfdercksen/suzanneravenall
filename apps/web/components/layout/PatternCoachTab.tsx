@@ -6,35 +6,47 @@ import { AnimatePresence, motion } from 'framer-motion'
 const STORAGE_KEY = 'pattern-coach-tab-dismissed'
 const EXTERNAL_URL = 'https://suzanneravenallpatterncoach.com'
 
-function BrainIcon({ size = 32 }: { size?: number }) {
+function BrainIcon({ size = 48 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M16 6C16 6 10 6 8 10C6 14 6 18 8 22C10 26 14 27 16 27"
-        stroke="#1719F4" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M16 6C16 6 22 6 24 10C26 14 26 18 24 22C22 26 18 27 16 27"
-        stroke="#1719F4" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M16 6V27"
-        stroke="#1719F4" strokeWidth="1.2" strokeLinecap="round" strokeDasharray="2 2" />
-      <path d="M8 12C10 11 12 13 11 15"
-        stroke="#1719F4" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M7 18C9 17 11 19 10 21"
-        stroke="#1719F4" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M24 12C22 11 20 13 21 15"
-        stroke="#1719F4" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M25 18C23 17 21 19 22 21"
-        stroke="#1719F4" strokeWidth="1.4" strokeLinecap="round" />
-      <circle cx="16" cy="12" r="1.5" fill="#1719F4" />
-      <circle cx="16" cy="20" r="1.5" fill="#1719F4" />
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M24 8C24 8 14 8 11 14C8 20 8 28 11 34C14 40 20 42 24 42"
+        stroke="#1719F4" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M24 8C24 8 34 8 37 14C40 20 40 28 37 34C34 40 28 42 24 42"
+        stroke="#1719F4" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M24 8V42" stroke="#1719F4" strokeWidth="1.5"
+        strokeLinecap="round" strokeDasharray="3 3" />
+      <path d="M11 16C14 15 17 18 15 21"
+        stroke="#1719F4" strokeWidth="2" strokeLinecap="round" />
+      <path d="M10 26C13 25 16 28 14 31"
+        stroke="#1719F4" strokeWidth="2" strokeLinecap="round" />
+      <path d="M13 20C15 22 14 25 12 26"
+        stroke="#1719F4" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M37 16C34 15 31 18 33 21"
+        stroke="#1719F4" strokeWidth="2" strokeLinecap="round" />
+      <path d="M38 26C35 25 32 28 34 31"
+        stroke="#1719F4" strokeWidth="2" strokeLinecap="round" />
+      <path d="M35 20C33 22 34 25 36 26"
+        stroke="#1719F4" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="24" cy="14" r="2.5" fill="#1719F4" />
+      <circle cx="24" cy="24" r="2.5" fill="#1719F4" />
+      <circle cx="24" cy="34" r="2.5" fill="#1719F4" />
+      <path d="M15 21L24 24" stroke="#1719F4" strokeWidth="1.2"
+        strokeLinecap="round" opacity="0.6" />
+      <path d="M33 21L24 24" stroke="#1719F4" strokeWidth="1.2"
+        strokeLinecap="round" opacity="0.6" />
+      <path d="M14 31L24 34" stroke="#1719F4" strokeWidth="1.2"
+        strokeLinecap="round" opacity="0.6" />
+      <path d="M34 31L24 34" stroke="#1719F4" strokeWidth="1.2"
+        strokeLinecap="round" opacity="0.6" />
     </svg>
   )
 }
 
 function CloseIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-      stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden="true">
-      <line x1="3" y1="3" x2="13" y2="13" />
-      <line x1="13" y1="3" x2="3" y2="13" />
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path d="M1 1L11 11M11 1L1 11" stroke="currentColor"
+        strokeWidth="2" strokeLinecap="round" />
     </svg>
   )
 }
@@ -42,16 +54,14 @@ function CloseIcon() {
 export default function PatternCoachTab() {
   const [isVisible, setIsVisible] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   useEffect(() => {
     const dismissed = window.localStorage.getItem(STORAGE_KEY) === 'true'
-    const motionMq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const updateMobile = () => setIsMobile(window.innerWidth < 1024)
+    if (dismissed) return
 
-    setPrefersReducedMotion(motionMq.matches)
+    const updateMobile = () => setIsMobile(window.innerWidth < 1024)
     updateMobile()
-    if (!dismissed) setIsVisible(true)
+    setIsVisible(true)
 
     window.addEventListener('resize', updateMobile)
     return () => window.removeEventListener('resize', updateMobile)
@@ -64,8 +74,7 @@ export default function PatternCoachTab() {
     setIsVisible(false)
   }
 
-  const delay = prefersReducedMotion ? 0 : 2.5
-  const duration = prefersReducedMotion ? 0 : 0.6
+  const springEase = [0.22, 1, 0.36, 1] as const
 
   return (
     <AnimatePresence>
@@ -73,41 +82,47 @@ export default function PatternCoachTab() {
         <motion.aside
           key="pc-desktop"
           aria-label="Pattern Coach App"
-          className="fixed right-0 z-[60] flex flex-col items-center py-5 w-16 h-[260px] border-r-4 border-[#1719F4] rounded-l-2xl overflow-hidden shadow-[-4px_0_32px_rgba(23,25,244,0.4)] hover:shadow-[-4px_0_48px_rgba(23,25,244,0.65)] transition-shadow duration-300"
+          className="fixed right-0 z-[60] flex flex-col items-center justify-between py-6 w-20 h-[280px] bg-white border-l-4 border-brand-accent rounded-l-3xl"
           style={{
             top: '50%',
             translateY: '-50%',
-            background: 'linear-gradient(180deg, #012B43 0%, #011829 100%)',
+            boxShadow: '-8px 0 40px rgba(0,0,0,0.25), -4px 0 20px rgba(23,25,244,0.3)',
           }}
-          initial={{ x: 120, opacity: 0 }}
+          initial={{ x: 140, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          exit={{ x: 120, opacity: 0, transition: { duration: 0.3 } }}
-          whileHover={{ x: -4, scale: 1.05 }}
-          transition={{ delay, duration, ease: 'easeOut' }}
+          exit={{ x: 140, opacity: 0, transition: { duration: 0.4 } }}
+          whileHover={{ x: -6, transition: { duration: 0.2, ease: 'easeOut' } }}
+          transition={{ delay: 2, duration: 0.7, ease: springEase }}
         >
           <a
             href={EXTERNAL_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center gap-4 flex-1 w-full min-h-0"
+            className="flex flex-col items-center gap-4 flex-1 cursor-pointer"
             aria-label="Open Pattern Coach — Brilliant Coach in Your Pocket"
           >
             <div
-              style={{ filter: 'drop-shadow(0 0 6px #1719F4)' }}
               className="motion-safe:animate-brain-pulse shrink-0"
+              style={{ filter: 'drop-shadow(0 0 8px #1719F4) drop-shadow(0 0 16px rgba(23,25,244,0.5))' }}
             >
-              <BrainIcon size={32} />
+              <BrainIcon size={48} />
             </div>
 
             <div
               style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
-              className="flex flex-col items-center gap-1 text-center flex-1"
+              className="flex flex-col items-center gap-2"
             >
-              <span className="text-[9px] font-bold tracking-[0.25em] text-white uppercase">
-                BRILLIANT COACH
+              <span className="text-[11px] font-black tracking-[0.2em] text-brand-primary-900 uppercase leading-none">
+                BRILLIANT
               </span>
-              <span className="text-[9px] font-medium tracking-[0.2em] text-[#1719F4] uppercase">
-                IN YOUR POCKET
+              <span className="text-[11px] font-black tracking-[0.2em] text-brand-primary-900 uppercase leading-none">
+                COACH
+              </span>
+              <span className="text-[10px] font-semibold tracking-[0.15em] text-brand-accent uppercase leading-none">
+                IN YOUR
+              </span>
+              <span className="text-[10px] font-semibold tracking-[0.15em] text-brand-accent uppercase leading-none">
+                POCKET
               </span>
             </div>
           </a>
@@ -116,7 +131,7 @@ export default function PatternCoachTab() {
             type="button"
             onClick={handleDismiss}
             aria-label="Close Pattern Coach"
-            className="shrink-0 h-8 w-8 flex items-center justify-center text-white/50 hover:text-white transition-colors duration-200"
+            className="-m-2.5 w-11 h-11 flex items-center justify-center text-gray-400 hover:text-brand-accent transition-colors duration-200"
           >
             <CloseIcon />
           </button>
@@ -127,17 +142,17 @@ export default function PatternCoachTab() {
         <motion.aside
           key="pc-mobile"
           aria-label="Pattern Coach App"
-          className="fixed z-[60] flex flex-row items-center gap-3 h-[52px] px-5 border-b-4 border-[#1719F4] rounded-2xl shadow-[0_-4px_32px_rgba(23,25,244,0.4)]"
+          className="fixed z-[60] flex flex-row items-center gap-3 h-14 px-6 bg-white border-t-4 border-brand-accent rounded-2xl"
           style={{
             bottom: '24px',
             left: '50%',
             translateX: '-50%',
-            background: 'linear-gradient(180deg, #012B43 0%, #011829 100%)',
+            boxShadow: '0 8px 40px rgba(0,0,0,0.2), 0 4px 16px rgba(23,25,244,0.3)',
           }}
           initial={{ y: 120, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 120, opacity: 0, transition: { duration: 0.3 } }}
-          transition={{ delay, duration, ease: 'easeOut' }}
+          exit={{ y: 120, opacity: 0, transition: { duration: 0.4 } }}
+          transition={{ delay: 2, duration: 0.6, ease: springEase }}
         >
           <a
             href={EXTERNAL_URL}
@@ -147,13 +162,16 @@ export default function PatternCoachTab() {
             aria-label="Open Pattern Coach — Brilliant Coach in Your Pocket"
           >
             <div
-              style={{ filter: 'drop-shadow(0 0 6px #1719F4)' }}
               className="motion-safe:animate-brain-pulse shrink-0"
+              style={{ filter: 'drop-shadow(0 0 6px #1719F4) drop-shadow(0 0 12px rgba(23,25,244,0.4))' }}
             >
-              <BrainIcon size={24} />
+              <BrainIcon size={32} />
             </div>
-            <span className="text-[9px] tracking-[0.2em] text-white uppercase whitespace-nowrap select-none">
-              BRILLIANT COACH IN YOUR POCKET
+            <span className="text-[10px] font-black tracking-[0.2em] text-brand-primary-900 uppercase whitespace-nowrap">
+              BRILLIANT COACH
+            </span>
+            <span className="text-[10px] font-semibold tracking-[0.15em] text-brand-accent uppercase whitespace-nowrap">
+              IN YOUR POCKET
             </span>
           </a>
 
@@ -161,7 +179,7 @@ export default function PatternCoachTab() {
             type="button"
             onClick={handleDismiss}
             aria-label="Close Pattern Coach"
-            className="ml-1 h-8 w-8 flex items-center justify-center text-white/50 hover:text-white transition-colors duration-200 shrink-0"
+            className="-m-2.5 ml-1 w-11 h-11 flex items-center justify-center text-gray-400 hover:text-brand-accent transition-colors duration-200 shrink-0"
           >
             <CloseIcon />
           </button>
