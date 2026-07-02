@@ -5,6 +5,7 @@ import Header from '../components/layout/Header'
 import Footer from '../components/layout/Footer'
 import { Providers } from '../components/layout/Providers'
 import CookieConsent from '../components/layout/CookieConsent'
+import PatternCoachTab from '../components/layout/PatternCoachTab'
 import './globals.css'
 
 const poppins = Poppins({
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <Providers>
           <Header />
+          <PatternCoachTab />
           {/* tabIndex={-1} allows the skip link to programmatically move focus here (WCAG 2.4.1) */}
           <main id="main-content" tabIndex={-1} className="outline-none">
             {children}
