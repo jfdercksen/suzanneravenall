@@ -146,7 +146,7 @@ export default function MobileNav({ links }: MobileNavProps) {
           </div>
 
           {/* Nav links */}
-          <nav aria-label="Mobile navigation" className="flex-1 flex flex-col justify-center px-8 gap-2">
+          <nav aria-label="Mobile navigation" className="flex-1 overflow-y-auto flex flex-col justify-start py-6 px-8 gap-2">
             {links.map((link) =>
               link.external ? (
                 <a

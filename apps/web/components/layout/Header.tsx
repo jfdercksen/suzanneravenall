@@ -12,9 +12,15 @@ export interface NavLink {
   external?: boolean
 }
 
+export interface NavDivider {
+  divider: true
+}
+
+export type NavGroupChild = NavLink | NavDivider
+
 export interface NavGroup {
   label: string
-  children: NavLink[]
+  children: NavGroupChild[]
 }
 
 export type NavItem = NavLink | NavGroup
@@ -29,7 +35,13 @@ const navItems: NavItem[] = [
   {
     label: 'Explore',
     children: [
-      { label: 'Explore', href: '/explore' },
+      { label: 'Emotional Mastery', href: '/explore/emotional-nervous-system-mastery' },
+      { label: 'Relationships', href: '/explore/relationships-attachment-patterns' },
+      { label: 'Health & Vitality', href: '/explore/next-level-health-vitality-longevity' },
+      { label: 'Identity & Purpose', href: '/explore/identity-purpose-activation' },
+      { label: 'Leadership', href: '/explore/leadership-high-performance' },
+      { label: 'All Topics →', href: '/explore' },
+      { divider: true },
       { label: 'Resources', href: '/resources' },
       { label: 'Blog', href: '/blog' },
     ],
@@ -59,7 +71,12 @@ const navItems: NavItem[] = [
 ]
 
 function getMobileLinks(items: NavItem[]): NavLink[] {
-  return items.flatMap((item) => ('children' in item ? item.children : [item]))
+  return items.flatMap((item) => {
+    if ('children' in item) {
+      return item.children.filter((c): c is NavLink => !('divider' in c))
+    }
+    return [item]
+  })
 }
 
 export default function Header() {

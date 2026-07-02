@@ -4,10 +4,14 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ExternalLink } from 'lucide-react'
-import type { NavItem, NavGroup, NavLink } from './Header'
+import type { NavItem, NavGroup, NavLink, NavGroupChild, NavDivider } from './Header'
 
 function isNavGroup(item: NavItem): item is NavGroup {
   return 'children' in item
+}
+
+function isNavDivider(child: NavGroupChild): child is NavDivider {
+  return 'divider' in child
 }
 
 interface DesktopNavProps {
@@ -50,12 +54,13 @@ export default function DesktopNav({ items }: DesktopNavProps) {
       {items.map((item) => {
         if (isNavGroup(item)) {
           const isOpen = openGroup === item.label
+          const panelId = `nav-panel-${item.label.toLowerCase().replace(/\s+/g, '-')}`
           return (
             <div key={item.label} className="relative">
               <button
                 type="button"
-                aria-haspopup="true"
                 aria-expanded={isOpen}
+                aria-controls={panelId}
                 onClick={() => setOpenGroup(isOpen ? null : item.label)}
                 className="flex items-center gap-1 whitespace-nowrap text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
               >
@@ -73,18 +78,23 @@ export default function DesktopNav({ items }: DesktopNavProps) {
               </button>
 
               {isOpen && (
-                <div className="absolute top-full left-0 pt-2 z-50">
-                  <div className="bg-white rounded-lg shadow-xl py-2 min-w-[180px]">
-                    {(item as NavGroup).children.map((child: NavLink) => (
-                      <Link
-                        key={child.label}
-                        href={child.href}
-                        onClick={close}
-                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-brand-primary hover:text-white transition-colors duration-150"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
+                <div id={panelId} className="absolute top-full left-0 pt-2 z-50">
+                  <div className="bg-white rounded-lg shadow-xl py-2 min-w-[220px] max-h-[calc(100vh-6rem)] overflow-y-auto">
+                    {item.children.map((child: NavGroupChild, i: number) => {
+                      if (isNavDivider(child)) {
+                        return <hr key={`divider-${i}`} className="my-1 border-t border-gray-200" />
+                      }
+                      return (
+                        <Link
+                          key={child.label}
+                          href={child.href}
+                          onClick={close}
+                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-brand-primary hover:text-white transition-colors duration-150 whitespace-nowrap"
+                        >
+                          {child.label}
+                        </Link>
+                      )
+                    })}
                   </div>
                 </div>
               )}
@@ -92,17 +102,16 @@ export default function DesktopNav({ items }: DesktopNavProps) {
           )
         }
 
-        const link = item as NavLink
-        if (link.external) {
+        if (item.external) {
           return (
             <a
-              key={link.label}
-              href={link.href}
+              key={item.label}
+              href={item.href}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
             >
-              {link.label}
+              {item.label}
               <ExternalLink size={14} aria-hidden="true" />
               <span className="sr-only">(opens in new tab)</span>
             </a>
@@ -111,11 +120,11 @@ export default function DesktopNav({ items }: DesktopNavProps) {
 
         return (
           <Link
-            key={link.label}
-            href={link.href}
+            key={item.label}
+            href={item.href}
             className="whitespace-nowrap text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
           >
-            {link.label}
+            {item.label}
           </Link>
         )
       })}

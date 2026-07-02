@@ -92,11 +92,11 @@ describe('Header', () => {
     expect(mobileNav).toBeInTheDocument()
   })
 
-  it('passes all nav links to MobileNav (12 leaf links)', () => {
+  it('passes all nav links to MobileNav (17 leaf links)', () => {
     render(<Header />)
     const mobileNav = screen.getByTestId('mobile-nav')
-    // About(1) + Explore(3) + WorkWithMe(4) + Masterclass + Shop + Contact + Portal = 12
-    expect(mobileNav).toHaveAttribute('data-link-count', '12')
+    // About(1) + Explore topics+All Topics+Resources+Blog(8) + WorkWithMe(4) + Masterclass + Shop + Contact + Portal(4) = 17
+    expect(mobileNav).toHaveAttribute('data-link-count', '17')
   })
 
   it('renders a <nav> with aria-label "Main navigation"', () => {
