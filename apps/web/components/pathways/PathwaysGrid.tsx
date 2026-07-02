@@ -69,7 +69,7 @@ export default function PathwaysGrid() {
             <motion.li key={pathway.slug} variants={cardVariants}>
               <Link
                 href={`/transformation-pathways/${pathway.slug}`}
-                className={`group flex h-full flex-col rounded-card bg-white/5 border border-white/10 border-l-2 ${cardAccentClass(pathway.category)} p-6 transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:bg-white/[0.07] hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-primary-900`}
+                className={`group flex h-full flex-col rounded-card bg-white/5 border border-white/10 border-l-2 ${cardAccentClass(pathway.category)} p-6 transition-all duration-500 hover:-translate-y-1 hover:border-t-brand-accent/40 hover:border-r-brand-accent/40 hover:border-b-brand-accent/40 hover:bg-white/[0.07] hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-primary-900`}
               >
                 <span
                   className={`inline-flex w-fit items-center rounded-button px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold mb-4 ${badgeClasses(pathway.category)}`}
@@ -117,7 +117,7 @@ export default function PathwaysGrid() {
             <motion.li key={pathway.slug} variants={cardVariants}>
               <Link
                 href={`/transformation-pathways/${pathway.slug}`}
-                className={`group flex h-full flex-col rounded-card bg-white/5 border border-white/10 border-l-2 ${cardAccentClass(pathway.category)} p-7 transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:bg-white/[0.07] hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-primary-900`}
+                className={`group flex h-full flex-col rounded-card bg-white/5 border border-white/10 border-l-2 ${cardAccentClass(pathway.category)} p-7 transition-all duration-500 hover:-translate-y-1 hover:border-t-brand-accent/40 hover:border-r-brand-accent/40 hover:border-b-brand-accent/40 hover:bg-white/[0.07] hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-primary-900`}
               >
                 <span
                   className={`inline-flex w-fit items-center rounded-button px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold mb-5 ${badgeClasses(pathway.category)}`}
