@@ -105,10 +105,19 @@ const config = {
           '0%, 100%': { filter: 'drop-shadow(0 0 4px #1719F4)' },
           '50%': { filter: 'drop-shadow(0 0 12px #1719F4) drop-shadow(0 0 24px #1719F4)' },
         },
+        'brain-pulse': {
+          '0%, 100%': {
+            filter: 'drop-shadow(0 0 4px #1719F4) drop-shadow(0 0 8px #1719F4)',
+          },
+          '50%': {
+            filter: 'drop-shadow(0 0 12px #1719F4) drop-shadow(0 0 24px #1719F4) drop-shadow(0 0 40px #1719F491)',
+          },
+        },
       },
       animation: {
         'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
         'brain-glow': 'brain-glow 2s ease-in-out infinite',
+        'brain-pulse': 'brain-pulse 2.5s ease-in-out infinite',
       },
     },
   },
