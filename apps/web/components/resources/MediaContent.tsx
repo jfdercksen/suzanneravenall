@@ -71,7 +71,7 @@ export default function MediaContent() {
       {/* Hero */}
       <section
         aria-labelledby="media-hero-heading"
-        className="w-full bg-brand-primary py-32 lg:py-40"
+        className="w-full bg-brand-primary py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p

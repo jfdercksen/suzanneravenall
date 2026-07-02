@@ -13,7 +13,7 @@ export default function ContactHero() {
   return (
     <section
       aria-labelledby="contact-hero-heading"
-      className="relative bg-brand-primary w-full py-32 lg:py-40 overflow-hidden"
+      className="relative bg-brand-primary w-full py-20 lg:py-32 overflow-hidden"
     >
       <div
         aria-hidden="true"

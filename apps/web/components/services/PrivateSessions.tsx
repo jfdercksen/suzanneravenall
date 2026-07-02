@@ -58,7 +58,7 @@ export default function PrivateSessions() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative overflow-hidden min-h-[280px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
+              className="group relative overflow-hidden min-h-[220px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
               <Image
                 src={sessionImages[session.slug] ?? fallbackImage}

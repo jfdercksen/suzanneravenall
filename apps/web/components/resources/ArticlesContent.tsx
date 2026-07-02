@@ -103,7 +103,7 @@ export default function ArticlesContent() {
       {/* Hero */}
       <section
         aria-labelledby="articles-hero-heading"
-        className="w-full bg-brand-primary py-32 lg:py-40"
+        className="w-full bg-brand-primary py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p

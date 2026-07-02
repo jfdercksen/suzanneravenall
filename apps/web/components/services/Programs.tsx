@@ -148,7 +148,7 @@ export default function Programs() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.5, delay: colIdx * 0.1 }}
-              className="group relative overflow-hidden flex flex-col min-h-[480px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
+              className="group relative overflow-hidden flex flex-col min-h-[320px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
             >
               {/* TODO: Replace with programme-specific image — Suzanne to provide: images representing each programme track (Practitioner, Self-Paced, Live) */}
               <Image
@@ -173,15 +173,13 @@ export default function Programs() {
                   {col.intro}
                 </p>
 
-                <ul className="space-y-6 mb-10 flex-1">
+                <ul className="space-y-3 mb-10 flex-1">
                   {col.programmes.map((p) => (
-                    <li key={p.name}>
-                      <h4 className="text-base font-semibold text-white mb-2">
+                    <li key={p.name} className="flex items-start gap-2">
+                      <span aria-hidden="true" className="mt-0.5 text-brand-accent text-xs shrink-0">→</span>
+                      <span className="text-sm font-medium text-white/85 leading-snug">
                         {p.name}
-                      </h4>
-                      <p className="text-sm text-white/65 font-light leading-relaxed">
-                        {p.description}
-                      </p>
+                      </span>
                     </li>
                   ))}
                 </ul>

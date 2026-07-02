@@ -14,7 +14,7 @@ export default function AboutFinalCTA() {
   return (
     <section
       aria-labelledby="about-cta-heading"
-      className="relative bg-brand-primary py-24 lg:py-36 overflow-hidden"
+      className="relative bg-brand-primary py-20 lg:py-32 overflow-hidden"
     >
       {/* Accent glow */}
       <div

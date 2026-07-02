@@ -221,7 +221,7 @@ export default function SpeakingContent() {
             </h2>
           </motion.div>
 
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {talks.map((talk, idx) => (
               <motion.article
                 key={talk.title}
@@ -232,7 +232,7 @@ export default function SpeakingContent() {
                   src="/images/hero-bg-suzanne-ravenall.jpg"
                   alt=""
                   fill
-                  sizes="(max-width: 640px) 100vw, 50vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   className="object-cover opacity-15 group-hover:opacity-30 transition-opacity duration-500"
                 />
                 <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent" />

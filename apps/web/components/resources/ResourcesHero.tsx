@@ -12,7 +12,7 @@ export default function ResourcesHero() {
   return (
     <section
       aria-labelledby="resources-hero-heading"
-      className="relative w-full bg-brand-primary py-32 lg:py-40 overflow-hidden"
+      className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
     >
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
