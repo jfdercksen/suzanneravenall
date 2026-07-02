@@ -58,7 +58,6 @@ const navItems: NavItem[] = [
   { label: 'Masterclass', href: '/masterclass' },
   { label: 'Shop', href: '/shop' },
   { label: 'Contact', href: '/contact' },
-  { label: 'Member Portal', href: '/portal' },
   // Pattern Coach is a separate Thinkific subscription product that runs
   // independently of this site. Hidden from the nav until the correct app
   // URL is confirmed — the current Thinkific link points to the wrong place.

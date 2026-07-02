@@ -31,6 +31,7 @@ const footerLinks = {
       { label: 'Explore', href: '/explore' },
       { label: 'Resources', href: '/resources' },
       { label: 'Contact', href: '/contact' },
+      { label: 'Member Portal', href: '/portal' },
     ],
   },
   legal: {
