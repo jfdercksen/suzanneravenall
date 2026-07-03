@@ -102,6 +102,45 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
         </div>
       </section>
 
+      {/* ── Pattern assessment CTA (light) ──────────────────────────────── */}
+      <section
+        aria-labelledby="pathway-assessment-heading"
+        className="py-12 lg:py-16 bg-gray-50"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div {...fadeUpInView(0)}>
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+              Pattern Assessment
+            </p>
+            <h2
+              id="pathway-assessment-heading"
+              className="text-2xl lg:text-3xl font-light text-brand-primary mb-4"
+            >
+              Not sure this is the right pathway for you?
+            </h2>
+            <p className="text-gray-500 text-base mb-8 max-w-xl mx-auto">
+              Take a free diagnostic to discover which pattern is running your
+              life — and which pathway addresses it directly.
+            </p>
+            <Link
+              href="/discover-your-pattern"
+              className="inline-flex items-center gap-2 rounded-button bg-brand-primary text-white px-8 py-3 text-sm font-medium hover:bg-brand-accent transition-colors duration-200"
+            >
+              Discover Your Pattern
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                  d="M3 8h10M9 4l4 4-4 4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ── CTA (dark) ──────────────────────────────────────────────────── */}
       <section
         aria-labelledby="pathway-cta-heading"

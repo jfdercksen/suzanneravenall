@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import ExploreHero from '@/components/explore/ExploreHero'
 import ExploreTopicGrid from '@/components/explore/ExploreTopicGrid'
+import ExploreDiagnosticCTA from '@/components/explore/ExploreDiagnosticCTA'
 import ExploreFinalCTA from '@/components/explore/ExploreFinalCTA'
 
 export function generateMetadata(): Metadata {
@@ -16,6 +17,7 @@ export default function ExplorePage() {
     <main>
       <ExploreHero />
       <ExploreTopicGrid />
+      <ExploreDiagnosticCTA />
       <ExploreFinalCTA />
     </main>
   )
