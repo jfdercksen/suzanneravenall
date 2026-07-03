@@ -50,7 +50,7 @@ export default function DesktopNav({ items }: DesktopNavProps) {
   }, [openGroup, close])
 
   return (
-    <nav ref={navRef} aria-label="Main navigation" className="hidden lg:flex items-center gap-2">
+    <nav ref={navRef} aria-label="Main navigation" className="hidden lg:flex items-center gap-6">
       {items.map((item) => {
         if (isNavGroup(item)) {
           const isOpen = openGroup === item.label

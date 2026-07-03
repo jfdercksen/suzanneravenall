@@ -85,7 +85,7 @@ export default function Header() {
       style={{ top: 'var(--pattern-bar-offset, 0px)' }}
       role="banner"
     >
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
 
           {/* Logo — shrink-0 so the flex row never crushes it to make room for nav/CTAs */}
@@ -103,7 +103,7 @@ export default function Header() {
           <DesktopNav items={navItems} />
 
           {/* Desktop CTA + cart + search + mobile hamburger */}
-          <div className="flex items-center gap-1 lg:gap-2 shrink-0">
+          <div className="flex items-center gap-2 lg:gap-3 shrink-0">
             <SearchBar />
             <CartIcon />
             {/* xl: not lg: — at 1024-1279px there isn't room for full nav + both
