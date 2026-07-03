@@ -98,7 +98,7 @@ export default function UpcomingPrograms() {
                 </p>
 
                 {/* Meta row — normal-case on mobile, uppercase on desktop for readability */}
-                <div className="flex flex-wrap gap-4 text-sm text-white/50 normal-case lg:uppercase lg:tracking-wider mb-8">
+                <div className="flex flex-wrap gap-4 text-sm text-white/70 normal-case lg:uppercase lg:tracking-wider mb-8">
                   <span className="flex items-center gap-2">
                     <CalendarDays className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
                     {featuredCohort.date}
@@ -154,7 +154,7 @@ export default function UpcomingPrograms() {
                 {/* Availability indicator */}
                 <div className="flex items-center gap-3 mb-2">
                   <span aria-hidden="true" className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-white/50 text-sm uppercase tracking-wider">
+                  <span className="text-white/70 text-sm uppercase tracking-wider">
                     {oneOnOne.availability}
                   </span>
                 </div>

@@ -56,7 +56,7 @@ export function VariantSelector({
 
   const headingClass = dark ? 'text-white' : 'text-gray-900'
   const priceClass = dark ? 'text-white' : 'text-gray-900'
-  const noteClass = dark ? 'text-white/50' : 'text-gray-400'
+  const noteClass = dark ? 'text-white/70' : 'text-gray-400'
 
   async function handleAddToCart() {
     if (!selectedVariant) return

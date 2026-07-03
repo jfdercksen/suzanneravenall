@@ -43,7 +43,7 @@ export function ProductHero({ product }: ProductHeroProps) {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-8">
-          <ol className="flex flex-wrap items-center gap-1.5 text-sm text-white/50">
+          <ol className="flex flex-wrap items-center gap-1.5 text-sm text-white/70">
             <li>
               <Link href="/shop" className="text-white/70 hover:text-white transition-colors duration-200">
                 Shop
@@ -67,7 +67,7 @@ export function ProductHero({ product }: ProductHeroProps) {
             <li aria-hidden="true" className="text-white/30">
               /
             </li>
-            <li className="text-white/50 truncate max-w-[200px]" aria-current="page">
+            <li className="text-white/70 truncate max-w-[200px]" aria-current="page">
               {product.title}
             </li>
           </ol>

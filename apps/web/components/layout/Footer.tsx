@@ -124,10 +124,10 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <p className="text-xs text-white/50">
+          <p className="text-xs text-white/70">
             &copy; {year} Dr. Suzanne Ravenall. All rights reserved.
           </p>
-          <p className="text-xs text-white/50">
+          <p className="text-xs text-white/70">
             Built by{' '}
             <a
               href="https://aidynamicadvisory.com"

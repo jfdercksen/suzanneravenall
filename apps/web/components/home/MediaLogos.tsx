@@ -94,7 +94,7 @@ export default function MediaLogos({
         transition={{ duration: 0.6, ease: 'easeOut' as const }}
         className="max-w-7xl mx-auto px-4 mb-6"
       >
-        <p className="text-center text-xs font-medium tracking-[0.3em] uppercase text-white/50">
+        <p className="text-center text-xs font-medium tracking-[0.3em] uppercase text-white/70">
           As seen in
         </p>
       </motion.div>

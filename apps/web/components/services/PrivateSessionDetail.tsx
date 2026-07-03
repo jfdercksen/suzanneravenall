@@ -201,7 +201,7 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
             </Link>
             <Link
               href="/services"
-              className="text-xs uppercase tracking-[0.2em] text-white/50 hover:text-white/80 transition-colors duration-300"
+              className="text-xs uppercase tracking-[0.2em] text-white/70 hover:text-white/80 transition-colors duration-300"
             >
               ← All Services
             </Link>

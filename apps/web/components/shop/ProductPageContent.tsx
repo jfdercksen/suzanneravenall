@@ -335,7 +335,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 <blockquote className="text-white/80 leading-relaxed text-lg mb-6 italic">
                   {t.quote}
                 </blockquote>
-                <footer className="text-white/50 text-sm font-medium">
+                <footer className="text-white/70 text-sm font-medium">
                   {t.name},{' '}
                   <span className="text-white/40 font-normal">{t.location}</span>
                 </footer>
@@ -406,7 +406,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-center mt-12 space-y-3"
           >
-            <p className="text-white/50 text-sm">
+            <p className="text-white/70 text-sm">
               Not sure which programme is right for you?{' '}
               <Link
                 href="/contact"

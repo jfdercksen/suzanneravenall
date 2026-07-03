@@ -135,11 +135,11 @@ export default function QuizFlow({ quiz }: { quiz: Quiz }) {
             <button
               type="button"
               onClick={goBack}
-              className="text-xs uppercase tracking-[0.2em] text-white/50 hover:text-white transition-colors duration-150"
+              className="text-xs uppercase tracking-[0.2em] text-white/70 hover:text-white transition-colors duration-150"
             >
               ← Back
             </button>
-            <span className="text-xs uppercase tracking-[0.2em] text-white/50">
+            <span className="text-xs uppercase tracking-[0.2em] text-white/70">
               {step} of {total}
             </span>
           </div>

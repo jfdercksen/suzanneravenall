@@ -82,7 +82,7 @@ export default function PathwaysGrid() {
                 <p className="text-sm text-white/60 font-light leading-relaxed mb-5">
                   {pathway.description}
                 </p>
-                <span className="mt-auto inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/50 transition-colors duration-300 group-hover:text-brand-accent">
+                <span className="mt-auto inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/70 transition-colors duration-300 group-hover:text-brand-accent">
                   Learn More
                   <span
                     aria-hidden="true"
@@ -130,7 +130,7 @@ export default function PathwaysGrid() {
                 <p className="text-sm lg:text-base text-white/60 font-light leading-relaxed mb-6">
                   {pathway.description}
                 </p>
-                <span className="mt-auto inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/50 transition-colors duration-300 group-hover:text-brand-accent">
+                <span className="mt-auto inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/70 transition-colors duration-300 group-hover:text-brand-accent">
                   Learn More
                   <span
                     aria-hidden="true"

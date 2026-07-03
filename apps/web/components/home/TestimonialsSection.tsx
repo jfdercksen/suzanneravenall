@@ -84,7 +84,7 @@ export default function TestimonialsSection() {
                   </div>
                   <div>
                     <p className="font-semibold text-white text-sm">{name}</p>
-                    <p className="text-white/50 text-xs">{title}</p>
+                    <p className="text-white/70 text-xs">{title}</p>
                   </div>
                 </div>
               </figcaption>
