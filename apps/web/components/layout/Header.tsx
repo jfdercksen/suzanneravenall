@@ -89,7 +89,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 lg:h-20">
 
           {/* Logo — shrink-0 so the flex row never crushes it to make room for nav/CTAs */}
-          <Link href="/" aria-label="Dr. Suzanne Ravenall — return to homepage" className="shrink-0">
+          <Link href="/" aria-label="Dr. Suzanne Ravenall — return to homepage" className="shrink-0 mr-8 lg:mr-12">
             <Image
                 src="/logos/suzanne-white-logo.png"
                 alt="Dr. Suzanne Ravenall"
