@@ -127,7 +127,7 @@ export default function ProgramsPageClient() {
 
   useEffect(() => {
     const observers: IntersectionObserver[] = []
-    const ids = ['practitioner', 'self-paced', 'live', 'group']
+    const ids = ['practitioner', 'self-paced', 'live', 'group'] as const
 
     ids.forEach((id) => {
       const el = sectionRefs.current[id]
@@ -148,9 +148,10 @@ export default function ProgramsPageClient() {
   return (
     <>
       {/* Hero */}
+      {/* Hero height leaves the category bar fully visible at the fold: 100vh minus sticky header (h-16/lg:h-20) minus category bar (taller stacked layout below lg) */}
       <section
         aria-labelledby="programs-hero-heading"
-        className="relative h-screen min-h-[640px] flex items-center overflow-hidden"
+        className="relative h-[calc(100vh-188px)] lg:h-[calc(100vh-176px)] min-h-[560px] flex items-center overflow-hidden"
       >
         <Image
           src="/images/generated/group-coaching-real.webp"
@@ -173,7 +174,7 @@ export default function ProgramsPageClient() {
           className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_theme(colors.brand.accent/15%),_transparent_50%)]"
         />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -211,19 +212,23 @@ export default function ProgramsPageClient() {
         </div>
       </section>
 
-      {/* Category navigation — sticky under site header */}
-      <nav aria-label="Programme categories" className="w-full bg-gray-950 py-8 sticky top-16 lg:top-20 z-40 border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Category navigation — visible at the fold on load, sticky under site header */}
+      <nav aria-label="Programme categories" className="w-full bg-gray-950 py-5 lg:py-6 sticky top-16 lg:top-20 z-40 border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-8">
+          <p className="flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent">
+            Browse by category
+          </p>
           <div className="flex gap-3 overflow-x-auto pb-1">
             {CATEGORIES.map((cat) => (
               <a
                 key={cat.id}
                 href={`#${cat.id}`}
+                aria-current={activeCategory === cat.id ? 'true' : undefined}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
+                className={`flex-shrink-0 px-6 py-3 rounded-full text-base font-medium transition-colors duration-200 ${
                   activeCategory === cat.id
-                    ? 'bg-brand-accent text-white'
-                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    ? 'bg-brand-accent text-white shadow-lg shadow-brand-accent/25'
+                    : 'border border-white/25 text-white hover:border-brand-accent hover:bg-white/5'
                 }`}
               >
                 {cat.label}
@@ -239,7 +244,7 @@ export default function ProgramsPageClient() {
         ref={(el) => {
           sectionRefs.current['practitioner'] = el
         }}
-        className="w-full bg-white py-20 lg:py-32"
+        className="w-full bg-white py-20 lg:py-32 scroll-mt-48 lg:scroll-mt-44"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -280,7 +285,7 @@ export default function ProgramsPageClient() {
         ref={(el) => {
           sectionRefs.current['self-paced'] = el
         }}
-        className="w-full bg-gray-950 py-20 lg:py-32"
+        className="w-full bg-gray-950 py-20 lg:py-32 scroll-mt-48 lg:scroll-mt-44"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -320,7 +325,7 @@ export default function ProgramsPageClient() {
         ref={(el) => {
           sectionRefs.current['live'] = el
         }}
-        className="w-full bg-white py-20 lg:py-32"
+        className="w-full bg-white py-20 lg:py-32 scroll-mt-48 lg:scroll-mt-44"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -391,7 +396,7 @@ export default function ProgramsPageClient() {
         ref={(el) => {
           sectionRefs.current['group'] = el
         }}
-        className="w-full bg-gray-950 py-20 lg:py-32"
+        className="w-full bg-gray-950 py-20 lg:py-32 scroll-mt-48 lg:scroll-mt-44"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
