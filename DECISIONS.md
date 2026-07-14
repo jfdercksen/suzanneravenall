@@ -115,3 +115,11 @@ This is the decision log. Every significant architectural choice is recorded her
 **When to revisit:** After VPS upgrade (8GB RAM recommended) or when a dedicated community server is provisioned. SSO implementation plan is documented in IMPLEMENTATION_WORKFLOW.md Task 3.8 — ready to build when hardware allows.
 **Alternatives evaluated:** Hosted Discourse ($100/month) ruled out to avoid recurring cost at launch. Supabase-backed custom forum ruled out — scope too large for this phase.
 **Date:** May 2026 | **Decided by:** Johan
+
+---
+
+## D020 — Pattern Intelligence™ as governing principle
+
+**Decision:** All future platform builds must answer: "Does this strengthen Pattern Intelligence™?" This is the acceptance criterion for every new feature, page, or integration. Any feature that does not map to one of the seven PI™ frameworks should not be built without explicit client approval.
+**Reason:** Received from Suzanne July 2026 — Pattern Intelligence™ is the overarching IP framework governing all of her work, products, and intellectual property. See `docs/strategy/pattern-intelligence-ecosystem.md`.
+**Date:** July 2026 | **Decided by:** Suzanne Ravenall

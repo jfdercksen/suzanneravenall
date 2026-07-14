@@ -75,6 +75,20 @@ Wait for developer confirmation before doing anything else.
 
 ## Critical Project Facts (include in every session restore)
 
+### Strategic Context (Pattern Intelligence™ Ecosystem)
+Suzanne's overarching IP framework — Pattern Intelligence™ — governs all builds. Every feature must map to one of seven frameworks:
+1. Pattern Intelligence™ (philosophy)
+2. Executive Capacity Intelligence™ (CEOs/leadership)
+3. Human Performance Intelligence™ (organisations)
+4. Pattern Discovery Instrument™ (assessments)
+5. Executive Capacity Index™ (executive diagnostic)
+6. Pattern Mapping Process™ (methodology/pathways)
+7. Pattern Intelligence Coach™ (certification)
+8. Pattern Intelligence AI™ (digital platform)
+
+Governing question for every new build: "Does this strengthen Pattern Intelligence™?"
+See docs/strategy/pattern-intelligence-ecosystem.md
+
 ### Environment
 - Single VPS at 169.239.180.49 — this IS production
 - NO staging environment — every deploy goes live immediately (D014)
@@ -139,6 +153,6 @@ Deploy ONLY after all agents pass or NEEDS CHANGES fixes are applied.
 ### Session continuity files
 - BUILD_STATUS.md — phase progress, completed work, open items
 - KNOWN_ISSUES.md — known bugs and blockers with severity
-- DECISIONS.md — D001–D019 architectural decisions
+- DECISIONS.md — D001–D020 architectural decisions
 - IMPLEMENTATION_WORKFLOW.md — original plan (NOTE: three-environment
   workflow is superseded by D014 — no staging exists)
