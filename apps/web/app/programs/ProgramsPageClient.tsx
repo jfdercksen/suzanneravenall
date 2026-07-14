@@ -213,7 +213,7 @@ export default function ProgramsPageClient() {
       </section>
 
       {/* Category navigation — visible at the fold on load, sticky under site header */}
-      <nav aria-label="Programme categories" className="w-full bg-gray-950 py-5 lg:py-6 sticky top-16 lg:top-20 z-40 border-b border-gray-800">
+      <nav aria-label="Programme categories" className="w-full bg-gray-950 py-4 lg:py-6 sticky top-16 lg:top-20 z-40 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-8">
           <p className="flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent">
             Browse by category
