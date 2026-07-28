@@ -114,10 +114,13 @@ const nextConfig = {
       { source: '/product/:slug*', destination: '/shop', permanent: true },
 
       // ── Events ───────────────────────────────────────────────────────────────
-      { source: '/events/:slug*',    destination: '/contact', permanent: true },
-      { source: '/events-calendar',  destination: '/contact', permanent: true },
-      { source: '/dates',            destination: '/contact', permanent: true },
-      { source: '/dates-repository', destination: '/contact', permanent: true },
+      // :slug+ (one or more segments), NOT :slug* — the site now has a real
+      // /events page and a zero-segment match would permanently redirect it
+      // (same trap as the old /checkout redirect, see no-bad-patterns.md).
+      { source: '/events/:slug+',    destination: '/events', permanent: true },
+      { source: '/events-calendar',  destination: '/events', permanent: true },
+      { source: '/dates',            destination: '/events', permanent: true },
+      { source: '/dates-repository', destination: '/events', permanent: true },
 
       // ── Slug-prefix patterns (covers all article/award/conference posts) ────
       { source: '/article-:slug*',    destination: '/blog',  permanent: true },
