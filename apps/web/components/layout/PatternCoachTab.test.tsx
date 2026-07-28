@@ -14,8 +14,15 @@ vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
 
+// Mock next/link as a passthrough <a>
+vi.mock('next/link', () => ({
+  default: ({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) => (
+    <a href={href} {...props}>{children}</a>
+  ),
+}))
+
 const STORAGE_KEY = 'pattern-coach-tab-dismissed'
-const EXTERNAL_URL = 'https://suzanneravenallpatterncoach.com'
+const PRODUCT_PAGE_PATH = '/pattern-coach'
 
 beforeEach(() => {
   // jsdom does not implement matchMedia — provide a stub that returns matches: false
@@ -73,7 +80,9 @@ describe('PatternCoachTab', () => {
     })
 
     const buttons = screen.getAllByRole('button', { name: 'Dismiss Pattern Coach tab' })
-    await user.click(buttons[0])
+    const firstButton = buttons[0]
+    if (!firstButton) throw new Error('Expected at least one dismiss button')
+    await user.click(firstButton)
 
     // localStorage must record the dismissal
     expect(localStorage.getItem(STORAGE_KEY)).toBe('true')
@@ -84,17 +93,19 @@ describe('PatternCoachTab', () => {
     })
   })
 
-  it('main anchor has correct href to suzanneravenallpatterncoach.com', async () => {
+  it('main link points to the internal /pattern-coach product page in the same tab', async () => {
     await act(async () => {
       render(<PatternCoachTab />)
     })
 
     await waitFor(() => {
-      // There are two anchor elements (desktop + mobile), both must point to the external URL
-      const links = screen.getAllByRole('link', { name: /Open Pattern Coach/i })
+      // There are two link elements (desktop + mobile), both must point to the internal product page
+      const links = screen.getAllByRole('link', { name: /Discover Pattern Coach/i })
       expect(links.length).toBeGreaterThanOrEqual(1)
       for (const link of links) {
-        expect(link).toHaveAttribute('href', EXTERNAL_URL)
+        expect(link).toHaveAttribute('href', PRODUCT_PAGE_PATH)
+        // Must open in the same tab — no external new-tab bypass of the trial flow
+        expect(link).not.toHaveAttribute('target')
       }
     })
   })

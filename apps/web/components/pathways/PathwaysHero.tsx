@@ -38,7 +38,7 @@ export default function PathwaysHero() {
             {...fadeUp(0.1)}
             className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
           >
-            Structured pathways for deep, lasting{' '}
+            Individual &amp; group pathways for deep, lasting{' '}
             <span className="text-brand-accent">transformation</span>
           </motion.h1>
 
@@ -49,6 +49,8 @@ export default function PathwaysHero() {
             Each pathway is a focused transformation journey — a guided way to
             uncover the hidden patterns running underneath, interrupt the loops
             that keep you stuck, and support real, lasting personal change.
+            Begin an Individual Transformation Pathway today, or register your
+            interest in the upcoming group immersions.
           </motion.p>
         </div>
       </div>

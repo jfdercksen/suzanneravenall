@@ -14,12 +14,12 @@ export default function TopicSocialProof({ topic }: { topic: Topic }) {
   return (
     <section
       aria-label="Client outcome"
-      className="relative w-full bg-brand-primary overflow-hidden py-20 lg:py-32"
+      className="relative w-full bg-white overflow-hidden py-20 lg:py-32"
     >
       {/* Subtle gradient */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-primary via-brand-primary-800 to-brand-primary-900"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white via-gray-50 to-white"
       />
       {/* Glow orbs */}
       <div
@@ -44,11 +44,11 @@ export default function TopicSocialProof({ topic }: { topic: Topic }) {
             </span>
 
             <blockquote>
-              <p className="text-xl lg:text-2xl text-white font-light italic leading-relaxed mb-8">
+              <p className="text-xl lg:text-2xl text-gray-900 font-light italic leading-relaxed mb-8">
                 {topic.testimonial.quote}
               </p>
               <footer className="space-y-1">
-                <p className="text-sm font-medium text-white tracking-wide">
+                <p className="text-sm font-medium text-gray-900 tracking-wide">
                   {topic.testimonial.name}
                 </p>
                 <p className="text-sm text-brand-accent/80 font-light">
@@ -66,7 +66,7 @@ export default function TopicSocialProof({ topic }: { topic: Topic }) {
             <p className="text-8xl lg:text-9xl font-light text-brand-accent leading-none mb-4">
               {topic.stat.value}
             </p>
-            <p className="text-base lg:text-lg text-white/65 font-light leading-relaxed max-w-xs lg:ml-auto">
+            <p className="text-base lg:text-lg text-gray-600 font-light leading-relaxed max-w-xs lg:ml-auto">
               {topic.stat.label}
             </p>
           </motion.div>

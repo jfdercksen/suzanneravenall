@@ -14,15 +14,15 @@ export default function ExploreFinalCTA() {
   return (
     <section
       aria-labelledby="explore-final-cta-heading"
-      className="relative w-full bg-brand-primary overflow-hidden"
+      className="relative w-full bg-white overflow-hidden"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-primary via-brand-primary-800 to-brand-primary-900"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white via-gray-50 to-white"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-brand-accent/10 blur-3xl"
+        className="pointer-events-none absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-brand-accent/5 blur-3xl"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 text-center">
@@ -36,31 +36,41 @@ export default function ExploreFinalCTA() {
         <motion.h2
           id="explore-final-cta-heading"
           {...fadeUp(0.1)}
-          className="text-4xl lg:text-6xl font-light text-white leading-tight mb-6 max-w-3xl mx-auto"
+          className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-6 max-w-3xl mx-auto"
         >
           Ready to go <span className="text-brand-accent">deeper</span>?
         </motion.h2>
 
         <motion.p
           {...fadeUp(0.2)}
-          className="text-lg lg:text-xl text-white/75 font-light max-w-2xl mx-auto mb-10 leading-relaxed"
+          className="text-lg lg:text-xl text-gray-600 font-light max-w-2xl mx-auto mb-10 leading-relaxed"
         >
-          Start with a discovery call. We&apos;ll identify the pattern underneath
-          what you&apos;re working on and map the path to change it.
+          Start with the free pattern scan — it identifies the pattern
+          underneath what you&apos;re working on. Then book a discovery call to
+          map the path to change it.
         </motion.p>
 
-        <motion.div {...fadeUp(0.3)}>
+        <motion.div
+          {...fadeUp(0.3)}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+        >
           <Link
-            href="/contact"
+            href="/discover-your-pattern"
             className="group inline-flex items-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
           >
-            Book Discovery Call
+            Take the Free Pattern Scan
             <span
               aria-hidden="true"
               className="inline-block transition-transform duration-300 group-hover:translate-x-1"
             >
               →
             </span>
+          </Link>
+          <Link
+            href="/contact"
+            className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary/30 hover:border-brand-primary/60 text-brand-primary font-semibold text-sm uppercase tracking-[0.2em] rounded-button transition-all duration-300 hover:bg-brand-primary/5"
+          >
+            Book a Discovery Call
           </Link>
         </motion.div>
       </div>

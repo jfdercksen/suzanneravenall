@@ -3,6 +3,7 @@ import {
   pathways,
   personalPathways,
   youthPathways,
+  groupPathways,
   pathwayBySlug,
   featuredPathway,
   categoryLabel,
@@ -139,13 +140,55 @@ describe('pathways (full array)', () => {
     expect(p?.hasDetailContent).toBe(false)
   })
 
-  it('entries with hasDetailContent === true have a detail object with tagline and objective', () => {
+  it('reclaim-your-power has hasDetailContent === false (source page is a stub)', () => {
+    const p = pathways.find((x) => x.slug === 'reclaim-your-power')
+    expect(p?.hasDetailContent).toBe(false)
+  })
+
+  it('exactly 10 of 12 pathways have supplied detail content', () => {
+    expect(pathways.filter((x) => x.hasDetailContent)).toHaveLength(10)
+  })
+
+  it('entries with hasDetailContent === true have a detail object with tagline and overview paragraphs', () => {
     for (const p of pathways.filter((x) => x.hasDetailContent)) {
       expect(p.detail).toBeDefined()
       expect(typeof p.detail?.tagline).toBe('string')
       expect(p.detail!.tagline.length).toBeGreaterThan(0)
-      expect(typeof p.detail?.objective).toBe('string')
-      expect(p.detail!.objective.length).toBeGreaterThan(0)
+      expect(Array.isArray(p.detail?.overview)).toBe(true)
+      expect(p.detail!.overview.length).toBeGreaterThan(0)
+      for (const paragraph of p.detail!.overview) {
+        expect(typeof paragraph).toBe('string')
+        expect(paragraph.length).toBeGreaterThan(0)
+      }
+    }
+  })
+
+  it('entries with hasDetailContent === false carry no detail object', () => {
+    for (const p of pathways.filter((x) => !x.hasDetailContent)) {
+      expect(p.detail).toBeUndefined()
+    }
+  })
+})
+
+describe('groupPathways', () => {
+  it('has exactly 4 immersions', () => {
+    expect(groupPathways).toHaveLength(4)
+  })
+
+  it('contains the four immersion titles in order', () => {
+    expect(groupPathways.map((g) => g.title)).toEqual([
+      '3-Day Immersion',
+      '8-Week Immersion',
+      '12-Week Immersion',
+      '12-Month Immersion',
+    ])
+  })
+
+  it('every immersion has a unique id and a non-empty description', () => {
+    const ids = groupPathways.map((g) => g.id)
+    expect(new Set(ids).size).toBe(ids.length)
+    for (const g of groupPathways) {
+      expect(g.description.length).toBeGreaterThan(0)
     }
   })
 })

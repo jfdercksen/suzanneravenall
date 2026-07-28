@@ -1,10 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const STORAGE_KEY = 'pattern-coach-tab-dismissed'
-const EXTERNAL_URL = 'https://suzanneravenallpatterncoach.com'
+const PRODUCT_PAGE_PATH = '/pattern-coach'
 const springEase = [0.22, 1, 0.36, 1] as const
 
 function BrainIcon({ size = 52 }: { size?: number }) {
@@ -87,12 +88,10 @@ export default function PatternCoachTab() {
           transition={{ delay: 2, duration: 0.8, ease: springEase }}
         >
           <div className="flex flex-col items-center gap-4">
-            <a
-              href={EXTERNAL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={PRODUCT_PAGE_PATH}
               className="flex flex-col items-center gap-4 hover:scale-105 transition-transform duration-200"
-              aria-label="Open Pattern Coach — Brilliant Coach in Your Pocket"
+              aria-label="Discover Pattern Coach — Brilliant Coach in Your Pocket. Start your 30-day free trial"
             >
               <div className="motion-safe:animate-brain-pulse">
                 <BrainIcon size={52} />
@@ -105,12 +104,12 @@ export default function PatternCoachTab() {
                   IN YOUR<br />POCKET
                 </span>
               </div>
-            </a>
+            </Link>
 
             <button
               type="button"
               onClick={handleDismiss}
-              aria-label="Close Pattern Coach"
+              aria-label="Dismiss Pattern Coach tab"
               className="mt-2 flex items-center justify-center w-full gap-1 min-h-[44px] rounded-lg border border-gray-200 text-[9px] text-gray-400 hover:text-brand-accent hover:border-brand-accent transition-all duration-200"
             >
               <CloseXIcon size={8} />
@@ -134,12 +133,10 @@ export default function PatternCoachTab() {
           exit={{ y: 120, opacity: 0, transition: { duration: 0.4 } }}
           transition={{ delay: 2, duration: 0.6, ease: springEase }}
         >
-          <a
-            href={EXTERNAL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={PRODUCT_PAGE_PATH}
             className="flex items-center gap-3"
-            aria-label="Open Pattern Coach — Brilliant Coach in Your Pocket"
+            aria-label="Discover Pattern Coach — Brilliant Coach in Your Pocket. Start your 30-day free trial"
           >
             <div className="motion-safe:animate-brain-pulse shrink-0">
               <BrainIcon size={36} />
@@ -150,12 +147,12 @@ export default function PatternCoachTab() {
             <span className="text-[11px] font-bold text-brand-accent uppercase tracking-wide whitespace-nowrap">
               IN YOUR POCKET
             </span>
-          </a>
+          </Link>
 
           <button
             type="button"
             onClick={handleDismiss}
-            aria-label="Close Pattern Coach"
+            aria-label="Dismiss Pattern Coach tab"
             className="-m-2.5 w-11 h-11 flex items-center justify-center text-gray-400 hover:text-brand-accent transition-colors duration-200 shrink-0"
           >
             <CloseXIcon size={10} />

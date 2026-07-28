@@ -2,10 +2,17 @@
  * Transformation Pathways — typed catalogue.
  *
  * `description` is the card copy from docs/content-source/pathways-overview-cards.md.
- * `detail` (optional) is paraphrased tagline/objective copy from the individual
- * stub pages in docs/content-source/pathways/{slug}.md — present only where
- * `hasDetailContent` is true. `young-minds-architecture` has no live source page
- * (the old WordPress URL 404s), so it carries no detail content.
+ * `detail` (optional) carries the full pathway page content supplied by Suzanne in
+ * docs/content-source/pathways/{slug}.md — a tagline plus overview paragraphs —
+ * present only where `hasDetailContent` is true.
+ *
+ * Two pathways have no supplied detail content yet and keep the coming-soon
+ * fallback on their detail pages:
+ * - `reclaim-your-power` — its source page is an "under construction" stub
+ * - `young-minds-architecture` — the old WordPress source URL 404s
+ *
+ * `groupPathways` are the upcoming Group Transformation Pathways (immersions)
+ * currently in development — cards only, no detail pages yet.
  */
 
 export type PathwaySlug =
@@ -25,8 +32,10 @@ export type PathwaySlug =
 export type PathwayCategory = 'personal' | 'youth'
 
 export interface PathwayDetail {
+  /** Short positioning line shown under "About This Pathway". */
   tagline: string
-  objective: string
+  /** Overview paragraphs, in order, from the supplied pathway brief. */
+  overview: string[]
 }
 
 export interface Pathway {
@@ -50,9 +59,12 @@ export const pathways: Pathway[] = [
     featured: true,
     hasDetailContent: true,
     detail: {
-      tagline: 'Recognise and interrupt the patterns that keep you cycling back to the same place.',
-      objective:
-        'This pathway surfaces the deeper emotional and behavioural patterns driving recurring situations, so they can be understood, interrupted and ultimately changed.',
+      tagline:
+        'Recognising and interrupting the repeating patterns that keep you stuck.',
+      overview: [
+        'Many people experience recurring situations in life that seem to repeat no matter how much effort they make to change them.',
+        'This pathway focuses on identifying the deeper emotional and behavioural patterns behind these cycles so that they can be understood, interrupted, and ultimately transformed.',
+      ],
     },
   },
   {
@@ -62,12 +74,9 @@ export const pathways: Pathway[] = [
       'Reconnect with your inner authority, reduce self-sabotage, and strengthen intentional action.',
     category: 'personal',
     featured: false,
-    hasDetailContent: true,
-    detail: {
-      tagline: 'Step back into your own authority.',
-      objective:
-        'A pathway for reconnecting with your inner authority, easing self-sabotage and strengthening intentional, self-directed action. Fuller content is being prepared.',
-    },
+    // The source page for this pathway is still an "under construction" stub —
+    // no detail content has been supplied yet.
+    hasDetailContent: false,
   },
   {
     slug: 'reinvent-your-life',
@@ -78,9 +87,11 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline: 'Build a new internal foundation for the next chapter of your life.',
-      objective:
-        'When change is no longer optional, this pathway helps you move past old limits, re-examine the structures shaping your life, and build a more aligned and empowered future.',
+      tagline: 'Creating a new internal foundation for the next chapter of your life.',
+      overview: [
+        'There are seasons in life when change is no longer optional and something deeper needs to shift.',
+        'This transformation pathway is designed to help you move beyond old limitations, re-evaluate the structures shaping your life, and begin building a more aligned, empowered future.',
+      ],
     },
   },
   {
@@ -92,9 +103,13 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline: 'Install a new mindset architecture for clarity, growth and momentum.',
-      objective:
-        'Many of your beliefs and automatic responses were installed years ago. This pathway helps you identify outdated mental and emotional programming and replace it with an internal operating system that supports your goals.',
+      tagline:
+        'Installing a new mindset architecture for clarity, growth and transformation.',
+      overview: [
+        'Many of the beliefs, reactions, and emotional responses we operate from were installed years ago and may no longer serve the life we want to create.',
+        'This transformation pathway focuses on identifying outdated mental and emotional programming and replacing it with a stronger, more supportive internal operating system that aligns with your goals and future vision.',
+        'Through this process you begin building a mindset structure that supports growth, resilience, and forward momentum.',
+      ],
     },
   },
   {
@@ -106,9 +121,12 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline: 'A future bigger than survival. Rewrite what comes next.',
-      objective:
-        'Survival strategies that once protected you can later hold life in place. This pathway explores how past experience shapes present behaviour and identity, helping you move from coping to building a future larger than survival.',
+      tagline: 'A future bigger than survival. Rewrite your future.',
+      overview: [
+        'Many people carry experiences that shaped their lives in powerful ways. While survival strategies may have helped at the time, they can later become patterns that hold life in place.',
+        'This transformation pathway focuses on understanding how past experiences influence present behaviour, emotional responses, and personal identity.',
+        'Through guided exploration and pattern recognition, the goal is to move beyond simply coping with the past and begin building a future that is larger than survival.',
+      ],
     },
   },
   {
@@ -120,9 +138,13 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline: 'Build inner steadiness and strength from the inside out.',
-      objective:
-        'Constant pressure can make it hard to stay grounded. This pathway strengthens emotional capacity, clearer responses and a more fortified sense of self, so you recover from difficulty and meet challenge with confidence.',
+      tagline:
+        'Building inner steadiness, emotional strength, and a stronger foundation for life.',
+      overview: [
+        'Life can place constant pressure on the mind, emotions, and nervous system, making it difficult to stay grounded and steady through challenge.',
+        'This transformation pathway is designed to strengthen resilience from the inside out, helping you build greater emotional capacity, clearer responses, and a more fortified sense of self.',
+        'The work focuses on creating internal stability so that you are not only able to recover from difficulty, but also move through life with greater confidence, adaptability, and strength.',
+      ],
     },
   },
   {
@@ -134,9 +156,13 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline: 'Move from awareness into mastery of your patterns.',
-      objective:
-        'Recognising your patterns is only the start. This pathway deepens your understanding of recurring internal patterns and builds your ability to work with them consciously, developing self-leadership and the capacity to respond differently.',
+      tagline:
+        'Moving beyond awareness into deeper pattern recognition, rewiring, and personal mastery.',
+      overview: [
+        'Many people begin by recognising the patterns that shape their emotions, behaviours, and decisions — but lasting transformation requires more than awareness alone.',
+        'This transformation pathway is designed to help deepen your understanding of recurring internal patterns and strengthen your ability to work with them consciously and effectively.',
+        'The focus is on developing greater self-leadership, emotional insight, and the capacity to respond differently, so that patterns no longer run life automatically.',
+      ],
     },
   },
 
@@ -150,9 +176,13 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline: 'Strong emotional foundations for healthy, lifelong growth.',
-      objective:
-        'The early years shape how young people understand themselves and meet challenges. This pathway supports stronger emotional foundations, resilience and self-awareness, giving children a steadier base to grow from.',
+      tagline:
+        'Supporting strong emotional foundations, healthy development, and lifelong inner stability.',
+      overview: [
+        'The early years of life shape how children and young people understand themselves, respond to challenges, and build confidence in the world around them.',
+        'This transformation pathway is designed to support stronger emotional foundations, helping young people develop resilience, self-awareness, and healthier internal patterns from an early stage.',
+        'The focus is on creating a steadier base for growth so that children and young people can move forward with greater confidence, emotional wellbeing, and a stronger sense of self.',
+      ],
     },
   },
   {
@@ -164,9 +194,13 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline: 'Help young people navigate their emotional world with confidence.',
-      objective:
-        'Young people face rising emotional pressure from school, social life and a fast-changing world. This pathway builds emotional awareness and the tools to respond to challenge in healthier, more balanced ways.',
+      tagline:
+        'Helping young people understand, regulate, and navigate their emotional world with confidence.',
+      overview: [
+        'Young people today face increasing emotional pressure from school, social environments, and the rapidly changing world around them.',
+        'This pathway focuses on helping young minds develop a deeper understanding of their emotions while building the tools needed to respond to challenges in a healthier and more balanced way.',
+        'By strengthening emotional awareness and resilience early in life, young people can develop stronger confidence, clearer thinking, and greater stability as they grow.',
+      ],
     },
   },
   {
@@ -176,6 +210,8 @@ export const pathways: Pathway[] = [
       'Strengthen the inner structures that support resilience, identity, confidence, and empowered thinking.',
     category: 'youth',
     featured: false,
+    // No live source page exists for this pathway (the old WordPress URL 404s) —
+    // no detail content has been supplied yet.
     hasDetailContent: false,
   },
   {
@@ -187,9 +223,13 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline: 'Introduce pattern awareness early in life.',
-      objective:
-        'From an early age we develop patterns that influence how we think, feel and respond. This pathway builds early awareness of how beliefs and experiences shape behaviour, so healthier internal frameworks can form.',
+      tagline:
+        'Introducing the foundations of pattern awareness and how our internal patterns shape behaviour and choices.',
+      overview: [
+        'From an early age people begin developing patterns that influence how they think, respond emotionally, and interact with the world around them.',
+        'This pathway focuses on helping individuals understand the foundations of these patterns, creating awareness of how beliefs, experiences, and emotional responses begin to shape behaviour.',
+        'By recognising these foundations early, individuals can begin building healthier internal frameworks that support growth, resilience, and more empowered choices in life.',
+      ],
     },
   },
   {
@@ -201,10 +241,51 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline: 'Strengthen self-trust and a clear sense of direction.',
-      objective:
-        'Many people move through life shaped by outside expectations and uncertainty. This pathway helps reconnect with an internal guidance system, strengthening self-awareness and trust so choices feel clearer and more aligned.',
+      tagline:
+        'Strengthening self-trust, personal direction, and the ability to navigate life with clarity.',
+      overview: [
+        'Many people move through life influenced by external expectations, pressure, or uncertainty about what direction to take.',
+        'This pathway focuses on helping individuals reconnect with their internal guidance system — the inner compass that supports confident decision making and authentic choices.',
+        "By strengthening self-awareness and trust in one's internal direction, individuals can begin navigating life with greater clarity, alignment, and confidence.",
+      ],
     },
+  },
+]
+
+// ── Group Transformation Pathways (in development) ─────────────────────────
+// Upcoming group immersions — Suzanne is still writing the full programmes,
+// so these carry only the honest cohort-format framing. No detail pages yet.
+
+export interface GroupPathway {
+  id: string
+  title: string
+  description: string
+}
+
+export const groupPathways: GroupPathway[] = [
+  {
+    id: '3-day-immersion',
+    title: '3-Day Immersion',
+    description:
+      'A focused three-day group immersion in a live cohort, guided by Suzanne throughout.',
+  },
+  {
+    id: '8-week-immersion',
+    title: '8-Week Immersion',
+    description:
+      'An eight-week group cohort journey with live guidance from Suzanne along the way.',
+  },
+  {
+    id: '12-week-immersion',
+    title: '12-Week Immersion',
+    description:
+      'A twelve-week group cohort immersion, guided live by Suzanne from start to finish.',
+  },
+  {
+    id: '12-month-immersion',
+    title: '12-Month Immersion',
+    description:
+      'A year-long group cohort immersion with sustained live guidance from Suzanne.',
   },
 ]
 

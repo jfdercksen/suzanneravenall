@@ -66,46 +66,53 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
         </div>
       </section>
 
-      {/* ── Body + placeholder (light) ──────────────────────────────────── */}
+      {/* ── Body (light) ────────────────────────────────────────────────── */}
       <section className="w-full bg-gray-50 py-20 lg:py-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          {pathway.hasDetailContent && pathway.detail && (
-            <motion.div {...fadeUpInView(0)} className="mb-12 lg:mb-16">
+          {pathway.hasDetailContent && pathway.detail ? (
+            <motion.div {...fadeUpInView(0)}>
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-5">
                 About This Pathway
               </p>
-              <h2 className="text-2xl lg:text-4xl font-light text-brand-primary leading-snug mb-5">
+              <h2 className="text-2xl lg:text-4xl font-light text-brand-primary leading-snug mb-8">
                 {pathway.detail.tagline}
               </h2>
-              <p className="text-base lg:text-lg text-gray-600 font-light leading-relaxed">
-                {pathway.detail.objective}
+              <div className="space-y-6">
+                {pathway.detail.overview.map((paragraph) => (
+                  <p
+                    key={paragraph}
+                    className="text-base lg:text-lg text-gray-600 font-light leading-relaxed"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+            /* "Coming soon" placeholder — only for pathways without supplied content */
+            <motion.div
+              {...fadeUpInView(0)}
+              className="rounded-card border border-dashed border-gray-300 bg-white p-8 lg:p-10 text-center"
+            >
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                Coming Soon
+              </p>
+              <p className="text-lg lg:text-xl font-light text-brand-primary leading-relaxed">
+                Full programme details for this pathway are coming soon.
+              </p>
+              <p className="mt-3 text-sm text-gray-500 font-light">
+                Session structure, format and who it is best suited for will be
+                added here shortly.
               </p>
             </motion.div>
           )}
-
-          {/* Consistent "coming soon" placeholder — reused on every pathway page */}
-          <motion.div
-            {...fadeUpInView(0.1)}
-            className="rounded-card border border-dashed border-gray-300 bg-white p-8 lg:p-10 text-center"
-          >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
-              Coming Soon
-            </p>
-            <p className="text-lg lg:text-xl font-light text-brand-primary leading-relaxed">
-              Full programme details for this pathway are coming soon.
-            </p>
-            <p className="mt-3 text-sm text-gray-500 font-light">
-              Session structure, format and who it is best suited for will be
-              added here shortly.
-            </p>
-          </motion.div>
         </div>
       </section>
 
-      {/* ── Pattern assessment CTA (light) ──────────────────────────────── */}
+      {/* ── Pattern assessment CTA (white — differs from gray-50 body above) ─ */}
       <section
         aria-labelledby="pathway-assessment-heading"
-        className="py-12 lg:py-16 bg-gray-50"
+        className="py-12 lg:py-16 bg-white"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div {...fadeUpInView(0)}>

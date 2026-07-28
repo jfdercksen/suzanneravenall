@@ -45,7 +45,7 @@ export default function ExploreDiagnosticCTA() {
               href="/discover-your-pattern"
               className="inline-flex items-center gap-2 rounded-button bg-brand-accent text-white px-8 py-3 text-sm font-medium hover:bg-white hover:text-brand-primary transition-colors duration-200"
             >
-              Discover Your Pattern
+              Take the Free Pattern Scan
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path
                   d="M3 8h10M9 4l4 4-4 4"

@@ -69,7 +69,7 @@ export default function ExploreTopicGrid() {
   return (
     <section
       aria-labelledby="explore-topic-grid-heading"
-      className="w-full bg-brand-primary-900 py-20 lg:py-32"
+      className="w-full bg-gray-50 py-20 lg:py-32"
     >
       {/* Section header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 lg:mb-20">
@@ -84,7 +84,7 @@ export default function ExploreTopicGrid() {
           </p>
           <h2
             id="explore-topic-grid-heading"
-            className="text-4xl lg:text-6xl font-light text-white leading-tight"
+            className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight"
           >
             Choose the area you&rsquo;re ready to{' '}
             <span className="text-brand-accent">repattern</span>
@@ -102,7 +102,7 @@ export default function ExploreTopicGrid() {
         <div
           tabIndex={0}
           onKeyDown={handleKeyDown}
-          className="w-2/5 flex flex-col justify-center gap-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-primary-900 rounded-card"
+          className="w-2/5 flex flex-col justify-center gap-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-gray-50 rounded-card"
         >
           {topics.map((topic, i) => {
             const active = i === activeIndex
@@ -122,25 +122,25 @@ export default function ExploreTopicGrid() {
                   'focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-inset',
                   active
                     ? 'border-brand-accent'
-                    : 'border-white/10 hover:border-brand-accent/40',
+                    : 'border-gray-200 hover:border-brand-accent/40',
                 ].join(' ')}
               >
                 <span
                   className={`block text-[10px] font-semibold tracking-[0.3em] uppercase mb-1 transition-colors duration-300 ${
-                    active ? 'text-brand-accent' : 'text-white/25'
+                    active ? 'text-brand-accent' : 'text-gray-400'
                   }`}
                 >
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <span
                   className={`block text-base lg:text-lg font-semibold leading-tight transition-colors duration-300 ${
-                    active ? 'text-white' : 'text-white/50 group-hover:text-white/75'
+                    active ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-700'
                   }`}
                 >
                   {topic.title}
                 </span>
                 <span
-                  className={`block text-sm font-light leading-relaxed overflow-hidden transition-all duration-500 text-white/60 ${
+                  className={`block text-sm font-light leading-relaxed overflow-hidden transition-all duration-500 text-gray-600 ${
                     active ? 'max-h-10 opacity-100 mt-1.5' : 'max-h-0 opacity-0'
                   }`}
                 >
@@ -231,7 +231,7 @@ export default function ExploreTopicGrid() {
           <li key={topic.slug}>
             <Link
               href={`/explore/${topic.slug}`}
-              className="group relative flex flex-col justify-end overflow-hidden rounded-card min-h-[300px] focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-primary-900"
+              className="group relative flex flex-col justify-end overflow-hidden rounded-card min-h-[300px] focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-gray-50"
             >
               <Image
                 src={TOPIC_IMAGES[topic.slug]}

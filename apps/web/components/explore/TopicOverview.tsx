@@ -18,7 +18,7 @@ export default function TopicOverview({ topic }: { topic: Topic }) {
   return (
     <section
       aria-labelledby="topic-overview-heading"
-      className="relative w-full bg-gray-950 overflow-hidden pt-20 pb-12 lg:pt-32 lg:pb-16"
+      className="relative w-full bg-gray-50 overflow-hidden pt-20 pb-12 lg:pt-32 lg:pb-16"
     >
       {/* Dot-grid background pattern */}
       <div
@@ -26,7 +26,7 @@ export default function TopicOverview({ topic }: { topic: Topic }) {
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            'radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)',
+            'radial-gradient(circle, rgba(1,43,67,0.06) 1px, transparent 1px)',
           backgroundSize: '32px 32px',
         }}
       />
@@ -46,7 +46,7 @@ export default function TopicOverview({ topic }: { topic: Topic }) {
             </p>
             <h2
               id="topic-overview-heading"
-              className="text-4xl lg:text-5xl font-light text-white leading-tight"
+              className="text-4xl lg:text-5xl font-light text-brand-primary leading-tight"
             >
               {topic.corePrinciple}
             </h2>
@@ -70,7 +70,7 @@ export default function TopicOverview({ topic }: { topic: Topic }) {
               <motion.p
                 key={index}
                 {...fadeUp(0.2 + index * 0.1)}
-                className="text-lg text-white/70 font-light leading-relaxed"
+                className="text-lg text-gray-600 font-light leading-relaxed"
               >
                 {paragraph}
               </motion.p>

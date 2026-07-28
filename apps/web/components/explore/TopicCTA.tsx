@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { Topic } from '@/app/explore/topics'
+import { getTopicQuiz, getTopicQuizLabel } from '@/components/explore/topicQuizMap'
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -13,20 +14,24 @@ const fadeUp = (delay: number) => ({
 })
 
 export default function TopicCTA({ topic }: { topic: Topic }) {
+  const quiz = getTopicQuiz(topic.slug)
+  const quizLabel = getTopicQuizLabel(topic.slug)
+  const isRelationships = topic.slug === 'relationships-attachment-patterns'
+
   return (
     <section
       aria-labelledby="topic-cta-heading"
-      className="relative w-full bg-brand-primary overflow-hidden"
+      className="relative w-full bg-gray-50 overflow-hidden"
     >
       {/* Background gradient */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-primary via-brand-primary-800 to-brand-primary-900"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50"
       />
       {/* Glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-brand-accent/10 blur-3xl"
+        className="pointer-events-none absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-brand-accent/5 blur-3xl"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
@@ -40,38 +45,22 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
               Work With Suzanne
             </motion.p>
 
-            {/* Diagnostic quiz CTA — only the nervous-system topic has a quiz
-                today. Other topics omit this to avoid dead links until their
-                quizzes are built. */}
-            {topic.slug === 'emotional-nervous-system-mastery' && (
-              <motion.div {...fadeUp(0.05)} className="mb-8">
-                <Link
-                  href={`/explore/${topic.slug}/quiz`}
-                  className="group inline-flex items-center gap-3 rounded-button border border-brand-accent/50 bg-brand-accent/10 px-6 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:border-brand-accent hover:bg-brand-accent/20"
-                >
-                  Take the 2-Minute Pattern Diagnostic
-                  <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-                    →
-                  </span>
-                </Link>
-              </motion.div>
-            )}
-
             {/* ctaHook replaces the awkward "Work on [title] with Suzanne" concatenation */}
             <motion.h2
               id="topic-cta-heading"
               {...fadeUp(0.1)}
-              className="text-4xl lg:text-5xl font-light text-white leading-tight mb-6"
+              className="text-4xl lg:text-5xl font-light text-brand-primary leading-tight mb-6"
             >
               {topic.ctaHook}
             </motion.h2>
 
             <motion.p
               {...fadeUp(0.2)}
-              className="text-lg text-white/70 font-light leading-relaxed mb-8"
+              className="text-lg text-gray-600 font-light leading-relaxed mb-8"
             >
-              Book a discovery call. We&apos;ll map the pattern underneath what
-              you&apos;re working with and the path to change it.
+              Start with the free pattern scan — it shows you the pattern
+              running underneath what you&apos;re working with. Then book a
+              discovery call to map the path to change it.
             </motion.p>
 
             {/* Social proof — outcome placeholder */}
@@ -79,34 +68,55 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
               {...fadeUp(0.25)}
               className="mb-8 pl-5 border-l border-brand-accent/40"
             >
-              <p className="text-sm text-white/55 font-light italic leading-relaxed">
+              <p className="text-sm text-gray-500 font-light italic leading-relaxed">
                 {topic.testimonial.outcome}
               </p>
             </motion.div>
 
-            {/* CTAs */}
-            <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4">
+            {/* CTAs — quiz first, discovery call second (Suzanne, 27 Jul 2026) */}
+            <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
+              {quiz ? (
+                <a
+                  href={quiz.scoreAppUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
+                >
+                  {quizLabel}
+                  <span aria-hidden="true">→</span>
+                </a>
+              ) : (
+                <Link
+                  href="/discover-your-pattern"
+                  className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
+                >
+                  Take the Free Pattern Scan
+                  <span aria-hidden="true">→</span>
+                </Link>
+              )}
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
+                className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary/30 hover:border-brand-primary/60 text-brand-primary font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-brand-primary/5"
               >
-                Book Discovery Call
-                <span aria-hidden="true">→</span>
+                Book a Discovery Call
               </Link>
-              <Link
-                href="/portal/resources"
-                className="inline-flex items-center justify-center px-8 py-4 border border-white/30 hover:border-white/60 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
-              >
-                Start with a Free Resource
-              </Link>
+              {isRelationships && (
+                <Link
+                  href="/programs/love-and-relationships"
+                  className="inline-flex items-center justify-center px-8 py-4 border border-brand-accent/50 hover:border-brand-accent text-brand-primary font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-brand-accent/10"
+                >
+                  Transform Your Relationship
+                </Link>
+              )}
             </motion.div>
 
             {/* Reassurance line */}
             <motion.p
               {...fadeUp(0.4)}
-              className="mt-4 text-xs text-white/40 font-light tracking-wide"
+              className="mt-4 text-xs text-gray-400 font-light tracking-wide"
             >
-              Discovery calls are 30 minutes, complimentary.
+              The pattern scan is free and takes a few minutes. Discovery calls
+              are 30 minutes, complimentary.
             </motion.p>
           </div>
 

@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { Topic } from '@/app/explore/topics'
+import { getTopicQuiz, getTopicQuizLabel } from '@/components/explore/topicQuizMap'
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -12,6 +13,9 @@ const fadeUp = (delay: number) => ({
 })
 
 export default function TopicHero({ topic }: { topic: Topic }) {
+  const quiz = getTopicQuiz(topic.slug)
+  const quizLabel = getTopicQuizLabel(topic.slug)
+
   const handleScrollToApproach = () => {
     const el = document.getElementById('approach')
     if (el) el.scrollIntoView({ behavior: 'smooth' })
@@ -81,7 +85,7 @@ export default function TopicHero({ topic }: { topic: Topic }) {
           <motion.h1
             id="topic-hero-heading"
             {...fadeUp(0.2)}
-            className="text-4xl lg:text-6xl xl:text-7xl font-light text-white leading-[1.05] mb-8"
+            className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
           >
             {topic.heroHeadline}
           </motion.h1>
@@ -94,18 +98,36 @@ export default function TopicHero({ topic }: { topic: Topic }) {
             {topic.heroSubheadline}
           </motion.p>
 
-          {/* CTAs — reduced padding on mobile so both buttons fit in the initial viewport */}
-          <motion.div {...fadeUp(0.4)} className="flex flex-wrap gap-3">
+          {/* CTAs — quiz first, discovery call second (Suzanne, 27 Jul 2026).
+              Reduced padding on mobile so both buttons fit in the initial viewport */}
+          <motion.div {...fadeUp(0.4)} className="flex flex-wrap items-center gap-3">
+            {quiz ? (
+              <a
+                href={quiz.scoreAppUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-6 py-3 lg:px-8 lg:py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
+              >
+                {quizLabel}
+              </a>
+            ) : (
+              <Link
+                href="/discover-your-pattern"
+                className="inline-flex items-center justify-center px-6 py-3 lg:px-8 lg:py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
+              >
+                Take the Free Pattern Scan
+              </Link>
+            )}
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center px-6 py-3 lg:px-8 lg:py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
+              className="inline-flex items-center justify-center px-6 py-3 lg:px-8 lg:py-4 border border-white/40 hover:border-white/80 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
             >
-              Book Discovery Call
+              Book a Discovery Call
             </Link>
             <button
               type="button"
               onClick={handleScrollToApproach}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 lg:px-8 lg:py-4 border border-white/40 hover:border-white/80 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
+              className="inline-flex items-center justify-center gap-2 px-4 py-3 text-white/70 hover:text-white font-semibold text-sm uppercase tracking-widest transition-colors duration-300"
             >
               Explore the Method
               <span aria-hidden="true" className="inline-block">↓</span>

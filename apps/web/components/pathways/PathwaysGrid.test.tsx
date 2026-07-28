@@ -89,10 +89,10 @@ vi.mock('framer-motion', () => ({
 
 describe('PathwaysGrid', () => {
   describe('section heading', () => {
-    it('renders the "Transformation Pathways" section heading', () => {
+    it('renders the "Individual Transformation Pathways" section heading', () => {
       render(<PathwaysGrid />)
       expect(
-        screen.getByRole('heading', { name: 'Transformation Pathways' })
+        screen.getByRole('heading', { name: 'Individual Transformation Pathways' })
       ).toBeInTheDocument()
     })
   })

@@ -44,8 +44,12 @@ export default function PathwaysGrid() {
             id="pathways-grid-heading"
             className="text-4xl lg:text-6xl font-light text-white leading-tight"
           >
-            Transformation Pathways
+            Individual Transformation Pathways
           </h2>
+          <p className="mt-5 text-base lg:text-lg text-white/70 font-light max-w-2xl leading-relaxed">
+            Focused transformation journeys for individuals — personal pathways
+            for adults, and dedicated pathways for children and young people.
+          </p>
         </motion.div>
 
         {/* Personal Pathways — 7 cards, lg:grid-cols-4 = 2 rows (4+3) */}
