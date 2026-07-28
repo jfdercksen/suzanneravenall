@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { allPrivateSessions, privateSessionBySlug } from './privateSessions'
 
+// Resonance Repatterning is deliberately last — Suzanne wants it findable but
+// never front-and-centre (feedback, 27 Jul 2026).
 const EXPECTED_SLUGS = [
-  'resonance-repatterning',
   'transformational-coaching',
   'rapid-transformational-therapy',
   'rapid-repatterning',
@@ -11,6 +12,7 @@ const EXPECTED_SLUGS = [
   'exploring-the-alpha-mind',
   'energetic-realignment-optimisation',
   'executive-coaching',
+  'resonance-repatterning',
 ]
 
 describe('allPrivateSessions', () => {

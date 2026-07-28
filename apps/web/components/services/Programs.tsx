@@ -41,11 +41,11 @@ const columns: Column[] = [
           'We are physical and energetic beings, with many channels that carry information and energy. This practitioner pathway teaches you to see, clear and realign the energy field — for yourself and for others.',
       },
     ],
-    ctaLabel: 'Explore Practitioner Paths',
-    ctaHref: '/contact',
+    ctaLabel: 'Explore Practitioner Programmes',
+    ctaHref: '/programs#practitioner',
   },
   {
-    eyebrow: 'Self-Paced',
+    eyebrow: 'Self-Study',
     title: 'Learn and grow at your own pace.',
     intro:
       'All programmes are recorded and you have access to them for as long as you need and want them. Let your journey unfold in a time that is right for you.',
@@ -76,8 +76,8 @@ const columns: Column[] = [
           'Have you ever wanted to change — different career, better health, improved body, better relationship — but it escapes you? If you have tried numerous approaches and keep waking up in the same cycle, this is for you.',
       },
     ],
-    ctaLabel: 'Browse Self-Paced',
-    ctaHref: '/shop',
+    ctaLabel: 'Browse Self-Study',
+    ctaHref: '/programs#self-paced',
   },
   {
     eyebrow: 'Live',
@@ -106,8 +106,8 @@ const columns: Column[] = [
           'Shift your resonance and embrace loving connections. Through the repatternings in this programme, resonate with new neural connections and memory imprints — and let fresh, transformative ways of relating take root.',
       },
     ],
-    ctaLabel: 'See Live Schedule',
-    ctaHref: '/contact',
+    ctaLabel: 'See Live Dates',
+    ctaHref: '/events',
   },
 ]
 
@@ -125,7 +125,7 @@ export default function Programs() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-20">
           <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
-            Guided Programmes
+            Practitioner &amp; Self-Study Programmes
           </p>
           <h2
             id="programs-heading"

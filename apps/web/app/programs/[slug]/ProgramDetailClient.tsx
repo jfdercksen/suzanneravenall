@@ -3,8 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { getCurrencySymbol } from '@/lib/currency'
-import type { Program } from '@/data/programs'
+import { isResonanceRepatterning, type Program } from '@/data/programs'
 
 type Props = {
   program: Program
@@ -15,21 +14,36 @@ type Props = {
 
 const CATEGORY_LABELS: Record<Program['category'], string> = {
   practitioner: 'Practitioner Training',
-  'self-paced': 'Self-Paced Online',
+  'self-paced': 'Self-Study Online',
   live: 'Live Programme',
-  group: 'Group Programme',
+  group: 'Recorded Group Session',
 }
 
 const DELIVERY_METHODS: Record<Program['category'], string> = {
   practitioner: 'Live Training via Zoom',
-  'self-paced': 'Self-Paced Online — Access Anytime',
+  'self-paced': 'Self-Study Online — Access Anytime',
   live: 'Live via Zoom with Suzanne',
-  group: 'Group Sessions via Zoom',
+  group: 'Recorded Sessions — Watch Anytime',
+}
+
+function getDeliveryMethod(program: Program): string {
+  // All Resonance Repatterning programmes are currently offered self-study
+  if (isResonanceRepatterning(program)) return 'Self-Study Online — Start Anytime'
+  return DELIVERY_METHODS[program.category]
+}
+
+function formatPriceUsd(program: Program): string | null {
+  if (program.priceUsd == null) return null
+  return `$${program.priceUsd.toLocaleString('en-US')}`
+}
+
+function formatPriceZar(program: Program): string | null {
+  if (program.priceZar == null) return null
+  return `R${program.priceZar.toLocaleString('en-US')}`
 }
 
 function getCtaProps(program: Program): { label: string; href: string } {
-  // TODO: When a medusaHandle field is added to Program type, use /shop/{handle} for priced programmes
-  if (program.price) return { label: 'Add to Cart', href: `/shop/${program.slug}` }
+  if (program.shopHandle) return { label: 'Add to Cart', href: `/shop/${program.shopHandle}` }
   if (program.category === 'live' || program.category === 'group') {
     return { label: 'Book Now', href: '/contact' }
   }
@@ -166,8 +180,10 @@ function RelatedProgramCard({ program }: { program: Program }) {
 
 export default function ProgramDetailClient({ program, relatedPrograms }: Props) {
   const cta = getCtaProps(program)
-  const deliveryMethod = DELIVERY_METHODS[program.category]
+  const deliveryMethod = getDeliveryMethod(program)
   const categoryLabel = CATEGORY_LABELS[program.category]
+  const priceUsd = formatPriceUsd(program)
+  const priceZar = formatPriceZar(program)
 
   return (
     <>
@@ -235,15 +251,23 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               )}
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-white/40 mb-1">Investment</p>
-                {program.price ? (
+                {priceUsd || priceZar ? (
                   <p className="text-sm font-semibold text-brand-accent">
-                    {getCurrencySymbol(program.currency)}{program.price}
-                    {program.currency && (
-                      <span className="text-white/50 font-normal ml-1">{program.currency}</span>
+                    {priceUsd && (
+                      <>
+                        {priceUsd}
+                        <span className="text-white/50 font-normal ml-1">USD</span>
+                      </>
+                    )}
+                    {priceUsd && priceZar && <span className="text-white/50 font-normal ml-2">/</span>}
+                    {priceZar && (
+                      <span className={priceUsd ? 'text-white/50 font-normal ml-2' : ''}>
+                        {priceZar} ZAR
+                      </span>
                     )}
                   </p>
                 ) : (
-                  <p className="text-sm text-white/80 font-light">Contact for pricing</p>
+                  <p className="text-sm text-white/80 font-light">Enquire</p>
                 )}
               </div>
             </motion.div>
@@ -397,15 +421,16 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               {/* Investment callout */}
               <div className="mt-12 p-6 bg-gray-900 border border-white/10 rounded-card">
                 <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-3">Investment</p>
-                {program.price ? (
+                {priceUsd || priceZar ? (
                   <p className="text-3xl font-light text-white mb-4">
-                    {getCurrencySymbol(program.currency)}{program.price}
-                    {program.currency && (
-                      <span className="text-white/40 text-base font-normal ml-2">{program.currency}</span>
+                    {priceUsd ?? `${priceZar} ZAR`}
+                    {priceUsd && <span className="text-white/40 text-base font-normal ml-2">USD</span>}
+                    {priceUsd && priceZar && (
+                      <span className="text-white/40 text-base font-normal ml-2">/ {priceZar} ZAR</span>
                     )}
                   </p>
                 ) : (
-                  <p className="text-xl font-light text-white/80 mb-4">Contact for pricing</p>
+                  <p className="text-xl font-light text-white/80 mb-4">Enquire</p>
                 )}
                 <Link
                   href={cta.href}

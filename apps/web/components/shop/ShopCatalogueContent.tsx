@@ -106,6 +106,13 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
   const [searchLoading, setSearchLoading] = useState(false)
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  // Private sessions are sessions, not programmes — the count label must match
+  // the active category (Suzanne feedback, 27 Jul 2026).
+  const activeCategoryHandle = filters.categoryId
+    ? initialCategories.find((c) => c.id === filters.categoryId)?.handle
+    : undefined
+  const countNoun = activeCategoryHandle === 'private-sessions' ? 'session' : 'programme'
+
   useEffect(() => {
     fetch(`${MEDUSA_URL}/store/collections?limit=20`, { headers: medusaHeaders })
       .then((r) => (r.ok ? r.json() : { collections: [] }))
@@ -232,7 +239,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
                 ? `${searchResults.length} result${searchResults.length !== 1 ? 's' : ''}`
                 : loading
                 ? 'Loading…'
-                : `${totalCount} programme${totalCount !== 1 ? 's' : ''}`}
+                : `${totalCount} ${countNoun}${totalCount !== 1 ? 's' : ''}`}
             </p>
             {searchResults === null && (
               <select

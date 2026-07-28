@@ -4,18 +4,32 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import { getCurrencySymbol } from '@/lib/currency'
-import { getProgramsByCategory, type Program } from '@/data/programs'
+import {
+  getProgramsByCategory,
+  getProgramsBySeries,
+  type Program,
+} from '@/data/programs'
 
 const CATEGORIES = [
   { id: 'practitioner', label: 'Practitioner' },
-  { id: 'self-paced', label: 'Self-Paced' },
+  { id: 'self-paced', label: 'Self-Study' },
   { id: 'live', label: 'Live' },
-  { id: 'group', label: 'Group' },
+  { id: 'group', label: 'Recorded Group' },
 ] as const
 
-const getCategoryLabel = (category: string) =>
-  CATEGORIES.find((c) => c.id === category)?.label ?? category
+const CARD_CATEGORY_LABELS: Record<Program['category'], string> = {
+  practitioner: 'Practitioner',
+  'self-paced': 'Self-Study',
+  live: 'Live',
+  group: 'Recorded Group',
+}
+
+function formatPrice(program: Program): string | null {
+  if (program.priceUsd == null) return null
+  const usd = `$${program.priceUsd.toLocaleString('en-US')}`
+  if (program.priceZar == null) return usd
+  return `${usd} · R${program.priceZar.toLocaleString('en-US')}`
+}
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -33,14 +47,15 @@ const childVariants = {
 }
 
 function ProgramCard({ program }: { program: Program }) {
+  const price = formatPrice(program)
   return (
     <motion.div
       variants={childVariants}
-      className="group bg-gray-50 rounded-card p-8 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 flex flex-col"
+      className="group bg-white border border-gray-100 rounded-card p-8 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 flex flex-col"
     >
       <div className="flex-1">
         <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
-          {getCategoryLabel(program.category)}
+          {CARD_CATEGORY_LABELS[program.category]}
         </p>
         <h3 className="text-xl font-semibold text-gray-900 mb-3 leading-snug">
           {program.name}
@@ -48,6 +63,11 @@ function ProgramCard({ program }: { program: Program }) {
         <p className="text-gray-600 text-sm font-light leading-relaxed mb-4">
           {program.shortDescription}
         </p>
+        {price && (
+          <p className="text-brand-primary font-semibold text-lg mb-2">
+            {price}
+          </p>
+        )}
         {program.duration && (
           <p className="text-xs text-gray-400 mb-6">{program.duration}</p>
         )}
@@ -63,6 +83,7 @@ function ProgramCard({ program }: { program: Program }) {
 }
 
 function DarkProgramCard({ program }: { program: Program }) {
+  const price = formatPrice(program)
   return (
     <motion.div
       variants={childVariants}
@@ -82,7 +103,7 @@ function DarkProgramCard({ program }: { program: Program }) {
       <div className="relative z-10 flex flex-col h-full p-8">
         <div className="flex-1">
           <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
-            {getCategoryLabel(program.category)}
+            {CARD_CATEGORY_LABELS[program.category]}
           </p>
           <h3 className="text-xl font-semibold text-white mb-3 leading-snug group-hover:text-brand-accent transition-colors duration-300">
             {program.name}
@@ -90,15 +111,9 @@ function DarkProgramCard({ program }: { program: Program }) {
           <p className="text-white/65 text-sm font-light leading-relaxed mb-4">
             {program.shortDescription}
           </p>
-          {program.price && (
+          {price && (
             <p className="text-brand-accent font-semibold text-lg mb-2">
-              {getCurrencySymbol(program.currency)}
-              {program.price}
-              {program.currency && (
-                <span className="text-gray-500 text-sm font-normal ml-1">
-                  {program.currency}
-                </span>
-              )}
+              {price}
             </p>
           )}
           {program.duration && (
@@ -116,12 +131,31 @@ function DarkProgramCard({ program }: { program: Program }) {
   )
 }
 
+function ChevronIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="currentColor"
+      aria-hidden="true"
+      className={`w-4 h-4 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+    </svg>
+  )
+}
+
 export default function ProgramsPageClient() {
   const [activeCategory, setActiveCategory] = useState<string>('practitioner')
+  const [rrOpen, setRrOpen] = useState(false)
   const sectionRefs = useRef<Partial<Record<'practitioner' | 'self-paced' | 'live' | 'group', HTMLElement | null>>>({})
 
-  const practitionerPrograms = getProgramsByCategory('practitioner')
-  const selfPacedPrograms = getProgramsByCategory('self-paced')
+  const rrPrograms = getProgramsBySeries('resonance-repatterning')
+  const energyClearingPrograms = getProgramsBySeries('energy-clearing')
+  const akashicPrograms = getProgramsBySeries('akashic-navigator')
+  const selfStudyPrograms = getProgramsByCategory('self-paced')
   const livePrograms = getProgramsByCategory('live')
   const groupPrograms = getProgramsByCategory('group')
 
@@ -257,7 +291,7 @@ export default function ProgramsPageClient() {
               Practitioner Programmes
             </p>
             <h2 className="text-4xl lg:text-6xl font-light text-gray-900 mb-4 max-w-2xl">
-              The Resonance Repatterning Series
+              Train as a Practitioner
             </h2>
             <p className="text-lg text-gray-600 font-light mb-12 max-w-2xl leading-relaxed">
               Become a practitioner in the healing arts and energy psychology.
@@ -265,21 +299,134 @@ export default function ProgramsPageClient() {
               others.
             </p>
           </motion.div>
-          <motion.div
-            variants={staggerChildren}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '0px' }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {practitionerPrograms.map((program) => (
-              <ProgramCard key={program.slug} program={program} />
-            ))}
-          </motion.div>
+
+          <div className="space-y-8">
+            {/* Resonance Repatterning — expandable parent block */}
+            <motion.div
+              variants={sectionVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '0px' }}
+              className="bg-gray-50 rounded-card p-8 lg:p-12"
+            >
+              <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+                <div className="max-w-2xl">
+                  <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                    Certification Training
+                  </p>
+                  <h3 className="text-2xl lg:text-4xl font-semibold text-gray-900 mb-4 leading-snug">
+                    Resonance Repatterning
+                  </h3>
+                  <p className="text-gray-600 font-light leading-relaxed mb-3">
+                    Train towards certification as a Resonance Repatterning
+                    practitioner — from the Basic Five foundation series through
+                    the advanced relationship and inner cultivation programmes.
+                  </p>
+                  <p className="text-sm text-gray-500 font-light">
+                    All Resonance Repatterning programmes are currently offered
+                    as self-study — start anytime.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setRrOpen((open) => !open)}
+                  aria-expanded={rrOpen}
+                  aria-controls="rr-programme-list"
+                  className="flex-shrink-0 inline-flex items-center justify-center gap-2 py-3 px-8 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm font-medium rounded-button transition-colors duration-300"
+                >
+                  {rrOpen ? 'Hide Programmes' : 'View the Programmes'}
+                  <ChevronIcon open={rrOpen} />
+                </button>
+              </div>
+
+              {rrOpen && (
+                <motion.div
+                  id="rr-programme-list"
+                  variants={staggerChildren}
+                  initial="hidden"
+                  animate="visible"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10"
+                >
+                  {rrPrograms.map((program) => (
+                    <ProgramCard key={program.slug} program={program} />
+                  ))}
+                </motion.div>
+              )}
+            </motion.div>
+
+            {/* Energy Clearing — parent block */}
+            <motion.div
+              variants={sectionVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '0px' }}
+              className="bg-gray-50 rounded-card p-8 lg:p-12"
+            >
+              <div className="max-w-2xl mb-10">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                  Practitioner Training
+                </p>
+                <h3 className="text-2xl lg:text-4xl font-semibold text-gray-900 mb-4 leading-snug">
+                  Energy Clearing
+                </h3>
+                <p className="text-gray-600 font-light leading-relaxed">
+                  We are physical and energetic beings. Learn to clear your own
+                  energy field at the Basic level, then train to facilitate
+                  clearing for others at the Advanced level.
+                </p>
+              </div>
+              <motion.div
+                variants={staggerChildren}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '0px' }}
+                className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+              >
+                {energyClearingPrograms.map((program) => (
+                  <ProgramCard key={program.slug} program={program} />
+                ))}
+              </motion.div>
+            </motion.div>
+
+            {/* Akashic Navigator — parent block */}
+            <motion.div
+              variants={sectionVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '0px' }}
+              className="bg-gray-50 rounded-card p-8 lg:p-12"
+            >
+              <div className="max-w-2xl mb-10">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                  Practitioner Training
+                </p>
+                <h3 className="text-2xl lg:text-4xl font-semibold text-gray-900 mb-4 leading-snug">
+                  Akashic Navigator
+                </h3>
+                <p className="text-gray-600 font-light leading-relaxed">
+                  Access and rewrite your life&apos;s blueprint through the
+                  Akashic Records. Begin with reading and clearing your own
+                  records, then advance to reading for others as an Akashic
+                  Navigator &amp; Intuitive Coach.
+                </p>
+              </div>
+              <motion.div
+                variants={staggerChildren}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '0px' }}
+                className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+              >
+                {akashicPrograms.map((program) => (
+                  <ProgramCard key={program.slug} program={program} />
+                ))}
+              </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Self-Paced Programmes — bg-gray-950 (DARK) */}
+      {/* Self-Study Programmes — bg-gray-950 (DARK) */}
       <section
         id="self-paced"
         ref={(el) => {
@@ -295,7 +442,7 @@ export default function ProgramsPageClient() {
             viewport={{ once: true, margin: '0px' }}
           >
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
-              Self-Paced Programmes
+              Self-Study Programmes
             </p>
             <h2 className="text-4xl lg:text-6xl font-light text-white mb-4 max-w-2xl">
               Learn at Your Own Pace
@@ -312,7 +459,7 @@ export default function ProgramsPageClient() {
             viewport={{ once: true, margin: '0px' }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {selfPacedPrograms.map((program) => (
+            {selfStudyPrograms.map((program) => (
               <DarkProgramCard key={program.slug} program={program} />
             ))}
           </motion.div>
@@ -372,6 +519,11 @@ export default function ProgramsPageClient() {
                   <p className="text-gray-600 text-sm font-light leading-relaxed mb-4">
                     {program.shortDescription}
                   </p>
+                  {formatPrice(program) && (
+                    <p className="text-brand-primary font-semibold text-lg mb-2">
+                      {formatPrice(program)}
+                    </p>
+                  )}
                   {program.duration && (
                     <p className="text-xs text-gray-400 mb-6">
                       {program.duration}
@@ -390,7 +542,7 @@ export default function ProgramsPageClient() {
         </div>
       </section>
 
-      {/* Group & Corporate — bg-gray-950 (DARK) — was bg-gray-50, fixed alternation */}
+      {/* Recorded Group Sessions — bg-gray-950 (DARK) */}
       <section
         id="group"
         ref={(el) => {
@@ -406,21 +558,22 @@ export default function ProgramsPageClient() {
             viewport={{ once: true, margin: '0px' }}
           >
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
-              Group &amp; Corporate
+              Resonance Repatterning
             </p>
             <h2 className="text-4xl lg:text-6xl font-light text-white mb-4 max-w-2xl">
-              Group Sessions &amp; Corporate Wellness
+              Recorded Group Sessions
             </h2>
             <p className="text-lg text-white/70 font-light mb-4 max-w-2xl leading-relaxed">
-              Through a comfortable, authentic and safe environment, Suzanne
-              runs short group series that tackle the key issues affecting most
-              people. She gets into the unconscious beliefs that disrupt lives
-              and helps participants go beyond these challenges and into their
+              These are recorded Resonance Repatterning group session series.
+              Through a comfortable, authentic and safe environment, Suzanne runs
+              short group series that tackle the key issues affecting most
+              people — getting into the unconscious beliefs that disrupt lives
+              and helping participants go beyond these challenges and into their
               power for inner self mastery.
             </p>
-            <p className="text-white/50 font-light mb-12 max-w-2xl leading-relaxed">
-              It simply creates a better life for those who are courageous enough
-              to try.
+            <p className="text-white/70 font-light mb-12 max-w-2xl leading-relaxed">
+              Each series was recorded live and carries the same energetic
+              benefit — work through it in your own time.
             </p>
           </motion.div>
           <motion.div
@@ -428,40 +581,11 @@ export default function ProgramsPageClient() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '0px' }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {groupPrograms.map((program) => (
               <DarkProgramCard key={program.slug} program={program} />
             ))}
-          </motion.div>
-
-          {/* Corporate CTA */}
-          <motion.div
-            variants={sectionVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '0px' }}
-            className="bg-brand-primary rounded-3xl p-10 lg:p-16 flex flex-col lg:flex-row items-center justify-between gap-8"
-          >
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
-                Corporate Wellness
-              </p>
-              <h3 className="text-3xl lg:text-4xl font-light text-white mb-3">
-                Corporate Retreats &amp; Team Wellness
-              </h3>
-              <p className="text-white/70 font-light max-w-xl leading-relaxed">
-                Bespoke wellness retreats and group programmes tailored to your
-                organisation. Help your team unlock their potential, reduce
-                stress, and build a culture of inner resilience and performance.
-              </p>
-            </div>
-            <Link
-              href="/contact"
-              className="flex-shrink-0 inline-flex items-center justify-center py-4 px-10 bg-brand-accent hover:bg-brand-accent-700 text-white font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)] whitespace-nowrap"
-            >
-              Enquire About Group Sessions
-            </Link>
           </motion.div>
         </div>
       </section>

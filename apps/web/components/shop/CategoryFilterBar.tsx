@@ -23,7 +23,7 @@ interface CategoryFilterBarProps {
 
 const CATEGORY_LABELS: Record<string, string> = {
   'private-sessions': 'Private Sessions',
-  'guided-programmes': 'Guided Programmes',
+  'guided-programmes': 'Practitioner Programmes',
   'group-sessions': 'Group Sessions',
   'products-tools': 'Products & Tools',
 }
@@ -85,7 +85,7 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
             />
           ))}
           <FilterPill
-            label="Online Courses"
+            label="Self-Study"
             active={isOnlineCourses}
             onClick={() => setCollectionHandle(isOnlineCourses ? '' : 'programmes')}
           />

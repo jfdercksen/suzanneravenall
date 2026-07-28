@@ -11,7 +11,7 @@ export function generateMetadata(): Metadata {
   return {
     title: 'Services | Private Sessions, Group Programmes & Keynotes — Dr. Suzanne Ravenall',
     description:
-      'Unlock your life and potential with Dr. Suzanne Ravenall — Private Sessions, Group & Corporate Wellness Retreats, Keynote Speaking, and Guided Programmes rooted in Resonance Repatterning, RTT® and transformational coaching.',
+      'Unlock your life and potential with Dr. Suzanne Ravenall — Private Sessions, Group & Corporate Wellness Retreats, Keynote Speaking, and Practitioner & Self-Study Programmes rooted in transformational coaching and pattern-level change.',
   }
 }
 

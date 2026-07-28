@@ -30,20 +30,6 @@ export interface PrivateSession {
 
 export const allPrivateSessions: PrivateSession[] = [
   {
-    slug: 'resonance-repatterning',
-    title: 'Resonance Repatterning',
-    medusaHandle: 'resonance-repatterning-session',
-    shortDescription:
-      'We attract people at our common level of woundedness or our common level of emotional health. The kind of energy you project has everything to do with the kind of person you attract — become the healthy self you want to meet.',
-    thinContent: false,
-    bodyContent: [
-      "Much of what holds us back lives below conscious awareness. The subconscious mind runs an estimated 95% of daily life, quietly replaying beliefs and programmes formed early on — often before we were old enough to choose them. When those patterns are out of sync, we keep meeting the same struggles in work, relationships and health, no matter how hard we try consciously.",
-      'Resonance Repatterning works with the principle that everything — our thoughts, feelings and even the body — carries an energetic frequency, and that the patterns we resonate with shape the life we experience. A session brings these hidden patterns into conscious awareness so they can be understood, cleared, and shifted toward greater coherence and alignment with what you actually want.',
-      'What to expect: you bring your lived experience and a genuine willingness to change. Using biofeedback and applied kinesiology, we locate the unconscious programme beneath the issue at hand, repattern the belief driving it, and shift the resonance using one of more than a hundred modalities — with coaching throughout so you understand the pattern and can act on the change. Sessions are held over Zoom in the comfort of your own space; you simply show up and participate.',
-      'Most core issues begin to shift somewhere between one and five sessions. For some people a single session creates a quantum leap; for others, blended core issues take a little longer. Sessions are offered as personal, executive, performance and group repatterning, and can be booked individually or as multi-session packages.',
-    ].join('\n\n'),
-  },
-  {
     slug: 'transformational-coaching',
     title: 'Transformational & Behavioural Coaching',
     medusaHandle: 'transformation-coaching-60-mins',
@@ -147,6 +133,22 @@ export const allPrivateSessions: PrivateSession[] = [
       'Executive-level coaching focused on leadership, performance, and transformational growth.',
     thinContent: false,
     bodyContent: null,
+  },
+  // Resonance Repatterning deliberately last — Suzanne wants it findable but
+  // never front-and-centre (feedback, 27 Jul 2026).
+  {
+    slug: 'resonance-repatterning',
+    title: 'Resonance Repatterning',
+    medusaHandle: 'resonance-repatterning-session',
+    shortDescription:
+      'We attract people at our common level of woundedness or our common level of emotional health. The kind of energy you project has everything to do with the kind of person you attract — become the healthy self you want to meet.',
+    thinContent: false,
+    bodyContent: [
+      "Much of what holds us back lives below conscious awareness. The subconscious mind runs an estimated 95% of daily life, quietly replaying beliefs and programmes formed early on — often before we were old enough to choose them. When those patterns are out of sync, we keep meeting the same struggles in work, relationships and health, no matter how hard we try consciously.",
+      'Resonance Repatterning works with the principle that everything — our thoughts, feelings and even the body — carries an energetic frequency, and that the patterns we resonate with shape the life we experience. A session brings these hidden patterns into conscious awareness so they can be understood, cleared, and shifted toward greater coherence and alignment with what you actually want.',
+      'What to expect: you bring your lived experience and a genuine willingness to change. Using biofeedback and applied kinesiology, we locate the unconscious programme beneath the issue at hand, repattern the belief driving it, and shift the resonance using one of more than a hundred modalities — with coaching throughout so you understand the pattern and can act on the change. Sessions are held over Zoom in the comfort of your own space; you simply show up and participate.',
+      'Most core issues begin to shift somewhere between one and five sessions. For some people a single session creates a quantum leap; for others, blended core issues take a little longer. Sessions are offered as personal, executive, performance and group repatterning, and can be booked individually or as multi-session packages.',
+    ].join('\n\n'),
   },
 ]
 

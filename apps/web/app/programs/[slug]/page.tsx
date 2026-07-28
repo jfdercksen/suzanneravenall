@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { PROGRAMS, getProgramBySlug, getProgramsByCategory } from '@/data/programs'
+import { PROGRAMS, getProgramBySlug, getRelatedPrograms } from '@/data/programs'
 import ProgramDetailClient from './ProgramDetailClient'
 
 type Props = { params: Promise<{ slug: string }> }
@@ -24,9 +24,9 @@ export default async function ProgramDetailPage({ params }: Props) {
   const program = getProgramBySlug(slug)
   if (!program || !program.isPublished) return notFound()
 
-  const related = getProgramsByCategory(program.category)
-    .filter((p) => p.slug !== slug)
-    .slice(0, 3)
+  // Related programmes: never cross-promotes Resonance Repatterning from
+  // non-RR pages (see getRelatedPrograms in data/programs.ts)
+  const related = getRelatedPrograms(program, 3)
 
   return <ProgramDetailClient program={program} relatedPrograms={related} />
 }

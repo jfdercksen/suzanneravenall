@@ -114,9 +114,9 @@ describe('Programs', () => {
       expect(screen.getByText('Practitioner')).toBeInTheDocument()
     })
 
-    it('renders "Self-Paced" eyebrow', () => {
+    it('renders "Self-Study" eyebrow', () => {
       render(<Programs />)
-      expect(screen.getByText('Self-Paced')).toBeInTheDocument()
+      expect(screen.getByText('Self-Study')).toBeInTheDocument()
     })
 
     it('renders "Live" eyebrow', () => {
@@ -144,25 +144,25 @@ describe('Programs', () => {
   })
 
   describe('CTA links', () => {
-    it('renders "Explore Practitioner Paths" link pointing to /contact', () => {
+    it('renders "Explore Practitioner Programmes" link pointing to /programs#practitioner', () => {
       render(<Programs />)
-      const cta = screen.getByRole('link', { name: 'Explore Practitioner Paths' })
+      const cta = screen.getByRole('link', { name: 'Explore Practitioner Programmes' })
       expect(cta).toBeInTheDocument()
-      expect(cta).toHaveAttribute('href', '/contact')
+      expect(cta).toHaveAttribute('href', '/programs#practitioner')
     })
 
-    it('renders "Browse Self-Paced" link pointing to /shop', () => {
+    it('renders "Browse Self-Study" link pointing to /programs#self-paced', () => {
       render(<Programs />)
-      const cta = screen.getByRole('link', { name: 'Browse Self-Paced' })
+      const cta = screen.getByRole('link', { name: 'Browse Self-Study' })
       expect(cta).toBeInTheDocument()
-      expect(cta).toHaveAttribute('href', '/shop')
+      expect(cta).toHaveAttribute('href', '/programs#self-paced')
     })
 
-    it('renders "See Live Schedule" link pointing to /contact', () => {
+    it('renders "See Live Dates" link pointing to /events', () => {
       render(<Programs />)
-      const cta = screen.getByRole('link', { name: 'See Live Schedule' })
+      const cta = screen.getByRole('link', { name: 'See Live Dates' })
       expect(cta).toBeInTheDocument()
-      expect(cta).toHaveAttribute('href', '/contact')
+      expect(cta).toHaveAttribute('href', '/events')
     })
   })
 
@@ -173,9 +173,9 @@ describe('Programs', () => {
       expect(section).toBeInTheDocument()
     })
 
-    it('renders the section heading "Guided Programmes"', () => {
+    it('renders the section heading "Practitioner & Self-Study Programmes"', () => {
       render(<Programs />)
-      expect(screen.getByText('Guided Programmes')).toBeInTheDocument()
+      expect(screen.getByText('Practitioner & Self-Study Programmes')).toBeInTheDocument()
     })
   })
 })
