@@ -30,6 +30,11 @@ const navItems: NavItem[] = [
     label: 'About',
     children: [
       { label: 'About Suzanne', href: '/about' },
+      { label: 'The Story', href: '/about/the-story' },
+      { label: 'The System', href: '/about/the-system' },
+      { label: 'The Science', href: '/about/the-science' },
+      { divider: true },
+      { label: 'Testimonials', href: '/testimonials' },
     ],
   },
   {
@@ -40,10 +45,8 @@ const navItems: NavItem[] = [
       { label: 'Health & Vitality', href: '/explore/next-level-health-vitality-longevity' },
       { label: 'Identity & Purpose', href: '/explore/identity-purpose-activation' },
       { label: 'Leadership', href: '/explore/leadership-high-performance' },
+      { label: 'Intuition', href: '/explore/intuition-as-patterned-intelligence' },
       { label: 'All Topics →', href: '/explore' },
-      { divider: true },
-      { label: 'Resources', href: '/resources' },
-      { label: 'Blog', href: '/blog' },
     ],
   },
   {
@@ -51,11 +54,20 @@ const navItems: NavItem[] = [
     children: [
       { label: 'Transformation Pathways', href: '/transformation-pathways' },
       { label: 'Precision Sessions', href: '/services' },
+      { label: 'Corporate & Retreats', href: '/services#group' },
       { label: 'Speaking', href: '/speaking' },
       { label: 'Programs', href: '/programs' },
     ],
   },
+  { label: 'Events', href: '/events' },
   { label: 'Masterclass', href: '/masterclass' },
+  {
+    label: 'Resources',
+    children: [
+      { label: 'Resource Library', href: '/resources' },
+      { label: 'Blog', href: '/blog' },
+    ],
+  },
   { label: 'Shop', href: '/shop' },
   { label: 'Contact', href: '/contact' },
   // Pattern Coach is a separate Thinkific subscription product that runs
@@ -106,21 +118,15 @@ export default function Header() {
           <div className="flex items-center gap-2 lg:gap-3 shrink-0">
             <SearchBar />
             <CartIcon />
-            {/* xl: not lg: — at 1024-1279px there isn't room for full nav + both
-                CTAs without crushing the logo or nav; the container itself is
-                capped at 1280px (see tailwind.config container.screens), so
-                gating on Tailwind's built-in xl breakpoint (1280px) exactly
-                matches where the header has verified room for both buttons.
-                Mobile nav still surfaces this link below lg: regardless. */}
-            <Link
-              href="/discover-your-pattern"
-              className="hidden xl:inline-flex items-center px-3 py-2.5 border-2 border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white font-medium text-sm rounded-button transition-colors duration-150 whitespace-nowrap"
-            >
-              Discover Your Pattern
-            </Link>
+            {/* xl: not lg: — with 8 top-level nav items there is no room for a
+                CTA button at 1024-1279px; the Contact tab and the site-wide
+                Pattern Hub sticky bar cover both CTAs at lg, and the mobile
+                overlay surfaces both links below lg. The hero's primary CTA
+                ("Take the Free Pattern Scan") replaces the old header
+                "Discover Your Pattern" button entirely. */}
             <Link
               href="/contact"
-              className="hidden lg:inline-flex items-center px-3 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white font-medium text-sm rounded-button transition-colors duration-150 whitespace-nowrap"
+              className="hidden xl:inline-flex items-center px-3 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white font-medium text-sm rounded-button transition-colors duration-150 whitespace-nowrap"
             >
               Book a Discovery Call
             </Link>

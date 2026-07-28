@@ -50,7 +50,7 @@ export default function TestimonialSpotlight() {
             <div className="w-16 h-px bg-brand-accent mb-8" />
 
             {/* Supporting context */}
-            <p className="text-white/40 text-sm font-light leading-relaxed max-w-sm">
+            <p className="text-white/60 text-sm font-light leading-relaxed max-w-sm">
               After just 3 sessions. A 30-year pattern dissolved.
               Business transformed.
             </p>
@@ -82,7 +82,7 @@ export default function TestimonialSpotlight() {
                 </div>
                 <cite className="not-italic">
                   <p className="text-white font-medium">Sarah M.</p>
-                  <p className="text-white/40 text-sm">CEO · Cape Town</p>
+                  <p className="text-white/60 text-sm">CEO · Cape Town</p>
                 </cite>
               </footer>
             </blockquote>
@@ -95,13 +95,13 @@ export default function TestimonialSpotlight() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/contact"
-                  className="bg-brand-accent hover:bg-brand-accent-700 text-white px-8 py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.4)] text-center"
+                  className="bg-brand-accent hover:bg-brand-accent-700 text-white px-8 py-4 rounded-button text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.4)] text-center"
                 >
                   Book Discovery Call &rarr;
                 </Link>
                 <Link
-                  href="/about"
-                  className="border border-white/50 hover:border-white/80 text-white/60 hover:text-white px-8 py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 text-center"
+                  href="/testimonials"
+                  className="border border-white/50 hover:border-white/80 text-white/60 hover:text-white px-8 py-4 rounded-button text-sm uppercase tracking-widest font-medium transition-all duration-300 text-center"
                 >
                   More Results
                 </Link>

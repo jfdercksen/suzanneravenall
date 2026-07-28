@@ -15,8 +15,8 @@ const footerLinks = {
   programs: {
     label: 'Programs',
     links: [
-      { label: 'Guided Programmes', href: '/programs' },
-      { label: 'Online Courses', href: '/programs' },
+      { label: 'Practitioner Programmes', href: '/programs' },
+      { label: 'Self-Study Courses', href: '/programs' },
       { label: 'Masterclass', href: '/masterclass' },
       { label: 'Shop', href: '/shop' },
       { label: 'The Book', href: '/book' },

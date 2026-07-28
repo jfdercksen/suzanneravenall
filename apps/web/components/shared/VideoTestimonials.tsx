@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -13,7 +14,12 @@ const videos = [
   { id: 'Gz3NUPWdxAI', name: 'Ivana' },
 ]
 
-export default function VideoTestimonials() {
+interface VideoTestimonialsProps {
+  /** Hide the "View all testimonials" link when the component is rendered on /testimonials itself */
+  showViewAllLink?: boolean
+}
+
+export default function VideoTestimonials({ showViewAllLink = true }: VideoTestimonialsProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const activeVideo = videos[activeIndex]!
@@ -177,6 +183,24 @@ export default function VideoTestimonials() {
             </motion.button>
           ))}
         </motion.div>
+
+        {/* View all link — hidden on /testimonials where the component is embedded */}
+        {showViewAllLink && (
+          <motion.div
+            className="text-center mt-10"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '0px' }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          >
+            <Link
+              href="/testimonials"
+              className="inline-flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-brand-accent hover:text-brand-accent-700 transition-colors duration-300"
+            >
+              View all testimonials <span aria-hidden="true">&rarr;</span>
+            </Link>
+          </motion.div>
+        )}
 
       </div>
     </section>

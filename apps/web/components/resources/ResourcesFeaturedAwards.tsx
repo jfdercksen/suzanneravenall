@@ -41,6 +41,7 @@ const cardVariants = {
 export default function ResourcesFeaturedAwards() {
   return (
     <section
+      id="awards"
       aria-labelledby="featured-awards-heading"
       className="relative w-full bg-gray-950 py-20 lg:py-32 overflow-hidden"
     >

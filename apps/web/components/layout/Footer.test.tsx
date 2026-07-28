@@ -78,21 +78,21 @@ describe('Footer', () => {
       render(<Footer />)
       const fb = screen.getByRole('link', { name: 'Facebook' })
       expect(fb).toBeInTheDocument()
-      expect(fb).toHaveAttribute('href', 'https://facebook.com')
+      expect(fb).toHaveAttribute('href', 'https://www.facebook.com/suzanneravenalltransformation')
     })
 
     it('renders an Instagram link', () => {
       render(<Footer />)
       const ig = screen.getByRole('link', { name: 'Instagram' })
       expect(ig).toBeInTheDocument()
-      expect(ig).toHaveAttribute('href', 'https://instagram.com')
+      expect(ig).toHaveAttribute('href', 'https://www.instagram.com/ravenallinstitute')
     })
 
     it('renders a LinkedIn link', () => {
       render(<Footer />)
       const li = screen.getByRole('link', { name: 'LinkedIn' })
       expect(li).toBeInTheDocument()
-      expect(li).toHaveAttribute('href', 'https://linkedin.com')
+      expect(li).toHaveAttribute('href', 'https://www.linkedin.com/in/sravenall')
     })
 
     it('renders a YouTube link', () => {
@@ -151,8 +151,8 @@ describe('Footer', () => {
 
     it('renders Programs column links', () => {
       render(<Footer />)
-      expect(screen.getByRole('link', { name: 'Guided Programmes' })).toBeInTheDocument()
-      expect(screen.getByRole('link', { name: 'Online Courses' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Practitioner Programmes' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Self-Study Courses' })).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Masterclass' })).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Workshops' })).toBeInTheDocument()
     })
@@ -161,7 +161,7 @@ describe('Footer', () => {
       render(<Footer />)
       expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Blog' })).toBeInTheDocument()
-      expect(screen.getByRole('link', { name: 'Media' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Resources' })).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Contact' })).toBeInTheDocument()
     })
 

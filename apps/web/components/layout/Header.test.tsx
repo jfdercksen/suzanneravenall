@@ -63,12 +63,13 @@ describe('Header', () => {
     expect(logo).toBeInTheDocument()
   })
 
-  it('renders the DesktopNav with 7 top-level items', () => {
+  it('renders the DesktopNav with 8 top-level items', () => {
     render(<Header />)
     const desktopNav = screen.getByTestId('desktop-nav')
     expect(desktopNav).toBeInTheDocument()
-    // 3 groups (About, Explore, Work With Me) + 4 standalone links
-    expect(desktopNav).toHaveAttribute('data-item-count', '7')
+    // 4 groups (About, Explore, Work With Me, Resources) + 4 standalone links
+    // (Events, Masterclass, Shop, Contact)
+    expect(desktopNav).toHaveAttribute('data-item-count', '8')
   })
 
   it('renders "Book a Discovery Call" CTA link pointing to /contact', () => {
@@ -78,36 +79,20 @@ describe('Header', () => {
     expect(cta).toHaveAttribute('href', '/contact')
   })
 
-  it('"Book a Discovery Call" CTA has hidden-on-mobile class', () => {
+  it('"Book a Discovery Call" CTA is hidden below the xl breakpoint', () => {
     render(<Header />)
     const cta = screen.getByRole('link', { name: 'Book a Discovery Call' })
-    // Tailwind: hidden lg:inline-flex — lg:hidden renders below lg, lg:inline-flex shows at lg+
-    expect(cta.className).toContain('hidden')
-    expect(cta.className).toContain('lg:inline-flex')
-  })
-
-  it('renders "Discover Your Pattern" CTA link pointing to /discover-your-pattern', () => {
-    render(<Header />)
-    const cta = screen.getByRole('link', { name: 'Discover Your Pattern' })
-    expect(cta).toBeInTheDocument()
-    expect(cta).toHaveAttribute('href', '/discover-your-pattern')
-  })
-
-  it('"Discover Your Pattern" CTA is hidden below the xl breakpoint', () => {
-    render(<Header />)
-    const cta = screen.getByRole('link', { name: 'Discover Your Pattern' })
-    // Tailwind: hidden xl:inline-flex — not lg:, because at 1024-1279px there
-    // isn't room for the full nav plus both CTAs without crushing the logo
-    // (verified via direct viewport measurement); xl (1280px) matches the
-    // header container's own max-width cap in tailwind.config.
+    // Tailwind: hidden xl:inline-flex — with 8 top-level nav items there is no
+    // room for a CTA button at 1024-1279px; the Contact tab covers it at lg.
     expect(cta.className).toContain('hidden')
     expect(cta.className).toContain('xl:inline-flex')
   })
 
-  it('renders both "Discover Your Pattern" and "Book a Discovery Call" CTAs together', () => {
+  it('does not render the retired "Discover Your Pattern" header CTA', () => {
     render(<Header />)
-    expect(screen.getByRole('link', { name: 'Discover Your Pattern' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Book a Discovery Call' })).toBeInTheDocument()
+    // Replaced by the hero's "Take the Free Pattern Scan" primary CTA and the
+    // site-wide Pattern Hub sticky bar (Suzanne feedback, 27 Jul 2026).
+    expect(screen.queryByRole('link', { name: 'Discover Your Pattern' })).not.toBeInTheDocument()
   })
 
   it('renders the MobileNav component', () => {
@@ -116,11 +101,12 @@ describe('Header', () => {
     expect(mobileNav).toBeInTheDocument()
   })
 
-  it('passes all nav links to MobileNav (17 leaf links)', () => {
+  it('passes all nav links to MobileNav (23 leaf links)', () => {
     render(<Header />)
     const mobileNav = screen.getByTestId('mobile-nav')
-    // About(1) + Explore topics+All Topics+Resources+Blog(8) + WorkWithMe(4) + Masterclass + Shop + Contact + Portal(4) = 17
-    expect(mobileNav).toHaveAttribute('data-link-count', '17')
+    // About(5) + Explore topics+All Topics(7) + WorkWithMe(5) + Events(1)
+    // + Masterclass(1) + Resources(2) + Shop(1) + Contact(1) = 23
+    expect(mobileNav).toHaveAttribute('data-link-count', '23')
   })
 
   it('renders a <nav> with aria-label "Main navigation"', () => {

@@ -128,7 +128,9 @@ export default function MasterclassContent() {
               className="text-xl text-gray-300 mt-4 max-w-2xl mb-10"
             >
               Discover the pattern, decode and disrupt it, then rewire your mind and
-              nervous system to create radical inner and outer transformation.
+              nervous system to create radical inner and outer transformation. This
+              free masterclass is designed as a taster — your first experience of
+              working at the pattern level before going deeper.
             </motion.p>
 
             <motion.div

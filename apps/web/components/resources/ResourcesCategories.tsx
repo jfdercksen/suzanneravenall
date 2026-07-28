@@ -32,7 +32,7 @@ const categories = [
     badge: null,
   },
   {
-    href: '/resources/articles',
+    href: '/resources#articles',
     icon: FileText,
     label: 'Articles',
     title: 'Published Articles',
@@ -41,7 +41,7 @@ const categories = [
     badge: null,
   },
   {
-    href: '/resources/awards',
+    href: '/resources#awards',
     icon: Trophy,
     label: 'Awards',
     title: 'Recognition & Honours',
@@ -50,7 +50,7 @@ const categories = [
     badge: null,
   },
   {
-    href: '/resources/newsletter',
+    href: '/resources#newsletter',
     icon: Mail,
     label: 'Newsletter',
     title: 'Monthly Insights Newsletter',
@@ -59,13 +59,13 @@ const categories = [
     badge: null,
   },
   {
-    href: '/resources/assessments',
+    href: '/discover-your-pattern',
     icon: Brain,
     label: 'Assessments',
     title: 'Tools for Self-Discovery',
     description:
       'Interactive assessments to identify your patterns, blind spots and transformation potential.',
-    badge: 'Coming Soon',
+    badge: null,
   },
 ]
 

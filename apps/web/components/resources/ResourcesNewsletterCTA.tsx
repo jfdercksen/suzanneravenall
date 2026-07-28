@@ -39,6 +39,7 @@ export default function ResourcesNewsletterCTA() {
 
   return (
     <section
+      id="newsletter"
       aria-labelledby="newsletter-cta-heading"
       className="w-full bg-white py-20 lg:py-32"
     >
