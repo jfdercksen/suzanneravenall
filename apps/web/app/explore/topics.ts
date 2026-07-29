@@ -65,6 +65,8 @@ export const topics: Topic[] = [
       'Most people believe their emotions are the problem. “I’m anxious.” “I overreact.” “I shut down.” So they try to control them.',
       'But emotions are not the cause — they are the output. They are the result of how your nervous system is interpreting the world.',
       'If your nervous system feels unsafe, you will experience anxiety — even in safe environments. If your system expects pressure, you will feel stress — even when nothing is wrong. If your system learned to shut down, you will disconnect — even when you want to engage.',
+      'Your nervous system is designed for survival. When it senses threat, it activates one of three responses that become default patterns over time: fight (react, control, push back — protecting by dominating the environment), flight (anxiety, overthinking, urgency — escaping the perceived threat), or freeze (shutdown, withdrawal, numbness — collapsing when the threat feels inescapable). You are not reacting to what’s happening now. You are reacting to what your system expects, based on the past.',
+      'One pattern shows up everywhere: in your emotions as anxiety, irritability, overwhelm and emotional highs and lows; in your relationships as reactivity, miscommunication, withdrawal and conflict patterns; in your performance as burnout, pressure-driven output and lack of clarity; and in your body as fatigue, tension and stress-related symptoms. You can understand this pattern and be aware of it, and still repeat it — because it lives in your nervous system, in your body, below conscious thought. You have to change the system.',
     ],
     corePrinciple: 'This is not personality. This is patterning.',
     discover: [
