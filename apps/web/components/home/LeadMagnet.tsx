@@ -41,7 +41,7 @@ export default function LeadMagnet() {
   }
 
   return (
-    <section id="lead-magnet" aria-labelledby="leadmagnet-heading" className="py-20 lg:py-32 bg-brand-primary">
+    <section id="lead-magnet" aria-labelledby="leadmagnet-heading" className="py-14 lg:py-24 bg-brand-primary">
       <div className="max-w-3xl mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

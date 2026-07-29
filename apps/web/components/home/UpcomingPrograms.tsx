@@ -32,7 +32,7 @@ const oneOnOne = {
 
 export default function UpcomingPrograms() {
   return (
-    <section className="bg-brand-primary py-20 lg:py-32">
+    <section className="bg-brand-primary py-14 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}

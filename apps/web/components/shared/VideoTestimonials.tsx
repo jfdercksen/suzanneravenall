@@ -32,7 +32,7 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
   }
 
   return (
-    <section aria-labelledby="video-testimonials-heading" className="bg-white py-20 lg:py-32">
+    <section aria-labelledby="video-testimonials-heading" className="bg-white py-14 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}

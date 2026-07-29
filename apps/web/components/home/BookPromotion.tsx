@@ -11,7 +11,7 @@ export default function BookPromotion() {
 
         {/* LEFT — Full-bleed book panel (navy bg makes cover pop) */}
         <motion.div
-          className="relative bg-brand-primary flex flex-col items-center justify-center py-20 lg:py-32 px-8 lg:px-16 overflow-hidden min-h-[400px] lg:min-h-[680px]"
+          className="relative bg-brand-primary flex flex-col items-center justify-center py-14 lg:py-24 px-8 lg:px-16 overflow-hidden min-h-[400px] lg:min-h-[680px]"
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: '0px' }}
@@ -57,7 +57,7 @@ export default function BookPromotion() {
 
         {/* RIGHT — Copy panel */}
         <div className="bg-gray-50 flex items-center">
-          <div className="w-full max-w-xl mx-auto py-20 lg:py-32 px-8 lg:px-16">
+          <div className="w-full max-w-xl mx-auto py-14 lg:py-24 px-8 lg:px-16">
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}

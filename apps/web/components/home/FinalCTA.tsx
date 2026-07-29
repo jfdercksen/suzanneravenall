@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 
 export default function FinalCTA() {
   return (
-    <section aria-labelledby="finalcta-heading" className="py-20 lg:py-32 bg-brand-primary">
+    <section aria-labelledby="finalcta-heading" className="py-14 lg:py-24 bg-brand-primary">
       <motion.div
         className="max-w-3xl mx-auto px-4 text-center"
         initial={{ opacity: 0, y: 20 }}

@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 
 export default function AboutTeaser() {
   return (
-    <section aria-labelledby="about-heading" className="py-20 lg:py-32 bg-gray-50">
+    <section aria-labelledby="about-heading" className="py-14 lg:py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 

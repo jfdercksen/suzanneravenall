@@ -69,7 +69,7 @@ export default function FocusAreas() {
   return (
     <section
       aria-label="Areas of Focus"
-      className="bg-gray-950 py-20 lg:py-32"
+      className="bg-gray-950 py-14 lg:py-24"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
