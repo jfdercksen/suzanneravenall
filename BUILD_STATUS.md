@@ -1,10 +1,10 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 5 — QA and Launch
-Current Task: Redesign pass 1 (per Suzanne's 27 Jul feedback) + content-parity QA fixes; pre-DNS-cutover items still awaiting Suzanne credentials
+Current Task: Redesign pass 1 (per Suzanne's 27 Jul feedback) + content-parity QA fixes + native diagnostic quiz build-out (1 of 8 shipped); pre-DNS-cutover items still awaiting Suzanne credentials
 Current Branch: feature/redesign-pass-1
 Last Updated: 2026-07-29
-Last Updated By: Claude (EA reconciliation against git history — 89 commits since 2026-06-09)
+Last Updated By: Claude
 
 ---
 
@@ -345,3 +345,5 @@ Status file had not been updated since 2026-06-09; 89 commits landed in between.
 - **New known issues logged:** KI025 (Media article links break post-DNS-cutover), KI027 (hero CTA/cookie-banner overlap on small phones — sitewide), Careers Portal deferred.
 - **Pending unchanged:** Phase 5 sign-offs and pre-DNS-cutover items still awaiting Suzanne's credentials (PayFast/PayPal sandbox, Sage, Resend domain verification) — see Phase 2 pending list above.
 - Housekeeping: 5 duplicate legacy flat skill files removed from `.claude/skills/`; hooks in `.claude/settings.json` repaired (were pointing at nonexistent `C:\Apps\` path).
+
+- **2026-07-29 (later same day) — Native diagnostic quiz, 1 of 8:** Replaced the "Discover Your Pattern" hub's external ScoreApp links with a native flow (78995f0): name/email capture before quiz access, emailed access-token link (30-day TTL), server-side scoring, completion notification to Suzanne with full Q&A. Security hardening applied in review: idempotent completion (no duplicate notify emails on link revisit), rate limiting on both quiz API routes, Sentry query-string token scrubbing, answer payload validation/capping. Shipped the nervous-system quiz first; QUIZ_NOTIFY_EMAIL wired through to the web container's Docker env (ead2b8e); life-transitions quiz shipped as the 2nd of 8 (678fffd). Remaining 6 diagnostics tracked separately, pending sourced question content per diagnostic.
