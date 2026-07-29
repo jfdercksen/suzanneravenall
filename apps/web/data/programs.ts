@@ -721,6 +721,31 @@ export const PROGRAMS: Program[] = [
     isPublished: true,
     isFeatured: false,
   },
+  {
+    slug: 'overcoming-the-need-to-fix-others',
+    // No dedicated product photo exists yet — using the shared group-session
+    // image rather than borrowing another programme's specific product photo.
+    image: '/images/generated/group-coaching-real.webp',
+    name: 'Overcoming the Need to Fix Others',
+    category: 'group',
+    shortDescription:
+      'Learn why you feel responsible for fixing everyone else\'s problems — and how to stop, without guilt.',
+    description:
+      'We respond to the lack of unconditional love in the family dynamic by wanting to make everything okay. We want to be liked and to please others to avoid controversy. As a small child we learn it is safe to fix others\' problems and difficulties, and we carry this on into adulthood. So how do we stop it? Join this 4-week challenge of overcoming the need to fix others — learn how to respond in a loving way and free up time and energy for your own dreams and desires. Through this 4-session series, part coaching and part repatterning class, find out what is underneath this behaviour and move into a new way of being.',
+    priceUsd: 90,
+    priceZar: 1500,
+    duration: 'Recorded series — 4 sessions',
+    features: [
+      'Understand the childhood roots of over-responsibility for others',
+      'Release the need to please and avoid controversy',
+      'Set down other people\'s problems without guilt',
+      'Free up time and energy for your own life and goals',
+      'Part coaching, part group repatterning',
+      'Recorded sessions — work through the series in your own time',
+    ],
+    isPublished: true,
+    isFeatured: false,
+  },
 ]
 
 export function getProgramBySlug(slug: string): Program | undefined {
