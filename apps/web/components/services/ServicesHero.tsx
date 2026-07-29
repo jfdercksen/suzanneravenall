@@ -16,7 +16,7 @@ export default function ServicesHero() {
     <section
       id="hero"
       aria-labelledby="services-hero-heading"
-      className="relative h-screen min-h-[640px] flex items-center overflow-hidden"
+      className="relative min-h-[600px] lg:h-screen lg:min-h-[640px] flex items-center overflow-hidden"
     >
       {/* Cinematic background video — client transformation montage (faces, crossfading) */}
       <video
@@ -45,13 +45,13 @@ export default function ServicesHero() {
         className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_theme(colors.brand.accent/15%),_transparent_50%)]"
       />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-32">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left — copy */}
           <div>
             <motion.p
               {...fadeUp(0)}
-              className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-6"
+              className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-4 lg:mb-6"
             >
               Services with Dr. Suzanne Ravenall
             </motion.p>
@@ -59,7 +59,7 @@ export default function ServicesHero() {
             <motion.h1
               id="services-hero-heading"
               {...fadeUp(0.15)}
-              className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
+              className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-4 lg:mb-8"
             >
               Unlock your life{' '}
               <span className="text-brand-accent">and potential.</span>
@@ -67,7 +67,7 @@ export default function ServicesHero() {
 
             <motion.p
               {...fadeUp(0.3)}
-              className="text-lg lg:text-xl text-white/75 font-light max-w-xl mb-12 leading-relaxed"
+              className="text-lg lg:text-xl text-white/75 font-light max-w-xl mb-6 lg:mb-12 leading-relaxed"
             >
               Through a comfortable, authentic and safe environment, Suzanne helps you
               get to the root cause of key issues that disrupt life, track the patterns
@@ -75,16 +75,16 @@ export default function ServicesHero() {
               challenges and into self mastery.
             </motion.p>
 
-            <motion.div {...fadeUp(0.45)} className="flex flex-wrap gap-4">
+            <motion.div {...fadeUp(0.45)} className="flex flex-wrap gap-3 lg:gap-4">
               <Link
                 href="#private"
-                className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
+                className="inline-flex items-center justify-center px-6 py-3.5 lg:px-8 lg:py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
               >
                 Find Your Path
               </Link>
               <Link
                 href="/explore"
-                className="inline-flex items-center justify-center px-8 py-4 border border-white/40 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/5"
+                className="inline-flex items-center justify-center px-6 py-3.5 lg:px-8 lg:py-4 border border-white/40 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/5"
               >
                 Explore the Method
               </Link>

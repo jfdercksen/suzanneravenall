@@ -12,7 +12,7 @@ export default function AboutHero() {
   return (
     <section
       aria-labelledby="about-hero-heading"
-      className="relative h-screen min-h-[640px] overflow-hidden"
+      className="relative min-h-[560px] lg:h-screen lg:min-h-[640px] overflow-hidden"
     >
       <video
         autoPlay
@@ -30,8 +30,8 @@ export default function AboutHero() {
         className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/20"
       />
 
-      <div className="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-center h-full max-w-3xl">
+      <div className="relative z-10 min-h-[560px] lg:min-h-0 lg:h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col justify-center min-h-[560px] lg:min-h-0 lg:h-full max-w-3xl py-16 lg:py-0">
           <motion.p
             {...fadeUp(0)}
             className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-6"
