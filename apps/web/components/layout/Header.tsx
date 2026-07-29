@@ -53,7 +53,7 @@ const navItems: NavItem[] = [
     label: 'Work With Me',
     children: [
       { label: 'Transformation Pathways', href: '/transformation-pathways' },
-      { label: 'Precision Sessions', href: '/services' },
+      { label: 'Precision Sessions', href: '/services#private' },
       { label: 'Corporate & Retreats', href: '/services#group' },
       { label: 'Speaking', href: '/speaking' },
       { label: 'Programs', href: '/programs' },
