@@ -141,6 +141,8 @@ export const topics: Topic[] = [
       'You don’t choose relationships consciously. You choose what feels familiar to your nervous system. Your mind thinks it is choosing love, but your body is selecting what it already knows. Familiar dynamics read as “home,” even when they are chaotic.',
       'Safety gets interpreted as recognition, not health. If intensity once felt like love, you’ll keep chasing intensity. If distance felt protective, you’ll keep agreeing to distance.',
       'Your attachment pattern formed early. It taught your system what connection should feel like, what to expect from others, and how to stay safe — so now you may chase connection (anxious), avoid closeness (avoidant), or move between both (push-pull).',
+      'It shows up as repeating relationship cycles, emotional disconnection, fear of abandonment or rejection, over-giving or over-controlling, and difficulty expressing needs. Your system isn’t choosing the person. It’s choosing the pattern.',
+      'And you can see the pattern and still recreate it — because your system recognises familiar signalling and calls it chemistry, confuses familiar with safe so red flags feel comforting, and replays old protection strategies even when they recreate pain. To choose differently, you have to change the pattern itself.',
     ],
     corePrinciple:
       'You are not attracted to what is healthy. You are attracted to what is recognisable.',
