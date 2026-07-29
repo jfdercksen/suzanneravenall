@@ -29,6 +29,10 @@ This 2-minute diagnostic will reveal:
 
   // Answer scale: Never=0, Rarely=1, Sometimes=2, Often=3, Almost Always=4
 
+  // Tie-break order: mixed (Regulated Responder) wins ties, including the
+  // all-zero case — matches the original hardcoded computeResult behavior.
+  categories: ['fight', 'flight', 'freeze', 'mixed'],
+
   results: {
     fight: {
       title: 'The Hyper-Alert Achiever',

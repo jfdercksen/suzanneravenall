@@ -51,22 +51,22 @@ describe('patternQuizzes', () => {
     }
   })
 
-  it('every scoreAppUrl starts with "https://suzanne-" and ends with ".scoreapp.com"', () => {
+  it('every topicSlug is a non-empty string', () => {
     for (const q of patternQuizzes) {
-      expect(q.scoreAppUrl.startsWith('https://suzanne-')).toBe(true)
-      expect(q.scoreAppUrl.endsWith('.scoreapp.com')).toBe(true)
+      expect(typeof q.topicSlug).toBe('string')
+      expect(q.topicSlug.length).toBeGreaterThan(0)
     }
   })
 
-  it('all scoreAppUrl values are unique', () => {
-    const urls = patternQuizzes.map((q) => q.scoreAppUrl)
-    expect(new Set(urls).size).toBe(urls.length)
+  it('all topicSlug values are unique', () => {
+    const slugs = patternQuizzes.map((q) => q.topicSlug)
+    expect(new Set(slugs).size).toBe(slugs.length)
   })
 
-  it('contains a "nervous-system" entry whose scoreAppUrl matches masterPatternQuizUrl', () => {
+  it('contains a "nervous-system" entry whose topicSlug matches the master quiz URL', () => {
     const nervousSystem = patternQuizzes.find((q) => q.slug === 'nervous-system')
     expect(nervousSystem).toBeDefined()
-    expect(nervousSystem?.scoreAppUrl).toBe(masterPatternQuizUrl)
+    expect(masterPatternQuizUrl).toBe(`/explore/${nervousSystem?.topicSlug}/quiz`)
   })
 
   it('every entry has a category from the PatternQuizCategory union', () => {
@@ -92,15 +92,15 @@ describe('patternQuizzes', () => {
 })
 
 describe('masterPatternQuizUrl', () => {
-  it('is a non-empty string matching the scoreapp URL pattern', () => {
+  it('is a non-empty internal path to the nervous-system quiz', () => {
     expect(typeof masterPatternQuizUrl).toBe('string')
-    expect(masterPatternQuizUrl.startsWith('https://suzanne-')).toBe(true)
-    expect(masterPatternQuizUrl.endsWith('.scoreapp.com')).toBe(true)
+    expect(masterPatternQuizUrl.startsWith('/explore/')).toBe(true)
+    expect(masterPatternQuizUrl.endsWith('/quiz')).toBe(true)
   })
 
-  it('matches the nervous-system entry scoreAppUrl exactly', () => {
+  it('matches the nervous-system entry topicSlug exactly', () => {
     const nervousSystem = patternQuizzes.find((q) => q.slug === 'nervous-system')
-    expect(masterPatternQuizUrl).toBe(nervousSystem?.scoreAppUrl)
+    expect(masterPatternQuizUrl).toBe(`/explore/${nervousSystem?.topicSlug}/quiz`)
   })
 })
 

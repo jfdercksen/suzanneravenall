@@ -5,7 +5,8 @@
  * added as new data files that satisfy these types and register in ./index.ts.
  */
 
-export type QuizCategory = 'fight' | 'flight' | 'freeze' | 'mixed'
+/** Each quiz declares its own category keys — not shared across quizzes. */
+export type QuizCategory = string
 
 export interface QuizQuestion {
   id: number
@@ -34,5 +35,11 @@ export interface Quiz {
   subtitle: string
   intro: string
   questions: QuizQuestion[]
+  /**
+   * Declared categories, in scoring tie-break order — ties resolve to the
+   * LAST category in this list, so put the "balanced/no dominant pattern"
+   * catch-all result last.
+   */
+  categories: QuizCategory[]
   results: Record<QuizCategory, QuizResult>
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { patternQuizzes, categoryLabel } from '@/data/patternQuizzes'
 
@@ -50,14 +51,12 @@ export default function PatternHubQuizGrid() {
                 {quiz.question}
               </h3>
               <p className="text-sm text-gray-500 mt-2 flex-1">{quiz.description}</p>
-              <a
-                href={quiz.scoreAppUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href={`/explore/${quiz.topicSlug}/quiz`}
                 className="mt-auto rounded-button bg-brand-primary text-white text-sm px-4 py-2 hover:bg-brand-accent transition-colors duration-200 text-center w-full"
               >
                 Take Quiz →
-              </a>
+              </Link>
             </motion.div>
           ))}
         </div>

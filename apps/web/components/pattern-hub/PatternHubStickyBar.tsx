@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { masterPatternQuizUrl } from '@/data/patternQuizzes'
 
 const BAR_OFFSET = '2.5rem' // 40px — drives both the bar's own height and Header's push-down offset
@@ -54,15 +55,13 @@ export default function PatternHubStickyBar() {
         <span className="hidden sm:inline text-white text-xs font-medium tracking-wide">
           Not sure where to start?
         </span>
-        <a
+        <Link
           href={masterPatternQuizUrl}
-          target="_blank"
-          rel="noopener noreferrer"
           className="text-white font-bold text-[11px] sm:text-xs underline underline-offset-2 hover:no-underline text-center"
         >
           <span className="sm:hidden">Take the 60-second Pattern Quiz →</span>
           <span className="hidden sm:inline">Take the 60-second Master Pattern Quiz →</span>
-        </a>
+        </Link>
         <button
           type="button"
           aria-label="Dismiss announcement bar"

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import PatternDiagnosticIllustration from '@/components/discover/PatternDiagnosticIllustration'
 import { masterPatternQuizUrl } from '@/data/patternQuizzes'
@@ -68,14 +69,12 @@ export default function PatternHubHero() {
             </motion.div>
 
             <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4 mt-10">
-              <a
+              <Link
                 href={masterPatternQuizUrl}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-medium text-sm rounded-button transition-colors duration-300 whitespace-nowrap"
               >
                 Start with Emotional Patterns
-              </a>
+              </Link>
               <a
                 href="#assessments"
                 className="inline-flex items-center justify-center px-8 py-4 border-2 border-white/30 hover:border-white text-white font-medium text-sm rounded-button transition-colors duration-300 whitespace-nowrap"

@@ -10,7 +10,9 @@ const LeadMagnetSchema = z.object({
   firstName: z.string().max(100).optional(),
   source: z.string().max(200).optional(),
   // Set by the Explore diagnostic quizzes — the user's dominant pattern.
-  quizResult: z.enum(['fight', 'flight', 'freeze', 'mixed']).optional(),
+  // Each quiz declares its own category keys (see QuizCategory = string in
+  // app/explore/quizzes/types.ts), so this can't be a fixed enum.
+  quizResult: z.string().max(100).optional(),
 })
 
 export async function POST(request: Request) {

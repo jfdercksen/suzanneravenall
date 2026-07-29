@@ -1,10 +1,10 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 5 — QA and Launch
-Current Task: Pre-DNS-cutover — awaiting Suzanne review + external credentials
-Current Branch: main
-Last Updated: 2026-06-09
-Last Updated By: Johan
+Current Task: Redesign pass 1 (per Suzanne's 27 Jul feedback) + content-parity QA fixes; pre-DNS-cutover items still awaiting Suzanne credentials
+Current Branch: feature/redesign-pass-1
+Last Updated: 2026-07-29
+Last Updated By: Claude (EA reconciliation against git history — 89 commits since 2026-06-09)
 
 ---
 
@@ -333,3 +333,15 @@ curl -s -o /dev/null -w "/api/search → %{http_code}\n" "http://169.239.180.49/
 - **April 2026:** Task 2.1 complete. Medusa v2 scaffolded in apps/medusa — medusa-config.ts, Dockerfile, seed script for regions/tax/shipping. Nginx /api/store and /api/admin routes added with correct path rewrites (/api/store/* → /store/*, /api/admin/* → /admin/*). Code review fixes applied: JWT/cookie secrets throw on missing env vars, Dockerfile runner stage does clean production install, admin TODO logged for IP restriction at DNS cutover. db:migrate must be run on VPS after first deploy.
 - **April 2026:** Payload CMS VPS deployment — CSS and login redirect issues encountered. Root cause: basePath/hydration conflict (KI004, KI005). Deferred to Phase 5; recommend dedicated subdomain cms.suzanneravenall.com at DNS cutover to avoid Nginx subpath complications. Moving to Task 1.8.
 - **April 2026:** Task 1.6 fully operational. Payload admin 500 resolved — root cause: (payload)/layout.tsx returned bare children instead of using RootLayout from @payloadcms/next/layouts, so ConfigProvider never mounted. Fix: wired RootLayout + handleServerFunctions. Secondary fixes: deleted importMap.ts (was shadowing auto-generated importMap.js), added sharp to buildConfig(), cleared stale public-schema migrations. Monorepo React deduplication fixed: apps/web upgraded from Next.js 14 + React 18 to Next.js 15 + React 19 to match apps/payload and eliminate duplicate React instances. Admin login confirmed ✓ · All 6 collections respond ✓ · BlogPost write confirmed ✓ · Both apps build clean ✓.
+
+---
+
+## Reconciliation — 2026-07-29 (EA, from git history)
+
+Status file had not been updated since 2026-06-09; 89 commits landed in between. Summary:
+
+- **2026-07-28/29 — Redesign pass 1** (branch `feature/redesign-pass-1`), driven by Suzanne's 27 Jul feedback: homepage + navigation redesign, programs rebuild (practitioner nesting, pricing, self-study catalogue), pathways content, quiz-first explore CTAs, pattern coach flow.
+- **Content-parity restoration vs old site:** real programme cards, accreditations, full testimonial sets, qualifications/memberships, restored topic-page copy (nervous-system, relationships, health-energy, identity), removed fabricated keynote titles/testimonials on /speaking, fixed wrong email + Instagram handle on Contact.
+- **New known issues logged:** KI025 (Media article links break post-DNS-cutover), KI027 (hero CTA/cookie-banner overlap on small phones — sitewide), Careers Portal deferred.
+- **Pending unchanged:** Phase 5 sign-offs and pre-DNS-cutover items still awaiting Suzanne's credentials (PayFast/PayPal sandbox, Sage, Resend domain verification) — see Phase 2 pending list above.
+- Housekeeping: 5 duplicate legacy flat skill files removed from `.claude/skills/`; hooks in `.claude/settings.json` repaired (were pointing at nonexistent `C:\Apps\` path).

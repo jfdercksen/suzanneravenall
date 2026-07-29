@@ -24,14 +24,12 @@ export default function PatternHubFinalCta() {
             You don&rsquo;t need to do all of them. Start with the one that
             feels most relevant right now.
           </p>
-          <a
+          <Link
             href={masterPatternQuizUrl}
-            target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white font-medium text-base rounded-button transition-colors duration-300"
           >
             Take Your First Diagnostic
-          </a>
+          </Link>
           <div className="mt-8">
             <Link
               href="/explore"

@@ -3,38 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import type { Quiz, QuizCategory } from '@/app/explore/quizzes/types'
-
-// Answer scale: Never=0, Rarely=1, Sometimes=2, Often=3, Almost Always=4
-const SCALE: { label: string; value: number }[] = [
-  { label: 'Never', value: 0 },
-  { label: 'Rarely', value: 1 },
-  { label: 'Sometimes', value: 2 },
-  { label: 'Often', value: 3 },
-  { label: 'Almost Always', value: 4 },
-]
-
-type Scores = Record<QuizCategory, number>
-
-/**
- * Dominant pattern:
- * - Highest category sum wins (across all four categories, mixed included).
- * - If fight/flight/freeze are all within 2 points of each other AND the mixed
- *   score is (tied for) the overall highest, the result is "mixed"
- *   (Regulated Responder) — this also covers the all-zero case, where someone
- *   reports no patterns and is correctly read as regulated.
- * Tie-break order favours fight > flight > freeze > mixed.
- */
-function computeResult(scores: Scores): QuizCategory {
-  const trio = [scores.fight, scores.flight, scores.freeze]
-  const allWithin2 = Math.max(...trio) - Math.min(...trio) <= 2
-  const overallMax = Math.max(scores.fight, scores.flight, scores.freeze, scores.mixed)
-
-  if (allWithin2 && scores.mixed === overallMax) return 'mixed'
-
-  const order: QuizCategory[] = ['fight', 'flight', 'freeze', 'mixed']
-  return order.reduce<QuizCategory>((best, c) => (scores[c] > scores[best] ? c : best), 'fight')
-}
+import type { Quiz } from '@/app/explore/quizzes/types'
+import { SCALE } from '@/lib/quiz/scale'
+import { computeResult } from '@/lib/quiz/scoring'
 
 const slideVariants = {
   enter: (dir: number) => ({ x: dir > 0 ? 80 : -80, opacity: 0 }),
@@ -44,16 +15,33 @@ const slideVariants = {
 
 type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error'
 
-export default function QuizFlow({ quiz }: { quiz: Quiz }) {
+interface QuizFlowProps {
+  quiz: Quiz
+  /** Present once a subscriber has passed the QuizGate — enables auto-reporting
+   *  completion to /api/quiz/complete and the one-click PDF report button. */
+  subscriberId?: string
+  accessToken?: string
+  subscriberEmail?: string
+  /** Replays a previously-completed attempt (e.g. revisiting the emailed link). */
+  initialAnswers?: Record<number, number>
+  initialStep?: number
+}
+
+export default function QuizFlow({
+  quiz,
+  subscriberId,
+  accessToken,
+  subscriberEmail,
+  initialAnswers,
+  initialStep,
+}: QuizFlowProps) {
   const total = quiz.questions.length
 
   // step 0 = intro, 1..total = questions, total + 1 = results
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(initialStep ?? 0)
   const [direction, setDirection] = useState(1)
-  const [answers, setAnswers] = useState<Record<number, number>>({})
+  const [answers, setAnswers] = useState<Record<number, number>>(initialAnswers ?? {})
 
-  const [showCapture, setShowCapture] = useState(false)
-  const [email, setEmail] = useState('')
   const [status, setStatus] = useState<SubmitStatus>('idle')
   const [message, setMessage] = useState('')
 
@@ -64,15 +52,7 @@ export default function QuizFlow({ quiz }: { quiz: Quiz }) {
     if (advanceTimer.current !== null) window.clearTimeout(advanceTimer.current)
   }, [])
 
-  const scores = useMemo<Scores>(() => {
-    const s: Scores = { fight: 0, flight: 0, freeze: 0, mixed: 0 }
-    for (const q of quiz.questions) {
-      s[q.category] += answers[q.id] ?? 0
-    }
-    return s
-  }, [answers, quiz.questions])
-
-  const resultKey = useMemo(() => computeResult(scores), [scores])
+  const resultKey = useMemo(() => computeResult(quiz, answers), [answers, quiz])
   const result = quiz.results[resultKey]
 
   const start = () => {
@@ -95,8 +75,30 @@ export default function QuizFlow({ quiz }: { quiz: Quiz }) {
     setStep((s) => Math.max(0, s - 1))
   }
 
-  const submitEmail = async (e: React.FormEvent) => {
-    e.preventDefault()
+  // Auto-report completion to Suzanne + persist the answers, once, the first
+  // time the results screen is reached with a known subscriber. Invisible to
+  // the user — their result is already rendered from local state regardless
+  // of this call's outcome.
+  const hasReportedCompletion = useRef(false)
+  useEffect(() => {
+    if (step <= total) return
+    if (!subscriberId || !accessToken) return
+    if (hasReportedCompletion.current) return
+    hasReportedCompletion.current = true
+
+    void fetch('/api/quiz/complete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ quizSlug: quiz.slug, accessToken, answers }),
+    }).catch(() => {
+      // Non-blocking — the result is already shown; nothing to surface here.
+    })
+    // Only re-evaluate on step change; answers/quiz are captured at fire time.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, total, subscriberId, accessToken])
+
+  const emailReport = async () => {
+    if (!subscriberEmail) return
     setStatus('submitting')
     setMessage('')
     try {
@@ -104,14 +106,14 @@ export default function QuizFlow({ quiz }: { quiz: Quiz }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email,
-          source: 'nervous-system-quiz',
+          email: subscriberEmail,
+          source: quiz.slug,
           quizResult: resultKey,
         }),
       })
       if (!res.ok) throw new Error('Request failed')
       setStatus('success')
-      setMessage('Your full Nervous System Pattern Report is on its way!')
+      setMessage(`Your full ${quiz.title} Report is on its way!`)
     } catch {
       setStatus('error')
       setMessage('Something went wrong. Please try again.')
@@ -175,7 +177,7 @@ export default function QuizFlow({ quiz }: { quiz: Quiz }) {
               transition={{ duration: 0.4, ease: 'easeOut' }}
               className="text-center"
             >
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
                 2-Minute Diagnostic
               </p>
               <h1 className="text-4xl lg:text-6xl font-light leading-tight mb-5">{quiz.title}</h1>
@@ -252,7 +254,7 @@ export default function QuizFlow({ quiz }: { quiz: Quiz }) {
               exit="exit"
               transition={{ duration: 0.4, ease: 'easeOut' }}
             >
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4 text-center">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4 text-center">
                 Your Result
               </p>
               <h1 className="text-4xl lg:text-6xl font-light leading-tight mb-3 text-center">
@@ -267,7 +269,7 @@ export default function QuizFlow({ quiz }: { quiz: Quiz }) {
                 { label: "What's Really Happening", body: result.mechanism },
               ].map((block) => (
                 <div key={block.label} className="mb-8">
-                  <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                  <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
                     {block.label}
                   </p>
                   <p className="text-base lg:text-lg text-white/80 font-light leading-relaxed">
@@ -281,7 +283,7 @@ export default function QuizFlow({ quiz }: { quiz: Quiz }) {
                 { label: 'The Shift', items: result.shift, accent: true },
               ].map((list) => (
                 <div key={list.label} className="mb-8">
-                  <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+                  <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
                     {list.label}
                   </p>
                   <ul className="space-y-2.5">
@@ -310,51 +312,25 @@ export default function QuizFlow({ quiz }: { quiz: Quiz }) {
                   <span aria-hidden="true">→</span>
                 </Link>
 
-                {!showCapture && status !== 'success' && (
+                {/* TODO: PDF report generation pending — currently sends email +
+                    result only. Build PDF per results structure in email when
+                    content is finalised. */}
+                {subscriberEmail && status !== 'success' && (
                   <button
                     type="button"
-                    onClick={() => setShowCapture(true)}
-                    className="inline-flex items-center justify-center px-8 py-4 border border-white/30 hover:border-white/60 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
+                    onClick={emailReport}
+                    disabled={status === 'submitting'}
+                    className="inline-flex items-center justify-center px-8 py-4 border border-white/30 hover:border-white/60 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10 disabled:opacity-60"
                   >
-                    Get Your Full Pattern Report (PDF)
+                    {status === 'submitting' ? 'Sending…' : 'Email Me the Full Report'}
                   </button>
                 )}
+                {status === 'error' && (
+                  <p className="text-sm text-red-300" role="alert">
+                    {message}
+                  </p>
+                )}
               </div>
-
-              {/* Email capture for the PDF report.
-                  TODO: PDF report generation pending — currently captures email +
-                  result only. Build PDF per results structure in email when
-                  content is finalised. */}
-              {showCapture && status !== 'success' && (
-                <form onSubmit={submitEmail} className="mt-6 rounded-card bg-white/5 border border-white/10 p-6">
-                  <label htmlFor="quiz-email" className="block text-sm text-white/70 mb-3">
-                    Where should we send your full Nervous System Pattern Report?
-                  </label>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <input
-                      id="quiz-email"
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="flex-1 min-h-[52px] rounded-button bg-brand-primary-900/60 border border-white/15 px-5 text-white placeholder-white/30 focus:border-brand-accent focus:outline-none"
-                    />
-                    <button
-                      type="submit"
-                      disabled={status === 'submitting'}
-                      className="min-h-[52px] rounded-button bg-brand-accent px-8 text-sm font-semibold uppercase tracking-[0.15em] text-white transition-all duration-300 hover:bg-brand-accent-700 disabled:opacity-60"
-                    >
-                      {status === 'submitting' ? 'Sending…' : 'Send It'}
-                    </button>
-                  </div>
-                  {status === 'error' && (
-                    <p className="mt-3 text-sm text-red-300" role="alert">
-                      {message}
-                    </p>
-                  )}
-                </form>
-              )}
 
               {status === 'success' && (
                 <p

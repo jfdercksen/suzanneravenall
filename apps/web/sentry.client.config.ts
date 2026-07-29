@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/nextjs";
+import { scrubSentryEvent } from "./lib/sentry-scrub";
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -12,4 +13,9 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0,
 
   integrations: [Sentry.replayIntegration()],
+
+  // Strip bearer-token-style query params (e.g. the quiz-invite link's
+  // ?token=) from captured URLs before events leave the browser.
+  beforeSend: scrubSentryEvent,
+  beforeSendTransaction: scrubSentryEvent,
 });

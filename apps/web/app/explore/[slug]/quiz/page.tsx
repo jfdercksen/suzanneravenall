@@ -1,13 +1,21 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import * as Sentry from '@sentry/nextjs'
 import { topics, topicBySlug } from '@/app/explore/topics'
 import { quizBySlug } from '@/app/explore/quizzes'
-import QuizFlow from '@/components/quiz/QuizFlow'
+import QuizGate from '@/components/quiz/QuizGate'
+import {
+  getServiceRoleClient,
+  getSubscriberByToken,
+  markStarted,
+  type QuizSubscriberRow,
+} from '@/lib/quiz/subscriber'
 
-// In Next.js 14 App Router, params is a Promise in dynamic routes.
+// In Next.js 14 App Router, params and searchParams are Promises in dynamic routes.
 type PageProps = {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ token?: string }>
 }
 
 // Pre-render the quiz route for every topic. Only nervous-system has a quiz
@@ -28,15 +36,73 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function QuizPage({ params }: PageProps) {
+export default async function QuizPage({ params, searchParams }: PageProps) {
   const { slug } = await params
+  const { token } = await searchParams
   const topic = topicBySlug(slug)
 
   // Not a real topic → 404.
   if (!topic) notFound()
 
   const quiz = quizBySlug(slug)
-  if (quiz) return <QuizFlow quiz={quiz} />
+  if (quiz) {
+    if (!token) return <QuizGate quiz={quiz} initialMode="gate" />
+
+    const supabase = getServiceRoleClient()
+    let subscriber: QuizSubscriberRow | null = null
+    if (supabase) {
+      try {
+        subscriber = await getSubscriberByToken(supabase, slug, token)
+      } catch (err) {
+        // A transient DB error shouldn't hard-crash this route — degrade to
+        // the same "invalid link" screen a bad token would show.
+        Sentry.captureException(err)
+        subscriber = null
+      }
+    }
+
+    if (!subscriber) return <QuizGate quiz={quiz} initialMode="invalid" />
+
+    if (subscriber.status === 'completed') {
+      const total = quiz.questions.length
+      // JSONB round-trips object keys as strings — convert back to the
+      // numeric question IDs QuizFlow's answers state expects.
+      const initialAnswers = Object.fromEntries(
+        Object.entries(subscriber.answers ?? {}).map(([id, value]) => [Number(id), value])
+      )
+      return (
+        <QuizGate
+          quiz={quiz}
+          initialMode="quiz"
+          subscriber={{
+            id: subscriber.id,
+            accessToken: token,
+            email: subscriber.email,
+            initialAnswers,
+            initialStep: total + 1,
+          }}
+        />
+      )
+    }
+
+    if (subscriber.status === 'pending' && supabase) {
+      // Non-critical status bookkeeping — a failure here shouldn't block the
+      // user from reaching their quiz, which they've already been verified for.
+      try {
+        await markStarted(supabase, subscriber.id)
+      } catch (err) {
+        Sentry.captureException(err)
+      }
+    }
+
+    return (
+      <QuizGate
+        quiz={quiz}
+        initialMode="quiz"
+        subscriber={{ id: subscriber.id, accessToken: token, email: subscriber.email }}
+      />
+    )
+  }
 
   // Valid topic without a quiz yet → "coming soon" with a route back to the topic.
   return (
@@ -46,7 +112,7 @@ export default async function QuizPage({ params }: PageProps) {
         className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[500px] rounded-full bg-brand-accent/10 blur-3xl"
       />
       <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 py-20 text-center">
-        <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+        <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
           Diagnostic Coming Soon
         </p>
         <h1 className="text-4xl lg:text-6xl font-light leading-tight mb-6">

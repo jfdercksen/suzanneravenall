@@ -50,3 +50,25 @@ export interface OrderEmailData {
   productType?: OrderProductType
   calBookingUrl?: string | null
 }
+
+export interface QuizInviteEmailData {
+  email: string
+  firstName: string
+  quizTitle: string
+  link: string
+}
+
+export interface QuizAnsweredQuestion {
+  text: string
+  answerLabel: string
+}
+
+export interface QuizCompletionEmailData {
+  firstName: string
+  lastName: string
+  email: string
+  quizTitle: string
+  resultTitle: string
+  resultSubtitle: string
+  questions: QuizAnsweredQuestion[]
+}

@@ -3,7 +3,7 @@ import { render, screen, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import PatternHubStickyBar from './PatternHubStickyBar'
 
-const QUIZ_URL = 'https://suzanne-jym5givl.scoreapp.com'
+const QUIZ_URL = '/explore/emotional-nervous-system-mastery/quiz'
 const BAR_OFFSET = '2.5rem'
 
 afterEach(() => {
@@ -19,18 +19,11 @@ describe('PatternHubStickyBar', () => {
     expect(screen.getByText('Not sure where to start?')).toBeInTheDocument()
   })
 
-  it('renders a link to the master ScoreApp quiz on mount', () => {
+  it('renders a link to the master diagnostic quiz on mount', () => {
     render(<PatternHubStickyBar />)
     const link = screen.getByRole('link', { name: /Take the 60-second Master Pattern Quiz/i })
     expect(link).toBeInTheDocument()
     expect(link).toHaveAttribute('href', QUIZ_URL)
-  })
-
-  it('quiz link opens in a new tab with rel="noopener noreferrer"', () => {
-    render(<PatternHubStickyBar />)
-    const link = screen.getByRole('link', { name: /Take the 60-second Master Pattern Quiz/i })
-    expect(link).toHaveAttribute('target', '_blank')
-    expect(link).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
   it('renders a dismiss button with aria-label "Dismiss announcement bar"', () => {
