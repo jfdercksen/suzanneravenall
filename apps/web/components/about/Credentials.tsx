@@ -25,12 +25,60 @@ const credentials: string[] = [
   'Neurobiology of Performance',
 ]
 
+// Full qualifications list ported from the old site's /qualifications page
+// (infra/scripts/scraped-content/about.md). Wording as published there.
+const academicQualifications = [
+  'B.Sc. Metaphysics (American Alternative Medical Association)',
+  'M.Sc. Metaphysics (American Alternative Medical Association)',
+  'Doctorate of Philosophy: Metaphysics (American Alternative Medical Association)',
+  'Ph.D. Integrative Medicine & Conscious Business Ethics — in progress',
+]
+
+const certifications = [
+  'Certified Master Behaviour Coach (BSI – UK)',
+  'Certified NLP Master',
+  'Certified RTT (RTT Hypnotherapy UK)',
+  'Certified Mediation Instructor (CTAA)',
+  'Certified / Diploma Advanced Resonance Repatterning (RR Institute)',
+  'Certified Teacher Resonance Repatterning (RR Institute)',
+  'Certified Teacher Therapeutic Qigong',
+  'Certified Mediator',
+  'Certified Teacher Mindfulness',
+  'Certified Facilitator HeartMath',
+  'Certified BodyTalk (CBP BodyTalk Association)',
+  'Certified Qi Gong Instructor',
+  'Certified Philosophical/Metaphysical Counsellor (AMA)',
+  'Certified Clinical Trauma Specialist (CCTSI)',
+  'Certified Clinical Trauma & Addiction Specialist (CTAA)',
+  'Certified PTSD Counselling (CTAA)',
+  'Certified Family Trauma Specialist (CFTP)',
+  'Sexual Trauma Specialist (CCTS)',
+  'Certified Akashic Mastery (Akashic School of Knowing)',
+  'Reiki Master',
+]
+
+const additionalTraining = [
+  'Regression Therapy (QHHT)',
+  'Energy Clearing',
+  'Mindscape',
+  'Bio-geometry',
+  'Radionics',
+  'Medical Mediumship',
+  'Reconnective Healing',
+  'BodyTalk Structural Integration',
+  'BodyTalk Fascia Balancing',
+  'Western & Eastern Astrology',
+]
+
+const memberships =
+  'Suzanne is a member of the ICF (International Coaching Federation), BMA (British Medical Association), BodyTalk Association, Resonance Repatterning Association, and the AMA (American Medical Association).'
+
 // [CONFIRM with Suzanne]: qualifications count and years-experience values were
 // counter widgets that didn't hydrate during scrape. Using same values as
 // homepage AnimatedStats until client confirms exact numbers.
 const stats: { target: number; suffix: string; label: string }[] = [
   { target: 20, suffix: '+', label: 'Years Experience' },
-  { target: 1000, suffix: '+', label: 'Clients Transformed' },
+  { target: 2000, suffix: '+', label: 'Clients Transformed' },
   { target: 30, suffix: '+', label: 'Awards' },
   { target: 30, suffix: '+', label: 'Countries' },
 ]
@@ -89,7 +137,27 @@ function AnimatedStat({ target, suffix, label, delay }: {
   )
 }
 
+function QualificationGroup({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div>
+      <h3 className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+        {title}
+      </h3>
+      <ul className="space-y-2">
+        {items.map((item) => (
+          <li key={item} className="flex gap-3 text-white/70 text-sm font-light leading-relaxed">
+            <span aria-hidden="true" className="mt-2 w-3 h-px bg-brand-accent flex-shrink-0" />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 export default function Credentials() {
+  const [showFullList, setShowFullList] = useState(false)
+
   return (
     <section
       aria-labelledby="credentials-heading"
@@ -142,6 +210,49 @@ export default function Credentials() {
               {tag}
             </motion.span>
           ))}
+        </div>
+
+        {/* Full qualifications & memberships — ported from the old /qualifications page */}
+        <div className="mt-12">
+          <button
+            type="button"
+            onClick={() => setShowFullList((open) => !open)}
+            aria-expanded={showFullList}
+            aria-controls="full-qualifications"
+            className="inline-flex items-center gap-3 text-sm uppercase tracking-widest font-medium text-white/80 hover:text-white border border-white/25 hover:border-white/50 rounded-button px-6 py-3 transition-colors duration-300"
+          >
+            {showFullList ? 'Hide full qualifications' : 'View full qualifications & memberships'}
+            <svg
+              aria-hidden="true"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className={`transition-transform duration-300 ${showFullList ? 'rotate-180' : ''}`}
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+
+          {showFullList && (
+            <div id="full-qualifications" className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+              <QualificationGroup title="Academic" items={academicQualifications} />
+              <QualificationGroup title="Certifications" items={certifications} />
+              <div className="space-y-10">
+                <QualificationGroup title="Additional Training" items={additionalTraining} />
+                <div>
+                  <h3 className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+                    Memberships
+                  </h3>
+                  <p className="text-white/70 text-sm font-light leading-relaxed">{memberships}</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

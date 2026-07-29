@@ -227,6 +227,48 @@ const writtenTestimonials = [
     name: 'Jennifer',
     location: 'South Africa',
   },
+  {
+    quote:
+      'I was amazed at the accuracy, and I was amazed by the clearing as I could feel the energy lifting and clearing. I realise that I have been neglecting the spiritual side of my life recently and that it’s time to make a move and get back on the right path. Thanks a lot for all the insight — it was just the motivation I needed to get moving again.',
+    name: 'Sheila',
+    location: 'Mauritius',
+  },
+  {
+    quote:
+      'I have been working with Suzanne for the past 3 years now. It has been an intense journey and it has been amazing to see how much I have shifted and grown. I had a huge crisis in which many parts of my life fell apart — Resonance Repatterning combined with my other daily practices saved me from falling into a depression and I started to create a new life from scratch. Thank you Suzanne.',
+    name: 'Jelka',
+    location: 'Austria',
+  },
+  {
+    quote:
+      'Thank you for a powerful session today. I’m really getting the messages and shifts at a deeper and different level.',
+    name: 'Zoe',
+    location: 'USA',
+  },
+  {
+    quote:
+      'Sciatica was gone by Friday evening. Spent the whole weekend painting the house — up and down ladders, moving stuff — and no pain or discomfort. Feeling great today, not even stiff or anything. I experience almost instant improvements.',
+    name: 'Pieter',
+    location: 'Thailand',
+  },
+  {
+    quote:
+      'Working with Suzanne Ravenall was a joy. I thought the session was well-paced, and found the simplicity, ease and fluidity of the format quite agreeable. I experienced a number of physiological responses as my cells registered the interventions and energy began to flow, and ultimately had a more palpable sense of both my internal environment and what is mine / what is not.',
+    name: 'Alexandra, Psychotherapist',
+    location: 'New York',
+  },
+  {
+    quote:
+      'Excellent — I felt very comfortable explaining the problems to Suzanne. Like talking to a friend. The honest advice, the information and the objective perspective make the whole session valuable. Suzanne is very warm and welcoming with a sincere desire to help. I felt comfortable to open up without fear of judgement.',
+    name: 'Carol',
+    location: 'Colombia',
+  },
+  {
+    quote:
+      'It was a wonderful, enlightening experience — accurate and insightful — and I came away with a fresh clarity and perspective on issues that I have been working on. Thanks Suzanne, powerful and relevant to my personal journey.',
+    name: 'Valanne',
+    location: 'Canada',
+  },
 ]
 
 export default function TestimonialsContent() {
