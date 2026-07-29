@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
+import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
 
 interface Stat {
@@ -9,6 +10,17 @@ interface Stat {
   numeric: number | null
   suffix: string
 }
+
+const accreditations = [
+  { src: '/logos/accreditations/icf-member.png',             alt: 'International Coaching Federation — Member',            w: 110 },
+  { src: '/logos/accreditations/aadp.png',                   alt: 'American Association of Drugless Practitioners',        w: 190 },
+  { src: '/logos/accreditations/ctaa.png',                   alt: 'Complementary Therapists Accredited Association',       w: 295 },
+  { src: '/logos/accreditations/ctss.png',                   alt: 'Certified Clinical Trauma Specialist',                  w: 110 },
+  { src: '/logos/accreditations/royal-society-medicine.png', alt: 'The Royal Society of Medicine',                         w: 111 },
+  { src: '/logos/accreditations/iqnet.png',                  alt: 'IQNet Certified',                                       w: 196 },
+  { src: '/logos/accreditations/iso-9001.jpg',               alt: 'ISO 9001 Certified',                                    w: 250 },
+  { src: '/logos/accreditations/accredited-mediator.jpg',    alt: 'Accredited Mediator',                                   w: 147 },
+]
 
 const stats: Stat[] = [
   { value: '20+',   label: 'Years Experience',        numeric: 20,   suffix: '+' },
@@ -75,6 +87,32 @@ export default function TrustBar() {
             </motion.div>
           ))}
         </dl>
+
+        {/* Accreditations */}
+        <motion.div
+          className="mt-14 lg:mt-16"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '0px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <p className="text-center text-xs uppercase tracking-[0.3em] font-medium text-gray-400 mb-8">
+            Our Accreditations
+          </p>
+          <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6" aria-label="Accreditation bodies">
+            {accreditations.map(({ src, alt, w }) => (
+              <li key={src} className="relative h-12 lg:h-14" style={{ aspectRatio: `${w} / 110` }}>
+                <Image
+                  src={src}
+                  alt={alt}
+                  fill
+                  sizes="160px"
+                  className="object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                />
+              </li>
+            ))}
+          </ul>
+        </motion.div>
       </div>
     </section>
   )

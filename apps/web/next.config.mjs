@@ -143,7 +143,7 @@ const nextConfig = {
       { source: '/awards',                       destination: '/about',    permanent: true },
       { source: '/careers',                      destination: '/contact',  permanent: true },
       { source: '/privacy-policy',               destination: '/legal/privacy', permanent: true },
-      { source: '/disclaimer',                   destination: '/',              permanent: true },
+      { source: '/disclaimer',                   destination: '/legal/disclaimer', permanent: true },
       { source: '/terms-and-conditions',         destination: '/legal/terms',   permanent: true },
       { source: '/privacy',                      destination: '/legal/privacy', permanent: true },
       { source: '/terms',                        destination: '/legal/terms',   permanent: true },

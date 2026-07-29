@@ -4,34 +4,43 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
-const programs = [
+const programs: {
+  title: string
+  subtitle: string
+  description: string
+  price: string | null
+  image: string
+  href: string
+  badge: string | null
+  urgency: string | null
+}[] = [
   {
-    title: 'Breakthrough Intensive',
-    subtitle: '3-Day Private Immersion',
-    description: 'Three days of deep 1:1 work to uncover and dissolve the core pattern driving every obstacle in your life.',
-    price: 'From R15,000',
+    title: 'Precision Pattern Sessions',
+    subtitle: 'Private 1:1 Work',
+    description: 'Behaviour and pattern-level transformation, one-on-one with Suzanne. Nine session types — from Rapid Repatterning® to Akashic Intuitive Mastery.',
+    price: null,
     image: '/images/generated/session-coaching.webp',
     href: '/services',
-    badge: 'Most Powerful',
+    badge: null,
     urgency: null,
   },
   {
-    title: 'Group Transformation',
-    subtitle: '8-Week Live Program',
-    description: 'A structured 8-week journey with a small cohort. Weekly live sessions, community support, and lasting change.',
-    price: 'From R4,500',
+    title: 'Recorded Group Repatterning',
+    subtitle: 'Rapid Repatterning® Groups',
+    description: 'Powerful group repatterning sessions on money, confidence, boundaries, attraction and more — recorded so you can start today.',
+    price: 'From $90 · R1,500',
     image: '/images/generated/group-coaching-real.webp',
-    href: '/services',
-    badge: 'Most Popular',
-    urgency: 'Next intake opening soon — join the waitlist',
+    href: '/programs#group',
+    badge: null,
+    urgency: null,
   },
   {
-    title: 'Practitioner Certification',
-    subtitle: 'Professional Licensing',
-    description: 'Become a certified Neuro-Repatterning® practitioner. Learn the methodology. Build your coaching practice.',
-    price: 'From R18,000',
-    image: '/images/generated/explore-akashic.webp',
-    href: '/services',
+    title: 'The Basic Five (Programs 1–5)',
+    subtitle: 'Practitioner Certification',
+    description: 'Train as an internationally certified Resonance Repatterning practitioner. Self-study online with mentoring — transform your life and gain the tools to transform others.',
+    price: '$2,540 · R13,950',
+    image: '/images/products/resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg',
+    href: '/programs/resonance-repatterning-basic-5-series',
     badge: null,
     urgency: null,
   },
@@ -93,7 +102,7 @@ export default function FeaturedPrograms() {
                   <p className="mt-3 text-xs text-brand-accent font-medium">{urgency}</p>
                 )}
                 <div className="mt-6 flex items-center justify-between">
-                  <span className="text-brand-primary font-semibold">{price}</span>
+                  <span className="text-brand-primary font-semibold">{price ?? 'Priced per session'}</span>
                   <Link
                     href={href}
                     className="inline-flex items-center justify-center px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm rounded-button transition-colors duration-150"

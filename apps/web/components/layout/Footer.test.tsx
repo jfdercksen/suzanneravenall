@@ -85,7 +85,7 @@ describe('Footer', () => {
       render(<Footer />)
       const ig = screen.getByRole('link', { name: 'Instagram' })
       expect(ig).toBeInTheDocument()
-      expect(ig).toHaveAttribute('href', 'https://www.instagram.com/ravenallinstitute')
+      expect(ig).toHaveAttribute('href', 'https://www.instagram.com/suzanneravenall')
     })
 
     it('renders a LinkedIn link', () => {
@@ -95,16 +95,14 @@ describe('Footer', () => {
       expect(li).toHaveAttribute('href', 'https://www.linkedin.com/in/sravenall')
     })
 
-    it('renders a YouTube link', () => {
+    it('does not render a placeholder YouTube link', () => {
       render(<Footer />)
-      const yt = screen.getByRole('link', { name: 'YouTube' })
-      expect(yt).toBeInTheDocument()
-      expect(yt).toHaveAttribute('href', 'https://youtube.com')
+      expect(screen.queryByRole('link', { name: 'YouTube' })).not.toBeInTheDocument()
     })
 
     it('all social links open in a new tab with rel="noopener noreferrer"', () => {
       render(<Footer />)
-      const socialLabels = ['Facebook', 'Instagram', 'LinkedIn', 'YouTube']
+      const socialLabels = ['Facebook', 'Instagram', 'LinkedIn']
       for (const label of socialLabels) {
         const link = screen.getByRole('link', { name: label })
         expect(link).toHaveAttribute('target', '_blank')
@@ -170,6 +168,39 @@ describe('Footer', () => {
       expect(screen.getByRole('link', { name: 'Privacy Policy' })).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Terms of Service' })).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Cookie Policy' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Disclaimer' })).toHaveAttribute('href', '/legal/disclaimer')
+    })
+
+    it('renders "Group Sites" column with external venture links', () => {
+      render(<Footer />)
+      expect(screen.getByText('Group Sites')).toBeInTheDocument()
+      const ventures: Array<[string, string]> = [
+        ['The Ravenall Institute', 'https://ravenallinstitute.com'],
+        ['Rapid Repatterning', 'https://repatterning.com'],
+        ['Human Performance Replicator', 'https://humanperformancereplicator.com'],
+        ['NCCBM', 'https://nccbmglobal.com'],
+        ['The Effectiveness Company', 'https://www.effectivenesscompany.com'],
+      ]
+      for (const [label, href] of ventures) {
+        const link = screen.getByRole('link', { name: label })
+        expect(link).toHaveAttribute('href', href)
+        expect(link).toHaveAttribute('target', '_blank')
+        expect(link).toHaveAttribute('rel', 'noopener noreferrer')
+      }
+    })
+  })
+
+  describe('contact details', () => {
+    it('renders the contact email as a mailto link', () => {
+      render(<Footer />)
+      const email = screen.getByRole('link', { name: 'sravenall@suzanneravenall.com' })
+      expect(email).toHaveAttribute('href', 'mailto:sravenall@suzanneravenall.com')
+    })
+
+    it('renders the postal address', () => {
+      render(<Footer />)
+      expect(screen.getByText(/PO Box 910, Kyalami/)).toBeInTheDocument()
+      expect(screen.getByText(/Johannesburg, South Africa/)).toBeInTheDocument()
     })
   })
 

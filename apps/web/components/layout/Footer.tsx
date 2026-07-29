@@ -40,9 +40,18 @@ const footerLinks = {
       { label: 'Privacy Policy', href: '/legal/privacy' },
       { label: 'Terms of Service', href: '/legal/terms' },
       { label: 'Cookie Policy', href: '/legal/cookies' },
+      { label: 'Disclaimer', href: '/legal/disclaimer' },
     ],
   },
 }
+
+const groupSites = [
+  { label: 'The Ravenall Institute', href: 'https://ravenallinstitute.com' },
+  { label: 'Rapid Repatterning', href: 'https://repatterning.com' },
+  { label: 'Human Performance Replicator', href: 'https://humanperformancereplicator.com' },
+  { label: 'NCCBM', href: 'https://nccbmglobal.com' },
+  { label: 'The Effectiveness Company', href: 'https://www.effectivenesscompany.com' },
+]
 
 const credentials = [
   'ICF Member',
@@ -59,7 +68,7 @@ export default function Footer() {
 
       {/* Main footer grid */}
       <div className="max-w-7xl mx-auto px-4 pt-16 pb-10">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-6">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-7">
 
           {/* Brand column — spans 2 cols on lg */}
           <div className="lg:col-span-2">
@@ -72,9 +81,24 @@ export default function Footer() {
               />
             </Link>
             <p className="mt-4 text-sm text-white/70 leading-relaxed max-w-xs">
-              Helping high-performers unlock their most extraordinary self through
-              Rapid Repatterning® and Neuro-repatterning® methodology.
+              Pattern-level transformation through the Pattern Intelligence™
+              ecosystem — decode the patterns running your life, and change them
+              for good.
             </p>
+
+            {/* Contact */}
+            <address className="mt-5 text-sm text-white/70 not-italic leading-relaxed">
+              <a
+                href="mailto:sravenall@suzanneravenall.com"
+                className="hover:text-white transition-colors duration-150"
+              >
+                sravenall@suzanneravenall.com
+              </a>
+              <br />
+              PO Box 910, Kyalami,
+              <br />
+              Johannesburg, South Africa
+            </address>
 
             {/* Credentials */}
             <ul className="mt-6 flex flex-wrap gap-2" aria-label="Professional credentials">
@@ -91,9 +115,8 @@ export default function Footer() {
             {/* Social icons */}
             <ul className="mt-6 flex items-center gap-4 list-none" aria-label="Social media links">
               <li><SocialLink href="https://www.facebook.com/suzanneravenalltransformation" label="Facebook"><FacebookIcon /></SocialLink></li>
-              <li><SocialLink href="https://www.instagram.com/ravenallinstitute" label="Instagram"><InstagramIcon /></SocialLink></li>
+              <li><SocialLink href="https://www.instagram.com/suzanneravenall" label="Instagram"><InstagramIcon /></SocialLink></li>
               <li><SocialLink href="https://www.linkedin.com/in/sravenall" label="LinkedIn"><LinkedInIcon /></SocialLink></li>
-              <li><SocialLink href="https://youtube.com" label="YouTube"><YouTubeIcon /></SocialLink></li>
             </ul>
           </div>
 
@@ -117,6 +140,27 @@ export default function Footer() {
               </ul>
             </div>
           ))}
+
+          {/* Group sites — external ventures */}
+          <div>
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+              Group Sites
+            </h3>
+            <ul className="space-y-2.5">
+              {groupSites.map((site) => (
+                <li key={site.label}>
+                  <a
+                    href={site.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-white/70 hover:text-white transition-colors duration-150"
+                  >
+                    {site.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
         </div>
       </div>
@@ -195,11 +239,3 @@ function LinkedInIcon() {
   )
 }
 
-function YouTubeIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
-      <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white" />
-    </svg>
-  )
-}

@@ -20,17 +20,17 @@ export const metadata: Metadata = {
     absolute: 'Dr. Suzanne Ravenall — Transformation Coaching',
   },
   description:
-    "Break the childhood patterns holding you back. Dr. Suzanne Ravenall's Neuro-Repatterning® methodology delivers permanent, measurable change for high-achievers ready to unlock their extraordinary life.",
+    "It's not you, it's your pattern. Dr. Suzanne Ravenall — founder of Pattern Intelligence™ — helps you decode the patterns running your life and change them at the level where they live.",
   openGraph: {
     title: 'Dr. Suzanne Ravenall — Transformation Coaching',
     description:
-      'Break the childhood patterns holding you back. Science-backed coaching that delivers permanent change.',
+      "It's not you, it's your pattern. Pattern-level transformation with Dr. Suzanne Ravenall, founder of Pattern Intelligence™.",
     images: [{ url: '/images/hero-bg-suzanne-ravenall.jpg', width: 1200, height: 630, alt: 'Dr. Suzanne Ravenall' }],
   },
   twitter: {
     title: 'Dr. Suzanne Ravenall — Transformation Coaching',
     description:
-      'Break the childhood patterns holding you back. Science-backed coaching that delivers permanent change.',
+      "It's not you, it's your pattern. Pattern-level transformation with Dr. Suzanne Ravenall, founder of Pattern Intelligence™.",
     images: ['/images/hero-bg-suzanne-ravenall.jpg'],
   },
 }
@@ -42,8 +42,9 @@ const organizationJsonLd = {
   url: 'https://suzanneravenall.com',
   logo: 'https://suzanneravenall.com/logos/suzanne-ravenall-logo.svg',
   sameAs: [
-    'https://www.linkedin.com/in/suzanneravenall',
+    'https://www.linkedin.com/in/sravenall',
     'https://www.instagram.com/suzanneravenall',
+    'https://www.facebook.com/suzanneravenalltransformation',
   ],
   contactPoint: {
     '@type': 'ContactPoint',
@@ -58,16 +59,17 @@ const personJsonLd = {
   name: 'Dr. Suzanne Ravenall',
   url: 'https://suzanneravenall.com',
   image: 'https://suzanneravenall.com/images/suzanne-portrait.jpg',
-  jobTitle: 'Transformation Coach',
+  jobTitle: 'Transformation, Behaviour & Pattern Coach',
   description:
-    "Neuro-Repatterning® pioneer helping high-achievers break childhood patterns for permanent, measurable change.",
+    'Founder of Pattern Intelligence™ — pattern-level transformation that helps you decode the patterns running your life and change them for good.',
   alumniOf: {
     '@type': 'Organization',
     name: 'University (credentials pending confirmation)',
   },
   sameAs: [
-    'https://www.linkedin.com/in/suzanneravenall',
+    'https://www.linkedin.com/in/sravenall',
     'https://www.instagram.com/suzanneravenall',
+    'https://www.facebook.com/suzanneravenalltransformation',
   ],
 }
 
