@@ -507,7 +507,8 @@ export const topics: Topic[] = [
     overview: [
       'Fatigue, tension, and pain are your body reporting how safe it feels — not proof that it’s broken.',
       'When your nervous system is under constant stress, cortisol rises and your body stays on alert, keeping you wired even when you’re trying to rest. Recovery decreases — sleep, digestion, and repair get deprioritised while the system keeps scanning for risk. Inflammation increases as the immune system overfires.',
-      'Over time this creates fatigue, burnout, immune disruption and chronic symptoms. Rest alone doesn’t change the pattern — if your system still feels unsafe, it stays activated.',
+      'Over time this creates fatigue, burnout, immune disruption and chronic symptoms. You are not just “tired” — your system is dysregulated: energy that crashes even after rest, a system that stays in output mode until it collapses, defences that swing between overreacting and shutting down, and issues that linger because the system keeps reliving the stress signal.',
+      'Rest alone doesn’t change the pattern — if your system still feels unsafe, it stays activated. So even when you stop, your body keeps reading safety as threat (cortisol stays high), expecting the next surge of pressure, and replaying protection loops before you notice. You have to retrain the system, not just pause it.',
     ],
     corePrinciple: 'Your body is not the problem. It is the messenger.',
     discover: [
