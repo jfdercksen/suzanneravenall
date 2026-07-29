@@ -72,10 +72,10 @@ export default function CookieConsent({ clarityId }: CookieConsentProps) {
       role="dialog"
       aria-label="Cookie consent"
       aria-live="polite"
-      className="fixed bottom-0 left-0 right-0 z-50 bg-brand-primary border-t border-brand-accent/30 px-4 py-4 lg:py-5"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-brand-primary border-t border-brand-accent/30 px-4 py-3 lg:py-5"
     >
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-4">
-        <p className="flex-1 text-sm text-white/80 leading-relaxed">
+      <div className="max-w-7xl mx-auto flex flex-row flex-wrap items-center gap-3 lg:gap-4">
+        <p className="flex-1 min-w-[200px] text-sm text-white/80 leading-relaxed">
           We use cookies to understand how you use our site and to improve your experience.{' '}
           <Link href="/legal/cookies" className="text-brand-accent underline underline-offset-2 hover:text-brand-accent/80 transition-colors duration-200">
             Cookie policy
