@@ -139,8 +139,8 @@ const nextConfig = {
 { source: '/what-i-do',                   destination: '/services', permanent: true },
 
       { source: '/qualifications',               destination: '/about',    permanent: true },
-      { source: '/media',                        destination: '/about',    permanent: true },
-      { source: '/awards',                       destination: '/about',    permanent: true },
+      { source: '/media',                        destination: '/resources/media',  permanent: true },
+      { source: '/awards',                       destination: '/resources/awards', permanent: true },
       { source: '/careers',                      destination: '/contact',  permanent: true },
       { source: '/privacy-policy',               destination: '/legal/privacy', permanent: true },
       { source: '/disclaimer',                   destination: '/legal/disclaimer', permanent: true },
@@ -150,14 +150,14 @@ const nextConfig = {
       { source: '/cookies',                      destination: '/legal/cookies', permanent: true },
 
       { source: '/blog-2',       destination: '/blog', permanent: true },
-      { source: '/articles',     destination: '/blog', permanent: true },
-      { source: '/newsletters',  destination: '/blog', permanent: true },
+      { source: '/articles',     destination: '/resources#articles',  permanent: true },
+      { source: '/newsletters',  destination: '/resources#newsletter', permanent: true },
       { source: '/notices',      destination: '/blog', permanent: true },
 
       { source: '/programmes',              destination: '/services', permanent: true },
       { source: '/guided-programmes',       destination: '/services', permanent: true },
       { source: '/courses',                 destination: '/services', permanent: true },
-      { source: '/assessments',             destination: '/services', permanent: true },
+      { source: '/assessments',             destination: '/discover-your-pattern', permanent: true },
       { source: '/akashic',                 destination: '/services', permanent: true },
       { source: '/energy-clearing',         destination: '/services', permanent: true },
       { source: '/trauma-to-transcendance', destination: '/services', permanent: true },

@@ -8,6 +8,7 @@ export interface TierPermissions {
   resources_basic: boolean
   resources_assessments: boolean
   resources_media: boolean
+  resources_awards: boolean
   group_sessions_recorded: boolean
   programmes_self_study: boolean
   live_session_recordings: boolean
@@ -26,6 +27,7 @@ const free: TierPermissions = {
   resources_basic: true,
   resources_assessments: false,
   resources_media: false,
+  resources_awards: false,
   group_sessions_recorded: false,
   programmes_self_study: false,
   live_session_recordings: false,
@@ -38,6 +40,7 @@ const silver: TierPermissions = {
   ...free,
   resources_assessments: true,
   resources_media: true,
+  resources_awards: true,
   group_sessions_recorded: true,
   programmes_self_study: true,
 }
