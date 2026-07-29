@@ -582,6 +582,7 @@ export const topics: Topic[] = [
       'If your identity says “stay invisible,” you play small no matter how big the goal.',
       'Your identity is built from past experiences, conditioning, and survival adaptations. Old moments defined who you think you must be to stay safe or valued. Roles you were praised or punished for convinced you that certain identities are “right.” You learned strategies — prove yourself, stay invisible, drift — that kept you safe then and run you now.',
       'This creates identity patterns like The Prover, The Invisible One, and The Drifter — patterns that hold you back, make you doubt your capability, and keep you in what feels familiar.',
+      'You can’t “just change” because behaviour follows identity, not the other way around. Identity decides what actions are even allowed, repeats behaviours that match the story, and filters every new strategy through the old identity. You have to shift the identity pattern.',
     ],
     corePrinciple: 'Your life reflects your identity — not your goals.',
     discover: [
