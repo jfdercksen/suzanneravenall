@@ -161,8 +161,8 @@ const nextConfig = {
       { source: '/akashic',                 destination: '/services', permanent: true },
       { source: '/energy-clearing',         destination: '/services', permanent: true },
       { source: '/trauma-to-transcendance', destination: '/services', permanent: true },
-      { source: '/masterclass2',            destination: '/services', permanent: true },
-      { source: '/masterclass-register',    destination: '/services', permanent: true },
+      { source: '/masterclass2',            destination: '/masterclass', permanent: true },
+      { source: '/masterclass-register',    destination: '/masterclass', permanent: true },
       { source: '/speaking-shop',           destination: '/shop',     permanent: true },
 
       // Services sub-pages

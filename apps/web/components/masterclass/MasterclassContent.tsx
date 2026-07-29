@@ -30,6 +30,12 @@ const outcomes = [
     description:
       'Learn how your thoughts create your reality and acquire proven methods to rewire your mind for lasting transformation.',
   },
+  {
+    number: '05',
+    headline: 'Understand Why You Are Here',
+    description:
+      'Reconnect with your sense of purpose and replan what you actually want from your life, rather than what you inherited or defaulted into.',
+  },
 ]
 
 const audience = [
@@ -156,7 +162,7 @@ export default function MasterclassContent() {
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {outcomes.map((item, i) => (
               <motion.div
                 key={item.number}
