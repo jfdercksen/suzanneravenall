@@ -71,7 +71,6 @@ export default function ContactForm({ light = false }: { light?: boolean }) {
   }`
 
   return (
-    // TODO: Wire to Resend in email setup task
     <form onSubmit={handleSubmit} noValidate className="space-y-4 mt-4">
       <div>
         <label htmlFor="contact-name" className={labelClass}>

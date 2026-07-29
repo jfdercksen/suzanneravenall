@@ -89,10 +89,10 @@ export default function ContactOptions() {
                 <div>
                   <p className="text-xs uppercase tracking-wider text-gray-500 mb-0.5">Email</p>
                   <a
-                    href="mailto:support@ravenallinstitute.com"
+                    href="mailto:sravenall@suzanneravenall.com"
                     className="text-gray-700 hover:text-brand-accent text-sm transition-colors"
                   >
-                    support@ravenallinstitute.com
+                    sravenall@suzanneravenall.com
                   </a>
                 </div>
               </li>
@@ -101,7 +101,7 @@ export default function ContactOptions() {
                 <MapPin className="w-5 h-5 text-brand-accent mt-0.5 shrink-0" aria-hidden="true" />
                 <div>
                   <p className="text-xs uppercase tracking-wider text-gray-500 mb-0.5">Location</p>
-                  <span className="text-gray-700 text-sm">Kyalami, GP, South Africa, 1684</span>
+                  <span className="text-gray-700 text-sm">PO Box 910, Kyalami, Johannesburg, South Africa</span>
                 </div>
               </li>
             </ul>
@@ -123,7 +123,7 @@ export default function ContactOptions() {
                 </li>
                 <li>
                   <a
-                    href="https://www.instagram.com/ravenallinstitute"
+                    href="https://www.instagram.com/suzanneravenall"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Instagram"
