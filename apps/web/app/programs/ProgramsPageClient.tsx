@@ -102,17 +102,17 @@ function DarkProgramCard({ program }: { program: Program }) {
       />
       <div className="relative z-10 flex flex-col h-full p-8">
         <div className="flex-1">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
             {CARD_CATEGORY_LABELS[program.category]}
           </p>
-          <h3 className="text-xl font-semibold text-white mb-3 leading-snug group-hover:text-brand-accent transition-colors duration-300">
+          <h3 className="text-xl font-semibold text-white mb-3 leading-snug group-hover:text-brand-accent-400 transition-colors duration-300">
             {program.name}
           </h3>
           <p className="text-white/65 text-sm font-light leading-relaxed mb-4">
             {program.shortDescription}
           </p>
           {price && (
-            <p className="text-brand-accent font-semibold text-lg mb-2">
+            <p className="text-brand-accent-400 font-semibold text-lg mb-2">
               {price}
             </p>
           )}

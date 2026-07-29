@@ -107,7 +107,7 @@ export default function Speaking() {
                 className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
               />
               <div className="relative z-10 p-8">
-                <h3 className="text-2xl font-semibold text-white mb-4 group-hover:text-brand-accent transition-colors duration-300">
+                <h3 className="text-2xl font-semibold text-white mb-4 group-hover:text-brand-accent-400 transition-colors duration-300">
                   {topic.name}
                 </h3>
                 <p className="text-sm text-white/65 font-light leading-relaxed">

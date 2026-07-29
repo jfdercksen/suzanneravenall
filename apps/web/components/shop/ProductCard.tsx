@@ -49,7 +49,7 @@ function getDeliveryBadge(handle: string, title: string): DeliveryBadge {
   const text = `${handle} ${title}`.toLowerCase()
 
   if (text.includes('live-via-zoom') || text.includes(' live')) {
-    return { label: 'Live', className: 'bg-brand-accent/20 text-brand-accent border border-brand-accent' }
+    return { label: 'Live', className: 'bg-brand-accent/20 text-brand-accent-400 border border-brand-accent-400' }
   }
   if (text.includes('self-study') || text.includes('self-paced')) {
     return { label: 'Self Paced', className: 'bg-emerald-900/40 text-emerald-400 border border-emerald-800' }
@@ -185,7 +185,7 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
           <div className="p-6 flex flex-col gap-3">
             {/* Change 2: Show root category name (e.g. "Private Sessions"), not the leaf sub-category */}
             {rootCategory && (
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400">
                 {rootCategory.name}
               </p>
             )}
@@ -202,7 +202,7 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
             </div>
 
             {/* Change 6: Stronger, action-oriented CTA */}
-            <p className="mt-2 text-sm font-medium text-white/50 group-hover:text-brand-accent transition-colors duration-300">
+            <p className="mt-2 text-sm font-medium text-white/50 group-hover:text-brand-accent-400 transition-colors duration-300">
               Explore &amp; Enrol →
             </p>
           </div>

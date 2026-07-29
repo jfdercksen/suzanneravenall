@@ -156,10 +156,10 @@ function RelatedProgramCard({ program }: { program: Program }) {
       <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent" />
       <div className="relative z-10 flex flex-col h-full p-8">
         <div className="flex-1">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
             {CATEGORY_LABELS[program.category]}
           </p>
-          <h3 className="text-xl font-semibold text-white mb-3 leading-snug group-hover:text-brand-accent transition-colors duration-300">
+          <h3 className="text-xl font-semibold text-white mb-3 leading-snug group-hover:text-brand-accent-400 transition-colors duration-300">
             {program.name}
           </h3>
           <p className="text-white/65 text-sm font-light leading-relaxed">{program.shortDescription}</p>

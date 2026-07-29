@@ -65,16 +65,16 @@ export default function TopicRelated({ slug }: { slug: TopicSlug }) {
 
                 {/* Content */}
                 <div className="relative z-10 flex flex-col justify-end h-full p-7">
-                  <span className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent/80 mb-3">
+                  <span className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
                     Explore
                   </span>
-                  <h3 className="text-xl font-light text-white leading-snug mb-3 transition-colors duration-300 group-hover:text-brand-accent">
+                  <h3 className="text-xl font-light text-white leading-snug mb-3 transition-colors duration-300 group-hover:text-brand-accent-400">
                     {topic.title}
                   </h3>
                   <p className="text-sm text-white/65 font-light leading-relaxed mb-5 italic">
                     {topic.shortDescription}
                   </p>
-                  <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/50 transition-colors duration-300 group-hover:text-brand-accent">
+                  <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/50 transition-colors duration-300 group-hover:text-brand-accent-400">
                     Read more
                     <span
                       aria-hidden="true"

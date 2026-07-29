@@ -79,7 +79,7 @@ export default function HowItWorks() {
                 className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
               />
               <div className="relative z-10 p-8">
-                <p className="text-6xl font-light text-brand-accent/30 mb-4 transition-colors duration-500 group-hover:text-brand-accent/60">
+                <p className="text-6xl font-light text-brand-accent-400/40 mb-4 transition-colors duration-500 group-hover:text-brand-accent-400/80">
                   {String(i + 1).padStart(2, '0')}
                 </p>
                 <h3 className="text-2xl font-semibold text-white mb-3">

@@ -236,10 +236,10 @@ export default function SpeakingContent() {
                 />
                 <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent" />
                 <div className="relative z-10 p-8 flex flex-col h-full">
-                  <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-brand-accent transition-colors duration-300">
+                  <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-brand-accent-400 transition-colors duration-300">
                     {talk.title}
                   </h3>
-                  <p className="text-base text-brand-accent/80 font-light italic mb-4 leading-snug">
+                  <p className="text-base text-brand-accent-400 font-light italic mb-4 leading-snug">
                     &ldquo;{talk.tagline}&rdquo;
                   </p>
                   <div className="mt-auto">

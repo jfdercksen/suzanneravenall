@@ -72,7 +72,7 @@ export default function PrivateSessions() {
                 className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
               />
               <div className="relative z-10 flex h-full flex-col p-8">
-                <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-brand-accent transition-colors duration-300">
+                <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-brand-accent-400 transition-colors duration-300">
                   {session.title}
                 </h3>
                 <p className="text-sm text-white/65 font-light leading-relaxed">
@@ -80,7 +80,7 @@ export default function PrivateSessions() {
                 </p>
                 <Link
                   href={`/services/private-sessions/${session.slug}`}
-                  className="mt-auto pt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-accent transition-colors duration-300 hover:text-white"
+                  className="mt-auto pt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-accent-400 transition-colors duration-300 hover:text-white"
                 >
                   More Information
                   <span

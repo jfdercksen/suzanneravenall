@@ -194,7 +194,7 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <p
-                          className="font-medium text-white group-hover:text-brand-accent transition-colors duration-150 [&_mark]:bg-brand-accent/30 [&_mark]:text-white [&_mark]:rounded-sm"
+                          className="font-medium text-white group-hover:text-brand-accent-400 transition-colors duration-150 [&_mark]:bg-brand-accent/30 [&_mark]:text-white [&_mark]:rounded-sm"
                           dangerouslySetInnerHTML={{ __html: item.title }}
                         />
                         <p
@@ -209,7 +209,7 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
                             {formatPrice(item.price_zar)}
                           </span>
                         ) : (
-                          <span className="text-xs px-2 py-1 bg-brand-accent/20 text-brand-accent rounded-full">
+                          <span className="text-xs px-2 py-1 bg-brand-accent/20 text-brand-accent-400 rounded-full">
                             Topic
                           </span>
                         )}
