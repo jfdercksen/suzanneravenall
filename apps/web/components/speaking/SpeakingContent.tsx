@@ -5,31 +5,30 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
-// TODO: Suzanne to confirm/update talk details
+// Suzanne's real, established signature keynote topics — same four talks
+// used in components/services/Speaking.tsx. Taglines are drawn directly
+// from the source copy, not invented. Durations are as published on the
+// old site.
 const talks = [
   {
-    title: 'The Performance Revolution',
-    tagline: 'Why your ceiling is not your skill — it’s your pattern',
-    audience: 'Corporate, executive teams, leadership conferences',
-    duration: '45–90 minutes',
+    title: 'Conversations with My Brain',
+    tagline: 'Living proof that you can re-train your brain',
+    duration: '20, 45 or 60 minutes',
   },
   {
-    title: 'The Unstoppable Force',
-    tagline: 'How to rebound with more courage than you thought possible',
-    audience: 'Women in leadership, transformation conferences',
-    duration: '45–90 minutes',
+    title: 'Recycling My Soul',
+    tagline: 'How consciousness draws our experiences to us — the science of entanglement',
+    duration: '20, 45 or 60 minutes',
   },
   {
-    title: 'Decode the Pattern',
-    tagline: 'The hidden programs running your life — and how to rewrite them',
-    audience: 'Personal development conferences, wellness events',
-    duration: '60–120 minutes',
+    title: 'Second Time Around',
+    tagline: 'A new way of being — a second time around',
+    duration: '20, 45 or 60 minutes',
   },
   {
-    title: 'Conscious Engineering',
-    tagline: 'Using energy psychology to drive peak performance',
-    audience: 'Corporate wellness, executive coaching summits',
-    duration: '30–90 minutes',
+    title: 'Trauma to Transcendence',
+    tagline: 'Turning trauma into transcendence',
+    duration: '45 or 60 minutes',
   },
 ]
 
@@ -243,10 +242,9 @@ export default function SpeakingContent() {
                   <p className="text-base text-brand-accent/80 font-light italic mb-4 leading-snug">
                     &ldquo;{talk.tagline}&rdquo;
                   </p>
-                  <div className="mt-auto space-y-1">
-                    <p className="text-xs text-white/50 uppercase tracking-widest">Audience</p>
-                    <p className="text-sm text-white/70">{talk.audience}</p>
-                    <p className="text-xs text-white/40 mt-2">{talk.duration}</p>
+                  <div className="mt-auto">
+                    <p className="text-xs text-white/50 uppercase tracking-widest">Duration</p>
+                    <p className="text-sm text-white/70 mt-1">{talk.duration}</p>
                   </div>
                 </div>
               </motion.article>
@@ -361,7 +359,7 @@ export default function SpeakingContent() {
             {/* Caption */}
             <div className="px-6 py-4 bg-gray-900">
               <p className="text-sm text-white/50 italic">
-                Keynote excerpt &mdash; Empower. Inspire. Change. Conference
+                Keynote preview
               </p>
             </div>
           </motion.div>
@@ -477,62 +475,18 @@ export default function SpeakingContent() {
             </h2>
           </motion.div>
 
-          {/* TODO: Replace with real speaking-specific testimonials — Suzanne to provide quotes from event organisers or attendees */}
-          <div className="grid gap-8 lg:grid-cols-2">
-            <motion.figure
-              {...scrollFadeUp(0.1)}
-              className="flex flex-col gap-6 p-8 bg-gray-50 border border-gray-100 rounded-card"
-            >
-              <div className="flex gap-1" role="img">
-                <span className="sr-only">5 out of 5 stars</span>
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-brand-accent" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <blockquote className="text-xl lg:text-2xl font-light text-brand-primary leading-relaxed italic">
-                &ldquo;Suzanne didn&rsquo;t just deliver a talk &mdash; she shifted something in the room. Our team left with tools they actually use.&rdquo;
-              </blockquote>
-              <figcaption className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center text-brand-primary font-semibold text-sm" aria-hidden="true">
-                  EC
-                </div>
-                <div>
-                  {/* TODO: Replace with real name and title */}
-                  <p className="text-sm font-semibold text-brand-primary">Event Co-ordinator</p>
-                  <p className="text-xs text-gray-500">Corporate Leadership Summit</p>
-                </div>
-              </figcaption>
-            </motion.figure>
-
-            <motion.figure
-              {...scrollFadeUp(0.15)}
-              className="flex flex-col gap-6 p-8 bg-gray-50 border border-gray-100 rounded-card"
-            >
-              <div className="flex gap-1" role="img">
-                <span className="sr-only">5 out of 5 stars</span>
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-brand-accent" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <blockquote className="text-xl lg:text-2xl font-light text-brand-primary leading-relaxed italic">
-                &ldquo;I&rsquo;ve attended hundreds of conferences. Suzanne&rsquo;s keynote was the one session everyone kept talking about six months later.&rdquo;
-              </blockquote>
-              <figcaption className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center text-brand-primary font-semibold text-sm" aria-hidden="true">
-                  CD
-                </div>
-                <div>
-                  {/* TODO: Replace with real name and title */}
-                  <p className="text-sm font-semibold text-brand-primary">Conference Director</p>
-                  <p className="text-xs text-gray-500">Transformation Summit</p>
-                </div>
-              </figcaption>
-            </motion.figure>
-          </div>
+          {/* Honest pending state — no speaking-specific testimonials exist on the
+              old site yet. Do not fabricate quotes or attributions; Suzanne to
+              provide real event organiser / attendee quotes. */}
+          <motion.div
+            {...scrollFadeUp(0.1)}
+            className="max-w-2xl mx-auto text-center p-12 bg-gray-50 border border-gray-100 rounded-card"
+          >
+            <p className="text-lg text-gray-600 font-light leading-relaxed">
+              Speaker testimonials from event organisers and attendees are coming
+              soon.
+            </p>
+          </motion.div>
         </div>
       </section>
 
