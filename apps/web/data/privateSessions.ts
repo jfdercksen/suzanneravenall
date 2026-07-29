@@ -79,7 +79,7 @@ export const allPrivateSessions: PrivateSession[] = [
     medusaHandle: 'akashic-clearing-session',
     shortDescription:
       'Access and rewrite your life’s blueprint. Alter your relationship with success and improve your intuition to such an extent that you receive daily guidance in the direction you are moving in — it is completely possible.',
-    thinContent: true,
+    thinContent: false,
     bodyContent: [
       "Access and rewrite your life's blueprint. Akashic Intuitive Mastery is a guided way of working with the Akashic Records — described as the energetic record of every soul's experience — to clear the blocks and constrictions sitting beneath the issues you are facing now.",
       'Imagine being able to shift your relationship with success and strengthen your intuition to the point where you receive clear daily guidance. The Records are used as a resource to see beyond the surface, clear disruption in your path, and move through life, work and relationships with greater ease — including the ancestral patterns that can quietly shape a life without our noticing.',
@@ -92,7 +92,7 @@ export const allPrivateSessions: PrivateSession[] = [
     medusaHandle: 'group-family-coaching-60-mins',
     shortDescription:
       'Some family challenges are difficult to resolve without outside assistance. When we understand how our earliest perceptions and beliefs shape who we are, we can see how our make-up shows up in family dynamics — sometimes in helpful, sometimes in harmful ways.',
-    thinContent: true,
+    thinContent: false,
     bodyContent: [
       "Some family challenges are hard to resolve without outside support. When we understand how our earliest perceptions and beliefs shape who we are, we can see how each person's make-up shows up in the family dynamic — sometimes helpfully, sometimes not. Group Family Coaching creates a space for everyone to see those dynamics differently and build something richer together.",
       'You might come to this as a parent seeking support with the family environment, because you are struggling with certain dynamics, or to prepare for a transition that lies ahead. Through new understanding and practical tools, willing family members discover fresh possibilities and, over time, forge deeper connections.',
@@ -144,6 +144,7 @@ export const allPrivateSessions: PrivateSession[] = [
       'We attract people at our common level of woundedness or our common level of emotional health. The kind of energy you project has everything to do with the kind of person you attract — become the healthy self you want to meet.',
     thinContent: false,
     bodyContent: [
+      "Recommended by Bruce Lipton, author of The Biology of Belief.",
       "Much of what holds us back lives below conscious awareness. The subconscious mind runs an estimated 95% of daily life, quietly replaying beliefs and programmes formed early on — often before we were old enough to choose them. When those patterns are out of sync, we keep meeting the same struggles in work, relationships and health, no matter how hard we try consciously.",
       'Resonance Repatterning works with the principle that everything — our thoughts, feelings and even the body — carries an energetic frequency, and that the patterns we resonate with shape the life we experience. A session brings these hidden patterns into conscious awareness so they can be understood, cleared, and shifted toward greater coherence and alignment with what you actually want.',
       'What to expect: you bring your lived experience and a genuine willingness to change. Using biofeedback and applied kinesiology, we locate the unconscious programme beneath the issue at hand, repattern the belief driving it, and shift the resonance using one of more than a hundred modalities — with coaching throughout so you understand the pattern and can act on the change. Sessions are held over Zoom in the comfort of your own space; you simply show up and participate.',
