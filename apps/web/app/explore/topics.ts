@@ -5,9 +5,9 @@
  * Do not invent content for these topics. If a field needs a new value,
  * pull it from the source .md file for that slug.
  *
- * TODO fields are placeholders Suzanne must replace before go-live:
- *   - testimonial.quote, testimonial.name, testimonial.outcome
- *   - stat.value, stat.label
+ * Testimonials are real client quotes from the old site (homepage/about
+ * carousels), matched to the closest topic. `stat` is optional and omitted
+ * until Suzanne provides real outcome numbers — never invent them.
  *   - programSlug (link to Medusa product slug once products are named)
  *
  * Orphaned assets (not assigned to any topic -- available for approach section
@@ -41,8 +41,8 @@ export type Topic = {
   discover: { title: string; body: string }[]
   approach: { step: string; title: string; body: string }[]
   ctaHook: string
-  testimonial: { quote: string; name: string; outcome: string }
-  stat: { value: string; label: string }
+  testimonial?: { quote: string; name: string; outcome?: string }
+  stat?: { value: string; label: string }
   relatedTo: TopicSlug[]
   programSlug?: string
   metaTitle: string
@@ -113,17 +113,10 @@ export const topics: Topic[] = [
     ],
     ctaHook:
       'Your nervous system learned this pattern to keep you safe. It can learn a new one.',
-    // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
-        'TODO: Suzanne to provide real client testimonial for emotional & nervous system mastery.',
-      name: 'TODO: Client name (anonymised)',
-      outcome: 'TODO: e.g. “6 sessions — from chronic anxiety to sleeping through the night”',
-    },
-    // TODO: Suzanne to provide real outcome stat
-    stat: {
-      value: 'TODO',
-      label: 'TODO: e.g. clients report sustained calm within 4 weeks',
+        'In the past I would shut down a lot to avoid the possibility of being affected or of becoming overly sensitive and nervous. Now I aim to remain strong when challenged and release any fear related to being challenged — there is no need to enter fear mode at any given time.',
+      name: 'Client, South Africa',
     },
     relatedTo: [
       'relationships-attachment-patterns',
@@ -193,17 +186,10 @@ export const topics: Topic[] = [
     ],
     ctaHook:
       'The pattern in your relationships started long before this relationship.',
-    // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
-        'TODO: Suzanne to provide real client testimonial for relationships & attachment patterns.',
-      name: 'TODO: Client name (anonymised)',
-      outcome: 'TODO: e.g. “8 sessions — ended the push-pull cycle, in a stable relationship for the first time”',
-    },
-    // TODO: Suzanne to provide real outcome stat
-    stat: {
-      value: 'TODO',
-      label: 'TODO: e.g. clients identify their attachment pattern within the first two sessions',
+        'Thank you so much for putting yourself on this path to help others. I loved everything about how you handled our session. I definitely got a lot of clarity, particularly about my children.',
+      name: 'Victoria, Colorado',
     },
     relatedTo: [
       'emotional-nervous-system-mastery',
@@ -273,17 +259,10 @@ export const topics: Topic[] = [
     ],
     ctaHook:
       'Your body is not failing you. It’s following a pattern. Patterns change.',
-    // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
-        'TODO: Suzanne to provide real client testimonial for next-level health, vitality & longevity.',
-      name: 'TODO: Client name (anonymised)',
-      outcome: 'TODO: e.g. “10 sessions — from burnout to consistent energy and 6-hour deep sleep”',
-    },
-    // TODO: Suzanne to provide real outcome stat
-    stat: {
-      value: 'TODO',
-      label: 'TODO: e.g. clients report measurable energy improvement within 6 weeks',
+        'Sciatica was gone by Friday evening. Spent the whole weekend painting the house — up and down ladders, moving stuff — and no pain or discomfort. Feeling great today, not even stiff or anything. I experience almost instant improvements.',
+      name: 'Pieter, Thailand',
     },
     relatedTo: [
       'emotional-nervous-system-mastery',
@@ -352,17 +331,10 @@ export const topics: Topic[] = [
     ],
     ctaHook:
       'Your intuition is not a feeling. It’s intelligence your nervous system collected before your mind caught up.',
-    // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
-        'TODO: Suzanne to provide real client testimonial for intuition as patterned intelligence.',
-      name: 'TODO: Client name (anonymised)',
-      outcome: 'TODO: e.g. “5 sessions — from chronic second-guessing to confident, fast decisions under pressure”',
-    },
-    // TODO: Suzanne to provide real outcome stat
-    stat: {
-      value: 'TODO',
-      label: 'TODO: e.g. clients report trusting their instincts consistently within 3 sessions',
+        'It was a wonderful, enlightening experience — accurate and insightful — and I came away with a fresh clarity and perspective on issues that I have been working on. Powerful and relevant to my personal journey.',
+      name: 'Valanne, Canada',
     },
     relatedTo: [
       'leadership-high-performance',
@@ -431,17 +403,10 @@ export const topics: Topic[] = [
     ],
     ctaHook:
       'The ceiling you keep hitting is not a skill gap. It’s a pattern.',
-    // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
-        'TODO: Suzanne to provide real client testimonial for leadership & high performance.',
-      name: 'TODO: Client name (anonymised)',
-      outcome: 'TODO: e.g. “8 sessions — from reactive, exhausted leader to calm under pressure, team retention improved”',
-    },
-    // TODO: Suzanne to provide real outcome stat
-    stat: {
-      value: 'TODO',
-      label: 'TODO: e.g. leaders report measurable reduction in reactive decisions within 6 weeks',
+        'One of my staff members opened up that she had been struggling and feeling depressed. I find that I can now help a lot by taking her through some of the fundamental points — I immediately witnessed a shift in her. I’m very grateful for having received the tools to not only help myself but to shine a light for others as well.',
+      name: 'Client, South Africa',
     },
     relatedTo: [
       'identity-purpose-activation',
@@ -510,17 +475,10 @@ export const topics: Topic[] = [
     ],
     ctaHook:
       'Transitions don’t require you to figure out who to become. They require you to release who you’ve been.',
-    // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
-        'TODO: Suzanne to provide real client testimonial for life transitions & reinvention.',
-      name: 'TODO: Client name (anonymised)',
-      outcome: 'TODO: e.g. “6 sessions — from paralysed in a career pivot to first client signed within 3 months”',
-    },
-    // TODO: Suzanne to provide real outcome stat
-    stat: {
-      value: 'TODO',
-      label: 'TODO: e.g. clients identify their next identity anchor within the first three sessions',
+        'Since our session, I have found myself looking at my life in such a grateful way! A few events have happened that have pushed me exactly to the path that I wanted to be walking. I had no fear of changing direction.',
+      name: 'Cristina, South America',
     },
     relatedTo: [
       'identity-purpose-activation',
@@ -590,17 +548,10 @@ export const topics: Topic[] = [
     ],
     ctaHook:
       'Your body is not failing you. It’s following a pattern. Patterns change.',
-    // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
-        'TODO: Suzanne to provide real client testimonial for health & energy intelligence.',
-      name: 'TODO: Client name (anonymised)',
-      outcome: 'TODO: e.g. “8 sessions — chronic fatigue resolved, digestion improved, sleeping through the night”',
-    },
-    // TODO: Suzanne to provide real outcome stat
-    stat: {
-      value: 'TODO',
-      label: 'TODO: e.g. clients report measurable improvement in sleep and energy within 4 weeks',
+        'I was amazed at the accuracy, and I was amazed by the clearing as I could feel the energy lifting and clearing. Thanks a lot for all the insight — it was just the motivation I needed to get moving again.',
+      name: 'Sheila, Mauritius',
     },
     relatedTo: [
       'emotional-nervous-system-mastery',
@@ -670,17 +621,10 @@ export const topics: Topic[] = [
     ],
     ctaHook:
       'Purpose isn’t found. It’s uncovered when the patterns obscuring it are cleared.',
-    // TODO: Suzanne to replace with real anonymised client testimonial
     testimonial: {
       quote:
-        'TODO: Suzanne to provide real client testimonial for identity & purpose activation.',
-      name: 'TODO: Client name (anonymised)',
-      outcome: 'TODO: e.g. “6 sessions — from invisible and proving to visible, leading, and clear on direction”',
-    },
-    // TODO: Suzanne to provide real outcome stat
-    stat: {
-      value: 'TODO',
-      label: 'TODO: e.g. clients report clarity on their next identity chapter within 4 sessions',
+        'Certain aspects of my personality and history that I couldn’t seem to overcome came out in the session. It has allowed me to have a new understanding of myself and I feel lighter and free.',
+      name: 'Leah, United States',
     },
     relatedTo: [
       'life-transitions-reinvention',

@@ -63,15 +63,17 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
               discovery call to map the path to change it.
             </motion.p>
 
-            {/* Social proof — outcome placeholder */}
-            <motion.div
-              {...fadeUp(0.25)}
-              className="mb-8 pl-5 border-l border-brand-accent/40"
-            >
-              <p className="text-sm text-gray-500 font-light italic leading-relaxed">
-                {topic.testimonial.outcome}
-              </p>
-            </motion.div>
+            {/* Social proof — real client outcome, when provided */}
+            {topic.testimonial?.outcome && (
+              <motion.div
+                {...fadeUp(0.25)}
+                className="mb-8 pl-5 border-l border-brand-accent/40"
+              >
+                <p className="text-sm text-gray-500 font-light italic leading-relaxed">
+                  {topic.testimonial.outcome}
+                </p>
+              </motion.div>
+            )}
 
             {/* CTAs — quiz first, discovery call second (Suzanne, 27 Jul 2026) */}
             <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row sm:flex-wrap gap-4">

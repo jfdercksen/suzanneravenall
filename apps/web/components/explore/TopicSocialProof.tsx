@@ -11,6 +11,8 @@ const fadeUp = (delay = 0) => ({
 })
 
 export default function TopicSocialProof({ topic }: { topic: Topic }) {
+  if (!topic.testimonial && !topic.stat) return null
+
   return (
     <section
       aria-label="Client outcome"
@@ -32,44 +34,54 @@ export default function TopicSocialProof({ topic }: { topic: Topic }) {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-16 lg:grid-cols-2 lg:gap-24 items-center">
-          {/* Left — testimonial */}
-          <motion.div {...fadeUp(0)}>
-            {/* Large decorative quote mark */}
-            <span
-              aria-hidden="true"
-              className="block text-8xl font-serif text-brand-accent/30 leading-none mb-4 select-none"
-            >
-              &ldquo;
-            </span>
+        <div
+          className={
+            topic.testimonial && topic.stat
+              ? 'grid gap-16 lg:grid-cols-2 lg:gap-24 items-center'
+              : 'max-w-3xl mx-auto'
+          }
+        >
+          {topic.testimonial && (
+            <motion.div {...fadeUp(0)}>
+              {/* Large decorative quote mark */}
+              <span
+                aria-hidden="true"
+                className="block text-8xl font-serif text-brand-accent/30 leading-none mb-4 select-none"
+              >
+                &ldquo;
+              </span>
 
-            <blockquote>
-              <p className="text-xl lg:text-2xl text-gray-900 font-light italic leading-relaxed mb-8">
-                {topic.testimonial.quote}
+              <blockquote>
+                <p className="text-xl lg:text-2xl text-gray-900 font-light italic leading-relaxed mb-8">
+                  {topic.testimonial.quote}
+                </p>
+                <footer className="space-y-1">
+                  <p className="text-sm font-medium text-gray-900 tracking-wide">
+                    {topic.testimonial.name}
+                  </p>
+                  {topic.testimonial.outcome && (
+                    <p className="text-sm text-brand-accent/80 font-light">
+                      {topic.testimonial.outcome}
+                    </p>
+                  )}
+                </footer>
+              </blockquote>
+            </motion.div>
+          )}
+
+          {topic.stat && (
+            <motion.div {...fadeUp(0.15)} className="lg:text-right">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+                By the numbers
               </p>
-              <footer className="space-y-1">
-                <p className="text-sm font-medium text-gray-900 tracking-wide">
-                  {topic.testimonial.name}
-                </p>
-                <p className="text-sm text-brand-accent/80 font-light">
-                  {topic.testimonial.outcome}
-                </p>
-              </footer>
-            </blockquote>
-          </motion.div>
-
-          {/* Right — stat */}
-          <motion.div {...fadeUp(0.15)} className="lg:text-right">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
-              By the numbers
-            </p>
-            <p className="text-8xl lg:text-9xl font-light text-brand-accent leading-none mb-4">
-              {topic.stat.value}
-            </p>
-            <p className="text-base lg:text-lg text-gray-600 font-light leading-relaxed max-w-xs lg:ml-auto">
-              {topic.stat.label}
-            </p>
-          </motion.div>
+              <p className="text-8xl lg:text-9xl font-light text-brand-accent leading-none mb-4">
+                {topic.stat.value}
+              </p>
+              <p className="text-base lg:text-lg text-gray-600 font-light leading-relaxed max-w-xs lg:ml-auto">
+                {topic.stat.label}
+              </p>
+            </motion.div>
+          )}
         </div>
       </div>
     </section>
