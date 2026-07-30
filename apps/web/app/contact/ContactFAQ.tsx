@@ -77,7 +77,7 @@ function FAQItem({
         onClick={() => setIsOpen((prev) => !prev)}
         className="w-full flex items-center justify-between py-6 text-left group"
       >
-        <span className="text-white font-semibold text-base lg:text-lg pr-4 group-hover:text-brand-accent transition-colors duration-200">
+        <span className="text-white font-semibold text-base lg:text-lg pr-4 group-hover:text-brand-accent-400 transition-colors duration-200">
           {question}
         </span>
         <ChevronDown

@@ -64,7 +64,7 @@ export default function TopicHero({ topic }: { topic: Topic }) {
         >
           <Link
             href="/explore"
-            className="transition-colors duration-300 hover:text-brand-accent"
+            className="transition-colors duration-300 hover:text-brand-accent-400"
           >
             Explore
           </Link>

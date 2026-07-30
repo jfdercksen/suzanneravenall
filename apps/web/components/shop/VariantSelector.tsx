@@ -89,7 +89,7 @@ export function VariantSelector({
                     isSelected
                       ? 'bg-brand-accent-600 text-white border-brand-accent-600'
                       : dark
-                        ? 'border-white/30 text-white/80 hover:border-brand-accent hover:text-brand-accent bg-transparent'
+                        ? 'border-white/30 text-white/80 hover:border-brand-accent hover:text-brand-accent-400 bg-transparent'
                         : 'border-gray-300 text-gray-700 hover:border-brand-accent hover:text-brand-accent bg-transparent'
                   }`}
                 >
