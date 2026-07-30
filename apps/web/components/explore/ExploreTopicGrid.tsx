@@ -255,7 +255,7 @@ export default function ExploreTopicGrid() {
                 <p className="text-white/65 text-sm font-light leading-relaxed mb-4">
                   {topic.shortDescription}
                 </p>
-                <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/50 group-hover:text-brand-accent-400 transition-colors duration-300">
+                <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/50 group-hover:text-white transition-colors duration-300">
                   Explore{' '}
                   <span
                     aria-hidden="true"
