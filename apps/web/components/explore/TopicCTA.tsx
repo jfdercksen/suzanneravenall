@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { Topic } from '@/app/explore/topics'
 import { getTopicQuiz, getTopicQuizLabel } from '@/components/explore/topicQuizMap'
+import { getTopicPathwayMapping } from '@/components/explore/topicPathwayMap'
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -17,6 +18,7 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
   const quiz = getTopicQuiz(topic.slug)
   const quizLabel = getTopicQuizLabel(topic.slug)
   const isRelationships = topic.slug === 'relationships-attachment-patterns'
+  const pathway = getTopicPathwayMapping(topic.slug)
 
   return (
     <section
@@ -99,6 +101,12 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
                 className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary/30 hover:border-brand-primary/60 text-brand-primary font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-brand-primary/5"
               >
                 Book a Discovery Call
+              </Link>
+              <Link
+                href={`/transformation-pathways/${pathway.pathwaySlug}`}
+                className="inline-flex items-center justify-center px-8 py-4 border border-brand-accent/50 hover:border-brand-accent text-brand-primary font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-brand-accent/10"
+              >
+                {pathway.pathwayCtaLabel}
               </Link>
               {isRelationships && (
                 <Link

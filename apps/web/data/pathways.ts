@@ -2,14 +2,9 @@
  * Transformation Pathways — typed catalogue.
  *
  * `description` is the card copy from docs/content-source/pathways-overview-cards.md.
- * `detail` (optional) carries the full pathway page content supplied by Suzanne in
- * docs/content-source/pathways/{slug}.md — a tagline plus overview paragraphs —
- * present only where `hasDetailContent` is true.
- *
- * Two pathways have no supplied detail content yet and keep the coming-soon
- * fallback on their detail pages:
- * - `reclaim-your-power` — its source page is an "under construction" stub
- * - `young-minds-architecture` — the old WordPress source URL 404s
+ * `detail` carries the full pathway page content supplied by Suzanne in
+ * "Transformation Pathways Website Pages response 1" (full-page brief covering
+ * every pathway). Present only where `hasDetailContent` is true.
  *
  * `groupPathways` are the upcoming Group Transformation Pathways (immersions)
  * currently in development — cards only, no detail pages yet.
@@ -32,10 +27,30 @@ export type PathwaySlug =
 export type PathwayCategory = 'personal' | 'youth'
 
 export interface PathwayDetail {
-  /** Short positioning line shown under "About This Pathway". */
-  tagline: string
-  /** Overview paragraphs, in order, from the supplied pathway brief. */
-  overview: string[]
+  /** Hero subhead — the one-line framing shown under the pathway title. */
+  heroSubhead: string
+  /**
+   * Primary hero CTA label (adult pathways only, e.g. "Find My Pattern").
+   * Omit for youth pathways — the hero then shows a single "Book a Discovery
+   * Session" button instead of two.
+   */
+  heroCtaPrimaryLabel?: string
+  /** Where the primary hero CTA links. Defaults to /contact when omitted. */
+  heroCtaPrimaryHref?: string
+  /** "What This Pathway Is" paragraphs, in order. */
+  whatThisPathwayIs: string[]
+  /** "Who It's For" bullet list. */
+  whoItsFor: string[]
+  /** "What We Work On" bullet list. */
+  whatWeWorkOn: string[]
+  /** "Outcomes" bullet list. */
+  outcomes: string[]
+  /** Short punchy quote block, shown after Outcomes (adult pathways only). */
+  signatureMessage?: string[]
+  /** Closing CTA section headline (adult pathways only). */
+  ctaSectionHeadline?: string
+  /** Closing CTA section body copy. */
+  ctaSectionBody: string
 }
 
 export interface Pathway {
@@ -59,12 +74,45 @@ export const pathways: Pathway[] = [
     featured: true,
     hasDetailContent: true,
     detail: {
-      tagline:
-        'Recognising and interrupting the repeating patterns that keep you stuck.',
-      overview: [
-        'Many people experience recurring situations in life that seem to repeat no matter how much effort they make to change them.',
-        'This pathway focuses on identifying the deeper emotional and behavioural patterns behind these cycles so that they can be understood, interrupted, and ultimately transformed.',
+      heroSubhead:
+        'When the same pattern keeps showing up in a different disguise, it is no longer bad luck. It is a loop.',
+      heroCtaPrimaryLabel: 'Find My Pattern',
+      heroCtaPrimaryHref: '/discover-your-pattern',
+      whatThisPathwayIs: [
+        'If you keep ending up in the same emotional pain, the same relationship dynamic, the same self-sabotage, the same fear, or the same stop-start cycle, this pathway is designed to help you interrupt the pattern at its root and create a new way forward.',
+        'Break the Loop is for people who are exhausted by repetition.',
+        'You may look successful on the outside, but inside you know something keeps pulling you back into the same emotional, behavioural, or energetic pattern. You may overthink, overgive, shut down, people-please, procrastinate, react, collapse, repeat toxic relationships, or keep rebuilding your confidence from scratch.',
+        'This pathway helps you identify the hidden pattern underneath the behaviour, understand where it began, and repattern it so you can stop living the same experience on repeat.',
       ],
+      whoItsFor: [
+        'You keep repeating the same pattern in relationships, work, money, or health',
+        'You know what to do, but cannot seem to do it consistently',
+        'You feel trapped in cycles of self-sabotage, fear, overgiving, or emotional overwhelm',
+        'You are tired of insight without lasting change',
+        'You want to get to the root cause, not just manage symptoms',
+      ],
+      whatWeWorkOn: [
+        'Identify the hidden loop driving the behaviour',
+        'Uncover the unconscious beliefs and emotional imprints beneath it',
+        'Understand the role of your nervous system, past adaptation, and pattern repetition',
+        'Release the old pattern at root level',
+        'Install a new internal response that supports freedom, choice, and momentum',
+      ],
+      outcomes: [
+        'Recognise your pattern before it takes over',
+        'Respond differently instead of repeating automatically',
+        'Feel less hooked, reactive, and emotionally trapped',
+        'Build new choices into everyday life',
+        'Create real movement where you used to feel stuck',
+      ],
+      signatureMessage: [
+        'You are not broken.',
+        'You are patterned.',
+        'And patterns can be changed.',
+      ],
+      ctaSectionHeadline: 'Ready to stop repeating what you have already outgrown?',
+      ctaSectionBody:
+        'Break the Loop helps you interrupt the unconscious pattern and create a new future from a new internal blueprint.',
     },
   },
   {
@@ -74,9 +122,45 @@ export const pathways: Pathway[] = [
       'Reconnect with your inner authority, reduce self-sabotage, and strengthen intentional action.',
     category: 'personal',
     featured: false,
-    // The source page for this pathway is still an "under construction" stub —
-    // no detail content has been supplied yet.
-    hasDetailContent: false,
+    hasDetailContent: true,
+    detail: {
+      heroSubhead: 'Come back to yourself.',
+      heroCtaPrimaryLabel: 'Start My Journey',
+      whatThisPathwayIs: [
+        'If life, relationships, trauma, loss, criticism, or years of over-adapting have left you disconnected from your voice, your truth, your confidence, or your boundaries, this pathway helps you rebuild from the inside out.',
+        'Reclaim Your Power is about returning to the parts of you that got buried under survival.',
+        'So many people live far away from themselves. They are capable, caring, and functional, but underneath they feel invisible, uncertain, emotionally hijacked, afraid to disappoint others, or disconnected from their own authority.',
+        'This pathway helps you restore inner safety, self-trust, emotional strength, and the ability to choose yourself without guilt.',
+      ],
+      whoItsFor: [
+        'You struggle with boundaries, self-worth, or speaking up',
+        'You often abandon yourself to keep the peace',
+        'You feel drained by people, situations, or emotional demands',
+        'You have lost confidence in your own voice, intuition, or decision-making',
+        'You want to feel strong, clear, and grounded again',
+      ],
+      whatWeWorkOn: [
+        'Rebuilding self-trust and inner authority',
+        'Healing the patterns that taught you to shrink, perform, fix, or disappear',
+        'Strengthening your emotional range and nervous system regulation',
+        'Reconnecting you to your needs, truth, and direction',
+        'Developing practical life tools for boundaries, difficult conversations, and self-leadership',
+      ],
+      outcomes: [
+        'Feel more anchored in yourself',
+        'Say yes and no with greater clarity',
+        'Stop leaking energy into guilt, fear, and over-responsibility',
+        'Trust your own judgement again',
+        'Show up with more confidence, calm, and personal authority',
+      ],
+      signatureMessage: [
+        'Power is not force.',
+        'Power is self-connection, self-trust, and the courage to stop abandoning yourself.',
+      ],
+      ctaSectionHeadline: 'Ready to come home to yourself?',
+      ctaSectionBody:
+        'Reclaim Your Power helps you rebuild the inner foundation that changes everything outside you.',
+    },
   },
   {
     slug: 'reinvent-your-life',
@@ -87,11 +171,42 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline: 'Creating a new internal foundation for the next chapter of your life.',
-      overview: [
-        'There are seasons in life when change is no longer optional and something deeper needs to shift.',
-        'This transformation pathway is designed to help you move beyond old limitations, re-evaluate the structures shaping your life, and begin building a more aligned, empowered future.',
+      heroSubhead: 'When the old life no longer fits, this is where the new one begins.',
+      heroCtaPrimaryLabel: 'Begin My Reinvention',
+      whatThisPathwayIs: [
+        'For the person standing at a crossroads, after loss, burnout, divorce, career change, empty nest, identity shift, or a deep inner knowing that the life you built is no longer the life you are meant to live.',
+        'Reinvent Your Life is designed for seasons of transition.',
+        'Sometimes life changes because you chose it. Sometimes it changes because it forced you to. Either way, there comes a point when your old identity, old structures, old patterns, and old survival strategies can no longer carry the future you are here to build.',
+        'This pathway helps you let go of what no longer fits, rewire the patterns that keep you tied to the past, and create a new identity, direction, and life architecture that is aligned with who you are becoming.',
       ],
+      whoItsFor: [
+        'You are in a major life transition or identity shift',
+        'You feel lost, stuck, or uncertain about what comes next',
+        'You know something has to change, but you do not know how to move forward',
+        'You want to stop rebuilding from pain and start creating from possibility',
+        'You are ready for a new chapter, but need support to step into it fully',
+      ],
+      whatWeWorkOn: [
+        'Releasing old identities, roles, and emotional attachments',
+        'Understanding the patterns that kept your life organised around survival or limitation',
+        'Clarifying what you want now and who you need to become to hold it',
+        'Repatterning internal beliefs and behaviours to match the next chapter',
+        'Building a stronger, truer foundation for the life ahead',
+      ],
+      outcomes: [
+        'Feel clearer about who you are now',
+        'Stop clinging to what is over',
+        'Reconnect to purpose, possibility, and direction',
+        'Make stronger decisions with less fear',
+        'Create a life that reflects your growth, not your past',
+      ],
+      signatureMessage: [
+        'Reinvention is not about becoming someone else.',
+        'It is about becoming more fully who you were always meant to be.',
+      ],
+      ctaSectionHeadline: 'Ready to begin again with intention?',
+      ctaSectionBody:
+        'Reinvent Your Life helps you move from ending to emergence, with clarity, courage, and a new internal blueprint.',
     },
   },
   {
@@ -103,13 +218,44 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline:
-        'Installing a new mindset architecture for clarity, growth and transformation.',
-      overview: [
-        'Many of the beliefs, reactions, and emotional responses we operate from were installed years ago and may no longer serve the life we want to create.',
-        'This transformation pathway focuses on identifying outdated mental and emotional programming and replacing it with a stronger, more supportive internal operating system that aligns with your goals and future vision.',
-        'Through this process you begin building a mindset structure that supports growth, resilience, and forward momentum.',
+      heroSubhead:
+        'A new mindset is not enough if the system underneath it is still wired for the old you.',
+      heroCtaPrimaryLabel: 'Upgrade My Inner System',
+      whatThisPathwayIs: [
+        'This pathway is for people who are ready for a true internal upgrade, rewiring the beliefs, emotional responses, mental habits, and subconscious patterns that shape performance, relationships, confidence, and results.',
+        'Your operating system is the internal code running your life.',
+        'It shapes what you believe is possible, how you respond under pressure, what you tolerate, how you relate, how you perform, and what you unconsciously create again and again.',
+        'If your mindset says one thing but your deeper wiring says another, your results will keep following the deeper code.',
+        'This pathway helps you identify the outdated internal programs you are still running and install a more aligned, more powerful, more future-ready system.',
       ],
+      whoItsFor: [
+        'You want to think, feel, and perform at a higher level',
+        'You know your internal wiring is limiting your results',
+        'You are ready to shift beliefs, habits, emotional defaults, and self-concept',
+        'You want lasting change, not surface-level motivation',
+        'You are building a new chapter and need a stronger internal foundation to hold it',
+      ],
+      whatWeWorkOn: [
+        'Identifying outdated mental and emotional programming',
+        'Rewiring limiting beliefs, identity structures, and behavioural defaults',
+        'Installing stronger inner responses for confidence, clarity, consistency, and action',
+        'Aligning subconscious patterns with conscious goals',
+        'Creating a mindset and nervous system that support the life you want to build',
+      ],
+      outcomes: [
+        'Feel less internally conflicted',
+        'Access more consistency, focus, and emotional control',
+        'Think and choose from a more empowered identity',
+        'Build habits and patterns that support the future you want',
+        'Move from coping to consciously creating',
+      ],
+      signatureMessage: [
+        'You do not rise by wishful thinking.',
+        'You rise by upgrading the system that runs your life.',
+      ],
+      ctaSectionHeadline: 'Ready for a full internal upgrade?',
+      ctaSectionBody:
+        'Upgrade Your Operating System helps you install a new way of thinking, feeling, and functioning, from the inside out.',
     },
   },
   {
@@ -121,12 +267,42 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline: 'A future bigger than survival. Rewrite your future.',
-      overview: [
-        'Many people carry experiences that shaped their lives in powerful ways. While survival strategies may have helped at the time, they can later become patterns that hold life in place.',
-        'This transformation pathway focuses on understanding how past experiences influence present behaviour, emotional responses, and personal identity.',
-        'Through guided exploration and pattern recognition, the goal is to move beyond simply coping with the past and begin building a future that is larger than survival.',
+      heroSubhead:
+        'This pathway is for those who have lived in survival mode for too long, and know there must be more than just getting through the day.',
+      heroCtaPrimaryLabel: 'Begin My Healing Journey',
+      whatThisPathwayIs: [
+        'Trauma changes more than how you feel. It can shape your nervous system, identity, relationships, self-worth, choices, and expectations of life.',
+        'This pathway is not about forcing positivity over pain. It is about safely understanding the patterns survival created, gently repatterning what trauma wired into the system, and building a future that is no longer organised around fear, collapse, hypervigilance, or emotional pain.',
+        'This is the movement from survival to selfhood. From pain to possibility. From coping to breakthrough.',
       ],
+      whoItsFor: [
+        'You have experienced trauma, chronic stress, emotional pain, or overwhelming life experiences',
+        'You feel stuck in survival patterns even when life looks "fine" on the outside',
+        'You struggle with fear, shutdown, hypervigilance, overwhelm, or deep emotional triggers',
+        'You want healing that is deep, practical, compassionate, and future-focused',
+        'You are ready to build a life that is not defined by what happened to you',
+      ],
+      whatWeWorkOn: [
+        'Understanding how trauma shaped your current patterns and responses',
+        'Expanding emotional capacity and nervous system safety',
+        'Identifying and shifting the adaptations created to survive',
+        'Releasing trauma-linked beliefs, emotional charges, and internal survival codes',
+        'Rebuilding identity, self-trust, hope, and future orientation',
+      ],
+      outcomes: [
+        'Feel safer in your body and inner world',
+        'Experience fewer automatic survival responses',
+        'Understand yourself with more compassion and less shame',
+        'Rebuild trust, resilience, and emotional stability',
+        'Move toward a future that feels larger than your past',
+      ],
+      signatureMessage: [
+        'What happened to you may have shaped your survival.',
+        'It does not have to shape your future.',
+      ],
+      ctaSectionHeadline: 'Ready to move beyond survival?',
+      ctaSectionBody:
+        'Trauma to Breakthrough helps you repattern pain at the root and build a future that feels safe, strong, and truly yours.',
     },
   },
   {
@@ -138,13 +314,42 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline:
-        'Building inner steadiness, emotional strength, and a stronger foundation for life.',
-      overview: [
-        'Life can place constant pressure on the mind, emotions, and nervous system, making it difficult to stay grounded and steady through challenge.',
-        'This transformation pathway is designed to strengthen resilience from the inside out, helping you build greater emotional capacity, clearer responses, and a more fortified sense of self.',
-        'The work focuses on creating internal stability so that you are not only able to recover from difficulty, but also move through life with greater confidence, adaptability, and strength.',
+      heroSubhead:
+        'This pathway helps you become less easily knocked over by stress, challenge, pressure, uncertainty, and the emotional demands of life, while becoming more grounded, adaptable, and internally equipped.',
+      heroCtaPrimaryLabel: 'Build My Resilience',
+      whatThisPathwayIs: [
+        'Resilience is more than bouncing back. It is the ability to stay connected to yourself under pressure, recover faster, think more clearly, and meet life without collapsing into old patterns.',
+        'Fortification means building the inner strength, emotional range, nervous system capacity, and practical life skills that help you handle life better.',
+        'This pathway is for people who want to feel stronger, steadier, and more capable in the face of everyday life as well as major challenge.',
       ],
+      whoItsFor: [
+        'You feel easily overwhelmed by stress or uncertainty',
+        'You want to become emotionally stronger and more adaptable',
+        'You are managing a lot and want better tools to handle life well',
+        'You want to build lasting capacity, not just recover from crises',
+        'You want a stronger internal foundation for work, family, leadership, or personal wellbeing',
+      ],
+      whatWeWorkOn: [
+        'Expanding your window of tolerance and emotional capacity',
+        'Strengthening nervous system regulation and recovery',
+        'Building practical life skills for stress, pressure, communication, and challenge',
+        'Identifying the patterns that weaken you under pressure',
+        'Fortifying mindset, identity, and behavioural responses for everyday resilience',
+      ],
+      outcomes: [
+        'Stay steadier under pressure',
+        'Recover more quickly from emotional setbacks',
+        'Feel less reactive and more resourceful',
+        'Handle difficult situations with more skill and calm',
+        'Build a deeper sense of strength, stability, and trust in yourself',
+      ],
+      signatureMessage: [
+        'Life may not get lighter overnight.',
+        'But you can become stronger in the way you meet it.',
+      ],
+      ctaSectionHeadline: 'Ready to build a stronger inner foundation?',
+      ctaSectionBody:
+        'Resilience & Fortification helps you create the emotional strength and practical capacity to handle life with greater ease and power.',
     },
   },
   {
@@ -156,13 +361,42 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline:
-        'Moving beyond awareness into deeper pattern recognition, rewiring, and personal mastery.',
-      overview: [
-        'Many people begin by recognising the patterns that shape their emotions, behaviours, and decisions — but lasting transformation requires more than awareness alone.',
-        'This transformation pathway is designed to help deepen your understanding of recurring internal patterns and strengthen your ability to work with them consciously and effectively.',
-        'The focus is on developing greater self-leadership, emotional insight, and the capacity to respond differently, so that patterns no longer run life automatically.',
+      heroSubhead:
+        'Pattern Mastery is for those who are ready to go beyond fixing symptoms and learn how patterns truly shape thoughts, emotions, behaviours, relationships, performance, and outcomes.',
+      heroCtaPrimaryLabel: 'Explore Pattern Mastery',
+      whatThisPathwayIs: [
+        'Everything repeats until it is understood.',
+        'Pattern Mastery is a deeper level pathway for people who want to understand the architecture beneath their life. It brings awareness to the unconscious structures that organise experience, how you think, choose, relate, protect, perform, collapse, succeed, avoid, and recreate the familiar.',
+        'This pathway is not only about healing. It is about mastery. It is about learning to read your patterns, interrupt them consciously, and create a more intentional internal and external life.',
       ],
+      whoItsFor: [
+        'You want to understand yourself at a deeper level',
+        'You are ready for advanced inner work and transformation',
+        'You keep noticing repeating emotional, behavioural, or life themes',
+        'You are fascinated by the root causes of human behaviour and change',
+        'You want tools for self-awareness, self-leadership, and lasting transformation',
+      ],
+      whatWeWorkOn: [
+        'Identifying recurring personal patterns and survival strategies',
+        'Understanding childhood adaptations, subconscious beliefs, and emotional coding',
+        'Learning how patterns shape results across relationships, work, health, and purpose',
+        'Developing the ability to catch and shift patterns in real time',
+        'Building mastery, self-awareness, and conscious choice into the way you live',
+      ],
+      outcomes: [
+        'Understand the hidden architecture of your life more clearly',
+        'Notice patterns earlier and shift them faster',
+        'Feel more conscious, empowered, and intentional',
+        'Stop being run by unconscious programming',
+        'Build a life shaped by awareness rather than automatic repetition',
+      ],
+      signatureMessage: [
+        'When you master the pattern, you stop living by default.',
+        'You begin living by design.',
+      ],
+      ctaSectionHeadline: 'Ready to go deeper?',
+      ctaSectionBody:
+        'Pattern Mastery helps you decode the hidden architecture of your life and turn awareness into transformation.',
     },
   },
 
@@ -176,13 +410,18 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline:
-        'Supporting strong emotional foundations, healthy development, and lifelong inner stability.',
-      overview: [
-        'The early years of life shape how children and young people understand themselves, respond to challenges, and build confidence in the world around them.',
-        'This transformation pathway is designed to support stronger emotional foundations, helping young people develop resilience, self-awareness, and healthier internal patterns from an early stage.',
-        'The focus is on creating a steadier base for growth so that children and young people can move forward with greater confidence, emotional wellbeing, and a stronger sense of self.',
+      heroSubhead:
+        'Support young people to build the emotional, mental, and inner foundations they will carry into relationships, school, identity, resilience, and adult life.',
+      whatThisPathwayIs: [
+        'These pathways are designed to help children and young people develop self-awareness, emotional strength, healthy internal patterns, and the life tools so many people only learn much later, after years of struggle.',
+        'The earlier we help young people understand emotions, patterns, identity, boundaries, and inner guidance, the stronger their foundation becomes.',
+        'These pathways are not about pathologising children. They are about equipping them. Helping them understand themselves, regulate emotions, respond to life with greater confidence, and develop the internal architecture for wellbeing, relationships, and growth.',
       ],
+      whoItsFor: [],
+      whatWeWorkOn: [],
+      outcomes: [],
+      ctaSectionBody:
+        'Support them with the foundations they will carry for life.',
     },
   },
   {
@@ -194,13 +433,32 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline:
-        'Helping young people understand, regulate, and navigate their emotional world with confidence.',
-      overview: [
-        'Young people today face increasing emotional pressure from school, social environments, and the rapidly changing world around them.',
-        'This pathway focuses on helping young minds develop a deeper understanding of their emotions while building the tools needed to respond to challenges in a healthier and more balanced way.',
-        'By strengthening emotional awareness and resilience early in life, young people can develop stronger confidence, clearer thinking, and greater stability as they grow.',
+      heroSubhead:
+        'Helping children understand, express, and manage their emotions with confidence.',
+      whatThisPathwayIs: [
+        'This pathway helps children and young people build emotional literacy, self-awareness, and healthy ways to understand and express what they feel.',
+        'Rather than becoming overwhelmed, shut down, reactive, or confused by their emotions, they learn how to recognise what is happening inside them and respond in healthier ways.',
       ],
+      whoItsFor: [
+        'Struggle with emotional outbursts, shutdown, or overwhelm',
+        'Need support understanding and naming what they feel',
+        'Find it hard to express emotions in healthy ways',
+        'Need stronger emotional tools for school, friendships, or home life',
+      ],
+      whatWeWorkOn: [
+        'Emotional awareness and vocabulary',
+        'Recognising feelings in the body',
+        'Understanding triggers and reactions',
+        'Healthy expression of emotions',
+        'Tools for calming, grounding, and self-regulation',
+      ],
+      outcomes: [
+        'Understand their emotions more clearly',
+        'Feel less overwhelmed by big feelings',
+        'Express themselves more safely and confidently',
+        'Build emotional strength and self-awareness',
+      ],
+      ctaSectionBody: 'Help them build emotional skills for life.',
     },
   },
   {
@@ -210,9 +468,35 @@ export const pathways: Pathway[] = [
       'Strengthen the inner structures that support resilience, identity, confidence, and empowered thinking.',
     category: 'youth',
     featured: false,
-    // No live source page exists for this pathway (the old WordPress URL 404s) —
-    // no detail content has been supplied yet.
-    hasDetailContent: false,
+    hasDetailContent: true,
+    detail: {
+      heroSubhead:
+        'Building the inner structures that support confidence, identity, thinking, and decision-making.',
+      whatThisPathwayIs: [
+        'Young Minds Architecture focuses on the development of a strong inner foundation.',
+        'It helps children and teens understand how thoughts, beliefs, self-image, emotions, and choices begin to form, and how to build healthier internal patterns early.',
+      ],
+      whoItsFor: [
+        'Need support with confidence, identity, or self-belief',
+        'Struggle with negative self-talk or insecurity',
+        'Feel uncertain, lost, or easily influenced by others',
+        'Need stronger inner foundations as they grow',
+      ],
+      whatWeWorkOn: [
+        'Self-image and self-worth',
+        'Thought patterns and mindset foundations',
+        'Confidence and identity development',
+        'Healthy decision-making',
+        'Inner safety and self-trust',
+      ],
+      outcomes: [
+        'Build stronger confidence from within',
+        'Understand how their thinking shapes behaviour',
+        'Develop healthier self-belief',
+        'Make more grounded choices',
+      ],
+      ctaSectionBody: 'Give them the architecture for a stronger future.',
+    },
   },
   {
     slug: 'pattern-foundations',
@@ -223,13 +507,32 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline:
-        'Introducing the foundations of pattern awareness and how our internal patterns shape behaviour and choices.',
-      overview: [
-        'From an early age people begin developing patterns that influence how they think, respond emotionally, and interact with the world around them.',
-        'This pathway focuses on helping individuals understand the foundations of these patterns, creating awareness of how beliefs, experiences, and emotional responses begin to shape behaviour.',
-        'By recognising these foundations early, individuals can begin building healthier internal frameworks that support growth, resilience, and more empowered choices in life.',
+      heroSubhead:
+        'Helping young people understand the patterns that shape behaviour, relationships, and self-worth.',
+      whatThisPathwayIs: [
+        'Pattern Foundations introduces children and teens to the idea that patterns are created early, and that awareness creates choice.',
+        'It gives them language and tools to notice what they repeat, what triggers them, what behaviours they fall into, and how to begin making different choices.',
       ],
+      whoItsFor: [
+        'Repeat certain reactions, behaviours, or friendship dynamics',
+        'Get stuck in the same emotional loops',
+        'Need support with self-awareness and behaviour change',
+        'Would benefit from understanding how patterns are formed',
+      ],
+      whatWeWorkOn: [
+        'Understanding habits, reactions, and patterns',
+        'Awareness of triggers and repeated responses',
+        'Early foundations of self-reflection',
+        'Building new choices and healthier behaviours',
+        'Relational patterns and social dynamics',
+      ],
+      outcomes: [
+        'Recognise patterns earlier',
+        'Understand why they react the way they do',
+        'Build better choices and behaviours',
+        'Develop stronger self-awareness for life',
+      ],
+      ctaSectionBody: 'Awareness early on can change a lifetime.',
     },
   },
   {
@@ -241,13 +544,32 @@ export const pathways: Pathway[] = [
     featured: false,
     hasDetailContent: true,
     detail: {
-      tagline:
-        'Strengthening self-trust, personal direction, and the ability to navigate life with clarity.',
-      overview: [
-        'Many people move through life influenced by external expectations, pressure, or uncertainty about what direction to take.',
-        'This pathway focuses on helping individuals reconnect with their internal guidance system — the inner compass that supports confident decision making and authentic choices.',
-        "By strengthening self-awareness and trust in one's internal direction, individuals can begin navigating life with greater clarity, alignment, and confidence.",
+      heroSubhead:
+        'Helping young people trust themselves, know themselves, and navigate life with greater clarity.',
+      whatThisPathwayIs: [
+        'Inner Compass helps children and young people connect to their own inner guidance, values, voice, and sense of direction.',
+        'In a world full of pressure, comparison, noise, and influence, this pathway helps them build the confidence to know what feels right for them and make choices that are aligned with who they are.',
       ],
+      whoItsFor: [
+        'Need support with confidence, decision-making, or self-trust',
+        'Are easily influenced by peers or external pressure',
+        'Feel disconnected from themselves',
+        'Need help finding their own voice and direction',
+      ],
+      whatWeWorkOn: [
+        'Self-trust and inner guidance',
+        'Values and decision-making',
+        'Boundaries and confidence',
+        'Voice, expression, and identity',
+        'Navigating life from inner alignment',
+      ],
+      outcomes: [
+        'Trust themselves more deeply',
+        'Make better choices with more confidence',
+        'Feel more connected to who they are',
+        'Develop inner direction and strength',
+      ],
+      ctaSectionBody: 'Help them build a compass they can carry for life.',
     },
   },
 ]

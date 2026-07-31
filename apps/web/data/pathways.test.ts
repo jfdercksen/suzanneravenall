@@ -135,37 +135,44 @@ describe('pathways (full array)', () => {
     }
   })
 
-  it('young-minds-architecture has hasDetailContent === false', () => {
-    const p = pathways.find((x) => x.slug === 'young-minds-architecture')
-    expect(p?.hasDetailContent).toBe(false)
+  it('all 12 pathways have supplied detail content', () => {
+    expect(pathways.filter((x) => x.hasDetailContent)).toHaveLength(12)
   })
 
-  it('reclaim-your-power has hasDetailContent === false (source page is a stub)', () => {
-    const p = pathways.find((x) => x.slug === 'reclaim-your-power')
-    expect(p?.hasDetailContent).toBe(false)
-  })
-
-  it('exactly 10 of 12 pathways have supplied detail content', () => {
-    expect(pathways.filter((x) => x.hasDetailContent)).toHaveLength(10)
-  })
-
-  it('entries with hasDetailContent === true have a detail object with tagline and overview paragraphs', () => {
-    for (const p of pathways.filter((x) => x.hasDetailContent)) {
+  it('every entry has a detail object with a heroSubhead and whatThisPathwayIs paragraphs', () => {
+    for (const p of pathways) {
       expect(p.detail).toBeDefined()
-      expect(typeof p.detail?.tagline).toBe('string')
-      expect(p.detail!.tagline.length).toBeGreaterThan(0)
-      expect(Array.isArray(p.detail?.overview)).toBe(true)
-      expect(p.detail!.overview.length).toBeGreaterThan(0)
-      for (const paragraph of p.detail!.overview) {
+      expect(typeof p.detail?.heroSubhead).toBe('string')
+      expect(p.detail!.heroSubhead.length).toBeGreaterThan(0)
+      expect(Array.isArray(p.detail?.whatThisPathwayIs)).toBe(true)
+      expect(p.detail!.whatThisPathwayIs.length).toBeGreaterThan(0)
+      for (const paragraph of p.detail!.whatThisPathwayIs) {
         expect(typeof paragraph).toBe('string')
         expect(paragraph.length).toBeGreaterThan(0)
       }
     }
   })
 
-  it('entries with hasDetailContent === false carry no detail object', () => {
-    for (const p of pathways.filter((x) => !x.hasDetailContent)) {
-      expect(p.detail).toBeUndefined()
+  it('every entry has a non-empty ctaSectionBody', () => {
+    for (const p of pathways) {
+      expect(typeof p.detail?.ctaSectionBody).toBe('string')
+      expect(p.detail!.ctaSectionBody.length).toBeGreaterThan(0)
+    }
+  })
+
+  it('the 7 adult pathways each have a primary hero CTA label and a signature message', () => {
+    for (const p of personalPathways) {
+      expect(typeof p.detail?.heroCtaPrimaryLabel).toBe('string')
+      expect(p.detail?.heroCtaPrimaryLabel?.length).toBeGreaterThan(0)
+      expect(Array.isArray(p.detail?.signatureMessage)).toBe(true)
+      expect(p.detail!.signatureMessage!.length).toBeGreaterThan(0)
+    }
+  })
+
+  it('the 5 youth pathways have no bespoke primary hero CTA label or signature message', () => {
+    for (const p of youthPathways) {
+      expect(p.detail?.heroCtaPrimaryLabel).toBeUndefined()
+      expect(p.detail?.signatureMessage).toBeUndefined()
     }
   })
 })
