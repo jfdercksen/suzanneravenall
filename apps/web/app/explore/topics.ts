@@ -8,6 +8,10 @@
  * Testimonials are real client quotes from the old site (homepage/about
  * carousels), matched to the closest topic. `stat` is optional and omitted
  * until Suzanne provides real outcome numbers — never invent them.
+ *
+ * `recognitionItems` sourced from Suzanne's "Universal Explore Page
+ * Structure" brief (forwarded email, Apr 2026) — the Recognition section
+ * of the shared 8-section topic page template.
  *   - programSlug (link to Medusa product slug once products are named)
  *
  * Orphaned assets (not assigned to any topic -- available for approach section
@@ -36,6 +40,7 @@ export type Topic = {
   openingQuestion: string
   heroHeadline: string
   heroSubheadline: string
+  recognitionItems: string[]
   overview: string[]
   corePrinciple: string
   discover: { title: string; body: string }[]
@@ -61,6 +66,13 @@ export const topics: Topic[] = [
     heroHeadline: 'Emotional Mastery Begins in the Nervous System',
     heroSubheadline:
       'If your emotions feel overwhelming, unpredictable or exhausting, it’s not because you’re too emotional. It’s because your nervous system has learned a pattern.',
+    recognitionItems: [
+      'Overreacting and regretting it',
+      'Anxiety without clear cause',
+      'Emotional shutdown',
+      'Burnout that won’t shift',
+      'Living in fight, flight or freeze',
+    ],
     overview: [
       'Most people believe their emotions are the problem. “I’m anxious.” “I overreact.” “I shut down.” So they try to control them.',
       'But emotions are not the cause. They are the output. They are the result of how your nervous system is interpreting the world.',
@@ -139,6 +151,13 @@ export const topics: Topic[] = [
     heroHeadline: 'Love Isn’t the Problem. The Pattern Is.',
     heroSubheadline:
       'If you keep experiencing the same relationship dynamics (different person, same feeling), it’s not coincidence. It’s pattern.',
+    recognitionItems: [
+      'Repeating relationship cycles',
+      'Fear of abandonment',
+      'Over-giving',
+      'Conflict avoidance',
+      'Emotional distance',
+    ],
     overview: [
       'You don’t choose relationships consciously. You choose what feels familiar to your nervous system. Your mind thinks it is choosing love, but your body is selecting what it already knows. Familiar dynamics read as “home,” even when they are chaotic.',
       'Safety gets interpreted as recognition, not health. If intensity once felt like love, you’ll keep chasing intensity. If distance felt protective, you’ll keep agreeing to distance.',
@@ -215,6 +234,11 @@ export const topics: Topic[] = [
     heroHeadline: 'Vitality Isn’t Willpower. It’s Pattern.',
     heroSubheadline:
       'High performers don’t just work harder. They operate from different internal patterns. Shift the pattern and vitality follows.',
+    recognitionItems: [
+      'High achiever burnout',
+      'Brain fog',
+      'Inconsistent energy',
+    ],
     overview: [
       'Performance is the output of the pattern you are running under pressure. The way your system learned to drive results (overdrive, reactivity, chaos) keeps repeating until the internal operating system changes.',
       'High performers often run one of three programs on repeat: overdrive (always-on output that burns energy faster than you can recover), reactivity (decisions driven by threat response that produce errors and erode trust), or lack of structure (inconsistent systems that create sporadic wins).',
@@ -287,6 +311,11 @@ export const topics: Topic[] = [
     heroHeadline: 'Intuition Is Not Magic. It’s Pattern Recognition.',
     heroSubheadline:
       'Your nervous system reads the room faster than your conscious mind can. When the system is clear, intuition is reliable intelligence. When it’s dysregulated, it drowns in noise.',
+    recognitionItems: [
+      'Second guessing yourself',
+      'Confusing fear with intuition',
+      'Misaligned decisions',
+    ],
     overview: [
       'Intuition is your nervous system processing signal at a speed your conscious mind cannot match. It isn’t a mystical sense. It’s a high-speed pattern recognition engine built from every experience your system has ever logged.',
       'When your nervous system is dysregulated, signal gets drowned by noise: you second-guess, override, or miss what your body already knew. The “gut feeling” you keep ignoring is not unreliable. The system that’s supposed to deliver it is.',
@@ -359,6 +388,12 @@ export const topics: Topic[] = [
     heroHeadline: 'High Performance Isn’t Effort. It’s Pattern.',
     heroSubheadline:
       'Top performers don’t just work harder. They operate from different internal patterns. Shift the pattern and output follows.',
+    recognitionItems: [
+      'Hitting a plateau',
+      'Team friction',
+      'Decision fatigue',
+      'Leadership burnout',
+    ],
     overview: [
       'Performance is the output of the pattern you are running under pressure. The way your system learned to drive results (overdrive, reactivity, chaos) keeps repeating until the internal operating system changes.',
       'High performers often run one of three programs on repeat: overdrive (always-on output that burns energy faster than you can recover), reactivity (decisions driven by threat response that produce errors and erode trust), or lack of structure (inconsistent systems that create sporadic wins and unreliable teams).',
@@ -431,6 +466,12 @@ export const topics: Topic[] = [
     heroHeadline: 'When Life Changes, Patterns Decide What Happens Next',
     heroSubheadline:
       'You are not lost. You are between identities: one is dissolving while the next hasn’t formed yet. That space in-between is not failure; it’s pattern reconfiguration.',
+    recognitionItems: [
+      'Identity collapse',
+      'Fear of starting over',
+      'Grief paralysis',
+      'Feeling directionless',
+    ],
     overview: [
       'Transitions strip away familiar patterns before new ones exist. That’s why everything feels uncertain.',
       'When life shifts, old patterns no longer work and a new identity hasn’t been anchored. What has always created certainty no longer fits this chapter, and your system hasn’t coded who you are becoming, so it hesitates.',
@@ -504,6 +545,12 @@ export const topics: Topic[] = [
     heroHeadline: 'Your Body Is Not Failing You. It Is Responding to Patterns.',
     heroSubheadline:
       'Symptoms are not random. They are signals. Your nervous system assigns meaning to every sensation, and when the pattern stays the same, the signals do too.',
+    recognitionItems: [
+      'Chronic fatigue',
+      'Autoimmune stress',
+      'Energy crashes',
+      'Stress-related illness',
+    ],
     overview: [
       'Fatigue, tension, and pain are your body reporting how safe it feels, not proof that it’s broken.',
       'When your nervous system is under constant stress, cortisol rises and your body stays on alert, keeping you wired even when you’re trying to rest. Recovery decreases: sleep, digestion, and repair get deprioritised while the system keeps scanning for risk. Inflammation increases as the immune system overfires.',
@@ -578,6 +625,12 @@ export const topics: Topic[] = [
     heroHeadline: 'You Don’t Have a Motivation Problem. You Have an Identity Pattern.',
     heroSubheadline:
       'You don’t act based on what you want. You act based on who you believe you are. Every choice is filtered through identity, and identity keeps you loyal to what feels true about you, even when it contradicts what you want next.',
+    recognitionItems: [
+      'Playing small',
+      'Imposter syndrome',
+      'Success without fulfilment',
+      'Confusion about direction',
+    ],
     overview: [
       'If your identity says “stay invisible,” you play small no matter how big the goal.',
       'Your identity is built from past experiences, conditioning, and survival adaptations. Old moments defined who you think you must be to stay safe or valued. Roles you were praised or punished for convinced you that certain identities are “right.” You learned strategies (prove yourself, stay invisible, drift) that kept you safe then and run you now.',

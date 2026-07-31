@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { topics, topicBySlug } from '@/app/explore/topics'
 import TopicHero from '@/components/explore/TopicHero'
+import TopicRecognition from '@/components/explore/TopicRecognition'
 import TopicOverview from '@/components/explore/TopicOverview'
 import TopicDiscover from '@/components/explore/TopicDiscover'
 import TopicApproach from '@/components/explore/TopicApproach'
@@ -40,6 +41,7 @@ export default async function TopicPage({ params }: PageProps) {
   return (
     <>
       <TopicHero topic={topic!} />
+      <TopicRecognition topic={topic!} />
       <TopicOverview topic={topic!} />
       <TopicDiscover topic={topic!} />
       <TopicApproach topic={topic!} />
