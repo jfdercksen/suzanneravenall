@@ -66,3 +66,7 @@ export const getTopicPathwayMapping = (slug: TopicSlug): TopicPathwayMapping =>
   topicPathwayMap[slug]
 
 export const RAPID_REPATTERNING_SESSION_HREF = RAPID_REPATTERNING_HREF
+
+// "Identity Upgrade Session", "Intuition Calibration Session" etc. need "an", not "a".
+export const articleFor = (label: string): 'a' | 'an' =>
+  /^[aeiou]/i.test(label) ? 'an' : 'a'

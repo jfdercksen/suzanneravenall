@@ -5,7 +5,11 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { Topic } from '@/app/explore/topics'
 import { getTopicQuiz, getTopicQuizLabel } from '@/components/explore/topicQuizMap'
-import { getTopicPathwayMapping } from '@/components/explore/topicPathwayMap'
+import {
+  getTopicPathwayMapping,
+  RAPID_REPATTERNING_SESSION_HREF,
+  articleFor,
+} from '@/components/explore/topicPathwayMap'
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -60,9 +64,11 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
               {...fadeUp(0.2)}
               className="text-lg text-gray-600 font-light leading-relaxed mb-8"
             >
-              Start with the free pattern scan. It shows you the pattern
-              running underneath what you&apos;re working with. Then book a
-              discovery call to map the path to change it.
+              Start with the free pattern diagnostic. It shows you the pattern
+              running underneath what you&apos;re working with. Then book{' '}
+              {articleFor(pathway.sessionCtaLabel)}{' '}
+              {pathway.sessionCtaLabel.toLowerCase()} to work through it
+              directly with Suzanne.
             </motion.p>
 
             {/* Social proof — real client outcome, when provided */}
@@ -77,7 +83,9 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
               </motion.div>
             )}
 
-            {/* CTAs — quiz first, discovery call second (Suzanne, 27 Jul 2026) */}
+            {/* CTAs — quiz first (Suzanne, 27 Jul 2026), then the topic's Rapid
+                Repatterning session, then the pathway CTA (Suzanne's button
+                mapping, forwarded email) */}
             <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
               {quiz ? (
                 <Link
@@ -97,10 +105,10 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
                 </Link>
               )}
               <Link
-                href="/contact"
+                href={RAPID_REPATTERNING_SESSION_HREF}
                 className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary/30 hover:border-brand-primary/60 text-brand-primary font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-brand-primary/5"
               >
-                Book a Discovery Call
+                Book {articleFor(pathway.sessionCtaLabel)} {pathway.sessionCtaLabel}
               </Link>
               <Link
                 href={`/transformation-pathways/${pathway.pathwaySlug}`}
@@ -123,8 +131,7 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
               {...fadeUp(0.4)}
               className="mt-4 text-xs text-gray-400 font-light tracking-wide"
             >
-              The pattern scan is free and takes a few minutes. Discovery calls
-              are 30 minutes, complimentary.
+              The pattern diagnostic is free and takes a few minutes.
             </motion.p>
           </div>
 
