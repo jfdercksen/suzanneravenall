@@ -42,6 +42,9 @@ const nextConfig = {
   // Disabling these checks in next build prevents the Docker builder from
   // attempting to auto-install @types/react via yarn (yarn 1.x misreads the
   // packageManager field in the Alpine image and aborts with a corepack error).
+  // Also required because @react-pdf/renderer v3.x + React 19 produces TS2786/
+  // TS2607 JSX type errors that are cosmetic (do not affect runtime). See
+  // .claude/rules/no-bad-patterns.md.
   typescript: {
     ignoreBuildErrors: true,
   },

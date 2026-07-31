@@ -102,14 +102,12 @@ export default function TopicHero({ topic }: { topic: Topic }) {
               Reduced padding on mobile so both buttons fit in the initial viewport */}
           <motion.div {...fadeUp(0.4)} className="flex flex-wrap items-center gap-3">
             {quiz ? (
-              <a
-                href={quiz.scoreAppUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href={`/explore/${topic.slug}/quiz`}
                 className="inline-flex items-center justify-center px-6 py-3 lg:px-8 lg:py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
               >
                 {quizLabel}
-              </a>
+              </Link>
             ) : (
               <Link
                 href="/discover-your-pattern"

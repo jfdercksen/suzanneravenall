@@ -58,7 +58,7 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
               {...fadeUp(0.2)}
               className="text-lg text-gray-600 font-light leading-relaxed mb-8"
             >
-              Start with the free pattern scan — it shows you the pattern
+              Start with the free pattern scan. It shows you the pattern
               running underneath what you&apos;re working with. Then book a
               discovery call to map the path to change it.
             </motion.p>
@@ -78,15 +78,13 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
             {/* CTAs — quiz first, discovery call second (Suzanne, 27 Jul 2026) */}
             <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
               {quiz ? (
-                <a
-                  href={quiz.scoreAppUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href={`/explore/${topic.slug}/quiz`}
                   className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
                 >
                   {quizLabel}
                   <span aria-hidden="true">→</span>
-                </a>
+                </Link>
               ) : (
                 <Link
                   href="/discover-your-pattern"
