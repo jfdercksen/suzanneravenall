@@ -52,7 +52,7 @@ const repatterningSteps = [
     number: '02',
     title: 'Subconscious pattern decoding',
     description:
-      'Identifying the specific pattern — and the early experience it was built to survive.',
+      'Identifying the specific pattern, and the early experience it was built to survive.',
   },
   {
     number: '03',
@@ -94,7 +94,7 @@ export default function TheScienceContent() {
               {...fadeUp(0)}
               className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
             >
-              About &mdash; The Science
+              About: The Science
             </motion.p>
             <motion.h1
               id="science-hero-heading"
@@ -108,7 +108,7 @@ export default function TheScienceContent() {
               {...fadeUp(0.4)}
               className="text-lg lg:text-xl text-white/75 font-light max-w-xl"
             >
-              The science behind Pattern Intelligence&trade; — how the brain and
+              The science behind Pattern Intelligence&trade;: how the brain and
               nervous system learn patterns, why they persist below conscious
               thought, and what actually changes them.
             </motion.p>
@@ -147,10 +147,10 @@ export default function TheScienceContent() {
               {...reveal(0.3)}
               className="text-gray-700 text-lg font-light leading-relaxed mb-6"
             >
-              If your nervous system feels unsafe, you will experience anxiety —
+              If your nervous system feels unsafe, you will experience anxiety,
               even in safe environments. If your system expects pressure, you
-              will feel stress — even when nothing is wrong. If your system
-              learned to shut down, you will disconnect — even when you want to
+              will feel stress, even when nothing is wrong. If your system
+              learned to shut down, you will disconnect, even when you want to
               engage.
             </motion.p>
             <motion.p
@@ -187,7 +187,7 @@ export default function TheScienceContent() {
             className="text-white/70 text-lg font-light leading-relaxed max-w-3xl mb-16"
           >
             Your nervous system is designed for survival. When it senses threat,
-            it activates one of three responses — and when repeated over time,
+            it activates one of three responses, and when repeated over time,
             these become default patterns.
           </motion.p>
 
@@ -220,7 +220,7 @@ export default function TheScienceContent() {
             className="border-l-2 border-brand-accent pl-6 italic text-white text-xl lg:text-2xl font-light leading-snug max-w-3xl"
           >
             You are not reacting to what&rsquo;s happening now. You are reacting
-            to what your system expects — based on the past.
+            to what your system expects, based on the past.
           </motion.blockquote>
         </div>
       </section>
@@ -253,7 +253,7 @@ export default function TheScienceContent() {
               earliest years, relationships with others play a key role in
               shaping how the brain grows. From early experiences of neglect,
               lack of love, or simply not having our needs met, we generate
-              beliefs — some helpful, some harmful.
+              beliefs, some helpful, some harmful.
             </motion.p>
             <motion.p
               {...reveal(0.3)}
@@ -262,7 +262,7 @@ export default function TheScienceContent() {
               The child adapts, learns a new way of being, and makes it the new
               familiar. Fast-forward to adulthood: the decisions are long
               forgotten, but the adult finds their potential reduced by rules
-              that are limiting and self-defeating — an operating system that was
+              that are limiting and self-defeating: an operating system that was
               installed early and has never been interrogated, reviewed or
               updated.
             </motion.p>
@@ -271,7 +271,7 @@ export default function TheScienceContent() {
               className="text-brand-primary text-xl font-light leading-relaxed"
             >
               Until that operating system is raised to awareness, the same
-              patterns repeat themselves — in relationships, health, work and
+              patterns repeat themselves: in relationships, health, work and
               life.
             </motion.p>
           </div>
@@ -305,7 +305,7 @@ export default function TheScienceContent() {
               >
                 You can understand your behaviour. You can be aware of it. And
                 still repeat it. Why? Because the pattern doesn&rsquo;t live in
-                your thinking — it lives in your nervous system, in your body,
+                your thinking. It lives in your nervous system, in your body,
                 below conscious thought. The system keeps returning to what it
                 resonates with: the familiar.
               </motion.p>
@@ -314,7 +314,7 @@ export default function TheScienceContent() {
                 className="text-white/70 text-lg font-light leading-relaxed"
               >
                 That is why Rapid Repatterning&reg; works at the level where
-                patterns are formed — not coping strategies layered on top, but a
+                patterns are formed, not coping strategies layered on top, but a
                 change to the pattern itself.
               </motion.p>
             </div>
@@ -376,7 +376,7 @@ export default function TheScienceContent() {
               className="text-gray-700 text-lg font-light leading-relaxed mb-10"
             >
               When your nervous system becomes regulated, the change shows up
-              everywhere at once — because one pattern was driving multiple areas
+              everywhere at once, because one pattern was driving multiple areas
               of your life. Coherence returns to the whole system:
             </motion.p>
             <ul className="mb-12">
@@ -405,7 +405,7 @@ export default function TheScienceContent() {
               {...reveal(0.3)}
               className="border-l-2 border-brand-accent pl-6 italic text-brand-primary text-xl lg:text-2xl font-light leading-snug"
             >
-              You don&rsquo;t become a different person. You become yourself —
+              You don&rsquo;t become a different person. You become yourself,
               without the pattern running you.
             </motion.blockquote>
           </div>
@@ -440,7 +440,7 @@ export default function TheScienceContent() {
             className="text-white/70 text-lg font-light leading-relaxed max-w-xl mx-auto mb-12"
           >
             Take the free Pattern Scan to identify the pattern your nervous
-            system is running — or book a discovery call to talk it through with
+            system is running, or book a discovery call to talk it through with
             Suzanne.
           </motion.p>
           <motion.div

@@ -42,7 +42,7 @@ interface DashboardContentProps {
 }
 
 function formatMemberSince(dateStr: string | null): string {
-  if (!dateStr) return '—'
+  if (!dateStr) return 'N/A'
   const date = new Date(dateStr)
   return date.toLocaleDateString('en-ZA', { month: 'long', year: 'numeric' })
 }
@@ -109,7 +109,7 @@ export default function DashboardContent({
               {programmes.length > 0 ? (
                 <><CountUp target={programmes.length} /> enrolled</>
               ) : (
-                '0 — browse shop'
+                '0 (browse shop)'
               )}
             </p>
           </div>

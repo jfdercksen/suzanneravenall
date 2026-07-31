@@ -33,45 +33,45 @@ const frameworks: {
     label: 'The Assessment',
     title: 'Pattern Discovery Instrument™',
     description:
-      'Where everyone starts. The assessment that identifies the unconscious pattern running beneath your behaviour — available now as the free Pattern Scan.',
+      'Where everyone starts. The assessment that identifies the unconscious pattern running beneath your behaviour, available now as the free Pattern Scan.',
   },
   {
     label: 'The Consulting Methodology',
     title: 'Pattern Mapping Process™',
     description:
-      'The structured methodology behind the Transformation Pathways and private sessions — mapping the pattern, then repatterning it at the level where it was formed.',
+      'The structured methodology behind the Transformation Pathways and private sessions: mapping the pattern, then repatterning it at the level where it was formed.',
   },
   {
     label: 'The Practitioner Certification',
     title: 'Pattern Intelligence Coach™',
     description:
-      'The certification track for practitioners — professional training programmes that teach the repatterning methodology so the work can be carried further than one person ever could.',
+      'The certification track for practitioners: professional training programmes that teach the repatterning methodology so the work can be carried further than one person ever could.',
   },
   {
     label: 'The Digital Platform',
     title: 'Pattern Intelligence AI™',
     description:
-      'The digital arm of the system — the Pattern Coach, bringing pattern-level guidance to you between sessions, whenever you need it.',
+      'The digital arm of the system: the Pattern Coach, bringing pattern-level guidance to you between sessions, whenever you need it.',
   },
   {
     label: 'For CEOs & Leadership Teams',
     title: 'Executive Capacity Intelligence™',
     description:
-      'The framework for CEOs and leadership teams — applying pattern-level work to the way leaders think, decide and perform under pressure.',
+      'The framework for CEOs and leadership teams: applying pattern-level work to the way leaders think, decide and perform under pressure.',
     inDevelopment: true,
   },
   {
     label: 'For Organisations',
     title: 'Human Performance Intelligence™',
     description:
-      'For organisations that want to understand what drives their top performers — and replicate it across teams and systems.',
+      'For organisations that want to understand what drives their top performers, and replicate it across teams and systems.',
     inDevelopment: true,
   },
   {
     label: 'The Executive Diagnostic',
     title: 'Executive Capacity Index™',
     description:
-      'The diagnostic instrument for leadership and corporate audiences — measuring the patterns that determine executive capacity.',
+      'The diagnostic instrument for leadership and corporate audiences: measuring the patterns that determine executive capacity.',
     inDevelopment: true,
   },
 ]
@@ -94,7 +94,7 @@ export default function TheSystemContent() {
               {...fadeUp(0)}
               className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
             >
-              About &mdash; The System
+              About: The System
             </motion.p>
             <motion.h1
               id="system-hero-heading"
@@ -144,14 +144,14 @@ export default function TheSystemContent() {
               Suzanne&rsquo;s work, products and intellectual property. It starts
               from one premise: what looks like a personality trait, a performance
               ceiling, or a recurring life problem is usually an unconscious
-              pattern — and patterns can be identified, mapped and changed.
+              pattern, and patterns can be identified, mapped and changed.
             </motion.p>
             <motion.p
               {...reveal(0.3)}
               className="text-gray-700 text-lg font-light leading-relaxed"
             >
               A philosophy alone doesn&rsquo;t change anyone. So around it,
-              Suzanne has built a coherent system of instruments and methods —
+              Suzanne has built a coherent system of instruments and methods,
               each one a different door into the same work, for individuals,
               leaders and organisations.
             </motion.p>
@@ -241,10 +241,10 @@ export default function TheSystemContent() {
                 We never create anything random again. Every new programme,
                 assessment, keynote, workshop, book, podcast, app, or piece of IP
                 must answer one question: does this strengthen Pattern
-                Intelligence? If it doesn&rsquo;t — we don&rsquo;t build it.
+                Intelligence? If it doesn&rsquo;t, we don&rsquo;t build it.
               </p>
               <footer className="mt-3 text-gray-500 text-sm tracking-widest uppercase not-italic">
-                &mdash; Dr. Suzanne Ravenall
+                Dr. Suzanne Ravenall
               </footer>
             </motion.blockquote>
             <motion.p
@@ -273,7 +273,7 @@ export default function TheSystemContent() {
               >
                 private session
               </Link>
-              , you are working within the same methodology — one intelligence,
+              , you are working within the same methodology: one intelligence,
               applied at the depth and scale you need.
             </motion.p>
           </div>
@@ -308,7 +308,7 @@ export default function TheSystemContent() {
             className="text-white/70 text-lg font-light leading-relaxed max-w-xl mx-auto mb-12"
           >
             Take the free Pattern Scan to discover which pattern is driving your
-            results — or book a discovery call to talk through where to begin.
+            results, or book a discovery call to talk through where to begin.
           </motion.p>
           <motion.div
             {...reveal(0.3)}

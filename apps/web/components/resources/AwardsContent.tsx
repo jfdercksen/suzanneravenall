@@ -18,7 +18,7 @@ const awardItems = [
       'The Ravenall Institute shortlisted among 20 promising companies for its impact on human transformation and development.',
   },
   {
-    name: 'Global 100 — Most Inspiring Companies',
+    name: 'Global 100: Most Inspiring Companies',
     organisation: 'Global 100 Awards',
     description:
       'The Ravenall Institute recognised among the Global 100 most inspiring companies, celebrating innovation and impact in human transformation.',
@@ -30,7 +30,7 @@ const awardItems = [
       'Acknowledged for creating an exceptional workplace culture that supports human flourishing and sustainable performance.',
   },
   {
-    name: 'Best Company to Work For — 7th Edition',
+    name: 'Best Company to Work For: 7th Edition',
     organisation: 'CRF (Corporate Research Foundation)',
     description:
       'Repeat recognition from CRF for consistent excellence in workplace culture and people leadership.',
@@ -42,7 +42,7 @@ const awardItems = [
       'Acknowledged for exemplary leadership management and creating an exceptional workplace culture that supports human flourishing.',
   },
   {
-    name: 'Leading Managers — Beyond the Ordinary',
+    name: 'Leading Managers: Beyond the Ordinary',
     organisation: 'CRF (Corporate Research Foundation)',
     description:
       'Recognised for management practices that go beyond conventional leadership standards.',

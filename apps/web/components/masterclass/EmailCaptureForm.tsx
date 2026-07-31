@@ -52,7 +52,7 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
           You&rsquo;re in!
         </p>
         <p className={`mt-1 text-sm ${variant === 'light' ? 'text-gray-600' : 'text-gray-300'}`}>
-          Check your inbox — your access link is on its way.
+          Check your inbox: your access link is on its way.
         </p>
       </div>
     )

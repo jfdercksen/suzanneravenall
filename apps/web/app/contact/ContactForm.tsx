@@ -55,7 +55,7 @@ export default function ContactForm({ light = false }: { light?: boolean }) {
       <div className="py-8 text-center">
         <p className="text-brand-accent text-lg font-semibold mb-2">Message sent!</p>
         <p className={`text-sm ${light ? 'text-gray-500' : 'text-white/70'}`}>
-          Thank you — Suzanne&rsquo;s team will be in touch within 2 business days.
+          Thank you. Suzanne&rsquo;s team will be in touch within 2 business days.
         </p>
       </div>
     )

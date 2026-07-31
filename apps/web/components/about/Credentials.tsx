@@ -31,7 +31,7 @@ const academicQualifications = [
   'B.Sc. Metaphysics (American Alternative Medical Association)',
   'M.Sc. Metaphysics (American Alternative Medical Association)',
   'Doctorate of Philosophy: Metaphysics (American Alternative Medical Association)',
-  'Ph.D. Integrative Medicine & Conscious Business Ethics — in progress',
+  'Ph.D. Integrative Medicine & Conscious Business Ethics (in progress)',
 ]
 
 const certifications = [

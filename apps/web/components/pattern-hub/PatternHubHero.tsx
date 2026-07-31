@@ -60,8 +60,8 @@ export default function PatternHubHero() {
 
             <motion.div {...fadeUp(0.2)} className="text-lg text-white/70 font-light mb-4 space-y-2">
               <p>
-                Every challenge you&rsquo;re facing — emotional, relational,
-                physical or performance-based — is shaped by a pattern.
+                Every challenge you&rsquo;re facing (emotional, relational,
+                physical or performance-based) is shaped by a pattern.
               </p>
               <p>Identify yours.</p>
               <p>Understand it.</p>

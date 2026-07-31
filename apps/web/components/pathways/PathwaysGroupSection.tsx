@@ -39,7 +39,7 @@ export default function PathwaysGroupSection() {
             Group Transformation Pathways
           </h2>
           <p className="mt-5 text-base lg:text-lg text-gray-600 font-light max-w-2xl leading-relaxed">
-            A new series of group immersions is currently in development — live
+            A new series of group immersions is currently in development, live
             cohort experiences guided by Suzanne. Register your interest to be
             the first to hear when enrolment opens.
           </p>

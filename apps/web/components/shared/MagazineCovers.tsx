@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 const covers = [
   {
     src: '/images/media/magazine-ceo-cover3.jpg',
-    alt: 'Dr. Suzanne Ravenall on the cover of CEO Magazine — third feature edition',
+    alt: 'Dr. Suzanne Ravenall on the cover of CEO Magazine, third feature edition',
     publication: 'CEO Magazine',
     rotate: -2,
   },

@@ -129,7 +129,7 @@ export default function MobileNav({ links }: MobileNavProps) {
 
           {/* Overlay header — close button first so focus lands here on open */}
           <div className="flex items-center justify-between px-4 h-16">
-            <Link href="/" onClick={close} aria-label="Dr. Suzanne Ravenall — return to homepage">
+            <Link href="/" onClick={close} aria-label="Dr. Suzanne Ravenall, return to homepage">
               <Image
                 src="/logos/suzanne-white-logo.png"
                 alt="Dr. Suzanne Ravenall"

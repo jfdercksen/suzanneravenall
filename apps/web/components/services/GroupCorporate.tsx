@@ -9,7 +9,7 @@ const groupOfferings = [
     name: 'Money Mastery',
     image: '/images/focus/business.jpg',
     description:
-      'Given the opportunity, everyone would love to accumulate more wealth and live a more abundant life. Many people have a poor relationship with money and as a result struggle to manifest the financial success they desire. Change that — at the root.',
+      'Given the opportunity, everyone would love to accumulate more wealth and live a more abundant life. Many people have a poor relationship with money and as a result struggle to manifest the financial success they desire. Change that at the root.',
   },
   {
     name: 'Love & Relationships',
@@ -21,7 +21,7 @@ const groupOfferings = [
     name: 'Career Progression',
     image: '/images/focus/business.jpg',
     description:
-      'To activate the Law of Attraction in your career, you must identify and change the limiting beliefs that have been internalised since childhood — and accepted as true even when they are not.',
+      'To activate the Law of Attraction in your career, you must identify and change the limiting beliefs that have been internalised since childhood, and accepted as true even when they are not.',
   },
   {
     name: 'Shedding Excess Weight',
@@ -33,31 +33,31 @@ const groupOfferings = [
     name: 'Overcoming the Need to Fix Others',
     image: '/images/generated/session-coaching.webp',
     description:
-      'We respond to a lack of unconditional love by wanting to make everything okay — learning as small children it is safe to fix others’ problems. A 4-week repatterning series: part coaching, part class, full release.',
+      'We respond to a lack of unconditional love by wanting to make everything okay, learning as small children it is safe to fix others’ problems. A 4-week repatterning series: part coaching, part class, full release.',
   },
   {
     name: 'Being a Great Boundary Setter',
     image: '/images/generated/session-coaching.webp',
     description:
-      'Setting boundaries is one of the most challenging aspects of being human — and something 99% of us were never taught. A 4-week series to understand what a boundary is, when it has been transgressed, and how to hold one in place.',
+      'Setting boundaries is one of the most challenging aspects of being human, and something 99% of us were never taught. A 4-week series to understand what a boundary is, when it has been transgressed, and how to hold one in place.',
   },
   {
     name: 'Nice or Not Nice Communication',
     image: '/images/generated/group-coaching-real.webp',
     description:
-      'We learn in early childhood to receive love and acceptance only by being nice or agreeable — a pattern with a flipside of cutting anger when it becomes too much. A 4-week series to move into a new way of being.',
+      'We learn in early childhood to receive love and acceptance only by being nice or agreeable, a pattern with a flipside of cutting anger when it becomes too much. A 4-week series to move into a new way of being.',
   },
   {
     name: 'Attraction Frequency',
     image: '/images/generated/group-coaching-real.webp',
     description:
-      'A vibration is a state of being — the energetic quality of a person, place, thought, or thing. In this Group Repatterning class, resonate with the attraction frequency and manifest your own positivity, light, and love.',
+      'A vibration is a state of being: the energetic quality of a person, place, thought, or thing. In this Group Repatterning class, resonate with the attraction frequency and manifest your own positivity, light, and love.',
   },
   {
     name: 'Develop Super Confidence',
     image: '/images/focus/business.jpg',
     description:
-      'Confidence within oneself is a complete game changer. As Henry Ford said: “Whether you think you can, or you think you can’t — you’re right.” This series builds the belief that underwrites every game-changing choice.',
+      'Confidence within oneself is a complete game changer. As Henry Ford said: “Whether you think you can, or you think you can’t, you’re right.” This series builds the belief that underwrites every game-changing choice.',
   },
 ]
 
@@ -85,7 +85,7 @@ export default function GroupCorporate() {
           </h2>
           <p className="text-lg text-white/70 font-light leading-relaxed">
             Through a comfortable, authentic and safe environment, Suzanne runs short
-            group series that tackle the key issues affecting most people — getting
+            group series that tackle the key issues affecting most people, getting
             into the unconscious beliefs that disrupt lives and helping participants
             move beyond these challenges and into their power to inner self mastery.
             It simply creates a better life for those courageous enough to try.
@@ -130,7 +130,7 @@ export default function GroupCorporate() {
             For Teams &amp; Organisations
           </p>
           <h3 className="text-2xl lg:text-4xl font-light mb-6 leading-tight">
-            Corporate Wellness Retreats — bespoke programmes for your team.
+            Corporate Wellness Retreats: bespoke programmes for your team.
           </h3>
           <p className="text-white/70 font-light leading-relaxed mb-8 max-w-3xl">
             Retreats and in-house series designed around the issues your people carry

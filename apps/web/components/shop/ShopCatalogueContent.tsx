@@ -290,7 +290,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
 
               {!loading && error && (
                 <div className="flex flex-col items-center gap-6 py-24 text-center">
-                  <p className="text-gray-500 text-lg">Unable to load programmes — please try again.</p>
+                  <p className="text-gray-500 text-lg">Unable to load programmes. Please try again.</p>
                   <button
                     onClick={() => void fetchProducts()}
                     className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium rounded-button transition-colors duration-200"

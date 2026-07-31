@@ -9,9 +9,9 @@ import ServicesFinalCTA from '@/components/services/ServicesFinalCTA'
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Services | Private Sessions, Group Programmes & Keynotes — Dr. Suzanne Ravenall',
+    title: 'Services | Private Sessions, Group Programmes & Keynotes | Dr. Suzanne Ravenall',
     description:
-      'Unlock your life and potential with Dr. Suzanne Ravenall — Private Sessions, Group & Corporate Wellness Retreats, Keynote Speaking, and Practitioner & Self-Study Programmes rooted in transformational coaching and pattern-level change.',
+      'Unlock your life and potential with Dr. Suzanne Ravenall: Private Sessions, Group & Corporate Wellness Retreats, Keynote Speaking, and Practitioner & Self-Study Programmes rooted in transformational coaching and pattern-level change.',
   }
 }
 

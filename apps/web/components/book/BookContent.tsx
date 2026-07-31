@@ -11,7 +11,7 @@ const books = [
     title: 'Breakthrough',
     subtitle: 'Decoding the Pattern',
     description:
-      'Identify and decode the hidden patterns that have been running your life beneath conscious awareness — the programs installed early in life that shape every decision, relationship, and result you experience today.',
+      'Identify and decode the hidden patterns that have been running your life beneath conscious awareness: the programs installed early in life that shape every decision, relationship, and result you experience today.',
     tag: 'Pre-Order',
     // TODO: Confirm with Suzanne — "Available Now" or "Pre-Order"?
     tagAccent: true,
@@ -21,7 +21,7 @@ const books = [
     title: 'Beyond the Pattern',
     subtitle: 'Upgrading Your Response',
     description:
-      'Once you can see the pattern, you can change it. Book two guides you through the process of upgrading how you respond to every situation — replacing automatic reactions with conscious, empowered choices.',
+      'Once you can see the pattern, you can change it. Book two guides you through the process of upgrading how you respond to every situation, replacing automatic reactions with conscious, empowered choices.',
     tag: 'Coming Soon',
     tagAccent: false,
   },
@@ -30,7 +30,7 @@ const books = [
     title: 'Becoming Unstoppable',
     subtitle: 'Living at Full Potential',
     description:
-      'The final book in the trilogy brings it all together — a complete operating system for living at your highest potential, navigating life with mastery and creating results that once felt impossible.',
+      'The final book in the trilogy brings it all together: a complete operating system for living at your highest potential, navigating life with mastery and creating results that once felt impossible.',
     tag: 'Coming Soon',
     tagAccent: false,
   },
@@ -55,7 +55,7 @@ const themes = [
       </svg>
     ),
     heading: 'Decode the Pattern',
-    body: 'Understanding the hidden programs running your life — installed before age seven and operating below conscious awareness.',
+    body: 'Understanding the hidden programs running your life, installed before age seven and operating below conscious awareness.',
   },
   {
     icon: (
@@ -75,7 +75,7 @@ const themes = [
       </svg>
     ),
     heading: 'Upgrade Your Response',
-    body: 'Changing how you relate to every situation — replacing automatic reactions with conscious, empowered choices that align with who you want to be.',
+    body: 'Changing how you relate to every situation, replacing automatic reactions with conscious, empowered choices that align with who you want to be.',
   },
   {
     icon: (
@@ -95,7 +95,7 @@ const themes = [
       </svg>
     ),
     heading: 'Navigate with Mastery',
-    body: 'Using your innate wisdom to move through life with clarity, confidence and purpose — not reacting, but responding with full command.',
+    body: 'Using your innate wisdom to move through life with clarity, confidence and purpose, not reacting, but responding with full command.',
   },
 ]
 
@@ -103,13 +103,13 @@ const themes = [
 const testimonials = [
   {
     quote:
-      "Suzanne's work fundamentally changed how I see myself and what I believe is possible. Within weeks of applying her methodology, I had breakthrough results in my business and my relationships. This is not theory — it works.",
+      "Suzanne's work fundamentally changed how I see myself and what I believe is possible. Within weeks of applying her methodology, I had breakthrough results in my business and my relationships. This is not theory. It works.",
     name: 'Michelle K.',
     title: 'Executive, Johannesburg',
   },
   {
     quote:
-      "I've read dozens of personal development books. What makes Suzanne's approach different is that it goes to the root cause. She doesn't teach you to manage your patterns — she helps you dissolve them entirely.",
+      "I've read dozens of personal development books. What makes Suzanne's approach different is that it goes to the root cause. She doesn't teach you to manage your patterns. She helps you dissolve them entirely.",
     name: 'David T.',
     title: 'Entrepreneur, Cape Town',
   },
@@ -197,7 +197,7 @@ export default function BookContent() {
                 className="text-lg text-white/75 leading-relaxed mb-10 max-w-xl"
               >
                 Three books. One journey. The complete roadmap to decoding the patterns that keep
-                you stuck — and upgrading every area of your life.
+                you stuck, and upgrading every area of your life.
               </motion.p>
 
               <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4">
@@ -285,7 +285,7 @@ export default function BookContent() {
               <div className="space-y-4 mb-10">
                 <motion.p {...scrollFadeUp(0.2)} className="text-gray-600 leading-relaxed">
                   Consciousness is a meaning field. The mind adapts to the worldview imposed on it.
-                  When this system is interrogated, it reveals a series of challenges — depression,
+                  When this system is interrogated, it reveals a series of challenges: depression,
                   illness, addiction, broken relationships.
                 </motion.p>
                 <motion.p {...scrollFadeUp(0.25)} className="text-gray-600 leading-relaxed">
@@ -430,11 +430,11 @@ export default function BookContent() {
               </div>
               <p className="text-2xl lg:text-3xl font-light text-gray-700 leading-relaxed italic mb-8">
                 Consciousness is a meaning field. The mind adapts to the worldview imposed on it.
-                When this system is interrogated, it reveals a series of challenges — depression,
+                When this system is interrogated, it reveals a series of challenges: depression,
                 illness, addiction, broken relationships.
               </p>
               <footer className="text-sm font-medium text-gray-400 uppercase tracking-widest">
-                — Dr. Suzanne Ravenall, Breakthrough Trilogy
+                Dr. Suzanne Ravenall, Breakthrough Trilogy
               </footer>
             </motion.blockquote>
 
@@ -443,7 +443,7 @@ export default function BookContent() {
               className="text-gray-600 leading-relaxed mb-10 max-w-2xl mx-auto"
             >
               The Breakthrough Trilogy is not a self-help book. It is a practical operating manual
-              for the human mind — drawing on neuroscience, energy psychology, and over two decades
+              for the human mind, drawing on neuroscience, energy psychology, and over two decades
               of hands-on client transformation to give you a complete system for lasting change.
             </motion.p>
 
@@ -490,7 +490,7 @@ export default function BookContent() {
               </motion.h2>
               <motion.p {...scrollFadeUp(0.2)} className="text-white/75 leading-relaxed mb-5">
                 This trilogy is not written from theory. It is written from the trenches of real
-                transformation — both Suzanne&apos;s own journey and thousands of client breakthroughs
+                transformation, both Suzanne&apos;s own journey and thousands of client breakthroughs
                 over 20+ years.
               </motion.p>
               <motion.p {...scrollFadeUp(0.3)} className="text-white/75 leading-relaxed mb-5">
@@ -502,7 +502,7 @@ export default function BookContent() {
               <motion.p {...scrollFadeUp(0.4)} className="text-white/75 leading-relaxed mb-10">
                 As the founder of Rapid Repatterning® and Neuro-repatterning® methodology, Suzanne
                 brings a unique fusion of neuroscience, quantum physics, and energetic psychology
-                to every page — giving you tools that work at the deepest level of your being.
+                to every page, giving you tools that work at the deepest level of your being.
               </motion.p>
               <motion.div {...scrollFadeUp(0.5)}>
                 <Link
@@ -649,7 +649,7 @@ export default function BookContent() {
                   href="/shop/the-latest-book-by-suzanne"
                   className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 animate-pulse-glow"
                 >
-                  Pre-Order Now — R165
+                  Pre-Order Now: R165
                 </Link>
                 <Link
                   href="/shop/the-latest-book-by-suzanne"

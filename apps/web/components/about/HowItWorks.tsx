@@ -14,12 +14,12 @@ const steps: { title: string; description: string }[] = [
   {
     title: 'Find the pattern',
     description:
-      'We locate the unconscious patterns, inherited trauma, and outdated programming driving the stuck loops in your life or organisation — the biological and energetic roots beneath the surface.',
+      'We locate the unconscious patterns, inherited trauma, and outdated programming driving the stuck loops in your life or organisation: the biological and energetic roots beneath the surface.',
   },
   {
     title: 'Disrupt the pattern',
     description:
-      'Using Rapid Repatterning\u00ae, we repattern at the neurological, emotional and energetic level — not through motivation or mindset tricks, but by rewriting the underlying code.',
+      'Using Rapid Repatterning\u00ae, we repattern at the neurological, emotional and energetic level, not through motivation or mindset tricks, but by rewriting the underlying code.',
   },
   {
     title: 'Rewire from the inside out',
@@ -29,7 +29,7 @@ const steps: { title: string; description: string }[] = [
   {
     title: 'Rise and integrate',
     description:
-      'You operate from a higher state — engineered for thriving, not chasing success. This is liberation of human potential at scale, sustained through ongoing coaching and community.',
+      'You operate from a higher state, engineered for thriving, not chasing success. This is liberation of human potential at scale, sustained through ongoing coaching and community.',
   },
 ]
 

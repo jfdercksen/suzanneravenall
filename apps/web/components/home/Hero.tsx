@@ -143,7 +143,7 @@ export default function Hero() {
             className="hidden sm:block text-sm lg:text-base text-white/60 font-light max-w-xl mb-10"
           >
             Decoding the invisible patterns that shape human potential.
-            Introducing Pattern Intelligence™ — a new science and way of
+            Introducing Pattern Intelligence™, a new science and way of
             understanding how unconscious patterns shape behaviour, leadership,
             resilience, health, success and abundance.
           </motion.p>

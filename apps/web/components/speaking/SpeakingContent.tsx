@@ -17,12 +17,12 @@ const talks = [
   },
   {
     title: 'Recycling My Soul',
-    tagline: 'How consciousness draws our experiences to us — the science of entanglement',
+    tagline: 'How consciousness draws our experiences to us: the science of entanglement',
     duration: '20, 45 or 60 minutes',
   },
   {
     title: 'Second Time Around',
-    tagline: 'A new way of being — a second time around',
+    tagline: 'A new way of being, a second time around',
     duration: '20, 45 or 60 minutes',
   },
   {
@@ -58,7 +58,7 @@ const outcomes = [
       </svg>
     ),
     heading: 'Lasting Change',
-    body: 'Not just inspiration — actual neural pathway restructuring that sticks long after the event.',
+    body: 'Not just inspiration: actual neural pathway restructuring that sticks long after the event.',
   },
 ]
 
@@ -155,8 +155,8 @@ export default function SpeakingContent() {
               {...fadeUp(0.2)}
               className="text-lg lg:text-xl text-white/75 font-light leading-relaxed mb-10 max-w-2xl"
             >
-              Suzanne Ravenall delivers keynote experiences that don&rsquo;t just inspire
-              &mdash; they create measurable, lasting change in how people think,
+              Suzanne Ravenall delivers keynote experiences that don&rsquo;t just inspire.
+              They create measurable, lasting change in how people think,
               lead, and perform.
             </motion.p>
 
@@ -380,7 +380,7 @@ export default function SpeakingContent() {
             </div>
             <p className="text-center text-xs text-gray-400 mt-6 italic">
               {/* TODO: Replace placeholder logo tiles with real conference/corporate logos */}
-              Conference and corporate client logos — to be provided by Suzanne
+              Conference and corporate client logos, to be provided by Suzanne
             </p>
           </motion.div>
         </div>

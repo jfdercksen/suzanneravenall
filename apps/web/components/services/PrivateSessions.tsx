@@ -41,7 +41,7 @@ export default function PrivateSessions() {
             id="private-heading"
             className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-8"
           >
-            Private Sessions to unlock the root cause — and go beyond it.
+            Private Sessions to unlock the root cause, and go beyond it.
           </h2>
           <p className="text-lg text-gray-600 font-light leading-relaxed">
             Suzanne helps you get to the root cause of the key issues disrupting your

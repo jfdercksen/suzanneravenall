@@ -8,7 +8,7 @@ export function generateMetadata(): Metadata {
   return {
     title: 'Media & Press | Dr. Suzanne Ravenall',
     description:
-      'Dr. Suzanne Ravenall featured in Leadership Magazine, CEO Magazine and Business Excellence Award press — read the coverage.',
+      'Dr. Suzanne Ravenall featured in Leadership Magazine, CEO Magazine and Business Excellence Award press. Read the coverage.',
   }
 }
 

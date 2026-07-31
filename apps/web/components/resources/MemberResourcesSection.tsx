@@ -26,7 +26,7 @@ const GATED_ITEMS: GatedItem[] = [
   },
   {
     title: 'Group Session Recordings',
-    description: 'Recorded group coaching sessions — Rapid Repatterning, Emotional Freedom, Relationship Healing, and more.',
+    description: 'Recorded group coaching sessions: Rapid Repatterning, Emotional Freedom, Relationship Healing, and more.',
     href: '/portal/videos?category=group-sessions',
     resource: 'group_sessions_recorded',
   },

@@ -8,7 +8,7 @@ const featuredMedia = [
   {
     outlet: 'CEO Magazine',
     type: 'Cover Story',
-    title: 'Fast and Furious — Leading at Speed',
+    title: 'Fast and Furious: Leading at Speed',
     description:
       'Dr. Suzanne Ravenall graces the cover of CEO Magazine, sharing her proven framework for leaders who must drive transformation at pace without burning out their teams.',
   },
@@ -29,9 +29,9 @@ const featuredMedia = [
   {
     outlet: 'CEO Magazine',
     type: 'Article',
-    title: 'Execution Excellence — Turning Strategy into Results',
+    title: 'Execution Excellence: Turning Strategy into Results',
     description:
-      'Dr. Ravenall on the gap between strategic intention and actual execution — and the mindset shifts that close it.',
+      'Dr. Ravenall on the gap between strategic intention and actual execution, and the mindset shifts that close it.',
   },
 ]
 

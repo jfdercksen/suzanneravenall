@@ -18,11 +18,11 @@ const articles = [
     publication: 'Business Excellence Awards',
     date: 'December 2021',
     summary:
-      'The Ravenall Institute recognised in the Business Excellence Awards — celebrating outstanding impact in coaching, human development and conscious business leadership.',
+      'The Ravenall Institute recognised in the Business Excellence Awards: celebrating outstanding impact in coaching, human development and conscious business leadership.',
     href: 'https://suzanneravenall.com/article-business-excellence-awards-press-release/',
   },
   {
-    title: 'Fast and Furious — Leading at Speed',
+    title: 'Fast and Furious: Leading at Speed',
     publication: 'CEO Magazine',
     date: 'November 2021',
     summary:
@@ -30,7 +30,7 @@ const articles = [
     href: 'https://suzanneravenall.com/article-ceo-magazine-cover-story-fast-and-furious/',
   },
   {
-    title: 'Execution Excellence — Closing the Strategy-Action Gap',
+    title: 'Execution Excellence: Closing the Strategy-Action Gap',
     publication: 'CEO Magazine',
     date: 'November 2021',
     summary:
@@ -42,15 +42,15 @@ const articles = [
     publication: 'CEO Magazine',
     date: 'November 2021',
     summary:
-      'Positivity is not naive optimism — it is a disciplined neurological practice. Dr. Ravenall explains how a regulated nervous system and rewired belief system produce measurably better outcomes.',
+      'Positivity is not naive optimism. It is a disciplined neurological practice. Dr. Ravenall explains how a regulated nervous system and rewired belief system produce measurably better outcomes.',
     href: 'https://suzanneravenall.com/article-ceo-magzaine-cover-story-power-of-positivity/',
   },
   {
-    title: 'B2B Outsourcing — A Human Lens',
+    title: 'B2B Outsourcing: A Human Lens',
     publication: 'CEO Magazine',
     date: 'November 2021',
     summary:
-      'Applying a human-centred lens to B2B outsourcing decisions. The people patterns — not the commercial terms — are what determine whether partnerships succeed or ultimately fail.',
+      'Applying a human-centred lens to B2B outsourcing decisions. The people patterns, not the commercial terms, are what determine whether partnerships succeed or ultimately fail.',
     href: 'https://suzanneravenall.com/article-ceo-magazine-b2b-outsourcing/',
   },
   {
@@ -62,7 +62,7 @@ const articles = [
     href: 'https://suzanneravenall.com/article-ceo-magazine-be-effective-or-be-at-risk/',
   },
   {
-    title: 'Transformation — What It Really Takes',
+    title: 'Transformation: What It Really Takes',
     publication: 'CEO Magazine',
     date: 'November 2021',
     summary:
@@ -74,7 +74,7 @@ const articles = [
     publication: 'CEO Magazine',
     date: 'November 2021',
     summary:
-      'You do not stumble into a great future — you design it from the inside out. Dr. Ravenall on intentional creation, purpose alignment and the role of consciousness in building what comes next.',
+      'You do not stumble into a great future. You design it from the inside out. Dr. Ravenall on intentional creation, purpose alignment and the role of consciousness in building what comes next.',
     href: 'https://suzanneravenall.com/article-ceo-magazine-creating-the-future/',
   },
   {
@@ -82,7 +82,7 @@ const articles = [
     publication: 'CEO Magazine',
     date: 'November 2021',
     summary:
-      'The labour market is shifting fundamentally. Dr. Ravenall analyses what employees now want — and why organisations that ignore human needs will struggle to attract and retain top talent.',
+      'The labour market is shifting fundamentally. Dr. Ravenall analyses what employees now want, and why organisations that ignore human needs will struggle to attract and retain top talent.',
     href: 'https://suzanneravenall.com/article-ceo-magazine-new-trend-labour-market/',
   },
 ]
@@ -131,7 +131,7 @@ export default function ArticlesContent() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-lg text-white/70 font-light max-w-xl leading-relaxed"
           >
-            Thought leadership from Dr. Suzanne Ravenall — published across leading business
+            Thought leadership from Dr. Suzanne Ravenall, published across leading business
             and leadership magazines covering transformation, execution and human potential.
           </motion.p>
         </div>
@@ -235,7 +235,7 @@ export default function ArticlesContent() {
             className="text-white/70 font-light max-w-xl mx-auto mb-10 leading-relaxed"
           >
             Subscribe to the monthly newsletter and receive Dr. Ravenall&apos;s latest thinking
-            on consciousness, healing, transformation and human potential — delivered directly
+            on consciousness, healing, transformation and human potential, delivered directly
             to your inbox.
           </motion.p>
 

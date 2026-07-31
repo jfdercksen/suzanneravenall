@@ -135,7 +135,7 @@ export function VariantSelector({
               : buttonState === 'added'
                 ? 'Added to cart ✓'
                 : buttonState === 'error'
-                  ? 'Could not add — try again'
+                  ? 'Could not add. Try again.'
                   : 'Add to Cart'}
           </button>
           {buttonState === 'added' ? (
@@ -146,7 +146,7 @@ export function VariantSelector({
               View cart →
             </Link>
           ) : (
-            <p className={`text-sm ${noteClass}`}>Payment plans available — contact us</p>
+            <p className={`text-sm ${noteClass}`}>Payment plans available: contact us</p>
           )}
         </div>
       ) : (

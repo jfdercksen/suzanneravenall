@@ -77,7 +77,7 @@ export default function BookPromotion() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="text-4xl lg:text-5xl font-light text-brand-primary leading-tight mb-6"
             >
-              Before you change your life — understand the architecture holding you back.
+              Before you change your life, understand the architecture holding you back.
             </motion.h2>
 
             <motion.div
@@ -88,7 +88,7 @@ export default function BookPromotion() {
               className="space-y-4 text-gray-600 leading-relaxed mb-8"
             >
               <p>
-                Consciousness is a meaning field. Your brain adapted to the worldview imposed on it in childhood — and unless that operating system is updated, life becomes a series of repeating patterns.
+                Consciousness is a meaning field. Your brain adapted to the worldview imposed on it in childhood, and unless that operating system is updated, life becomes a series of repeating patterns.
               </p>
               <p>
                 The Breakthrough Trilogy is the intellectual foundation of everything Suzanne teaches. Three books. One complete system for decoding and upgrading the patterns running your life.
@@ -104,10 +104,10 @@ export default function BookPromotion() {
               className="border-l-2 border-brand-accent pl-6 mb-8"
             >
               <p className="text-lg font-light italic text-brand-primary leading-relaxed">
-                &ldquo;When we decode hidden patterns, we transform in unimaginable ways. That shift radiates outward — into how we lead, grow, relate, love, and show up.&rdquo;
+                &ldquo;When we decode hidden patterns, we transform in unimaginable ways. That shift radiates outward: into how we lead, grow, relate, love, and show up.&rdquo;
               </p>
               <footer className="mt-3 text-sm text-gray-400 uppercase tracking-wider not-italic">
-                — Dr. Suzanne Ravenall
+                Dr. Suzanne Ravenall
               </footer>
             </motion.blockquote>
 
@@ -122,7 +122,7 @@ export default function BookPromotion() {
                 href="/shop/the-latest-book-by-suzanne"
                 className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.4)]"
               >
-                Order Now — R165
+                Order Now: R165
               </Link>
               {/* TODO: Replace href with dedicated chapter download page once PDF asset is provided */}
               <Link

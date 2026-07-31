@@ -124,7 +124,7 @@ export default function LegalCookiesContent() {
                       <tr className="bg-gray-50">
                         <td className="px-4 py-3 text-gray-600 border border-gray-200 font-mono text-xs">_clck, _clsk, CLID</td>
                         <td className="px-4 py-3 text-gray-600 border border-gray-200">Microsoft Clarity</td>
-                        <td className="px-4 py-3 text-gray-600 border border-gray-200">Session recording and heatmap analytics — helps us improve page usability</td>
+                        <td className="px-4 py-3 text-gray-600 border border-gray-200">Session recording and heatmap analytics: helps us improve page usability</td>
                         <td className="px-4 py-3 text-gray-600 border border-gray-200">1 year / session</td>
                       </tr>
                     </tbody>

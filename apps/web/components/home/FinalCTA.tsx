@@ -26,7 +26,7 @@ export default function FinalCTA() {
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
         >
-          Schedule a complimentary discovery call. No obligation — just clarity on where you are, where you want to be, and whether working together is the right fit.
+          Schedule a complimentary discovery call. No obligation: just clarity on where you are, where you want to be, and whether working together is the right fit.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 20 }}

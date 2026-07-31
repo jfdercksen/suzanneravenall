@@ -82,7 +82,7 @@ export default function MediaLogos({
           {quote}
         </p>
         <footer className="mt-3 text-white/40 text-sm tracking-widest uppercase not-italic">
-          — {quoteAttribution}
+          {quoteAttribution}
         </footer>
       </motion.blockquote>
 

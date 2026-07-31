@@ -64,7 +64,7 @@ export default function ExploreHero() {
             className="text-lg lg:text-xl text-white/75 font-light max-w-2xl leading-relaxed"
           >
             Transformation isn&apos;t about working harder on the surface. It&apos;s about
-            changing the pattern underneath — the one your nervous system has
+            changing the pattern underneath, the one your nervous system has
             been running for years. When the pattern shifts, every area of your
             life follows.
           </motion.p>

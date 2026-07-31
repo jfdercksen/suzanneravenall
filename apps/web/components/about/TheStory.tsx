@@ -52,7 +52,7 @@ export default function TheStory() {
               transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' as const }}
               className="text-gray-700 text-lg font-light leading-relaxed mb-6"
             >
-              Suzanne is a modern-day explorer of human potential — a transformation
+              Suzanne is a modern-day explorer of human potential, a transformation
               and performance coach, speaker, and multiple award-winning entrepreneur
               who&rsquo;s dedicated her life to helping people break free from
               unconscious patterns, trauma, and limitation, and step into who they are
@@ -69,7 +69,7 @@ export default function TheStory() {
               entrepreneurs globally, Suzanne&rsquo;s life took a dramatic turn. A
               series of profound traumas shattered her health and sense of identity,
               and triggered previous old covered-up traumas, forcing her to begin
-              again — not from scratch, but from new awareness, truth and a new way
+              again, not from scratch, but from new awareness, truth and a new way
               of being.
             </motion.p>
 
@@ -78,7 +78,7 @@ export default function TheStory() {
               transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' as const }}
               className="text-gray-700 text-lg font-light leading-relaxed mb-6"
             >
-              What followed — trauma, a stroke, and a multiple sclerosis diagnosis —
+              What followed (trauma, a stroke, and a multiple sclerosis diagnosis)
               became a radical journey into metaphysics, neuroscience, trauma science,
               energy psychology, NLP, the neurobiology of performance, consciousness
               studies, and ancient healing arts. Today, through Rapid Repatterning&reg;
@@ -92,14 +92,14 @@ export default function TheStory() {
               className="mt-10 border-l-2 border-brand-accent pl-6 italic text-brand-primary text-lg font-light leading-relaxed"
             >
               <p className="mb-3">
-                To repattern the human experience — unlocking the potential within
+                To repattern the human experience: unlocking the potential within
                 individuals, organisations and humanity itself, so we can evolve
                 beyond the pain, beyond survival, transcend inherited and personal
                 trauma, and consciously shape a future driven by coherence, purpose
                 and limitless potential.
               </p>
               <footer className="mt-3 text-gray-500 text-sm tracking-widest uppercase not-italic">
-                — The Big Why
+                The Big Why
               </footer>
             </motion.blockquote>
           </div>

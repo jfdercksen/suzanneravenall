@@ -74,10 +74,10 @@ export default function LegalPrivacyContent() {
                   <strong>Contact data:</strong> email address, telephone number, postal address
                 </li>
                 <li>
-                  <strong>Account data:</strong> username, password (stored as a salted hash — never in plain text), membership tier, purchase history
+                  <strong>Account data:</strong> username, password (stored as a salted hash, never in plain text), membership tier, purchase history
                 </li>
                 <li>
-                  <strong>Payment data:</strong> transaction references and payment status (we do not store full card numbers — these are handled by PayFast and PayPal)
+                  <strong>Payment data:</strong> transaction references and payment status (we do not store full card numbers; these are handled by PayFast and PayPal)
                 </li>
                 <li>
                   <strong>Usage data:</strong> pages visited, session duration, browser type, IP address, referring URL
@@ -103,7 +103,7 @@ export default function LegalPrivacyContent() {
                 <li>To process payments for programmes, products, and memberships</li>
                 <li>To deliver digital content, resources, and coaching services you have purchased</li>
                 <li>To send transactional communications (booking confirmations, invoices, receipts)</li>
-                <li>To send marketing communications — only with your explicit consent</li>
+                <li>To send marketing communications, only with your explicit consent</li>
                 <li>To comply with legal obligations (tax, accounting, regulatory requirements)</li>
                 <li>To improve our website and services through analytics</li>
                 <li>To protect against fraud and unauthorised access</li>
@@ -122,28 +122,28 @@ export default function LegalPrivacyContent() {
               </p>
               <ul className="list-disc list-outside pl-6 space-y-2 text-gray-600">
                 <li>
-                  <strong>Supabase</strong> — database and authentication hosting
+                  <strong>Supabase</strong>: database and authentication hosting
                 </li>
                 <li>
-                  <strong>PayFast / PayPal</strong> — payment processing
+                  <strong>PayFast / PayPal</strong>: payment processing
                 </li>
                 <li>
-                  <strong>Resend</strong> — transactional email delivery
+                  <strong>Resend</strong>: transactional email delivery
                 </li>
                 <li>
-                  <strong>Bunny CDN / Bunny Stream</strong> — video content delivery
+                  <strong>Bunny CDN / Bunny Stream</strong>: video content delivery
                 </li>
                 <li>
-                  <strong>Google Analytics 4 &amp; Microsoft Clarity</strong> — website analytics
+                  <strong>Google Analytics 4 &amp; Microsoft Clarity</strong>: website analytics
                 </li>
                 <li>
-                  <strong>Sage Business Cloud</strong> — accounting and invoicing
+                  <strong>Sage Business Cloud</strong>: accounting and invoicing
                 </li>
                 <li>
-                  <strong>Vtiger CRM</strong> — client relationship management
+                  <strong>Vtiger CRM</strong>: client relationship management
                 </li>
                 <li>
-                  <strong>Cal.com</strong> — appointment scheduling
+                  <strong>Cal.com</strong>: appointment scheduling
                 </li>
                 <li>Regulatory authorities, where required by law</li>
               </ul>
@@ -158,19 +158,19 @@ export default function LegalPrivacyContent() {
               <p className="text-gray-600 leading-relaxed mb-3">Under POPIA you have the right to:</p>
               <ul className="list-disc list-outside pl-6 space-y-2 text-gray-600">
                 <li>
-                  <strong>Access</strong> — request a copy of the personal information we hold about you
+                  <strong>Access</strong>: request a copy of the personal information we hold about you
                 </li>
                 <li>
-                  <strong>Correction</strong> — request that inaccurate information be corrected
+                  <strong>Correction</strong>: request that inaccurate information be corrected
                 </li>
                 <li>
-                  <strong>Deletion</strong> — request that your personal information be deleted (subject to legal retention requirements)
+                  <strong>Deletion</strong>: request that your personal information be deleted (subject to legal retention requirements)
                 </li>
                 <li>
-                  <strong>Objection</strong> — object to the processing of your personal information
+                  <strong>Objection</strong>: object to the processing of your personal information
                 </li>
                 <li>
-                  <strong>Withdraw consent</strong> — where processing is based on consent, withdraw it at any time without affecting the lawfulness of prior processing
+                  <strong>Withdraw consent</strong>: where processing is based on consent, withdraw it at any time without affecting the lawfulness of prior processing
                 </li>
               </ul>
               <p className="text-gray-600 leading-relaxed mt-4">
@@ -208,7 +208,7 @@ export default function LegalPrivacyContent() {
                 We implement appropriate technical and organisational measures to protect your personal
                 information against unauthorised access, disclosure, alteration, and destruction. These
                 include TLS encryption for data in transit, encrypted storage, role-based access controls,
-                and regular security reviews. No transmission over the internet is 100% secure — if you
+                and regular security reviews. No transmission over the internet is 100% secure. If you
                 believe your information has been compromised, please contact us immediately.
               </p>
             </div>

@@ -45,7 +45,7 @@ export default function ExploreFinalCTA() {
           {...fadeUp(0.2)}
           className="text-lg lg:text-xl text-gray-600 font-light max-w-2xl mx-auto mb-10 leading-relaxed"
         >
-          Start with the free pattern scan — it identifies the pattern
+          Start with the free pattern scan. It identifies the pattern
           underneath what you&apos;re working on. Then book a discovery call to
           map the path to change it.
         </motion.p>

@@ -22,13 +22,13 @@ export default function AboutTeaser() {
               Meet Your Guide
             </p>
             <p className="text-sm text-gray-500 font-light italic mb-5 max-w-sm leading-relaxed">
-              Dr. Suzanne Ravenall — Neuro-Repatterning® pioneer, author, keynote speaker and transformation coach to 2,000+ clients across 30+ countries.
+              Dr. Suzanne Ravenall, Neuro-Repatterning® pioneer, author, keynote speaker and transformation coach to 2,000+ clients across 30+ countries.
             </p>
             <h2 id="about-heading" className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight">
               Science-backed coaching with a track record of real results
             </h2>
             <p className="mt-6 text-gray-600 leading-relaxed">
-              Dr. Suzanne Ravenall developed Neuro-Repatterning® after two decades of clinical study and thousands of hours with private clients across four continents. Her methodology targets the childhood brain patterns that sabotage adult success — and dissolves them at the root.
+              Dr. Suzanne Ravenall developed Neuro-Repatterning® after two decades of clinical study and thousands of hours with private clients across four continents. Her methodology targets the childhood brain patterns that sabotage adult success, and dissolves them at the root.
             </p>
             <p className="mt-4 text-gray-600 leading-relaxed">
               The result is not motivation. It is permanent, measurable change.

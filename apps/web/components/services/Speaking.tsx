@@ -10,25 +10,25 @@ const topics = [
     name: 'Conversations with My Brain',
     image: '/images/hero-bg-suzanne-ravenall.jpg',
     description:
-      'After suffering a traumatic brain injury, stroke and several life-or-death traumas, Suzanne is living proof that you can re-train your brain. We learn beliefs in early childhood that get buried deep in the unconscious — and wonder years later why the same patterns of failure, pain or trauma keep reoccurring.',
+      'After suffering a traumatic brain injury, stroke and several life-or-death traumas, Suzanne is living proof that you can re-train your brain. We learn beliefs in early childhood that get buried deep in the unconscious, and wonder years later why the same patterns of failure, pain or trauma keep reoccurring.',
   },
   {
     name: 'Recycling My Soul',
     image: '/images/generated/explore-transformation.webp',
     description:
-      'With all this talk of consciousness in the world — what does it mean? In the context of my life and work, how does my consciousness impact another? How does it impact me? In practical terms, how does my behaviour and my level of consciousness draw my experiences to me? The science of entanglement.',
+      'With all this talk of consciousness in the world, what does it mean? In the context of my life and work, how does my consciousness impact another? How does it impact me? In practical terms, how does my behaviour and my level of consciousness draw my experiences to me? The science of entanglement.',
   },
   {
     name: 'Second Time Around',
     image: '/images/generated/explore-repatterning.webp',
     description:
-      'In this keynote we learn how our early lives define our choices, decisions and beliefs — why we seem unable to move forward, and critically, what it takes to have a restart. A "second time around": a new way of being where all possibilities are available — it is just learning how to navigate and tap into your innate potential.',
+      'In this keynote we learn how our early lives define our choices, decisions and beliefs: why we seem unable to move forward, and critically, what it takes to have a restart. A "second time around": a new way of being where all possibilities are available. It is just learning how to navigate and tap into your innate potential.',
   },
   {
     name: 'Trauma to Transcendence',
     image: '/images/focus/business.jpg',
     description:
-      'Suzanne weaves her way through this challenging topic — helping us understand where buried trauma comes from, how it shows up, how your nervous system responds or breaks down, and how to turn trauma into transcendence: changing your body/mind and bringing homeostasis back to your system.',
+      'Suzanne weaves her way through this challenging topic, helping us understand where buried trauma comes from, how it shows up, how your nervous system responds or breaks down, and how to turn trauma into transcendence: changing your body/mind and bringing homeostasis back to your system.',
   },
 ]
 
@@ -52,26 +52,26 @@ export default function Speaking() {
             id="speaking-heading"
             className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-8"
           >
-            Customised, real, authentic — keynotes that cut to what underlies human
+            Customised, real, authentic: keynotes that cut to what underlies human
             behaviour.
           </h2>
           <p className="text-lg text-gray-600 font-light leading-relaxed mb-6">
             As a keynote speaker, Suzanne takes audiences on a journey of inner
-            transformation — changing lives from the inside out. When we turn on the
+            transformation, changing lives from the inside out. When we turn on the
             magic on the inside and capitalise on it, we begin to transform in
             unimaginable ways, and that shows up in every-day life.
           </p>
           <p className="text-lg text-gray-600 font-light leading-relaxed">
             More resilience to navigate today&apos;s challenging world. More courage and
             confidence than you ever thought possible. The power of our own innate
-            wisdom, energy and mind — to respond, not react, to life.
+            wisdom, energy and mind, to respond, not react, to life.
           </p>
         </div>
 
         <figure className="max-w-4xl mb-16 border-l-2 border-brand-accent pl-6">
           <blockquote className="text-2xl lg:text-3xl font-light italic text-brand-primary leading-snug">
             &ldquo;When we decode hidden patterns, we transform in unimaginable ways.
-            That shift radiates outward — into how we lead, grow, relate, love, and
+            That shift radiates outward, into how we lead, grow, relate, love, and
             show up.&rdquo;
           </blockquote>
           <figcaption className="mt-4 text-xs uppercase tracking-[0.3em] font-medium text-gray-600">

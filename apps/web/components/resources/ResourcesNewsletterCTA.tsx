@@ -74,7 +74,7 @@ export default function ResourcesNewsletterCTA() {
             className="text-gray-600 font-light leading-relaxed mb-10"
           >
             Each month, Dr. Suzanne Ravenall shares insights on consciousness, healing, inner
-            regulation and transformation — the kind of wisdom that changes how you see yourself
+            regulation and transformation, the kind of wisdom that changes how you see yourself
             and your world.
           </motion.p>
 

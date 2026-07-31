@@ -4,7 +4,7 @@ export const nervousSystemQuiz: Quiz = {
   slug: 'emotional-nervous-system-mastery',
   title: 'What Nervous System Pattern Is Running Your Life?',
   subtitle: 'Your reactions aren\'t random. They\'re patterned.',
-  intro: `Most people try to control their emotions. But emotions are not the problem. They are the output of a deeper system — your nervous system. When that system is patterned by stress, trauma or pressure, it creates automatic responses: Overreaction. Anxiety. Shutdown. Burnout.
+  intro: `Most people try to control their emotions. But emotions are not the problem. They are the output of a deeper system: your nervous system. When that system is patterned by stress, trauma or pressure, it creates automatic responses: Overreaction. Anxiety. Shutdown. Burnout.
 
 This 2-minute diagnostic will reveal:
 - Your dominant nervous system pattern
@@ -21,7 +21,7 @@ This 2-minute diagnostic will reveal:
     { id: 6, text: 'I avoid conflict or difficult conversations', category: 'freeze' },
     { id: 7, text: 'When things feel too much, I shut down or withdraw', category: 'freeze' },
     { id: 8, text: 'I feel responsible for keeping everything under control', category: 'fight' },
-    { id: 9, text: 'My energy fluctuates — I go from high output to exhaustion', category: 'mixed' },
+    { id: 9, text: 'My energy fluctuates: I go from high output to exhaustion', category: 'mixed' },
     { id: 10, text: 'I replay conversations or situations in my mind', category: 'flight' },
     { id: 11, text: 'I struggle to feel calm, safe or settled in my body', category: 'mixed' },
     { id: 12, text: 'I push myself even when I know I\'m tired', category: 'fight' },
@@ -37,8 +37,8 @@ This 2-minute diagnostic will reveal:
     fight: {
       title: 'The Hyper-Alert Achiever',
       subtitle: 'Your Pattern: The Hyper-Alert Achiever',
-      mirror: `You are driven, capable and often the one others rely on. From the outside, you look in control. But internally, your system is running at a high level of alertness — even when it doesn't need to. You don't slow down easily. You push through. You carry responsibility. And over time, that becomes exhausting.`,
-      mechanism: `Your nervous system has learned: "I must stay in control to stay safe." This creates a constant activation of your stress response — even in non-threatening situations. It's not weakness. It's a highly conditioned survival pattern.`,
+      mirror: `You are driven, capable and often the one others rely on. From the outside, you look in control. But internally, your system is running at a high level of alertness, even when it doesn't need to. You don't slow down easily. You push through. You carry responsibility. And over time, that becomes exhausting.`,
+      mechanism: `Your nervous system has learned: "I must stay in control to stay safe." This creates a constant activation of your stress response, even in non-threatening situations. It's not weakness. It's a highly conditioned survival pattern.`,
       impact: [
         'Chronic stress and burnout',
         'Irritability and overreaction',
@@ -47,7 +47,7 @@ This 2-minute diagnostic will reveal:
         'Long-term health impact',
       ],
       shift: [
-        'You maintain high performance — without pressure',
+        'You maintain high performance, without pressure',
         'You feel calm, focused and in control',
         'You respond instead of react',
         'You lead from clarity, not stress',
@@ -76,8 +76,8 @@ This 2-minute diagnostic will reveal:
     freeze: {
       title: 'The Withdrawn Protector',
       subtitle: 'Your Pattern: The Withdrawn Protector',
-      mirror: `When things feel too much — you pull back. You may avoid difficult situations, feel stuck or disconnected, struggle to take action. This isn't laziness. It's protection.`,
-      mechanism: `Your system has learned: "It's safer to shut down than to engage." This creates a freeze response — where energy drops and action stops.`,
+      mirror: `When things feel too much, you pull back. You may avoid difficult situations, feel stuck or disconnected, struggle to take action. This isn't laziness. It's protection.`,
+      mechanism: `Your system has learned: "It's safer to shut down than to engage." This creates a freeze response, where energy drops and action stops.`,
       impact: [
         'Procrastination',
         'Missed opportunities',
@@ -96,7 +96,7 @@ This 2-minute diagnostic will reveal:
       title: 'The Regulated Responder',
       subtitle: 'Your Pattern: The Regulated Responder',
       mirror: `Your system is relatively balanced. You are able to stay calm under pressure, respond thoughtfully, recover from stress. But this doesn't mean there aren't deeper patterns still shaping your potential.`,
-      mechanism: `You have developed a level of regulation — but refinement is possible.`,
+      mechanism: `You have developed a level of regulation, but refinement is possible.`,
       impact: [
         'Stable performance',
         'Emotional resilience',

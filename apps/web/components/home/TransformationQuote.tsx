@@ -48,7 +48,7 @@ export default function TransformationQuote() {
           </p>
           <footer>
             <cite className="text-white/50 text-sm tracking-widest uppercase not-italic">
-              — Dr. Suzanne Ravenall
+              Dr. Suzanne Ravenall
             </cite>
           </footer>
         </motion.blockquote>

@@ -22,7 +22,7 @@ const DELIVERY_BADGE: Record<string, string> = {
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr)
-  if (isNaN(date.getTime())) return '—'
+  if (isNaN(date.getTime())) return 'N/A'
   return date.toLocaleDateString('en-ZA', {
     day: 'numeric',
     month: 'short',
@@ -128,7 +128,7 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
           </p>
           <h1 className="text-3xl lg:text-5xl font-light text-white mb-3">My Programmes</h1>
           <p className="text-lg text-white/60">
-            Every programme you&apos;ve purchased — your personal transformation library.
+            Every programme you&apos;ve purchased: your personal transformation library.
           </p>
         </motion.div>
 

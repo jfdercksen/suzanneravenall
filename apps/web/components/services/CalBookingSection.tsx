@@ -68,7 +68,7 @@ export default function CalBookingSection() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-lg text-gray-600 font-light max-w-xl mx-auto mb-12"
         >
-          A 30-minute discovery call — no obligation. Find out which path is right for you.
+          A 30-minute discovery call, no obligation. Find out which path is right for you.
         </motion.p>
 
         <motion.div

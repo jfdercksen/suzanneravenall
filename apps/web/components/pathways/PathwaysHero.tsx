@@ -46,7 +46,7 @@ export default function PathwaysHero() {
             {...fadeUp(0.2)}
             className="text-lg lg:text-xl text-white/75 font-light max-w-2xl leading-relaxed"
           >
-            Each pathway is a focused transformation journey — a guided way to
+            Each pathway is a focused transformation journey, a guided way to
             uncover the hidden patterns running underneath, interrupt the loops
             that keep you stuck, and support real, lasting personal change.
             Begin an Individual Transformation Pathway today, or register your

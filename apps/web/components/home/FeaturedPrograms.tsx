@@ -17,7 +17,7 @@ const programs: {
   {
     title: 'Precision Pattern Sessions',
     subtitle: 'Private 1:1 Work',
-    description: 'Behaviour and pattern-level transformation, one-on-one with Suzanne. Nine session types — from Rapid Repatterning® to Akashic Intuitive Mastery.',
+    description: 'Behaviour and pattern-level transformation, one-on-one with Suzanne. Nine session types: from Rapid Repatterning® to Akashic Intuitive Mastery.',
     price: null,
     image: '/images/generated/session-coaching.webp',
     href: '/services',
@@ -27,7 +27,7 @@ const programs: {
   {
     title: 'Recorded Group Repatterning',
     subtitle: 'Rapid Repatterning® Groups',
-    description: 'Powerful group repatterning sessions on money, confidence, boundaries, attraction and more — recorded so you can start today.',
+    description: 'Powerful group repatterning sessions on money, confidence, boundaries, attraction and more, recorded so you can start today.',
     price: 'From $90 · R1,500',
     image: '/images/generated/group-coaching-real.webp',
     href: '/programs#group',
@@ -37,7 +37,7 @@ const programs: {
   {
     title: 'The Basic Five (Programs 1–5)',
     subtitle: 'Practitioner Certification',
-    description: 'Train as an internationally certified Resonance Repatterning practitioner. Self-study online with mentoring — transform your life and gain the tools to transform others.',
+    description: 'Train as an internationally certified Resonance Repatterning practitioner. Self-study online with mentoring. Transform your life and gain the tools to transform others.',
     price: '$2,540 · R13,950',
     image: '/images/products/resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg',
     href: '/programs/resonance-repatterning-basic-5-series',

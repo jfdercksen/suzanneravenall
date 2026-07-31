@@ -213,7 +213,7 @@ export default function EventsContent() {
             </h1>
             <p className="text-lg lg:text-xl text-white/75 font-light max-w-xl mb-10 leading-relaxed">
               Group sessions, live-via-Zoom trainings and events with Dr.
-              Suzanne Ravenall — join from anywhere in the world.
+              Suzanne Ravenall, join from anywhere in the world.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
@@ -258,7 +258,7 @@ export default function EventsContent() {
             <p className="text-lg text-gray-600 font-light mb-12 max-w-2xl leading-relaxed">
               Suzanne is finalising the new live calendar. Book what is open
               now, and register your interest for the sessions awaiting new
-              dates — you will be the first to know when dates are confirmed.
+              dates. You will be the first to know when dates are confirmed.
             </p>
           </motion.div>
 
@@ -317,7 +317,7 @@ export default function EventsContent() {
             viewport={{ once: true, margin: '-100px' }}
           >
             <h3 className="text-2xl lg:text-3xl font-light text-brand-primary mb-3">
-              Group Sessions — New Dates Coming Soon
+              Group Sessions: New Dates Coming Soon
             </h3>
             <p className="text-gray-600 font-light mb-10 max-w-2xl leading-relaxed">
               These live group repatterning series are between cohorts. Register
@@ -362,7 +362,7 @@ export default function EventsContent() {
             </h2>
             <p className="text-lg text-white/70 font-light mb-12 max-w-2xl leading-relaxed">
               These programmes run as live cohorts with Suzanne throughout the
-              year — practitioner certification series, energy clearing levels
+              year: practitioner certification series, energy clearing levels
               and guided practice sessions. Attend from anywhere in the world.
             </p>
           </motion.div>
@@ -410,7 +410,7 @@ export default function EventsContent() {
               </h3>
               <p className="text-gray-600 text-sm font-light leading-relaxed mb-6">
                 Most live programmes are also available as recorded, self-study
-                versions — the same material, in your own time, with the same
+                versions: the same material, in your own time, with the same
                 energetic benefit as being in the class.
               </p>
               <Link
@@ -462,7 +462,7 @@ export default function EventsContent() {
             </h2>
             <p className="text-lg lg:text-xl text-white/70 font-light mb-10 max-w-2xl mx-auto leading-relaxed">
               A free 30-minute call with no obligation. Suzanne will help you
-              find the event or programme that best fits where you are — and
+              find the event or programme that best fits where you are, and
               where you want to go.
             </p>
             <Link

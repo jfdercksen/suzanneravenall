@@ -52,7 +52,7 @@ export default function TheStoryContent() {
               {...fadeUp(0)}
               className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
             >
-              About &mdash; The Story
+              About: The Story
             </motion.p>
             <motion.h1
               id="story-hero-heading"
@@ -66,7 +66,7 @@ export default function TheStoryContent() {
               {...fadeUp(0.4)}
               className="text-lg lg:text-xl text-white/75 font-light max-w-xl"
             >
-              Dr. Suzanne Ravenall is a modern-day explorer of human potential — a
+              Dr. Suzanne Ravenall is a modern-day explorer of human potential, a
               transformation and performance coach, speaker, and multiple
               award-winning entrepreneur. This is the journey that shaped her work.
             </motion.p>
@@ -89,7 +89,7 @@ export default function TheStoryContent() {
               id="rise-heading"
               className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] mb-8"
             >
-              Transformation was her business — long before it became personal.
+              Transformation was her business, long before it became personal.
             </motion.h2>
             <motion.p
               {...reveal(0.2)}
@@ -97,7 +97,7 @@ export default function TheStoryContent() {
             >
               Suzanne built one of South Africa&rsquo;s respected corporate
               transformation companies, guiding organisations through deep,
-              structural change. Her work earned international recognition — she
+              structural change. Her work earned international recognition: she
               was named one of the top 11 women entrepreneurs globally.
             </motion.p>
             <motion.p
@@ -105,7 +105,7 @@ export default function TheStoryContent() {
               className="text-gray-700 text-lg font-light leading-relaxed"
             >
               From the outside, it was a story of achievement. What came next would
-              test everything she understood about change — and reveal how much
+              test everything she understood about change, and reveal how much
               deeper transformation really goes.
             </motion.p>
           </div>
@@ -137,14 +137,14 @@ export default function TheStoryContent() {
               className="text-white/70 text-lg font-light leading-relaxed mb-6"
             >
               A series of profound traumas shattered Suzanne&rsquo;s health and
-              sense of identity — and triggered old, covered-up traumas from years
+              sense of identity, and triggered old, covered-up traumas from years
               before. A stroke followed, and then a multiple sclerosis diagnosis.
             </motion.p>
             <motion.p
               {...reveal(0.3)}
               className="text-white/70 text-lg font-light leading-relaxed"
             >
-              She was forced to begin again — not from scratch, but from new
+              She was forced to begin again, not from scratch, but from new
               awareness, truth, and a new way of being. The question was no longer
               how to perform. It was how to heal, and whether lasting change was
               truly possible.
@@ -169,14 +169,14 @@ export default function TheStoryContent() {
                 id="search-heading"
                 className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] mb-8"
               >
-                She went looking for answers — everywhere.
+                She went looking for answers, everywhere.
               </motion.h2>
               <motion.p
                 {...reveal(0.2)}
                 className="text-gray-700 text-lg font-light leading-relaxed"
               >
                 What followed was a radical journey through the sciences and
-                traditions of human change — a search for reason and meaning that
+                traditions of human change, a search for reason and meaning that
                 refused to settle for surface-level fixes. Not just to survive,
                 but to heal and transcend.
               </motion.p>
@@ -244,7 +244,7 @@ export default function TheStoryContent() {
               At its heart is a single insight, proven first in her own life:
               radical transformation doesn&rsquo;t come from motivation or mindset
               tricks. It comes from repatterning the biological and energetic
-              roots of pain and limitation. That insight now carries a name —
+              roots of pain and limitation. That insight now carries a name:
               Pattern Intelligence&trade;.
             </motion.p>
             <motion.blockquote
@@ -278,8 +278,8 @@ export default function TheStoryContent() {
               {...reveal(0.2)}
               className="text-gray-700 text-lg font-light leading-relaxed mb-6"
             >
-              Humanity is running outdated programming — neurological, emotional
-              and societal — and Suzanne believes it&rsquo;s time to rewrite the
+              Humanity is running outdated programming, neurological, emotional
+              and societal, and Suzanne believes it&rsquo;s time to rewrite the
               code. Her moonshot: to make deep human transformation a replicable
               science that can be taught and scaled globally, so people, teams and
               entire systems can repattern their way to coherence, health and joy.
@@ -289,14 +289,14 @@ export default function TheStoryContent() {
               className="mt-10 border-l-2 border-brand-accent pl-6 italic text-brand-primary text-lg font-light leading-relaxed"
             >
               <p className="mb-3">
-                To repattern the human experience — unlocking the potential within
+                To repattern the human experience: unlocking the potential within
                 individuals, organisations and humanity itself, so we can evolve
                 beyond the pain, beyond survival, transcend inherited and personal
                 trauma, and consciously shape a future driven by coherence,
                 purpose and limitless potential.
               </p>
               <footer className="mt-3 text-gray-500 text-sm tracking-widest uppercase not-italic">
-                &mdash; The Big Why
+                The Big Why
               </footer>
             </motion.blockquote>
           </div>
@@ -331,7 +331,7 @@ export default function TheStoryContent() {
             className="text-white/70 text-lg font-light leading-relaxed max-w-xl mx-auto mb-12"
           >
             The first step is seeing it. Take the free Pattern Scan to discover
-            the pattern running beneath your story — or speak with Suzanne
+            the pattern running beneath your story, or speak with Suzanne
             directly.
           </motion.p>
           <motion.div

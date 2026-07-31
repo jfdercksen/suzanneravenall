@@ -63,8 +63,8 @@ export function ComingSoonSection() {
               Our Blog is Launching Soon
             </h1>
             <p className="text-lg text-gray-300 max-w-xl mx-auto mb-10">
-              Insights on transformation, pattern mastery, and the science of lasting change —
-              subscribe to be the first to know when we go live.
+              Insights on transformation, pattern mastery, and the science of lasting change.
+              Subscribe to be the first to know when we go live.
             </p>
             <Link
               href="/contact"

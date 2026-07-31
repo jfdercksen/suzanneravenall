@@ -22,7 +22,7 @@ const outcomes = [
     number: '03',
     headline: 'Understand How Your Experiences Shape You',
     description:
-      'Develop a deep understanding of how early experiences have shaped your current actions — and how to consciously change them.',
+      'Develop a deep understanding of how early experiences have shaped your current actions, and how to consciously change them.',
   },
   {
     number: '04',
@@ -49,7 +49,7 @@ const audience = [
     icon: Users,
     title: 'You Are Ready for Real Change',
     description:
-      'You have tried motivation and willpower. Now you want to understand the root cause — and do the deeper work that creates lasting results.',
+      'You have tried motivation and willpower. Now you want to understand the root cause, and do the deeper work that creates lasting results.',
   },
   {
     icon: Zap,
@@ -68,7 +68,7 @@ const testimonials = [
   },
   {
     quote:
-      "I have achieved so much. It is a learning experience to heal yourself and touch other people's lives in a spectacular way. Suzanne has amazing knowledge and wisdom — it has been a wonderful journey.",
+      "I have achieved so much. It is a learning experience to heal yourself and touch other people's lives in a spectacular way. Suzanne has amazing knowledge and wisdom. It has been a wonderful journey.",
     name: 'Adriana',
     location: 'Venezuela',
   },
@@ -135,7 +135,7 @@ export default function MasterclassContent() {
             >
               Discover the pattern, decode and disrupt it, then rewire your mind and
               nervous system to create radical inner and outer transformation. This
-              free masterclass is designed as a taster — your first experience of
+              free masterclass is designed as a taster: your first experience of
               working at the pattern level before going deeper.
             </motion.p>
 
@@ -242,7 +242,7 @@ export default function MasterclassContent() {
             </p>
             <p className="text-gray-700 text-lg leading-relaxed mb-4">
               Her expertise spans neuroscience-informed coaching, Resonance Repatterning,
-              and conscious engineering — a unique approach that addresses the root causes
+              and conscious engineering, a unique approach that addresses the root causes
               of limitation rather than just the symptoms.
             </p>
             <p className="text-gray-700 text-lg leading-relaxed mb-8">
@@ -289,8 +289,8 @@ export default function MasterclassContent() {
                   &ldquo;{quote}&rdquo;
                 </blockquote>
                 <figcaption className="text-white font-semibold text-sm">
-                  {name}{' '}
-                  <span className="text-gray-500 font-normal">— {location}</span>
+                  {name}
+                  <span className="text-gray-500 font-normal">, {location}</span>
                 </figcaption>
               </motion.figure>
             ))}

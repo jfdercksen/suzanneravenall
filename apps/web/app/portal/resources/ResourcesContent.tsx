@@ -112,7 +112,7 @@ const RESOURCE_CATEGORIES: ResourceCategory[] = [
     resource: 'group_sessions_recorded',
     resources: [
       {
-        title: 'Rapid Repatterning — Group Session 1',
+        title: 'Rapid Repatterning: Group Session 1',
         description: 'Introduction to the RR process with group practice. 90 minutes.',
         type: 'Recording',
         resource: 'group_sessions_recorded',
@@ -136,13 +136,13 @@ const RESOURCE_CATEGORIES: ResourceCategory[] = [
     resource: 'live_session_recordings',
     resources: [
       {
-        title: 'Gold Cohort — May 2026 Intensive',
+        title: 'Gold Cohort: May 2026 Intensive',
         description: 'Full 3-hour live coaching intensive with Gold members. Advanced patterns work.',
         type: 'Recording',
         resource: 'live_session_recordings',
       },
       {
-        title: 'VIP Masterclass — Energy Leadership',
+        title: 'VIP Masterclass: Energy Leadership',
         description: 'Exclusive masterclass on energy leadership for high-performance professionals.',
         type: 'Recording',
         resource: 'live_session_recordings',
@@ -300,7 +300,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
             Resource Library
           </h1>
           <p className="text-xl text-white/60 max-w-2xl">
-            Your complete toolkit for transformation — assessments, workbooks, templates, and session recordings.
+            Your complete toolkit for transformation: assessments, workbooks, templates, and session recordings.
           </p>
         </motion.div>
 

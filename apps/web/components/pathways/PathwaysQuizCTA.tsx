@@ -42,7 +42,7 @@ export default function PathwaysQuizCTA() {
           className="text-lg text-white/70 font-light leading-relaxed mb-10"
         >
           Patterns are personal. Start with the free Pattern Scan at the Pattern
-          Diagnostic Hub to reveal the pattern shaping how you respond — a clear
+          Diagnostic Hub to reveal the pattern shaping how you respond, a clear
           first step toward the pathway that fits you best.
         </motion.p>
 

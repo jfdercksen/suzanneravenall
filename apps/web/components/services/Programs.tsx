@@ -23,22 +23,22 @@ const columns: Column[] = [
     eyebrow: 'Practitioner',
     title: 'Become a practitioner in the healing arts.',
     intro:
-      'Considering changing your life and becoming a practitioner in the healing arts or energy psychology? Join these expansive practitioner programmes — not only will your own life be transformed, you will help others transform theirs.',
+      'Considering changing your life and becoming a practitioner in the healing arts or energy psychology? Join these expansive practitioner programmes: not only will your own life be transformed, you will help others transform theirs.',
     programmes: [
       {
         name: 'Resonance Repatterning Basic 5 Series',
         description:
-          'Ever wondered why you work so hard at something and it simply doesn’t materialise? A major cause is subconscious beliefs — mostly unknown to the conscious mind — that are active every day, interfering with the life you want and deserve.',
+          'Ever wondered why you work so hard at something and it simply doesn’t materialise? A major cause is subconscious beliefs, mostly unknown to the conscious mind, that are active every day, interfering with the life you want and deserve.',
       },
       {
         name: 'Akashic Navigator (Basic & Advanced)',
         description:
-          'Access and rewrite your life’s blueprint through the Akashic Records. Create the past, present and future that you desire — and improve your intuition to receive daily guidance.',
+          'Access and rewrite your life’s blueprint through the Akashic Records. Create the past, present and future that you desire, and improve your intuition to receive daily guidance.',
       },
       {
         name: 'Energy Clearing (Basic & Advanced)',
         description:
-          'We are physical and energetic beings, with many channels that carry information and energy. This practitioner pathway teaches you to see, clear and realign the energy field — for yourself and for others.',
+          'We are physical and energetic beings, with many channels that carry information and energy. This practitioner pathway teaches you to see, clear and realign the energy field, for yourself and for others.',
       },
     ],
     ctaLabel: 'Explore Practitioner Programmes',
@@ -53,7 +53,7 @@ const columns: Column[] = [
       {
         name: 'Trauma to Transcendence',
         description:
-          'Breaking the hold of the childhood brain on your adult self. From early experiences of neglect or unmet needs we form beliefs — helpful and harmful — that limit our potential. This programme rewrites the adaptations we forgot we made.',
+          'Breaking the hold of the childhood brain on your adult self. From early experiences of neglect or unmet needs we form beliefs, helpful and harmful, that limit our potential. This programme rewrites the adaptations we forgot we made.',
       },
       {
         name: 'Love & Relationships',
@@ -63,17 +63,17 @@ const columns: Column[] = [
       {
         name: 'Intuition in My Personal Capacity',
         description:
-          'Identify and change the limiting beliefs we have internalised since childhood — even the ones we have accepted as true though they are not — and reconnect to the intuition that was always there.',
+          'Identify and change the limiting beliefs we have internalised since childhood, even the ones we have accepted as true though they are not, and reconnect to the intuition that was always there.',
       },
       {
         name: 'Become an Energy Ninja',
         description:
-          'Mastering energy for an abundant life, Level 1. Everything starts as, and is, energy. Learn how to change your world by using an unseen force — and bring it into every area of your life.',
+          'Mastering energy for an abundant life, Level 1. Everything starts as, and is, energy. Learn how to change your world by using an unseen force, and bring it into every area of your life.',
       },
       {
         name: 'Getting Unstuck',
         description:
-          'Have you ever wanted to change — different career, better health, improved body, better relationship — but it escapes you? If you have tried numerous approaches and keep waking up in the same cycle, this is for you.',
+          'Have you ever wanted to change (different career, better health, improved body, better relationship) but it escapes you? If you have tried numerous approaches and keep waking up in the same cycle, this is for you.',
       },
     ],
     ctaLabel: 'Browse Self-Study',
@@ -83,17 +83,17 @@ const columns: Column[] = [
     eyebrow: 'Live',
     title: 'Live programmes, run by Suzanne via Zoom.',
     intro:
-      'Programmes run live on a range of topics — designed to help you shift gear in life to a new way of being: more of who you are, and who you want to be. Connect from wherever you are in the world.',
+      'Programmes run live on a range of topics, designed to help you shift gear in life to a new way of being: more of who you are, and who you want to be. Connect from wherever you are in the world.',
     programmes: [
       {
         name: 'Mindfulness',
         description:
-          'Mindfulness — the ability to be fully present in the moment — is linked to decreased stress and sadness and increased focus and happiness. This programme teaches you to recognise it, practise it, and integrate it into everyday life.',
+          'Mindfulness (the ability to be fully present in the moment) is linked to decreased stress and sadness and increased focus and happiness. This programme teaches you to recognise it, practise it, and integrate it into everyday life.',
       },
       {
         name: 'Meditation',
         description:
-          'Meditation isn’t about becoming a different person. It’s training in awareness — a healthy sense of perspective. You’re not trying to turn off your thoughts, you’re learning to observe them without judgment.',
+          'Meditation isn’t about becoming a different person. It’s training in awareness: a healthy sense of perspective. You’re not trying to turn off your thoughts, you’re learning to observe them without judgment.',
       },
       {
         name: 'Inner Cultivation (RR 06)',
@@ -103,7 +103,7 @@ const columns: Column[] = [
       {
         name: 'Principles of Relationship (RR 08)',
         description:
-          'Shift your resonance and embrace loving connections. Through the repatternings in this programme, resonate with new neural connections and memory imprints — and let fresh, transformative ways of relating take root.',
+          'Shift your resonance and embrace loving connections. Through the repatternings in this programme, resonate with new neural connections and memory imprints, and let fresh, transformative ways of relating take root.',
       },
     ],
     ctaLabel: 'See Live Dates',
@@ -131,12 +131,12 @@ export default function Programs() {
             id="programs-heading"
             className="text-4xl lg:text-6xl font-light text-white leading-tight mb-8"
           >
-            Programmes for dramatic change — unlock your super powers now.
+            Programmes for dramatic change: unlock your super powers now.
           </h2>
           <p className="text-lg text-white/70 font-light leading-relaxed">
             Programmes to transform yourself and others, utilising conscious
             engineering and natural healing practices. Dive deep into the unconscious
-            and flip open your — and others’ — self mastery.
+            and flip open self mastery, both yours and others’.
           </p>
         </div>
 

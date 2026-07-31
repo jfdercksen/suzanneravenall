@@ -558,7 +558,7 @@ export default function CheckoutContent() {
                       {payPalApprovalUrl ? 'Redirecting to PayPal' : 'Redirecting to PayFast'}
                     </h2>
                     <p className="text-sm text-gray-500 mb-6">
-                      Please wait — you are being securely redirected to complete your payment.
+                      Please wait, you are being securely redirected to complete your payment.
                     </p>
                     <div className="flex justify-center gap-1.5">
                       {[0, 1, 2].map((i) => (

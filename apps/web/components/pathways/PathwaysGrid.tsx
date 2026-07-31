@@ -47,7 +47,7 @@ export default function PathwaysGrid() {
             Individual Transformation Pathways
           </h2>
           <p className="mt-5 text-base lg:text-lg text-white/70 font-light max-w-2xl leading-relaxed">
-            Focused transformation journeys for individuals — personal pathways
+            Focused transformation journeys for individuals: personal pathways
             for adults, and dedicated pathways for children and young people.
           </p>
         </motion.div>

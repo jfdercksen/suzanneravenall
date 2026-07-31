@@ -38,13 +38,13 @@ const FAQ_ITEMS = [
     id: 'faq-5',
     question: 'Do you offer payment plans?',
     answer:
-      'Yes — flexible payment plans are available for most programmes. Please reach out via the contact form or book a discovery call and we will find an arrangement that works for you.', // TODO: Suzanne to review and personalise
+      'Yes, flexible payment plans are available for most programmes. Please reach out via the contact form or book a discovery call and we will find an arrangement that works for you.', // TODO: Suzanne to review and personalise
   },
   {
     id: 'faq-6',
     question: 'What results can I expect, and how quickly?',
     answer:
-      'Results vary depending on the depth of the pattern and your commitment to the process. Many clients notice a meaningful shift within the first few sessions. Lasting transformation — the kind that does not slip back — typically takes consistent engagement over weeks to months.', // TODO: Suzanne to review and personalise
+      'Results vary depending on the depth of the pattern and your commitment to the process. Many clients notice a meaningful shift within the first few sessions. Lasting transformation (the kind that does not slip back) typically takes consistent engagement over weeks to months.', // TODO: Suzanne to review and personalise
   },
 ] as const
 

@@ -52,7 +52,7 @@ export default function AboutHero() {
             {...fadeUp(0.4)}
             className="text-lg lg:text-xl text-white/75 font-light max-w-xl"
           >
-            B.Msc. M.Msc. Msc.D. — Transformation &amp; Performance Coach, Speaker,
+            B.Msc. M.Msc. Msc.D.: Transformation &amp; Performance Coach, Speaker,
             and multiple award-winning entrepreneur.
           </motion.p>
 
@@ -61,7 +61,7 @@ export default function AboutHero() {
             className="mt-10 max-w-2xl border-l-2 border-brand-accent pl-6 italic text-white/80 text-base lg:text-lg font-light leading-relaxed"
           >
             &ldquo;When we find and disrupt the patterns that keep us stuck, we don&rsquo;t
-            just change — we become.&rdquo;
+            just change. We become.&rdquo;
           </motion.blockquote>
         </div>
       </div>

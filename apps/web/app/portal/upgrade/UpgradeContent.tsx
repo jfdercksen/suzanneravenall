@@ -128,7 +128,7 @@ export default function UpgradeContent({
 
   const trackDisplay =
     currentTrack !== 'general' && currentTrack !== 'both'
-      ? ` — ${TRACK_LABELS[currentTrack]}`
+      ? ` (${TRACK_LABELS[currentTrack]})`
       : ''
 
   return (
@@ -156,7 +156,7 @@ export default function UpgradeContent({
               . Choose the next step in your practitioner journey below.
             </p>
             <p className="text-sm text-white/40 mb-10">
-              Both tracks are independent — you may hold memberships in Akashic and Energy Clearing simultaneously.
+              Both tracks are independent. You may hold memberships in Akashic and Energy Clearing simultaneously.
               Basic tiers give core access; Premier tiers include CPD tracking, community access, and extended resources.
             </p>
             <Link
@@ -184,7 +184,7 @@ export default function UpgradeContent({
             </p>
             <h2 className="text-3xl lg:text-4xl font-light text-white">Starting Point</h2>
             <p className="text-white/40 text-sm mt-2">
-              Entry memberships — no training required.
+              Entry memberships: no training required.
             </p>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

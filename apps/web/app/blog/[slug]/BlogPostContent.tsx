@@ -74,7 +74,7 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
             {(post.author || post.publishedAt) && (
               <div className="flex items-center gap-4 mt-6 text-gray-300 text-sm">
                 {post.author && <span>{post.author}</span>}
-                {post.author && post.publishedAt && <span>&mdash;</span>}
+                {post.author && post.publishedAt && <span aria-hidden="true">&middot;</span>}
                 {post.publishedAt && <span>{formatDate(post.publishedAt)}</span>}
               </div>
             )}

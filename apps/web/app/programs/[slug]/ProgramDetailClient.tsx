@@ -21,14 +21,14 @@ const CATEGORY_LABELS: Record<Program['category'], string> = {
 
 const DELIVERY_METHODS: Record<Program['category'], string> = {
   practitioner: 'Live Training via Zoom',
-  'self-paced': 'Self-Study Online — Access Anytime',
+  'self-paced': 'Self-Study Online: Access Anytime',
   live: 'Live via Zoom with Suzanne',
-  group: 'Recorded Sessions — Watch Anytime',
+  group: 'Recorded Sessions: Watch Anytime',
 }
 
 function getDeliveryMethod(program: Program): string {
   // All Resonance Repatterning programmes are currently offered self-study
-  if (isResonanceRepatterning(program)) return 'Self-Study Online — Start Anytime'
+  if (isResonanceRepatterning(program)) return 'Self-Study Online: Start Anytime'
   return DELIVERY_METHODS[program.category]
 }
 
@@ -115,12 +115,12 @@ const OUTCOMES = [
   {
     Icon: SparklesIcon,
     title: 'Shift Your Perspective',
-    body: 'Gain a completely new understanding of the patterns and beliefs shaping your life — and discover that lasting change is not only possible, it is inevitable.',
+    body: 'Gain a completely new understanding of the patterns and beliefs shaping your life, and discover that lasting change is not only possible, it is inevitable.',
   },
   {
     Icon: BoltIcon,
     title: 'Rewire Deep Patterns',
-    body: 'Move beyond surface-level change to reprogramme the subconscious beliefs at the root of your challenges — creating embodied, lasting transformation.',
+    body: 'Move beyond surface-level change to reprogramme the subconscious beliefs at the root of your challenges, creating embodied, lasting transformation.',
   },
   {
     Icon: ArrowUpIcon,
@@ -313,7 +313,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               After this programme, you will&hellip;
             </h2>
             <p className="text-lg text-gray-600 font-light leading-relaxed">
-              Every programme is designed to produce real, measurable shifts — not just insight,
+              Every programme is designed to produce real, measurable shifts, not just insight,
               but transformation you can feel in your daily life.
             </p>
           </div>
@@ -390,7 +390,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                 <p className="text-white/65 font-light leading-relaxed text-sm">
                   This programme is for you if you are ready to move beyond surface-level change and
                   commit to a deeper journey of inner transformation. Whether you are facing a specific
-                  challenge or simply know that there is more available to you — this is your next step.
+                  challenge or simply know that there is more available to you, this is your next step.
                 </p>
               </div>
             </div>
@@ -483,8 +483,8 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               {/* TODO: Suzanne to review and approve facilitator bio copy */}
               <p className="text-lg text-gray-600 font-light leading-relaxed mb-6">
                 Dr. Suzanne Ravenall has spent over two decades guiding individuals and organisations
-                through profound inner transformation. A trauma survivor herself — having navigated
-                a traumatic brain injury, stroke, and multiple life-altering experiences — Suzanne
+                through profound inner transformation. A trauma survivor herself, having navigated
+                a traumatic brain injury, stroke, and multiple life-altering experiences, Suzanne
                 has turned her lived wisdom into a rigorous methodology for conscious healing.
               </p>
               <p className="text-base text-gray-500 font-light leading-relaxed mb-10">

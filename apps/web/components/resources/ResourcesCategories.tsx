@@ -19,7 +19,7 @@ const categories = [
     label: 'Blog',
     title: 'Insights & Articles',
     description:
-      'Deep dives into transformation, neuroscience, patterns and human potential — written by Dr. Suzanne Ravenall.',
+      'Deep dives into transformation, neuroscience, patterns and human potential, written by Dr. Suzanne Ravenall.',
     badge: null,
   },
   {
@@ -46,7 +46,7 @@ const categories = [
     label: 'Awards',
     title: 'Recognition & Honours',
     description:
-      'Recognised across healthcare, business and leadership excellence — Global 100, CRF Best Employers, Healthcare & Pharmaceutical Awards and more.',
+      'Recognised across healthcare, business and leadership excellence: Global 100, CRF Best Employers, Healthcare & Pharmaceutical Awards and more.',
     badge: null,
   },
   {

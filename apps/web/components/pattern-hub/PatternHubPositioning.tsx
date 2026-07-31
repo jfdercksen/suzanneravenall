@@ -38,9 +38,9 @@ export default function PatternHubPositioning() {
             className="space-y-5 text-base lg:text-lg text-gray-600 leading-relaxed"
           >
             <p>
-              What you notice day to day — the argument that repeats, the
+              What you notice day to day (the argument that repeats, the
               exhaustion that won&rsquo;t lift, the hesitation before a big
-              decision — is only the surface. Those are behaviours, and
+              decision) is only the surface. Those are behaviours, and
               behaviours are what a pattern looks like from the outside.
             </p>
             <p>
@@ -52,7 +52,7 @@ export default function PatternHubPositioning() {
             <p>
               Each diagnostic below is built to surface exactly that: the
               pattern quietly driving your emotions, your relationships,
-              your health, your decisions and your performance — so you can
+              your health, your decisions and your performance, so you can
               finally see what has been running the show.
             </p>
           </motion.div>

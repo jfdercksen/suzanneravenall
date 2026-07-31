@@ -47,13 +47,13 @@ export default function PatternHubDeeperPositioning() {
           >
             <p>
               These aren&rsquo;t fixed traits or flaws in your character.
-              They&rsquo;re patterned responses your system learned — ways of
+              They&rsquo;re patterned responses your system learned, ways of
               coping, protecting and adapting that made sense once and now
               run on autopilot.
             </p>
             <p>
               And anything that was learned can be relearned. That&rsquo;s
-              not a motivational idea — it&rsquo;s how the nervous system
+              not a motivational idea. It&rsquo;s how the nervous system
               actually works.
             </p>
             <p>

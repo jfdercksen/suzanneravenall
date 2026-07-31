@@ -46,7 +46,7 @@ const TESTIMONIALS = [
   },
   {
     quote:
-      'The science behind the process gave me confidence it would work — and it did. I went from chronic anxiety to a calm I never thought was possible for me.',
+      'The science behind the process gave me confidence it would work, and it did. I went from chronic anxiety to a calm I never thought was possible for me.',
     name: 'James K.',
     location: 'Johannesburg',
   },
@@ -61,12 +61,12 @@ const FAQ_ITEMS = [
   {
     question: 'What results can I expect?',
     answer:
-      'Most clients report a noticeable shift in their first session — a reduction in the emotional charge around a specific pattern or belief. Lasting transformation builds across the programme as multiple root causes are addressed. Results vary by individual, but permanent pattern release is the goal of every session.',
+      'Most clients report a noticeable shift in their first session, a reduction in the emotional charge around a specific pattern or belief. Lasting transformation builds across the programme as multiple root causes are addressed. Results vary by individual, but permanent pattern release is the goal of every session.',
   },
   {
     question: 'Is this right for me?',
     answer:
-      'Book a free discovery call to find out — link below. If you are tired of coping strategies that only manage symptoms, and ready to resolve the root cause, this work is likely a strong fit.',
+      'Book a free discovery call to find out: link below. If you are tired of coping strategies that only manage symptoms, and ready to resolve the root cause, this work is likely a strong fit.',
   },
 ]
 

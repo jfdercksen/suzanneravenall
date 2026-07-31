@@ -75,7 +75,7 @@ const writtenTestimonials = [
   },
   {
     quote:
-      'I have achieved so much. I met amazing people through the training system which truly transforms lives in an amazing way. It is a real learning experience to heal yourself and to help heal other people and to touch lives in a spectacular way. I feel blessed and lucky to have met Suzanne — she has been my mentor. It has been a wonderful journey of transformation.',
+      'I have achieved so much. I met amazing people through the training system which truly transforms lives in an amazing way. It is a real learning experience to heal yourself and to help heal other people and to touch lives in a spectacular way. I feel blessed and lucky to have met Suzanne. She has been my mentor. It has been a wonderful journey of transformation.',
     name: 'Adriana',
     location: 'Venezuela',
   },
@@ -146,13 +146,13 @@ const writtenTestimonials = [
   },
   {
     quote:
-      'A huge big thank you!! The tools provided in your course are working very well for me. Facing the shadow has been fundamental in my processing, as well as the daily work — it’s been awesome.',
+      'A huge big thank you!! The tools provided in your course are working very well for me. Facing the shadow has been fundamental in my processing, as well as the daily work. It’s been awesome.',
     name: 'Jean',
     location: 'South Africa',
   },
   {
     quote:
-      'I thoroughly loved the session. Suzanne, you were absolutely bang on — certain issues which nobody could tell me about before, and you confirmed the reasons why. I felt totally helpless and disappointed with others I reached out to for help. You helped me with the answers and reasons where others couldn’t.',
+      'I thoroughly loved the session. Suzanne, you were absolutely bang on: certain issues which nobody could tell me about before, and you confirmed the reasons why. I felt totally helpless and disappointed with others I reached out to for help. You helped me with the answers and reasons where others couldn’t.',
     name: 'Jaya',
     location: 'India',
   },
@@ -170,7 +170,7 @@ const writtenTestimonials = [
   },
   {
     quote:
-      'There’s a shift alright — the exercises are proving a challenge! One day at a time, one moment at a time. I want to thank you for your energy specifically.',
+      'There’s a shift alright. The exercises are proving a challenge! One day at a time, one moment at a time. I want to thank you for your energy specifically.',
     name: 'Gavin',
     location: 'South Africa',
   },
@@ -182,7 +182,7 @@ const writtenTestimonials = [
   },
   {
     quote:
-      'I have now started to re-read the notes — they contain priceless knowledge. Many, many thanks. I’m literally absorbing the content and I want to put this knowledge into practice. I’m so grateful to you.',
+      'I have now started to re-read the notes. They contain priceless knowledge. Many, many thanks. I’m literally absorbing the content and I want to put this knowledge into practice. I’m so grateful to you.',
     name: 'Houshana',
     location: 'Mauritius',
   },
@@ -199,7 +199,7 @@ const writtenTestimonials = [
   },
   {
     quote:
-      'One of my staff members opened up that she had been struggling and feeling depressed. I find that I can now help a lot by taking her through some of the fundamental points. I immediately witnessed a shift in her. I’m very grateful for having received the tools you provided — to not only help myself but to shine a light for others as well.',
+      'One of my staff members opened up that she had been struggling and feeling depressed. I find that I can now help a lot by taking her through some of the fundamental points. I immediately witnessed a shift in her. I’m very grateful for having received the tools you provided, to not only help myself but to shine a light for others as well.',
     name: 'Anonymous',
     location: 'South Africa',
   },
@@ -217,7 +217,7 @@ const writtenTestimonials = [
   },
   {
     quote:
-      'There is something special about group sessions — it’s like we are helping each other unravel our deepest issues with total vulnerability, and yet we feel so protected knowing a lot of our negative conditioning is just garbage that we need to throw out. It’s a privilege to be guided by Suzanne.',
+      'There is something special about group sessions: it’s like we are helping each other unravel our deepest issues with total vulnerability, and yet we feel so protected knowing a lot of our negative conditioning is just garbage that we need to throw out. It’s a privilege to be guided by Suzanne.',
     name: 'Schweta',
     location: 'Mauritius',
   },
@@ -229,13 +229,13 @@ const writtenTestimonials = [
   },
   {
     quote:
-      'I was amazed at the accuracy, and I was amazed by the clearing as I could feel the energy lifting and clearing. I realise that I have been neglecting the spiritual side of my life recently and that it’s time to make a move and get back on the right path. Thanks a lot for all the insight — it was just the motivation I needed to get moving again.',
+      'I was amazed at the accuracy, and I was amazed by the clearing as I could feel the energy lifting and clearing. I realise that I have been neglecting the spiritual side of my life recently and that it’s time to make a move and get back on the right path. Thanks a lot for all the insight. It was just the motivation I needed to get moving again.',
     name: 'Sheila',
     location: 'Mauritius',
   },
   {
     quote:
-      'I have been working with Suzanne for the past 3 years now. It has been an intense journey and it has been amazing to see how much I have shifted and grown. I had a huge crisis in which many parts of my life fell apart — Resonance Repatterning combined with my other daily practices saved me from falling into a depression and I started to create a new life from scratch. Thank you Suzanne.',
+      'I have been working with Suzanne for the past 3 years now. It has been an intense journey and it has been amazing to see how much I have shifted and grown. I had a huge crisis in which many parts of my life fell apart. Resonance Repatterning combined with my other daily practices saved me from falling into a depression and I started to create a new life from scratch. Thank you Suzanne.',
     name: 'Jelka',
     location: 'Austria',
   },
@@ -247,7 +247,7 @@ const writtenTestimonials = [
   },
   {
     quote:
-      'Sciatica was gone by Friday evening. Spent the whole weekend painting the house — up and down ladders, moving stuff — and no pain or discomfort. Feeling great today, not even stiff or anything. I experience almost instant improvements.',
+      'Sciatica was gone by Friday evening. Spent the whole weekend painting the house (up and down ladders, moving stuff) and no pain or discomfort. Feeling great today, not even stiff or anything. I experience almost instant improvements.',
     name: 'Pieter',
     location: 'Thailand',
   },
@@ -259,13 +259,13 @@ const writtenTestimonials = [
   },
   {
     quote:
-      'Excellent — I felt very comfortable explaining the problems to Suzanne. Like talking to a friend. The honest advice, the information and the objective perspective make the whole session valuable. Suzanne is very warm and welcoming with a sincere desire to help. I felt comfortable to open up without fear of judgement.',
+      'Excellent. I felt very comfortable explaining the problems to Suzanne. Like talking to a friend. The honest advice, the information and the objective perspective make the whole session valuable. Suzanne is very warm and welcoming with a sincere desire to help. I felt comfortable to open up without fear of judgement.',
     name: 'Carol',
     location: 'Colombia',
   },
   {
     quote:
-      'It was a wonderful, enlightening experience — accurate and insightful — and I came away with a fresh clarity and perspective on issues that I have been working on. Thanks Suzanne, powerful and relevant to my personal journey.',
+      'It was a wonderful, enlightening experience, accurate and insightful, and I came away with a fresh clarity and perspective on issues that I have been working on. Thanks Suzanne, powerful and relevant to my personal journey.',
     name: 'Valanne',
     location: 'Canada',
   },
@@ -302,7 +302,7 @@ export default function TestimonialsContent() {
             {...fadeUp(0.3)}
             className="text-lg text-white/70 font-light max-w-xl leading-relaxed"
           >
-            Clients around the world share what shifted when they found — and broke — the
+            Clients around the world share what shifted when they found, and broke, the
             patterns that were holding them back.
           </motion.p>
         </div>
@@ -343,8 +343,8 @@ export default function TestimonialsContent() {
               </p>
               <div className="w-16 h-px bg-brand-accent mb-8" />
               <p className="text-white/60 text-sm font-light leading-relaxed max-w-sm">
-                Three sessions. One 30-year pattern found and dissolved. A business — and a
-                life — running at double the pace.
+                Three sessions. One 30-year pattern found and dissolved. A business, and a
+                life, running at double the pace.
               </p>
             </motion.div>
 
@@ -362,7 +362,7 @@ export default function TestimonialsContent() {
               </p>
               <ul className="space-y-6 list-none">
                 {[
-                  'Patterns they had carried for decades — through therapy, books and willpower — finally naming themselves and losing their grip.',
+                  'Patterns they had carried for decades (through therapy, books and willpower) finally naming themselves and losing their grip.',
                   'Relationships shifting as old attachment and communication loops dissolve.',
                   'Calm and clarity under pressure where there used to be anxiety and overwhelm.',
                   'Momentum in business and career once the invisible handbrake comes off.',
@@ -404,7 +404,7 @@ export default function TestimonialsContent() {
               What clients say
             </h2>
             <p className="text-gray-500 text-lg font-light max-w-2xl mx-auto">
-              From private sessions to group programmes — in their own words, exactly as
+              From private sessions to group programmes, in their own words, exactly as
               they shared them.
             </p>
           </motion.div>
@@ -479,7 +479,7 @@ export default function TestimonialsContent() {
             transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
             className="text-lg text-white/70 font-light max-w-xl mx-auto leading-relaxed mb-10"
           >
-            Start by finding the pattern that&apos;s running your life — it takes two
+            Start by finding the pattern that&apos;s running your life. It takes two
             minutes and it&apos;s free.
           </motion.p>
 

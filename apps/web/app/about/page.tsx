@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'About Dr. Suzanne Ravenall | Transformation & Performance Coach',
     description:
-      'Meet Dr. Suzanne Ravenall — B.Msc. M.Msc. Msc.D. Modern-day explorer of human potential, transformation and performance coach, speaker, and multiple award-winning entrepreneur championing the change in the human condition one person at a time.',
+      'Meet Dr. Suzanne Ravenall, B.Msc. M.Msc. Msc.D. Modern-day explorer of human potential, transformation and performance coach, speaker, and multiple award-winning entrepreneur championing the change in the human condition one person at a time.',
   }
 }
 
@@ -28,7 +28,7 @@ export default function AboutPage() {
       <MagazineCovers />
       <HowItWorks />
       <MediaLogos
-        quote="&#8220;When we find and disrupt the patterns that keep us stuck, we don&#8217;t just change &#8212; we become.&#8221;"
+        quote="&#8220;When we find and disrupt the patterns that keep us stuck, we don&#8217;t just change. We become.&#8221;"
         quoteAttribution="Dr. Suzanne Ravenall"
       />
       <TheEcosystem />

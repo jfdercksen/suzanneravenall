@@ -8,7 +8,7 @@ export function generateMetadata(): Metadata {
   return {
     title: 'Awards & Honours | Dr. Suzanne Ravenall',
     description:
-      'Dr. Suzanne Ravenall and the Ravenall Institute — recognised with Global 100, CRF and Healthcare & Pharmaceutical Excellence Awards.',
+      'Dr. Suzanne Ravenall and the Ravenall Institute, recognised with Global 100, CRF and Healthcare & Pharmaceutical Excellence Awards.',
   }
 }
 

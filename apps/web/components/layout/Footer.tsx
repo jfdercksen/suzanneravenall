@@ -72,7 +72,7 @@ export default function Footer() {
 
           {/* Brand column — spans 2 cols on lg */}
           <div className="lg:col-span-2">
-            <Link href="/" aria-label="Dr. Suzanne Ravenall — return to homepage">
+            <Link href="/" aria-label="Dr. Suzanne Ravenall, return to homepage">
               <Image
                 src="/logos/suzanne-white-logo.png"
                 alt="Dr. Suzanne Ravenall"
@@ -82,7 +82,7 @@ export default function Footer() {
             </Link>
             <p className="mt-4 text-sm text-white/70 leading-relaxed max-w-xs">
               Pattern-level transformation through the Pattern Intelligence™
-              ecosystem — decode the patterns running your life, and change them
+              ecosystem: decode the patterns running your life, and change them
               for good.
             </p>
 

@@ -37,7 +37,7 @@ export const metadata: Metadata = {
         url: '/images/hero-bg-suzanne-ravenall.jpg',
         width: 1200,
         height: 630,
-        alt: 'Dr. Suzanne Ravenall — Transformation Coaching',
+        alt: 'Dr. Suzanne Ravenall: Transformation Coaching',
       },
     ],
   },

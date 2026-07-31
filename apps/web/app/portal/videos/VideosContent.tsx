@@ -235,7 +235,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
             Video Library
           </h1>
           <p className="text-xl text-white/60 max-w-2xl">
-            Coaching sessions, group intensives, and masterclasses — watch at your own pace.
+            Coaching sessions, group intensives, and masterclasses. Watch at your own pace.
           </p>
         </motion.div>
 

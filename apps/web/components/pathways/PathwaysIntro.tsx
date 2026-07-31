@@ -44,7 +44,7 @@ export default function PathwaysIntro() {
               Every pathway is built around a distinct transformation theme. Some
               focus on personal breakthrough and pattern interruption, others on
               foundations for children and young people. Think of this as a clear
-              starting point — find the area that fits the season of life you are
+              starting point: find the area that fits the season of life you are
               in right now.
             </p>
           </motion.div>

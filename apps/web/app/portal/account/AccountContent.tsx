@@ -19,9 +19,9 @@ interface AccountContentProps {
 }
 
 function formatDate(dateStr: string | null): string {
-  if (!dateStr) return '—'
+  if (!dateStr) return 'N/A'
   const date = new Date(dateStr)
-  if (isNaN(date.getTime())) return '—'
+  if (isNaN(date.getTime())) return 'N/A'
   return date.toLocaleDateString('en-ZA', {
     day: 'numeric',
     month: 'long',

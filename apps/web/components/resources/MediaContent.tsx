@@ -16,7 +16,7 @@ const mediaItems = [
   {
     outlet: 'CEO Magazine',
     type: 'Cover Story',
-    title: 'Fast and Furious — Leading at Speed',
+    title: 'Fast and Furious: Leading at Speed',
     description:
       "A CEO Magazine cover story exploring how high-performing leaders drive transformation at pace. Dr. Ravenall's strategies for sustainable execution.",
     href: 'https://suzanneravenall.com/article-ceo-magazine-cover-story-fast-and-furious/',
@@ -26,7 +26,7 @@ const mediaItems = [
     type: 'Cover Story',
     title: 'Execution Excellence',
     description:
-      'The gap between strategic intention and actual execution — and the mindset shifts that close it. A CEO Magazine cover story.',
+      'The gap between strategic intention and actual execution, and the mindset shifts that close it. A CEO Magazine cover story.',
     href: 'https://suzanneravenall.com/article-ceo-magazine-cover-story-execution-excellence/',
   },
   {
@@ -40,15 +40,15 @@ const mediaItems = [
   {
     outlet: 'CEO Magazine',
     type: 'Article',
-    title: 'B2B Outsourcing — A Human Lens',
+    title: 'B2B Outsourcing: A Human Lens',
     description:
-      'Applying a human-centred lens to B2B outsourcing decisions — how people patterns determine whether partnerships succeed or fail.',
+      'Applying a human-centred lens to B2B outsourcing decisions: how people patterns determine whether partnerships succeed or fail.',
     href: 'https://suzanneravenall.com/article-ceo-magazine-b2b-outsourcing/',
   },
   {
     outlet: 'Business Excellence Awards',
     type: 'Press Release',
-    title: 'Ravenall Institute — Business Excellence Award',
+    title: 'Ravenall Institute: Business Excellence Award',
     description:
       'Official press release recognising the Ravenall Institute for outstanding contribution to coaching, human development and business excellence.',
     href: 'https://suzanneravenall.com/article-business-excellence-awards-press-release/',
@@ -99,7 +99,7 @@ export default function MediaContent() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-lg text-white/70 font-light max-w-xl leading-relaxed"
           >
-            Dr. Suzanne Ravenall featured across leading business and leadership publications —
+            Dr. Suzanne Ravenall featured across leading business and leadership publications,
             from CEO Magazine cover stories to international award announcements.
           </motion.p>
         </div>

@@ -41,7 +41,7 @@ export default function TheMethod() {
             <p className="text-white/70 text-lg font-light leading-relaxed">
               A radical synthesis of metaphysics, neuroscience, trauma science, energy
               psychology, NLP, the neurobiology of decision making and performance,
-              consciousness studies, and ancient healing arts — fused into a practical
+              consciousness studies, and ancient healing arts, fused into a practical
               methodology for lasting transformation. Not just to survive, but to heal
               and transcend.
             </p>
@@ -55,7 +55,7 @@ export default function TheMethod() {
               The differentiation
             </h3>
             <p className="text-white/70 text-lg font-light leading-relaxed">
-              Every individual, team and system is capable of radical transformation —
+              Every individual, team and system is capable of radical transformation,
               not through motivation or mindset tricks, but by repatterning the
               biological and energetic roots of pain and limitation. This is about
               human evolution: operating from a higher state of awareness, resilience,

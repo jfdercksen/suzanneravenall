@@ -96,7 +96,7 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
             </p>
             <h1 className="text-3xl lg:text-4xl font-light leading-tight mb-3">{quiz.title}</h1>
             <p className="text-base text-white/70 font-light leading-relaxed mb-6">
-              Tell us where to send your diagnostic link — you&apos;ll get your result the
+              Tell us where to send your diagnostic link: you&apos;ll get your result the
               moment you finish.
             </p>
 

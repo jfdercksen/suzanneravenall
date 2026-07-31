@@ -57,7 +57,7 @@ export function ShopHeroBanner() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="text-lg text-white/70 leading-relaxed mb-8 max-w-xl"
         >
-          48 programmes. One destination. The tools Suzanne has used to transform 2,000+ lives — now available to you.
+          48 programmes. One destination. The tools Suzanne has used to transform 2,000+ lives, now available to you.
         </motion.p>
 
         {/* Credibility stats */}

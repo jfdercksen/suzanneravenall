@@ -14,13 +14,13 @@ const sections: Section[] = [
     title: '1. Overview',
     paragraphs: [
       'Welcome to suzanneravenall.com (the "Website"). Please read this Disclaimer before purchasing, accessing, enrolling in or using any sessions, practices, online programmes or content (collectively, the "Services"). The term "You" refers to the user, client or viewer of the Website. The Website and its content are owned by the Ravenall Institute (offices of which reside in South Africa).',
-      'By viewing this Website or anything made available on or through this Website — including but not limited to programmes, products, services, opt-in gifts, e-books, videos, webinars, blog posts, newsletters, emails, social media and/or other communication — You are agreeing to accept all parts of this Disclaimer. If You do not agree with the Disclaimer below, You should leave the Website now.',
+      'By viewing this Website or anything made available on or through this Website (including but not limited to programmes, products, services, opt-in gifts, e-books, videos, webinars, blog posts, newsletters, emails, social media and/or other communication), You are agreeing to accept all parts of this Disclaimer. If You do not agree with the Disclaimer below, You should leave the Website now.',
     ],
   },
   {
     title: '2. For Educational and Informational Purposes Only',
     paragraphs: [
-      'The information provided in or through this Website is for educational and informational purposes only, and solely as a self-help tool for your own use. You are welcome to share the Website with your loved ones, friends and beyond — the same Disclaimer remains valid for them as well.',
+      'The information provided in or through this Website is for educational and informational purposes only, and solely as a self-help tool for your own use. You are welcome to share the Website with your loved ones, friends and beyond. The same Disclaimer remains valid for them as well.',
     ],
   },
   {
@@ -60,8 +60,8 @@ const sections: Section[] = [
   {
     title: '8. Technology Disclaimer',
     paragraphs: [
-      'We try to ensure that the availability and delivery of the Services is uninterrupted and error-free — including our content and communications through the Website, private groups, email communications, videos, audio recordings, webinars, downloadable files, handouts and e-books, or any other materials provided to You. However, we cannot guarantee that your access will not be suspended or restricted from time to time, including to allow for repairs, maintenance or updates, although we will of course try to limit the frequency and duration of any suspension or restriction.',
-      'To the fullest extent permitted by law, we will not be liable to You for damages or refunds, or for any other recourse, should the Services become unavailable, or should access to them become slow or incomplete, due to any reason — such as system back-up procedures, internet traffic volume, upgrades, overload of requests to the servers, general network failures or delays, or any other cause which may from time to time make the Services inaccessible to You.',
+      'We try to ensure that the availability and delivery of the Services is uninterrupted and error-free, including our content and communications through the Website, private groups, email communications, videos, audio recordings, webinars, downloadable files, handouts and e-books, or any other materials provided to You. However, we cannot guarantee that your access will not be suspended or restricted from time to time, including to allow for repairs, maintenance or updates, although we will of course try to limit the frequency and duration of any suspension or restriction.',
+      'To the fullest extent permitted by law, we will not be liable to You for damages or refunds, or for any other recourse, should the Services become unavailable, or should access to them become slow or incomplete, due to any reason, such as system back-up procedures, internet traffic volume, upgrades, overload of requests to the servers, general network failures or delays, or any other cause which may from time to time make the Services inaccessible to You.',
     ],
   },
   {
@@ -73,13 +73,13 @@ const sections: Section[] = [
   {
     title: '10. Assumption of Risk',
     paragraphs: [
-      'As with all situations, there are sometimes unknown individual risks and circumstances that can arise during use of the Website that cannot be foreseen and that can influence or reduce results. You understand that any mention of any suggestion or recommendation on or through the Website is to be taken at your own risk, with no liability on our part, recognising that there is a rare chance that illness, injury or even death could result, and You agree to assume all risks. Do what You feel is right for You — double-check, and ask around if necessary.',
+      'As with all situations, there are sometimes unknown individual risks and circumstances that can arise during use of the Website that cannot be foreseen and that can influence or reduce results. You understand that any mention of any suggestion or recommendation on or through the Website is to be taken at your own risk, with no liability on our part, recognising that there is a rare chance that illness, injury or even death could result, and You agree to assume all risks. Do what You feel is right for You. Double-check, and ask around if necessary.',
     ],
   },
   {
     title: '11. Limitation of Liability',
     paragraphs: [
-      'By using this Website and Services, You agree to absolve us of any liability or loss that You, or any other person, may incur from use of the information, products or materials that You request or receive through or on the Website. You agree that we will not be liable to You, or to any other individual, company or entity, for any type of damages — including direct, indirect, special, incidental, equitable or consequential loss or damages — for use of or reliance on the Website.',
+      'By using this Website and Services, You agree to absolve us of any liability or loss that You, or any other person, may incur from use of the information, products or materials that You request or receive through or on the Website. You agree that we will not be liable to You, or to any other individual, company or entity, for any type of damages (including direct, indirect, special, incidental, equitable or consequential loss or damages) for use of or reliance on the Website.',
       'You agree that we do not assume liability for accidents, delays, injuries, harm, loss, damage, death, lost profits, personal, professional or business interruptions, misapplication of information, physical or mental disease, condition or issue, or any other type of loss or damage due to any act or default by us or anyone acting as our agent, consultant, affiliate, joint venture partner, employee, shareholder, director, staff, team member, or anyone otherwise affiliated with our business, who is engaged in delivering content on or through this Website or Services.',
       'In any event, our entire liability to You is equal to the value of the goods and/or services paid by You to us during the duration of our contract. Should You not be satisfied with the provided Service, we will refund your money within 7 days, in line with our satisfaction guarantee policy.',
     ],
@@ -87,7 +87,7 @@ const sections: Section[] = [
   {
     title: '12. Indemnification and Release of Claims',
     paragraphs: [
-      'You hereby fully and completely hold harmless, indemnify and release us — and any of our agents, consultants, affiliates, joint venture partners, employees, shareholders, directors, staff, team members, or anyone otherwise affiliated with our business — from any and all causes of action, allegations, suits, claims, damages or demands whatsoever, in law or equity, that may arise in the past, present or future, that are in any way related to the Website or Services.',
+      'You hereby fully and completely hold harmless, indemnify and release us (and any of our agents, consultants, affiliates, joint venture partners, employees, shareholders, directors, staff, team members, or anyone otherwise affiliated with our business) from any and all causes of action, allegations, suits, claims, damages or demands whatsoever, in law or equity, that may arise in the past, present or future, that are in any way related to the Website or Services.',
     ],
   },
   {

@@ -11,7 +11,7 @@ const steps = [
     number: '01',
     title: 'Sign Up',
     description:
-      'Create your account in minutes. No long forms, no gatekeeping — just you and your coach, ready when you are.',
+      'Create your account in minutes. No long forms, no gatekeeping: just you and your coach, ready when you are.',
   },
   {
     number: '02',
@@ -23,7 +23,7 @@ const steps = [
     number: '03',
     title: 'Continue Monthly',
     description:
-      'Loved your first month? Keep going — then a simple monthly subscription, cancel anytime.',
+      'Loved your first month? Keep going, then a simple monthly subscription, cancel anytime.',
   },
 ]
 
@@ -38,7 +38,7 @@ const capabilities = [
     icon: Compass,
     title: 'Pattern-Aware Guidance',
     description:
-      'Grounded in Pattern Intelligence™ — it helps you notice the unconscious patterns driving your decisions and behaviour, and supports the work between sessions.',
+      'Grounded in Pattern Intelligence™, it helps you notice the unconscious patterns driving your decisions and behaviour, and supports the work between sessions.',
   },
   {
     icon: Sparkles,
@@ -57,17 +57,17 @@ const reassurances = [
   {
     question: 'What happens after the trial?',
     answer:
-      'You continue on a simple monthly subscription — cancel anytime. Full subscription details are confirmed when you sign up.',
+      'You continue on a simple monthly subscription, cancel anytime. Full subscription details are confirmed when you sign up.',
   },
   {
     question: 'What devices does it work on?',
     answer:
-      'Any device with a browser — phone, tablet, or desktop. Your coach travels with you wherever you go.',
+      'Any device with a browser: phone, tablet, or desktop. Your coach travels with you wherever you go.',
   },
   {
     question: 'Does it replace working with Suzanne?',
     answer:
-      'No — it complements it. The Pattern Intelligence Coach™ supports you between sessions and in everyday moments; deep transformation work still happens with Suzanne and her programmes.',
+      'No, it complements it. The Pattern Intelligence Coach™ supports you between sessions and in everyday moments; deep transformation work still happens with Suzanne and her programmes.',
   },
 ]
 
@@ -103,7 +103,7 @@ export default function PatternCoachContent() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-4xl lg:text-6xl font-light text-white leading-tight mb-6"
             >
-              A Brilliant Coach in Your Pocket —{' '}
+              A Brilliant Coach in Your Pocket:{' '}
               <span className="text-brand-accent">24 Hours a Day</span>
             </motion.h1>
 
@@ -114,8 +114,8 @@ export default function PatternCoachContent() {
               className="text-xl text-gray-300 mt-4 max-w-2xl mb-10"
             >
               The moments that shape you rarely happen in a coaching session. The
-              Pattern Intelligence Coach&trade; is your always-on AI coach — built on
-              Dr. Suzanne Ravenall&rsquo;s method — ready whenever a pattern shows up.
+              Pattern Intelligence Coach&trade; is your always-on AI coach, built on
+              Dr. Suzanne Ravenall&rsquo;s method, ready whenever a pattern shows up.
               Try it free for 30 days, then continue on a simple monthly subscription.
             </motion.p>
 
@@ -264,7 +264,7 @@ export default function PatternCoachContent() {
               Your Coach Is Waiting
             </h2>
             <p className="text-gray-300 text-lg mb-10">
-              Start today and have a brilliant coach in your pocket within minutes —
+              Start today and have a brilliant coach in your pocket within minutes:
               free for 30 days, then a simple monthly subscription. Cancel anytime.
             </p>
             <a

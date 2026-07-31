@@ -91,7 +91,7 @@ export default function PatternCoachTab() {
             <Link
               href={PRODUCT_PAGE_PATH}
               className="flex flex-col items-center gap-4 hover:scale-105 transition-transform duration-200"
-              aria-label="Discover Pattern Coach — Brilliant Coach in Your Pocket. Start your 30-day free trial"
+              aria-label="Discover Pattern Coach: Brilliant Coach in Your Pocket. Start your 30-day free trial"
             >
               <div className="motion-safe:animate-brain-pulse">
                 <BrainIcon size={52} />
@@ -136,7 +136,7 @@ export default function PatternCoachTab() {
           <Link
             href={PRODUCT_PAGE_PATH}
             className="flex items-center gap-3"
-            aria-label="Discover Pattern Coach — Brilliant Coach in Your Pocket. Start your 30-day free trial"
+            aria-label="Discover Pattern Coach: Brilliant Coach in Your Pocket. Start your 30-day free trial"
           >
             <div className="motion-safe:animate-brain-pulse shrink-0">
               <BrainIcon size={36} />

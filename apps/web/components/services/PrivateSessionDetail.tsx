@@ -113,7 +113,7 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
               className="mt-10 rounded-card border border-amber-300 bg-amber-50 p-6 text-center"
             >
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-800">
-                [Copy to be expanded — awaiting input]
+                [Copy to be expanded, awaiting input]
               </p>
               <p className="mt-2 text-sm text-amber-700 font-light">
                 The source page for this session was brief. This copy is a starting

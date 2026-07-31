@@ -132,8 +132,8 @@ export default function LegalTermsContent() {
               </h2>
               {/* TODO (legal review): Confirm IP ownership — distinguish between owned content and licensed third-party content (e.g. Resonance Repatterning) */}
               <p className="text-gray-600 leading-relaxed">
-                All content on this Site — including text, graphics, logos, images, audio, video,
-                programme materials, and software — is the property of Dr. Suzanne Ravenall or her
+                All content on this Site, including text, graphics, logos, images, audio, video,
+                programme materials, and software, is the property of Dr. Suzanne Ravenall or her
                 licensors and is protected by South African copyright law and international treaties.
                 You may not reproduce, distribute, modify, or create derivative works from any content
                 without our express written consent. Purchase of a programme grants a limited,

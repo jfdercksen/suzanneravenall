@@ -319,12 +319,12 @@ export default function ProgramsPageClient() {
                   </h3>
                   <p className="text-gray-600 font-light leading-relaxed mb-3">
                     Train towards certification as a Resonance Repatterning
-                    practitioner — from the Basic Five foundation series through
+                    practitioner, from the Basic Five foundation series through
                     the advanced relationship and inner cultivation programmes.
                   </p>
                   <p className="text-sm text-gray-500 font-light">
                     All Resonance Repatterning programmes are currently offered
-                    as self-study — start anytime.
+                    as self-study: start anytime.
                   </p>
                 </div>
                 <button
@@ -567,13 +567,13 @@ export default function ProgramsPageClient() {
               These are recorded Resonance Repatterning group session series.
               Through a comfortable, authentic and safe environment, Suzanne runs
               short group series that tackle the key issues affecting most
-              people — getting into the unconscious beliefs that disrupt lives
+              people: getting into the unconscious beliefs that disrupt lives
               and helping participants go beyond these challenges and into their
               power for inner self mastery.
             </p>
             <p className="text-white/70 font-light mb-12 max-w-2xl leading-relaxed">
               Each series was recorded live and carries the same energetic
-              benefit — work through it in your own time.
+              benefit: work through it in your own time.
             </p>
           </motion.div>
           <motion.div

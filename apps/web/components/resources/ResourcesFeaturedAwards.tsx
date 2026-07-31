@@ -6,7 +6,7 @@ import { ArrowRight, Award } from 'lucide-react'
 
 const featuredAwards = [
   {
-    name: 'Global 100 — Most Inspiring Companies',
+    name: 'Global 100: Most Inspiring Companies',
     organisation: 'Global 100 Awards',
     year: '2021',
     description:

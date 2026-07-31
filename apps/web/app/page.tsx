@@ -17,18 +17,18 @@ import FinalCTA from '../components/home/FinalCTA'
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'Dr. Suzanne Ravenall — Transformation Coaching',
+    absolute: 'Dr. Suzanne Ravenall: Transformation Coaching',
   },
   description:
-    "It's not you, it's your pattern. Dr. Suzanne Ravenall — founder of Pattern Intelligence™ — helps you decode the patterns running your life and change them at the level where they live.",
+    "It's not you, it's your pattern. Dr. Suzanne Ravenall, founder of Pattern Intelligence™, helps you decode the patterns running your life and change them at the level where they live.",
   openGraph: {
-    title: 'Dr. Suzanne Ravenall — Transformation Coaching',
+    title: 'Dr. Suzanne Ravenall: Transformation Coaching',
     description:
       "It's not you, it's your pattern. Pattern-level transformation with Dr. Suzanne Ravenall, founder of Pattern Intelligence™.",
     images: [{ url: '/images/hero-bg-suzanne-ravenall.jpg', width: 1200, height: 630, alt: 'Dr. Suzanne Ravenall' }],
   },
   twitter: {
-    title: 'Dr. Suzanne Ravenall — Transformation Coaching',
+    title: 'Dr. Suzanne Ravenall: Transformation Coaching',
     description:
       "It's not you, it's your pattern. Pattern-level transformation with Dr. Suzanne Ravenall, founder of Pattern Intelligence™.",
     images: ['/images/hero-bg-suzanne-ravenall.jpg'],

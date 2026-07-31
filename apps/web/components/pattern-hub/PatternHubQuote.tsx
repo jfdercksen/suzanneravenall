@@ -22,7 +22,7 @@ export default function PatternHubQuote() {
               it changes with it.
             </p>
             <footer className="text-white/60 text-sm uppercase tracking-[0.2em]">
-              — Dr. Suzanne Ravenall
+              Dr. Suzanne Ravenall
             </footer>
           </blockquote>
         </motion.div>
