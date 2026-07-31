@@ -11,8 +11,6 @@ const fadeUp = (delay = 0) => ({
 })
 
 export default function TopicRecognition({ topic }: { topic: Topic }) {
-  const isOddCount = topic.recognitionItems.length % 2 !== 0
-
   return (
     <section
       aria-labelledby="topic-recognition-heading"
@@ -40,24 +38,21 @@ export default function TopicRecognition({ topic }: { topic: Topic }) {
         </motion.h2>
 
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl mx-auto">
-          {topic.recognitionItems.map((item, index) => {
-            const isTrailingOdd = isOddCount && index === topic.recognitionItems.length - 1
-            return (
-              <motion.li
-                key={`${topic.slug}-recognition-${index}`}
-                {...fadeUp(0.15 + index * 0.05)}
-                className={`flex items-start gap-4 ${isTrailingOdd ? 'sm:col-span-2 sm:justify-center' : ''}`}
-              >
-                <span
-                  aria-hidden="true"
-                  className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent-400"
-                />
-                <span className="text-lg text-white/80 font-light leading-relaxed">
-                  {item}
-                </span>
-              </motion.li>
-            )
-          })}
+          {topic.recognitionItems.map((item, index) => (
+            <motion.li
+              key={`${topic.slug}-recognition-${index}`}
+              {...fadeUp(0.15 + index * 0.05)}
+              className="flex items-start gap-4"
+            >
+              <span
+                aria-hidden="true"
+                className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent-400"
+              />
+              <span className="text-lg text-white/80 font-light leading-relaxed">
+                {item}
+              </span>
+            </motion.li>
+          ))}
         </ul>
       </div>
     </section>
