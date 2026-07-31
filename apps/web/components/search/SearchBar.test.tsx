@@ -125,7 +125,8 @@ describe('SearchBar — fetch on debounced input', () => {
       expect(mockFetch).toHaveBeenCalledTimes(1)
     })
 
-    const calledUrl = mockFetch.mock.calls[0][0] as string
+    // waitFor above already proved fetch was called once — calls[0] exists
+    const calledUrl = mockFetch.mock.calls[0]![0] as string
     expect(calledUrl).toContain('/api/search')
     expect(calledUrl).toContain('q=mindset')
   }, 15000)

@@ -40,8 +40,9 @@ describe('scrubSentryEvent', () => {
       ],
     }
     const result = scrubSentryEvent(event)
-    expect(result.breadcrumbs![0].data!.url).not.toContain('abc123')
-    expect(result.breadcrumbs![1].data!.url).toBe('https://suzanneravenall.com/about')
+    // The event literal above has exactly 2 breadcrumb entries, each with a data.url — safe to assert non-null
+    expect(result.breadcrumbs![0]!.data!.url).not.toContain('abc123')
+    expect(result.breadcrumbs![1]!.data!.url).toBe('https://suzanneravenall.com/about')
   })
 
   it('handles an event with no request or breadcrumbs', () => {

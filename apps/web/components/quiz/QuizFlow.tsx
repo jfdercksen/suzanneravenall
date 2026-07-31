@@ -62,6 +62,10 @@ export default function QuizFlow({
 
   const handleSelect = (value: number) => {
     const question = quiz.questions[step - 1]
+    // Only reachable while a question screen is rendered (1 <= step <= total),
+    // so step - 1 is always a valid index — but guard defensively rather than
+    // assert, since this is a user-input event handler.
+    if (!question) return
     setAnswers((prev) => ({ ...prev, [question.id]: value }))
     setDirection(1)
     // Brief highlight before sliding to the next screen.
@@ -121,6 +125,7 @@ export default function QuizFlow({
   }
 
   const isQuestion = step >= 1 && step <= total
+  const currentQuestion = isQuestion ? quiz.questions[step - 1] : undefined
 
   return (
     <section className="relative min-h-screen w-full bg-brand-primary text-white overflow-hidden">
@@ -200,7 +205,7 @@ export default function QuizFlow({
           )}
 
           {/* STEPS 1..total — Questions */}
-          {isQuestion && (
+          {isQuestion && currentQuestion && (
             <motion.div
               key={`q-${step}`}
               custom={direction}
@@ -214,12 +219,12 @@ export default function QuizFlow({
                 id="quiz-current-question"
                 className="text-2xl lg:text-4xl font-light leading-snug text-center min-h-[3.5em] flex items-center justify-center mb-10"
               >
-                {quiz.questions[step - 1].text}
+                {currentQuestion.text}
               </h2>
 
               <div className="flex flex-col gap-3">
                 {SCALE.map((option) => {
-                  const selected = answers[quiz.questions[step - 1].id] === option.value
+                  const selected = answers[currentQuestion.id] === option.value
                   return (
                     <button
                       key={option.value}
@@ -244,7 +249,25 @@ export default function QuizFlow({
           )}
 
           {/* STEP total + 1 — Results */}
-          {step > total && (
+          {step > total && !result && (
+            <motion.div
+              key="results-error"
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              className="text-center"
+            >
+              <p className="text-base text-white/70 font-light">
+                We couldn&apos;t load your result. Please retake the diagnostic.
+              </p>
+            </motion.div>
+          )}
+
+          {/* STEP total + 1 — Results */}
+          {step > total && result && (
             <motion.div
               key="results"
               custom={direction}

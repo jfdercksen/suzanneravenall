@@ -209,7 +209,8 @@ describe('requireAccess', () => {
       requireAccess(supabase as any, 'resources_assessments')
     ).rejects.toThrow('NEXT_REDIRECT:/portal/login')
     expect(redirect).toHaveBeenCalledWith('/portal/login')
-    const call = (redirect as ReturnType<typeof vi.fn>).mock.calls[0][0] as string
+    // toHaveBeenCalledWith above already proved calls[0] exists — safe to assert non-null
+    const call = vi.mocked(redirect).mock.calls[0]![0]
     expect(call).not.toContain('?')
   })
 
@@ -222,7 +223,8 @@ describe('requireAccess', () => {
       requireAccess(supabase as any, 'resources_assessments')
     ).rejects.toThrow('NEXT_REDIRECT:/portal/upgrade')
     expect(redirect).toHaveBeenCalledWith('/portal/upgrade')
-    const call = (redirect as ReturnType<typeof vi.fn>).mock.calls[0][0] as string
+    // toHaveBeenCalledWith above already proved calls[0] exists — safe to assert non-null
+    const call = vi.mocked(redirect).mock.calls[0]![0]
     expect(call).not.toContain('?')
   })
 })

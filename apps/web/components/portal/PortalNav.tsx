@@ -13,7 +13,15 @@ const TIER_LABELS: Record<TierSlug, string> = {
   practitioner: 'Practitioner',
 }
 
-const NAV_LINKS = [
+interface NavLink {
+  href: string
+  label: string
+  icon: React.ReactNode
+}
+
+// Fixed-length tuple (not `NavLink[]`) so that the literal indices used below
+// to build MOBILE_NAV_LINKS resolve to `NavLink`, not `NavLink | undefined`.
+const NAV_LINKS: readonly [NavLink, NavLink, NavLink, NavLink, NavLink, NavLink] = [
   {
     href: '/portal/dashboard',
     label: 'Dashboard',
@@ -71,7 +79,7 @@ const NAV_LINKS = [
 ]
 
 // Subset of links for the mobile bottom nav (5 max)
-const MOBILE_NAV_LINKS = [
+const MOBILE_NAV_LINKS: readonly NavLink[] = [
   NAV_LINKS[0], // Dashboard
   NAV_LINKS[1], // My Programmes
   NAV_LINKS[2], // Resources

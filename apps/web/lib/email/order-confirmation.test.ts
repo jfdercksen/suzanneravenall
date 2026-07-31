@@ -103,7 +103,8 @@ describe('sendOrderConfirmationEmail', () => {
 
     await sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl: null })
 
-    const callArg = mockSend.mock.calls[0][0] as Record<string, unknown>
+    // The `await` above guarantees sendOrderConfirmationEmail called mockSend — calls[0] exists
+    const callArg = mockSend.mock.calls[0]![0] as Record<string, unknown>
     expect(callArg).toHaveProperty('text')
     expect(typeof callArg.text).toBe('string')
     expect(callArg.text as string).toContain('#42')
@@ -115,7 +116,8 @@ describe('sendOrderConfirmationEmail', () => {
 
     await sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl })
 
-    const callArg = mockSend.mock.calls[0][0] as Record<string, unknown>
+    // The `await` above guarantees sendOrderConfirmationEmail called mockSend — calls[0] exists
+    const callArg = mockSend.mock.calls[0]![0] as Record<string, unknown>
     expect(callArg.text as string).toContain(invoiceUrl)
   })
 
@@ -124,7 +126,8 @@ describe('sendOrderConfirmationEmail', () => {
 
     await sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl: null })
 
-    const callArg = mockSend.mock.calls[0][0] as Record<string, unknown>
+    // The `await` above guarantees sendOrderConfirmationEmail called mockSend — calls[0] exists
+    const callArg = mockSend.mock.calls[0]![0] as Record<string, unknown>
     expect(callArg.text as string).not.toContain('YOUR TAX INVOICE')
     expect(callArg.text as string).not.toContain('Download:')
   })
@@ -134,7 +137,8 @@ describe('sendOrderConfirmationEmail', () => {
 
     await sendOrderConfirmationEmail({ order: { ...baseOrder, firstName: 'Alice' }, invoiceUrl: null })
 
-    const callArg = mockSend.mock.calls[0][0] as Record<string, unknown>
+    // The `await` above guarantees sendOrderConfirmationEmail called mockSend — calls[0] exists
+    const callArg = mockSend.mock.calls[0]![0] as Record<string, unknown>
     expect(callArg.text as string).toContain('Dear Alice,')
   })
 
@@ -143,7 +147,8 @@ describe('sendOrderConfirmationEmail', () => {
 
     await sendOrderConfirmationEmail({ order: { ...baseOrder, firstName: null }, invoiceUrl: null })
 
-    const callArg = mockSend.mock.calls[0][0] as Record<string, unknown>
+    // The `await` above guarantees sendOrderConfirmationEmail called mockSend — calls[0] exists
+    const callArg = mockSend.mock.calls[0]![0] as Record<string, unknown>
     expect(callArg.text as string).toContain('Dear valued customer,')
   })
 })

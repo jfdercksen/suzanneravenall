@@ -17,7 +17,7 @@ const BLUE = '#1719F4'
 const LIGHT_GRAY = '#F5F7FA'
 const MEDIUM_GRAY = '#64748B'
 
-const WHAT_YOU_HAD: Record<string, string[]> = {
+const WHAT_YOU_HAD: Record<MembershipEmailData['tier'], string[]> = {
   free: ['Your member dashboard and profile'],
   silver: [
     'Resource and media library',

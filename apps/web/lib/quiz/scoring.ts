@@ -15,11 +15,19 @@ export function computeResult(quiz: Quiz, answers: Record<number, number>): Quiz
   )
 
   for (const question of quiz.questions) {
-    scores[question.category] += answers[question.id] ?? 0
+    // A question's category should always be one of quiz.categories (and thus
+    // already a key in `scores`), but fall back to 0 rather than corrupt the
+    // tally with NaN if a quiz's data ever drifts out of sync.
+    scores[question.category] = (scores[question.category] ?? 0) + (answers[question.id] ?? 0)
+  }
+
+  if (quiz.categories.length === 0) {
+    throw new Error(`computeResult: quiz "${quiz.slug}" declares no categories`)
   }
 
   return quiz.categories.reduce<QuizCategory>(
-    (best, category) => (scores[category] >= scores[best] ? category : best),
-    quiz.categories[0]
+    (best, category) => ((scores[category] ?? 0) >= (scores[best] ?? 0) ? category : best),
+    // Safe: quiz.categories.length === 0 is checked above, so index 0 exists.
+    quiz.categories[0]!
   )
 }

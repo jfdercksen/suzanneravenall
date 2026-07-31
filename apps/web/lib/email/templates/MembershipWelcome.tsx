@@ -17,7 +17,7 @@ const BLUE = '#1719F4'
 const LIGHT_GRAY = '#F5F7FA'
 const MEDIUM_GRAY = '#64748B'
 
-const TIER_BENEFITS: Record<string, string[]> = {
+const TIER_BENEFITS: Record<MembershipEmailData['tier'], string[]> = {
   free: [
     'Access to the blog and resource library',
     'Dr. Suzanne\'s curated reading list',

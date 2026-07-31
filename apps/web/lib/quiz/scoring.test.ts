@@ -50,10 +50,13 @@ describe('computeResult', () => {
       ...baseQuiz,
       categories: ['fight', 'flight', 'freeze', 'mixed'],
       results: {
-        fight: baseQuiz.results.a,
-        flight: baseQuiz.results.a,
-        freeze: baseQuiz.results.a,
-        mixed: baseQuiz.results.a,
+        // Non-null: baseQuiz.results.a is a hardcoded fixture defined above,
+        // always present — `Record<QuizCategory, QuizResult>`'s generic index
+        // signature is what makes TS treat the read as possibly undefined.
+        fight: baseQuiz.results.a!,
+        flight: baseQuiz.results.a!,
+        freeze: baseQuiz.results.a!,
+        mixed: baseQuiz.results.a!,
       },
     }
     expect(computeResult(nsQuiz, {})).toBe('mixed')
@@ -73,10 +76,13 @@ describe('computeResult', () => {
       ],
       categories: ['fight', 'flight', 'freeze', 'mixed'],
       results: {
-        fight: baseQuiz.results.a,
-        flight: baseQuiz.results.a,
-        freeze: baseQuiz.results.a,
-        mixed: baseQuiz.results.a,
+        // Non-null: baseQuiz.results.a is a hardcoded fixture defined above,
+        // always present — `Record<QuizCategory, QuizResult>`'s generic index
+        // signature is what makes TS treat the read as possibly undefined.
+        fight: baseQuiz.results.a!,
+        flight: baseQuiz.results.a!,
+        freeze: baseQuiz.results.a!,
+        mixed: baseQuiz.results.a!,
       },
     }
     expect(computeResult(nsQuiz, { 1: 4, 2: 4 })).toBe('mixed')

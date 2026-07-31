@@ -90,7 +90,8 @@ describe('sendMembershipExpiredEmail', () => {
 
     await sendMembershipExpiredEmail(baseData)
 
-    const call = mockSend.mock.calls[0][0] as { from: string }
+    // The `await` above guarantees sendMembershipExpiredEmail called mockSend — calls[0] exists
+    const call = mockSend.mock.calls[0]![0] as { from: string }
     expect(call.from).toBeTruthy()
     expect(typeof call.from).toBe('string')
   })

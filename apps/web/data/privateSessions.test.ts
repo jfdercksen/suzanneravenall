@@ -102,7 +102,8 @@ describe('dualProduct field', () => {
   it('only transformational-coaching has a dualProduct', () => {
     const withDual = allPrivateSessions.filter((s) => s.dualProduct !== undefined)
     expect(withDual).toHaveLength(1)
-    expect(withDual[0].slug).toBe('transformational-coaching')
+    // toHaveLength(1) above already proved withDual[0] exists — safe to assert non-null
+    expect(withDual[0]!.slug).toBe('transformational-coaching')
   })
 
   it('transformational-coaching dualProduct has handle executive-coaching-30-mins', () => {

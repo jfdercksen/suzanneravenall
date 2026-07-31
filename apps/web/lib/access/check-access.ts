@@ -18,7 +18,14 @@ export async function getMemberTier(supabase: SupabaseClient): Promise<TierSlug>
     .limit(1)
     .maybeSingle()
 
-  const tier = subscription?.membership_tiers as { slug: string } | null
+  // supabase-js's generic query-builder typing always treats a parenthesised
+  // nested select (e.g. `membership_tiers(slug)`) as a to-many relation and
+  // types it as an array, even though `member_id -> membership_tiers` is a
+  // to-one foreign key and PostgREST returns a single object at runtime.
+  // Handle both shapes defensively so a real array response can't silently
+  // widen access (fail closed: only ever look at the first row).
+  const rawTier = subscription?.membership_tiers
+  const tier = Array.isArray(rawTier) ? rawTier[0] : rawTier
   const slug = tier?.slug
 
   if (slug === 'silver' || slug === 'gold' || slug === 'practitioner') {
