@@ -1,0 +1,501 @@
+{
+  "name": "Medusa Order → Thinkific Enrollment",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "medusa-order-complete",
+        "responseMode": "onReceived",
+        "responseCode": 200,
+        "responseData": "noData",
+        "options": {}
+      },
+      "id": "mte-0001-0000-0000-000000000001",
+      "name": "Webhook: Order Complete",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "medusa-order-complete"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Verify shared webhook secret sent by the Medusa subscriber.\n// The secret is passed in the x-webhook-secret header.\nconst secret = $env.N8N_WEBHOOK_SECRET ?? '';\nconst received = $input.first().headers?.['x-webhook-secret'] ?? '';\n\nif (secret && received !== secret) {\n  throw new Error('Invalid webhook secret — request rejected');\n}\n\n// Extract customer fields from the order payload.\nconst order = $input.first().json;\nconst customer = order.customer ?? {};\nconst email = (customer.email ?? '').toLowerCase().trim();\nconst firstName = typeof customer.first_name === 'string' ? customer.first_name : email.split('@')[0];\nconst lastName = typeof customer.last_name === 'string' ? customer.last_name : '';\n\nif (!email) {\n  throw new Error('Order payload missing customer.email — cannot enroll');\n}\n\n// Extract thinkific_course_id from each line item's product metadata.\n// Only keep items that actually have a course ID.\nconst courseItems = (order.items ?? []).reduce((acc, item) => {\n  const meta = item?.variant?.product?.metadata;\n  const courseId = meta?.thinkific_course_id;\n  if (courseId != null && String(courseId).trim() !== '') {\n    const title = item?.variant?.product?.title ?? item?.title ?? 'Course';\n    acc.push({\n      thinkific_course_id: Number(courseId),\n      title,\n    });\n  }\n  return acc;\n}, []);\n\nreturn [{\n  json: {\n    orderId: order.id,\n    email,\n    firstName,\n    lastName,\n    courseItems,\n    hasCourseItems: courseItems.length > 0,\n    thinkificBaseUrl: 'https://api.thinkific.com/api/public/v1',\n    thinkificApiKey: $env.THINKIFIC_API_KEY ?? '',\n  }\n}];"
+      },
+      "id": "mte-0002-0000-0000-000000000002",
+      "name": "Parse: Order + Extract Course IDs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "id": "has-courses",
+              "leftValue": "={{ $json.hasCourseItems }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "mte-0003-0000-0000-000000000003",
+      "name": "IF: Has Course Items?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.thinkificBaseUrl + '/users' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.THINKIFIC_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query[email]",
+              "value": "={{ $json.email }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "mte-0004-0000-0000-000000000004",
+      "name": "Thinkific: Find User",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 200],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "id": "user-found",
+              "leftValue": "={{ ($json.items ?? []).length > 0 }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "mte-0005-0000-0000-000000000005",
+      "name": "IF: User Exists in Thinkific?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// User found — extract the ID from the first result.\nconst prep = $('Parse: Order + Extract Course IDs').first().json;\nconst findResult = $input.first().json;\nconst user = (findResult.items ?? [])[0];\nif (!user || !user.id) throw new Error('Thinkific: user lookup returned empty items unexpectedly');\n\nreturn [{\n  json: {\n    ...prep,\n    thinkificUserId: user.id,\n    thinkificUserFound: true,\n  }\n}];"
+      },
+      "id": "mte-0006-0000-0000-000000000006",
+      "name": "Prepare: Use Existing User ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parse: Order + Extract Course IDs').first().json.thinkificBaseUrl + '/users' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.THINKIFIC_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ first_name: $('Parse: Order + Extract Course IDs').first().json.firstName, last_name: $('Parse: Order + Extract Course IDs').first().json.lastName, email: $('Parse: Order + Extract Course IDs').first().json.email, send_welcome_email: true }) }}",
+        "options": {}
+      },
+      "id": "mte-0007-0000-0000-000000000007",
+      "name": "Thinkific: Create User",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 340],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Capture the new user ID from the create response.\nconst prep = $('Parse: Order + Extract Course IDs').first().json;\nconst createResult = $input.first().json;\nif (!createResult.id) throw new Error('Thinkific: user creation did not return an id: ' + JSON.stringify(createResult).slice(0, 200));\n\nreturn [{\n  json: {\n    ...prep,\n    thinkificUserId: createResult.id,\n    thinkificUserFound: false,\n  }\n}];"
+      },
+      "id": "mte-0008-0000-0000-000000000008",
+      "name": "Prepare: Capture New User ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 340]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge both branches — user was either found or just created.\n// At this point $input.first() carries the fully populated context from\n// whichever branch ran. Both branches include thinkificUserId.\nconst ctx = $input.first().json;\nif (!ctx.thinkificUserId) throw new Error('thinkificUserId not resolved — should not reach here');\n\n// Build one enrollment task per course item.\n// We tag each with activated_at = now ISO.\nconst activatedAt = new Date().toISOString();\nconst enrollmentTasks = ctx.courseItems.map(item => ({\n  course_id: item.thinkific_course_id,\n  user_id: ctx.thinkificUserId,\n  activated_at: activatedAt,\n  title: item.title,\n}));\n\nreturn [{\n  json: {\n    ...ctx,\n    enrollmentTasks,\n    enrollmentResults: [],\n    enrollmentErrors: [],\n  }\n}];"
+      },
+      "id": "mte-0009-0000-0000-000000000009",
+      "name": "Merge: Resolve User ID + Build Tasks",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1780, 220]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Enroll the user in each course, collecting successes and failures.\n// Per-enrollment errors are isolated — one failure does not abort the rest.\nconst ctx = $input.first().json;\nconst tasks = ctx.enrollmentTasks ?? [];\n\nconst successTitles = [];\nconst errors = [];\n\nfor (const task of tasks) {\n  try {\n    const res = await fetch(ctx.thinkificBaseUrl + '/enrollments', {\n      method: 'POST',\n      headers: {\n        'Authorization': 'Bearer ' + ctx.thinkificApiKey,\n        'Content-Type': 'application/json',\n      },\n      body: JSON.stringify({\n        course_id: task.course_id,\n        user_id: task.user_id,\n        activated_at: task.activated_at,\n      }),\n    });\n\n    if (res.ok) {\n      successTitles.push(task.title);\n      console.log('[thinkific-enroll] enrolled userId=' + task.user_id + ' courseId=' + task.course_id + ' title=' + task.title);\n    } else {\n      const body = await res.text();\n      const msg = 'Thinkific enrollment HTTP ' + res.status + ' for courseId=' + task.course_id + ': ' + body.slice(0, 300);\n      errors.push({ course_id: task.course_id, title: task.title, error: msg });\n      console.error('[thinkific-enroll] ' + msg);\n    }\n  } catch (err) {\n    const msg = err instanceof Error ? err.message : String(err);\n    errors.push({ course_id: task.course_id, title: task.title, error: msg });\n    console.error('[thinkific-enroll] fetch error courseId=' + task.course_id + ': ' + msg);\n  }\n}\n\nreturn [{\n  json: {\n    ...ctx,\n    enrollmentSuccessTitles: successTitles,\n    enrollmentErrors: errors,\n    hasErrors: errors.length > 0,\n    hasSuccesses: successTitles.length > 0,\n  }\n}];"
+      },
+      "id": "mte-0010-0000-0000-000000000010",
+      "name": "Enroll: Per Course (isolated failures)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 220]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "id": "has-successes",
+              "leftValue": "={{ $json.hasSuccesses }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "mte-0011-0000-0000-000000000011",
+      "name": "IF: Any Enrollments Succeeded?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2220, 220]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build and send the customer confirmation email via Resend.\nconst ctx = $input.first().json;\nconst courses = ctx.enrollmentSuccessTitles ?? [];\nconst courseListHtml = courses.map(t => '<li>' + t + '</li>').join('');\nconst subject = 'Your course access is ready \\u2014 ' + courses.join(', ');\n\nconst html = [\n  '<h2>Welcome to the Ravenall Institute!</h2>',\n  '<p>Hi ' + ctx.firstName + ',</p>',\n  '<p>Your payment was received and your course access has been activated. You can now start learning:</p>',\n  '<ul>' + courseListHtml + '</ul>',\n  '<p><a href=\"https://ravenallinstitute-9629.thinkific.com/collections\">Access your courses on Thinkific</a></p>',\n  '<p>You will also receive a separate welcome email from Thinkific for the first course — this may land in your promotions or spam folder, so please check there if you do not see it.</p>',\n  '<p>If you have any questions, reply to this email and we will help you.</p>',\n  '<p>Warm regards,<br>Dr. Suzanne Ravenall</p>',\n].join('');\n\nconst resendPayload = JSON.stringify({\n  from: 'noreply@suzanneravenall.com',\n  to: [ctx.email],\n  subject,\n  html,\n});\n\nreturn [{\n  json: {\n    ...ctx,\n    resendPayload,\n    emailSubject: subject,\n  }\n}];"
+      },
+      "id": "mte-0012-0000-0000-000000000012",
+      "name": "Prepare: Confirmation Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2440, 120]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.RESEND_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.resendPayload }}",
+        "options": {}
+      },
+      "id": "mte-0013-0000-0000-000000000013",
+      "name": "Resend: Send Confirmation Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2660, 120],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "id": "has-errors",
+              "leftValue": "={{ $('Enroll: Per Course (isolated failures)').first().json.hasErrors }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "mte-0014-0000-0000-000000000014",
+      "name": "IF: Any Enrollment Errors?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2880, 220]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build admin error alert for failed enrollments.\nconst enrollCtx = $('Enroll: Per Course (isolated failures)').first().json;\nconst errors = enrollCtx.enrollmentErrors ?? [];\nconst errorDetails = errors.map(e => `<li>Course ID ${e.course_id} (${e.title}): ${e.error}</li>`).join('');\n\nconst subject = '[ALERT] Thinkific enrollment partial failure — order ' + (enrollCtx.orderId ?? 'unknown');\nconst html = [\n  '<h3>Thinkific enrollment errors for order ' + (enrollCtx.orderId ?? 'unknown') + '</h3>',\n  '<p>Customer: ' + enrollCtx.email + '</p>',\n  '<p>Thinkific user ID: ' + enrollCtx.thinkificUserId + '</p>',\n  '<p>Failed enrollments:</p>',\n  '<ul>' + errorDetails + '</ul>',\n  '<p>Successful: ' + (enrollCtx.enrollmentSuccessTitles ?? []).join(', ') + '</p>',\n  '<p>Please manually enroll the customer for the failed course(s) in the Thinkific admin: https://ravenallinstitute-9629.thinkific.com</p>',\n  '<p>Time: ' + new Date().toISOString() + '</p>',\n].join('');\n\nconst sentryDsn = $env.SENTRY_DSN ?? $env.SENTRY_DSN_WEB ?? $env.SENTRY_DSN_MEDUSA ?? '';\n\nreturn [{\n  json: {\n    ...enrollCtx,\n    adminAlertSubject: subject,\n    adminAlertHtml: html,\n    sentryDsn,\n    hasSentryDsn: !!sentryDsn && !sentryDsn.includes('<DSN'),\n  }\n}];"
+      },
+      "id": "mte-0015-0000-0000-000000000015",
+      "name": "Prepare: Admin Error Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3100, 120]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.RESEND_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ from: 'noreply@suzanneravenall.com', to: ['admin@suzanneravenall.com'], subject: $json.adminAlertSubject, html: $json.adminAlertHtml }) }}",
+        "options": {}
+      },
+      "id": "mte-0016-0000-0000-000000000016",
+      "name": "Alert: Admin Error Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3320, 120],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Workflow complete — log outcome.\nconst ctx = $('Enroll: Per Course (isolated failures)').first().json;\nconst successes = (ctx.enrollmentSuccessTitles ?? []).length;\nconst errors = (ctx.enrollmentErrors ?? []).length;\nconsole.log('[thinkific-enroll] DONE orderId=' + (ctx.orderId ?? 'unknown') + ' email=' + ctx.email + ' enrolled=' + successes + ' failed=' + errors);\nreturn [$input.first()];"
+      },
+      "id": "mte-0017-0000-0000-000000000017",
+      "name": "Done: Log Outcome",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3540, 220]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Error handler for Thinkific API failures (user lookup or create).\n// Called via onError from Thinkific: Find User or Thinkific: Create User.\nconst errItem = $input.first();\nconst errorMessage = errItem.error?.message ?? errItem.json?.message ?? 'Unknown error';\nlet orderId = 'unknown';\nlet email = 'unknown';\ntry { orderId = $('Parse: Order + Extract Course IDs').first().json.orderId ?? 'unknown'; } catch {}\ntry { email = $('Parse: Order + Extract Course IDs').first().json.email ?? 'unknown'; } catch {}\n\nconsole.error('[thinkific-enroll] FATAL error orderId=' + orderId + ' email=' + email + ' error=' + errorMessage);\n\nconst subject = '[ALERT] Thinkific enrollment failed — order ' + orderId;\nconst html = [\n  '<h3>Thinkific enrollment failed for order ' + orderId + '</h3>',\n  '<p>Customer: ' + email + '</p>',\n  '<p>Error: ' + errorMessage + '</p>',\n  '<p>This is a Thinkific API failure (user lookup or creation). Please manually enroll the customer at: https://ravenallinstitute-9629.thinkific.com</p>',\n  '<p>Time: ' + new Date().toISOString() + '</p>',\n].join('');\n\nreturn [{\n  json: {\n    orderId,\n    email,\n    errorMessage,\n    adminAlertSubject: subject,\n    adminAlertHtml: html,\n  }\n}];"
+      },
+      "id": "mte-0018-0000-0000-000000000018",
+      "name": "Error: Thinkific API Failure",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 480]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.RESEND_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ from: 'noreply@suzanneravenall.com', to: ['admin@suzanneravenall.com'], subject: $json.adminAlertSubject, html: $json.adminAlertHtml }) }}",
+        "options": {}
+      },
+      "id": "mte-0019-0000-0000-000000000019",
+      "name": "Alert: Fatal Error Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 480],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "console.log('[thinkific-enroll] fatal error handled — alert sent to admin');\nreturn [$input.first()];"
+      },
+      "id": "mte-0020-0000-0000-000000000020",
+      "name": "Done: Fatal Error Handled",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 480]
+    },
+    {
+      "parameters": {
+        "content": "## Medusa Order → Thinkific Enrollment\n\n**Trigger:** POST /webhook/medusa-order-complete\nFired by order-placed.ts subscriber when the order contains course products.\n\n**Required env vars in n8n container:**\n- THINKIFIC_API_KEY (Bearer token, write:all scope)\n- RESEND_API_KEY\n- N8N_WEBHOOK_SECRET (shared secret for signature verification)\n- SENTRY_DSN / SENTRY_DSN_WEB / SENTRY_DSN_MEDUSA (any of these — optional)\n\n**Thinkific subdomain:** ravenallinstitute-9629\n**Thinkific API base:** https://api.thinkific.com/api/public/v1\n**Thinkific admin:** https://ravenallinstitute-9629.thinkific.com\n\n**What this workflow does:**\n1. Verifies webhook secret header\n2. Extracts customer + course IDs from order line item product.metadata.thinkific_course_id\n3. Exits cleanly if no course items found (non-course order)\n4. Finds or creates Thinkific user by email\n5. Enrolls user in each course (isolated — one failure does not abort others)\n6. Sends customer confirmation email via Resend\n7. Sends admin alert email for any enrollment failures\n\n**Error policy:**\nFatal (user create/find) → admin alert → stop.\nPartial (per-course) → continue other courses → customer email → admin alert for failures.\nOrder is NEVER blocked.",
+        "height": 420,
+        "width": 500,
+        "color": 4
+      },
+      "id": "mte-0021-0000-0000-000000000021",
+      "name": "Notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, 560]
+    }
+  ],
+  "connections": {
+    "Webhook: Order Complete": {
+      "main": [
+        [{ "node": "Parse: Order + Extract Course IDs", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse: Order + Extract Course IDs": {
+      "main": [
+        [{ "node": "IF: Has Course Items?", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: Has Course Items?": {
+      "main": [
+        [{ "node": "Thinkific: Find User", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Thinkific: Find User": {
+      "main": [
+        [{ "node": "IF: User Exists in Thinkific?", "type": "main", "index": 0 }]
+      ],
+      "error": [
+        [{ "node": "Error: Thinkific API Failure", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: User Exists in Thinkific?": {
+      "main": [
+        [{ "node": "Prepare: Use Existing User ID", "type": "main", "index": 0 }],
+        [{ "node": "Thinkific: Create User", "type": "main", "index": 0 }]
+      ]
+    },
+    "Prepare: Use Existing User ID": {
+      "main": [
+        [{ "node": "Merge: Resolve User ID + Build Tasks", "type": "main", "index": 0 }]
+      ]
+    },
+    "Thinkific: Create User": {
+      "main": [
+        [{ "node": "Prepare: Capture New User ID", "type": "main", "index": 0 }]
+      ],
+      "error": [
+        [{ "node": "Error: Thinkific API Failure", "type": "main", "index": 0 }]
+      ]
+    },
+    "Prepare: Capture New User ID": {
+      "main": [
+        [{ "node": "Merge: Resolve User ID + Build Tasks", "type": "main", "index": 0 }]
+      ]
+    },
+    "Merge: Resolve User ID + Build Tasks": {
+      "main": [
+        [{ "node": "Enroll: Per Course (isolated failures)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Enroll: Per Course (isolated failures)": {
+      "main": [
+        [{ "node": "IF: Any Enrollments Succeeded?", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: Any Enrollments Succeeded?": {
+      "main": [
+        [{ "node": "Prepare: Confirmation Email", "type": "main", "index": 0 }],
+        [{ "node": "IF: Any Enrollment Errors?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Prepare: Confirmation Email": {
+      "main": [
+        [{ "node": "Resend: Send Confirmation Email", "type": "main", "index": 0 }]
+      ]
+    },
+    "Resend: Send Confirmation Email": {
+      "main": [
+        [{ "node": "IF: Any Enrollment Errors?", "type": "main", "index": 0 }]
+      ],
+      "error": [
+        [{ "node": "IF: Any Enrollment Errors?", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: Any Enrollment Errors?": {
+      "main": [
+        [{ "node": "Prepare: Admin Error Alert", "type": "main", "index": 0 }],
+        [{ "node": "Done: Log Outcome", "type": "main", "index": 0 }]
+      ]
+    },
+    "Prepare: Admin Error Alert": {
+      "main": [
+        [{ "node": "Alert: Admin Error Email", "type": "main", "index": 0 }]
+      ]
+    },
+    "Alert: Admin Error Email": {
+      "main": [
+        [{ "node": "Done: Log Outcome", "type": "main", "index": 0 }]
+      ]
+    },
+    "Error: Thinkific API Failure": {
+      "main": [
+        [{ "node": "Alert: Fatal Error Email", "type": "main", "index": 0 }]
+      ]
+    },
+    "Alert: Fatal Error Email": {
+      "main": [
+        [{ "node": "Done: Fatal Error Handled", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "versionId": "mte-ffff-0000-0000-000000000001",
+  "id": "medusa-thinkific-enrollment-v1",
+  "tags": [
+    { "id": "tag-thinkific", "name": "thinkific" },
+    { "id": "tag-orders", "name": "orders" }
+  ]
+}

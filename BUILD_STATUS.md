@@ -10,9 +10,11 @@ Last Updated By: Claude
 
 ## Phase Progress
 
-| Phase | Build | Staging | Sign-off |
-|-------|-------|---------|----------|
-| Phase 0 — Foundation | ✅ Complete | ✅ Staging deployed | ⏳ Awaiting sign-off |
+No staging environment (D014) — single VPS, deployed straight to it, reviewed there pre-DNS-cutover via IP-testing access.
+
+| Phase | Build | Deployed to VPS | Sign-off |
+|-------|-------|------------------|----------|
+| Phase 0 — Foundation | ✅ Complete | ✅ Live on VPS | ⏳ Awaiting sign-off |
 | Phase 1 — Public Website | ✅ Complete | ❌ Not yet | ❌ Not yet |
 | Phase 2 — E-Commerce | ✅ Complete | ❌ Not yet | ⏳ Awaiting client credentials (see pending items) |
 | Phase 3 — Membership Portal | ✅ Complete (Task 3.8 on hold — see KI012) | ❌ Not yet | ❌ Not yet |

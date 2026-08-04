@@ -1,4 +1,5 @@
 {
+  "enableAllProjectMcpServers": true,
   "env": {
     "NEXT_PUBLIC_SUPABASE_URL": "https://mjhwonoekokxyisfljtj.supabase.co",
     "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1qaHdvbm9la29reHlpc2ZsanRqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDQzNTk0NywiZXhwIjoyMDkwMDExOTQ3fQ.CArlM8fAbul0oqkgwO_bj-lzCyS_oKWE5NdOueoUE4Y"
@@ -10,7 +11,9 @@
       "Bash(bash .claude/hooks/skill-evaluator.sh \"test prompt\")",
       "Bash(bash .claude/hooks/post-edit.sh \"test/file.ts\")",
       "Bash(bash .claude/hooks/block-env-edit.sh \".env.local\")",
-      "Bash(CLAUDE_TOOL_INPUT=\".env.local\" bash .claude/hooks/block-env-edit.sh)"
+      "Bash(CLAUDE_TOOL_INPUT=\".env.local\" bash .claude/hooks/block-env-edit.sh)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:3000/_next/static/chunks/main-app.js\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:3000/_next/static/chunks/webpack-4c4dfdcc5c1a6a78.js\")"
     ]
   }
 }

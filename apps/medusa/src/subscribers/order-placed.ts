@@ -8,6 +8,7 @@ const N8N_WEBHOOK_SECRET = process.env.N8N_WEBHOOK_SECRET ?? ''
 const WEB_BASE_URL = (process.env.WEB_BASE_URL ?? 'http://web:3000').replace(/\/$/, '')
 const VIBE_MARKETING_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
 const CALCOM_SESSION_BOOKING_URL = process.env.CALCOM_SESSION_BOOKING_URL ?? 'https://cal.com/suzanneravenall/discovery-call'
+const N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL = (process.env.N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL ?? '').replace(/\/$/, '')
 
 if (!N8N_WEBHOOK_SECRET) {
   console.warn('[order-placed] N8N_WEBHOOK_SECRET is not set — outgoing webhooks will have no secret header')
@@ -435,6 +436,7 @@ async function handlePortalAccessGrant(order: RetrievedOrder): Promise<void> {
 // Side effects on order placement (all fire-and-forget, never block order completion):
 // 1. n8n webhook → Sage invoice creation
 // 1b. n8n webhook → Vtiger CRM
+// 1c. n8n webhook → Thinkific enrollment (course products only, keyed by product.metadata.thinkific_course_id)
 // 2. Invoice generation → order confirmation email (chained; email includes productType + calBookingUrl)
 // 3. Membership activation (Medusa module + Supabase mirror) for membership products
 // 4. Portal access grant for programme purchases (Supabase access_level upgrade)
@@ -492,6 +494,18 @@ export default async function orderPlacedHandler({
       const message = err instanceof Error ? err.message : String(err)
       console.error(`[order-placed] vtiger webhook failed for order ${orderId}: ${message}`)
     })
+
+    // 1c. n8n → Thinkific enrollment: fire-and-forget (only when URL is configured)
+    if (N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL) {
+      void fetch(N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(order),
+      }).catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : String(err)
+        console.error(`[order-placed] thinkific enrollment webhook failed for order ${orderId}: ${message}`)
+      })
+    }
 
     // 2. Invoice generation → order confirmation email (chained sequentially)
     void (async () => {

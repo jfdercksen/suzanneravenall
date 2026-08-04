@@ -5,7 +5,7 @@
 | File | Trigger | Purpose |
 |------|---------|---------|
 | `deploy.yml` | Push to `main` | Build, test, then deploy to production VPS |
-| `pr-checks.yml` | PR targeting `staging` or `main` | Lint and test before merge |
+| `pr-checks.yml` | PR targeting `main` | Lint and test before merge |
 
 ---
 

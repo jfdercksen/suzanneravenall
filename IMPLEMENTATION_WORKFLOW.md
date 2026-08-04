@@ -1,7 +1,14 @@
 # Suzanne Ravenall Platform — Master Implementation Workflow
 ## Ai Dynamic Advisory | Claude Code Build Guide
 
-This document is the single source of truth for building the platform. Development follows a three-environment workflow — build locally, deploy to staging for Suzanne to review, then promote to production after sign-off. Never push directly to main without staging approval.
+> ⚠️ **SUPERSEDED BY D014 (see DECISIONS.md) — THERE IS NO STAGING ENVIRONMENT.**
+> This was the original March 2026 plan. Every deploy now goes straight to the single
+> production VPS (169.239.180.49) — reviewed there via IP-testing access pre-DNS-cutover,
+> not on a separate staging tier. All "staging" references below are historical and do
+> not reflect the current workflow. Current source of truth: `CLAUDE.md`, `infra/DEPLOYMENT.md`,
+> `BUILD_STATUS.md`.
+
+This document is the **original** plan for building the platform. It described a three-environment workflow — build locally, deploy to staging for Suzanne to review, then promote to production after sign-off — which D014 replaced with direct-to-VPS deployment. Kept for historical phase/task breakdown only.
 
 ---
 

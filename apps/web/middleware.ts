@@ -3,6 +3,11 @@ import { createClient } from '@/utils/supabase/middleware'
 
 const PROTECTED_PREFIXES = ['/portal']
 
+// Session cookies from the hosted-Supabase era (pre-migration). Combined with the
+// new session they can push the Cookie header past nginx's buffer size, so expire
+// them on every response until they have washed out of members' browsers.
+const LEGACY_COOKIE_PREFIX = 'sb-mjhwonoekokxyisfljtj-'
+
 // These paths live under /portal but do not require authentication
 const PUBLIC_PORTAL_PATHS = [
   '/portal/login',
@@ -11,6 +16,15 @@ const PUBLIC_PORTAL_PATHS = [
   '/portal/forgot-password',
   '/portal/reset-password',
 ]
+
+function expireLegacyCookies(request: NextRequest, response: NextResponse): NextResponse {
+  for (const cookie of request.cookies.getAll()) {
+    if (cookie.name.startsWith(LEGACY_COOKIE_PREFIX)) {
+      response.cookies.delete(cookie.name)
+    }
+  }
+  return response
+}
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   const { pathname } = request.nextUrl
@@ -39,12 +53,12 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
             ? pathname
             : '/portal/dashboard'
         loginUrl.searchParams.set('redirect', safeRedirect)
-        return NextResponse.redirect(loginUrl)
+        return expireLegacyCookies(request, NextResponse.redirect(loginUrl))
       }
     }
   }
 
-  return supabaseResponse
+  return expireLegacyCookies(request, supabaseResponse)
 }
 
 export const config = {

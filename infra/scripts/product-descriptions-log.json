@@ -1,0 +1,437 @@
+{
+  "run_at": "2026-06-07T03:52:51.522Z",
+  "medusa_url": "http://169.239.180.49/api",
+  "summary": {
+    "total": 77,
+    "updated": 10,
+    "already_updated": 38,
+    "skipped": 29,
+    "failed": 0
+  },
+  "results": [
+    {
+      "handle": "rapid-repatterning-session",
+      "title": "Rapid Repatterning Session",
+      "status": "updated",
+      "source": "exact"
+    },
+    {
+      "handle": "resonance-repatterning-session",
+      "title": "Resonance Repatterning / Coaching Session",
+      "status": "already_updated"
+    },
+    {
+      "handle": "transformation-coaching-60-mins",
+      "title": "Transformation Coaching Session",
+      "status": "already_updated"
+    },
+    {
+      "handle": "executive-coaching-30-mins",
+      "title": "Executive Coaching Session",
+      "status": "already_updated"
+    },
+    {
+      "handle": "akashic-clearing-session",
+      "title": "Akashic Coaching / Clearing Session",
+      "status": "already_updated"
+    },
+    {
+      "handle": "group-family-coaching-60-mins",
+      "title": "Group Family Coaching",
+      "status": "already_updated"
+    },
+    {
+      "handle": "exploring-the-alpha-mind-45-minutes",
+      "title": "Exploring the Alpha Mind",
+      "status": "already_updated"
+    },
+    {
+      "handle": "rapid-transformation-therapy-session",
+      "title": "Rapid Transformation Therapy Session",
+      "status": "already_updated"
+    },
+    {
+      "handle": "energetic-clearing-completed-remotely",
+      "title": "Energetic Clearing",
+      "status": "already_updated"
+    },
+    {
+      "handle": "resonance-repatterning-program-1-fundamentals-live-via-zoom",
+      "title": "Resonance Repatterning Program 1 — Fundamentals",
+      "status": "already_updated"
+    },
+    {
+      "handle": "resonance-repatterning-program-2-primary-patterns-live-via-zoom",
+      "title": "Resonance Repatterning Program 2 — Primary Patterns",
+      "status": "already_updated"
+    },
+    {
+      "handle": "resonance-repatterning-program-3-unconscious-patterns-live-via-zoom",
+      "title": "Resonance Repatterning Program 3 — Unconscious Patterns",
+      "status": "already_updated"
+    },
+    {
+      "handle": "resonance-repatterning-program-4-chakra-patterns-live-via-zoom",
+      "title": "Resonance Repatterning Program 4 — Chakra Patterns",
+      "status": "already_updated"
+    },
+    {
+      "handle": "resonance-repatterning-program-5-five-elements-meridians-live-via-zoom",
+      "title": "Resonance Repatterning Program 5 — Five Elements & Meridians",
+      "status": "already_updated"
+    },
+    {
+      "handle": "resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom",
+      "title": "Resonance Repatterning Full Basic Series Programs 1–5",
+      "status": "already_updated"
+    },
+    {
+      "handle": "resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-live-via-zoom",
+      "title": "Resonance Repatterning Accelerated Basic 5 Review",
+      "status": "already_updated"
+    },
+    {
+      "handle": "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+      "title": "Akashic Navigator Level 1 — Fundamentals",
+      "status": "already_updated"
+    },
+    {
+      "handle": "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom",
+      "title": "Akashic Navigator Level 2 — Advanced",
+      "status": "already_updated"
+    },
+    {
+      "handle": "akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom",
+      "title": "Akashic Navigator Level 1 & 2 — Purchased Together",
+      "status": "already_updated"
+    },
+    {
+      "handle": "deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom",
+      "title": "Deep Energy Clearing Level 1 — Fundamentals",
+      "status": "already_updated"
+    },
+    {
+      "handle": "deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom",
+      "title": "Deep Energy Clearing Level 2 — Advanced",
+      "status": "already_updated"
+    },
+    {
+      "handle": "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live",
+      "title": "Be an Energy Ninja Level 1",
+      "status": "already_updated"
+    },
+    {
+      "handle": "trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live",
+      "title": "Trauma to Transcendence",
+      "status": "already_updated"
+    },
+    {
+      "handle": "finding-my-life-purpose-live",
+      "title": "Finding My Life Purpose",
+      "status": "already_updated"
+    },
+    {
+      "handle": "love-relationships-live",
+      "title": "Love & Relationships",
+      "status": "updated",
+      "source": "exact"
+    },
+    {
+      "handle": "intuition-in-my-personal-capacity-live",
+      "title": "Intuition (Personal & Business Capacity)",
+      "status": "updated",
+      "source": "exact"
+    },
+    {
+      "handle": "meditation-live-via-zoom",
+      "title": "Meditation",
+      "status": "already_updated"
+    },
+    {
+      "handle": "mindfulness-live",
+      "title": "Mindfulness",
+      "status": "already_updated"
+    },
+    {
+      "handle": "group-session-being-a-great-boundary-setter-booked-as-a-series-only",
+      "title": "Group Session — Being a Great Boundary Setter",
+      "status": "already_updated"
+    },
+    {
+      "handle": "career-progression-group-session",
+      "title": "Group Session — Career Progression",
+      "status": "already_updated"
+    },
+    {
+      "handle": "group-session-develop-super-confidence",
+      "title": "Group Session — Develop Super Confidence",
+      "status": "already_updated"
+    },
+    {
+      "handle": "love-relationships-group-session",
+      "title": "Group Session — Love & Relationships",
+      "status": "already_updated"
+    },
+    {
+      "handle": "money-mastery-group-session",
+      "title": "Group Session — Money Mastery",
+      "status": "already_updated"
+    },
+    {
+      "handle": "group-session-shedding-excess-weight",
+      "title": "Group Session — Shedding Excess Weight",
+      "status": "already_updated"
+    },
+    {
+      "handle": "resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study",
+      "title": "Resonance Repatterning Program 7 — Principles of Relationships",
+      "status": "already_updated"
+    },
+    {
+      "handle": "resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study",
+      "title": "Resonance Repatterning Program 9 — Energetics of Relationships",
+      "status": "already_updated"
+    },
+    {
+      "handle": "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live",
+      "title": "Be an Energy Ninja Level 2",
+      "status": "already_updated"
+    },
+    {
+      "handle": "group-session-attraction-frequency-recorded",
+      "title": "Group Session — Attraction Frequency",
+      "status": "already_updated"
+    },
+    {
+      "handle": "group-session-nice-or-not-nice-in-communication-booked-as-a-series-only",
+      "title": "Group Session — Nice or Not Nice in Communication",
+      "status": "already_updated"
+    },
+    {
+      "handle": "coherence-muscle-testing-self-study-online-2",
+      "title": "Coherence Muscle Testing",
+      "status": "updated",
+      "source": "exact"
+    },
+    {
+      "handle": "resonance-repatterning-all-repatternings-as-demos-talk-throughs-resources-self-study",
+      "title": "Resonance Repatterning — All Demos & Talk Throughs",
+      "status": "already_updated"
+    },
+    {
+      "handle": "post-traumatic-growth-self-study-online",
+      "title": "Post Traumatic Growth",
+      "status": "updated",
+      "source": "exact"
+    },
+    {
+      "handle": "the-latest-book-by-suzanne",
+      "title": "Breakthrough Trilogy",
+      "status": "already_updated"
+    },
+    {
+      "handle": "quantum-healing-codes-ebook-audio-download",
+      "title": "Quantum Healing Codes",
+      "status": "updated",
+      "source": "exact"
+    },
+    {
+      "handle": "bringing-your-energy-back",
+      "title": "Bringing Your Energy Back",
+      "status": "updated",
+      "source": "exact"
+    },
+    {
+      "handle": "energetic-alignment-inner-neutrality",
+      "title": "Energetic Alignment & Inner Neutrality",
+      "status": "updated",
+      "source": "exact"
+    },
+    {
+      "handle": "relaxation-energy-reclamation",
+      "title": "Relaxation & Energy Reclamation",
+      "status": "updated",
+      "source": "exact"
+    },
+    {
+      "handle": "getting-unstuck-self-study",
+      "title": "Getting Unstuck (Self Study)",
+      "status": "updated",
+      "source": "exact"
+    },
+    {
+      "handle": "membership-s0211",
+      "title": "Guest Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0212",
+      "title": "Lifestyle Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0213",
+      "title": "Akashic Student Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0214",
+      "title": "Akashic Novice Practitioner - Basic Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0215",
+      "title": "Akashic Novice Practitioner - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0216",
+      "title": "Akashic Practitioner (Prdip) - Basic Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0217",
+      "title": "Akashic Practitioner (Prdip) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0218",
+      "title": "Akashic Certified Practitioner (CertPrdip) - Basic Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0219",
+      "title": "Akashic Certified Practitioner (CertPrdip) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0220",
+      "title": "Akashic Certified Advanced Practitioner (CertAdvPrdip) - Basic Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0221",
+      "title": "Akashic Certified Advanced Practitioner (CertAdvPrdip) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0222",
+      "title": "Akashic Mentor (MentorPrdip) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0223",
+      "title": "Akashic Master Practitioner (MasterPrdip) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0224",
+      "title": "Akashic Instructor (Inst) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0225",
+      "title": "Akashic Certified Master Instructor (CertMasterInst) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0226",
+      "title": "Energy Clearing Student Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0227",
+      "title": "Energy Clearing Novice Practitioner - Basic Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0228",
+      "title": "Energy Clearing Novice Practitioner - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0229",
+      "title": "Energy Clearing Practitioner (Prdip) - Basic Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0230",
+      "title": "Energy Clearing Practitioner (Prdip) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0231",
+      "title": "Energy Clearing Certified Practitioner (CertPrdip) - Basic Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0232",
+      "title": "Energy Clearing Certified Practitioner (CertPrdip) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0233",
+      "title": "Energy Clearing Certified Advanced Practitioner (CertAdvPrdip) - Basic Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0234",
+      "title": "Energy Clearing Certified Advanced Practitioner (CertAdvPrdip) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0235",
+      "title": "Energy Clearing Mentor (MentorPrdip) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0236",
+      "title": "Energy Clearing Master Practitioner (MasterPrdip) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0237",
+      "title": "Energy Clearing Certified Master Practitioner (CertMasterPrdip) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0238",
+      "title": "Energy Clearing Instructor (Inst) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    },
+    {
+      "handle": "membership-s0239",
+      "title": "Energy Clearing Certified Master Instructor (CertMasterInst) - Premier Membership",
+      "status": "skipped",
+      "reason": "no description mapped"
+    }
+  ]
+}

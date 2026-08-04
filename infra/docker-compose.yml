@@ -114,6 +114,7 @@ services:
       VTIGER_USERNAME: ${VTIGER_USERNAME:-}
       VTIGER_ACCESS_KEY: ${VTIGER_ACCESS_KEY:-}
       VIBE_MARKETING_WEBHOOK_URL: ${VIBE_MARKETING_WEBHOOK_URL:-}
+      N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL: ${N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL:-}
     networks:
       - suzanne_network
     healthcheck:
@@ -308,6 +309,7 @@ services:
       VTIGER_URL: ${VTIGER_URL:-}
       VTIGER_USERNAME: ${VTIGER_USERNAME:-}
       VTIGER_ACCESS_KEY: ${VTIGER_ACCESS_KEY:-}
+      THINKIFIC_API_KEY: ${THINKIFIC_API_KEY}
     networks:
       - suzanne_network
     healthcheck:
