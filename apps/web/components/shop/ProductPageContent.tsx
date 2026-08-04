@@ -148,6 +148,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               variants={product.variants}
               selectedVariantId={selectedVariantId}
               onSelect={setSelectedVariantId}
+              productHandle={product.handle}
             />
 
             {isThinkificCourse && (
@@ -395,6 +396,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               variants={product.variants}
               selectedVariantId={selectedVariantId}
               onSelect={setSelectedVariantId}
+              productHandle={product.handle}
               dark
             />
           </motion.div>

@@ -3,34 +3,31 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ChevronRight, CalendarDays, Clock, Users } from 'lucide-react'
+import { ChevronRight, Clock, Users } from 'lucide-react'
+import type { FeaturedCohort } from '@/lib/inventory/group-sessions'
 
-// TODO: Replace static data with Payload CMS query in Task 1.6
-const featuredCohort = {
-  label: 'GROUP PROGRAM · NEXT INTAKE',
-  title: 'Group Transformation',
-  subtitle: '6 weeks. Small group. Permanent change.',
-  date: 'June 2026',
-  duration: '6 weeks',
-  spots: 12,
-  spotsRemaining: 4,
-  price: 'R14,500',
-  href: '/programs/group-transformation',
-  cta: 'Reserve Your Spot',
-}
-
-// TODO: Connect nextAvailable to Cal.com availability API in Task 1.8
+// 1-on-1 availability isn't inventory-backed (it's Cal.com-governed, not a
+// capacity count) — kept as static copy, out of scope for the group-session
+// inventory work. TODO: Connect nextAvailable to Cal.com availability API.
 const oneOnOne = {
   label: '1-ON-1 COACHING',
   title: 'Private Intensive',
   subtitle: "Suzanne's full attention. Your breakthrough.",
   availability: 'Limited availability',
-  nextAvailable: 'May 2026',
+  nextAvailable: 'By discovery call',
   href: '/contact',
   cta: 'Book Discovery Call',
 }
 
-export default function UpcomingPrograms() {
+interface UpcomingProgramsProps {
+  /** Real, inventory-backed cohort — null when no group session currently
+   *  has tracked inventory (seed script not yet run, or fetch failed). Never
+   *  fabricate a fallback number here — render the honest waitlist card
+   *  instead. */
+  cohort: FeaturedCohort | null
+}
+
+export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
   return (
     <section className="bg-brand-primary py-14 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,54 +75,91 @@ export default function UpcomingPrograms() {
 
             {/* Content */}
             <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-between min-h-[380px]">
+              {cohort ? (
+                <>
+                  <div>
+                    {/* Top row — label + real spots badge */}
+                    <div className="flex items-start justify-between mb-8">
+                      <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium">
+                        GROUP PROGRAM · NEXT INTAKE
+                      </p>
+                      <span
+                        className={`text-xs px-3 py-1 uppercase tracking-wider ${
+                          cohort.spotsRemaining > 0
+                            ? 'bg-brand-accent/20 border border-brand-accent-400 text-brand-accent-400'
+                            : 'bg-gray-800 border border-gray-700 text-gray-400'
+                        }`}
+                      >
+                        {cohort.spotsRemaining > 0
+                          ? `${cohort.spotsRemaining} spot${cohort.spotsRemaining === 1 ? '' : 's'} left`
+                          : 'Waitlist only'}
+                      </span>
+                    </div>
 
-              <div>
-                {/* Top row — label + spots badge */}
-                <div className="flex items-start justify-between mb-8">
-                  <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium">
-                    {featuredCohort.label}
-                  </p>
-                  <span className="bg-brand-accent/20 border border-brand-accent/40 text-brand-accent text-xs px-3 py-1 uppercase tracking-wider">
-                    {featuredCohort.spotsRemaining} spots left
-                  </span>
-                </div>
+                    <h3 className="text-4xl lg:text-5xl font-light text-white leading-tight mb-3">
+                      {cohort.productTitle}
+                    </h3>
+                    <p className="text-white/60 text-lg font-light mb-8">
+                      Small group. Live via Zoom. Permanent change.
+                    </p>
 
-                <h3 className="text-4xl lg:text-5xl font-light text-white leading-tight mb-3">
-                  {featuredCohort.title}
-                </h3>
-                <p className="text-white/60 text-lg font-light mb-8">
-                  {featuredCohort.subtitle}
-                </p>
+                    {/* Meta row — normal-case on mobile, uppercase on desktop for readability */}
+                    <div className="flex flex-wrap gap-4 text-sm text-white/70 normal-case lg:uppercase lg:tracking-wider mb-8">
+                      {cohort.duration && (
+                        <span className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+                          {cohort.duration}
+                        </span>
+                      )}
+                      <span className="flex items-center gap-2">
+                        <Users className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+                        {cohort.capacity} people max
+                      </span>
+                    </div>
+                  </div>
 
-                {/* Meta row — normal-case on mobile, uppercase on desktop for readability */}
-                <div className="flex flex-wrap gap-4 text-sm text-white/70 normal-case lg:uppercase lg:tracking-wider mb-8">
-                  <span className="flex items-center gap-2">
-                    <CalendarDays className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                    {featuredCohort.date}
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                    {featuredCohort.duration}
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <Users className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                    {featuredCohort.spots} people max
-                  </span>
-                </div>
-              </div>
-
-              {/* Bottom row — price + CTA */}
-              <div className="flex items-center justify-between flex-wrap gap-4">
-                <span className="text-3xl font-light text-white">
-                  {featuredCohort.price}
-                </span>
-                <Link
-                  href={featuredCohort.href}
-                  className="bg-brand-accent hover:bg-brand-accent-700 text-white px-8 py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.4)]"
-                >
-                  {featuredCohort.cta} &rarr;
-                </Link>
-              </div>
+                  {/* Bottom row — price + CTA */}
+                  <div className="flex items-center justify-between flex-wrap gap-4">
+                    <span className="text-3xl font-light text-white">
+                      {cohort.priceZar !== null
+                        ? `R${cohort.priceZar.toLocaleString('en-ZA', { maximumFractionDigits: 0 })}`
+                        : 'Contact us'}
+                    </span>
+                    <Link
+                      href={`/shop/${cohort.productHandle}`}
+                      className="bg-brand-accent hover:bg-brand-accent-700 text-white px-8 py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.4)]"
+                    >
+                      {cohort.spotsRemaining > 0 ? 'Reserve Your Spot' : 'Join the Waitlist'} &rarr;
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* No group session currently has confirmed inventory/dates —
+                      honest fallback, matches the tone of /events rather than
+                      inventing a number. */}
+                  <div>
+                    <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-8">
+                      GROUP PROGRAMS
+                    </p>
+                    <h3 className="text-4xl lg:text-5xl font-light text-white leading-tight mb-3">
+                      New Cohorts Forming
+                    </h3>
+                    <p className="text-white/60 text-lg font-light mb-8 max-w-md">
+                      Suzanne is finalising the next round of live group sessions. Register your
+                      interest and be the first to know when a spot opens.
+                    </p>
+                  </div>
+                  <div>
+                    <Link
+                      href="/events"
+                      className="inline-flex bg-brand-accent hover:bg-brand-accent-700 text-white px-8 py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.4)]"
+                    >
+                      Register Your Interest &rarr;
+                    </Link>
+                  </div>
+                </>
+              )}
             </div>
           </motion.div>
 

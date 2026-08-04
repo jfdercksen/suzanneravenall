@@ -10,6 +10,13 @@ export interface ProductVariant {
   id: string
   title: string
   prices: Array<{ currency_code: string; amount: number }>
+  /**
+   * Computed Medusa field — only populated when the store API request
+   * explicitly asks for `+variants.inventory_quantity`. `null`/`undefined`
+   * means this variant isn't inventory-tracked (unlimited); a number means
+   * real, live remaining stock (see apps/web/lib/inventory/spots.ts).
+   */
+  inventory_quantity?: number | null
 }
 
 /** Alias used by product detail page components */

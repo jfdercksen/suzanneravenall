@@ -14,6 +14,7 @@ import UpcomingEvents from '../components/home/UpcomingEvents'
 import LeadMagnet from '../components/home/LeadMagnet'
 import VideoTestimonials from '../components/shared/VideoTestimonials'
 import FinalCTA from '../components/home/FinalCTA'
+import { getFeaturedCohort } from '../lib/inventory/group-sessions'
 
 export const metadata: Metadata = {
   title: {
@@ -73,7 +74,9 @@ const personJsonLd = {
   ],
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const featuredCohort = await getFeaturedCohort()
+
   return (
     <>
       <script
@@ -91,7 +94,7 @@ export default function HomePage() {
       {/* 3 — dark (bg-gray-950) */}
       <MediaLogos id="media-logos" />
       {/* 4 — dark (bg-brand-primary) */}
-      <UpcomingPrograms />
+      <UpcomingPrograms cohort={featuredCohort} />
       {/* 5 — light (bg-white) */}
       <MagazineCovers />
       {/* 5 — light (bg-gray-50) */}
@@ -107,7 +110,7 @@ export default function HomePage() {
       {/* 10 — mixed dark/light (BookPromotion split layout) */}
       <BookPromotion />
       {/* 11 — light (bg-gray-50) */}
-      <UpcomingEvents />
+      <UpcomingEvents cohort={featuredCohort} />
       {/* 12 — dark (bg-brand-primary) */}
       <LeadMagnet />
       {/* 13 — light (bg-white) */}

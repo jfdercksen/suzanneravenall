@@ -132,7 +132,8 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
       const params = new URLSearchParams({
         limit: String(PAGE_SIZE),
         offset: String(page * PAGE_SIZE),
-        fields: 'id,handle,title,description,thumbnail,*variants,*variants.prices,*categories,*collection',
+        fields:
+          'id,handle,title,description,thumbnail,*variants,*variants.prices,+variants.inventory_quantity,*categories,*collection',
       })
 
       if (filters.categoryId) {

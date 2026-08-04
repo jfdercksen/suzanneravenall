@@ -4,6 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useCart } from '@/lib/cart'
+import { getSpotsInfo, isLiveVariantTitle } from '@/lib/inventory/spots'
+import { isCapacityLimitedHandle } from '@/lib/inventory/group-sessions'
 import type { MedusaProduct, ProductVariant } from '@/types/medusa'
 
 const CATEGORY_IMAGE_MAP: Record<string, string> = {
@@ -43,6 +45,35 @@ interface CategoryNode {
 interface DeliveryBadge {
   label: string
   className: string
+}
+
+/**
+ * Real, inventory-backed "spots left" badge for the product's Live variant,
+ * when one exists and the store API returned tracked inventory for it.
+ * Takes priority over the generic delivery-format badge — a real seat count
+ * is more useful (and more honest) than "Live" on its own.
+ *
+ * Gated on isCapacityLimitedHandle — many unrelated self-paced products also
+ * have variants titled "Live via Zoom" and must never show a fabricated
+ * spots/sold-out badge (see isCapacityLimitedHandle's doc comment).
+ */
+function getRealSpotsBadge(handle: string, variants: ProductVariant[]): DeliveryBadge | null {
+  if (!isCapacityLimitedHandle(handle)) return null
+
+  const liveVariant = variants.find((v) => isLiveVariantTitle(v.title))
+  if (!liveVariant) return null
+
+  const spots = getSpotsInfo(liveVariant.inventory_quantity)
+  if (spots === null) return null
+
+  if (spots.soldOut) {
+    return { label: 'Sold Out', className: 'bg-gray-800 text-gray-400 border border-gray-700' }
+  }
+
+  return {
+    label: `${spots.spotsRemaining} spot${spots.spotsRemaining === 1 ? '' : 's'} left`,
+    className: 'bg-brand-accent/20 text-brand-accent-400 border border-brand-accent-400',
+  }
 }
 
 function getDeliveryBadge(handle: string, title: string): DeliveryBadge {
@@ -150,7 +181,9 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
   const { cart } = useCart()
   const currency = cart?.currency_code ?? defaultCurrency
 
-  const badge = getDeliveryBadge(product.handle, product.title)
+  const badge =
+    getRealSpotsBadge(product.handle, product.variants) ??
+    getDeliveryBadge(product.handle, product.title)
   const leafCategory = product.categories[0] ?? null
   const rootCategory = getRootCategory(product.categories, allCategories)
 

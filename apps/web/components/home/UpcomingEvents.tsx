@@ -2,10 +2,11 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import type { FeaturedCohort } from '@/lib/inventory/group-sessions'
 
-// TODO: Suzanne to provide real upcoming event dates
-// Replace hardcoded cards with dynamic data from Payload CMS
-// when real programme schedule is confirmed
+// TODO: Suzanne to provide real upcoming event dates for the FREE/BOOK cards
+// below — replace with dynamic data from Payload CMS when the real programme
+// schedule is confirmed. The GROUP card is real (see cohort prop).
 
 type BadgeVariant = 'free' | 'group' | 'book'
 
@@ -20,47 +21,84 @@ interface Opportunity {
   price?: string
 }
 
-const opportunities: Opportunity[] = [
-  {
-    type: 'FREE',
-    variant: 'free',
-    title: 'Discovery Call',
-    description:
-      '30-minute complimentary call to map your patterns and find the right programme for you.',
-    cta: 'Book Now',
-    href: '/contact',
-    badge: 'Available this week',
-  },
-  {
-    type: 'GROUP',
-    variant: 'group',
-    title: 'Group Transformation Session',
-    description:
-      'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
-    cta: 'Join Waitlist',
-    href: '/contact',
-    badge: 'Next intake opening soon',
-  },
-  {
-    type: 'BOOK',
-    variant: 'book',
-    title: 'Breakthrough Trilogy',
-    description:
-      "Start your transformation journey with Suzanne's complete guide to decoding your patterns.",
-    price: 'R165',
-    cta: 'Pre-Order Now',
-    href: '/shop/the-latest-book-by-suzanne',
-    badge: 'Available now',
-  },
-]
-
 const variantStyles: Record<BadgeVariant, string> = {
   free: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
   group: 'bg-brand-accent/15 text-brand-accent border border-brand-accent/30',
   book: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
 }
 
-export default function UpcomingEvents() {
+interface UpcomingEventsProps {
+  /** Same real, inventory-backed cohort used on UpcomingPrograms — null when
+   *  no group session currently has tracked inventory. Never fabricate a
+   *  fallback number here. */
+  cohort: FeaturedCohort | null
+}
+
+function buildGroupOpportunity(cohort: FeaturedCohort | null): Opportunity {
+  if (cohort && cohort.spotsRemaining > 0) {
+    return {
+      type: 'GROUP',
+      variant: 'group',
+      title: cohort.productTitle,
+      description:
+        'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
+      cta: 'Reserve Your Spot',
+      href: `/shop/${cohort.productHandle}`,
+      badge: `${cohort.spotsRemaining} spot${cohort.spotsRemaining === 1 ? '' : 's'} left`,
+    }
+  }
+
+  if (cohort) {
+    return {
+      type: 'GROUP',
+      variant: 'group',
+      title: cohort.productTitle,
+      description:
+        'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
+      cta: 'Join Waitlist',
+      href: `/shop/${cohort.productHandle}`,
+      badge: 'Fully booked',
+    }
+  }
+
+  return {
+    type: 'GROUP',
+    variant: 'group',
+    title: 'Group Transformation Session',
+    description:
+      'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
+    cta: 'Register Interest',
+    href: '/events',
+    badge: 'Next intake opening soon',
+  }
+}
+
+export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
+  const opportunities: Opportunity[] = [
+    {
+      type: 'FREE',
+      variant: 'free',
+      title: 'Discovery Call',
+      description:
+        '30-minute complimentary call to map your patterns and find the right programme for you.',
+      cta: 'Book Now',
+      href: '/contact',
+      badge: 'Available this week',
+    },
+    buildGroupOpportunity(cohort),
+    {
+      type: 'BOOK',
+      variant: 'book',
+      title: 'Breakthrough Trilogy',
+      description:
+        "Start your transformation journey with Suzanne's complete guide to decoding your patterns.",
+      price: 'R165',
+      cta: 'Pre-Order Now',
+      href: '/shop/the-latest-book-by-suzanne',
+      badge: 'Available now',
+    },
+  ]
+
   return (
     <section aria-labelledby="upcoming-events-heading" className="bg-gray-50 py-14 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
