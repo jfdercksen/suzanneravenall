@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { bookTestimonials } from '@/data/testimonials'
 
 // TODO: Suzanne to confirm book titles, descriptions, and release dates for all 3 books in the trilogy
 const books = [
@@ -99,27 +100,10 @@ const themes = [
   },
 ]
 
-// TODO: Replace with book-specific testimonials when available
-const testimonials = [
-  {
-    quote:
-      "Suzanne's work fundamentally changed how I see myself and what I believe is possible. Within weeks of applying her methodology, I had breakthrough results in my business and my relationships. This is not theory. It works.",
-    name: 'Michelle K.',
-    title: 'Executive, Johannesburg',
-  },
-  {
-    quote:
-      "I've read dozens of personal development books. What makes Suzanne's approach different is that it goes to the root cause. She doesn't teach you to manage your patterns. She helps you dissolve them entirely.",
-    name: 'David T.',
-    title: 'Entrepreneur, Cape Town',
-  },
-  {
-    quote:
-      'The Rapid Repatterning® process described in this work is the single most powerful tool I have ever encountered for lasting change. I recommend it to every client I work with.',
-    name: 'Dr. Karen M.',
-    title: 'Clinical Psychologist',
-  },
-]
+// Reader testimonials live in data/testimonials.ts (bookTestimonials) — the
+// single source of truth. Entries require Dr. Suzanne Ravenall's verified
+// sign-off; while the list is empty the "Early Readers Say" section below
+// renders nothing.
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -172,7 +156,7 @@ export default function BookContent() {
             <div>
               <motion.p
                 {...fadeUp(0)}
-                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
               >
                 The Breakthrough Trilogy
               </motion.p>
@@ -187,7 +171,7 @@ export default function BookContent() {
 
               <motion.p
                 {...fadeUp(0.2)}
-                className="text-xl lg:text-2xl font-light text-brand-accent/80 italic mb-6"
+                className="text-xl lg:text-2xl font-light text-brand-accent-300 italic mb-6"
               >
                 A Quest to Find an Upgraded Version of You
               </motion.p>
@@ -349,7 +333,7 @@ export default function BookContent() {
           <div className="text-center mb-16">
             <motion.p
               {...scrollFadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4"
             >
               Inside the Trilogy
             </motion.p>
@@ -377,14 +361,14 @@ export default function BookContent() {
                   <span
                     className={`inline-block px-3 py-1 text-xs font-medium rounded-full mb-4 ${
                       book.tagAccent
-                        ? 'bg-brand-accent/20 text-brand-accent'
+                        ? 'bg-brand-accent/20 text-brand-accent-400'
                         : 'bg-white/10 text-white/50'
                     }`}
                   >
                     {book.tag}
                   </span>
                   <h3 className="text-xl font-semibold text-white mb-1">{book.title}</h3>
-                  <p className="text-sm text-brand-accent mb-4">{book.subtitle}</p>
+                  <p className="text-sm text-brand-accent-400 mb-4">{book.subtitle}</p>
                   <p className="text-gray-400 text-sm leading-relaxed">{book.description}</p>
                 </div>
               </motion.div>
@@ -477,7 +461,7 @@ export default function BookContent() {
             <div>
               <motion.p
                 {...scrollFadeUp(0)}
-                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
+                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4"
               >
                 About the Author
               </motion.p>
@@ -507,7 +491,7 @@ export default function BookContent() {
               <motion.div {...scrollFadeUp(0.5)}>
                 <Link
                   href="/about"
-                  className="inline-flex items-center text-brand-accent font-semibold text-sm uppercase tracking-widest hover:text-brand-accent-400 transition-colors duration-300 group"
+                  className="inline-flex items-center text-brand-accent-300 font-semibold text-sm uppercase tracking-widest hover:text-brand-accent-200 transition-colors duration-300 group"
                 >
                   Meet Dr. Ravenall
                   <svg
@@ -545,7 +529,9 @@ export default function BookContent() {
       </section>
 
       {/* ─── 6. Reader Responses — light, bg-white ──────────────────── */}
-      {/* TODO: Replace with book-specific testimonials when available */}
+      {/* Hidden entirely until data/testimonials.ts holds verified,
+          Suzanne-approved reader quotes */}
+      {bookTestimonials.length > 0 && (
       <section
         aria-labelledby="responses-heading"
         className="w-full bg-white py-20 lg:py-32"
@@ -568,7 +554,7 @@ export default function BookContent() {
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {testimonials.map((t, i) => (
+            {bookTestimonials.map((t, i) => (
               <motion.div
                 key={`${t.name}-${i}`}
                 {...scrollFadeUp(i * 0.1)}
@@ -592,13 +578,14 @@ export default function BookContent() {
                 </p>
                 <div>
                   <p className="font-semibold text-brand-primary text-sm">{t.name}</p>
-                  <p className="text-gray-400 text-xs mt-0.5">{t.title}</p>
+                  {t.title && <p className="text-gray-400 text-xs mt-0.5">{t.title}</p>}
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
+      )}
 
       {/* ─── 7. Pre-Order CTA — dark, bg-brand-primary-900 ────────────── */}
       <section
@@ -618,7 +605,7 @@ export default function BookContent() {
             <div>
               <motion.p
                 {...scrollFadeUp(0)}
-                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
+                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4"
               >
                 Get Your Copy
               </motion.p>

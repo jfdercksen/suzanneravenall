@@ -92,7 +92,7 @@ export default function TheScienceContent() {
           <div className="max-w-3xl">
             <motion.p
               {...fadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
             >
               About: The Science
             </motion.p>
@@ -102,7 +102,7 @@ export default function TheScienceContent() {
               className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
             >
               It&rsquo;s not you,{' '}
-              <span className="text-brand-accent">it&rsquo;s your pattern</span>.
+              <span className="text-brand-accent-300">it&rsquo;s your pattern</span>.
             </motion.h1>
             <motion.p
               {...fadeUp(0.4)}
@@ -171,7 +171,7 @@ export default function TheScienceContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
             {...sectionReveal}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
           >
             The Nervous System
           </motion.p>
@@ -288,7 +288,7 @@ export default function TheScienceContent() {
             <div>
               <motion.p
                 {...sectionReveal}
-                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
               >
                 Why Insight Isn&rsquo;t Enough
               </motion.p>
@@ -333,7 +333,7 @@ export default function TheScienceContent() {
                   }}
                   className="flex gap-6 rounded-card border border-white/5 bg-gray-900 p-6 transition-all duration-500 hover:border-brand-accent/40"
                 >
-                  <span className="text-brand-accent text-2xl font-light shrink-0">
+                  <span className="text-brand-accent-400 text-2xl font-light shrink-0">
                     {step.number}
                   </span>
                   <div>
@@ -424,7 +424,7 @@ export default function TheScienceContent() {
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
             {...sectionReveal}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
           >
             Find Your Pattern
           </motion.p>

@@ -25,7 +25,7 @@ export default function TopicRecognition({ topic }: { topic: Topic }) {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           {...fadeUp(0)}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6 text-center"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6 text-center"
         >
           Sound Familiar?
         </motion.p>

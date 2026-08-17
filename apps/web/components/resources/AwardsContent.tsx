@@ -72,7 +72,7 @@ export default function AwardsContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
           >
             Resources
           </motion.p>
@@ -130,10 +130,10 @@ export default function AwardsContent() {
                 className="flex flex-col bg-gray-900 rounded-2xl p-6 h-full"
               >
                 <div className="flex items-center gap-3 mb-5">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-accent/10 text-brand-accent">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-accent/10 text-brand-accent-400">
                     <Award size={18} />
                   </div>
-                  <p className="text-xs uppercase tracking-wider font-medium text-brand-accent">
+                  <p className="text-xs uppercase tracking-wider font-medium text-brand-accent-400">
                     {item.organisation}
                   </p>
                 </div>
@@ -162,7 +162,7 @@ export default function AwardsContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4"
           >
             Work With Suzanne
           </motion.p>

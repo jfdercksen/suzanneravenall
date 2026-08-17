@@ -13,8 +13,10 @@ import {
   Section,
   Text,
 } from '@react-email/components'
-import type { CartEmailData } from '../types'
+import type { CartEmailProps } from '../types'
+import { companyPhysicalAddress } from '../company'
 import { formatAmount } from '../utils'
+import { emailTestimonial } from '@/data/testimonials'
 
 const NAVY = '#012B43'
 const BLUE = '#1719F4'
@@ -28,7 +30,8 @@ export default function CartAbandonment3({
   total,
   cartUrl,
   currency,
-}: CartEmailData) {
+  unsubscribeUrl,
+}: CartEmailProps) {
   const greeting = firstName ? `${firstName},` : 'Friend,'
 
   return (
@@ -68,20 +71,21 @@ export default function CartAbandonment3({
               reserved spot will be released.
             </Text>
 
-            {/* Testimonial placeholder */}
-            <Section style={{ backgroundColor: LIGHT_GRAY, borderRadius: '4px', padding: '24px', marginBottom: '32px' }}>
-              <Text style={{ color: MEDIUM_GRAY, fontSize: '11px', fontWeight: '700', letterSpacing: '0.1em', textTransform: 'uppercase', margin: '0 0 12px' }}>
-                What Others Are Saying
-              </Text>
-              {/* TODO: Replace with a real client testimonial once Suzanne provides quotes */}
-              <Text style={{ color: NAVY, fontSize: '15px', fontStyle: 'italic', lineHeight: '1.6', margin: '0 0 12px' }}>
-                &ldquo;Working with Dr Suzanne completely shifted how I understand myself and
-                my purpose. The tools she shares are practical, profound, and lasting.&rdquo;
-              </Text>
-              <Text style={{ color: MEDIUM_GRAY, fontSize: '13px', fontWeight: '600', margin: 0 }}>
-                — Client Name, Location
-              </Text>
-            </Section>
+            {/* Testimonial — sourced from data/testimonials.ts (single source of
+                truth). Omitted entirely until Suzanne signs off a real quote. */}
+            {emailTestimonial && (
+              <Section style={{ backgroundColor: LIGHT_GRAY, borderRadius: '4px', padding: '24px', marginBottom: '32px' }}>
+                <Text style={{ color: MEDIUM_GRAY, fontSize: '11px', fontWeight: '700', letterSpacing: '0.1em', textTransform: 'uppercase', margin: '0 0 12px' }}>
+                  What Others Are Saying
+                </Text>
+                <Text style={{ color: NAVY, fontSize: '15px', fontStyle: 'italic', lineHeight: '1.6', margin: '0 0 12px' }}>
+                  &ldquo;{emailTestimonial.quote}&rdquo;
+                </Text>
+                <Text style={{ color: MEDIUM_GRAY, fontSize: '13px', fontWeight: '600', margin: 0 }}>
+                  — {emailTestimonial.attribution}
+                </Text>
+              </Section>
+            )}
 
             {/* Cart summary */}
             <Section style={{ border: `2px solid ${NAVY}`, borderRadius: '4px', padding: '24px', marginBottom: '32px' }}>
@@ -161,11 +165,10 @@ export default function CartAbandonment3({
           {/* Footer */}
           <Section style={{ backgroundColor: LIGHT_GRAY, padding: '24px 40px', borderTop: '1px solid #e2e8f0' }}>
             <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', margin: '0 0 4px' }}>
-              Ravenall Institute · Cape Town, South Africa
+              Ravenall Institute · {companyPhysicalAddress()}
             </Text>
             <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', margin: 0 }}>
-              {/* TODO: Replace with real unsubscribe link once email management is configured */}
-              <a href="#" style={{ color: MEDIUM_GRAY }}>Unsubscribe</a> from cart reminder emails
+              <a href={unsubscribeUrl} style={{ color: MEDIUM_GRAY }}>Unsubscribe</a> from cart reminder emails
             </Text>
           </Section>
 

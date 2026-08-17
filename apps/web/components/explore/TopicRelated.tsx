@@ -23,7 +23,7 @@ export default function TopicRelated({ slug }: { slug: TopicSlug }) {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="max-w-3xl mb-16 lg:mb-20"
         >
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
             Related Focus Areas
           </p>
           <h2
@@ -31,7 +31,7 @@ export default function TopicRelated({ slug }: { slug: TopicSlug }) {
             className="text-4xl lg:text-6xl font-light text-white leading-tight"
           >
             Patterns rarely live in{' '}
-            <span className="text-brand-accent">isolation</span>
+            <span className="text-brand-accent-400">isolation</span>
           </h2>
         </motion.div>
 

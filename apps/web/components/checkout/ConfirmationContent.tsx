@@ -89,7 +89,7 @@ export default function ConfirmationContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
               Payment Received
             </p>
             <h1 className="text-4xl lg:text-5xl font-light text-white mb-4">

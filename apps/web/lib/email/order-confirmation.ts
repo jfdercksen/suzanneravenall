@@ -2,6 +2,7 @@ import { createElement } from 'react'
 import { Resend } from 'resend'
 import OrderConfirmation from '../../emails/OrderConfirmation'
 import type { OrderEmailData } from './types'
+import { companyVatNumber } from './company'
 import { formatAmount } from './utils'
 
 export type { OrderEmailData }
@@ -65,20 +66,24 @@ function buildPlainText(order: OrderEmailData, invoiceUrl: string | null): strin
     )
   }
 
-  lines.push(
-    '',
-    `Subtotal: ${formatAmount(order.subtotal, order.currency)}`,
-    `VAT (15%): ${formatAmount(order.taxTotal, order.currency)}`,
-    `Total: ${formatAmount(order.total, order.currency)}`,
-    ''
-  )
+  // Not VAT registered by default (companyVatNumber() null): no VAT line,
+  // no tax-invoice wording. Mirrors OrderConfirmation.tsx and InvoiceDocument.tsx.
+  const vatRegistered = companyVatNumber() !== null
+
+  lines.push('', `Subtotal: ${formatAmount(order.subtotal, order.currency)}`)
+  if (vatRegistered) {
+    lines.push(`VAT (15%): ${formatAmount(order.taxTotal, order.currency)}`)
+  }
+  lines.push(`Total: ${formatAmount(order.total, order.currency)}`, '')
 
   if (invoiceUrl) {
     lines.push(
-      'YOUR TAX INVOICE',
+      vatRegistered ? 'YOUR TAX INVOICE' : 'YOUR INVOICE',
       '================',
       `Download: ${invoiceUrl}`,
-      'This invoice is VAT compliant for South African tax purposes.',
+      vatRegistered
+        ? 'This invoice is VAT compliant for South African tax purposes.'
+        : 'Keep this invoice for your records.',
       ''
     )
   }

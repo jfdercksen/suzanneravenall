@@ -137,7 +137,7 @@ export default function SpeakingContent() {
           <div className="max-w-3xl">
             <motion.p
               {...fadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
             >
               Keynote Speaker
             </motion.p>
@@ -148,7 +148,7 @@ export default function SpeakingContent() {
               className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
             >
               Transform Your Audience{' '}
-              <span className="text-brand-accent">From the Inside Out</span>
+              <span className="text-brand-accent-300">From the Inside Out</span>
             </motion.h1>
 
             <motion.p
@@ -260,7 +260,7 @@ export default function SpeakingContent() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...scrollFadeUp(0)} className="max-w-3xl mb-16">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
               What Happens in the Room
             </p>
             <h2
@@ -278,7 +278,7 @@ export default function SpeakingContent() {
                 {...scrollFadeUp(idx * 0.1)}
                 className="group flex flex-col gap-5 p-8 bg-gray-900 border border-white/5 rounded-card hover:border-brand-accent/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-accent/5"
               >
-                <div className="text-brand-accent group-hover:scale-110 transition-transform duration-300 w-fit">
+                <div className="text-brand-accent-400 group-hover:scale-110 transition-transform duration-300 w-fit">
                   {item.icon}
                 </div>
                 <h3 className="text-lg font-semibold text-white">{item.heading}</h3>
@@ -398,7 +398,7 @@ export default function SpeakingContent() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...scrollFadeUp(0)} className="max-w-3xl mb-16">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
               Who Suzanne Speaks To
             </p>
             <h2
@@ -505,7 +505,7 @@ export default function SpeakingContent() {
 
             {/* Left — copy */}
             <div>
-              <motion.p {...scrollFadeUp(0)} className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+              <motion.p {...scrollFadeUp(0)} className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
                 Book Suzanne
               </motion.p>
               <motion.h2

@@ -3,6 +3,7 @@ import { createHash, timingSafeEqual } from 'crypto'
 import { z } from 'zod'
 import { sendMembershipWelcomeEmail } from '@/lib/email/membership-welcome'
 import { tierLabel } from '@/lib/access/tiers'
+import { logError } from '@/lib/log'
 
 const bodySchema = z.object({
   email: z.string().email(),
@@ -59,8 +60,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ emailId })
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
-    console.error('[membership-welcome] Failed to send email:', message)
+    logError('[membership-welcome] Failed to send email:', err)
     return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
   }
 }

@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import crypto from 'crypto'
 import { z } from 'zod'
+import { logError } from '@/lib/log'
 
 // Cal.com sends X-Cal-Signature-256: sha256=<hex> (HMAC-SHA256 of raw body)
 // Docs: https://cal.com/docs/core-features/webhooks
@@ -33,7 +34,7 @@ const N8N_BASE_URL = (process.env.N8N_WEBHOOK_URL ?? 'http://n8n:5678').replace(
 export async function POST(request: NextRequest) {
   const webhookSecret = process.env.CALCOM_WEBHOOK_SECRET
   if (!webhookSecret) {
-    console.error('[calcom webhook] CALCOM_WEBHOOK_SECRET is not set')
+    logError('[calcom webhook] CALCOM_WEBHOOK_SECRET is not set')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
 
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest) {
   // Cal.com signature header: "sha256=<hex>"
   const signatureHeader = request.headers.get('X-Cal-Signature-256')
   if (!signatureHeader) {
-    console.error('[calcom webhook] Missing X-Cal-Signature-256 header')
+    logError('[calcom webhook] Missing X-Cal-Signature-256 header')
     return NextResponse.json({ error: 'Missing signature' }, { status: 401 })
   }
 
@@ -93,7 +94,7 @@ export async function POST(request: NextRequest) {
       body: rawBody,
     }).catch((err: unknown) => {
       const message = err instanceof Error ? err.message : String(err)
-      console.error(`[calcom webhook] n8n forward failed: ${message}`)
+      logError(`[calcom webhook] n8n forward failed: ${message}`, err)
     })
   }
 

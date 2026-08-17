@@ -43,7 +43,7 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-36">
           <motion.span
             {...fadeUpAnimate(0)}
-            className="inline-flex items-center rounded-button px-4 py-1.5 text-xs uppercase tracking-[0.2em] font-semibold mb-6 bg-brand-accent/15 text-brand-accent border border-brand-accent/30"
+            className="inline-flex items-center rounded-button px-4 py-1.5 text-xs uppercase tracking-[0.2em] font-semibold mb-6 bg-brand-accent/15 text-brand-accent-300 border border-brand-accent/30"
           >
             Private Session
           </motion.span>

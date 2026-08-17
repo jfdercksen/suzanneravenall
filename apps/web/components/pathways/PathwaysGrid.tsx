@@ -17,7 +17,7 @@ const cardVariants = {
 const badgeClasses = (category: PathwayCategory): string =>
   category === 'youth'
     ? 'bg-emerald-500/20 text-emerald-400'
-    : 'bg-brand-accent/20 text-brand-accent'
+    : 'bg-brand-accent/20 text-brand-accent-300'
 
 const cardAccentClass = (category: PathwayCategory): string =>
   category === 'youth' ? 'border-l-emerald-500' : 'border-l-brand-accent'
@@ -37,7 +37,7 @@ export default function PathwaysGrid() {
           transition={{ duration: 0.6 }}
           className="mb-12 lg:mb-16"
         >
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
             Explore the Pathways
           </p>
           <h2
@@ -58,7 +58,7 @@ export default function PathwaysGrid() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5 }}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
         >
           Personal Pathways
         </motion.p>
@@ -86,7 +86,7 @@ export default function PathwaysGrid() {
                 <p className="text-sm text-white/60 font-light leading-relaxed mb-5">
                   {pathway.description}
                 </p>
-                <span className="mt-auto inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/70 transition-colors duration-300 group-hover:text-brand-accent-400">
+                <span className="mt-auto inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/70 transition-colors duration-300 group-hover:text-brand-accent-300">
                   Learn More
                   <span
                     aria-hidden="true"
@@ -106,7 +106,7 @@ export default function PathwaysGrid() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5 }}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6 mt-16"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6 mt-16"
         >
           Young People Pathways
         </motion.p>
@@ -134,7 +134,7 @@ export default function PathwaysGrid() {
                 <p className="text-sm lg:text-base text-white/60 font-light leading-relaxed mb-6">
                   {pathway.description}
                 </p>
-                <span className="mt-auto inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/70 transition-colors duration-300 group-hover:text-brand-accent-400">
+                <span className="mt-auto inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/70 transition-colors duration-300 group-hover:text-brand-accent-300">
                   Learn More
                   <span
                     aria-hidden="true"

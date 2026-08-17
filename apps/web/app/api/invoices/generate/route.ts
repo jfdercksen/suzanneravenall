@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 import { createElement } from 'react'
 import { z } from 'zod'
 import InvoiceDocument, { type InvoiceOrder } from '@/components/invoice/InvoiceDocument'
+import { logError } from '@/lib/log'
 
 const bodySchema = z.object({
   orderId: z.string().min(1).max(64).regex(/^[a-zA-Z0-9_-]+$/, 'Invalid order ID format'),
@@ -117,7 +118,7 @@ export async function POST(req: NextRequest) {
   // If the env var is not configured (dev/test), skip verification with a warning.
   const webhookSecret = process.env.N8N_WEBHOOK_SECRET
   if (!webhookSecret) {
-    console.error('[invoices/generate] N8N_WEBHOOK_SECRET is not set')
+    logError('[invoices/generate] N8N_WEBHOOK_SECRET is not set')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
   const provided = req.headers.get('x-webhook-secret') ?? ''
@@ -131,11 +132,11 @@ export async function POST(req: NextRequest) {
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
   if (!medusaToken) {
-    console.error('[invoices/generate] MEDUSA_API_TOKEN is not set')
+    logError('[invoices/generate] MEDUSA_API_TOKEN is not set')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
   if (!supabaseUrl || !supabaseServiceKey) {
-    console.error('[invoices/generate] Supabase env vars missing')
+    logError('[invoices/generate] Supabase env vars missing')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
 
@@ -178,7 +179,7 @@ export async function POST(req: NextRequest) {
     }
     if (!res.ok) {
       const detail = await res.text().catch(() => '')
-      console.error(`[invoices/generate] Medusa fetch failed for ${orderId}: ${res.status} ${detail.slice(0, 200)}`)
+      logError(`[invoices/generate] Medusa fetch failed for ${orderId}: ${res.status} ${detail.slice(0, 200)}`, undefined, { orderId, status: res.status })
       return NextResponse.json({ error: 'Failed to fetch order' }, { status: 502 })
     }
 
@@ -186,7 +187,7 @@ export async function POST(req: NextRequest) {
     order = data.order
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
-    console.error(`[invoices/generate] Medusa request error: ${msg}`)
+    logError(`[invoices/generate] Medusa request error: ${msg}`, err, { orderId })
     return NextResponse.json({ error: 'Failed to fetch order' }, { status: 502 })
   }
 
@@ -198,7 +199,7 @@ export async function POST(req: NextRequest) {
     pdfBuffer = await renderToBuffer(element)
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
-    console.error(`[invoices/generate] PDF render error for ${orderId}: ${msg}`)
+    logError(`[invoices/generate] PDF render error for ${orderId}: ${msg}`, err, { orderId })
     return NextResponse.json({ error: 'Failed to generate PDF' }, { status: 500 })
   }
 
@@ -233,7 +234,7 @@ export async function POST(req: NextRequest) {
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
-    console.error(`[invoices/generate] Supabase upload error for ${orderId}: ${msg}`)
+    logError(`[invoices/generate] Supabase upload error for ${orderId}: ${msg}`, err, { orderId })
     return NextResponse.json({ error: 'Failed to store invoice' }, { status: 500 })
   }
 
@@ -244,7 +245,7 @@ export async function POST(req: NextRequest) {
     .createSignedUrl(filePath, 7 * 24 * 60 * 60)
 
   if (signedError || !signedData?.signedUrl) {
-    console.error(`[invoices/generate] Signed URL error for ${orderId}: ${signedError?.message}`)
+    logError(`[invoices/generate] Signed URL error for ${orderId}: ${signedError?.message}`, signedError ?? undefined, { orderId })
     return NextResponse.json({ error: 'Failed to generate invoice URL' }, { status: 500 })
   }
   const invoiceUrl = signedData.signedUrl
@@ -268,13 +269,15 @@ export async function POST(req: NextRequest) {
     if (!res.ok) {
       const detail = await res.text().catch(() => '')
       // Log but don't fail — PDF is uploaded; metadata update is best-effort
-      console.error(
-        `[invoices/generate] Medusa metadata update failed for ${orderId}: ${res.status} ${detail.slice(0, 200)}`
+      logError(
+        `[invoices/generate] Medusa metadata update failed for ${orderId}: ${res.status} ${detail.slice(0, 200)}`,
+        undefined,
+        { orderId, status: res.status }
       )
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
-    console.error(`[invoices/generate] Medusa metadata update error: ${msg}`)
+    logError(`[invoices/generate] Medusa metadata update error: ${msg}`, err, { orderId })
   }
 
   return NextResponse.json({ invoiceUrl })

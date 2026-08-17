@@ -51,7 +51,7 @@ export default function ServicesHero() {
           <div>
             <motion.p
               {...fadeUp(0)}
-              className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-4 lg:mb-6"
+              className="text-xs tracking-[0.3em] text-brand-accent-400 uppercase font-medium mb-4 lg:mb-6"
             >
               Services with Dr. Suzanne Ravenall
             </motion.p>
@@ -62,7 +62,7 @@ export default function ServicesHero() {
               className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-4 lg:mb-8"
             >
               Unlock your life{' '}
-              <span className="text-brand-accent">and potential.</span>
+              <span className="text-brand-accent-400">and potential.</span>
             </motion.h1>
 
             <motion.p

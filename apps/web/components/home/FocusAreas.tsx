@@ -83,7 +83,7 @@ export default function FocusAreas() {
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
+          <p className="text-brand-accent-400 text-xs font-medium uppercase tracking-[0.3em] mb-3">
             Areas of Focus
           </p>
           <h2 className="text-4xl lg:text-6xl font-light text-white">
@@ -115,7 +115,7 @@ export default function FocusAreas() {
                       : 'border-transparent hover:bg-white/5 opacity-50 hover:opacity-75'
                   }`}
                 >
-                  <span className="text-brand-accent text-xs font-mono font-semibold mt-1 flex-shrink-0">
+                  <span className="text-brand-accent-400 text-xs font-mono font-semibold mt-1 flex-shrink-0">
                     {area.number}
                   </span>
                   <div>
@@ -166,7 +166,7 @@ export default function FocusAreas() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.4, ease: 'easeOut' }}
               >
-                <p className="text-brand-accent text-xs font-mono uppercase tracking-[0.3em] mb-3">
+                <p className="text-brand-accent-400 text-xs font-mono uppercase tracking-[0.3em] mb-3">
                   {activeArea.number}
                 </p>
                 <h3 className="text-4xl lg:text-5xl font-light text-white mb-4 leading-tight">
@@ -210,7 +210,7 @@ export default function FocusAreas() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <p className="text-brand-accent text-xs font-mono uppercase tracking-[0.3em] mb-1">
+                  <p className="text-brand-accent-400 text-xs font-mono uppercase tracking-[0.3em] mb-1">
                     {area.number}
                   </p>
                   <h3 className="text-xl font-semibold text-white leading-tight">{area.title}</h3>

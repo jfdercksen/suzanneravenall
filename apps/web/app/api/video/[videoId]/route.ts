@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { createClient } from '@/utils/supabase/server'
 import { getMemberTier } from '@/lib/access/check-access'
 import { generateSignedUrl } from '@/lib/bunny/get-signed-url'
+import { logError } from '@/lib/log'
 
 const paramsSchema = z.object({
   videoId: z
@@ -40,8 +41,7 @@ export async function GET(
   try {
     url = generateSignedUrl(parsed.data.videoId, tier)
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
-    console.error('[video API] Bunny config error:', message)
+    logError('[video API] Bunny config error:', err)
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
 

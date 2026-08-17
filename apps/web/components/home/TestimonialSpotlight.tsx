@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { spotlightTestimonial } from '@/data/testimonials'
 
 // Inline SVG quote mark — thick block-serif style, decoupled from font stack
 // (project uses Poppins only; &ldquo; in Poppins lacks the typographic drama needed)
@@ -11,7 +12,7 @@ function QuoteMark() {
       aria-hidden="true"
       viewBox="0 0 512 512"
       fill="currentColor"
-      className="w-14 h-14 text-brand-accent mb-6"
+      className="w-14 h-14 text-brand-accent-400 mb-6"
     >
       {/* Font Awesome quote-left path — thick, cinematic block quote mark */}
       <path d="M464 256h-80v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8c-88.4 0-160 71.6-160 160v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48zm-288 0H96v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8C71.6 32 0 103.6 0 192v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48z" />
@@ -19,7 +20,13 @@ function QuoteMark() {
   )
 }
 
+// Spotlight data lives in data/testimonials.ts — the single source of truth.
+// It stays null until Dr. Suzanne Ravenall signs off a real, verified client
+// story; while it is null this component renders nothing.
 export default function TestimonialSpotlight() {
+  if (!spotlightTestimonial) return null
+  const { stat, statLabel, supporting, quote, name, role, initials } = spotlightTestimonial
+
   return (
     <section className="bg-gray-950 py-14 lg:py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,14 +42,14 @@ export default function TestimonialSpotlight() {
             transition={{ duration: 0.7, ease: 'easeOut' as const }}
           >
             <div className="mb-8">
-              <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-6">
+              <p className="text-xs tracking-[0.3em] text-brand-accent-400 uppercase font-medium mb-6">
                 CLIENT RESULT
               </p>
               <div className="text-7xl lg:text-9xl font-light text-white leading-none mb-2">
-                2×
+                {stat}
               </div>
               <p className="text-xl lg:text-2xl text-white/60 font-light uppercase tracking-wider">
-                Productivity in 6 months
+                {statLabel}
               </p>
             </div>
 
@@ -51,8 +58,7 @@ export default function TestimonialSpotlight() {
 
             {/* Supporting context */}
             <p className="text-white/60 text-sm font-light leading-relaxed max-w-sm">
-              After just 3 sessions. A 30-year pattern dissolved.
-              Business transformed.
+              {supporting}
             </p>
           </motion.div>
 
@@ -68,21 +74,17 @@ export default function TestimonialSpotlight() {
             <QuoteMark />
 
             <blockquote className="text-2xl lg:text-3xl font-light text-white leading-relaxed mb-8">
-              <p>
-                In three sessions I dismantled a self-sabotage pattern
-                I&apos;d carried for 30 years. My business doubled in
-                the following six months.
-              </p>
+              <p>{quote}</p>
               <footer className="flex items-center gap-4 mt-8">
                 <div
-                  aria-label="Sarah M. — avatar"
+                  aria-label={`${name} — avatar`}
                   className="w-12 h-12 rounded-full bg-brand-primary border border-brand-accent/70 flex items-center justify-center flex-shrink-0"
                 >
-                  <span className="text-brand-accent text-sm font-medium" aria-hidden="true">SM</span>
+                  <span className="text-brand-accent-400 text-sm font-medium" aria-hidden="true">{initials}</span>
                 </div>
                 <cite className="not-italic">
-                  <p className="text-white font-medium">Sarah M.</p>
-                  <p className="text-white/60 text-sm">CEO · Cape Town</p>
+                  <p className="text-white font-medium">{name}</p>
+                  <p className="text-white/60 text-sm">{role}</p>
                 </cite>
               </footer>
             </blockquote>

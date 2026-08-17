@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { logError } from '@/lib/log'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const FROM = process.env.RESEND_FROM_ADDRESS ?? 'Dr Suzanne Ravenall <hello@suzanneravenall.com>'
@@ -83,7 +84,7 @@ export async function POST(request: NextRequest) {
         html,
       })
       .catch(err => {
-        console.error('[contact] Resend delivery error:', err)
+        logError('[contact] Resend delivery error:', err)
       })
   }
 

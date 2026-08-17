@@ -10,7 +10,9 @@ import {
   Section,
   Text,
 } from '@react-email/components'
-import type { MembershipEmailData } from '../types'
+import type { MembershipEmailData, MembershipEmailProps } from '../types'
+import { companyPhysicalAddress } from '../company'
+import { memberEmailTestimonial } from '@/data/testimonials'
 
 const NAVY = '#012B43'
 const BLUE = '#1719F4'
@@ -44,7 +46,8 @@ export default function MembershipExpired({
   tier,
   tierLabel,
   siteUrl,
-}: MembershipEmailData) {
+  unsubscribeUrl,
+}: MembershipEmailProps) {
   const greeting = firstName ? `Hi ${firstName},` : 'Hi there,'
   const hadItems = WHAT_YOU_HAD[tier] ?? WHAT_YOU_HAD.silver
 
@@ -126,16 +129,19 @@ export default function MembershipExpired({
               </Text>
             </Section>
 
-            {/* Testimonial placeholder */}
-            <Section style={{ borderLeft: `3px solid ${BLUE}`, paddingLeft: '20px', marginBottom: '32px' }}>
-              <Text style={{ color: '#334155', fontSize: '15px', lineHeight: '1.7', fontStyle: 'italic', margin: '0 0 8px' }}>
-                &ldquo;Coming back after a break was the best decision I made. Dr Suzanne met me exactly where I was.&rdquo;
-              </Text>
-              <Text style={{ color: MEDIUM_GRAY, fontSize: '13px', margin: 0 }}>
-                {/* TODO for Suzanne: replace with a real member testimonial */}
-                — Member, Gold Tier
-              </Text>
-            </Section>
+            {/* Member testimonial — sourced from data/testimonials.ts (single
+                source of truth). Omitted entirely until Suzanne signs off a
+                real member quote. */}
+            {memberEmailTestimonial && (
+              <Section style={{ borderLeft: `3px solid ${BLUE}`, paddingLeft: '20px', marginBottom: '32px' }}>
+                <Text style={{ color: '#334155', fontSize: '15px', lineHeight: '1.7', fontStyle: 'italic', margin: '0 0 8px' }}>
+                  &ldquo;{memberEmailTestimonial.quote}&rdquo;
+                </Text>
+                <Text style={{ color: MEDIUM_GRAY, fontSize: '13px', margin: 0 }}>
+                  — {memberEmailTestimonial.attribution}
+                </Text>
+              </Section>
+            )}
 
             <Hr style={{ borderColor: '#e2e8f0', margin: '24px 0' }} />
 
@@ -152,11 +158,10 @@ export default function MembershipExpired({
           {/* Footer */}
           <Section style={{ backgroundColor: LIGHT_GRAY, padding: '24px 40px', borderTop: '1px solid #e2e8f0' }}>
             <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', margin: '0 0 4px' }}>
-              Ravenall Institute · Cape Town, South Africa
+              Ravenall Institute · {companyPhysicalAddress()}
             </Text>
             <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', margin: 0 }}>
-              {/* TODO: Replace with real unsubscribe link once email management is configured (POPIA compliance) */}
-              <a href={`${siteUrl}/portal/account`} style={{ color: MEDIUM_GRAY }}>Unsubscribe</a> from membership emails
+              <a href={unsubscribeUrl} style={{ color: MEDIUM_GRAY }}>Unsubscribe</a> from membership emails
             </Text>
           </Section>
 

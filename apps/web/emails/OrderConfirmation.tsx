@@ -14,6 +14,7 @@ import {
   Text,
 } from '@react-email/components'
 import type { OrderEmailData, OrderProductType } from '../lib/email/types'
+import { companyPhysicalAddress, companyVatNumber } from '../lib/email/company'
 import { formatAmount } from '../lib/email/utils'
 
 const NAVY = '#012B43'
@@ -87,6 +88,12 @@ export default function OrderConfirmation({
   })
 
   const nextSteps = getNextSteps(productType)
+
+  // Ravenall Institute is not VAT registered by default (companyVatNumber()
+  // returns null): show no VAT line and no tax-invoice wording. Setting
+  // COMPANY_VAT_NUMBER switches this email back to tax-invoice language,
+  // matching InvoiceDocument.tsx.
+  const vatRegistered = companyVatNumber() !== null
 
   return (
     <Html lang="en">
@@ -243,16 +250,18 @@ export default function OrderConfirmation({
                   </Text>
                 </Column>
               </Row>
-              <Row style={{ marginBottom: '12px' }}>
-                <Column>
-                  <Text style={{ color: MEDIUM_GRAY, fontSize: '13px', margin: 0 }}>VAT (15%)</Text>
-                </Column>
-                <Column style={{ textAlign: 'right' }}>
-                  <Text style={{ color: DARK_TEXT, fontSize: '13px', margin: 0 }}>
-                    {formatAmount(taxTotal, currency)}
-                  </Text>
-                </Column>
-              </Row>
+              {vatRegistered ? (
+                <Row style={{ marginBottom: '12px' }}>
+                  <Column>
+                    <Text style={{ color: MEDIUM_GRAY, fontSize: '13px', margin: 0 }}>VAT (15%)</Text>
+                  </Column>
+                  <Column style={{ textAlign: 'right' }}>
+                    <Text style={{ color: DARK_TEXT, fontSize: '13px', margin: 0 }}>
+                      {formatAmount(taxTotal, currency)}
+                    </Text>
+                  </Column>
+                </Row>
+              ) : null}
               <Row>
                 <Column>
                   <Text style={{ color: NAVY, fontSize: '15px', fontWeight: '700', margin: 0 }}>Total</Text>
@@ -290,7 +299,7 @@ export default function OrderConfirmation({
           {/* Invoice Section */}
           <Section style={{ padding: '32px 40px', borderTop: `3px solid ${BLUE}` }}>
             <Text style={{ color: MEDIUM_GRAY, fontSize: '11px', fontWeight: '700', letterSpacing: '0.15em', textTransform: 'uppercase', margin: '0 0 12px' }}>
-              Your Tax Invoice
+              {vatRegistered ? 'Your Tax Invoice' : 'Your Invoice'}
             </Text>
             {invoiceUrl ? (
               <>
@@ -315,13 +324,16 @@ export default function OrderConfirmation({
                   </Button>
                 </Section>
                 <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', lineHeight: '1.5', margin: 0 }}>
-                  This invoice is VAT compliant for South African tax purposes.
+                  {vatRegistered
+                    ? 'This invoice is VAT compliant for South African tax purposes.'
+                    : 'Keep this invoice for your records.'}
                 </Text>
               </>
             ) : (
               <Text style={{ color: DARK_TEXT, fontSize: '14px', lineHeight: '1.6', margin: 0 }}>
-                Your VAT-compliant tax invoice is being generated and will be sent to you in a
-                separate email shortly.
+                {vatRegistered
+                  ? 'Your VAT-compliant tax invoice is being generated and will be sent to you in a separate email shortly.'
+                  : 'Your invoice is being generated and will be sent to you in a separate email shortly.'}
               </Text>
             )}
           </Section>
@@ -355,16 +367,11 @@ export default function OrderConfirmation({
             <Text style={{ color: '#ffffff', fontSize: '15px', fontWeight: '700', margin: '0 0 4px' }}>
               Dr Suzanne Ravenall
             </Text>
-            <Text style={{ color: '#94a3b8', fontSize: '12px', margin: '0 0 16px' }}>
-              Ravenall Institute · Cape Town, South Africa
-            </Text>
-            {/* TODO: Replace with real physical address — required for POPIA compliance */}
-            <Text style={{ color: '#64748b', fontSize: '11px', margin: '0 0 8px' }}>
-              [Physical address — required for POPIA compliance — to be confirmed]
+            <Text style={{ color: '#94a3b8', fontSize: '12px', margin: '0 0 4px' }}>
+              Ravenall Institute
             </Text>
             <Text style={{ color: '#64748b', fontSize: '11px', margin: '0 0 12px' }}>
-              {/* TODO: Replace with real unsubscribe link once email management is configured */}
-              <a href="#" style={{ color: '#64748b' }}>Unsubscribe</a> from transactional emails
+              {companyPhysicalAddress()}
             </Text>
             <Text style={{ color: '#475569', fontSize: '11px', margin: 0 }}>
               Powered by Ai Dynamic Advisory

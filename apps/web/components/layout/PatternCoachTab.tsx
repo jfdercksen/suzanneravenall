@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
+import { CONSENT_STORAGE_KEY, CONSENT_CHOSEN_EVENT } from './CookieConsent'
 
 const STORAGE_KEY = 'pattern-coach-tab-dismissed'
 const PRODUCT_PAGE_PATH = '/pattern-coach'
@@ -44,6 +45,9 @@ function CloseXIcon({ size = 8 }: { size?: number }) {
 export default function PatternCoachTab() {
   const [isVisible, setIsVisible] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  // KI027: on mobile the pill waits until the cookie banner has been answered, so the two
+  // fixed-bottom overlays never stack on top of each other on first visit.
+  const [consentChosen, setConsentChosen] = useState(false)
 
   useEffect(() => {
     const dismissed = window.localStorage.getItem(STORAGE_KEY) === 'true'
@@ -53,8 +57,16 @@ export default function PatternCoachTab() {
     updateMobile()
     setIsVisible(true)
 
+    const updateConsent = () =>
+      setConsentChosen(window.localStorage.getItem(CONSENT_STORAGE_KEY) !== null)
+    updateConsent()
+
     window.addEventListener('resize', updateMobile)
-    return () => window.removeEventListener('resize', updateMobile)
+    window.addEventListener(CONSENT_CHOSEN_EVENT, updateConsent)
+    return () => {
+      window.removeEventListener('resize', updateMobile)
+      window.removeEventListener(CONSENT_CHOSEN_EVENT, updateConsent)
+    }
   }, [])
 
   function handleDismiss(e: React.MouseEvent) {
@@ -119,11 +131,14 @@ export default function PatternCoachTab() {
         </motion.aside>
       )}
 
-      {isVisible && isMobile && (
+      {/* Mobile pill: gated on consentChosen (KI027) so it never stacks on the cookie banner;
+          z-[60] sits above the sticky header (z-50) but below the consent banner (z-[70]);
+          bottom offset includes the iOS safe-area inset. */}
+      {isVisible && isMobile && consentChosen && (
         <motion.aside
           key="pc-mobile"
           aria-label="Pattern Coach App"
-          className="fixed bottom-6 left-1/2 z-[60] flex flex-row items-center gap-3 bg-white rounded-[50px] border-t-4 border-brand-accent py-[10px] px-5"
+          className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 z-[60] flex flex-row items-center gap-3 bg-white rounded-[50px] border-t-4 border-brand-accent py-[10px] px-4 min-[415px]:px-5"
           style={{
             translateX: '-50%',
             boxShadow: '0 8px 40px rgba(0,0,0,0.2), 0 4px 20px rgba(23,25,244,0.35)',
@@ -144,7 +159,8 @@ export default function PatternCoachTab() {
             <span className="text-[11px] font-black text-brand-primary-900 uppercase tracking-wide whitespace-nowrap">
               BRILLIANT COACH
             </span>
-            <span className="text-[11px] font-bold text-brand-accent uppercase tracking-wide whitespace-nowrap">
+            {/* Hidden on the smallest phones so the pill stays well inside a 375px viewport (KI027) */}
+            <span className="hidden min-[415px]:inline text-[11px] font-bold text-brand-accent uppercase tracking-wide whitespace-nowrap">
               IN YOUR POCKET
             </span>
           </Link>

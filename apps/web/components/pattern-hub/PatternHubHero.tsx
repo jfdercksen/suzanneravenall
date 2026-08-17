@@ -45,7 +45,7 @@ export default function PatternHubHero() {
           <div className="max-w-4xl self-center">
             <motion.p
               {...fadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
             >
               Pattern Diagnostic Hub
             </motion.p>

@@ -27,7 +27,7 @@ export default function ExploreDiagnosticCTA() {
         <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
           {/* Left: text */}
           <motion.div {...fadeUpInView(0)}>
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
               Free Diagnostic
             </p>
             <h2
@@ -68,7 +68,7 @@ export default function ExploreDiagnosticCTA() {
                 key={quiz.slug}
                 className="bg-white/5 border border-white/10 rounded-card px-5 py-3 flex items-center gap-3"
               >
-                <span className="text-brand-accent font-bold text-sm shrink-0">
+                <span className="text-brand-accent-300 font-bold text-sm shrink-0">
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <span className="text-white/80 text-sm leading-snug">{quiz.question}</span>

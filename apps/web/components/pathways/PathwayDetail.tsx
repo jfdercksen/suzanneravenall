@@ -20,7 +20,7 @@ const fadeUpInView = (delay: number) => ({
 const heroBadgeClasses = (category: PathwayCategory): string =>
   category === 'youth'
     ? 'bg-white/10 text-white/70 border border-white/20'
-    : 'bg-brand-accent/15 text-brand-accent border border-brand-accent/30'
+    : 'bg-brand-accent/15 text-brand-accent-300 border border-brand-accent/30'
 
 function BulletList({ items }: { items: string[] }) {
   return (
@@ -136,7 +136,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
               <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-16 lg:grid-cols-2">
                 {detail.whoItsFor.length > 0 && (
                   <motion.div {...fadeUpInView(0)}>
-                    <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
+                    <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
                       Who It&apos;s For
                     </p>
                     <ul className="space-y-3">
@@ -156,7 +156,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
                 )}
                 {detail.whatWeWorkOn.length > 0 && (
                   <motion.div {...fadeUpInView(0.1)}>
-                    <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
+                    <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
                       What We Work On
                     </p>
                     <ul className="space-y-3">
@@ -236,7 +236,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
       <section className="w-full bg-brand-primary py-20 lg:py-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div {...fadeUpInView(0)}>
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
               How the Work Happens
             </p>
             <p className="text-lg lg:text-xl text-white/75 font-light leading-relaxed">

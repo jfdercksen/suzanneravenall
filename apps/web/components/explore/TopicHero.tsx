@@ -69,7 +69,7 @@ export default function TopicHero({ topic }: { topic: Topic }) {
             Explore
           </Link>
           <span aria-hidden="true" className="mx-3">/</span>
-          <span className="text-brand-accent">{topic.title}</span>
+          <span className="text-brand-accent-400">{topic.title}</span>
         </motion.nav>
 
         <div className="max-w-4xl">

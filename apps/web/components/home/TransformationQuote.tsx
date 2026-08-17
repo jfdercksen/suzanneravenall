@@ -35,7 +35,7 @@ export default function TransformationQuote() {
 
         <motion.p
           {...fadeUp(0)}
-          className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-8"
+          className="text-xs tracking-[0.3em] text-brand-accent-400 uppercase font-medium mb-8"
         >
           The Method
         </motion.p>

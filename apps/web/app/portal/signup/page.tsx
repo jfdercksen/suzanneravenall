@@ -52,7 +52,7 @@ export default function SignupPage() {
     return (
       <main className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
         <div className="w-full max-w-md bg-gray-900 rounded-2xl p-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-accent/10 text-brand-accent mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-accent/10 text-brand-accent-400 mb-6">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>
@@ -61,7 +61,7 @@ export default function SignupPage() {
           <p className="text-white/60 mb-2">
             We&apos;ve sent a confirmation link to
           </p>
-          <p className="text-brand-accent font-medium mb-8">{email}</p>
+          <p className="text-brand-accent-400 font-medium mb-8">{email}</p>
           <p className="text-white/40 text-sm mb-8">
             Click the link in the email to confirm your account, then you can
             log in.
@@ -177,7 +177,7 @@ export default function SignupPage() {
 
           <p className="mt-6 text-center text-white/40 text-sm">
             Already have an account?{' '}
-            <Link href="/portal/login" className="text-brand-accent hover:underline">
+            <Link href="/portal/login" className="text-brand-accent-400 hover:underline">
               Log in →
             </Link>
           </p>

@@ -202,7 +202,7 @@ export default function EventsContent() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
               Events
             </p>
             <h1
@@ -351,7 +351,7 @@ export default function EventsContent() {
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
               Recurring Live Programmes
             </p>
             <h2
@@ -451,7 +451,7 @@ export default function EventsContent() {
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
               Not Sure Where to Start?
             </p>
             <h2

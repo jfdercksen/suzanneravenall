@@ -1,4 +1,9 @@
 import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer'
+import {
+  companyPhysicalAddress,
+  companyRegistrationNumber,
+  companyVatNumber,
+} from '../../lib/email/company'
 
 export interface InvoiceLineItem {
   id: string
@@ -258,6 +263,13 @@ interface Props {
 }
 
 export default function InvoiceDocument({ order }: Props) {
+  // VAT-aware rendering. Ravenall Institute is not VAT registered, so by
+  // default companyVatNumber() is null and this renders a plain INVOICE:
+  // no VAT column, no VAT breakdown, a single TOTAL. Setting the
+  // COMPANY_VAT_NUMBER env var switches to the full SA tax-invoice layout.
+  const vatNumber = companyVatNumber()
+  const vatRegistered = vatNumber !== null
+
   const invoiceNumber = order.sage_invoice_number
     ?? `SR-${String(order.display_id).padStart(5, '0')}`
 
@@ -271,7 +283,7 @@ export default function InvoiceDocument({ order }: Props) {
 
   return (
     <Document
-      title={`Tax Invoice ${invoiceNumber}`}
+      title={`${vatRegistered ? 'Tax Invoice' : 'Invoice'} ${invoiceNumber}`}
       author="Ravenall Institute"
       creator="suzanneravenall.com"
     >
@@ -286,7 +298,7 @@ export default function InvoiceDocument({ order }: Props) {
             <Text style={s.logoEmail}>sravenall@suzanneravenall.com</Text>
           </View>
           <View style={s.invoiceMeta}>
-            <Text style={s.taxInvoiceLabel}>TAX INVOICE</Text>
+            <Text style={s.taxInvoiceLabel}>{vatRegistered ? 'TAX INVOICE' : 'INVOICE'}</Text>
             <View style={s.metaRow}>
               <Text style={s.metaLabel}>Invoice #</Text>
               <Text style={s.metaValue}>{invoiceNumber}</Text>
@@ -311,8 +323,11 @@ export default function InvoiceDocument({ order }: Props) {
           <View style={s.partyBox}>
             <Text style={s.partyLabel}>FROM</Text>
             <Text style={s.partyName}>Ravenall Institute</Text>
-            <Text style={s.partyLine}>Cape Town, South Africa</Text>
-            <Text style={s.partyMuted}>VAT Reg: PENDING — to be added</Text>
+            <Text style={s.partyLine}>{companyPhysicalAddress()}</Text>
+            <Text style={s.partyMuted}>Reg No: {companyRegistrationNumber()}</Text>
+            {vatRegistered ? (
+              <Text style={s.partyMuted}>VAT Reg: {vatNumber}</Text>
+            ) : null}
             <Text style={s.partyMuted}>sravenall@suzanneravenall.com</Text>
           </View>
           <View style={[s.partyBox, s.partyBoxRight]}>
@@ -340,13 +355,16 @@ export default function InvoiceDocument({ order }: Props) {
             <Text style={[s.tableHeaderCell, s.colVariant]}>VARIANT</Text>
             <Text style={[s.tableHeaderCell, s.colQty]}>QTY</Text>
             <Text style={[s.tableHeaderCell, s.colUnit]}>UNIT PRICE</Text>
-            <Text style={[s.tableHeaderCell, s.colVat]}>VAT 15%</Text>
+            {vatRegistered ? (
+              <Text style={[s.tableHeaderCell, s.colVat]}>VAT 15%</Text>
+            ) : null}
             <Text style={[s.tableHeaderCell, s.colTotal]}>TOTAL</Text>
           </View>
           {order.items.map((item, idx) => {
             const lineTotal = item.unit_price * item.quantity
             // Tax-inclusive pricing (standard for SA): extract VAT portion from line total.
             // Compute per-unit ex-VAT directly from unit_price to avoid rounding accumulation.
+            // Only relevant in tax-invoice mode; the plain invoice shows the price as-is.
             const unitExclVat = Math.round(item.unit_price * 100 / 115)
             const vatPortion = lineTotal - unitExclVat * item.quantity
             return (
@@ -357,8 +375,12 @@ export default function InvoiceDocument({ order }: Props) {
                 <Text style={[s.cell, s.colDesc]}>{item.title}</Text>
                 <Text style={[s.cell, s.colVariant]}>{item.variant_title ?? '—'}</Text>
                 <Text style={[s.cell, s.colQty]}>{item.quantity}</Text>
-                <Text style={[s.cell, s.colUnit]}>{zarFormat(unitExclVat)}</Text>
-                <Text style={[s.cell, s.colVat]}>{zarFormat(vatPortion)}</Text>
+                <Text style={[s.cell, s.colUnit]}>
+                  {zarFormat(vatRegistered ? unitExclVat : item.unit_price)}
+                </Text>
+                {vatRegistered ? (
+                  <Text style={[s.cell, s.colVat]}>{zarFormat(vatPortion)}</Text>
+                ) : null}
                 <Text style={[s.cell, s.colTotal]}>{zarFormat(lineTotal)}</Text>
               </View>
             )
@@ -368,18 +390,34 @@ export default function InvoiceDocument({ order }: Props) {
         {/* ── Totals ─────────────────────────────────────────── */}
         <View style={s.totalsOuter}>
           <View style={s.totalsBox}>
-            <View style={s.totalRow}>
-              <Text style={s.totalLabel}>Subtotal (excl VAT)</Text>
-              <Text style={s.totalVal}>{zarFormat(order.subtotal)}</Text>
-            </View>
-            <View style={s.totalRow}>
-              <Text style={s.totalLabel}>VAT (15%)</Text>
-              <Text style={s.totalVal}>{zarFormat(order.tax_total)}</Text>
-            </View>
-            <View style={s.totalRowFinal}>
-              <Text style={s.totalLabelFinal}>TOTAL (incl VAT)</Text>
-              <Text style={s.totalValFinal}>{zarFormat(order.total)}</Text>
-            </View>
+            {vatRegistered ? (
+              <>
+                <View style={s.totalRow}>
+                  <Text style={s.totalLabel}>Subtotal (excl VAT)</Text>
+                  <Text style={s.totalVal}>{zarFormat(order.subtotal)}</Text>
+                </View>
+                <View style={s.totalRow}>
+                  <Text style={s.totalLabel}>VAT (15%)</Text>
+                  <Text style={s.totalVal}>{zarFormat(order.tax_total)}</Text>
+                </View>
+                <View style={s.totalRowFinal}>
+                  <Text style={s.totalLabelFinal}>TOTAL (incl VAT)</Text>
+                  <Text style={s.totalValFinal}>{zarFormat(order.total)}</Text>
+                </View>
+              </>
+            ) : (
+              // Not VAT registered: a single TOTAL row, no VAT breakdown.
+              // order.tax_total is deliberately ignored here. If tax_total > 0
+              // while the company is not VAT registered, that is a data
+              // inconsistency (Medusa region tax config charging tax the
+              // company may not collect) - it must never surface as a VAT
+              // line on a document from a non-registered vendor. Flag the
+              // Medusa tax rate config instead of rendering it.
+              <View style={s.totalRowFinal}>
+                <Text style={s.totalLabelFinal}>TOTAL</Text>
+                <Text style={s.totalValFinal}>{zarFormat(order.total)}</Text>
+              </View>
+            )}
           </View>
         </View>
 

@@ -5,6 +5,22 @@
  * using the CONSOLIDATION_MAP. Any WC product not absorbed becomes standalone.
  * Produces a 301 redirect map at infra/scripts/migrations/redirect-map.json.
  *
+ * KI006 (August 2026): the 15 legitimate products that WooCommerce had parked
+ * in category 73 ("not used-Akashic Coaching") are now covered by explicit
+ * CONSOLIDATION_MAP entries (Program 6 Inner Cultivation, Program 7/9 Live
+ * variants, Deep Energy Clearing Purchased Together, Practitioner Mentorship,
+ * and the Growth Booster add-ons). The category-73 exclusion rule still stands
+ * for the remaining junk in that category (drafts, price-R5 test rows, the
+ * legacy "Suzanne Ravenall Coaching App" stub). Because consolidated entries
+ * are created from the map, not from the audit scan, the exclusion rule cannot
+ * drop them, and the rule prevents phase 2 from creating duplicates.
+ *
+ * Idempotency: products are matched by handle and skipped when present. When a
+ * product exists but the map defines variants it does not have yet (e.g.
+ * Program 7/9 gained a "Live via Zoom" variant), the missing variants are
+ * added to the existing product (option values updated first) — re-running is
+ * always safe and never duplicates products or variants.
+ *
  * Dry run:  DRY_RUN=true  MEDUSA_ADMIN_PASSWORD=xxx ts-node src/scripts/migrate-woocommerce.ts
  * Live run: DRY_RUN=false MEDUSA_ADMIN_PASSWORD=xxx ts-node src/scripts/migrate-woocommerce.ts
  */
@@ -66,6 +82,13 @@ interface ConsolidationEntry {
   title: string
   collection: string
   program_type: string
+  /**
+   * Plain-text storefront description. Optional — the original 48 entries
+   * predate this field and keep "" (their live descriptions are curated by
+   * infra/scripts/update-product-descriptions.mjs). KI006 rescue entries
+   * carry copy derived from the WooCommerce source data.
+   */
+  description?: string
   variants: ConsolidationVariant[]
 }
 
@@ -252,12 +275,37 @@ const CONSOLIDATION_MAP: ConsolidationEntry[] = [
       { label: "Self Study", price_zar: 3100, source_wc_slugs: ["resonance-repatterning-05-five-elements-meridians-self-study-online", "resonance-repatterning-05-five-elements-meridian-patterns-self-study-rr-online", "https-suzanneravenall-com-product-resonance-represonance-repatterning-program-5-five-elements-meridians-self-study"] },
     ],
   },
+  // KI006: Program 6 was stranded in WC category 73 and never migrated.
+  {
+    canonical_slug: "resonance-repatterning-program-6-inner-cultivation-practical-demos-live-via-zoom",
+    title: "Resonance Repatterning Program 6 — Inner Cultivation",
+    collection: "deep-dive",
+    program_type: "course",
+    description:
+      "Within each individual lies the seed of Dao: a divine essence, an inner path that depends on us to nurture it. " +
+      "Over 4 sessions of 3.5 to 4 hours, this programme offers practice of each of the 12 Inner Cultivation repatternings, " +
+      "transforming disturbed emotions and reconnecting you to your true self.\n\n" +
+      "Prerequisite: the Inner Cultivation home-study material from the RRII Home Study website, completed before taking this course. " +
+      "Available Live via Zoom or as Self Study.",
+    variants: [
+      { label: "Live via Zoom", price_zar: 5315, source_wc_slugs: [
+        "resonance-repatterning-program-6-inner-cultivation-practical-demos-live-via-zoom",
+        "resonance-repatterning-06-inner-cultivation-live-online",
+        "resonance-repatterning-06-inner-cultivation-live-online-3",
+      ]},
+      { label: "Self Study", price_zar: 4205, source_wc_slugs: [
+        "resonance-repatterning-program-6-inner-cultivation-practical-demos-self-study",
+      ]},
+    ],
+  },
   {
     canonical_slug: "resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study",
     title: "Resonance Repatterning Program 7 — Principles of Relationships",
     collection: "deep-dive",
     program_type: "course",
     variants: [
+      // KI006: the Live product sat in WC category 73 — added as a variant here.
+      { label: "Live via Zoom", price_zar: 5315, source_wc_slugs: ["resonance-repatterning-program-7-principles-of-relationships-practical-demos-live-via-zoom"] },
       { label: "Self Study", price_zar: 4205, source_wc_slugs: ["resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study"] },
     ],
   },
@@ -267,6 +315,8 @@ const CONSOLIDATION_MAP: ConsolidationEntry[] = [
     collection: "deep-dive",
     program_type: "course",
     variants: [
+      // KI006: the Live product sat in WC category 73 — added as a variant here.
+      { label: "Live via Zoom", price_zar: 5315, source_wc_slugs: ["resonance-repatterning-program-9-energetics-of-relationships-practical-demos-live-via-zoom"] },
       { label: "Self Study", price_zar: 4205, source_wc_slugs: ["resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study"] },
     ],
   },
@@ -401,6 +451,28 @@ const CONSOLIDATION_MAP: ConsolidationEntry[] = [
       { label: "Self Study", price_zar: 4650, source_wc_slugs: [
         "deep-energy-clearing-advanced-clearing-others-level-2-self-study",
         "energy-clearing-level-2-clearing-others-self-study-online",
+      ]},
+    ],
+  },
+  // KI006: the "Purchased Together" bundle sat in WC category 73 and was never
+  // migrated. Mirrors the Akashic Navigator Level 1 & 2 bundle pattern.
+  {
+    canonical_slug: "deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom",
+    title: "Deep Energy Clearing Level 1 & 2 — Purchased Together",
+    collection: "deep-dive",
+    program_type: "bundle",
+    description:
+      "Deep Energy Clearing Fundamentals (Level 1, Clearing Self) and Advanced (Level 2, Clearing Others) purchased together at a bundled price. " +
+      "Level 1 covers techniques to clear yourself and your projects at a deep level, practical tools to recognise and shift non-coherent energies, " +
+      "and methods for grounding and running energy effectively. Level 2 covers protecting yourself from absorbing others' energies and clearing " +
+      "energy at a core level for people, animals, projects, businesses and spaces, including the ethics of permission.\n\n" +
+      "Prerequisite: proficiency in muscle checking or pendulum use. The Coherence Muscle Testing (Self Study) course will prepare you to attend.",
+    variants: [
+      { label: "Live via Zoom", price_zar: 17500, source_wc_slugs: [
+        "deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom",
+      ]},
+      { label: "Live Retaker", price_zar: 1660, source_wc_slugs: [
+        "deep-energy-clearing-fundamentals-advanced-purchased-together-live-retaker-via-zoom",
       ]},
     ],
   },
@@ -636,6 +708,92 @@ const CONSOLIDATION_MAP: ConsolidationEntry[] = [
       { label: "eBook & Audio Download", price_zar: 345, source_wc_slugs: ["quantum-healing-codes-ebook-audio-download"] },
     ],
   },
+
+  // ── KI006 rescue: Practitioner support & Growth Booster add-ons ───────────
+  // These 10 published WC products (category 177 "Product Add-ons : Growth
+  // Boosters" and the Practitioner Mentorship set) were also tagged with the
+  // excluded category 73 and silently dropped by the Task 2.3 migration.
+  {
+    canonical_slug: "mentorship-single-session-live",
+    title: "Practitioner Mentorship",
+    collection: "practitioner",
+    program_type: "session",
+    description:
+      "Structured support for practitioners via a monthly 1-hour group mentorship session, held on the last Wednesday of every month " +
+      "at 4pm South African time. A space to ask questions, explore new insights, practise your skills and receive guidance that keeps " +
+      "you moving forward. Available as single sessions or as a bundle of 5 monthly sessions, in Live or Self Study format.",
+    variants: [
+      { label: "Single Session (Live)", price_zar: 575, source_wc_slugs: ["mentorship-single-session-live"] },
+      { label: "Single Session (Self Study)", price_zar: 575, source_wc_slugs: ["mentorship-single-session-self-study"] },
+      { label: "Bundle of 5 Sessions (Live)", price_zar: 1900, source_wc_slugs: ["mentorship-bundle-of-5-sessions-live"] },
+      { label: "Bundle of 5 Sessions (Self Study)", price_zar: 1900, source_wc_slugs: ["mentorship-bundle-of-5-sessions-self-study"] },
+    ],
+  },
+  {
+    canonical_slug: "email-support",
+    title: "Email Support",
+    collection: "start-here",
+    program_type: "addon",
+    description:
+      "Direct access to personalised email support: one email a week for feedback, advice, or answers to questions between sessions. " +
+      "Whether it is clarity on something discussed, new challenges, or a moment of encouragement, this add-on keeps you moving forward. " +
+      "Priced per month; choose the number of months you need.",
+    variants: [
+      { label: "Per month", price_zar: 200, source_wc_slugs: ["email-support"] },
+    ],
+  },
+  {
+    canonical_slug: "coaching-support-package",
+    title: "Coaching Support Package",
+    collection: "start-here",
+    program_type: "addon",
+    description:
+      "1-on-1 monthly coaching to dive deeper into the areas that matter most to you: unpacking challenges, refining strategies and " +
+      "clearing roadblocks. Each session is crafted to meet your evolving needs. Priced per session; a minimum of 6 sessions at one " +
+      "per month is recommended.",
+    variants: [
+      { label: "Per session", price_zar: 1660, source_wc_slugs: ["coaching-support-package"] },
+    ],
+  },
+  {
+    canonical_slug: "vip-package",
+    title: "VIP Package",
+    collection: "start-here",
+    program_type: "addon",
+    description:
+      "A single monthly VIP session of 1 hour plus priority access via email. Includes unlimited email support between sessions and " +
+      "direct contact for real-time guidance to keep you aligned, inspired, and progressing consistently. Priced per month; best " +
+      "combined with a package of transformation coaching sessions (minimum of 6 recommended).",
+    variants: [
+      { label: "Per month", price_zar: 1500, source_wc_slugs: ["vip-package"] },
+    ],
+  },
+  {
+    canonical_slug: "bonus-lifetime-access-self-study-online",
+    title: "Bonus Lifetime Access",
+    collection: "start-here",
+    program_type: "addon",
+    description:
+      "Add lifetime access to the self-study programme for the level you have purchased. This bonus package complements the live " +
+      "seminar, allowing you to revisit key concepts and continue your practice at your own pace after the event. Priced per " +
+      "programme level.",
+    variants: [
+      { label: "Per programme level", price_zar: 2060, source_wc_slugs: ["bonus-lifetime-access-self-study-online"] },
+    ],
+  },
+  {
+    canonical_slug: "ravenall-institute-certification-observation-fee",
+    title: "Ravenall Institute Certification Observation Fee",
+    collection: "practitioner",
+    program_type: "addon",
+    description:
+      "Advance your journey to becoming a certified practitioner. Complete your observation to achieve Practitioner Level, gain " +
+      "valuable feedback to enhance your skills and demonstrate your expertise. An essential step toward certification and " +
+      "professional growth.",
+    variants: [
+      { label: "Once-off", price_zar: 2800, source_wc_slugs: ["ravenall-institute-certification-observation-fee"] },
+    ],
+  },
 ]
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -721,6 +879,12 @@ interface MedusaVariantInput {
   title: string
   prices: MedusaProductPrice[]
   options?: MedusaVariantOption
+  // Medusa v2 defaults manage_inventory to true, which breaks complete-cart
+  // when no stock location is linked to the sales channel. Only the
+  // capacity-limited group-session "Live" seat variants track inventory
+  // (12-seat cap, seeded by seed-group-session-inventory.ts) — everything
+  // else is digital/service and must be created with manage_inventory: false.
+  manage_inventory: boolean
 }
 
 interface MedusaOptionInput {
@@ -780,6 +944,29 @@ interface MedusaProductResponse {
 
 interface MedusaProductListResponse {
   products: Array<{ id: string; handle: string; title: string }>
+}
+
+interface MedusaProductDetail {
+  id: string
+  handle: string
+  title: string
+  variants: Array<{ id: string; title: string | null }> | null
+  options: Array<{
+    id: string
+    title: string
+    values: Array<{ id: string; value: string }> | null
+  }> | null
+}
+
+interface MedusaProductDetailListResponse {
+  products: MedusaProductDetail[]
+}
+
+/** An existing Medusa product that the map says needs extra variants. */
+interface VariantSync {
+  entry: ConsolidationEntry
+  product_id: string
+  missing: ConsolidationVariant[]
 }
 
 interface MedusaCollectionListResponse {
@@ -850,17 +1037,42 @@ function buildConsolidatedPayload(
     title: v.label,
     prices: [{ amount: priceInCents(v.price_zar), currency_code: "zar" }],
     options: { Option: v.label },
+    // Only group-session "Live" seats are capacity-limited (12-seat cap).
+    // Gate on program_type — other programs also have "Live via Zoom"
+    // variants that must NOT track inventory (see apps/web/lib/inventory/
+    // group-sessions.ts for the same reasoning on the storefront side).
+    // seed-group-session-inventory.ts seeds the actual levels afterwards.
+    manage_inventory: variantManagesInventory(entry, v.label),
   }))
 
   return {
     title: entry.title,
     handle: entry.canonical_slug,
-    description: "",
+    description: entry.description ?? "",
     status: "published",
     collection_id: collectionId,
     options,
     variants,
   }
+}
+
+/**
+ * Which of an entry's mapped variants are missing from the product that
+ * already exists in Medusa (matched by variant title)? Pure — unit tested.
+ */
+function computeMissingVariants(
+  entry: ConsolidationEntry,
+  existingVariantTitles: Array<string | null>
+): ConsolidationVariant[] {
+  const existing = new Set(
+    existingVariantTitles.filter((t): t is string => t !== null)
+  )
+  return entry.variants.filter((v) => !existing.has(v.label))
+}
+
+/** The manage_inventory rule, in one place for creation and variant sync. */
+function variantManagesInventory(entry: ConsolidationEntry, label: string): boolean {
+  return entry.program_type === "group" && label.startsWith("Live")
 }
 
 function buildStandalonePayload(
@@ -879,6 +1091,8 @@ function buildStandalonePayload(
         title: "Default",
         prices: [{ amount: priceStrInCents(product.price), currency_code: "zar" }],
         options: { Option: "Default" },
+        // Standalone WC products are digital/service — never inventory-tracked.
+        manage_inventory: false,
       },
     ],
   }
@@ -938,6 +1152,71 @@ async function productExistsByHandle(handle: string, token: string): Promise<boo
     token
   )
   return data.products.length > 0
+}
+
+async function fetchProductByHandle(
+  handle: string,
+  token: string
+): Promise<MedusaProductDetail | null> {
+  const encoded = encodeURIComponent(handle)
+  const data = await medusaRequest<MedusaProductDetailListResponse>(
+    `/admin/products?handle=${encoded}&limit=1` +
+      `&fields=id,title,handle,variants.id,variants.title,options.id,options.title,options.values.id,options.values.value`,
+    {},
+    token
+  )
+  return data.products[0] ?? null
+}
+
+/**
+ * Add the map-defined variants that an existing product is missing.
+ * 1. Extends the product option's value list with the new labels.
+ * 2. Creates each missing variant with its ZAR price and the same
+ *    manage_inventory rule used at creation time.
+ * Safe to re-run: callers only pass variants whose titles are absent.
+ */
+async function addMissingVariants(sync: VariantSync, token: string): Promise<void> {
+  const product = await fetchProductByHandle(sync.entry.canonical_slug, token)
+  if (product === null) {
+    throw new Error(`Product "${sync.entry.canonical_slug}" disappeared between check and sync`)
+  }
+
+  const option = product.options?.find((o) => o.title === "Option") ?? product.options?.[0]
+  if (option === undefined) {
+    throw new Error(`Product "${product.handle}" has no options — cannot add variants`)
+  }
+
+  const existingValues = (option.values ?? []).map((v) => v.value)
+  const newValues = sync.missing
+    .map((m) => m.label)
+    .filter((label) => !existingValues.includes(label))
+
+  if (newValues.length > 0) {
+    await medusaRequest(
+      `/admin/products/${product.id}/options/${option.id}`,
+      {
+        method: "POST",
+        body: JSON.stringify({ values: [...existingValues, ...newValues] }),
+      },
+      token
+    )
+  }
+
+  for (const m of sync.missing) {
+    await medusaRequest(
+      `/admin/products/${product.id}/variants`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          title: m.label,
+          options: { [option.title]: m.label },
+          prices: [{ amount: priceInCents(m.price_zar), currency_code: "zar" }],
+          manage_inventory: variantManagesInventory(sync.entry, m.label),
+        }),
+      },
+      token
+    )
+  }
 }
 
 // ── Source data helpers ───────────────────────────────────────────────────────
@@ -1066,6 +1345,7 @@ async function migrate(): Promise<void> {
 
   const productsToCreate: ProductToCreate[] = []
   const skipped: SkippedProduct[] = []
+  const variantSyncs: VariantSync[] = []
   let alreadyExistsCount = 0
 
   log(`Processing ${CONSOLIDATION_MAP.length} consolidation map entries...`)
@@ -1073,18 +1353,31 @@ async function migrate(): Promise<void> {
   for (const entry of CONSOLIDATION_MAP) {
     const collectionId = collectionHandleToId[entry.collection] ?? null
 
-    let alreadyExists = false
+    let existing: MedusaProductDetail | null = null
     if (token !== null && medusaReachable) {
       try {
-        alreadyExists = await productExistsByHandle(entry.canonical_slug, token)
+        existing = await fetchProductByHandle(entry.canonical_slug, token)
       } catch {
         log(`  Warning: could not check existence for "${entry.canonical_slug}"`)
       }
     }
 
-    if (alreadyExists) {
+    if (existing !== null) {
       alreadyExistsCount++
-      skipped.push({ wc_id: -1, name: entry.title, reason: "already_exists" })
+      // The product exists — but the map may define variants it predates
+      // (KI006: Program 7/9 gained a "Live via Zoom" variant). Sync those
+      // instead of skipping outright, so re-runs stay idempotent at the
+      // variant level too.
+      const missing = computeMissingVariants(
+        entry,
+        (existing.variants ?? []).map((v) => v.title)
+      )
+      if (missing.length > 0) {
+        variantSyncs.push({ entry, product_id: existing.id, missing })
+        log(`  "${entry.title}" exists but is missing ${missing.length} variant(s): ${missing.map((m) => m.label).join(", ")}`)
+      } else {
+        skipped.push({ wc_id: -1, name: entry.title, reason: "already_exists" })
+      }
       continue
     }
 
@@ -1214,6 +1507,7 @@ async function migrate(): Promise<void> {
         standalone_products: standaloneCount.total,
         total_medusa_products: productsToCreate.length,
         already_exists_in_medusa: alreadyExistsCount,
+        existing_products_needing_variants: variantSyncs.length,
         redirect_map_entries: redirectMap.length,
         wc_skip_reasons: skipCounts,
         by_collection: byCollection,
@@ -1221,6 +1515,11 @@ async function migrate(): Promise<void> {
         medusa_auth_ok: medusaAuthOk,
       },
       products_to_create: productsToCreate,
+      variants_to_add: variantSyncs.map((s) => ({
+        handle: s.entry.canonical_slug,
+        title: s.entry.title,
+        missing_variants: s.missing.map((m) => ({ label: m.label, price_zar: m.price_zar })),
+      })),
       skipped,
     }
 
@@ -1234,6 +1533,7 @@ async function migrate(): Promise<void> {
     log(`Standalone Medusa products:    ${standaloneCount.total}`)
     log(`Total Medusa products:         ${productsToCreate.length}`)
     log(`Already exists (skipped):      ${alreadyExistsCount}`)
+    log(`Existing needing variants:     ${variantSyncs.length}`)
     log(`Redirect map entries:          ${redirectMap.length}`)
     log("")
     log("WC skip reasons:")
@@ -1258,6 +1558,13 @@ async function migrate(): Promise<void> {
       log("Standalone products:")
       for (const p of productsToCreate.filter((x) => x.source === "standalone")) {
         log(`  [WC #${p.wc_id}] ${p.title}  (${p.collection})  → ${p.canonical_slug}`)
+      }
+    }
+    if (variantSyncs.length > 0) {
+      log("")
+      log("Existing products that would gain variants:")
+      for (const s of variantSyncs) {
+        log(`  ${s.entry.title}  (${s.entry.canonical_slug})  + ${s.missing.map((m) => `"${m.label}" R${m.price_zar}`).join(", ")}`)
       }
     }
     log("")
@@ -1322,11 +1629,30 @@ async function migrate(): Promise<void> {
     }
   }
 
+  // ── Variant sync on existing products (KI006: Program 7/9 Live variants) ───
+
+  const variantsAdded: Array<{ handle: string; added: string[] }> = []
+
+  for (const sync of variantSyncs) {
+    try {
+      await addMissingVariants(sync, token)
+      variantsAdded.push({
+        handle: sync.entry.canonical_slug,
+        added: sync.missing.map((m) => m.label),
+      })
+      log(`  Added ${sync.missing.length} variant(s) to existing "${sync.entry.title}": ${sync.missing.map((m) => m.label).join(", ")}`)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      log(`  ERROR adding variants to "${sync.entry.title}": ${message}`)
+      errors.push({ slug: sync.entry.canonical_slug, name: sync.entry.title, error: message })
+    }
+  }
+
   log("")
-  log(`Migration complete. Migrated: ${migrated.length}  Skipped: ${skipped.length}  Errors: ${errors.length}`)
+  log(`Migration complete. Migrated: ${migrated.length}  Variant syncs: ${variantsAdded.length}  Skipped: ${skipped.length}  Errors: ${errors.length}`)
 
   const resultsPath = path.join(MIGRATIONS_DIR, "wc-migration-results.json")
-  writeJson(resultsPath, { migrated_at: startedAt, migrated, skipped, errors })
+  writeJson(resultsPath, { migrated_at: startedAt, migrated, variants_added: variantsAdded, skipped, errors })
   log(`Results written to: ${resultsPath}`)
 
   if (errors.length > 0) {
@@ -1339,9 +1665,33 @@ async function migrate(): Promise<void> {
   }
 }
 
+// ── Exports (unit tests) ──────────────────────────────────────────────────────
+
+export {
+  CONSOLIDATION_MAP,
+  buildSourceSlugIndex,
+  buildRedirectMap,
+  buildConsolidatedPayload,
+  buildStandalonePayload,
+  computeMissingVariants,
+  variantManagesInventory,
+  getSkipReason,
+  priceInCents,
+}
+export type { ConsolidationEntry, ConsolidationVariant, WcProduct, SkipReason }
+
 // ── Entry point ───────────────────────────────────────────────────────────────
 
-migrate().catch((err: unknown) => {
-  console.error("Migration failed:", err instanceof Error ? err.message : err)
-  process.exit(1)
-})
+// Guarded so the module can be imported by tests without running a migration.
+// (typeof checks keep the guard safe under both CJS ts-node and ESM test
+// transforms, where `require`/`module` do not exist.)
+if (
+  typeof require !== "undefined" &&
+  typeof module !== "undefined" &&
+  require.main === module
+) {
+  migrate().catch((err: unknown) => {
+    console.error("Migration failed:", err instanceof Error ? err.message : err)
+    process.exit(1)
+  })
+}

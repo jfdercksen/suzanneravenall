@@ -15,7 +15,7 @@ export default function TheMethod() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           {...sectionReveal}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
         >
           The Method
         </motion.p>
@@ -27,7 +27,7 @@ export default function TheMethod() {
           className="text-4xl lg:text-6xl font-light text-white leading-[1.08] max-w-4xl mb-16"
         >
           Rewiring from the inside out through{' '}
-          <span className="text-brand-accent">Rapid Repatterning&reg; &amp; Neuro-repatterning&reg;</span>
+          <span className="text-brand-accent-400">Rapid Repatterning&reg; &amp; Neuro-repatterning&reg;</span>
         </motion.h2>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">

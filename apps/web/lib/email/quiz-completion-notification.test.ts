@@ -29,6 +29,9 @@ const baseData: QuizCompletionEmailData = {
 describe('sendQuizCompletionNotificationEmail', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // The send function fails loudly without an API key; stub it so tests
+    // don't depend on the developer's local .env
+    vi.stubEnv('RESEND_API_KEY', 'test_resend_key')
   })
 
   it('returns the emailId string on success', async () => {

@@ -1,6 +1,7 @@
 import { createElement } from 'react'
 import { Resend } from 'resend'
 import MembershipRenewalReminder from './templates/MembershipRenewalReminder'
+import { buildListUnsubscribeHeaders, buildUnsubscribeUrl } from './unsubscribe'
 import type { MembershipEmailData } from './types'
 
 export type { MembershipEmailData }
@@ -19,7 +20,8 @@ export async function sendMembershipRenewalReminderEmail(data: MembershipEmailDa
     to: [data.email],
     replyTo: REPLY_TO,
     subject: 'Your membership renews in 7 days',
-    react: createElement(MembershipRenewalReminder, data),
+    headers: buildListUnsubscribeHeaders(data.email),
+    react: createElement(MembershipRenewalReminder, { ...data, unsubscribeUrl: buildUnsubscribeUrl(data.email) }),
   })
 
   if (error) throw new Error(`Resend error: ${error.message}`)

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logError } from '@/lib/log'
 
 interface PayPalCheckoutRequest {
   amountInCents: number
@@ -113,7 +114,7 @@ export async function POST(req: NextRequest) {
 
     if (!res.ok) {
       const errBody = (await res.text()).slice(0, 400)
-      console.error('[PayPal] Create order failed', { status: res.status, body: errBody })
+      logError('[PayPal] Create order failed', undefined, { status: res.status, body: errBody })
       return NextResponse.json({ error: 'PayPal order creation failed' }, { status: 502 })
     }
 
@@ -121,7 +122,7 @@ export async function POST(req: NextRequest) {
     const approvalLink = order.links.find((l) => l.rel === 'payer-action')
 
     if (!approvalLink) {
-      console.error('[PayPal] No payer-action link in order response', { orderId: order.id })
+      logError('[PayPal] No payer-action link in order response', undefined, { orderId: order.id })
       return NextResponse.json({ error: 'PayPal approval URL not returned' }, { status: 502 })
     }
 
@@ -131,7 +132,7 @@ export async function POST(req: NextRequest) {
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
-    console.error('[PayPal] Create order error', { message })
+    logError('[PayPal] Create order error', err, { message })
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

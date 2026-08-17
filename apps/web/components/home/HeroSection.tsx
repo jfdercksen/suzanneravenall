@@ -22,7 +22,7 @@ export default function HeroSection() {
       {/* Content */}
       <div className="relative z-10 w-full">
         <div className="max-w-7xl mx-auto px-4 pb-20 lg:pb-0 pt-32 lg:pt-0">
-          <p className="text-brand-accent text-xs font-semibold uppercase tracking-widest mb-5">
+          <p className="text-brand-accent-300 text-xs font-semibold uppercase tracking-widest mb-5">
             Transformation Coaching · Neuro-Repatterning®
           </p>
           <h1 id="hero-heading" className="text-5xl sm:text-6xl lg:text-[4.5rem] font-display text-white leading-[1.08] max-w-2xl lg:max-w-3xl">

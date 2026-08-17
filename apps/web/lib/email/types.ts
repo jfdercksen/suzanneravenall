@@ -34,6 +34,20 @@ export interface MembershipEmailData {
   siteUrl: string
 }
 
+/**
+ * Props actually rendered by templates that carry a working unsubscribe link.
+ * The send function (not the caller) injects unsubscribeUrl via
+ * buildUnsubscribeUrl() so routes keep passing plain CartEmailData /
+ * MembershipEmailData.
+ */
+export interface CartEmailProps extends CartEmailData {
+  unsubscribeUrl: string
+}
+
+export interface MembershipEmailProps extends MembershipEmailData {
+  unsubscribeUrl: string
+}
+
 export type OrderProductType = 'session' | 'self-paced' | 'live' | 'group' | 'other'
 
 export interface OrderEmailData {

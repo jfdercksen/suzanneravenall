@@ -2,7 +2,9 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createHash, timingSafeEqual } from 'crypto'
 import { z } from 'zod'
 import { sendMembershipRenewalReminderEmail } from '@/lib/email/membership-renewal-reminder'
+import { isEmailUnsubscribed } from '@/lib/email/suppression'
 import { tierLabel } from '@/lib/access/tiers'
+import { logError } from '@/lib/log'
 
 const bodySchema = z.object({
   email: z.string().email(),
@@ -49,6 +51,11 @@ export async function POST(request: NextRequest) {
   const { email, firstName, tier, renewalDate } = parsed.data
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://suzanneravenall.com'
 
+  // POPIA: renewal reminders are promotional — honour the suppression list.
+  if (await isEmailUnsubscribed(email)) {
+    return NextResponse.json({ skipped: true, reason: 'unsubscribed' })
+  }
+
   try {
     const emailId = await sendMembershipRenewalReminderEmail({
       email,
@@ -61,8 +68,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ emailId })
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
-    console.error('[membership-renewal-reminder] Failed to send email:', message)
+    logError('[membership-renewal-reminder] Failed to send email:', err)
     return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
   }
 }

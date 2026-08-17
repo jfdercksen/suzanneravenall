@@ -7,6 +7,11 @@ type ConsentState = 'accepted' | 'rejected' | null
 
 const STORAGE_KEY = 'cookie_consent'
 
+/** Shared with PatternCoachTab so the mobile pill can wait until consent is chosen (KI027). */
+export const CONSENT_STORAGE_KEY = STORAGE_KEY
+/** Fired on window when the user accepts or rejects, so other overlays can react without polling. */
+export const CONSENT_CHOSEN_EVENT = 'sr:cookie-consent-chosen'
+
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void
@@ -56,6 +61,7 @@ export default function CookieConsent({ clarityId }: CookieConsentProps) {
     setVisible(false)
     updateGtagConsent(true)
     if (clarityId) loadClarity(clarityId)
+    window.dispatchEvent(new Event(CONSENT_CHOSEN_EVENT))
   }
 
   function handleReject() {
@@ -63,21 +69,28 @@ export default function CookieConsent({ clarityId }: CookieConsentProps) {
     setConsent('rejected')
     setVisible(false)
     updateGtagConsent(false)
+    window.dispatchEvent(new Event(CONSENT_CHOSEN_EVENT))
   }
 
   if (!visible || consent !== null) return null
 
   return (
+    // z-[70]: deliberately above the Pattern Coach pill (z-[60]) and sticky header (z-50) —
+    // the consent dialog always wins the stacking order (KI027).
+    // pb uses env(safe-area-inset-bottom) so the buttons clear the iOS home indicator.
     <div
       role="dialog"
       aria-label="Cookie consent"
       aria-live="polite"
-      className="fixed bottom-0 left-0 right-0 z-50 bg-brand-primary border-t border-brand-accent/30 px-4 py-3 lg:py-5"
+      className="fixed bottom-0 left-0 right-0 z-[70] bg-brand-primary border-t border-brand-accent/30 px-4 pt-3 lg:pt-5 pb-[calc(0.75rem+env(safe-area-inset-bottom))] lg:pb-[calc(1.25rem+env(safe-area-inset-bottom))]"
     >
       <div className="max-w-7xl mx-auto flex flex-row flex-wrap items-center gap-3 lg:gap-4">
-        <p className="flex-1 min-w-[200px] text-sm text-white/80 leading-relaxed">
-          We use cookies to understand how you use our site and to improve your experience.{' '}
-          <Link href="/legal/cookies" className="text-brand-accent underline underline-offset-2 hover:text-brand-accent/80 transition-colors duration-200">
+        {/* min-w-0 below sm keeps the buttons inline with the text at 375px instead of
+            wrapping them onto a second row (which made the banner ~141px tall — KI027). */}
+        <p className="flex-1 min-w-0 sm:min-w-[200px] text-[13px] sm:text-sm text-white/80 leading-relaxed">
+          <span className="sm:hidden">We use cookies to improve your experience.</span>
+          <span className="hidden sm:inline">We use cookies to understand how you use our site and to improve your experience.</span>{' '}
+          <Link href="/legal/cookies" className="text-brand-accent-300 underline underline-offset-2 hover:text-brand-accent-200 transition-colors duration-200">
             Cookie policy
           </Link>
         </p>
@@ -90,7 +103,7 @@ export default function CookieConsent({ clarityId }: CookieConsentProps) {
           </button>
           <button
             onClick={handleAccept}
-            className="text-sm font-medium bg-brand-accent-600 hover:bg-brand-accent-700 text-white px-5 py-2 rounded-button transition-all duration-300"
+            className="text-sm font-medium bg-brand-accent-600 hover:bg-brand-accent-700 text-white px-4 sm:px-5 py-2 rounded-button transition-all duration-300"
           >
             Accept
           </button>

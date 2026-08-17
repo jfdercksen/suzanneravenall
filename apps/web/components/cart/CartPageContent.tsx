@@ -108,7 +108,7 @@ export default function CartPageContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
               {hasItems ? `${cart.items.reduce((s, i) => s + i.quantity, 0)} item${cart.items.reduce((s, i) => s + i.quantity, 0) !== 1 ? 's' : ''}` : 'Empty'}
             </p>
             <h1 className="text-4xl lg:text-5xl font-light text-white">Your Cart</h1>

@@ -92,7 +92,7 @@ export default function TheSystemContent() {
           <div className="max-w-3xl">
             <motion.p
               {...fadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
             >
               About: The System
             </motion.p>
@@ -102,7 +102,7 @@ export default function TheSystemContent() {
               className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
             >
               One philosophy. An entire system built on it:{' '}
-              <span className="text-brand-accent">Pattern Intelligence&trade;</span>
+              <span className="text-brand-accent-300">Pattern Intelligence&trade;</span>
             </motion.h1>
             <motion.p
               {...fadeUp(0.4)}
@@ -167,7 +167,7 @@ export default function TheSystemContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
             {...sectionReveal}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
           >
             The Frameworks
           </motion.p>
@@ -193,7 +193,7 @@ export default function TheSystemContent() {
                 }}
                 className="group relative h-full rounded-card border border-white/5 bg-gray-900 p-8 transition-all duration-500 hover:border-brand-accent/40 hover:shadow-2xl hover:-translate-y-1"
               >
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-5">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-5">
                   {framework.label}
                 </p>
                 <h3 className="text-2xl font-light text-white mb-4">
@@ -292,7 +292,7 @@ export default function TheSystemContent() {
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
             {...sectionReveal}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
           >
             Enter the System
           </motion.p>

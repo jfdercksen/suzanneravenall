@@ -1,0 +1,29 @@
+/* CSS replacement for the framer-motion entrance animations that used to live in
+   AccountContent.tsx (KI016). Pure CSS keeps framer-motion out of this page's
+   first-load JS. Delays mirror the original stagger (0.05s steps). */
+
+.fadeUp {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeUp 0.6s ease-out forwards;
+}
+
+.delay1 { animation-delay: 0.05s; }
+.delay2 { animation-delay: 0.1s; }
+.delay3 { animation-delay: 0.15s; }
+.delay4 { animation-delay: 0.2s; }
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fadeUp {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

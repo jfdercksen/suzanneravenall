@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import type { Quiz } from '@/app/explore/quizzes/types'
 import QuizFlow from './QuizFlow'
 
-type GateMode = 'gate' | 'checkEmail' | 'invalid' | 'quiz'
+type GateMode = 'gate' | 'checkEmail' | 'invalid' | 'rateLimited' | 'quiz'
 
 interface QuizSubscriberSeed {
   id: string
@@ -16,7 +16,7 @@ interface QuizSubscriberSeed {
 
 interface QuizGateProps {
   quiz: Quiz
-  initialMode: 'gate' | 'invalid' | 'quiz'
+  initialMode: 'gate' | 'invalid' | 'rateLimited' | 'quiz'
   subscriber?: QuizSubscriberSeed
 }
 
@@ -49,7 +49,15 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
         body: JSON.stringify({ quizSlug: quiz.slug, firstName, lastName, email }),
       })
       const data = (await res.json().catch(() => ({}))) as { error?: string }
-      if (!res.ok) throw new Error(data.error ?? 'Something went wrong. Please try again.')
+      if (!res.ok) {
+        // 429s carry a friendly server message; this fallback keeps the UI
+        // graceful even if the body couldn't be parsed.
+        const fallback =
+          res.status === 429
+            ? 'Too many requests. Please wait a few minutes and try again.'
+            : 'Something went wrong. Please try again.'
+        throw new Error(data.error ?? fallback)
+      }
 
       setSentTo(email)
       setStatus('idle')
@@ -178,6 +186,21 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
             >
               Didn&apos;t get it? Resend
             </button>
+          </div>
+        )}
+
+        {mode === 'rateLimited' && (
+          <div className="text-center">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
+              Just a Moment
+            </p>
+            <h1 className="text-3xl lg:text-4xl font-light leading-tight mb-3">
+              Too many requests
+            </h1>
+            <p className="text-base text-white/70 font-light leading-relaxed mb-6">
+              This page has been requested too many times in a short period. Wait a
+              minute, then refresh to continue to your diagnostic.
+            </p>
           </div>
         )}
 

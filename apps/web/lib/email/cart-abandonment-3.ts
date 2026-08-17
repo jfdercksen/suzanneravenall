@@ -1,6 +1,7 @@
 import { createElement } from 'react'
 import { Resend } from 'resend'
 import CartAbandonment3 from './templates/CartAbandonment3'
+import { buildListUnsubscribeHeaders, buildUnsubscribeUrl } from './unsubscribe'
 import type { CartEmailData } from './types'
 
 export type { CartEmailData }
@@ -13,7 +14,8 @@ export async function sendCartAbandonmentEmail3(data: CartEmailData): Promise<st
     from: FROM,
     to: [data.email],
     subject: 'Last chance to secure your place',
-    react: createElement(CartAbandonment3, data),
+    headers: buildListUnsubscribeHeaders(data.email),
+    react: createElement(CartAbandonment3, { ...data, unsubscribeUrl: buildUnsubscribeUrl(data.email) }),
   })
 
   if (error) throw new Error(`Resend error: ${error.message}`)

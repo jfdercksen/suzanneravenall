@@ -41,9 +41,15 @@
  * default sales channel (harmless — it only makes the 8 Live variants below
  * fully purchasable; every other variant remains exactly as broken/working
  * as it was before, since this script does not touch their manage_inventory
- * or create location levels for them). Flag this to the project owner as a
- * separate, urgent, sitewide follow-up — see the report accompanying this
- * script for the two remediation options.
+ * or create location levels for them).
+ *
+ * REMEDIATION (2026-08-04): the sitewide side is now handled by
+ * fix-variant-inventory-flags.ts, which sets manage_inventory: false on every
+ * variant EXCEPT the Live seats defined below (it imports
+ * GROUP_SESSION_PRODUCTS from this file). The creation paths
+ * (migrate-woocommerce.ts, seed.ts, seed-memberships.ts) now also pass
+ * manage_inventory explicitly, so new variants are born correct. Run order on
+ * a fresh environment: fix-variant-inventory-flags.ts first, then this script.
  *
  * ── Store API — reading remaining quantity back on the storefront ─────────
  * Verified against node_modules/@medusajs/types/dist/http/product/common.d.ts
@@ -145,13 +151,15 @@ interface InventoryLevel {
 // liveVariantTitle is `null` for the one product that has no "Live" variant
 // at all (Attraction Frequency only ships a "Recorded series" variant).
 
-interface GroupSessionProduct {
+export interface GroupSessionProduct {
   canonicalSlug: string
   title: string
   liveVariantTitle: string | null
 }
 
-const GROUP_SESSION_PRODUCTS: GroupSessionProduct[] = [
+// Exported: fix-variant-inventory-flags.ts imports this as the single source
+// of truth for which variants must KEEP manage_inventory: true.
+export const GROUP_SESSION_PRODUCTS: GroupSessionProduct[] = [
   {
     canonicalSlug: "group-session-attraction-frequency-recorded",
     title: "Group Session — Attraction Frequency",

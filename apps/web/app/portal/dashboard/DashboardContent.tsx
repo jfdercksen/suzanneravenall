@@ -75,7 +75,7 @@ export default function DashboardContent({
           transition={{ duration: 0.6 }}
           className="mb-10"
         >
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
             Member Portal
           </p>
           <div className="flex flex-wrap items-center gap-4 mb-3">
@@ -115,7 +115,7 @@ export default function DashboardContent({
           </div>
           <div className="p-5 bg-gray-900 rounded-card col-span-2 lg:col-span-1">
             <p className="text-xs uppercase tracking-widest text-white/40 mb-1">Membership tier</p>
-            <p className={`font-semibold ${tierSlug === 'gold' ? 'text-yellow-300' : tierSlug === 'practitioner' ? 'text-brand-accent' : 'text-white'}`}>
+            <p className={`font-semibold ${tierSlug === 'gold' ? 'text-yellow-300' : tierSlug === 'practitioner' ? 'text-brand-accent-400' : 'text-white'}`}>
               {tierName}
             </p>
           </div>
@@ -149,7 +149,7 @@ export default function DashboardContent({
                     <p className="text-white font-semibold text-sm mb-0.5">Assessments</p>
                     <p className="text-white/40 text-xs leading-relaxed">Pattern recognition, emotional mastery, life design</p>
                   </div>
-                  <svg className="w-4 h-4 text-brand-accent flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity self-center" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-brand-accent-300 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity self-center" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                   </svg>
                 </Link>
@@ -160,7 +160,7 @@ export default function DashboardContent({
                   href="/portal/videos"
                   className="group flex items-start gap-4 p-5 bg-gray-900 hover:bg-gray-800 rounded-card transition-all duration-300"
                 >
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-accent/20 flex items-center justify-center text-brand-accent">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-brand-accent/20 flex items-center justify-center text-brand-accent-300">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
                     </svg>
@@ -169,7 +169,7 @@ export default function DashboardContent({
                     <p className="text-white font-semibold text-sm mb-0.5">Group Sessions</p>
                     <p className="text-white/40 text-xs leading-relaxed">Recorded group coaching intensives</p>
                   </div>
-                  <svg className="w-4 h-4 text-brand-accent flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity self-center" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-brand-accent-300 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity self-center" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                   </svg>
                 </Link>
@@ -188,7 +188,7 @@ export default function DashboardContent({
                   <p className="text-white font-semibold text-sm mb-0.5">Workbooks &amp; Templates</p>
                   <p className="text-white/40 text-xs leading-relaxed">Download all available resources</p>
                 </div>
-                <svg className="w-4 h-4 text-brand-accent flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity self-center" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="w-4 h-4 text-brand-accent-300 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity self-center" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
               </Link>
@@ -207,7 +207,7 @@ export default function DashboardContent({
         >
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-white">My Programmes</h2>
-            <Link href="/portal/programmes" className="text-brand-accent text-sm hover:underline">
+            <Link href="/portal/programmes" className="text-brand-accent-300 text-sm hover:underline">
               View all
             </Link>
           </div>
@@ -220,7 +220,7 @@ export default function DashboardContent({
                   href="/portal/programmes"
                   className="group flex items-center gap-4 p-4 bg-gray-900 hover:bg-gray-800 rounded-card transition-all duration-300"
                 >
-                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-brand-accent/10 flex items-center justify-center text-brand-accent">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-brand-accent/10 flex items-center justify-center text-brand-accent-300">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
                     </svg>
@@ -259,7 +259,7 @@ export default function DashboardContent({
           {/* Upcoming sessions widget */}
           <div className="p-6 bg-gray-900 rounded-card">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-lg bg-brand-accent/10 flex items-center justify-center text-brand-accent">
+              <div className="w-9 h-9 rounded-lg bg-brand-accent/10 flex items-center justify-center text-brand-accent-400">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                 </svg>
@@ -272,7 +272,7 @@ export default function DashboardContent({
             </p>
             <Link
               href="/contact#booking"
-              className="inline-flex items-center gap-2 text-brand-accent text-sm font-medium hover:underline"
+              className="inline-flex items-center gap-2 text-brand-accent-400 text-sm font-medium hover:underline"
             >
               View available sessions
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -342,7 +342,7 @@ export default function DashboardContent({
             />
             <div className="relative flex flex-col lg:flex-row lg:items-center gap-8">
               <div className="flex-1">
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
                   Unlock More
                 </p>
                 <h2 className="text-2xl lg:text-3xl font-light text-white mb-3">

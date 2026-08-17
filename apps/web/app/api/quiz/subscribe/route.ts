@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/nextjs'
 import { quizBySlug } from '@/app/explore/quizzes'
 import { getServiceRoleClient, markEmailSent, upsertSubscriber } from '@/lib/quiz/subscriber'
 import { sendQuizInviteEmail } from '@/lib/email/quiz-invite'
+import { createRateLimiter, getClientIp, rateLimitResponse } from '@/lib/rate-limit'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://suzanneravenall.com'
 
@@ -14,40 +15,14 @@ const SubscribeSchema = z.object({
   email: z.string().trim().email().max(255),
 })
 
-// Simple in-memory rate limiter: 5 requests per IP per 10-minute window —
-// stricter than search's 20/60s since every hit here sends an email.
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now()
-  const entry = rateLimitMap.get(ip)
-
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + 600_000 })
-    return false
-  }
-
-  if (entry.count >= 5) return true
-  entry.count++
-  return false
-}
-
-setInterval(() => {
-  const now = Date.now()
-  for (const [ip, entry] of rateLimitMap) {
-    if (now > entry.resetAt) rateLimitMap.delete(ip)
-  }
-}, 300_000)
+// 5 requests per IP per 10-minute window — stricter than search's 20/60s
+// since every hit here sends an email (KI028; shared limiter, in-memory,
+// single-container deployment).
+const limiter = createRateLimiter({ limit: 5, windowMs: 600_000 })
 
 export async function POST(request: NextRequest) {
-  const ip =
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
-    request.headers.get('x-real-ip') ??
-    'unknown'
-
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-  }
+  const { limited, retryAfterSeconds } = limiter.check(getClientIp(request.headers))
+  if (limited) return rateLimitResponse(retryAfterSeconds)
 
   let body: unknown
   try {

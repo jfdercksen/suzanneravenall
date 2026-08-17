@@ -56,7 +56,7 @@ export function ComingSoonSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
               Insights & Inspiration
             </p>
             <h1 className="text-4xl lg:text-6xl font-light text-white mb-6">
@@ -183,7 +183,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
         />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
             Insights & Inspiration
           </p>
           <h1
@@ -323,7 +323,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4"
           >
             YOUR NEXT STEP
           </motion.p>

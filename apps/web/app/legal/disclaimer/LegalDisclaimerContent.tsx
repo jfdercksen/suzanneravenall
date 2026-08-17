@@ -130,7 +130,7 @@ export default function LegalDisclaimerContent() {
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
               Legal
             </p>
             <h1 className="text-4xl lg:text-6xl font-light text-white mb-6">

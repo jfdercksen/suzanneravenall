@@ -47,7 +47,7 @@ function TierCard({ tier, isCurrentTier, isUpgrade }: TierCardProps) {
 
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="flex-1 min-w-0">
-          <p className="text-[10px] font-semibold text-brand-accent uppercase tracking-[0.2em] mb-0.5">
+          <p className="text-[10px] font-semibold text-brand-accent-300 uppercase tracking-[0.2em] mb-0.5">
             {tier.tierType !== 'standard' ? `${tier.tierType} · level ${tier.accessLevel}` : `level ${tier.accessLevel}`}
           </p>
           <p className="text-white font-semibold text-sm leading-snug">{tier.title}</p>
@@ -143,7 +143,7 @@ export default function UpgradeContent({
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
               Membership Upgrade
             </p>
             <h1 className="text-4xl lg:text-6xl font-light text-white mb-6 leading-tight">
@@ -179,7 +179,7 @@ export default function UpgradeContent({
             transition={{ duration: 0.5 }}
             className="mb-10"
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
               Open to Everyone
             </p>
             <h2 className="text-3xl lg:text-4xl font-light text-white">Starting Point</h2>
@@ -210,7 +210,7 @@ export default function UpgradeContent({
             transition={{ duration: 0.5 }}
             className="mb-12"
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
               Practitioner Pathways
             </p>
             <h2 className="text-3xl lg:text-4xl font-light text-white">Choose your track</h2>

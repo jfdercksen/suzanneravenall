@@ -49,7 +49,7 @@ export default function LeadMagnet() {
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-4">
+          <p className="text-brand-accent-300 text-xs font-medium uppercase tracking-[0.3em] mb-4">
             Free Chapter
           </p>
           <h2 id="leadmagnet-heading" className="text-4xl lg:text-6xl font-light text-white">

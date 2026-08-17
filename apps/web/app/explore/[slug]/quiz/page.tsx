@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { headers } from 'next/headers'
 import Link from 'next/link'
 import * as Sentry from '@sentry/nextjs'
 import { topics, topicBySlug } from '@/app/explore/topics'
@@ -11,6 +12,15 @@ import {
   markStarted,
   type QuizSubscriberRow,
 } from '@/lib/quiz/subscriber'
+import { createRateLimiter, getClientIp } from '@/lib/rate-limit'
+
+// KI028: every tokened GET here costs a Supabase service-role lookup, and
+// /explore/* falls outside the Cloudflare WAF rule scoped to /api/*, so this
+// route was an uncovered DB-load vector. 30 lookups per IP per minute is
+// generous for real visitors (a quiz-taker follows their emailed link once,
+// maybe refreshes a handful of times) while capping what a flood can push at
+// the DB. Shared in-memory limiter — single-container deployment.
+const tokenLookupLimiter = createRateLimiter({ limit: 30, windowMs: 60_000 })
 
 // In Next.js 14 App Router, params and searchParams are Promises in dynamic routes.
 type PageProps = {
@@ -47,6 +57,15 @@ export default async function QuizPage({ params, searchParams }: PageProps) {
   const quiz = quizBySlug(slug)
   if (quiz) {
     if (!token) return <QuizGate quiz={quiz} initialMode="gate" />
+
+    // A server component can't return a real 429 status (only notFound() /
+    // redirect() are available), so over-limit requests get a graceful
+    // retry screen instead — the point is that the DB lookup below is
+    // skipped. The quiz API routes return true 429s with Retry-After.
+    const requestHeaders = await headers()
+    if (tokenLookupLimiter.check(getClientIp(requestHeaders)).limited) {
+      return <QuizGate quiz={quiz} initialMode="rateLimited" />
+    }
 
     const supabase = getServiceRoleClient()
     let subscriber: QuizSubscriberRow | null = null

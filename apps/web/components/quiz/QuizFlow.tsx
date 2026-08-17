@@ -115,6 +115,11 @@ export default function QuizFlow({
           quizResult: resultKey,
         }),
       })
+      if (res.status === 429) {
+        setStatus('error')
+        setMessage('Too many requests. Please wait a moment and try again.')
+        return
+      }
       if (!res.ok) throw new Error('Request failed')
       setStatus('success')
       setMessage(`Your full ${quiz.title} Report is on its way!`)

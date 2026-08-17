@@ -82,7 +82,7 @@ function FAQItem({
         </span>
         <ChevronDown
           aria-hidden="true"
-          className={`w-5 h-5 shrink-0 text-brand-accent transition-transform duration-300 ${
+          className={`w-5 h-5 shrink-0 text-brand-accent-400 transition-transform duration-300 ${
             isOpen ? 'rotate-180' : 'rotate-0'
           }`}
         />
@@ -118,7 +118,7 @@ export default function ContactFAQ() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           {...sectionReveal}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4 text-center"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4 text-center"
         >
           COMMON QUESTIONS
         </motion.p>

@@ -34,7 +34,7 @@ export default function AboutHero() {
         <div className="flex flex-col justify-center min-h-[560px] lg:min-h-0 lg:h-full max-w-3xl py-16 lg:py-0">
           <motion.p
             {...fadeUp(0)}
-            className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-6"
+            className="text-xs tracking-[0.3em] text-brand-accent-400 uppercase font-medium mb-6"
           >
             Meet Dr. Suzanne Ravenall
           </motion.p>
@@ -45,7 +45,7 @@ export default function AboutHero() {
             className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
           >
             Championing the change in the human condition{' '}
-            <span className="text-brand-accent">one person at a time</span>
+            <span className="text-brand-accent-400">one person at a time</span>
           </motion.h1>
 
           <motion.p

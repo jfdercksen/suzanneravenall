@@ -3,7 +3,9 @@ import { timingSafeEqual, createHash } from 'crypto'
 import { sendCartAbandonmentEmail1 } from '@/lib/email/cart-abandonment-1'
 import { sendCartAbandonmentEmail2 } from '@/lib/email/cart-abandonment-2'
 import { sendCartAbandonmentEmail3 } from '@/lib/email/cart-abandonment-3'
+import { isEmailUnsubscribed } from '@/lib/email/suppression'
 import type { CartEmailData, CartItem } from '@/lib/email/types'
+import { logError } from '@/lib/log'
 
 function verifySecret(provided: string, expected: string): boolean {
   try {
@@ -42,7 +44,7 @@ function parseItems(raw: unknown[]): CartItem[] {
 export async function POST(req: NextRequest) {
   const webhookSecret = process.env.N8N_WEBHOOK_SECRET
   if (!webhookSecret) {
-    console.error('[email/cart-abandonment] N8N_WEBHOOK_SECRET is not set')
+    logError('[email/cart-abandonment] N8N_WEBHOOK_SECRET is not set')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
   const provided = req.headers.get('x-webhook-secret') ?? ''
@@ -51,7 +53,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (!process.env.RESEND_API_KEY) {
-    console.error('[email/cart-abandonment] RESEND_API_KEY is not set')
+    logError('[email/cart-abandonment] RESEND_API_KEY is not set')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
 
@@ -92,6 +94,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'items contains no valid line items' }, { status: 400 })
   }
 
+  // POPIA: cart-abandonment emails are marketing — honour the suppression list.
+  if (await isEmailUnsubscribed(email)) {
+    return NextResponse.json({ skipped: true, reason: 'unsubscribed' })
+  }
+
   const data: CartEmailData = {
     cartId,
     email,
@@ -114,7 +121,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ emailId })
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
-    console.error(`[email/cart-abandonment] send failed (template ${template}, cart ${cartId}): ${msg}`)
+    logError(`[email/cart-abandonment] send failed (template ${template}, cart ${cartId}): ${msg}`, err, { template, cartId })
     return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
   }
 }

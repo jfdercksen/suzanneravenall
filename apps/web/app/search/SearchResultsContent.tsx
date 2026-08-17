@@ -75,12 +75,12 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
           transition={{ duration: 0.6 }}
           className="mb-10"
         >
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
             Search Results
           </p>
           <h1 className="text-3xl lg:text-4xl font-light text-white">
             {initialQuery ? (
-              <>Results for &ldquo;<span className="text-brand-accent">{initialQuery}</span>&rdquo;</>
+              <>Results for &ldquo;<span className="text-brand-accent-400">{initialQuery}</span>&rdquo;</>
             ) : (
               'What are you looking for?'
             )}
@@ -144,7 +144,7 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
             <p className="text-gray-300 text-lg mb-2">No results found</p>
             <p className="text-gray-500 text-sm">
               Try different keywords, or{' '}
-              <Link href="/shop" className="text-brand-accent hover:underline">
+              <Link href="/shop" className="text-brand-accent-400 hover:underline">
                 browse all programmes
               </Link>
               .

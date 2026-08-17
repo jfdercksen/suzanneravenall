@@ -35,7 +35,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
         {/* Section header */}
         <div className="flex items-center justify-between mb-12">
           <div>
-            <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-2">
+            <p className="text-xs tracking-[0.3em] text-brand-accent-300 uppercase font-medium mb-2">
               UPCOMING PROGRAMS
             </p>
             <h2 className="text-4xl lg:text-6xl font-light text-white">
@@ -80,7 +80,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                   <div>
                     {/* Top row — label + real spots badge */}
                     <div className="flex items-start justify-between mb-8">
-                      <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium">
+                      <p className="text-xs tracking-[0.3em] text-brand-accent-300 uppercase font-medium">
                         GROUP PROGRAM · NEXT INTAKE
                       </p>
                       <span
@@ -139,7 +139,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                       honest fallback, matches the tone of /events rather than
                       inventing a number. */}
                   <div>
-                    <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-8">
+                    <p className="text-xs tracking-[0.3em] text-brand-accent-300 uppercase font-medium mb-8">
                       GROUP PROGRAMS
                     </p>
                     <h3 className="text-4xl lg:text-5xl font-light text-white leading-tight mb-3">
@@ -175,7 +175,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
             <div className="p-8 flex flex-col justify-between min-h-[380px]">
 
               <div>
-                <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-8">
+                <p className="text-xs tracking-[0.3em] text-brand-accent-300 uppercase font-medium mb-8">
                   {oneOnOne.label}
                 </p>
                 <h3 className="text-3xl font-light text-white leading-tight mb-3">

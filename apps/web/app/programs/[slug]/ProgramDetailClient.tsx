@@ -221,7 +221,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
 
             {/* Category + delivery badges */}
             <motion.div {...fadeUp(0.05)} className="flex flex-wrap gap-3 mb-6">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest bg-brand-accent/20 text-brand-accent border border-brand-accent/30">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest bg-brand-accent/20 text-brand-accent-400 border border-brand-accent/30">
                 {categoryLabel}
               </span>
               <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest bg-white/10 text-white/70 border border-white/20">
@@ -252,7 +252,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-white/40 mb-1">Investment</p>
                 {priceUsd || priceZar ? (
-                  <p className="text-sm font-semibold text-brand-accent">
+                  <p className="text-sm font-semibold text-brand-accent-400">
                     {priceUsd && (
                       <>
                         {priceUsd}
@@ -352,7 +352,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
           <div className="grid gap-16 lg:grid-cols-2">
             {/* Left — description + who this is for */}
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
                 Programme Details
               </p>
               <h2
@@ -369,16 +369,16 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               {/* Info grid */}
               <div className="grid grid-cols-2 gap-6 mb-10">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-2">Format</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-brand-accent-400 mb-2">Format</p>
                   <p className="text-white/80 text-sm font-light">{categoryLabel}</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-2">Delivery</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-brand-accent-400 mb-2">Delivery</p>
                   <p className="text-white/80 text-sm font-light">{deliveryMethod}</p>
                 </div>
                 {program.duration && (
                   <div className="col-span-2">
-                    <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-2">Duration</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-brand-accent-400 mb-2">Duration</p>
                     <p className="text-white/80 text-sm font-light">{program.duration}</p>
                   </div>
                 )}
@@ -386,7 +386,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
 
               {/* TODO: Suzanne to provide — "Who this is for" paragraph for each programme */}
               <div className="border-l-2 border-brand-accent/40 pl-6">
-                <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-3">Who This Is For</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-brand-accent-400 mb-3">Who This Is For</p>
                 <p className="text-white/65 font-light leading-relaxed text-sm">
                   This programme is for you if you are ready to move beyond surface-level change and
                   commit to a deeper journey of inner transformation. Whether you are facing a specific
@@ -397,7 +397,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
 
             {/* Right — what's included */}
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
                 What&apos;s Included
               </p>
               <motion.ul
@@ -410,7 +410,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                     variants={childVariants}
                     className="flex items-start gap-4 text-white/75 font-light leading-relaxed"
                   >
-                    <span className="text-brand-accent mt-0.5">
+                    <span className="text-brand-accent-400 mt-0.5">
                       <CheckIcon />
                     </span>
                     <span>{feature}</span>
@@ -420,7 +420,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
 
               {/* Investment callout */}
               <div className="mt-12 p-6 bg-gray-900 border border-white/10 rounded-card">
-                <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-3">Investment</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-brand-accent-400 mb-3">Investment</p>
                 {priceUsd || priceZar ? (
                   <p className="text-3xl font-light text-white mb-4">
                     {priceUsd ?? `${priceZar} ZAR`}

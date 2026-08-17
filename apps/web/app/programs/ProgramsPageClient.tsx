@@ -215,7 +215,7 @@ export default function ProgramsPageClient() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
               Programmes
             </p>
             <h1
@@ -249,7 +249,7 @@ export default function ProgramsPageClient() {
       {/* Category navigation — visible at the fold on load, sticky under site header */}
       <nav aria-label="Programme categories" className="w-full bg-gray-950 py-4 lg:py-6 sticky top-16 lg:top-20 z-40 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-8">
-          <p className="flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent">
+          <p className="flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400">
             Browse by category
           </p>
           <div className="flex gap-3 overflow-x-auto pb-1">
@@ -441,7 +441,7 @@ export default function ProgramsPageClient() {
             whileInView="visible"
             viewport={{ once: true, margin: '0px' }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
               Self-Study Programmes
             </p>
             <h2 className="text-4xl lg:text-6xl font-light text-white mb-4 max-w-2xl">
@@ -557,7 +557,7 @@ export default function ProgramsPageClient() {
             whileInView="visible"
             viewport={{ once: true, margin: '0px' }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
               Resonance Repatterning
             </p>
             <h2 className="text-4xl lg:text-6xl font-light text-white mb-4 max-w-2xl">
@@ -599,7 +599,7 @@ export default function ProgramsPageClient() {
             whileInView="visible"
             viewport={{ once: true, margin: '0px' }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
               Not Sure Where to Start?
             </p>
             <h2 className="text-4xl lg:text-6xl font-light text-white mb-6">

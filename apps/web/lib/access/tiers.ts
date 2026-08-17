@@ -92,7 +92,7 @@ export const TIER_BADGE_STYLES: Record<TierSlug, string> = {
   free: 'bg-gray-700 text-gray-300',
   silver: 'bg-gray-400/20 text-gray-200 border border-gray-400/40',
   gold: 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/40',
-  practitioner: 'bg-brand-accent/20 text-brand-accent border border-brand-accent/40',
+  practitioner: 'bg-brand-accent/20 text-brand-accent-300 border border-brand-accent/40',
 }
 
 // ─── 29-tier membership system (Wild Apricot / real structure) ────────────────

@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { createClient } from '@/utils/supabase/client'
 import { TIER_BADGE_STYLES, type TierSlug } from '@/lib/access/tiers'
 
 const TIER_LABELS: Record<TierSlug, string> = {
@@ -97,6 +96,9 @@ export default function PortalNav({ tier }: PortalNavProps) {
   const badgeClass = TIER_BADGE_STYLES[tier] ?? TIER_BADGE_STYLES.free
 
   async function handleLogout() {
+    // Lazy import keeps @supabase/ssr + supabase-js out of every portal page's
+    // first-load JS (KI016); the chunk is only fetched when the member signs out.
+    const { createClient } = await import('@/utils/supabase/client')
     const supabase = createClient()
     const { error } = await supabase.auth.signOut()
     if (!error) {
@@ -144,11 +146,11 @@ export default function PortalNav({ tier }: PortalNavProps) {
                   href={link.href}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                     active
-                      ? 'bg-brand-accent/10 text-brand-accent'
+                      ? 'bg-brand-accent/10 text-brand-accent-300'
                       : 'text-white/60 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  <span className={active ? 'text-brand-accent' : 'text-white/40'}>
+                  <span className={active ? 'text-brand-accent-300' : 'text-white/40'}>
                     {link.icon}
                   </span>
                   {link.label}
@@ -186,7 +188,7 @@ export default function PortalNav({ tier }: PortalNavProps) {
                 key={link.href}
                 href={link.href}
                 className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-colors duration-200 ${
-                  active ? 'text-brand-accent' : 'text-white/40'
+                  active ? 'text-brand-accent-300' : 'text-white/40'
                 }`}
               >
                 {link.icon}

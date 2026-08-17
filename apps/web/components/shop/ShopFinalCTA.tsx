@@ -22,7 +22,7 @@ export function ShopFinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6 }}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4"
         >
           Not sure where to start?
         </motion.p>

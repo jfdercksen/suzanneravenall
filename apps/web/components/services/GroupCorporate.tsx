@@ -74,7 +74,7 @@ export default function GroupCorporate() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-16">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
             Group &amp; Corporate
           </p>
           <h2
@@ -126,7 +126,7 @@ export default function GroupCorporate() {
         </div>
 
         <div className="mt-16 rounded-card bg-brand-primary-900 p-10 lg:p-14 text-white">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
             For Teams &amp; Organisations
           </p>
           <h3 className="text-2xl lg:text-4xl font-light mb-6 leading-tight">

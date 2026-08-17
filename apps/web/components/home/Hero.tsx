@@ -105,7 +105,7 @@ export default function Hero() {
           {/* Name */}
           <motion.p
             {...fadeUp(0)}
-            className="text-brand-accent text-sm lg:text-base font-medium tracking-[0.3em] uppercase mb-2"
+            className="text-brand-accent-400 text-sm lg:text-base font-medium tracking-[0.3em] uppercase mb-2"
           >
             Dr. Suzanne Ravenall
           </motion.p>
@@ -124,7 +124,7 @@ export default function Hero() {
             {...fadeUp(0.25)}
             className="text-4xl lg:text-6xl font-display text-white leading-[1.05] mb-4 lg:mb-6"
           >
-            It&apos;s not you, <span className="text-brand-accent">it&apos;s your pattern</span>
+            It&apos;s not you, <span className="text-brand-accent-400">it&apos;s your pattern</span>
           </motion.h1>
 
           {/* Subheadline */}

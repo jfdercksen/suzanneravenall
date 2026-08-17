@@ -27,6 +27,11 @@ const baseData: MembershipEmailData = {
 describe('sendMembershipWelcomeEmail', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // The send function fails loudly without an API key; stub it so tests
+    // don't depend on the developer's local .env
+    vi.stubEnv('RESEND_API_KEY', 'test_resend_key')
+    // Send functions now sign an unsubscribe link per recipient
+    vi.stubEnv('EMAIL_UNSUBSCRIBE_SECRET', 'test-unsubscribe-secret')
   })
 
   it('returns the emailId string on success', async () => {

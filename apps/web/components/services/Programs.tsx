@@ -124,7 +124,7 @@ export default function Programs() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-20">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
             Practitioner &amp; Self-Study Programmes
           </p>
           <h2
@@ -163,7 +163,7 @@ export default function Programs() {
                 className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
               />
               <div className="relative z-10 flex flex-col h-full p-8 lg:p-10">
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
                   {col.eyebrow}
                 </p>
                 <h3 className="text-2xl lg:text-3xl font-light text-white leading-tight mb-6">
@@ -176,7 +176,7 @@ export default function Programs() {
                 <ul className="space-y-3 mb-10 flex-1">
                   {col.programmes.map((p) => (
                     <li key={p.name} className="flex items-start gap-2">
-                      <span aria-hidden="true" className="mt-0.5 text-brand-accent text-xs shrink-0">→</span>
+                      <span aria-hidden="true" className="mt-0.5 text-brand-accent-400 text-xs shrink-0">→</span>
                       <span className="text-sm font-medium text-white/85 leading-snug">
                         {p.name}
                       </span>

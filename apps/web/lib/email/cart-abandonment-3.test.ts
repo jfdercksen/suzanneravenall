@@ -28,6 +28,8 @@ const baseData: CartEmailData = {
 describe('sendCartAbandonmentEmail3', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // Send functions now sign an unsubscribe link per recipient
+    vi.stubEnv('EMAIL_UNSUBSCRIBE_SECRET', 'test-unsubscribe-secret')
   })
 
   it('returns the emailId string on success', async () => {

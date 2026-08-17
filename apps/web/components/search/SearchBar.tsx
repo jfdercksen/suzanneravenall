@@ -231,7 +231,7 @@ export function SearchBar() {
                           {formatPrice(item.price_zar)}
                         </span>
                       ) : (
-                        <span className="text-xs px-2 py-0.5 bg-brand-accent/20 text-brand-accent rounded-full">
+                        <span className="text-xs px-2 py-0.5 bg-brand-accent/20 text-brand-accent-400 rounded-full">
                           Topic
                         </span>
                       )}

@@ -22,7 +22,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="max-w-3xl mb-16 lg:mb-20"
         >
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
             Suzanne&apos;s Method
           </p>
           <h2
@@ -30,7 +30,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
             className="text-4xl lg:text-6xl font-light text-white leading-tight mb-6"
           >
             How Suzanne works{' '}
-            <span className="text-brand-accent">through this</span>
+            <span className="text-brand-accent-400">through this</span>
           </h2>
           <p className="text-lg text-white/60 font-light leading-relaxed max-w-2xl">
             Using Rapid Repatterning®, we work at the level where patterns are
@@ -77,7 +77,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
                 {/* Step title below node */}
                 <span
                   className={`text-xs uppercase tracking-[0.2em] font-medium text-center leading-tight transition-colors duration-300 px-2
-                    ${activeStep === index ? 'text-brand-accent' : 'text-white/40 group-hover:text-white/60'}`}
+                    ${activeStep === index ? 'text-brand-accent-400' : 'text-white/40 group-hover:text-white/60'}`}
                 >
                   {stage.title}
                 </span>

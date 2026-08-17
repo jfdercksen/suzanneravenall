@@ -66,7 +66,7 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 lg:py-6 flex flex-col lg:flex-row lg:items-start gap-3 lg:gap-8">
-        <p className="flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent lg:pt-3.5">
+        <p className="flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 lg:pt-3.5">
           Browse by category
         </p>
         <div className="flex-1">

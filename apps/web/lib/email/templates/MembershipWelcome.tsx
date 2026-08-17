@@ -10,7 +10,8 @@ import {
   Section,
   Text,
 } from '@react-email/components'
-import type { MembershipEmailData } from '../types'
+import type { MembershipEmailData, MembershipEmailProps } from '../types'
+import { companyPhysicalAddress } from '../company'
 
 const NAVY = '#012B43'
 const BLUE = '#1719F4'
@@ -48,7 +49,8 @@ export default function MembershipWelcome({
   tier,
   tierLabel,
   siteUrl,
-}: MembershipEmailData) {
+  unsubscribeUrl,
+}: MembershipEmailProps) {
   const greeting = firstName ? `Welcome, ${firstName}!` : 'Welcome!'
   const benefits = TIER_BENEFITS[tier] ?? TIER_BENEFITS.free
 
@@ -162,13 +164,12 @@ export default function MembershipWelcome({
           {/* Footer */}
           <Section style={{ backgroundColor: LIGHT_GRAY, padding: '24px 40px', borderTop: '1px solid #e2e8f0' }}>
             <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', margin: '0 0 4px' }}>
-              Ravenall Institute · Cape Town, South Africa
+              Ravenall Institute · {companyPhysicalAddress()}
             </Text>
             <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', margin: 0 }}>
-              {/* TODO: Replace with real unsubscribe link once email management is configured (POPIA compliance) */}
               <a href={`${siteUrl}/portal/account`} style={{ color: MEDIUM_GRAY }}>Manage your membership</a>
               {' · '}
-              <a href={`${siteUrl}/portal/account`} style={{ color: MEDIUM_GRAY }}>Unsubscribe</a>
+              <a href={unsubscribeUrl} style={{ color: MEDIUM_GRAY }}>Unsubscribe</a>
             </Text>
           </Section>
 

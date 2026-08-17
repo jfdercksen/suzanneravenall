@@ -92,7 +92,7 @@ export default function PatternCoachContent() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
             >
               Pattern Intelligence Coach&trade;
             </motion.p>
@@ -104,7 +104,7 @@ export default function PatternCoachContent() {
               className="text-4xl lg:text-6xl font-light text-white leading-tight mb-6"
             >
               A Brilliant Coach in Your Pocket:{' '}
-              <span className="text-brand-accent">24 Hours a Day</span>
+              <span className="text-brand-accent-300">24 Hours a Day</span>
             </motion.h1>
 
             <motion.p
@@ -189,7 +189,7 @@ export default function PatternCoachContent() {
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="mb-16 text-center">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
               What It Does
             </p>
             <h2 className="text-4xl lg:text-6xl font-light text-white">
@@ -208,7 +208,7 @@ export default function PatternCoachContent() {
                 className="bg-gray-900 rounded-card p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
               >
                 <div className="w-12 h-12 rounded-card bg-brand-accent/10 flex items-center justify-center mb-6">
-                  <Icon className="w-6 h-6 text-brand-accent" strokeWidth={1.5} />
+                  <Icon className="w-6 h-6 text-brand-accent-400" strokeWidth={1.5} />
                 </div>
                 <h3 className="text-white text-xl font-semibold mb-3">{title}</h3>
                 <p className="text-white/70 leading-relaxed">{description}</p>
@@ -257,7 +257,7 @@ export default function PatternCoachContent() {
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="max-w-2xl mx-auto text-center">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
               Ready When You Are
             </p>
             <h2 className="text-4xl lg:text-6xl font-light text-white mb-6">

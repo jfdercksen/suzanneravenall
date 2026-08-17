@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { timingSafeEqual, createHash } from 'crypto'
 import { sendOrderConfirmationEmail } from '@/lib/email/order-confirmation'
 import type { OrderEmailData, OrderProductType } from '@/lib/email/types'
+import { logError } from '@/lib/log'
 
 interface MedusaOrderItem {
   id: string
@@ -40,7 +41,7 @@ function verifySecret(provided: string, expected: string): boolean {
 export async function POST(req: NextRequest) {
   const webhookSecret = process.env.N8N_WEBHOOK_SECRET
   if (!webhookSecret) {
-    console.error('[email/order-confirmation] N8N_WEBHOOK_SECRET is not set')
+    logError('[email/order-confirmation] N8N_WEBHOOK_SECRET is not set')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
 
@@ -52,7 +53,7 @@ export async function POST(req: NextRequest) {
   const medusaBase = process.env.MEDUSA_BACKEND_URL ?? 'http://medusa:9000'
   const medusaToken = process.env.MEDUSA_API_TOKEN
   if (!medusaToken) {
-    console.error('[email/order-confirmation] MEDUSA_API_TOKEN is not set')
+    logError('[email/order-confirmation] MEDUSA_API_TOKEN is not set')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
 
@@ -101,8 +102,10 @@ export async function POST(req: NextRequest) {
     }
     if (!res.ok) {
       const detail = await res.text().catch(() => '')
-      console.error(
-        `[email/order-confirmation] Medusa fetch failed for ${orderId}: ${res.status} ${detail.slice(0, 200)}`
+      logError(
+        `[email/order-confirmation] Medusa fetch failed for ${orderId}: ${res.status} ${detail.slice(0, 200)}`,
+        undefined,
+        { orderId, status: res.status }
       )
       return NextResponse.json({ error: 'Failed to fetch order' }, { status: 502 })
     }
@@ -111,13 +114,13 @@ export async function POST(req: NextRequest) {
     order = data.order
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
-    console.error(`[email/order-confirmation] Medusa request error: ${msg}`)
+    logError(`[email/order-confirmation] Medusa request error: ${msg}`, err, { orderId })
     return NextResponse.json({ error: 'Failed to fetch order' }, { status: 502 })
   }
 
   const customerEmail = order.customer?.email
   if (!customerEmail) {
-    console.error(`[email/order-confirmation] order ${orderId} has no customer email — cannot send`)
+    logError(`[email/order-confirmation] order ${orderId} has no customer email — cannot send`, undefined, { orderId })
     return NextResponse.json({ error: 'Order has no customer email' }, { status: 422 })
   }
 
@@ -147,7 +150,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ emailId })
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
-    console.error(`[email/order-confirmation] send failed for ${orderId}: ${msg}`)
+    logError(`[email/order-confirmation] send failed for ${orderId}: ${msg}`, err, { orderId })
     return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
   }
 }

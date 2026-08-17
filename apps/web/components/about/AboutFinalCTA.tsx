@@ -25,7 +25,7 @@ export default function AboutFinalCTA() {
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.p
           {...sectionReveal}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
         >
           Ready to Begin
         </motion.p>

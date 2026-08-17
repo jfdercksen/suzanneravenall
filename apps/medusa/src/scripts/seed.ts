@@ -63,6 +63,10 @@ interface ProductPrice {
 interface ProductVariantInput {
   title: string
   prices: ProductPrice[]
+  // Medusa v2 defaults manage_inventory to true, which breaks complete-cart
+  // when no stock location is linked to the sales channel. All placeholder
+  // products here are digital/service offerings — never track inventory.
+  manage_inventory?: boolean
 }
 
 interface ProductInput {
@@ -553,7 +557,12 @@ async function ensureProducts(
       description: productInput.description,
       status: productInput.status,
       collection_id: collectionId,
-      variants: productInput.variants,
+      // Explicit manage_inventory: false — none of these placeholder products
+      // are capacity-limited (see fix-variant-inventory-flags.ts).
+      variants: productInput.variants.map((v) => ({
+        ...v,
+        manage_inventory: false,
+      })),
     }
 
     console.log(`  Creating product "${productInput.title}"…`)

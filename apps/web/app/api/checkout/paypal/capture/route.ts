@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logError } from '@/lib/log'
 
 interface CaptureRequest {
   orderId: string
@@ -90,7 +91,7 @@ export async function POST(req: NextRequest) {
 
     if (!captureRes.ok) {
       const errBody = (await captureRes.text()).slice(0, 400)
-      console.error('[PayPal] Capture failed', { orderId, status: captureRes.status, body: errBody })
+      logError('[PayPal] Capture failed', undefined, { orderId, status: captureRes.status, body: errBody })
       return NextResponse.json({ error: 'PayPal capture failed' }, { status: 502 })
     }
 
@@ -108,7 +109,7 @@ export async function POST(req: NextRequest) {
     // order but supplies a different victim's cartId to complete a more valuable cart.
     const paypalCartId = captureData.purchase_units?.[0]?.custom_id ?? ''
     if (paypalCartId !== cartId) {
-      console.error('[PayPal] cartId mismatch — possible substitution attack', {
+      logError('[PayPal] cartId mismatch — possible substitution attack', undefined, {
         paypalCartId,
         providedCartId: cartId,
         orderId,
@@ -136,7 +137,7 @@ export async function POST(req: NextRequest) {
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
-    console.error('[PayPal] Capture error', { message })
+    logError('[PayPal] Capture error', err, { message })
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

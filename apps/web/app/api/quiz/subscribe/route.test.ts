@@ -129,7 +129,7 @@ describe('POST /api/quiz/subscribe', () => {
     expect(await res.json()).toMatchObject({ error: "We couldn't send your link — please try again." })
   })
 
-  it('rate-limits after 5 requests from the same IP within the window', async () => {
+  it('rate-limits after 5 requests from the same IP within the window, with a Retry-After header', async () => {
     const ip = '198.51.100.9'
     for (let i = 0; i < 5; i++) {
       const res = await POST(makeRequest(validBody, ip) as never)
@@ -137,5 +137,25 @@ describe('POST /api/quiz/subscribe', () => {
     }
     const limited = await POST(makeRequest(validBody, ip) as never)
     expect(limited.status).toBe(429)
+    const retryAfter = Number(limited.headers.get('Retry-After'))
+    expect(retryAfter).toBeGreaterThanOrEqual(1)
+    expect(retryAfter).toBeLessThanOrEqual(600)
+  })
+
+  it('allows requests again after the 10-minute window resets', async () => {
+    vi.useFakeTimers()
+    try {
+      const ip = '198.51.100.10'
+      for (let i = 0; i < 5; i++) {
+        const res = await POST(makeRequest(validBody, ip) as never)
+        expect(res.status).toBe(200)
+      }
+      expect((await POST(makeRequest(validBody, ip) as never)).status).toBe(429)
+
+      vi.advanceTimersByTime(600_001)
+      expect((await POST(makeRequest(validBody, ip) as never)).status).toBe(200)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })

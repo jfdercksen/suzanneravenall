@@ -28,7 +28,7 @@ export default function PathwaysHero() {
         <div className="max-w-4xl">
           <motion.p
             {...fadeUp(0)}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
           >
             Transformation Pathways
           </motion.p>
@@ -39,7 +39,7 @@ export default function PathwaysHero() {
             className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
           >
             Individual &amp; group pathways for deep, lasting{' '}
-            <span className="text-brand-accent">transformation</span>
+            <span className="text-brand-accent-300">transformation</span>
           </motion.h1>
 
           <motion.p

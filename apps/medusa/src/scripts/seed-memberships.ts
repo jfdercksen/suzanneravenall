@@ -57,6 +57,10 @@ interface ProductOption {
 interface ProductVariantInput {
   title: string
   prices: ProductPrice[]
+  // Memberships are digital subscriptions — never inventory-tracked. Medusa
+  // v2 defaults manage_inventory to true, which breaks complete-cart when no
+  // stock location is linked to the sales channel.
+  manage_inventory?: boolean
   options: Record<string, string>
 }
 
@@ -245,7 +249,12 @@ async function seedMembershipProducts(token: string): Promise<void> {
           status: def.status,
           collection_id: collectionId,
           options: def.options,
-          variants: def.variants,
+          // Explicit manage_inventory: false — memberships are not
+          // capacity-limited (see fix-variant-inventory-flags.ts).
+          variants: def.variants.map((v) => ({
+            ...v,
+            manage_inventory: false,
+          })),
           metadata: def.metadata,
         }),
       },

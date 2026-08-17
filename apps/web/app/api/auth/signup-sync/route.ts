@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { logError } from '@/lib/log'
 
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -106,7 +107,7 @@ export async function POST(request: Request) {
     .single()
 
   if (insertError) {
-    console.error('[signup-sync] insert error:', insertError.message)
+    logError('[signup-sync] insert error:', insertError)
     return NextResponse.json(
       { error: 'Failed to create subscription' },
       { status: 500 }

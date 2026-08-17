@@ -1,5 +1,6 @@
 import { createHash } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
+import { logError, logWarn } from '@/lib/log'
 
 // PayFast sandbox IP ranges (update with production IPs at DNS cutover)
 // Ref: https://developers.payfast.co.za/docs#step_4_confirm_payment
@@ -68,7 +69,7 @@ async function validateWithPayFast(
     const text = (await res.text()).trim()
     return res.ok && text === 'VALID'
   } catch (err) {
-    console.error('[PayFast ITN] Validation endpoint request failed', { err })
+    logError('[PayFast ITN] Validation endpoint request failed', err)
     return false
   }
 }
@@ -105,7 +106,7 @@ async function completeCart(cartId: string): Promise<boolean> {
     })
     return false
   } catch (err) {
-    console.error('[PayFast ITN] completeCart network error', { cartId, err })
+    logError('[PayFast ITN] completeCart network error', err, { cartId })
     return false
   }
 }
@@ -118,7 +119,7 @@ export async function POST(req: NextRequest) {
   // Fail loudly if passphrase env var is missing — an empty passphrase would
   // silently accept forged ITN requests signed without a passphrase.
   if (!passphrase) {
-    console.error('[PayFast ITN] PAYFAST_PASSPHRASE is not set — rejecting all ITN requests')
+    logError('[PayFast ITN] PAYFAST_PASSPHRASE is not set — rejecting all ITN requests')
     return new NextResponse('OK', { status: 200 })
   }
 
@@ -139,7 +140,7 @@ export async function POST(req: NextRequest) {
     rawBody = await req.text()
     itn = Object.fromEntries(new URLSearchParams(rawBody).entries())
   } catch {
-    console.error('[PayFast ITN] Failed to parse body')
+    logError('[PayFast ITN] Failed to parse body')
     return new NextResponse('OK', { status: 200 })
   }
 
@@ -148,7 +149,7 @@ export async function POST(req: NextRequest) {
   // 3. MD5 signature verification
   const expectedSignature = buildSignature(itnWithoutSig, passphrase)
   if (signature !== expectedSignature) {
-    console.error('[PayFast ITN] Signature mismatch', {
+    logError('[PayFast ITN] Signature mismatch', undefined, {
       received: signature,
       expected: expectedSignature,
       m_payment_id: itn.m_payment_id,
@@ -159,7 +160,7 @@ export async function POST(req: NextRequest) {
   // 4. PayFast server-side validation (required by PayFast ITN spec)
   const isValid = await validateWithPayFast(rawBody, isSandbox)
   if (!isValid) {
-    console.error('[PayFast ITN] Server-side validation failed', {
+    logError('[PayFast ITN] Server-side validation failed', undefined, {
       m_payment_id: itn.m_payment_id,
     })
     return new NextResponse('OK', { status: 200 })
@@ -185,11 +186,11 @@ export async function POST(req: NextRequest) {
     console.info('[PayFast ITN] Payment COMPLETE', { cartId, pfPaymentId, amountGross })
     await completeCart(cartId)
   } else if (paymentStatus === 'FAILED' || paymentStatus === 'CANCELLED') {
-    console.warn('[PayFast ITN] Payment not completed', {
+    // Reaches Sentry once the DSN is set (KI001) — a failed payment is a lost sale.
+    logWarn('[PayFast ITN] Payment not completed', undefined, {
       cartId,
       paymentStatus,
     })
-    // TODO (Phase 5): log to Sentry when KI001 is resolved
   }
 
   // PayFast spec: always respond 200

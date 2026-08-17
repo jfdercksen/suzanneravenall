@@ -103,7 +103,7 @@ export default function CommunityContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
                 Community
               </p>
               <h1 className="text-4xl lg:text-6xl font-light text-white mb-6 leading-tight">
@@ -171,7 +171,7 @@ export default function CommunityContent() {
             >
               <Link
                 href="/portal/dashboard"
-                className="inline-flex items-center gap-2 text-brand-accent hover:text-white font-semibold transition-colors duration-300 group"
+                className="inline-flex items-center gap-2 text-brand-accent-300 hover:text-white font-semibold transition-colors duration-300 group"
               >
                 <svg
                   aria-hidden="true"
@@ -250,7 +250,7 @@ export default function CommunityContent() {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
               What&apos;s coming
             </p>
             <h2 className="text-3xl lg:text-5xl font-light text-white">
@@ -268,7 +268,7 @@ export default function CommunityContent() {
                 transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
                 className="p-6 bg-gray-900 rounded-card"
               >
-                <div className="w-10 h-10 rounded-card bg-brand-accent/10 flex items-center justify-center text-brand-accent mb-4">
+                <div className="w-10 h-10 rounded-card bg-brand-accent/10 flex items-center justify-center text-brand-accent-400 mb-4">
                   {feature.icon}
                 </div>
                 <h3 className="text-white font-semibold mb-2">{feature.title}</h3>

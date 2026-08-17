@@ -54,7 +54,7 @@ export default function ResourcesFeaturedAwards() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6 }}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4"
         >
           Recognition
         </motion.p>
@@ -79,7 +79,7 @@ export default function ResourcesFeaturedAwards() {
           >
             <Link
               href="/resources/awards"
-              className="inline-flex items-center gap-2 text-sm font-medium text-brand-accent hover:gap-3 transition-all duration-300"
+              className="inline-flex items-center gap-2 text-sm font-medium text-brand-accent-400 hover:gap-3 transition-all duration-300"
             >
               See all awards <ArrowRight size={16} />
             </Link>
@@ -100,17 +100,17 @@ export default function ResourcesFeaturedAwards() {
               className="bg-gray-900 rounded-card p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group"
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="flex items-center justify-center w-12 h-12 rounded-card bg-brand-accent/10 text-brand-accent group-hover:bg-brand-accent/20 transition-colors duration-300">
+                <div className="flex items-center justify-center w-12 h-12 rounded-card bg-brand-accent/10 text-brand-accent-400 group-hover:bg-brand-accent/20 transition-colors duration-300">
                   <Award size={22} />
                 </div>
-                <span className="text-3xl font-light text-brand-accent">{award.year}</span>
+                <span className="text-3xl font-light text-brand-accent-400">{award.year}</span>
               </div>
 
               <h3 className="text-lg font-semibold text-white mb-2 leading-snug">
                 {award.name}
               </h3>
 
-              <p className="text-sm font-medium text-brand-accent mb-4">{award.organisation}</p>
+              <p className="text-sm font-medium text-brand-accent-400 mb-4">{award.organisation}</p>
 
               <p className="text-sm text-white/60 font-light leading-relaxed">{award.description}</p>
             </motion.div>

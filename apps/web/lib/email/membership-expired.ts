@@ -1,6 +1,7 @@
 import { createElement } from 'react'
 import { Resend } from 'resend'
 import MembershipExpired from './templates/MembershipExpired'
+import { buildListUnsubscribeHeaders, buildUnsubscribeUrl } from './unsubscribe'
 import type { MembershipEmailData } from './types'
 
 export type { MembershipEmailData }
@@ -23,7 +24,8 @@ export async function sendMembershipExpiredEmail(data: MembershipEmailData): Pro
     to: [data.email],
     replyTo: REPLY_TO,
     subject,
-    react: createElement(MembershipExpired, data),
+    headers: buildListUnsubscribeHeaders(data.email),
+    react: createElement(MembershipExpired, { ...data, unsubscribeUrl: buildUnsubscribeUrl(data.email) }),
   })
 
   if (error) throw new Error(`Resend error: ${error.message}`)

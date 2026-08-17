@@ -105,7 +105,7 @@ export function VariantSelector({
     <div className="space-y-8">
       {hasMultipleVariants && (
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+          <p className={`text-xs uppercase tracking-[0.3em] font-medium ${dark ? 'text-brand-accent-300' : 'text-brand-accent'} mb-4`}>
             Choose Your Programme
           </p>
           <div className="flex flex-wrap gap-3">
@@ -119,7 +119,7 @@ export function VariantSelector({
                     isSelected
                       ? 'bg-brand-accent-600 text-white border-brand-accent-600'
                       : dark
-                        ? 'border-white/30 text-white/80 hover:border-brand-accent hover:text-brand-accent-400 bg-transparent'
+                        ? 'border-white/30 text-white/80 hover:border-brand-accent hover:text-brand-accent-300 bg-transparent'
                         : 'border-gray-300 text-gray-700 hover:border-brand-accent hover:text-brand-accent bg-transparent'
                   }`}
                 >
@@ -143,7 +143,7 @@ export function VariantSelector({
           </p>
         )}
         {spots !== null && !spots.soldOut && (
-          <p className="mt-2 text-sm font-medium text-brand-accent-400">
+          <p className={`mt-2 text-sm font-medium ${dark ? 'text-brand-accent-300' : 'text-brand-accent'}`}>
             Only {spots.spotsRemaining} spot{spots.spotsRemaining === 1 ? '' : 's'} left for this
             cohort
           </p>
@@ -191,7 +191,7 @@ export function VariantSelector({
           {buttonState === 'added' ? (
             <Link
               href="/cart"
-              className={`text-sm font-medium underline underline-offset-4 transition-colors duration-200 ${dark ? 'text-brand-accent hover:text-white' : 'text-brand-accent hover:text-brand-primary'}`}
+              className={`text-sm font-medium underline underline-offset-4 transition-colors duration-200 ${dark ? 'text-brand-accent-300 hover:text-white' : 'text-brand-accent hover:text-brand-primary'}`}
             >
               View cart →
             </Link>

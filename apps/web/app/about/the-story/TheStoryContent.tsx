@@ -50,7 +50,7 @@ export default function TheStoryContent() {
           <div className="max-w-3xl">
             <motion.p
               {...fadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
             >
               About: The Story
             </motion.p>
@@ -60,7 +60,7 @@ export default function TheStoryContent() {
               className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
             >
               Before the method, there was a life that had to be{' '}
-              <span className="text-brand-accent">rebuilt</span>.
+              <span className="text-brand-accent-300">rebuilt</span>.
             </motion.h1>
             <motion.p
               {...fadeUp(0.4)}
@@ -121,7 +121,7 @@ export default function TheStoryContent() {
           <div className="max-w-3xl">
             <motion.p
               {...sectionReveal}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
             >
               The Turning Point
             </motion.p>
@@ -215,7 +215,7 @@ export default function TheStoryContent() {
           <div className="max-w-3xl">
             <motion.p
               {...sectionReveal}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
             >
               The Method
             </motion.p>
@@ -315,7 +315,7 @@ export default function TheStoryContent() {
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
             {...sectionReveal}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
           >
             Your Turn
           </motion.p>

@@ -203,7 +203,7 @@ describe('POST /api/quiz/complete', () => {
     expect(mockSendQuizCompletionNotificationEmail).not.toHaveBeenCalled()
   })
 
-  it('rate-limits after 5 requests from the same IP within the window', async () => {
+  it('rate-limits after 5 requests from the same IP within the window, with a Retry-After header', async () => {
     const ip = '203.0.113.50'
     for (let i = 0; i < 5; i++) {
       const res = await POST(makeRequest(validBody, ip) as never)
@@ -211,5 +211,25 @@ describe('POST /api/quiz/complete', () => {
     }
     const limited = await POST(makeRequest(validBody, ip) as never)
     expect(limited.status).toBe(429)
+    const retryAfter = Number(limited.headers.get('Retry-After'))
+    expect(retryAfter).toBeGreaterThanOrEqual(1)
+    expect(retryAfter).toBeLessThanOrEqual(600)
+  })
+
+  it('allows requests again after the 10-minute window resets', async () => {
+    vi.useFakeTimers()
+    try {
+      const ip = '203.0.113.51'
+      for (let i = 0; i < 5; i++) {
+        const res = await POST(makeRequest(validBody, ip) as never)
+        expect(res.status).toBe(200)
+      }
+      expect((await POST(makeRequest(validBody, ip) as never)).status).toBe(429)
+
+      vi.advanceTimersByTime(600_001)
+      expect((await POST(makeRequest(validBody, ip) as never)).status).toBe(200)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })

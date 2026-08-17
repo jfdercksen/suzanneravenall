@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { useCart } from '@/lib/cart'
 import { getSpotsInfo, isLiveVariantTitle } from '@/lib/inventory/spots'
 import { isCapacityLimitedHandle } from '@/lib/inventory/group-sessions'
+import { getHighlightBadge } from '@/data/shopHighlights'
 import type { MedusaProduct, ProductVariant } from '@/types/medusa'
 
 const CATEGORY_IMAGE_MAP: Record<string, string> = {
@@ -184,6 +185,9 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
   const badge =
     getRealSpotsBadge(product.handle, product.variants) ??
     getDeliveryBadge(product.handle, product.title)
+  // Decision-guidance badge (launch audit item 15) — data-driven, renders
+  // nothing unless the product is explicitly flagged (see data/shopHighlights.ts).
+  const highlight = getHighlightBadge(product)
   const leafCategory = product.categories[0] ?? null
   const rootCategory = getRootCategory(product.categories, allCategories)
 
@@ -213,6 +217,13 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
             />
             {/* Change 3: Overlay starts light (image is vivid), darkens on hover */}
             <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-300" />
+            {/* Decision-guidance badge — absolutely positioned over the image so
+                unflagged cards keep an identical layout (no shift). */}
+            {highlight && (
+              <span className="absolute top-3 left-3 text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-brand-accent-600 text-white shadow-lg">
+                {highlight.label}
+              </span>
+            )}
           </div>
 
           <div className="p-6 flex flex-col gap-3">

@@ -11,6 +11,7 @@ import {
   Text,
 } from '@react-email/components'
 import type { QuizInviteEmailData } from '../types'
+import { companyPhysicalAddress } from '../company'
 
 const NAVY = '#012B43'
 const BLUE = '#1719F4'
@@ -80,7 +81,7 @@ export default function QuizInvite({ firstName, quizTitle, link }: QuizInviteEma
 
           <Section style={{ backgroundColor: LIGHT_GRAY, padding: '24px 40px', borderTop: '1px solid #e2e8f0' }}>
             <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', margin: 0 }}>
-              Ravenall Institute · Cape Town, South Africa
+              Ravenall Institute · {companyPhysicalAddress()}
             </Text>
           </Section>
 

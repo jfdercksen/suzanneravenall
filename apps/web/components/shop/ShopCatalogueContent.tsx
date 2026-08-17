@@ -9,6 +9,7 @@ import { ProductGridSkeleton } from './ProductGridSkeleton'
 import { ShopHeroBanner } from './ShopHeroBanner'
 import { ShopPagination } from './ShopPagination'
 import { ShopFinalCTA } from './ShopFinalCTA'
+import { getHighlightBadge } from '@/data/shopHighlights'
 import type { MedusaProduct } from '@/types/medusa'
 import type { ProductSearchHit } from '@/lib/search/types'
 
@@ -52,7 +53,12 @@ function sortProducts(products: MedusaProduct[], sort: SortOption, currency: str
   if (sort === 'price_desc') {
     return [...products].sort((a, b) => getLowestPriceForSort(b, currency) - getLowestPriceForSort(a, currency))
   }
-  return products
+  // Featured (default): highlighted products first, otherwise preserve the
+  // store's own order (Array.prototype.sort is stable). No-op when nothing
+  // is flagged — see data/shopHighlights.ts.
+  return [...products].sort(
+    (a, b) => (getHighlightBadge(a) === null ? 1 : 0) - (getHighlightBadge(b) === null ? 1 : 0)
+  )
 }
 
 function getCategoryAndDescendantIds(
@@ -133,7 +139,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
         limit: String(PAGE_SIZE),
         offset: String(page * PAGE_SIZE),
         fields:
-          'id,handle,title,description,thumbnail,*variants,*variants.prices,+variants.inventory_quantity,*categories,*collection',
+          'id,handle,title,description,thumbnail,metadata,*variants,*variants.prices,+variants.inventory_quantity,*categories,*collection',
       })
 
       if (filters.categoryId) {

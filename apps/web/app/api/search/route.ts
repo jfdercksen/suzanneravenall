@@ -6,6 +6,7 @@ import type {
   SearchResultItem,
   SearchIndex,
 } from '@/lib/search/types'
+import { logError } from '@/lib/log'
 import { sanitizeHighlight } from '@/lib/search/utils'
 
 const MEILI_HOST = process.env.MEILISEARCH_HOST ?? 'http://meilisearch:7700'
@@ -116,7 +117,7 @@ export async function GET(req: NextRequest) {
   }
 
   if (!MEILI_KEY) {
-    console.error('[api/search] MEILISEARCH_ADMIN_KEY is not set')
+    logError('[api/search] MEILISEARCH_ADMIN_KEY is not set')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
 
@@ -146,7 +147,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ results, query: q })
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
-    console.error(`[api/search] query failed: ${msg}`)
+    logError(`[api/search] query failed: ${msg}`, err)
     return NextResponse.json({ error: 'Search unavailable' }, { status: 503 })
   }
 }

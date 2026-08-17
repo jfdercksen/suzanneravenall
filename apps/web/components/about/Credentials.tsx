@@ -127,7 +127,7 @@ function AnimatedStat({ target, suffix, label, delay }: {
       transition={{ duration: 0.6, delay, ease: 'easeOut' as const }}
       className="border-t border-white/15 pt-6 min-w-[140px]"
     >
-      <p className="text-5xl lg:text-6xl font-light text-brand-accent mb-2">
+      <p className="text-5xl lg:text-6xl font-light text-brand-accent-300 mb-2">
         {count.toLocaleString()}{suffix}
       </p>
       <p className="text-white/60 text-sm tracking-widest uppercase">
@@ -140,7 +140,7 @@ function AnimatedStat({ target, suffix, label, delay }: {
 function QualificationGroup({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
-      <h3 className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+      <h3 className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
         {title}
       </h3>
       <ul className="space-y-2">
@@ -166,7 +166,7 @@ export default function Credentials() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           {...sectionReveal}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
         >
           Credentials &amp; Expertise
         </motion.p>
@@ -245,7 +245,7 @@ export default function Credentials() {
               <div className="space-y-10">
                 <QualificationGroup title="Additional Training" items={additionalTraining} />
                 <div>
-                  <h3 className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+                  <h3 className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
                     Memberships
                   </h3>
                   <p className="text-white/70 text-sm font-light leading-relaxed">{memberships}</p>

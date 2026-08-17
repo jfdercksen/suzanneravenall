@@ -24,7 +24,7 @@ export default function ServicesFinalCTA() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
         >
           Your Next Step
         </motion.p>

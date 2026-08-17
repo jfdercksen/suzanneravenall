@@ -59,7 +59,7 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
                 {post.tags.map((t) => (
                   <span
                     key={t.id}
-                    className="text-xs uppercase tracking-[0.2em] font-medium text-brand-accent"
+                    className="text-xs uppercase tracking-[0.2em] font-medium text-brand-accent-300"
                   >
                     {t.tag}
                   </span>

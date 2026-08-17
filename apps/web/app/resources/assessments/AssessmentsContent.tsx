@@ -30,7 +30,7 @@ export default function AssessmentsContent() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
               Coming Soon
             </p>
             <h1 className="text-4xl lg:text-6xl font-light text-white mb-6">Assessments</h1>

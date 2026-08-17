@@ -158,7 +158,7 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
             {/* Floating name badge */}
             <div className="absolute bottom-6 left-6 right-6 bg-brand-primary/80 backdrop-blur-sm rounded-card p-4 border border-white/10">
               <p className="text-sm font-medium text-white">Dr. Suzanne Ravenall</p>
-              <p className="text-xs text-brand-accent/80 font-light mt-0.5">
+              <p className="text-xs text-brand-accent-300 font-light mt-0.5">
                 Rapid Repatterning® Specialist
               </p>
             </div>

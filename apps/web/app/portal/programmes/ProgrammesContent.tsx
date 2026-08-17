@@ -15,7 +15,7 @@ type FilterKey = 'All' | 'Live' | 'Self Study' | 'In-Person'
 const FILTERS: FilterKey[] = ['All', 'Live', 'Self Study', 'In-Person']
 
 const DELIVERY_BADGE: Record<string, string> = {
-  Live: 'bg-brand-accent/20 text-brand-accent border border-brand-accent/30',
+  Live: 'bg-brand-accent/20 text-brand-accent-400 border border-brand-accent/30',
   'Self Study': 'bg-green-500/20 text-green-300 border border-green-500/30',
   'In-Person': 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30',
 }
@@ -123,7 +123,7 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
           transition={{ duration: 0.6 }}
           className="mb-10"
         >
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
             Member Portal
           </p>
           <h1 className="text-3xl lg:text-5xl font-light text-white mb-3">My Programmes</h1>
@@ -190,7 +190,7 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
         ) : filtered.length === 0 ? (
           <div className="py-12 text-center">
             <p className="text-white/50">No programmes match the &quot;{activeFilter}&quot; filter.</p>
-            <button onClick={() => setActiveFilter('All')} className="mt-3 text-brand-accent text-sm hover:underline">
+            <button onClick={() => setActiveFilter('All')} className="mt-3 text-brand-accent-300 text-sm hover:underline">
               Show all
             </button>
           </div>

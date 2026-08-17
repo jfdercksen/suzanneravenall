@@ -27,7 +27,7 @@ export default function PatternHubDeeperPositioning() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="space-y-5"
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
               What People Call It
             </p>
             {labeledAs.map((label) => (
@@ -58,7 +58,7 @@ export default function PatternHubDeeperPositioning() {
             </p>
             <p>
               This is the work of{' '}
-              <span className="text-brand-accent font-medium">Rapid Repatterning®</span>
+              <span className="text-brand-accent-300 font-medium">Rapid Repatterning®</span>
               : going beneath the behaviour to the pattern that produces it,
               and changing it at that level.
             </p>

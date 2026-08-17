@@ -1,6 +1,7 @@
 import { createElement } from 'react'
 import { Resend } from 'resend'
 import MembershipWelcome from './templates/MembershipWelcome'
+import { buildListUnsubscribeHeaders, buildUnsubscribeUrl } from './unsubscribe'
 import type { MembershipEmailData } from './types'
 
 export type { MembershipEmailData }
@@ -23,7 +24,8 @@ export async function sendMembershipWelcomeEmail(data: MembershipEmailData): Pro
     to: [data.email],
     replyTo: REPLY_TO,
     subject,
-    react: createElement(MembershipWelcome, data),
+    headers: buildListUnsubscribeHeaders(data.email),
+    react: createElement(MembershipWelcome, { ...data, unsubscribeUrl: buildUnsubscribeUrl(data.email) }),
   })
 
   if (error) throw new Error(`Resend error: ${error.message}`)

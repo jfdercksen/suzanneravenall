@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import { Sparkles, Heart, Zap, Check } from 'lucide-react'
 import Link from 'next/link'
 import type { MedusaProduct } from '@/types/medusa'
+import { productTestimonials } from '@/data/testimonials'
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -37,20 +38,9 @@ const OUTCOME_CARDS = [
   },
 ]
 
-const TESTIMONIALS = [
-  {
-    quote:
-      'I spent years trying to change my patterns through therapy and self-help books. One programme with Dr. Ravenall did more than all of that combined. The shifts were permanent.',
-    name: 'Sarah M.',
-    location: 'Cape Town',
-  },
-  {
-    quote:
-      'The science behind the process gave me confidence it would work, and it did. I went from chronic anxiety to a calm I never thought was possible for me.',
-    name: 'James K.',
-    location: 'Johannesburg',
-  },
-]
+// Testimonial data lives in data/testimonials.ts — the single source of truth.
+// Entries require Dr. Suzanne Ravenall's verified sign-off; while the list is
+// empty the testimonials section below renders nothing.
 
 const FAQ_ITEMS = [
   {
@@ -176,7 +166,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       <section className="w-full bg-gray-950 py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="text-center mb-16">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
               The Shift
             </p>
             <h2 className="text-4xl lg:text-6xl font-light text-white">
@@ -196,7 +186,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                   transition={{ duration: 0.6, delay: i * 0.1 }}
                   className="group relative bg-gray-900 rounded-card p-8 border border-white/5 hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500"
                 >
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-accent/10 text-brand-accent mb-6 group-hover:bg-brand-accent group-hover:text-white transition-all duration-300">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-accent/10 text-brand-accent-400 mb-6 group-hover:bg-brand-accent group-hover:text-white transition-all duration-300">
                     <Icon className="w-5 h-5" />
                   </div>
                   <h3 className="text-xl font-semibold text-white mb-3">{card.title}</h3>
@@ -299,7 +289,9 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         </div>
       </section>
 
-      {/* 5 — Testimonials (dark) */}
+      {/* 5 — Testimonials (dark) — hidden entirely until data/testimonials.ts
+          holds entries verified and signed off by Suzanne */}
+      {productTestimonials.length > 0 && (
       <section className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden">
         {/* Ambient glow */}
         <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -308,17 +300,16 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="text-center mb-16">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
               Client Stories
             </p>
             <h2 className="text-4xl lg:text-5xl font-light text-white">
               Real Results, Real People
             </h2>
-            {/* TODO: Replace with real testimonials — source from Suzanne */}
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {TESTIMONIALS.map((t, i) => (
+            {productTestimonials.map((t, i) => (
               <motion.div
                 key={t.name}
                 initial={{ opacity: 0, y: 20 }}
@@ -328,7 +319,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 className="bg-brand-primary-700 rounded-card p-8 border border-white/10"
               >
                 <p
-                  className="text-6xl font-serif leading-none text-brand-accent mb-4"
+                  className="text-6xl font-serif leading-none text-brand-accent-300 mb-4"
                   aria-hidden="true"
                 >
                   &ldquo;
@@ -337,14 +328,20 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                   {t.quote}
                 </blockquote>
                 <footer className="text-white/70 text-sm font-medium">
-                  {t.name},{' '}
-                  <span className="text-white/40 font-normal">{t.location}</span>
+                  {t.name}
+                  {t.location && (
+                    <>
+                      ,{' '}
+                      <span className="text-white/40 font-normal">{t.location}</span>
+                    </>
+                  )}
                 </footer>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
+      )}
 
       {/* 6 — FAQ Accordion (light) */}
       <section className="w-full bg-white py-20 lg:py-32">
@@ -374,7 +371,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       <section className="w-full bg-brand-primary py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="text-center mb-16">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
               Your next step
             </p>
             <h2 className="text-4xl lg:text-5xl font-light text-white mb-4">
@@ -412,7 +409,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               Not sure which programme is right for you?{' '}
               <Link
                 href="/contact"
-                className="text-brand-accent hover:text-white underline underline-offset-4 transition-colors duration-200"
+                className="text-brand-accent-300 hover:text-white underline underline-offset-4 transition-colors duration-200"
               >
                 Book a free discovery call
               </Link>{' '}

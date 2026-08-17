@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import crypto from 'crypto'
 import { z } from 'zod'
 import { createClient } from '@supabase/supabase-js'
+import { logError } from '@/lib/log'
 
 // Zod schema validates payload before any DB interaction.
 // VideoGuid must be a UUID — prevents an empty/malformed value matching
@@ -27,7 +28,7 @@ type BunnyWebhookPayload = z.infer<typeof BunnyPayloadSchema>
 export async function POST(request: NextRequest) {
   const webhookSecret = process.env.BUNNY_WEBHOOK_SECRET
   if (!webhookSecret) {
-    console.error('[bunny webhook] BUNNY_WEBHOOK_SECRET is not set')
+    logError('[bunny webhook] BUNNY_WEBHOOK_SECRET is not set')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
 
@@ -82,7 +83,7 @@ export async function POST(request: NextRequest) {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   if (!serviceRoleKey || !supabaseUrl) {
-    console.error('[bunny webhook] Supabase env vars are not set')
+    logError('[bunny webhook] Supabase env vars are not set')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
 
@@ -106,7 +107,7 @@ export async function POST(request: NextRequest) {
     .eq('bunny_video_id', payload.VideoGuid)
 
   if (error) {
-    console.error('[bunny webhook] Failed to update video_content:', error)
+    logError('[bunny webhook] Failed to update video_content:', error)
     return NextResponse.json({ error: 'Database update failed' }, { status: 500 })
   }
 

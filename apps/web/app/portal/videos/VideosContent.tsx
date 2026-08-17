@@ -163,7 +163,7 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
       </div>
 
       <div className="flex flex-col flex-1 p-5">
-        <p className="text-xs uppercase tracking-widest text-brand-accent font-medium mb-2">
+        <p className="text-xs uppercase tracking-widest text-brand-accent-300 font-medium mb-2">
           {video.category}
         </p>
         <p className="text-white font-semibold leading-snug mb-2 text-sm">{video.title}</p>
@@ -228,7 +228,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
           transition={{ duration: 0.6 }}
           className="mb-12"
         >
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
             Member Portal
           </p>
           <h1 className="text-4xl lg:text-6xl font-light text-white mb-4">
@@ -308,7 +308,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
           >
             <div className="flex flex-col lg:flex-row lg:items-center gap-8">
               <div className="flex-1">
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
                   Unlock the Library
                 </p>
                 <h2 className="text-2xl lg:text-3xl font-light text-white mb-3">

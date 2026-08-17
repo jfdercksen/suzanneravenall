@@ -181,7 +181,7 @@ const RESOURCE_CATEGORIES: ResourceCategory[] = [
 const TYPE_BADGE: Record<Resource['type'], string> = {
   PDF: 'bg-blue-500/20 text-blue-300',
   Workbook: 'bg-purple-500/20 text-purple-300',
-  Recording: 'bg-brand-accent/20 text-brand-accent',
+  Recording: 'bg-brand-accent/20 text-brand-accent-300',
   Template: 'bg-green-500/20 text-green-300',
   Assessment: 'bg-yellow-500/20 text-yellow-300',
 }
@@ -203,7 +203,7 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
           <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${TYPE_BADGE[resource.type]}`}>
             {resource.type}
           </span>
-          <svg className="w-4 h-4 text-brand-accent opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-4 h-4 text-brand-accent-300 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </div>
@@ -224,7 +224,7 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
           <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${TYPE_BADGE[resource.type]}`}>
             {resource.type}
           </span>
-          <svg className="w-4 h-4 text-brand-accent opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-4 h-4 text-brand-accent-300 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
           </svg>
         </div>
@@ -249,7 +249,7 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
             <p className="text-white/40 text-xs">
               Unlock with{' '}
               {/* TODO: Build /portal/upgrade page */}
-              <Link href="/shop?collection=membership" className="text-brand-accent hover:underline">
+              <Link href="/shop?collection=membership" className="text-brand-accent-400 hover:underline">
                 {tierLabel(minTier)}
               </Link>
             </p>
@@ -293,7 +293,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
             Member Portal
           </p>
           <h1 className="text-4xl lg:text-6xl font-light text-white mb-4">
@@ -322,7 +322,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
                   {!categoryUnlocked && (
                     <Link
                       href="/shop?collection=membership"
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-brand-accent/10 text-brand-accent text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-brand-accent/20 transition-colors"
+                      className="inline-flex items-center gap-1 px-3 py-1 bg-brand-accent/10 text-brand-accent-300 text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-brand-accent/20 transition-colors"
                     >
                       <svg aria-hidden="true" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
@@ -352,7 +352,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
           >
             <div className="flex flex-col lg:flex-row lg:items-center gap-8">
               <div className="flex-1">
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
                   Unlock Everything
                 </p>
                 <h2 className="text-2xl lg:text-3xl font-light text-white mb-3">

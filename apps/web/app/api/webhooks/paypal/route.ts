@@ -3,7 +3,7 @@
  *
  * Events handled:
  *   PAYMENT.CAPTURE.COMPLETED  → complete Medusa cart to create order
- *   PAYMENT.CAPTURE.DENIED     → log the failure (TODO Phase 5: Sentry)
+ *   PAYMENT.CAPTURE.DENIED     → log the failure (console + Sentry via lib/log)
  *
  * Sandbox test steps (run once PayPal sandbox credentials are set):
  *   1. Create a PayPal sandbox buyer account at developer.paypal.com
@@ -18,6 +18,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { logError, logWarn } from '@/lib/log'
 
 interface PayPalWebhookHeaders {
   transmissionId: string
@@ -51,13 +52,13 @@ async function verifyWebhookSignature(
       console.warn('[PayPal Webhook] PAYPAL_WEBHOOK_ID not set — bypassing (local dev only)')
       return 'verified'
     }
-    console.error('[PayPal Webhook] PAYPAL_WEBHOOK_ID not set — rejecting webhook')
+    logError('[PayPal Webhook] PAYPAL_WEBHOOK_ID not set — rejecting webhook')
     return 'forged'
   }
 
   // Validate cert_url before forwarding — prevent SSRF via untrusted certificate origin
   if (!isTrustedCertUrl(headers.certUrl, isSandbox)) {
-    console.error('[PayPal Webhook] cert_url origin not trusted', { certUrl: headers.certUrl })
+    logError('[PayPal Webhook] cert_url origin not trusted', undefined, { certUrl: headers.certUrl })
     return 'forged'
   }
 
@@ -65,7 +66,7 @@ async function verifyWebhookSignature(
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET ?? ''
 
   if (!clientId || !clientSecret) {
-    console.error('[PayPal Webhook] Missing credentials for signature verification')
+    logError('[PayPal Webhook] Missing credentials for signature verification')
     return 'transient_error'
   }
 
@@ -83,7 +84,7 @@ async function verifyWebhookSignature(
     })
 
     if (!tokenRes.ok) {
-      console.error('[PayPal Webhook] OAuth token fetch failed', { status: tokenRes.status })
+      logError('[PayPal Webhook] OAuth token fetch failed', undefined, { status: tokenRes.status })
       return 'transient_error'
     }
 
@@ -107,14 +108,14 @@ async function verifyWebhookSignature(
     })
 
     if (!verifyRes.ok) {
-      console.error('[PayPal Webhook] Verify endpoint returned non-OK', { status: verifyRes.status })
+      logError('[PayPal Webhook] Verify endpoint returned non-OK', undefined, { status: verifyRes.status })
       return 'transient_error'
     }
 
     const result = (await verifyRes.json()) as { verification_status: string }
     return result.verification_status === 'SUCCESS' ? 'verified' : 'forged'
   } catch (err) {
-    console.error('[PayPal Webhook] Signature verification error', err)
+    logError('[PayPal Webhook] Signature verification error', err)
     return 'transient_error'
   }
 }
@@ -151,7 +152,7 @@ async function completeCart(cartId: string): Promise<boolean> {
     })
     return false
   } catch (err) {
-    console.error('[PayPal Webhook] completeCart network error', { cartId, err })
+    logError('[PayPal Webhook] completeCart network error', err, { cartId })
     return false
   }
 }
@@ -172,7 +173,7 @@ export async function POST(req: NextRequest) {
 
   if (verifyResult === 'transient_error') {
     // Return 500 so PayPal retries the event — do not silently drop legitimate events
-    console.error('[PayPal Webhook] Transient verification error — returning 500 for retry', {
+    logError('[PayPal Webhook] Transient verification error — returning 500 for retry', undefined, {
       transmissionId: webhookHeaders.transmissionId,
     })
     return new NextResponse('Verification error', { status: 500 })
@@ -180,7 +181,7 @@ export async function POST(req: NextRequest) {
 
   if (verifyResult === 'forged') {
     // Return 200 so PayPal does not retry a confirmed forgery
-    console.error('[PayPal Webhook] Signature verification failed — confirmed forgery', {
+    logError('[PayPal Webhook] Signature verification failed — confirmed forgery', undefined, {
       transmissionId: webhookHeaders.transmissionId,
     })
     return new NextResponse('OK', { status: 200 })
@@ -198,7 +199,7 @@ export async function POST(req: NextRequest) {
   try {
     event = JSON.parse(rawBody) as typeof event
   } catch {
-    console.error('[PayPal Webhook] Failed to parse body')
+    logError('[PayPal Webhook] Failed to parse body')
     return new NextResponse('OK', { status: 200 })
   }
 
@@ -229,8 +230,8 @@ export async function POST(req: NextRequest) {
     }
   } else if (eventType === 'PAYMENT.CAPTURE.DENIED') {
     const cartId = event.resource?.purchase_units?.[0]?.custom_id ?? event.resource?.id ?? ''
-    console.warn('[PayPal Webhook] PAYMENT.CAPTURE.DENIED', { cartId, resourceId: event.resource?.id })
-    // TODO (Phase 5): log to Sentry when KI001 is resolved
+    // Reaches Sentry once the DSN is set (KI001) — a denied capture is a lost sale.
+    logWarn('[PayPal Webhook] PAYMENT.CAPTURE.DENIED', undefined, { cartId, resourceId: event.resource?.id })
   }
 
   return new NextResponse('OK', { status: 200 })

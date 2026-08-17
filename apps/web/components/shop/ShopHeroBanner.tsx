@@ -34,7 +34,7 @@ export function ShopHeroBanner() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
         >
           Transform Your Life
         </motion.p>
@@ -48,7 +48,7 @@ export function ShopHeroBanner() {
         >
           Your Breakthrough
           <br />
-          <span className="text-brand-accent">Starts Here</span>
+          <span className="text-brand-accent-300">Starts Here</span>
         </motion.h1>
 
         <motion.p

@@ -188,7 +188,7 @@ export default function MobileNav({ links }: MobileNavProps) {
             <Link
               href="/discover-your-pattern"
               onClick={close}
-              className="flex items-center justify-center w-full px-6 py-4 border-2 border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white font-semibold text-lg rounded-button transition-colors duration-150"
+              className="flex items-center justify-center w-full px-6 py-4 border-2 border-brand-accent text-brand-accent-300 hover:bg-brand-accent hover:text-white font-semibold text-lg rounded-button transition-colors duration-150"
             >
               Discover Your Pattern
             </Link>

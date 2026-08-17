@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import VideoTestimonials from '@/components/shared/VideoTestimonials'
+import { spotlightTestimonial } from '@/data/testimonials'
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -285,7 +286,7 @@ export default function TestimonialsContent() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
             {...fadeUp(0)}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
           >
             Testimonials
           </motion.p>
@@ -311,7 +312,11 @@ export default function TestimonialsContent() {
       {/* ── Video testimonials — light (bg-white inside component) ─────── */}
       <VideoTestimonials showViewAllLink={false} />
 
-      {/* ── Results spotlight — dark stats band ────────────────────────── */}
+      {/* ── Results spotlight — dark stats band ──────────────────────────
+          Driven by spotlightTestimonial in data/testimonials.ts (the single
+          source of truth, shared with the homepage TestimonialSpotlight).
+          Hidden entirely until Suzanne signs off a real, verified story. */}
+      {spotlightTestimonial && (
       <section
         aria-labelledby="testimonials-result-heading"
         className="bg-gray-950 py-20 lg:py-32 overflow-hidden"
@@ -326,7 +331,7 @@ export default function TestimonialsContent() {
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, ease: 'easeOut' as const }}
             >
-              <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-3">
+              <p className="text-xs tracking-[0.3em] text-brand-accent-400 uppercase font-medium mb-3">
                 The Numbers Behind the Stories
               </p>
               <h2
@@ -336,20 +341,19 @@ export default function TestimonialsContent() {
                 When the pattern breaks, everything moves
               </h2>
               <div className="text-7xl lg:text-9xl font-light text-white leading-none mb-2">
-                2&times;
+                {spotlightTestimonial.stat}
               </div>
               <p className="text-xl lg:text-2xl text-white/60 font-light uppercase tracking-wider mb-8">
-                Productivity in 6 months
+                {spotlightTestimonial.statLabel}
               </p>
               <div className="w-16 h-px bg-brand-accent mb-8" />
               <p className="text-white/60 text-sm font-light leading-relaxed max-w-sm">
-                Three sessions. One 30-year pattern found and dissolved. A business, and a
-                life, running at double the pace.
+                {spotlightTestimonial.supporting}
               </p>
             </motion.div>
 
             {/* Outcomes — the homepage TestimonialSpotlight already carries the
-                Sarah M. quote and links here, so this band summarises what
+                spotlight quote and links here, so this band summarises what
                 clients consistently report instead of repeating it. */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -357,7 +361,7 @@ export default function TestimonialsContent() {
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' as const }}
             >
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-8">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-8">
                 What Clients Report
               </p>
               <ul className="space-y-6 list-none">
@@ -380,6 +384,7 @@ export default function TestimonialsContent() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── Written testimonials grid — light ──────────────────────────── */}
       <section
@@ -456,7 +461,7 @@ export default function TestimonialsContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
           >
             Your Turn
           </motion.p>

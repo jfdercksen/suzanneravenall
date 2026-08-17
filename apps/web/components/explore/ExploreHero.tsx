@@ -45,7 +45,7 @@ export default function ExploreHero() {
         <div className="max-w-4xl">
           <motion.p
             {...fadeUp(0)}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
           >
             Areas of Focus
           </motion.p>
@@ -56,7 +56,7 @@ export default function ExploreHero() {
             className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
           >
             Every area of your life,{' '}
-            <span className="text-brand-accent">transformed</span>
+            <span className="text-brand-accent-400">transformed</span>
           </motion.h1>
 
           <motion.p

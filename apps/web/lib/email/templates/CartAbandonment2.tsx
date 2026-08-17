@@ -12,7 +12,8 @@ import {
   Section,
   Text,
 } from '@react-email/components'
-import type { CartEmailData } from '../types'
+import type { CartEmailProps } from '../types'
+import { companyPhysicalAddress } from '../company'
 import { formatAmount } from '../utils'
 
 const NAVY = '#012B43'
@@ -26,7 +27,8 @@ export default function CartAbandonment2({
   total,
   cartUrl,
   currency,
-}: CartEmailData) {
+  unsubscribeUrl,
+}: CartEmailProps) {
   const greeting = firstName ? `${firstName},` : 'Friend,'
 
   return (
@@ -141,11 +143,10 @@ export default function CartAbandonment2({
           {/* Footer */}
           <Section style={{ backgroundColor: LIGHT_GRAY, padding: '24px 40px', borderTop: '1px solid #e2e8f0' }}>
             <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', margin: '0 0 4px' }}>
-              Ravenall Institute · Cape Town, South Africa
+              Ravenall Institute · {companyPhysicalAddress()}
             </Text>
             <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', margin: 0 }}>
-              {/* TODO: Replace with real unsubscribe link once email management is configured */}
-              <a href="#" style={{ color: MEDIUM_GRAY }}>Unsubscribe</a> from cart reminder emails
+              <a href={unsubscribeUrl} style={{ color: MEDIUM_GRAY }}>Unsubscribe</a> from cart reminder emails
             </Text>
           </Section>
 

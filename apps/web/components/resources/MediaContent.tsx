@@ -3,57 +3,11 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Newspaper, ArrowRight } from 'lucide-react'
+import { FEATURED_MEDIA_ARTICLES, type MediaArticle } from '@/data/mediaArticles'
 
-const mediaItems = [
-  {
-    outlet: 'Leadership Magazine',
-    type: 'Article',
-    title: 'Leadership Magazine Feature',
-    description:
-      'Dr. Suzanne Ravenall featured in Leadership Magazine, sharing insights on transformational leadership and the science of human potential.',
-    href: 'https://suzanneravenall.com/article-leadership-magazine/',
-  },
-  {
-    outlet: 'CEO Magazine',
-    type: 'Cover Story',
-    title: 'Fast and Furious: Leading at Speed',
-    description:
-      "A CEO Magazine cover story exploring how high-performing leaders drive transformation at pace. Dr. Ravenall's strategies for sustainable execution.",
-    href: 'https://suzanneravenall.com/article-ceo-magazine-cover-story-fast-and-furious/',
-  },
-  {
-    outlet: 'CEO Magazine',
-    type: 'Cover Story',
-    title: 'Execution Excellence',
-    description:
-      'The gap between strategic intention and actual execution, and the mindset shifts that close it. A CEO Magazine cover story.',
-    href: 'https://suzanneravenall.com/article-ceo-magazine-cover-story-execution-excellence/',
-  },
-  {
-    outlet: 'CEO Magazine',
-    type: 'Cover Story',
-    title: 'The Power of Positivity',
-    description:
-      'Dr. Ravenall on how positivity is not naive optimism but a disciplined neurological practice that reshapes outcomes in business and life.',
-    href: 'https://suzanneravenall.com/article-ceo-magzaine-cover-story-power-of-positivity/',
-  },
-  {
-    outlet: 'CEO Magazine',
-    type: 'Article',
-    title: 'B2B Outsourcing: A Human Lens',
-    description:
-      'Applying a human-centred lens to B2B outsourcing decisions: how people patterns determine whether partnerships succeed or fail.',
-    href: 'https://suzanneravenall.com/article-ceo-magazine-b2b-outsourcing/',
-  },
-  {
-    outlet: 'Business Excellence Awards',
-    type: 'Press Release',
-    title: 'Ravenall Institute: Business Excellence Award',
-    description:
-      'Official press release recognising the Ravenall Institute for outstanding contribution to coaching, human development and business excellence.',
-    href: 'https://suzanneravenall.com/article-business-excellence-awards-press-release/',
-  },
-]
+// KI025: entries without an `href` (status 'needs-content-decision') render
+// as unlinked citation cards — never a dead anchor to the old WordPress site.
+const mediaItems = FEATURED_MEDIA_ARTICLES
 
 const containerVariants = {
   hidden: {},
@@ -63,6 +17,50 @@ const containerVariants = {
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
+}
+
+function MediaCard({ item }: { item: MediaArticle }) {
+  const inner = (
+    <>
+      <div className="flex items-center gap-3 mb-5">
+        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-accent/10 text-brand-accent-400 group-hover:bg-brand-accent/20 transition-colors duration-300">
+          <Newspaper size={18} />
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-wider font-medium text-brand-accent-400">
+            {item.type}
+          </p>
+          <p className="text-sm font-semibold text-white">{item.outlet}</p>
+        </div>
+      </div>
+
+      <h3 className="text-base font-semibold text-white mb-3 leading-snug flex-1">
+        {item.title}
+      </h3>
+
+      <p className="text-sm text-gray-400 font-light leading-relaxed">{item.description}</p>
+    </>
+  )
+
+  if (item.href) {
+    return (
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex flex-col bg-gray-900 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 h-full"
+      >
+        {inner}
+        <div className="mt-5 flex items-center gap-2 text-sm font-medium text-brand-accent-400 group-hover:gap-3 transition-all duration-300">
+          <span>Read</span>
+          <ArrowRight size={14} />
+        </div>
+      </a>
+    )
+  }
+
+  // No live destination yet (KI025) — static citation card, no anchor.
+  return <div className="flex flex-col bg-gray-900 rounded-2xl p-6 h-full">{inner}</div>
 }
 
 export default function MediaContent() {
@@ -78,7 +76,7 @@ export default function MediaContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
           >
             Resources
           </motion.p>
@@ -131,37 +129,7 @@ export default function MediaContent() {
           >
             {mediaItems.map((item) => (
               <motion.div key={item.title} variants={cardVariants}>
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex flex-col bg-gray-900 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 h-full"
-                >
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-accent/10 text-brand-accent group-hover:bg-brand-accent/20 transition-colors duration-300">
-                      <Newspaper size={18} />
-                    </div>
-                    <div>
-                      <p className="text-xs uppercase tracking-wider font-medium text-brand-accent">
-                        {item.type}
-                      </p>
-                      <p className="text-sm font-semibold text-white">{item.outlet}</p>
-                    </div>
-                  </div>
-
-                  <h3 className="text-base font-semibold text-white mb-3 leading-snug flex-1">
-                    {item.title}
-                  </h3>
-
-                  <p className="text-sm text-gray-400 font-light leading-relaxed mb-5">
-                    {item.description}
-                  </p>
-
-                  <div className="flex items-center gap-2 text-sm font-medium text-brand-accent group-hover:gap-3 transition-all duration-300">
-                    <span>Read</span>
-                    <ArrowRight size={14} />
-                  </div>
-                </a>
+                <MediaCard item={item} />
               </motion.div>
             ))}
           </motion.div>
@@ -179,7 +147,7 @@ export default function MediaContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4"
           >
             Media Enquiries
           </motion.p>

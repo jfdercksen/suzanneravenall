@@ -320,7 +320,9 @@ describe('POST /api/auth/signup-sync', () => {
       })
 
       await POST(makeRequest({ userId: VALID_UUID }))
-      expect(consoleSpy).toHaveBeenCalledWith('[signup-sync] insert error:', 'db write failed')
+      // KI017: the route now logs the full insert-error object (via lib/log's
+      // logError, which also forwards it to Sentry), not just the message string.
+      expect(consoleSpy).toHaveBeenCalledWith('[signup-sync] insert error:', { message: 'db write failed' })
       consoleSpy.mockRestore()
     })
   })
