@@ -109,11 +109,14 @@ export default function PatternCoachTab() {
                 <BrainIcon size={52} />
               </div>
               <div className="flex flex-col items-center gap-1 text-center">
+                <span className="text-[10px] font-bold text-brand-accent uppercase tracking-wide leading-tight">
+                  24/7 Coaching App
+                </span>
                 <span className="text-[13px] font-black text-brand-primary-900 uppercase tracking-wider leading-tight">
                   BRILLIANT<br />COACH
                 </span>
-                <span className="text-[11px] font-bold text-brand-accent uppercase tracking-wide leading-tight">
-                  IN YOUR<br />POCKET
+                <span className="text-[10px] font-bold text-brand-accent uppercase tracking-wide leading-tight">
+                  Click for<br />Free Trial
                 </span>
               </div>
             </Link>
@@ -156,12 +159,17 @@ export default function PatternCoachTab() {
             <div className="motion-safe:animate-brain-pulse shrink-0">
               <BrainIcon size={36} />
             </div>
-            <span className="text-[11px] font-black text-brand-primary-900 uppercase tracking-wide whitespace-nowrap">
-              BRILLIANT COACH
+            <span className="flex flex-col items-start leading-tight">
+              <span className="text-[9px] font-bold text-brand-accent uppercase tracking-wide whitespace-nowrap">
+                24/7 Coaching App
+              </span>
+              <span className="text-[11px] font-black text-brand-primary-900 uppercase tracking-wide whitespace-nowrap">
+                BRILLIANT COACH
+              </span>
             </span>
             {/* Hidden on the smallest phones so the pill stays well inside a 375px viewport (KI027) */}
             <span className="hidden min-[415px]:inline text-[11px] font-bold text-brand-accent uppercase tracking-wide whitespace-nowrap">
-              IN YOUR POCKET
+              Tap for Free Trial
             </span>
           </Link>
 

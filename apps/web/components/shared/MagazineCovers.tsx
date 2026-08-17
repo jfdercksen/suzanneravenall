@@ -8,25 +8,21 @@ const covers = [
     src: '/images/media/magazine-ceo-cover3.jpg',
     alt: 'Dr. Suzanne Ravenall on the cover of CEO Magazine, third feature edition',
     publication: 'CEO Magazine',
-    rotate: -2,
   },
   {
     src: '/images/media/magazine-ceo-global.jpg',
     alt: 'Dr. Suzanne Ravenall featured on the cover of CEO Global Magazine',
     publication: 'CEO Global',
-    rotate: 1,
   },
   {
     src: '/images/media/magazine-ceo.jpg',
     alt: 'Dr. Suzanne Ravenall on the front cover of CEO Magazine',
     publication: 'CEO Magazine',
-    rotate: -1,
   },
   {
     src: '/images/media/magazine-feature.jpg',
     alt: 'Dr. Suzanne Ravenall magazine cover feature',
     publication: 'Cover Feature',
-    rotate: 2,
   },
 ]
 
@@ -64,8 +60,8 @@ export function MagazineCovers() {
             >
               <motion.div
                 className="relative w-full aspect-[3/4] rounded-card overflow-hidden"
-                animate={{ rotate: cover.rotate, boxShadow: '0 8px 30px rgba(0,0,0,0.15)' }}
-                whileHover={{ rotate: 0, scale: 1.03, y: -6, boxShadow: '0 20px 60px rgba(0,0,0,0.25)' }}
+                animate={{ boxShadow: '0 8px 30px rgba(0,0,0,0.15)' }}
+                whileHover={{ scale: 1.05, y: -6, boxShadow: '0 20px 60px rgba(0,0,0,0.25)' }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
               >
                 <Image

@@ -63,6 +63,9 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # Cold rebuilds (no docker layer cache after `docker system prune -f` below)
+          # can take longer than the appleboy/ssh-action 10m default — give it headroom.
+          command_timeout: 25m
           script: |
             set -euo pipefail
             cd /var/www/suzanneravenall/suzanneravenall

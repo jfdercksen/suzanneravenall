@@ -11,6 +11,13 @@ interface MobileNavProps {
   links: NavLink[]
 }
 
+// Root path only matches itself; every other href also matches its own sub-routes
+// so e.g. /resources stays highlighted on /resources/articles.
+function isActivePath(pathname: string, href: string): boolean {
+  if (href === '/') return pathname === '/'
+  return pathname === href || pathname.startsWith(`${href}/`)
+}
+
 export default function MobileNav({ links }: MobileNavProps) {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
@@ -156,15 +163,21 @@ export default function MobileNav({ links }: MobileNavProps) {
 
           {/* Nav links */}
           <nav aria-label="Mobile navigation" className="flex-1 overflow-y-auto flex flex-col justify-start py-6 px-8 gap-2">
-            {links.map((link) =>
-              link.external ? (
+            {links.map((link) => {
+              const isActive = isActivePath(pathname, link.href)
+              const linkClassName = `flex items-center gap-3 font-semibold text-3xl py-3 border-b transition-colors duration-150 ${
+                isActive
+                  ? 'text-brand-accent-300 border-brand-accent-300'
+                  : 'text-white border-white/10 hover:text-brand-accent-300'
+              }`
+              return link.external ? (
                 <a
                   key={link.label}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={close}
-                  className="flex items-center gap-3 text-white font-semibold text-3xl py-3 border-b border-white/10 hover:text-brand-accent-300 transition-colors duration-150"
+                  className={linkClassName}
                 >
                   {link.label}
                   <ExternalLink size={22} aria-hidden="true" />
@@ -175,12 +188,13 @@ export default function MobileNav({ links }: MobileNavProps) {
                   key={link.label}
                   href={link.href}
                   onClick={close}
-                  className="text-white font-semibold text-3xl py-3 border-b border-white/10 hover:text-brand-accent-300 transition-colors duration-150"
+                  aria-current={isActive ? 'page' : undefined}
+                  className={linkClassName}
                 >
                   {link.label}
                 </Link>
               )
-            )}
+            })}
           </nav>
 
           {/* CTA at bottom */}

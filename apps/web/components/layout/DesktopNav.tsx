@@ -14,6 +14,13 @@ function isNavDivider(child: NavGroupChild): child is NavDivider {
   return 'divider' in child
 }
 
+// Root path only matches itself; every other href also matches its own sub-routes
+// so e.g. /resources stays highlighted on /resources/articles.
+function isActivePath(pathname: string, href: string): boolean {
+  if (href === '/') return pathname === '/'
+  return pathname === href || pathname.startsWith(`${href}/`)
+}
+
 interface DesktopNavProps {
   items: NavItem[]
 }
@@ -56,15 +63,22 @@ export default function DesktopNav({ items }: DesktopNavProps) {
       {items.map((item) => {
         if (isNavGroup(item)) {
           const isOpen = openGroup === item.label
+          const isGroupActive = item.children.some(
+            (child) => !isNavDivider(child) && isActivePath(pathname, child.href)
+          )
           const panelId = `nav-panel-${item.label.toLowerCase().replace(/\s+/g, '-')}`
           return (
             <div key={item.label} className="relative">
               <button
                 type="button"
                 aria-expanded={isOpen}
-                aria-controls={panelId}
                 onClick={() => setOpenGroup(isOpen ? null : item.label)}
-                className="flex items-center gap-1 whitespace-nowrap text-white/90 hover:text-white font-medium text-sm xl:text-[15px] transition-colors duration-150"
+                aria-controls={panelId}
+                className={`flex items-center gap-1 whitespace-nowrap font-medium text-sm xl:text-[15px] transition-colors duration-150 ${
+                  isGroupActive
+                    ? 'text-brand-accent-300 font-semibold'
+                    : 'text-white/90 hover:text-white'
+                }`}
               >
                 {item.label}
                 <svg
@@ -86,12 +100,16 @@ export default function DesktopNav({ items }: DesktopNavProps) {
                       if (isNavDivider(child)) {
                         return <hr key={`divider-${i}`} className="my-1 border-t border-gray-200" />
                       }
+                      const childActive = isActivePath(pathname, child.href)
                       return (
                         <Link
                           key={child.label}
                           href={child.href}
                           onClick={close}
-                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-brand-primary hover:text-white transition-colors duration-150 whitespace-nowrap"
+                          aria-current={childActive ? 'page' : undefined}
+                          className={`block px-4 py-2.5 text-sm hover:bg-brand-primary hover:text-white transition-colors duration-150 whitespace-nowrap ${
+                            childActive ? 'bg-gray-100 text-brand-primary font-semibold' : 'text-gray-700'
+                          }`}
                         >
                           {child.label}
                         </Link>
@@ -120,11 +138,15 @@ export default function DesktopNav({ items }: DesktopNavProps) {
           )
         }
 
+        const isActive = isActivePath(pathname, item.href)
         return (
           <Link
             key={item.label}
             href={item.href}
-            className="whitespace-nowrap text-white/90 hover:text-white font-medium text-sm xl:text-[15px] transition-colors duration-150"
+            aria-current={isActive ? 'page' : undefined}
+            className={`whitespace-nowrap font-medium text-sm xl:text-[15px] transition-colors duration-150 ${
+              isActive ? 'text-brand-accent-300 font-semibold' : 'text-white/90 hover:text-white'
+            }`}
           >
             {item.label}
           </Link>

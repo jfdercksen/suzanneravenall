@@ -74,7 +74,7 @@ export function ShopHeroBanner() {
           ].map(({ value, label }) => (
             <div key={label}>
               <span className="block text-3xl font-bold text-white">{value}</span>
-              <span className="block text-sm text-white/60 mt-0.5">{label}</span>
+              <span className="block text-sm text-white/70 mt-0.5">{label}</span>
             </div>
           ))}
         </motion.div>

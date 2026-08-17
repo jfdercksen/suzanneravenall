@@ -60,7 +60,7 @@ export default function TopicHero({ topic }: { topic: Topic }) {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           aria-label="Breadcrumb"
-          className="mb-12 text-xs uppercase tracking-[0.3em] font-medium text-white/50"
+          className="mb-12 text-xs uppercase tracking-[0.3em] font-medium text-white/70"
         >
           <Link
             href="/explore"

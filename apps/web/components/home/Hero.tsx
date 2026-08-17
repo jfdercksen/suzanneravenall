@@ -140,7 +140,7 @@ export default function Hero() {
           {/* Supporting line — hidden below sm so the CTAs stay above the fold on phones */}
           <motion.p
             {...fadeUp(0.55)}
-            className="hidden sm:block text-sm lg:text-base text-white/60 font-light max-w-xl mb-10"
+            className="hidden sm:block text-sm lg:text-base text-white/70 font-light max-w-xl mb-10"
           >
             Decoding the invisible patterns that shape human potential.
             Introducing Pattern Intelligence™, a new science and way of
