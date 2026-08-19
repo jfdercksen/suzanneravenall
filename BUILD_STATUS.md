@@ -1,9 +1,9 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 5 — QA and Launch
-Current Task: Redesign pass 1 (per Suzanne's 27 Jul feedback) + content-parity QA fixes + native diagnostic quiz build-out (1 of 8 shipped); pre-DNS-cutover items still awaiting Suzanne credentials
-Current Branch: feature/redesign-pass-1
-Last Updated: 2026-08-12
+Current Task: FIX 13 QA sweep DONE (2026-08-19) — all 8 Diagnostic Hub quizzes verified server-side end-to-end, sitewide 60-route pass clean, KI030 inventory fixed on VPS (links repaired + 12-seat levels live), MeiliSearch seeded (KI020), email_unsubscribes migration applied, EMAIL_UNSUBSCRIBE_SECRET + COMPANY_PHYSICAL_ADDRESS set (VAT unset = plain-invoice mode), VAT verified clean (zero tax rates). Reply draft for Suzanne awaiting Johan approval (C:\Johan Brain\drafts\2026-08-19-suzanne-review-reply.md). BLOCKED ON JOHAN: PayFast sandbox checkout (creds in Vaultwarden), Sentry DSNs (KI001), Resend domain decision (quiz emails + contact form dead until verified). NEW: KI034 (USD region pricing), KI035 (contact form silent drop). FIX 12 (pattern-coach trial CTA → old Pocket Coach site) open, needs destination decision.
+Current Branch: main (VPS also on main at 77ef5f9 since 2026-08-19)
+Last Updated: 2026-08-19
 Last Updated By: Claude
 
 ---
@@ -158,7 +158,7 @@ Navigation audit complete — all broken links fixed. Merged from `feature/nav-c
 - [x] KI015 — Supabase hostname fixed in next.config.mjs (mjhwonoekokxyisfljtj.supabase.co)
 - [x] KI018 — PAYFAST_SANDBOX=true + PAYPAL_SANDBOX=true set on VPS (change to false at DNS cutover)
 - [x] KI019 — VPS web container rebuilt (9ff4317/a6088e0) — /about, /contact, /blog, /community, /legal/* all return 200
-- [ ] KI020 — Run MeiliSearch seed script on VPS (node infra/scripts/migrations/seed-meilisearch.js)
+- [x] KI020 — MeiliSearch seeded on VPS 2026-08-19 (98 products + 8 topics, /api/search verified; durable MEDUSA_API_TOKEN for n8n reindex still recommended)
 - [x] KI021 — Social media links updated (Facebook, LinkedIn, Instagram, address, support email) — commit e72122a
 - [x] KI022 — 29 real Wild Apricot membership tiers implemented and seeded (S0211–S0239, access_level 1–10, Supabase migration applied, Medusa seeded) — commit b7fe54a / 78e2038
 
