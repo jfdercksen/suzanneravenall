@@ -91,10 +91,10 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
       </div>
 
       {state === 'error' && (
-        <p className="mt-2 text-red-400 text-xs">{errorMessage}</p>
+        <p className={`mt-2 text-xs ${variant === 'light' ? 'text-red-600' : 'text-red-400'}`}>{errorMessage}</p>
       )}
 
-      <p className={`mt-3 text-xs ${variant === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
+      <p className={`mt-3 text-xs ${variant === 'light' ? 'text-gray-500' : 'text-white/70'}`}>
         Free. No credit card required. Instant access.
       </p>
 

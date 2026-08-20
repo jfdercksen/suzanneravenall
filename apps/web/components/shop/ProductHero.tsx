@@ -34,9 +34,20 @@ export function ProductHero({ product }: ProductHeroProps) {
         </div>
       )}
 
-      {/* Gradient fallback — always rendered, but hidden when thumbnail is present */}
+      {/* Photo fallback — dark heroes must be imagery-backed, never flat colour */}
       {!product.thumbnail && (
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary via-brand-primary-800 to-brand-primary-700" />
+        <div className="absolute inset-0">
+          <Image
+            src="/images/hero-bg-suzanne-ravenall.jpg"
+            alt=""
+            aria-hidden="true"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-brand-primary/75" />
+        </div>
       )}
 
       {/* Content */}
@@ -78,7 +89,7 @@ export function ProductHero({ product }: ProductHeroProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl lg:text-6xl font-light text-white mb-6 max-w-3xl leading-tight"
+          className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white mb-6 max-w-3xl leading-tight"
         >
           {product.title}
         </motion.h1>
@@ -88,7 +99,7 @@ export function ProductHero({ product }: ProductHeroProps) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="text-lg lg:text-xl text-white/70 max-w-2xl leading-relaxed mb-8"
+          className="text-lg lg:text-xl text-white/80 max-w-2xl leading-relaxed mb-8"
         >
           {transformationPromise}
         </motion.p>
@@ -97,7 +108,7 @@ export function ProductHero({ product }: ProductHeroProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-sm text-white/60 italic"
+          className="text-sm text-white/70 italic"
         >
           Join thousands of clients worldwide
         </motion.p>

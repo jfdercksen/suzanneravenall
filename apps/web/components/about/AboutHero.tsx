@@ -34,7 +34,7 @@ export default function AboutHero() {
         <div className="flex flex-col justify-center min-h-[560px] lg:min-h-0 lg:h-full max-w-3xl py-16 lg:py-0">
           <motion.p
             {...fadeUp(0)}
-            className="text-xs tracking-[0.3em] text-brand-accent-400 uppercase font-medium mb-6"
+            className="text-xs tracking-[0.3em] text-white/80 uppercase font-medium mb-6"
           >
             Meet Dr. Suzanne Ravenall
           </motion.p>
@@ -42,15 +42,15 @@ export default function AboutHero() {
           <motion.h1
             id="about-hero-heading"
             {...fadeUp(0.2)}
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
+            className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-8"
           >
             Championing the change in the human condition{' '}
-            <span className="text-brand-accent-400">one person at a time</span>
+            <span className="underline decoration-brand-accent-400 decoration-[6px] underline-offset-8">one person at a time</span>
           </motion.h1>
 
           <motion.p
             {...fadeUp(0.4)}
-            className="text-lg lg:text-xl text-white/75 font-light max-w-xl"
+            className="text-lg lg:text-xl text-white/80 font-light max-w-xl"
           >
             B.Msc. M.Msc. Msc.D.: Transformation &amp; Performance Coach, Speaker,
             and multiple award-winning entrepreneur.

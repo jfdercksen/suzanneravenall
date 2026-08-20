@@ -46,7 +46,7 @@ export default function TopicOverview({ topic }: { topic: Topic }) {
             </p>
             <h2
               id="topic-overview-heading"
-              className="text-4xl lg:text-5xl font-light text-brand-primary leading-tight"
+              className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight"
             >
               {topic.corePrinciple}
             </h2>

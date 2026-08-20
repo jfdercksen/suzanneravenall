@@ -42,17 +42,6 @@ export default function TopicHero({ topic }: { topic: Topic }) {
         className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black/80"
       />
 
-      {/* Brand accent glow — top right */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-48 -right-32 h-[600px] w-[600px] rounded-full bg-brand-accent/8 blur-3xl"
-      />
-      {/* Subtle bottom glow */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-32 left-1/4 h-[400px] w-[400px] rounded-full bg-brand-accent/5 blur-3xl"
-      />
-
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-48">
         {/* Breadcrumb */}
         <motion.nav
@@ -60,16 +49,16 @@ export default function TopicHero({ topic }: { topic: Topic }) {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           aria-label="Breadcrumb"
-          className="mb-12 text-xs uppercase tracking-[0.3em] font-medium text-white/70"
+          className="mb-12 text-xs uppercase tracking-[0.3em] font-medium text-white/80"
         >
           <Link
             href="/explore"
-            className="transition-colors duration-300 hover:text-brand-accent-400"
+            className="transition-colors duration-300 hover:text-white"
           >
             Explore
           </Link>
           <span aria-hidden="true" className="mx-3">/</span>
-          <span className="text-brand-accent-400">{topic.title}</span>
+          <span className="text-white">{topic.title}</span>
         </motion.nav>
 
         <div className="max-w-4xl">
@@ -85,7 +74,7 @@ export default function TopicHero({ topic }: { topic: Topic }) {
           <motion.h1
             id="topic-hero-heading"
             {...fadeUp(0.2)}
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-8"
           >
             {topic.heroHeadline}
           </motion.h1>

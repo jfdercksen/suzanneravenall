@@ -42,7 +42,7 @@ export function MagazineCovers() {
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             Cover Features
           </p>
-          <h2 id="magazine-covers-heading" className="text-4xl lg:text-6xl font-light text-brand-primary">
+          <h2 id="magazine-covers-heading" className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
             Recognised as a leading voice in transformation
           </h2>
         </motion.div>

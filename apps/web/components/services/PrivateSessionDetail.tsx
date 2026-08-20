@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { PrivateSession } from '@/data/privateSessions'
@@ -25,25 +26,15 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
 
   return (
     <main>
-      {/* ── Hero (dark) ─────────────────────────────────────────────────── */}
+      {/* ── Hero (light) ────────────────────────────────────────────────── */}
       <section
         aria-labelledby="session-hero-heading"
-        className="relative w-full overflow-hidden bg-brand-primary"
+        className="relative w-full overflow-hidden bg-white"
       >
-        {/* hero already labelled by #session-hero-heading below */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-primary via-brand-primary-800 to-brand-primary-900"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[500px] rounded-full bg-brand-accent/10 blur-3xl"
-        />
-
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-36">
           <motion.span
             {...fadeUpAnimate(0)}
-            className="inline-flex items-center rounded-button px-4 py-1.5 text-xs uppercase tracking-[0.2em] font-semibold mb-6 bg-brand-accent/15 text-brand-accent-300 border border-brand-accent/30"
+            className="inline-flex items-center rounded-button px-4 py-1.5 text-xs uppercase tracking-[0.2em] font-semibold mb-6 bg-brand-accent/10 text-brand-accent border border-brand-accent/30"
           >
             Private Session
           </motion.span>
@@ -51,14 +42,14 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
           <motion.h1
             id="session-hero-heading"
             {...fadeUpAnimate(0.1)}
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-6"
+            className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-6"
           >
             {session.title}
           </motion.h1>
 
           <motion.p
             {...fadeUpAnimate(0.2)}
-            className="text-lg lg:text-xl text-white/75 font-light max-w-2xl leading-relaxed"
+            className="text-lg lg:text-xl text-gray-600 font-light max-w-2xl leading-relaxed"
           >
             {session.shortDescription}
           </motion.p>
@@ -124,20 +115,29 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
         </div>
       </section>
 
-      {/* ── Book this session (dark) ────────────────────────────────────── */}
+      {/* ── Book this session (dark, photo-backed CTA band) ─────────────── */}
       <section
         aria-labelledby="session-cta-heading"
         className="relative w-full overflow-hidden bg-brand-primary"
       >
+        {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+        <Image
+          src="/images/generated/session-coaching.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-brand-accent/10 blur-3xl"
+          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
         />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-center">
           <motion.h2
             id="session-cta-heading"
             {...fadeUpInView(0)}
-            className="text-3xl lg:text-5xl font-light text-white leading-tight mb-8"
+            className="text-3xl lg:text-5xl font-semibold tracking-tight text-white leading-tight mb-8"
           >
             Ready to begin?
           </motion.h2>
@@ -195,13 +195,13 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
           >
             <Link
               href="/contact"
-              className="text-sm font-medium text-white/70 hover:text-white underline underline-offset-4 transition-colors duration-300"
+              className="text-sm font-medium text-white/80 hover:text-white underline underline-offset-4 transition-colors duration-300"
             >
               Have questions? Get in touch
             </Link>
             <Link
               href="/services"
-              className="text-xs uppercase tracking-[0.2em] text-white/70 hover:text-white/80 transition-colors duration-300"
+              className="text-xs uppercase tracking-[0.2em] text-white/80 hover:text-white transition-colors duration-300"
             >
               ← All Services
             </Link>

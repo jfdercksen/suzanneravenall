@@ -34,7 +34,7 @@ export default function ContactFinalCTA() {
           id="contact-cta-heading"
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
-          className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] mb-6"
+          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-6"
         >
           Not sure where to start?
         </motion.h2>

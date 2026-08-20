@@ -70,20 +70,20 @@ export default function GroupCorporate() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.6 }}
-      className="relative w-full bg-gray-950 py-20 lg:py-32"
+      className="relative w-full bg-gray-50 py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-16">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
             Group &amp; Corporate
           </p>
           <h2
             id="group-heading"
-            className="text-4xl lg:text-6xl font-light text-white leading-tight mb-8"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-8"
           >
             Group Sessions &amp; Corporate Wellness Retreats.
           </h2>
-          <p className="text-lg text-white/70 font-light leading-relaxed">
+          <p className="text-lg text-gray-600 font-light leading-relaxed">
             Through a comfortable, authentic and safe environment, Suzanne runs short
             group series that tackle the key issues affecting most people, getting
             into the unconscious beliefs that disrupt lives and helping participants
@@ -111,13 +111,13 @@ export default function GroupCorporate() {
               />
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+                className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent"
               />
               <div className="relative z-10 p-8">
-                <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-brand-accent-400 transition-colors duration-300">
+                <h3 className="text-xl font-semibold text-white mb-4">
                   {offering.name}
                 </h3>
-                <p className="text-sm text-white/65 font-light leading-relaxed">
+                <p className="text-sm text-white/70 font-light leading-relaxed">
                   {offering.description}
                 </p>
               </div>
@@ -125,14 +125,14 @@ export default function GroupCorporate() {
           ))}
         </div>
 
-        <div className="mt-16 rounded-card bg-brand-primary-900 p-10 lg:p-14 text-white">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+        <div className="mt-16 rounded-card bg-white border border-gray-100 shadow-sm p-10 lg:p-14">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
             For Teams &amp; Organisations
           </p>
-          <h3 className="text-2xl lg:text-4xl font-light mb-6 leading-tight">
+          <h3 className="text-2xl lg:text-4xl font-semibold tracking-tight text-brand-primary mb-6 leading-tight">
             Corporate Wellness Retreats: bespoke programmes for your team.
           </h3>
-          <p className="text-white/70 font-light leading-relaxed mb-8 max-w-3xl">
+          <p className="text-gray-600 font-light leading-relaxed mb-8 max-w-3xl">
             Retreats and in-house series designed around the issues your people carry
             into work every day. {/* [CONFIRM: exact corporate retreat formats, duration, and pricing — scraped page lists offering but no package detail] */}
           </p>

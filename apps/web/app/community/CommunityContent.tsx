@@ -90,11 +90,8 @@ export default function CommunityContent() {
   return (
     <main className="w-full">
 
-      {/* ── Section 1: Hero (dark) ──────────────────────────────────────── */}
-      <section className="relative w-full bg-brand-primary min-h-screen flex items-center py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-          <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
-        </div>
+      {/* ── Section 1: Hero (light) ─────────────────────────────────────── */}
+      <section className="relative w-full bg-gray-50 min-h-screen flex items-center py-20 lg:py-32 overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-3xl">
 
@@ -103,13 +100,13 @@ export default function CommunityContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
                 Community
               </p>
-              <h1 className="text-4xl lg:text-6xl font-light text-white mb-6 leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary mb-6 leading-[1.05]">
                 Your Transformation<br />Community
               </h1>
-              <p className="text-xl text-white/60 mb-12 leading-relaxed max-w-2xl">
+              <p className="text-xl text-gray-600 mb-12 leading-relaxed max-w-2xl">
                 A private space for members to connect, share breakthroughs, and support
                 each other&apos;s journey. Coming soon.
               </p>
@@ -122,16 +119,16 @@ export default function CommunityContent() {
               transition={{ duration: 0.6, delay: 0.15 }}
               className="mb-16"
             >
-              <p className="text-white/80 font-semibold mb-4">
+              <p className="text-brand-primary font-semibold mb-4">
                 Be the first to know when we launch
               </p>
 
               {state === 'success' ? (
-                <div className="flex items-center gap-3 p-4 bg-green-500/10 border border-green-500/30 rounded-card max-w-md">
-                  <svg aria-hidden="true" className="w-5 h-5 text-green-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-card max-w-md">
+                  <svg aria-hidden="true" className="w-5 h-5 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
-                  <p className="text-green-300 text-sm">
+                  <p className="text-green-700 text-sm">
                     You&apos;re on the list. We&apos;ll let you know as soon as the community launches.
                   </p>
                 </div>
@@ -146,7 +143,7 @@ export default function CommunityContent() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
                     disabled={state === 'loading'}
-                    className="flex-1 px-5 py-3.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-white/40 focus:outline-none focus:border-brand-accent transition-colors duration-200 disabled:opacity-60"
+                    className="flex-1 px-5 py-3.5 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-brand-accent transition-colors duration-200 disabled:opacity-60"
                   />
                   <button
                     type="submit"
@@ -159,7 +156,7 @@ export default function CommunityContent() {
               )}
 
               {state === 'error' && errorMessage && (
-                <p className="mt-3 text-red-400 text-sm">{errorMessage}</p>
+                <p className="mt-3 text-red-500 text-sm">{errorMessage}</p>
               )}
             </motion.div>
 
@@ -171,7 +168,7 @@ export default function CommunityContent() {
             >
               <Link
                 href="/portal/dashboard"
-                className="inline-flex items-center gap-2 text-brand-accent-300 hover:text-white font-semibold transition-colors duration-300 group"
+                className="inline-flex items-center gap-2 text-brand-accent hover:text-brand-accent-700 font-semibold transition-colors duration-300 group"
               >
                 <svg
                   aria-hidden="true"
@@ -204,7 +201,7 @@ export default function CommunityContent() {
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               While you wait
             </p>
-            <h2 className="text-3xl lg:text-4xl font-light text-gray-900">
+            <h2 className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary">
               Explore what&apos;s available now
             </h2>
           </motion.div>
@@ -237,11 +234,8 @@ export default function CommunityContent() {
         </div>
       </section>
 
-      {/* ── Section 3: Feature preview (dark) ──────────────────────────── */}
-      <section className="relative w-full bg-gray-950 py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-          <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
-        </div>
+      {/* ── Section 3: Feature preview (light) ─────────────────────────── */}
+      <section className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -250,10 +244,10 @@ export default function CommunityContent() {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               What&apos;s coming
             </p>
-            <h2 className="text-3xl lg:text-5xl font-light text-white">
+            <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary">
               Built for your growth
             </h2>
           </motion.div>
@@ -266,13 +260,13 @@ export default function CommunityContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
-                className="p-6 bg-gray-900 rounded-card"
+                className="p-6 bg-white border border-gray-100 rounded-card"
               >
-                <div className="w-10 h-10 rounded-card bg-brand-accent/10 flex items-center justify-center text-brand-accent-400 mb-4">
+                <div className="w-10 h-10 rounded-card bg-brand-accent/10 flex items-center justify-center text-brand-accent mb-4">
                   {feature.icon}
                 </div>
-                <h3 className="text-white font-semibold mb-2">{feature.title}</h3>
-                <p className="text-white/50 text-sm leading-relaxed">{feature.description}</p>
+                <h3 className="text-brand-primary font-semibold mb-2">{feature.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
               </motion.div>
             ))}
           </div>

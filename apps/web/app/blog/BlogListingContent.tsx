@@ -44,25 +44,19 @@ export function ComingSoonSection() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
         </div>
 
-        {/* Ambient glow */}
-        <div
-          aria-hidden="true"
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-brand-accent/10 blur-[140px]"
-        />
-
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-4">
               Insights & Inspiration
             </p>
-            <h1 className="text-4xl lg:text-6xl font-light text-white mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white mb-6">
               Our Blog is Launching Soon
             </h1>
-            <p className="text-lg text-gray-300 max-w-xl mx-auto mb-10">
+            <p className="text-lg text-white/80 max-w-xl mx-auto mb-10">
               Insights on transformation, pattern mastery, and the science of lasting change.
               Subscribe to be the first to know when we go live.
             </p>
@@ -103,7 +97,7 @@ export function ComingSoonSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] mb-6"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-6"
           >
             Ready to Transform Your Life?
           </motion.h2>
@@ -171,28 +165,22 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
       {/* Hero */}
       <motion.section
         aria-labelledby="blog-hero-heading"
-        className="relative py-20 lg:py-32 bg-brand-primary-900 overflow-hidden"
+        className="relative py-20 lg:py-32 bg-gray-50 overflow-hidden"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Ambient glow */}
-        <div
-          aria-hidden="true"
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-brand-accent/10 blur-[140px]"
-        />
-
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
             Insights & Inspiration
           </p>
           <h1
             id="blog-hero-heading"
-            className="text-4xl lg:text-6xl font-light text-white"
+            className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary"
           >
             The Blog
           </h1>
-          <p className="mt-6 text-lg text-gray-300 max-w-2xl mx-auto">
+          <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
             Science-backed perspectives on transformation, pattern mastery, and the art of
             becoming who you were always meant to be.
           </p>
@@ -288,7 +276,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
 
                     <div className="flex items-center justify-between">
                       {post.publishedAt && (
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-gray-500">
                           {formatDate(post.publishedAt)}
                         </span>
                       )}
@@ -307,14 +295,22 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
         </div>
       </section>
 
-      {/* Final CTA */}
+      {/* Final CTA — dark, photo-backed band */}
       <section
         aria-labelledby="blog-cta-heading"
-        className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
+        className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
       >
+        <Image
+          src="/images/generated/session-coaching.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
         <div
           aria-hidden="true"
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-brand-accent/10 blur-[120px]"
+          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
         />
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -323,7 +319,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-4"
           >
             YOUR NEXT STEP
           </motion.p>
@@ -334,7 +330,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-6"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-6"
           >
             Ready to Transform Your Life?
           </motion.h2>
@@ -344,7 +340,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-gray-300 text-lg font-light leading-relaxed mb-10"
+            className="text-white/80 text-lg font-light leading-relaxed mb-10"
           >
             Book a free discovery call with Dr. Suzanne Ravenall and find your path to lasting change.
           </motion.p>

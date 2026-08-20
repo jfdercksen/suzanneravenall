@@ -22,7 +22,7 @@ const layers = [
 
 export default function PatternHubMethod() {
   return (
-    <section aria-labelledby="pattern-hub-method-heading" className="w-full bg-white py-20 lg:py-32">
+    <section aria-labelledby="pattern-hub-method-heading" className="w-full bg-gray-50 py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -33,11 +33,11 @@ export default function PatternHubMethod() {
         >
           <h2
             id="pattern-hub-method-heading"
-            className="text-3xl lg:text-5xl font-light text-brand-primary leading-tight mb-4"
+            className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-4"
           >
             The Method Behind the Work
           </h2>
-          <p className="text-base lg:text-lg text-gray-500">
+          <p className="text-base lg:text-lg text-gray-600">
             Rapid Repatterning® works at the level where patterns are formed
           </p>
         </motion.div>
@@ -53,7 +53,7 @@ export default function PatternHubMethod() {
             >
               <p className="text-brand-accent font-black text-2xl mb-3">{layer.number}</p>
               <h3 className="text-lg font-semibold text-brand-primary mb-2">{layer.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{layer.description}</p>
+              <p className="text-sm text-gray-600 leading-relaxed">{layer.description}</p>
             </motion.div>
           ))}
         </div>

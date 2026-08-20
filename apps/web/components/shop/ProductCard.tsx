@@ -68,12 +68,12 @@ function getRealSpotsBadge(handle: string, variants: ProductVariant[]): Delivery
   if (spots === null) return null
 
   if (spots.soldOut) {
-    return { label: 'Sold Out', className: 'bg-gray-800 text-gray-400 border border-gray-700' }
+    return { label: 'Sold Out', className: 'bg-gray-100 text-gray-500 border border-gray-200' }
   }
 
   return {
     label: `${spots.spotsRemaining} spot${spots.spotsRemaining === 1 ? '' : 's'} left`,
-    className: 'bg-brand-accent/20 text-brand-accent-400 border border-brand-accent-400',
+    className: 'bg-brand-accent/10 text-brand-accent border border-brand-accent/30',
   }
 }
 
@@ -81,19 +81,19 @@ function getDeliveryBadge(handle: string, title: string): DeliveryBadge {
   const text = `${handle} ${title}`.toLowerCase()
 
   if (text.includes('live-via-zoom') || text.includes(' live')) {
-    return { label: 'Live', className: 'bg-brand-accent/20 text-brand-accent-400 border border-brand-accent-400' }
+    return { label: 'Live', className: 'bg-brand-accent/10 text-brand-accent border border-brand-accent/30' }
   }
   if (text.includes('self-study') || text.includes('self-paced')) {
-    return { label: 'Self Paced', className: 'bg-emerald-900/40 text-emerald-400 border border-emerald-800' }
+    return { label: 'Self Paced', className: 'bg-emerald-50 text-emerald-700 border border-emerald-200' }
   }
   if (text.includes('in-person')) {
-    return { label: 'In-Person', className: 'bg-amber-900/40 text-amber-400 border border-amber-700' }
+    return { label: 'In-Person', className: 'bg-amber-50 text-amber-700 border border-amber-200' }
   }
   if (text.includes('recorded')) {
-    return { label: 'Recorded', className: 'bg-purple-900/40 text-purple-400 border border-purple-800' }
+    return { label: 'Recorded', className: 'bg-purple-50 text-purple-700 border border-purple-200' }
   }
 
-  return { label: 'Session', className: 'bg-gray-800 text-gray-300' }
+  return { label: 'Session', className: 'bg-gray-100 text-gray-600' }
 }
 
 /**
@@ -149,7 +149,7 @@ function PriceDisplay({ variants, currency }: { variants: ProductVariant[]; curr
   const lowest = getLowestPriceForCurrency(variants, currency)
 
   if (!lowest) {
-    return <span className="text-2xl font-light text-white/60">Contact us</span>
+    return <span className="text-2xl font-light text-gray-500">Contact us</span>
   }
 
   const amount = lowest.amount / 100
@@ -158,14 +158,14 @@ function PriceDisplay({ variants, currency }: { variants: ProductVariant[]; curr
 
   if (lowest.currency_code === 'usd') {
     return (
-      <span className="text-2xl font-light text-white">
+      <span className="text-2xl font-semibold tracking-tight text-gray-900">
         {prefix}${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}
       </span>
     )
   }
 
   return (
-    <span className="text-2xl font-light text-white">
+    <span className="text-2xl font-semibold tracking-tight text-gray-900">
       {prefix}R{amount.toLocaleString('en-ZA', { maximumFractionDigits: 0 })}
     </span>
   )
@@ -205,7 +205,7 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
       transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
     >
       <Link href={`/shop/${product.handle}`} className="block group">
-        <div className="bg-gray-900 rounded-card overflow-hidden border border-white/5 hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500">
+        <div className="bg-white rounded-card overflow-hidden border border-gray-100 shadow-sm hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500">
           {/* Change 1: aspect-[4/3] instead of aspect-video for taller, more impactful images */}
           <div className="relative aspect-[4/3] overflow-hidden">
             <Image
@@ -215,8 +215,8 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            {/* Change 3: Overlay starts light (image is vivid), darkens on hover */}
-            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-300" />
+            {/* Neutral overlay — starts light (image is vivid), darkens slightly on hover */}
+            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/25 transition-all duration-300" />
             {/* Decision-guidance badge — absolutely positioned over the image so
                 unflagged cards keep an identical layout (no shift). */}
             {highlight && (
@@ -229,12 +229,12 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
           <div className="p-6 flex flex-col gap-3">
             {/* Change 2: Show root category name (e.g. "Private Sessions"), not the leaf sub-category */}
             {rootCategory && (
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent">
                 {rootCategory.name}
               </p>
             )}
 
-            <h3 className="text-xl font-semibold text-white leading-snug line-clamp-2">
+            <h3 className="text-xl font-semibold text-brand-primary leading-snug line-clamp-2">
               {product.title}
             </h3>
 
@@ -246,7 +246,7 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
             </div>
 
             {/* Change 6: Stronger, action-oriented CTA */}
-            <p className="mt-2 text-sm font-medium text-white/50 group-hover:text-brand-accent-400 transition-colors duration-300">
+            <p className="mt-2 text-sm font-medium text-gray-500 group-hover:text-brand-accent transition-colors duration-300">
               Explore &amp; Enrol →
             </p>
           </div>

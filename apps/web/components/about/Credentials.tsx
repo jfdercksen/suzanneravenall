@@ -125,12 +125,12 @@ function AnimatedStat({ target, suffix, label, delay }: {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.6, delay, ease: 'easeOut' as const }}
-      className="border-t border-white/15 pt-6 min-w-[140px]"
+      className="border-t border-gray-200 pt-6 min-w-[140px]"
     >
-      <p className="text-5xl lg:text-6xl font-light text-brand-accent-300 mb-2">
+      <p className="text-5xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-2">
         {count.toLocaleString()}{suffix}
       </p>
-      <p className="text-white/60 text-sm tracking-widest uppercase">
+      <p className="text-gray-500 text-sm tracking-widest uppercase">
         {label}
       </p>
     </motion.div>
@@ -140,12 +140,12 @@ function AnimatedStat({ target, suffix, label, delay }: {
 function QualificationGroup({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
-      <h3 className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+      <h3 className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
         {title}
       </h3>
       <ul className="space-y-2">
         {items.map((item) => (
-          <li key={item} className="flex gap-3 text-white/70 text-sm font-light leading-relaxed">
+          <li key={item} className="flex gap-3 text-gray-600 text-sm font-light leading-relaxed">
             <span aria-hidden="true" className="mt-2 w-3 h-px bg-brand-accent flex-shrink-0" />
             {item}
           </li>
@@ -161,12 +161,12 @@ export default function Credentials() {
   return (
     <section
       aria-labelledby="credentials-heading"
-      className="bg-brand-primary py-20 lg:py-32"
+      className="bg-gray-50 py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           {...sectionReveal}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
         >
           Credentials &amp; Expertise
         </motion.p>
@@ -175,7 +175,7 @@ export default function Credentials() {
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
           id="credentials-heading"
-          className="text-4xl lg:text-6xl font-light text-white leading-[1.08] max-w-3xl mb-16"
+          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] max-w-3xl mb-16"
         >
           Two decades. Multiple disciplines. One integrated method.
         </motion.h2>
@@ -205,7 +205,7 @@ export default function Credentials() {
                 delay: i * 0.05,
                 ease: 'easeOut' as const,
               }}
-              className="px-5 py-2.5 rounded-full border border-white/20 bg-white/5 text-white/80 text-sm font-light backdrop-blur-sm"
+              className="px-5 py-2.5 rounded-full border border-gray-200 bg-white text-gray-600 text-sm font-light"
             >
               {tag}
             </motion.span>
@@ -219,7 +219,7 @@ export default function Credentials() {
             onClick={() => setShowFullList((open) => !open)}
             aria-expanded={showFullList}
             aria-controls="full-qualifications"
-            className="inline-flex items-center gap-3 text-sm uppercase tracking-widest font-medium text-white/80 hover:text-white border border-white/25 hover:border-white/50 rounded-button px-6 py-3 transition-colors duration-300"
+            className="inline-flex items-center gap-3 text-sm uppercase tracking-widest font-medium text-gray-600 hover:text-brand-primary border border-gray-300 hover:border-brand-primary rounded-button px-6 py-3 transition-colors duration-300"
           >
             {showFullList ? 'Hide full qualifications' : 'View full qualifications & memberships'}
             <svg
@@ -245,10 +245,10 @@ export default function Credentials() {
               <div className="space-y-10">
                 <QualificationGroup title="Additional Training" items={additionalTraining} />
                 <div>
-                  <h3 className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+                  <h3 className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
                     Memberships
                   </h3>
-                  <p className="text-white/70 text-sm font-light leading-relaxed">{memberships}</p>
+                  <p className="text-gray-600 text-sm font-light leading-relaxed">{memberships}</p>
                 </div>
               </div>
             </div>

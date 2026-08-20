@@ -14,11 +14,11 @@ export default function ExploreFinalCTA() {
   return (
     <section
       aria-labelledby="explore-final-cta-heading"
-      className="relative w-full bg-white overflow-hidden"
+      className="relative w-full bg-gray-50 overflow-hidden"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white via-gray-50 to-white"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50"
       />
       <div
         aria-hidden="true"
@@ -36,7 +36,7 @@ export default function ExploreFinalCTA() {
         <motion.h2
           id="explore-final-cta-heading"
           {...fadeUp(0.1)}
-          className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-6 max-w-3xl mx-auto"
+          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-6 max-w-3xl mx-auto"
         >
           Ready to go <span className="text-brand-accent">deeper</span>?
         </motion.h2>

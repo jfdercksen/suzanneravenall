@@ -24,11 +24,11 @@ export default function PatternHubQuizGrid() {
           </p>
           <h2
             id="pattern-hub-quiz-grid-heading"
-            className="text-3xl lg:text-5xl font-light text-brand-primary leading-tight mb-4"
+            className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-4"
           >
             Choose the Diagnostic That Speaks to You
           </h2>
-          <p className="text-base lg:text-lg text-gray-500">
+          <p className="text-base lg:text-lg text-gray-600">
             You don&rsquo;t need to do all of them. Start with the one that
             feels most relevant right now.
           </p>

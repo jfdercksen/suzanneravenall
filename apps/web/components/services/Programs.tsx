@@ -120,20 +120,20 @@ export default function Programs() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.6 }}
-      className="relative w-full bg-gray-950 py-20 lg:py-32"
+      className="relative w-full bg-gray-50 py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-20">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
             Practitioner &amp; Self-Study Programmes
           </p>
           <h2
             id="programs-heading"
-            className="text-4xl lg:text-6xl font-light text-white leading-tight mb-8"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-8"
           >
             Programmes for dramatic change: unlock your super powers now.
           </h2>
-          <p className="text-lg text-white/70 font-light leading-relaxed">
+          <p className="text-lg text-gray-600 font-light leading-relaxed">
             Programmes to transform yourself and others, utilising conscious
             engineering and natural healing practices. Dive deep into the unconscious
             and flip open self mastery, both yours and others’.
@@ -160,13 +160,13 @@ export default function Programs() {
               />
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+                className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent"
               />
               <div className="relative z-10 flex flex-col h-full p-8 lg:p-10">
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-4">
                   {col.eyebrow}
                 </p>
-                <h3 className="text-2xl lg:text-3xl font-light text-white leading-tight mb-6">
+                <h3 className="text-2xl lg:text-3xl font-semibold tracking-tight text-white leading-tight mb-6">
                   {col.title}
                 </h3>
                 <p className="text-sm text-white/70 font-light leading-relaxed mb-8">
@@ -176,7 +176,7 @@ export default function Programs() {
                 <ul className="space-y-3 mb-10 flex-1">
                   {col.programmes.map((p) => (
                     <li key={p.name} className="flex items-start gap-2">
-                      <span aria-hidden="true" className="mt-0.5 text-brand-accent-400 text-xs shrink-0">→</span>
+                      <span aria-hidden="true" className="mt-0.5 text-white/70 text-xs shrink-0">→</span>
                       <span className="text-sm font-medium text-white/85 leading-snug">
                         {p.name}
                       </span>

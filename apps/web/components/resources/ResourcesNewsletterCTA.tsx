@@ -61,7 +61,7 @@ export default function ResourcesNewsletterCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-light text-gray-900 mb-6"
+            className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-6"
           >
             Stay Connected
           </motion.h2>
@@ -140,7 +140,7 @@ export default function ResourcesNewsletterCTA() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-4 text-xs text-gray-400 font-light"
+            className="mt-4 text-xs text-gray-500 font-light"
           >
             No spam. Unsubscribe at any time.
           </motion.p>

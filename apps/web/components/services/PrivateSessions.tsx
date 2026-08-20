@@ -39,7 +39,7 @@ export default function PrivateSessions() {
           </p>
           <h2
             id="private-heading"
-            className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-8"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-8"
           >
             Private Sessions to unlock the root cause, and go beyond it.
           </h2>
@@ -69,18 +69,18 @@ export default function PrivateSessions() {
               />
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+                className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent"
               />
               <div className="relative z-10 flex h-full flex-col p-8">
-                <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-brand-accent-400 transition-colors duration-300">
+                <h3 className="text-xl font-semibold text-white mb-4">
                   {session.title}
                 </h3>
-                <p className="text-sm text-white/65 font-light leading-relaxed">
+                <p className="text-sm text-white/70 font-light leading-relaxed">
                   {session.shortDescription}
                 </p>
                 <Link
                   href={`/services/private-sessions/${session.slug}`}
-                  className="mt-auto pt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-accent-400 transition-colors duration-300 hover:text-white"
+                  className="mt-auto pt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/80 transition-colors duration-300 hover:text-white"
                 >
                   More Information
                   <span

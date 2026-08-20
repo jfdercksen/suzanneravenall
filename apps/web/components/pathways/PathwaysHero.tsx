@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 // Above the fold — entrance uses `animate` (not whileInView).
@@ -15,20 +16,26 @@ export default function PathwaysHero() {
       aria-labelledby="pathways-hero-heading"
       className="relative w-full overflow-hidden bg-brand-primary"
     >
-      <div
+      {/* Background photo + navy scrim — dark heroes carry imagery, never flat colour */}
+      <Image
+        src="/images/generated/explore-transformation.webp"
+        alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-primary via-brand-primary-800 to-brand-primary-900"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center opacity-50"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[500px] rounded-full bg-brand-accent/10 blur-3xl"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-40">
         <div className="max-w-4xl">
           <motion.p
             {...fadeUp(0)}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
           >
             Transformation Pathways
           </motion.p>
@@ -36,10 +43,10 @@ export default function PathwaysHero() {
           <motion.h1
             id="pathways-hero-heading"
             {...fadeUp(0.1)}
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-8"
           >
             Individual &amp; group pathways for deep, lasting{' '}
-            <span className="text-brand-accent-300">transformation</span>
+            <span className="underline decoration-brand-accent-400 decoration-4 underline-offset-8">transformation</span>
           </motion.h1>
 
           <motion.p

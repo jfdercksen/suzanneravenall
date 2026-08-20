@@ -101,7 +101,7 @@ export default function ResourcesCategories() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl lg:text-5xl font-light text-gray-900 mb-12"
+          className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-12"
         >
           Everything in one place
         </motion.h2>

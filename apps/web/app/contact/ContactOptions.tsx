@@ -41,7 +41,7 @@ export default function ContactOptions() {
           id="contact-options-heading"
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
-          className="text-4xl lg:text-5xl font-light text-brand-primary text-center mb-12"
+          className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary text-center mb-12"
         >
           Choose Your Path
         </motion.h2>

@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
@@ -16,15 +17,24 @@ export default function PathwaysQuizCTA() {
       aria-labelledby="pathways-quiz-cta-heading"
       className="relative w-full overflow-hidden bg-brand-primary py-20 lg:py-32"
     >
+      {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+      <Image
+        src="/images/generated/group-coaching-real.webp"
+        alt=""
+        aria-hidden="true"
+        fill
+        sizes="100vw"
+        className="object-cover object-center opacity-50"
+      />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-brand-accent/10 blur-3xl"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
       />
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.p
           {...fadeUp(0)}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
         >
           Find Your Starting Point
         </motion.p>
@@ -32,14 +42,14 @@ export default function PathwaysQuizCTA() {
         <motion.h2
           id="pathways-quiz-cta-heading"
           {...fadeUp(0.1)}
-          className="text-4xl lg:text-6xl font-light text-white leading-tight mb-6"
+          className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-tight mb-6"
         >
           Not sure which pathway is right for you?
         </motion.h2>
 
         <motion.p
           {...fadeUp(0.2)}
-          className="text-lg text-white/70 font-light leading-relaxed mb-10"
+          className="text-lg text-white/80 font-light leading-relaxed mb-10"
         >
           Patterns are personal. Start with the free Pattern Scan at the Pattern
           Diagnostic Hub to reveal the pattern shaping how you respond, a clear

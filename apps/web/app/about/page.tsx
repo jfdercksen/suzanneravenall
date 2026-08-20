@@ -28,6 +28,7 @@ export default function AboutPage() {
       <MagazineCovers />
       <HowItWorks />
       <MediaLogos
+        tone="light"
         quote="&#8220;When we find and disrupt the patterns that keep us stuck, we don&#8217;t just change. We become.&#8221;"
         quoteAttribution="Dr. Suzanne Ravenall"
       />

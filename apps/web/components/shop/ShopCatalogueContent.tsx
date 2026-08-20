@@ -204,18 +204,18 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
 
   return (
     <main className="min-h-screen">
-      {/* 1 — Dark hero */}
+      {/* 1 — Video-backed hero (dark, neutral scrim) */}
       <ShopHeroBanner />
 
-      {/* 2 — Dark sticky filter bar */}
+      {/* 2 — Light sticky filter bar */}
       <CategoryFilterBar
         categories={initialCategories}
         filters={filters}
         onFiltersChange={handleFiltersChange}
       />
 
-      {/* 3 — Light product grid */}
-      <section id="programmes" className="w-full bg-white scroll-mt-48">
+      {/* 3 — Light product grid (gray-50 so white cards read as cards) */}
+      <section id="programmes" className="w-full bg-gray-50 scroll-mt-48">
         {/* Search + sort toolbar */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="relative flex-1 max-w-sm">
@@ -225,7 +225,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
               placeholder="Search programmes…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg pl-9 pr-8 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200 placeholder-gray-400"
+              className="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-lg pl-9 pr-8 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200 placeholder-gray-400"
             />
             {searchQuery && (
               <button
@@ -330,7 +330,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
         </div>
       </section>
 
-      {/* 4 — Dark final CTA */}
+      {/* 4 — Photo-backed final CTA (dark, allowed as CTA band) */}
       <ShopFinalCTA />
     </main>
   )

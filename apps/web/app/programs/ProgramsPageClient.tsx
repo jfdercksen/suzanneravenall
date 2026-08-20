@@ -98,26 +98,26 @@ function DarkProgramCard({ program }: { program: Program }) {
       />
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+        className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent"
       />
       <div className="relative z-10 flex flex-col h-full p-8">
         <div className="flex-1">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-3">
             {CARD_CATEGORY_LABELS[program.category]}
           </p>
-          <h3 className="text-xl font-semibold text-white mb-3 leading-snug group-hover:text-brand-accent-400 transition-colors duration-300">
+          <h3 className="text-xl font-semibold text-white mb-3 leading-snug">
             {program.name}
           </h3>
-          <p className="text-white/65 text-sm font-light leading-relaxed mb-4">
+          <p className="text-white/70 text-sm font-light leading-relaxed mb-4">
             {program.shortDescription}
           </p>
           {price && (
-            <p className="text-brand-accent-400 font-semibold text-lg mb-2">
+            <p className="text-white font-semibold text-lg mb-2">
               {price}
             </p>
           )}
           {program.duration && (
-            <p className="text-xs text-white/40 mb-6">{program.duration}</p>
+            <p className="text-xs text-white/70 mb-6">{program.duration}</p>
           )}
         </div>
         <Link
@@ -203,10 +203,6 @@ export default function ProgramsPageClient() {
           aria-hidden="true"
           className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60"
         />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_theme(colors.brand.accent/15%),_transparent_50%)]"
-        />
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
           <motion.div
@@ -215,12 +211,12 @@ export default function ProgramsPageClient() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6">
               Programmes
             </p>
             <h1
               id="programs-hero-heading"
-              className="text-4xl lg:text-6xl font-light text-white mb-6 leading-tight"
+              className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white mb-6 leading-[1.05]"
             >
               Find Your Path to Transformation
             </h1>
@@ -247,9 +243,9 @@ export default function ProgramsPageClient() {
       </section>
 
       {/* Category navigation — visible at the fold on load, sticky under site header */}
-      <nav aria-label="Programme categories" className="w-full bg-gray-950 py-4 lg:py-6 sticky top-16 lg:top-20 z-40 border-b border-gray-800">
+      <nav aria-label="Programme categories" className="w-full bg-white py-4 lg:py-6 sticky top-16 lg:top-20 z-40 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-8">
-          <p className="flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400">
+          <p className="flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent">
             Browse by category
           </p>
           <div className="flex gap-3 overflow-x-auto pb-1">
@@ -262,7 +258,7 @@ export default function ProgramsPageClient() {
                 className={`flex-shrink-0 px-6 py-3 rounded-full text-base font-medium transition-colors duration-200 ${
                   activeCategory === cat.id
                     ? 'bg-brand-accent text-white shadow-lg shadow-brand-accent/25'
-                    : 'border border-white/25 text-white hover:border-brand-accent hover:bg-white/5'
+                    : 'border border-gray-300 text-gray-600 hover:border-brand-accent hover:text-brand-primary'
                 }`}
               >
                 {cat.label}
@@ -290,7 +286,7 @@ export default function ProgramsPageClient() {
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Practitioner Programmes
             </p>
-            <h2 className="text-4xl lg:text-6xl font-light text-gray-900 mb-4 max-w-2xl">
+            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4 max-w-2xl">
               Train as a Practitioner
             </h2>
             <p className="text-lg text-gray-600 font-light mb-12 max-w-2xl leading-relaxed">
@@ -314,7 +310,7 @@ export default function ProgramsPageClient() {
                   <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
                     Certification Training
                   </p>
-                  <h3 className="text-2xl lg:text-4xl font-semibold text-gray-900 mb-4 leading-snug">
+                  <h3 className="text-2xl lg:text-4xl font-semibold tracking-tight text-gray-900 mb-4 leading-snug">
                     Resonance Repatterning
                   </h3>
                   <p className="text-gray-600 font-light leading-relaxed mb-3">
@@ -366,7 +362,7 @@ export default function ProgramsPageClient() {
                 <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
                   Practitioner Training
                 </p>
-                <h3 className="text-2xl lg:text-4xl font-semibold text-gray-900 mb-4 leading-snug">
+                <h3 className="text-2xl lg:text-4xl font-semibold tracking-tight text-gray-900 mb-4 leading-snug">
                   Energy Clearing
                 </h3>
                 <p className="text-gray-600 font-light leading-relaxed">
@@ -400,7 +396,7 @@ export default function ProgramsPageClient() {
                 <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
                   Practitioner Training
                 </p>
-                <h3 className="text-2xl lg:text-4xl font-semibold text-gray-900 mb-4 leading-snug">
+                <h3 className="text-2xl lg:text-4xl font-semibold tracking-tight text-gray-900 mb-4 leading-snug">
                   Akashic Navigator
                 </h3>
                 <p className="text-gray-600 font-light leading-relaxed">
@@ -426,13 +422,13 @@ export default function ProgramsPageClient() {
         </div>
       </section>
 
-      {/* Self-Study Programmes — bg-gray-950 (DARK) */}
+      {/* Self-Study Programmes — bg-gray-50 (LIGHT) */}
       <section
         id="self-paced"
         ref={(el) => {
           sectionRefs.current['self-paced'] = el
         }}
-        className="w-full bg-gray-950 py-20 lg:py-32 scroll-mt-48 lg:scroll-mt-44"
+        className="w-full bg-gray-50 py-20 lg:py-32 scroll-mt-48 lg:scroll-mt-44"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -441,13 +437,13 @@ export default function ProgramsPageClient() {
             whileInView="visible"
             viewport={{ once: true, margin: '0px' }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Self-Study Programmes
             </p>
-            <h2 className="text-4xl lg:text-6xl font-light text-white mb-4 max-w-2xl">
+            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4 max-w-2xl">
               Learn at Your Own Pace
             </h2>
-            <p className="text-lg text-white/70 font-light mb-12 max-w-2xl leading-relaxed">
+            <p className="text-lg text-gray-600 font-light mb-12 max-w-2xl leading-relaxed">
               All programmes are recorded and you have access for as long as you
               need. Let your journey unfold in a time that is right for you.
             </p>
@@ -484,7 +480,7 @@ export default function ProgramsPageClient() {
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Live Programmes
             </p>
-            <h2 className="text-4xl lg:text-6xl font-light text-gray-900 mb-4 max-w-2xl">
+            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4 max-w-2xl">
               Live with Suzanne via Zoom
             </h2>
             <p className="text-lg text-gray-600 font-light mb-12 max-w-2xl leading-relaxed">
@@ -542,13 +538,13 @@ export default function ProgramsPageClient() {
         </div>
       </section>
 
-      {/* Recorded Group Sessions — bg-gray-950 (DARK) */}
+      {/* Recorded Group Sessions — bg-gray-50 (LIGHT) */}
       <section
         id="group"
         ref={(el) => {
           sectionRefs.current['group'] = el
         }}
-        className="w-full bg-gray-950 py-20 lg:py-32 scroll-mt-48 lg:scroll-mt-44"
+        className="w-full bg-gray-50 py-20 lg:py-32 scroll-mt-48 lg:scroll-mt-44"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -557,13 +553,13 @@ export default function ProgramsPageClient() {
             whileInView="visible"
             viewport={{ once: true, margin: '0px' }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Resonance Repatterning
             </p>
-            <h2 className="text-4xl lg:text-6xl font-light text-white mb-4 max-w-2xl">
+            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4 max-w-2xl">
               Recorded Group Sessions
             </h2>
-            <p className="text-lg text-white/70 font-light mb-4 max-w-2xl leading-relaxed">
+            <p className="text-lg text-gray-600 font-light mb-4 max-w-2xl leading-relaxed">
               These are recorded Resonance Repatterning group session series.
               Through a comfortable, authentic and safe environment, Suzanne runs
               short group series that tackle the key issues affecting most
@@ -571,7 +567,7 @@ export default function ProgramsPageClient() {
               and helping participants go beyond these challenges and into their
               power for inner self mastery.
             </p>
-            <p className="text-white/70 font-light mb-12 max-w-2xl leading-relaxed">
+            <p className="text-gray-600 font-light mb-12 max-w-2xl leading-relaxed">
               Each series was recorded live and carries the same energetic
               benefit: work through it in your own time.
             </p>
@@ -590,22 +586,35 @@ export default function ProgramsPageClient() {
         </div>
       </section>
 
-      {/* Final CTA — bg-brand-primary (DARK) */}
-      <section className="w-full bg-brand-primary py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      {/* Final CTA — DARK (photo-backed CTA band) */}
+      <section className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden">
+        {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+        <Image
+          src="/images/generated/session-coaching.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             variants={sectionVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '0px' }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6">
               Not Sure Where to Start?
             </p>
-            <h2 className="text-4xl lg:text-6xl font-light text-white mb-6">
+            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-white mb-6">
               Not Sure Which Path Is Right for You?
             </h2>
-            <p className="text-lg lg:text-xl text-white/70 font-light mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg lg:text-xl text-white/80 font-light mb-10 max-w-2xl mx-auto leading-relaxed">
               Book a free 30-minute discovery call. No obligation. Suzanne will
               help you identify the programme that best fits where you are and
               where you want to go.

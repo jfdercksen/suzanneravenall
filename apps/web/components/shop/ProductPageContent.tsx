@@ -65,24 +65,24 @@ function getDeliveryBadge(handle: string, title: string = ''): { label: string; 
   if (/live(-via-zoom)?/.test(text) || text.includes(' live'))
     return {
       label: 'Live',
-      className: 'bg-brand-accent/20 text-brand-accent border border-brand-accent',
+      className: 'bg-brand-accent/10 text-brand-accent border border-brand-accent/30',
     }
   if (/self-study|self-paced/.test(text))
     return {
       label: 'Self Paced',
-      className: 'bg-emerald-900/40 text-emerald-400 border border-emerald-800',
+      className: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
     }
   if (/in-person/.test(text))
     return {
       label: 'In-Person',
-      className: 'bg-amber-900/40 text-amber-400 border border-amber-700',
+      className: 'bg-amber-50 text-amber-700 border border-amber-200',
     }
   if (/recorded/.test(text))
     return {
       label: 'Recorded',
-      className: 'bg-purple-900/40 text-purple-400 border border-purple-800',
+      className: 'bg-purple-50 text-purple-700 border border-purple-200',
     }
-  return { label: 'Session', className: 'bg-gray-800 text-gray-300' }
+  return { label: 'Session', className: 'bg-gray-100 text-gray-600' }
 }
 
 interface ProductPageContentProps {
@@ -101,7 +101,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
     product.metadata.thinkific_course_id !== ''
 
   const badge = isThinkificCourse
-    ? { label: 'Self-Paced', className: 'bg-emerald-900/40 text-emerald-400 border border-emerald-800' }
+    ? { label: 'Self-Paced', className: 'bg-emerald-50 text-emerald-700 border border-emerald-200' }
     : getDeliveryBadge(product.handle, product.title)
 
   const includedItems = isThinkificCourse
@@ -162,14 +162,14 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         </div>
       </section>
 
-      {/* 3 — Transformation Promise (dark) */}
-      <section className="w-full bg-gray-950 py-20 lg:py-32">
+      {/* 3 — Transformation Promise (light) */}
+      <section className="w-full bg-gray-50 py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="text-center mb-16">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               The Shift
             </p>
-            <h2 className="text-4xl lg:text-6xl font-light text-white">
+            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
               What You&apos;ll Experience
             </h2>
           </motion.div>
@@ -184,13 +184,13 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '0px' }}
                   transition={{ duration: 0.6, delay: i * 0.1 }}
-                  className="group relative bg-gray-900 rounded-card p-8 border border-white/5 hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500"
+                  className="group relative bg-white rounded-card p-8 border border-gray-100 hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500"
                 >
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-accent/10 text-brand-accent-400 mb-6 group-hover:bg-brand-accent group-hover:text-white transition-all duration-300">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-accent/10 text-brand-accent mb-6 group-hover:bg-brand-accent group-hover:text-white transition-all duration-300">
                     <Icon className="w-5 h-5" />
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-3">{card.title}</h3>
-                  <p className="text-white/60 leading-relaxed">{card.description}</p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">{card.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{card.description}</p>
                 </motion.div>
               )
             })}
@@ -205,7 +205,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Programme Details
             </p>
-            <h2 className="text-4xl lg:text-5xl font-light text-gray-900">
+            <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary">
               Everything You Need to Know
             </h2>
           </motion.div>
@@ -289,21 +289,16 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         </div>
       </section>
 
-      {/* 5 — Testimonials (dark) — hidden entirely until data/testimonials.ts
+      {/* 5 — Testimonials (light) — hidden entirely until data/testimonials.ts
           holds entries verified and signed off by Suzanne */}
       {productTestimonials.length > 0 && (
-      <section className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden">
-        {/* Ambient glow */}
-        <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
-        </div>
-
+      <section className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="text-center mb-16">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Client Stories
             </p>
-            <h2 className="text-4xl lg:text-5xl font-light text-white">
+            <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary">
               Real Results, Real People
             </h2>
           </motion.div>
@@ -316,23 +311,23 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="bg-brand-primary-700 rounded-card p-8 border border-white/10"
+                className="bg-white rounded-card p-8 border border-gray-100"
               >
                 <p
-                  className="text-6xl font-serif leading-none text-brand-accent-300 mb-4"
+                  className="text-6xl font-serif leading-none text-brand-accent mb-4"
                   aria-hidden="true"
                 >
                   &ldquo;
                 </p>
-                <blockquote className="text-white/80 leading-relaxed text-lg mb-6 italic">
+                <blockquote className="text-gray-600 leading-relaxed text-lg mb-6 italic">
                   {t.quote}
                 </blockquote>
-                <footer className="text-white/70 text-sm font-medium">
+                <footer className="text-gray-700 text-sm font-medium">
                   {t.name}
                   {t.location && (
                     <>
                       ,{' '}
-                      <span className="text-white/40 font-normal">{t.location}</span>
+                      <span className="text-gray-500 font-normal">{t.location}</span>
                     </>
                   )}
                 </footer>
@@ -343,14 +338,14 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       </section>
       )}
 
-      {/* 6 — FAQ Accordion (light) */}
-      <section className="w-full bg-white py-20 lg:py-32">
+      {/* 6 — FAQ Accordion (light, gray-50 to alternate with the white details section) */}
+      <section className="w-full bg-gray-50 py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="mb-12">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               FAQ
             </p>
-            <h2 className="text-4xl lg:text-5xl font-light text-gray-900">
+            <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary">
               Frequently Asked Questions
             </h2>
           </motion.div>
@@ -367,17 +362,17 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         </div>
       </section>
 
-      {/* 7 — Final CTA (dark) */}
-      <section className="w-full bg-brand-primary py-20 lg:py-32">
+      {/* 7 — Final CTA (light) */}
+      <section className="w-full bg-white py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="text-center mb-16">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Your next step
             </p>
-            <h2 className="text-4xl lg:text-5xl font-light text-white mb-4">
+            <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-4">
               Ready to Transform?
             </h2>
-            <p className="text-white/60 text-lg max-w-xl mx-auto">
+            <p className="text-gray-600 text-lg max-w-xl mx-auto">
               Choose your programme below and take the first step toward permanent change.
             </p>
           </motion.div>
@@ -394,7 +389,6 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               selectedVariantId={selectedVariantId}
               onSelect={setSelectedVariantId}
               productHandle={product.handle}
-              dark
             />
           </motion.div>
 
@@ -405,11 +399,11 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-center mt-12 space-y-3"
           >
-            <p className="text-white/70 text-sm">
+            <p className="text-gray-600 text-sm">
               Not sure which programme is right for you?{' '}
               <Link
                 href="/contact"
-                className="text-brand-accent-300 hover:text-white underline underline-offset-4 transition-colors duration-200"
+                className="text-brand-accent hover:text-brand-primary underline underline-offset-4 transition-colors duration-200"
               >
                 Book a free discovery call
               </Link>{' '}
@@ -418,7 +412,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             <p>
               <Link
                 href="/shop"
-                className="text-white/30 hover:text-white/60 text-sm transition-colors duration-200"
+                className="text-gray-500 hover:text-brand-primary text-sm transition-colors duration-200"
               >
                 &larr; Back to all programmes
               </Link>

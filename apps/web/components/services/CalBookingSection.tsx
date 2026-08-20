@@ -56,7 +56,7 @@ export default function CalBookingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-6"
+          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
         >
           Ready to begin?
         </motion.h2>

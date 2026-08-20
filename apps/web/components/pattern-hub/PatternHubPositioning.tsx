@@ -16,7 +16,7 @@ const itemVariants = {
 
 export default function PatternHubPositioning() {
   return (
-    <section aria-labelledby="pattern-hub-positioning-heading" className="w-full bg-white py-20 lg:py-32">
+    <section aria-labelledby="pattern-hub-positioning-heading" className="w-full bg-gray-50 py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
           <motion.h2
@@ -25,7 +25,7 @@ export default function PatternHubPositioning() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6 }}
-            className="text-3xl lg:text-5xl font-light text-brand-primary leading-tight mb-8"
+            className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-8"
           >
             You Don&rsquo;t Have a Problem. You Have a Pattern.
           </motion.h2>

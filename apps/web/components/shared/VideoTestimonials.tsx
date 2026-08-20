@@ -46,7 +46,7 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             What Clients Say
           </p>
-          <h2 id="video-testimonials-heading" className="text-4xl lg:text-6xl font-light text-brand-primary mb-4">
+          <h2 id="video-testimonials-heading" className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4">
             Real transformations. Real people.
           </h2>
           <p className="text-gray-500 text-lg font-light max-w-2xl mx-auto">

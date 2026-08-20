@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Newspaper, ArrowRight } from 'lucide-react'
@@ -23,22 +24,22 @@ function MediaCard({ item }: { item: MediaArticle }) {
   const inner = (
     <>
       <div className="flex items-center gap-3 mb-5">
-        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-accent/10 text-brand-accent-400 group-hover:bg-brand-accent/20 transition-colors duration-300">
+        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-accent/10 text-brand-accent group-hover:bg-brand-accent/20 transition-colors duration-300">
           <Newspaper size={18} />
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wider font-medium text-brand-accent-400">
+          <p className="text-xs uppercase tracking-wider font-medium text-brand-accent">
             {item.type}
           </p>
-          <p className="text-sm font-semibold text-white">{item.outlet}</p>
+          <p className="text-sm font-semibold text-brand-primary">{item.outlet}</p>
         </div>
       </div>
 
-      <h3 className="text-base font-semibold text-white mb-3 leading-snug flex-1">
+      <h3 className="text-base font-semibold text-gray-900 mb-3 leading-snug flex-1">
         {item.title}
       </h3>
 
-      <p className="text-sm text-gray-400 font-light leading-relaxed">{item.description}</p>
+      <p className="text-sm text-gray-600 font-light leading-relaxed">{item.description}</p>
     </>
   )
 
@@ -48,10 +49,10 @@ function MediaCard({ item }: { item: MediaArticle }) {
         href={item.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex flex-col bg-gray-900 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 h-full"
+        className="group flex flex-col bg-gray-50 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 h-full"
       >
         {inner}
-        <div className="mt-5 flex items-center gap-2 text-sm font-medium text-brand-accent-400 group-hover:gap-3 transition-all duration-300">
+        <div className="mt-5 flex items-center gap-2 text-sm font-medium text-brand-accent group-hover:gap-3 transition-all duration-300">
           <span>Read</span>
           <ArrowRight size={14} />
         </div>
@@ -60,7 +61,7 @@ function MediaCard({ item }: { item: MediaArticle }) {
   }
 
   // No live destination yet (KI025) — static citation card, no anchor.
-  return <div className="flex flex-col bg-gray-900 rounded-2xl p-6 h-full">{inner}</div>
+  return <div className="flex flex-col bg-gray-50 rounded-2xl p-6 h-full">{inner}</div>
 }
 
 export default function MediaContent() {
@@ -69,14 +70,14 @@ export default function MediaContent() {
       {/* Hero */}
       <section
         aria-labelledby="media-hero-heading"
-        className="w-full bg-brand-primary py-20 lg:py-32"
+        className="w-full bg-gray-50 py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
           >
             Resources
           </motion.p>
@@ -86,7 +87,7 @@ export default function MediaContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.1] max-w-3xl mb-6"
+            className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary leading-[1.05] max-w-3xl mb-6"
           >
             Media &amp; Press
           </motion.h1>
@@ -95,7 +96,7 @@ export default function MediaContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg text-white/70 font-light max-w-xl leading-relaxed"
+            className="text-lg text-gray-600 font-light max-w-xl leading-relaxed"
           >
             Dr. Suzanne Ravenall featured across leading business and leadership publications,
             from CEO Magazine cover stories to international award announcements.
@@ -106,7 +107,7 @@ export default function MediaContent() {
       {/* Media Grid */}
       <section
         aria-labelledby="media-appearances-heading"
-        className="w-full bg-gray-950 py-20 lg:py-32"
+        className="w-full bg-white py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
@@ -115,7 +116,7 @@ export default function MediaContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="text-3xl lg:text-4xl font-light text-white mb-12"
+            className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary mb-12"
           >
             All Media Appearances
           </motion.h2>
@@ -136,18 +137,30 @@ export default function MediaContent() {
         </div>
       </section>
 
-      {/* Press Enquiries CTA */}
+      {/* Press Enquiries CTA — dark, photo-backed band */}
       <section
         aria-labelledby="press-cta-heading"
-        className="w-full bg-brand-primary py-20 lg:py-32"
+        className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <Image
+          src="/images/generated/session-coaching.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-4"
           >
             Media Enquiries
           </motion.p>
@@ -158,7 +171,7 @@ export default function MediaContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-light text-white mb-6"
+            className="text-4xl lg:text-5xl font-semibold tracking-tight text-white mb-6"
           >
             Working on a story?
           </motion.h2>
@@ -168,7 +181,7 @@ export default function MediaContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-white/70 font-light max-w-xl mx-auto mb-10 leading-relaxed"
+            className="text-white/80 font-light max-w-xl mx-auto mb-10 leading-relaxed"
           >
             For media enquiries, interview requests or press kit access, please get in touch.
             Dr. Ravenall is available for comment on topics covering transformation, neuroscience,

@@ -48,7 +48,7 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
           >
             <Link
               href="/blog"
-              className="inline-flex items-center text-sm text-gray-300 hover:text-white transition-colors duration-300 mb-8 group"
+              className="inline-flex items-center text-sm text-white/80 hover:text-white transition-colors duration-300 mb-8 group"
             >
               <span className="mr-2 group-hover:-translate-x-1 transition-transform duration-300">&larr;</span>
               Back to Blog
@@ -59,7 +59,7 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
                 {post.tags.map((t) => (
                   <span
                     key={t.id}
-                    className="text-xs uppercase tracking-[0.2em] font-medium text-brand-accent-300"
+                    className="text-xs uppercase tracking-[0.2em] font-medium text-white/80"
                   >
                     {t.tag}
                   </span>
@@ -67,12 +67,12 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
               </div>
             )}
 
-            <h1 className="text-4xl lg:text-6xl font-light text-white max-w-4xl leading-tight">
+            <h1 className="text-4xl lg:text-6xl font-semibold tracking-tight text-white max-w-4xl leading-tight">
               {post.title}
             </h1>
 
             {(post.author || post.publishedAt) && (
-              <div className="flex items-center gap-4 mt-6 text-gray-300 text-sm">
+              <div className="flex items-center gap-4 mt-6 text-white/80 text-sm">
                 {post.author && <span>{post.author}</span>}
                 {post.author && post.publishedAt && <span aria-hidden="true">&middot;</span>}
                 {post.publishedAt && <span>{formatDate(post.publishedAt)}</span>}
@@ -102,7 +102,7 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
                 to render the full Lexical rich text stored in post.content.
                 The raw content object is intentionally not displayed — it is unstructured JSON. */}
             <div className="text-gray-700 leading-relaxed">
-              <p className="text-gray-400 italic text-sm">
+              <p className="text-gray-500 italic text-sm">
                 Full article content will render here once the Payload Lexical rich text renderer is configured.
               </p>
             </div>
@@ -124,7 +124,7 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
                 Continue Reading
               </p>
-              <h2 className="text-4xl font-light text-gray-900">Related Posts</h2>
+              <h2 className="text-4xl font-semibold tracking-tight text-brand-primary">Related Posts</h2>
             </motion.div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -154,7 +154,7 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
                       </h3>
                     </Link>
                     {related.publishedAt && (
-                      <p className="text-xs text-gray-400">{formatDate(related.publishedAt)}</p>
+                      <p className="text-xs text-gray-500">{formatDate(related.publishedAt)}</p>
                     )}
                     <Link
                       href={`/blog/${related.slug}`}

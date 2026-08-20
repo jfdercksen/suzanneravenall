@@ -40,10 +40,6 @@ export default function ServicesHero() {
         aria-hidden="true"
         className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60"
       />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_theme(colors.brand.accent/15%),_transparent_50%)]"
-      />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-32">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -51,7 +47,7 @@ export default function ServicesHero() {
           <div>
             <motion.p
               {...fadeUp(0)}
-              className="text-xs tracking-[0.3em] text-brand-accent-400 uppercase font-medium mb-4 lg:mb-6"
+              className="text-xs tracking-[0.3em] text-white/80 uppercase font-medium mb-4 lg:mb-6"
             >
               Services with Dr. Suzanne Ravenall
             </motion.p>
@@ -59,10 +55,10 @@ export default function ServicesHero() {
             <motion.h1
               id="services-hero-heading"
               {...fadeUp(0.15)}
-              className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-4 lg:mb-8"
+              className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-4 lg:mb-8"
             >
               Unlock your life{' '}
-              <span className="text-brand-accent-400">and potential.</span>
+              <span className="underline decoration-brand-accent-400 decoration-[5px] underline-offset-8">and potential.</span>
             </motion.h1>
 
             <motion.p

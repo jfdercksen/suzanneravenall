@@ -23,7 +23,7 @@ export default function TopicDiscover({ topic }: { topic: Topic }) {
           </p>
           <h2
             id="topic-discover-heading"
-            className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight"
           >
             Life after{' '}
             <span className="text-brand-accent">repatterning</span>
@@ -43,22 +43,12 @@ export default function TopicDiscover({ topic }: { topic: Topic }) {
                 delay: index * 0.1,
                 ease: 'easeOut',
               }}
-              className="group relative rounded-card bg-gray-900 border-t-2 border-brand-accent p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-accent/10 overflow-hidden"
+              className="group relative rounded-card bg-gray-50 border border-gray-100 border-t-2 border-t-brand-accent p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-accent/10 overflow-hidden"
             >
-              {/* Subtle radial gradient texture for card depth */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 opacity-40"
-                style={{
-                  background:
-                    'radial-gradient(ellipse at top right, rgba(23,25,244,0.08) 0%, transparent 60%)',
-                }}
-              />
-
               {/* Large number background accent */}
               <span
                 aria-hidden="true"
-                className="absolute top-4 right-6 text-7xl font-light text-white/4 select-none leading-none"
+                className="absolute top-4 right-6 text-7xl font-light text-brand-primary/5 select-none leading-none"
               >
                 {String(index + 1).padStart(2, '0')}
               </span>
@@ -68,11 +58,11 @@ export default function TopicDiscover({ topic }: { topic: Topic }) {
                 {String(index + 1).padStart(2, '0')}
               </span>
 
-              <h3 className="text-xl lg:text-2xl font-light text-white leading-snug mb-3">
+              <h3 className="text-xl lg:text-2xl font-light text-brand-primary leading-snug mb-3">
                 {item.title}
               </h3>
 
-              <p className="text-sm text-white/60 font-light leading-relaxed">
+              <p className="text-sm text-gray-600 font-light leading-relaxed">
                 {item.body}
               </p>
             </motion.li>

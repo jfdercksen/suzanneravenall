@@ -12,7 +12,7 @@ const sectionReveal = {
 
 export default function TheStory() {
   return (
-    <section aria-labelledby="story-heading" className="bg-gray-50 py-20 lg:py-32">
+    <section aria-labelledby="story-heading" className="bg-white py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* Image left */}
@@ -42,7 +42,7 @@ export default function TheStory() {
               {...sectionReveal}
               transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
               id="story-heading"
-              className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               From trauma to mastery
             </motion.h2>

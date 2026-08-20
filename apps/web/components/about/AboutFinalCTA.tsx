@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
@@ -16,16 +17,24 @@ export default function AboutFinalCTA() {
       aria-labelledby="about-cta-heading"
       className="relative bg-brand-primary py-20 lg:py-32 overflow-hidden"
     >
-      {/* Accent glow */}
+      {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+      <Image
+        src="/images/generated/session-coaching.webp"
+        alt=""
+        aria-hidden="true"
+        fill
+        sizes="100vw"
+        className="object-cover opacity-50"
+      />
       <div
         aria-hidden="true"
-        className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-brand-accent/15 blur-[120px]"
+        className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
       />
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.p
           {...sectionReveal}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
         >
           Ready to Begin
         </motion.p>
@@ -34,7 +43,7 @@ export default function AboutFinalCTA() {
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
           id="about-cta-heading"
-          className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
+          className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.08] mb-8"
         >
           Step into who you were always meant to be.
         </motion.h2>
@@ -42,7 +51,7 @@ export default function AboutFinalCTA() {
         <motion.p
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' as const }}
-          className="text-white/70 text-lg font-light leading-relaxed max-w-xl mx-auto mb-12"
+          className="text-white/80 text-lg font-light leading-relaxed max-w-xl mx-auto mb-12"
         >
           Book a discovery call with Suzanne, or explore the programs designed to
           help you repattern your way to coherence, performance and joy.

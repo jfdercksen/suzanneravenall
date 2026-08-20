@@ -27,12 +27,12 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
   return (
     <section
       aria-labelledby="topic-cta-heading"
-      className="relative w-full bg-gray-50 overflow-hidden"
+      className="relative w-full bg-white overflow-hidden"
     >
       {/* Background gradient */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white via-gray-50 to-white"
       />
       {/* Glow */}
       <div
@@ -55,7 +55,7 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
             <motion.h2
               id="topic-cta-heading"
               {...fadeUp(0.1)}
-              className="text-4xl lg:text-5xl font-light text-brand-primary leading-tight mb-6"
+              className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
             >
               {topic.ctaHook}
             </motion.h2>

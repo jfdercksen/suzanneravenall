@@ -61,12 +61,12 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
     <nav
       ref={barRef}
       aria-label="Shop categories"
-      className={`sticky top-16 lg:top-20 z-40 w-full bg-gray-950 border-b transition-shadow duration-300 ${
-        isSticky ? 'border-white/10 shadow-lg shadow-black/40' : 'border-transparent'
+      className={`sticky top-16 lg:top-20 z-40 w-full bg-white border-b border-gray-200 transition-shadow duration-300 ${
+        isSticky ? 'shadow-lg shadow-gray-900/5' : ''
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 lg:py-6 flex flex-col lg:flex-row lg:items-start gap-3 lg:gap-8">
-        <p className="flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 lg:pt-3.5">
+        <p className="flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent lg:pt-3.5">
           Browse by category
         </p>
         <div className="flex-1">
@@ -99,7 +99,7 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.2 }}
-              className="mt-3 text-xs text-white/40 font-light"
+              className="mt-3 text-xs text-gray-500 font-light"
             >
               Self-paced courses delivered via the Ravenall Institute
             </motion.p>
@@ -125,7 +125,7 @@ function FilterPill({ label, active, onClick }: FilterPillProps) {
       className={`px-6 py-3 rounded-full text-base font-medium transition-all duration-200 whitespace-nowrap ${
         active
           ? 'bg-brand-accent text-white shadow-lg shadow-brand-accent/25'
-          : 'border border-white/25 text-white hover:border-brand-accent hover:bg-white/5'
+          : 'border border-gray-300 text-gray-600 hover:border-brand-accent hover:text-brand-primary hover:bg-gray-50'
       }`}
     >
       {label}

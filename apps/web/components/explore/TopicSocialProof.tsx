@@ -74,7 +74,7 @@ export default function TopicSocialProof({ topic }: { topic: Topic }) {
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
                 By the numbers
               </p>
-              <p className="text-8xl lg:text-9xl font-light text-brand-accent leading-none mb-4">
+              <p className="text-8xl lg:text-9xl font-semibold tracking-tight text-brand-accent leading-none mb-4">
                 {topic.stat.value}
               </p>
               <p className="text-base lg:text-lg text-gray-600 font-light leading-relaxed max-w-xs lg:ml-auto">

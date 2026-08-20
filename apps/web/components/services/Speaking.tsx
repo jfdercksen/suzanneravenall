@@ -50,7 +50,7 @@ export default function Speaking() {
           </p>
           <h2
             id="speaking-heading"
-            className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-8"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-8"
           >
             Customised, real, authentic: keynotes that cut to what underlies human
             behaviour.
@@ -104,13 +104,13 @@ export default function Speaking() {
               />
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+                className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent"
               />
               <div className="relative z-10 p-8">
-                <h3 className="text-2xl font-semibold text-white mb-4 group-hover:text-brand-accent-400 transition-colors duration-300">
+                <h3 className="text-2xl font-semibold text-white mb-4">
                   {topic.name}
                 </h3>
-                <p className="text-sm text-white/65 font-light leading-relaxed">
+                <p className="text-sm text-white/70 font-light leading-relaxed">
                   {topic.description}
                 </p>
               </div>

@@ -73,15 +73,15 @@ export default function ConfirmationContent() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}
-      <section className="w-full bg-brand-primary py-20 lg:py-28">
+      <section className="w-full bg-gray-50 border-b border-gray-200 py-20 lg:py-28">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, type: 'spring', stiffness: 200 }}
-            className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-500/20 mb-6"
+            className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-100 mb-6"
           >
-            <CheckCircle className="w-10 h-10 text-emerald-400" />
+            <CheckCircle className="w-10 h-10 text-emerald-600" />
           </motion.div>
 
           <motion.div
@@ -89,13 +89,13 @@ export default function ConfirmationContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Payment Received
             </p>
-            <h1 className="text-4xl lg:text-5xl font-light text-white mb-4">
+            <h1 className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-4">
               Thank You!
             </h1>
-            <p className="text-white/60 text-lg max-w-md mx-auto">
+            <p className="text-gray-600 text-lg max-w-md mx-auto">
               Your purchase is confirmed. We&apos;re excited to support your transformation journey.
             </p>
           </motion.div>
@@ -134,7 +134,7 @@ export default function ConfirmationContent() {
                   <Icon className="w-5 h-5" />
                 </div>
                 <h3 className="text-sm font-semibold text-gray-900 mb-2">{heading}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{body}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{body}</p>
               </motion.div>
             ))}
           </div>

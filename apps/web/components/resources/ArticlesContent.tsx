@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { FileText, ArrowRight, ExternalLink } from 'lucide-react'
@@ -30,7 +31,7 @@ function ArticleCard({ article }: { article: MediaArticle }) {
           <span className="text-xs font-semibold text-brand-accent uppercase tracking-wider">
             {article.outlet}
           </span>
-          <span className="text-xs text-gray-400">{article.date}</span>
+          <span className="text-xs text-gray-500">{article.date}</span>
         </div>
       </div>
 
@@ -71,14 +72,14 @@ export default function ArticlesContent() {
       {/* Hero */}
       <section
         aria-labelledby="articles-hero-heading"
-        className="w-full bg-brand-primary py-20 lg:py-32"
+        className="w-full bg-gray-50 py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
           >
             Resources
           </motion.p>
@@ -88,7 +89,7 @@ export default function ArticlesContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.1] max-w-3xl mb-6"
+            className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary leading-[1.05] max-w-3xl mb-6"
           >
             Articles &amp; Publications
           </motion.h1>
@@ -97,7 +98,7 @@ export default function ArticlesContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg text-white/70 font-light max-w-xl leading-relaxed"
+            className="text-lg text-gray-600 font-light max-w-xl leading-relaxed"
           >
             Thought leadership from Dr. Suzanne Ravenall, published across leading business
             and leadership magazines covering transformation, execution and human potential.
@@ -117,7 +118,7 @@ export default function ArticlesContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="text-3xl lg:text-4xl font-light text-gray-900 mb-12"
+            className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary mb-12"
           >
             All Published Articles
           </motion.h2>
@@ -138,18 +139,30 @@ export default function ArticlesContent() {
         </div>
       </section>
 
-      {/* Newsletter CTA */}
+      {/* Newsletter CTA — dark, photo-backed band */}
       <section
         aria-labelledby="articles-newsletter-cta-heading"
-        className="w-full bg-brand-primary py-20 lg:py-32"
+        className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <Image
+          src="/images/generated/session-coaching.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-4"
           >
             Stay Informed
           </motion.p>
@@ -160,7 +173,7 @@ export default function ArticlesContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-light text-white mb-6"
+            className="text-4xl lg:text-5xl font-semibold tracking-tight text-white mb-6"
           >
             Want more insights?
           </motion.h2>
@@ -170,7 +183,7 @@ export default function ArticlesContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-white/70 font-light max-w-xl mx-auto mb-10 leading-relaxed"
+            className="text-white/80 font-light max-w-xl mx-auto mb-10 leading-relaxed"
           >
             Subscribe to the monthly newsletter and receive Dr. Ravenall&apos;s latest thinking
             on consciousness, healing, transformation and human potential, delivered directly

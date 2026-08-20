@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { categoryLabel, type Pathway, type PathwayCategory } from '@/data/pathways'
@@ -19,8 +20,8 @@ const fadeUpInView = (delay: number) => ({
 
 const heroBadgeClasses = (category: PathwayCategory): string =>
   category === 'youth'
-    ? 'bg-white/10 text-white/70 border border-white/20'
-    : 'bg-brand-accent/15 text-brand-accent-300 border border-brand-accent/30'
+    ? 'bg-white/10 text-white/80 border border-white/25'
+    : 'bg-brand-accent/25 text-white border border-brand-accent/50'
 
 function BulletList({ items }: { items: string[] }) {
   return (
@@ -48,13 +49,19 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
         aria-labelledby="pathway-hero-heading"
         className="relative w-full overflow-hidden bg-brand-primary"
       >
-        <div
+        {/* Background photo + navy scrim — dark heroes carry imagery, never flat colour */}
+        <Image
+          src="/images/generated/explore-repatterning.webp"
+          alt=""
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-primary via-brand-primary-800 to-brand-primary-900"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-50"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[500px] rounded-full bg-brand-accent/10 blur-3xl"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
         />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-36">
@@ -70,7 +77,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
           <motion.h1
             id="pathway-hero-heading"
             {...fadeUpAnimate(0.1)}
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-6"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.08] mb-6"
           >
             {pathway.title}
           </motion.h1>
@@ -130,48 +137,24 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
             </div>
           </section>
 
-          {/* ── Who It's For / What We Work On (dark) ─────────────────────── */}
+          {/* ── Who It's For / What We Work On (light) ─────────────────────── */}
           {(detail.whoItsFor.length > 0 || detail.whatWeWorkOn.length > 0) && (
-            <section className="w-full bg-brand-primary-900 py-20 lg:py-32">
+            <section className="w-full bg-white py-20 lg:py-32">
               <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-16 lg:grid-cols-2">
                 {detail.whoItsFor.length > 0 && (
                   <motion.div {...fadeUpInView(0)}>
-                    <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
+                    <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
                       Who It&apos;s For
                     </p>
-                    <ul className="space-y-3">
-                      {detail.whoItsFor.map((item) => (
-                        <li key={item} className="flex items-start gap-3">
-                          <span
-                            aria-hidden="true"
-                            className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent-400"
-                          />
-                          <span className="text-base text-white/70 font-light leading-relaxed">
-                            {item}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
+                    <BulletList items={detail.whoItsFor} />
                   </motion.div>
                 )}
                 {detail.whatWeWorkOn.length > 0 && (
                   <motion.div {...fadeUpInView(0.1)}>
-                    <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
+                    <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
                       What We Work On
                     </p>
-                    <ul className="space-y-3">
-                      {detail.whatWeWorkOn.map((item) => (
-                        <li key={item} className="flex items-start gap-3">
-                          <span
-                            aria-hidden="true"
-                            className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent-400"
-                          />
-                          <span className="text-base text-white/70 font-light leading-relaxed">
-                            {item}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
+                    <BulletList items={detail.whatWeWorkOn} />
                   </motion.div>
                 )}
               </div>
@@ -180,7 +163,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
 
           {/* ── Outcomes / Signature Message (light) ──────────────────────── */}
           {(detail.outcomes.length > 0 || detail.signatureMessage) && (
-            <section className="w-full bg-white py-20 lg:py-32">
+            <section className="w-full bg-gray-50 py-20 lg:py-32">
               <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                 {detail.outcomes.length > 0 && (
                   <motion.div {...fadeUpInView(0)} className="mb-16">
@@ -232,14 +215,14 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
         </section>
       )}
 
-      {/* ── How the Work Happens (dark) — shared across every pathway ────── */}
-      <section className="w-full bg-brand-primary py-20 lg:py-32">
+      {/* ── How the Work Happens (light) — shared across every pathway ────── */}
+      <section className="w-full bg-white py-20 lg:py-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div {...fadeUpInView(0)}>
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
               How the Work Happens
             </p>
-            <p className="text-lg lg:text-xl text-white/75 font-light leading-relaxed">
+            <p className="text-lg lg:text-xl text-gray-600 font-light leading-relaxed">
               Each pathway combines deep pattern recognition with practical
               transformation tools to help create lasting change. Depending on
               the pathway, this may include coaching, subconscious
@@ -251,7 +234,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
       </section>
 
       {/* ── Why This Work Is Different (light) — shared ───────────────────── */}
-      <section className="w-full bg-white py-20 lg:py-32">
+      <section className="w-full bg-gray-50 py-20 lg:py-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div {...fadeUpInView(0)}>
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
@@ -271,16 +254,25 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
         aria-labelledby="pathway-cta-heading"
         className="relative w-full overflow-hidden bg-brand-primary"
       >
+        {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+        <Image
+          src="/images/generated/session-coaching.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover object-center opacity-50"
+        />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-brand-accent/10 blur-3xl"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
         />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-center">
           {detail?.ctaSectionHeadline && (
             <motion.h2
               id="pathway-cta-heading"
               {...fadeUpInView(0)}
-              className="text-3xl lg:text-5xl font-light text-white leading-tight mb-6"
+              className="text-3xl lg:text-5xl font-semibold tracking-tight text-white leading-tight mb-6"
             >
               {detail.ctaSectionHeadline}
             </motion.h2>
@@ -288,7 +280,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
           {detail?.ctaSectionBody && (
             <motion.p
               {...fadeUpInView(0.05)}
-              className="text-lg text-white/70 font-light leading-relaxed mb-10"
+              className="text-lg text-white/80 font-light leading-relaxed mb-10"
             >
               {detail.ctaSectionBody}
             </motion.p>
@@ -296,7 +288,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
 
           <motion.p
             {...fadeUpInView(0.1)}
-            className="text-base text-white/60 font-light leading-relaxed mb-8 max-w-xl mx-auto"
+            className="text-base text-white/80 font-light leading-relaxed mb-8 max-w-xl mx-auto"
           >
             You do not have to keep living the old pattern. There is another
             way, and it begins with understanding what is really driving your

@@ -125,19 +125,15 @@ export default async function QuizPage({ params, searchParams }: PageProps) {
 
   // Valid topic without a quiz yet → "coming soon" with a route back to the topic.
   return (
-    <section className="relative min-h-[70vh] w-full bg-brand-primary text-white flex items-center justify-center overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[500px] rounded-full bg-brand-accent/10 blur-3xl"
-      />
+    <section className="relative min-h-[70vh] w-full bg-white flex items-center justify-center overflow-hidden">
       <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 py-20 text-center">
-        <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
+        <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
           Diagnostic Coming Soon
         </p>
-        <h1 className="text-4xl lg:text-6xl font-light leading-tight mb-6">
+        <h1 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-6">
           This pattern diagnostic is on its way
         </h1>
-        <p className="text-lg text-white/70 font-light leading-relaxed mb-10">
+        <p className="text-lg text-gray-600 font-light leading-relaxed mb-10">
           We&apos;re building the {topic!.title} diagnostic. In the meantime,
           explore the topic or book a discovery call with Suzanne.
         </p>
@@ -151,7 +147,7 @@ export default async function QuizPage({ params, searchParams }: PageProps) {
           </Link>
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center px-8 py-4 border border-white/30 hover:border-white/60 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
+            className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary/30 hover:border-brand-primary/60 text-brand-primary font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-brand-primary/5"
           >
             Book a Discovery Call
           </Link>

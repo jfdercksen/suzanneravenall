@@ -84,7 +84,7 @@ export default function ExploreTopicGrid() {
           </p>
           <h2
             id="explore-topic-grid-heading"
-            className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight"
           >
             Choose the area you&rsquo;re ready to{' '}
             <span className="text-brand-accent">repattern</span>
@@ -201,16 +201,16 @@ export default function ExploreTopicGrid() {
               transition={{ duration: 0.5, ease: 'easeOut' }}
               className="absolute bottom-0 left-0 right-0 z-20 p-10"
             >
-              <p className="text-[10px] uppercase tracking-[0.35em] font-semibold text-brand-accent-400 mb-3">
+              <p className="text-[10px] uppercase tracking-[0.35em] font-semibold text-white/80 mb-3">
                 Areas of Focus
               </p>
-              <h3 className="text-2xl lg:text-4xl font-light text-white leading-tight mb-3">
+              <h3 className="text-2xl lg:text-4xl font-semibold tracking-tight text-white leading-tight mb-3">
                 {activeTopic.heroHeadline}
               </h3>
-              <p className="text-white/65 text-sm lg:text-base font-light leading-relaxed mb-2 max-w-lg">
+              <p className="text-white/80 text-sm lg:text-base font-light leading-relaxed mb-2 max-w-lg">
                 {activeTopic.shortDescription}
               </p>
-              <p className="italic text-white/40 text-xs mb-8 max-w-md">
+              <p className="italic text-white/80 text-xs mb-8 max-w-md">
                 &ldquo;{activeTopic.corePrinciple}&rdquo;
               </p>
               <Link
@@ -246,16 +246,16 @@ export default function ExploreTopicGrid() {
                 className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/40 to-black/10"
               />
               <div className="relative z-10 p-6">
-                <span className="block text-[10px] uppercase tracking-[0.3em] font-semibold text-brand-accent-400 mb-2">
+                <span className="block text-[10px] uppercase tracking-[0.3em] font-semibold text-white/80 mb-2">
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <h3 className="text-lg font-semibold text-white leading-tight mb-2">
                   {topic.title}
                 </h3>
-                <p className="text-white/65 text-sm font-light leading-relaxed mb-4">
+                <p className="text-white/80 text-sm font-light leading-relaxed mb-4">
                   {topic.shortDescription}
                 </p>
-                <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/50 group-hover:text-white transition-colors duration-300">
+                <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-white/80 group-hover:text-white transition-colors duration-300">
                   Explore{' '}
                   <span
                     aria-hidden="true"

@@ -69,7 +69,7 @@ function StepIndicator({ step }: { step: Step }) {
               </div>
               <span
                 className={`text-xs font-medium transition-colors duration-300 ${
-                  isCurrent ? 'text-gray-900' : 'text-gray-400'
+                  isCurrent ? 'text-gray-900' : 'text-gray-500'
                 }`}
               >
                 {label}
@@ -526,7 +526,7 @@ export default function CheckoutContent() {
                           <Lock className="w-4 h-4" />
                           {isSubmitting ? 'Preparing payment...' : 'Pay with PayFast'}
                         </button>
-                        <p className="text-xs text-gray-400 text-center mt-4">
+                        <p className="text-xs text-gray-500 text-center mt-4">
                           Secured by PayFast · South Africa&apos;s leading payment gateway
                         </p>
                       </>
@@ -540,7 +540,7 @@ export default function CheckoutContent() {
                           <Lock className="w-4 h-4" />
                           {isSubmitting ? 'Preparing payment...' : 'Pay with PayPal'}
                         </button>
-                        <p className="text-xs text-gray-400 text-center mt-4">
+                        <p className="text-xs text-gray-500 text-center mt-4">
                           Secured by PayPal · Accepted worldwide
                         </p>
                       </>

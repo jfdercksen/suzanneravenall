@@ -153,16 +153,16 @@ function RelatedProgramCard({ program }: { program: Program }) {
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-500"
       />
-      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent" />
+      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent" />
       <div className="relative z-10 flex flex-col h-full p-8">
         <div className="flex-1">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-3">
             {CATEGORY_LABELS[program.category]}
           </p>
-          <h3 className="text-xl font-semibold text-white mb-3 leading-snug group-hover:text-brand-accent-400 transition-colors duration-300">
+          <h3 className="text-xl font-semibold text-white mb-3 leading-snug">
             {program.name}
           </h3>
-          <p className="text-white/65 text-sm font-light leading-relaxed">{program.shortDescription}</p>
+          <p className="text-white/70 text-sm font-light leading-relaxed">{program.shortDescription}</p>
         </div>
         <Link
           href={`/programs/${program.slug}`}
@@ -202,7 +202,6 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         />
         <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/40" />
         <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
-        <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_theme(colors.brand.accent/15%),_transparent_50%)]" />
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
           <div className="max-w-3xl">
@@ -210,7 +209,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
             <motion.div {...fadeUp(0)}>
               <Link
                 href="/programs"
-                className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-white/50 hover:text-white transition-colors duration-200 mb-8"
+                className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-white/80 hover:text-white transition-colors duration-200 mb-8"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -221,10 +220,10 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
 
             {/* Category + delivery badges */}
             <motion.div {...fadeUp(0.05)} className="flex flex-wrap gap-3 mb-6">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest bg-brand-accent/20 text-brand-accent-400 border border-brand-accent/30">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest bg-black/50 text-white border border-white/40">
                 {categoryLabel}
               </span>
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest bg-white/10 text-white/70 border border-white/20">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest bg-white/10 text-white/80 border border-white/20">
                 {deliveryMethod}
               </span>
             </motion.div>
@@ -232,7 +231,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
             <motion.h1
               id="program-hero-heading"
               {...fadeUp(0.15)}
-              className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-6"
+              className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-6"
             >
               {program.name}
             </motion.h1>
@@ -245,23 +244,23 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
             <motion.div {...fadeUp(0.3)} className="flex flex-wrap gap-6 mb-10">
               {program.duration && (
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-white/40 mb-1">Duration</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-white/80 mb-1">Duration</p>
                   <p className="text-sm text-white/80 font-light">{program.duration}</p>
                 </div>
               )}
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-white/40 mb-1">Investment</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-white/80 mb-1">Investment</p>
                 {priceUsd || priceZar ? (
-                  <p className="text-sm font-semibold text-brand-accent-400">
+                  <p className="text-sm font-semibold text-white">
                     {priceUsd && (
                       <>
                         {priceUsd}
-                        <span className="text-white/50 font-normal ml-1">USD</span>
+                        <span className="text-white/80 font-normal ml-1">USD</span>
                       </>
                     )}
-                    {priceUsd && priceZar && <span className="text-white/50 font-normal ml-2">/</span>}
+                    {priceUsd && priceZar && <span className="text-white/80 font-normal ml-2">/</span>}
                     {priceZar && (
-                      <span className={priceUsd ? 'text-white/50 font-normal ml-2' : ''}>
+                      <span className={priceUsd ? 'text-white/80 font-normal ml-2' : ''}>
                         {priceZar} ZAR
                       </span>
                     )}
@@ -308,7 +307,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
             </p>
             <h2
               id="outcomes-heading"
-              className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-6"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
             >
               After this programme, you will&hellip;
             </h2>
@@ -339,55 +338,55 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         </div>
       </motion.section>
 
-      {/* ── 3. PROGRAMME DETAILS — dark ─────────────────────────────── */}
+      {/* ── 3. PROGRAMME DETAILS — light ────────────────────────────── */}
       <motion.section
         aria-labelledby="details-heading"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
-        className="relative w-full bg-gray-950 py-20 lg:py-32"
+        className="relative w-full bg-gray-50 py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-2">
             {/* Left — description + who this is for */}
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
                 Programme Details
               </p>
               <h2
                 id="details-heading"
-                className="text-4xl lg:text-5xl font-light text-white leading-tight mb-8"
+                className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-8"
               >
                 Everything you need to know.
               </h2>
 
-              <p className="text-white/75 font-light leading-relaxed mb-10 text-base lg:text-lg">
+              <p className="text-gray-600 font-light leading-relaxed mb-10 text-base lg:text-lg">
                 {program.description}
               </p>
 
               {/* Info grid */}
               <div className="grid grid-cols-2 gap-6 mb-10">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-brand-accent-400 mb-2">Format</p>
-                  <p className="text-white/80 text-sm font-light">{categoryLabel}</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-2">Format</p>
+                  <p className="text-gray-600 text-sm font-light">{categoryLabel}</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-brand-accent-400 mb-2">Delivery</p>
-                  <p className="text-white/80 text-sm font-light">{deliveryMethod}</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-2">Delivery</p>
+                  <p className="text-gray-600 text-sm font-light">{deliveryMethod}</p>
                 </div>
                 {program.duration && (
                   <div className="col-span-2">
-                    <p className="text-xs uppercase tracking-[0.2em] text-brand-accent-400 mb-2">Duration</p>
-                    <p className="text-white/80 text-sm font-light">{program.duration}</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-2">Duration</p>
+                    <p className="text-gray-600 text-sm font-light">{program.duration}</p>
                   </div>
                 )}
               </div>
 
               {/* TODO: Suzanne to provide — "Who this is for" paragraph for each programme */}
               <div className="border-l-2 border-brand-accent/40 pl-6">
-                <p className="text-xs uppercase tracking-[0.2em] text-brand-accent-400 mb-3">Who This Is For</p>
-                <p className="text-white/65 font-light leading-relaxed text-sm">
+                <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-3">Who This Is For</p>
+                <p className="text-gray-600 font-light leading-relaxed text-sm">
                   This programme is for you if you are ready to move beyond surface-level change and
                   commit to a deeper journey of inner transformation. Whether you are facing a specific
                   challenge or simply know that there is more available to you, this is your next step.
@@ -397,7 +396,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
 
             {/* Right — what's included */}
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
                 What&apos;s Included
               </p>
               <motion.ul
@@ -408,9 +407,9 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                   <motion.li
                     key={feature}
                     variants={childVariants}
-                    className="flex items-start gap-4 text-white/75 font-light leading-relaxed"
+                    className="flex items-start gap-4 text-gray-600 font-light leading-relaxed"
                   >
-                    <span className="text-brand-accent-400 mt-0.5">
+                    <span className="text-brand-accent mt-0.5">
                       <CheckIcon />
                     </span>
                     <span>{feature}</span>
@@ -419,18 +418,18 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               </motion.ul>
 
               {/* Investment callout */}
-              <div className="mt-12 p-6 bg-gray-900 border border-white/10 rounded-card">
-                <p className="text-xs uppercase tracking-[0.2em] text-brand-accent-400 mb-3">Investment</p>
+              <div className="mt-12 p-6 bg-white border border-gray-200 rounded-card shadow-sm">
+                <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-3">Investment</p>
                 {priceUsd || priceZar ? (
-                  <p className="text-3xl font-light text-white mb-4">
+                  <p className="text-3xl font-semibold tracking-tight text-brand-primary mb-4">
                     {priceUsd ?? `${priceZar} ZAR`}
-                    {priceUsd && <span className="text-white/40 text-base font-normal ml-2">USD</span>}
+                    {priceUsd && <span className="text-gray-500 text-base font-normal ml-2">USD</span>}
                     {priceUsd && priceZar && (
-                      <span className="text-white/40 text-base font-normal ml-2">/ {priceZar} ZAR</span>
+                      <span className="text-gray-500 text-base font-normal ml-2">/ {priceZar} ZAR</span>
                     )}
                   </p>
                 ) : (
-                  <p className="text-xl font-light text-white/80 mb-4">Enquire</p>
+                  <p className="text-xl font-light text-gray-600 mb-4">Enquire</p>
                 )}
                 <Link
                   href={cta.href}
@@ -451,7 +450,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
-        className="relative w-full bg-gray-50 py-20 lg:py-32"
+        className="relative w-full bg-white py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-2 items-center">
@@ -476,7 +475,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               </p>
               <h2
                 id="facilitator-heading"
-                className="text-4xl lg:text-5xl font-light text-brand-primary leading-tight mb-6"
+                className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
               >
                 Dr. Suzanne Ravenall
               </h2>
@@ -508,7 +507,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         </div>
       </motion.section>
 
-      {/* ── 5. RELATED PROGRAMMES — dark ───────────────────────────── */}
+      {/* ── 5. RELATED PROGRAMMES — light ──────────────────────────── */}
       {relatedPrograms.length > 0 && (
         <motion.section
           aria-labelledby="related-heading"
@@ -516,7 +515,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
           initial="hidden"
           whileInView="visible"
           viewport={viewport}
-          className="relative w-full bg-gray-950 py-20 lg:py-32"
+          className="relative w-full bg-gray-50 py-20 lg:py-32"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-16">
@@ -526,14 +525,14 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                 </p>
                 <h2
                   id="related-heading"
-                  className="text-4xl lg:text-5xl font-light text-white leading-tight"
+                  className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight"
                 >
                   You might also like.
                 </h2>
               </div>
               <Link
                 href="/programs"
-                className="shrink-0 inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors duration-200 uppercase tracking-widest"
+                className="shrink-0 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-brand-primary transition-colors duration-200 uppercase tracking-widest"
               >
                 View All
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -585,7 +584,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight mb-6"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
           >
             Ready to begin your transformation?
           </motion.h2>

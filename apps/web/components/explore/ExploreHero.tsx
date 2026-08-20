@@ -33,19 +33,11 @@ export default function ExploreHero() {
         className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"
       />
 
-      {/* Ambient glow — centred */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-      >
-        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
-      </div>
-
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-40">
         <div className="max-w-4xl">
           <motion.p
             {...fadeUp(0)}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
           >
             Areas of Focus
           </motion.p>
@@ -53,10 +45,10 @@ export default function ExploreHero() {
           <motion.h1
             id="explore-hero-heading"
             {...fadeUp(0.1)}
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-8"
           >
             Every area of your life,{' '}
-            <span className="text-brand-accent-400">transformed</span>
+            <span className="underline decoration-brand-accent-400 decoration-4 underline-offset-8">transformed</span>
           </motion.h1>
 
           <motion.p

@@ -43,18 +43,15 @@ export default function ResourcesFeaturedAwards() {
     <section
       id="awards"
       aria-labelledby="featured-awards-heading"
-      className="relative w-full bg-gray-950 py-20 lg:py-32 overflow-hidden"
+      className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden"
     >
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
-      </div>
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6 }}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
         >
           Recognition
         </motion.p>
@@ -66,7 +63,7 @@ export default function ResourcesFeaturedAwards() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-light text-white"
+            className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary"
           >
             Awards &amp; Honours
           </motion.h2>
@@ -79,7 +76,7 @@ export default function ResourcesFeaturedAwards() {
           >
             <Link
               href="/resources/awards"
-              className="inline-flex items-center gap-2 text-sm font-medium text-brand-accent-400 hover:gap-3 transition-all duration-300"
+              className="inline-flex items-center gap-2 text-sm font-medium text-brand-accent hover:gap-3 transition-all duration-300"
             >
               See all awards <ArrowRight size={16} />
             </Link>
@@ -97,22 +94,22 @@ export default function ResourcesFeaturedAwards() {
             <motion.div
               key={award.name}
               variants={cardVariants}
-              className="bg-gray-900 rounded-card p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group"
+              className="bg-white border border-gray-100 rounded-card p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group"
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="flex items-center justify-center w-12 h-12 rounded-card bg-brand-accent/10 text-brand-accent-400 group-hover:bg-brand-accent/20 transition-colors duration-300">
+                <div className="flex items-center justify-center w-12 h-12 rounded-card bg-brand-accent/10 text-brand-accent group-hover:bg-brand-accent/20 transition-colors duration-300">
                   <Award size={22} />
                 </div>
-                <span className="text-3xl font-light text-brand-accent-400">{award.year}</span>
+                <span className="text-3xl font-semibold tracking-tight text-brand-accent">{award.year}</span>
               </div>
 
-              <h3 className="text-lg font-semibold text-white mb-2 leading-snug">
+              <h3 className="text-lg font-semibold text-brand-primary mb-2 leading-snug">
                 {award.name}
               </h3>
 
-              <p className="text-sm font-medium text-brand-accent-400 mb-4">{award.organisation}</p>
+              <p className="text-sm font-medium text-brand-accent mb-4">{award.organisation}</p>
 
-              <p className="text-sm text-white/60 font-light leading-relaxed">{award.description}</p>
+              <p className="text-sm text-gray-600 font-light leading-relaxed">{award.description}</p>
             </motion.div>
           ))}
         </motion.div>

@@ -101,17 +101,17 @@ export default function CartPageContent() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero strip */}
-      <section className="w-full bg-brand-primary py-16 lg:py-20">
+      <section className="w-full bg-gray-50 border-b border-gray-200 py-16 lg:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
               {hasItems ? `${cart.items.reduce((s, i) => s + i.quantity, 0)} item${cart.items.reduce((s, i) => s + i.quantity, 0) !== 1 ? 's' : ''}` : 'Empty'}
             </p>
-            <h1 className="text-4xl lg:text-5xl font-light text-white">Your Cart</h1>
+            <h1 className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary">Your Cart</h1>
           </motion.div>
         </div>
       </section>
@@ -293,7 +293,7 @@ function OrderSummary({ cart }: { cart: import('@/lib/cart').Cart }) {
           { icon: ShieldCheck, label: 'PayFast payment gateway' },
           { icon: RefreshCw, label: 'Cancel anytime' },
         ].map(({ icon: Icon, label }) => (
-          <div key={label} className="flex items-center gap-2 text-xs text-gray-400">
+          <div key={label} className="flex items-center gap-2 text-xs text-gray-500">
             <Icon className="w-3.5 h-3.5 flex-shrink-0" />
             <span>{label}</span>
           </div>

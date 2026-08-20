@@ -137,21 +137,21 @@ function LiveProgrammeCard({ program }: { program: Program }) {
       />
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+        className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent"
       />
       <div className="relative z-10 flex flex-col h-full p-8">
         <div className="flex-1">
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-3">
             Live via Zoom
           </p>
-          <h3 className="text-xl font-semibold text-white mb-3 leading-snug group-hover:text-brand-accent-400 transition-colors duration-300">
+          <h3 className="text-xl font-semibold text-white mb-3 leading-snug">
             {program.name}
           </h3>
-          <p className="text-white/65 text-sm font-light leading-relaxed mb-4">
+          <p className="text-white/70 text-sm font-light leading-relaxed mb-4">
             {program.shortDescription}
           </p>
           {program.duration && (
-            <p className="text-xs text-white/60 mb-6">{program.duration}</p>
+            <p className="text-xs text-white/70 mb-6">{program.duration}</p>
           )}
         </div>
         <Link
@@ -173,10 +173,10 @@ export default function EventsContent() {
 
   return (
     <>
-      {/* Hero — DARK */}
+      {/* Hero — DARK (photo-backed, neutral black scrim — no navy/accent tints over imagery) */}
       <section
         aria-labelledby="events-hero-heading"
-        className="relative w-full min-h-[560px] flex items-center overflow-hidden bg-brand-primary-900"
+        className="relative w-full min-h-[560px] flex items-center overflow-hidden bg-gray-950"
       >
         <Image
           src="/images/generated/session-coaching.webp"
@@ -184,15 +184,15 @@ export default function EventsContent() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center opacity-30"
+          className="object-cover object-center"
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-r from-brand-primary-900/95 via-brand-primary-900/70 to-brand-primary-900/40"
+          className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/30"
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_theme(colors.brand.accent/15%),_transparent_50%)]"
+          className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50"
         />
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
@@ -202,12 +202,12 @@ export default function EventsContent() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6">
               Events
             </p>
             <h1
               id="events-hero-heading"
-              className="text-4xl lg:text-6xl font-light text-white mb-6 leading-tight"
+              className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white mb-6 leading-[1.05]"
             >
               Live Events &amp; Training Dates
             </h1>
@@ -251,7 +251,7 @@ export default function EventsContent() {
             </p>
             <h2
               id="upcoming-events-heading"
-              className="text-4xl lg:text-6xl font-light text-brand-primary mb-4 max-w-2xl"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4 max-w-2xl"
             >
               Your Next Opportunity to Join Live
             </h2>
@@ -316,7 +316,7 @@ export default function EventsContent() {
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
           >
-            <h3 className="text-2xl lg:text-3xl font-light text-brand-primary mb-3">
+            <h3 className="text-2xl lg:text-3xl font-semibold tracking-tight text-brand-primary mb-3">
               Group Sessions: New Dates Coming Soon
             </h3>
             <p className="text-gray-600 font-light mb-10 max-w-2xl leading-relaxed">
@@ -339,10 +339,10 @@ export default function EventsContent() {
         </div>
       </section>
 
-      {/* Recurring Live Programmes — DARK */}
+      {/* Recurring Live Programmes — LIGHT */}
       <section
         aria-labelledby="live-programmes-heading"
-        className="w-full bg-gray-950 py-20 lg:py-32"
+        className="w-full bg-white py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -351,16 +351,16 @@ export default function EventsContent() {
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Recurring Live Programmes
             </p>
             <h2
               id="live-programmes-heading"
-              className="text-4xl lg:text-6xl font-light text-white mb-4 max-w-2xl"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4 max-w-2xl"
             >
               Trainings Run Live via Zoom
             </h2>
-            <p className="text-lg text-white/70 font-light mb-12 max-w-2xl leading-relaxed">
+            <p className="text-lg text-gray-600 font-light mb-12 max-w-2xl leading-relaxed">
               These programmes run as live cohorts with Suzanne throughout the
               year: practitioner certification series, energy clearing levels
               and guided practice sessions. Attend from anywhere in the world.
@@ -383,7 +383,7 @@ export default function EventsContent() {
       {/* Can't make a live date — LIGHT */}
       <section
         aria-labelledby="self-study-heading"
-        className="w-full bg-white py-20 lg:py-32"
+        className="w-full bg-gray-50 py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -399,7 +399,7 @@ export default function EventsContent() {
               </p>
               <h2
                 id="self-study-heading"
-                className="text-4xl lg:text-5xl font-light text-brand-primary leading-tight"
+                className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight"
               >
                 Start Now, Your Way
               </h2>
@@ -439,28 +439,41 @@ export default function EventsContent() {
         </div>
       </section>
 
-      {/* Final CTA — DARK */}
+      {/* Final CTA — DARK (photo-backed CTA band) */}
       <section
         aria-labelledby="events-cta-heading"
-        className="w-full bg-brand-primary py-20 lg:py-32"
+        className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+        <Image
+          src="/images/generated/group-coaching-real.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             variants={sectionVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6">
               Not Sure Where to Start?
             </p>
             <h2
               id="events-cta-heading"
-              className="text-4xl lg:text-6xl font-light text-white mb-6"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-white mb-6"
             >
               Book a Discovery Call
             </h2>
-            <p className="text-lg lg:text-xl text-white/70 font-light mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg lg:text-xl text-white/80 font-light mb-10 max-w-2xl mx-auto leading-relaxed">
               A free 30-minute call with no obligation. Suzanne will help you
               find the event or programme that best fits where you are, and
               where you want to go.

@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
@@ -79,34 +80,42 @@ const frameworks: {
 export default function TheSystemContent() {
   return (
     <>
-      {/* Hero — dark navy */}
+      {/* Hero — photo-backed dark navy */}
       <section
         aria-labelledby="system-hero-heading"
         className="relative bg-brand-primary pt-40 pb-24 lg:pt-52 lg:pb-32 overflow-hidden"
       >
+        <Image
+          src="/images/hero-bg-suzanne-ravenall.jpg"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
         <div
           aria-hidden="true"
-          className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-brand-accent/15 blur-[120px]"
+          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
         />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <motion.p
               {...fadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
             >
               About: The System
             </motion.p>
             <motion.h1
               id="system-hero-heading"
               {...fadeUp(0.2)}
-              className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
+              className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-8"
             >
               One philosophy. An entire system built on it:{' '}
-              <span className="text-brand-accent-300">Pattern Intelligence&trade;</span>
+              <span className="underline decoration-brand-accent-400 decoration-[6px] underline-offset-8">Pattern Intelligence&trade;</span>
             </motion.h1>
             <motion.p
               {...fadeUp(0.4)}
-              className="text-lg lg:text-xl text-white/75 font-light max-w-xl"
+              className="text-lg lg:text-xl text-white/80 font-light max-w-xl"
             >
               A behavioural performance methodology that helps people, leaders and
               organisations identify and change the unconscious patterns that
@@ -132,7 +141,7 @@ export default function TheSystemContent() {
             <motion.h2
               {...reveal(0.1)}
               id="philosophy-heading"
-              className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               It&rsquo;s not you, it&rsquo;s your pattern.
             </motion.h2>
@@ -159,22 +168,22 @@ export default function TheSystemContent() {
         </div>
       </section>
 
-      {/* The Frameworks — dark */}
+      {/* The Frameworks — light */}
       <section
         aria-labelledby="frameworks-heading"
-        className="bg-gray-950 py-20 lg:py-32"
+        className="bg-gray-50 py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
             {...sectionReveal}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
           >
             The Frameworks
           </motion.p>
           <motion.h2
             {...reveal(0.1)}
             id="frameworks-heading"
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.08] max-w-3xl mb-16"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] max-w-3xl mb-16"
           >
             Seven instruments. One intelligence.
           </motion.h2>
@@ -191,19 +200,19 @@ export default function TheSystemContent() {
                   delay: i * 0.1,
                   ease: 'easeOut' as const,
                 }}
-                className="group relative h-full rounded-card border border-white/5 bg-gray-900 p-8 transition-all duration-500 hover:border-brand-accent/40 hover:shadow-2xl hover:-translate-y-1"
+                className="group relative h-full rounded-card border border-gray-100 bg-white p-8 transition-all duration-500 hover:border-brand-accent/40 hover:shadow-2xl hover:-translate-y-1"
               >
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-5">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-5">
                   {framework.label}
                 </p>
-                <h3 className="text-2xl font-light text-white mb-4">
+                <h3 className="text-2xl font-light text-brand-primary mb-4">
                   {framework.title}
                 </h3>
-                <p className="text-white/65 font-light leading-relaxed">
+                <p className="text-gray-600 font-light leading-relaxed">
                   {framework.description}
                 </p>
                 {framework.inDevelopment && (
-                  <p className="mt-6 inline-flex items-center text-xs uppercase tracking-widest font-medium text-white/40 border border-white/15 rounded-button px-3 py-1">
+                  <p className="mt-6 inline-flex items-center text-xs uppercase tracking-widest font-medium text-gray-500 border border-gray-300 rounded-button px-3 py-1">
                     In development
                   </p>
                 )}
@@ -216,7 +225,7 @@ export default function TheSystemContent() {
       {/* The Governing Principle — light */}
       <section
         aria-labelledby="principle-heading"
-        className="bg-gray-50 py-20 lg:py-32"
+        className="bg-white py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
@@ -229,7 +238,7 @@ export default function TheSystemContent() {
             <motion.h2
               {...reveal(0.1)}
               id="principle-heading"
-              className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               Nothing random. Ever again.
             </motion.h2>
@@ -280,32 +289,40 @@ export default function TheSystemContent() {
         </div>
       </section>
 
-      {/* Final CTA — dark navy */}
+      {/* Final CTA — photo-backed dark navy */}
       <section
         aria-labelledby="system-cta-heading"
         className="relative bg-brand-primary py-20 lg:py-32 overflow-hidden"
       >
+        <Image
+          src="/images/generated/session-coaching.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
         <div
           aria-hidden="true"
-          className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-brand-accent/15 blur-[120px]"
+          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
         />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
             {...sectionReveal}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
           >
             Enter the System
           </motion.p>
           <motion.h2
             {...reveal(0.1)}
             id="system-cta-heading"
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.08] mb-8"
           >
             Every part of the system starts in the same place: your pattern.
           </motion.h2>
           <motion.p
             {...reveal(0.2)}
-            className="text-white/70 text-lg font-light leading-relaxed max-w-xl mx-auto mb-12"
+            className="text-white/80 text-lg font-light leading-relaxed max-w-xl mx-auto mb-12"
           >
             Take the free Pattern Scan to discover which pattern is driving your
             results, or book a discovery call to talk through where to begin.

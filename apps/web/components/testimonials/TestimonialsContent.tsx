@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import VideoTestimonials from '@/components/shared/VideoTestimonials'
@@ -275,18 +276,15 @@ const writtenTestimonials = [
 export default function TestimonialsContent() {
   return (
     <>
-      {/* ── Hero — dark, short ─────────────────────────────────────────── */}
+      {/* ── Hero — light, short ────────────────────────────────────────── */}
       <section
         aria-labelledby="testimonials-hero-heading"
-        className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
+        className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden"
       >
-        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-          <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
-        </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
             {...fadeUp(0)}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
           >
             Testimonials
           </motion.p>
@@ -294,14 +292,14 @@ export default function TestimonialsContent() {
           <motion.h1
             id="testimonials-hero-heading"
             {...fadeUp(0.15)}
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.1] max-w-3xl mb-6"
+            className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary leading-[1.05] max-w-3xl mb-6"
           >
             Real People. Real Patterns. Real Change.
           </motion.h1>
 
           <motion.p
             {...fadeUp(0.3)}
-            className="text-lg text-white/70 font-light max-w-xl leading-relaxed"
+            className="text-lg text-gray-600 font-light max-w-xl leading-relaxed"
           >
             Clients around the world share what shifted when they found, and broke, the
             patterns that were holding them back.
@@ -312,14 +310,14 @@ export default function TestimonialsContent() {
       {/* ── Video testimonials — light (bg-white inside component) ─────── */}
       <VideoTestimonials showViewAllLink={false} />
 
-      {/* ── Results spotlight — dark stats band ──────────────────────────
+      {/* ── Results spotlight — light stats band ─────────────────────────
           Driven by spotlightTestimonial in data/testimonials.ts (the single
           source of truth, shared with the homepage TestimonialSpotlight).
           Hidden entirely until Suzanne signs off a real, verified story. */}
       {spotlightTestimonial && (
       <section
         aria-labelledby="testimonials-result-heading"
-        className="bg-gray-950 py-20 lg:py-32 overflow-hidden"
+        className="bg-white py-20 lg:py-32 overflow-hidden"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -331,23 +329,23 @@ export default function TestimonialsContent() {
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, ease: 'easeOut' as const }}
             >
-              <p className="text-xs tracking-[0.3em] text-brand-accent-400 uppercase font-medium mb-3">
+              <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-3">
                 The Numbers Behind the Stories
               </p>
               <h2
                 id="testimonials-result-heading"
-                className="text-4xl lg:text-6xl font-light text-white leading-[1.1] mb-8"
+                className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.1] mb-8"
               >
                 When the pattern breaks, everything moves
               </h2>
-              <div className="text-7xl lg:text-9xl font-light text-white leading-none mb-2">
+              <div className="text-7xl lg:text-9xl font-semibold tracking-tight text-brand-primary leading-none mb-2">
                 {spotlightTestimonial.stat}
               </div>
-              <p className="text-xl lg:text-2xl text-white/60 font-light uppercase tracking-wider mb-8">
+              <p className="text-xl lg:text-2xl text-gray-500 font-light uppercase tracking-wider mb-8">
                 {spotlightTestimonial.statLabel}
               </p>
               <div className="w-16 h-px bg-brand-accent mb-8" />
-              <p className="text-white/60 text-sm font-light leading-relaxed max-w-sm">
+              <p className="text-gray-600 text-sm font-light leading-relaxed max-w-sm">
                 {spotlightTestimonial.supporting}
               </p>
             </motion.div>
@@ -361,7 +359,7 @@ export default function TestimonialsContent() {
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' as const }}
             >
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-8">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-8">
                 What Clients Report
               </p>
               <ul className="space-y-6 list-none">
@@ -373,7 +371,7 @@ export default function TestimonialsContent() {
                 ].map((outcome) => (
                   <li key={outcome} className="flex gap-4">
                     <span aria-hidden="true" className="mt-2.5 w-8 h-px bg-brand-accent flex-shrink-0" />
-                    <span className="text-lg lg:text-xl font-light text-white/80 leading-relaxed">
+                    <span className="text-lg lg:text-xl font-light text-gray-600 leading-relaxed">
                       {outcome}
                     </span>
                   </li>
@@ -404,7 +402,7 @@ export default function TestimonialsContent() {
             </p>
             <h2
               id="written-testimonials-heading"
-              className="text-4xl lg:text-6xl font-light text-brand-primary mb-4"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4"
             >
               What clients say
             </h2>
@@ -439,7 +437,7 @@ export default function TestimonialsContent() {
 
                 <figcaption className="mt-6 pt-6 border-t border-gray-100">
                   <p className="text-brand-primary font-medium text-sm">{name}</p>
-                  <p className="text-gray-400 text-xs mt-0.5">{location}</p>
+                  <p className="text-gray-500 text-xs mt-0.5">{location}</p>
                 </figcaption>
               </motion.figure>
             ))}
@@ -447,21 +445,30 @@ export default function TestimonialsContent() {
         </div>
       </section>
 
-      {/* ── Final CTA — dark ───────────────────────────────────────────── */}
+      {/* ── Final CTA — dark, photo-backed band ────────────────────────── */}
       <section
         aria-labelledby="testimonials-cta-heading"
-        className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
+        className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
       >
-        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-          <div className="absolute bg-brand-accent/10 blur-[160px] rounded-full w-[32rem] h-[32rem] -bottom-40 left-1/2 -translate-x-1/2" />
-        </div>
+        <Image
+          src="/images/generated/session-coaching.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
+        />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
           >
             Your Turn
           </motion.p>
@@ -472,7 +479,7 @@ export default function TestimonialsContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.1] max-w-3xl mx-auto mb-6"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] max-w-3xl mx-auto mb-6"
           >
             Ready to write your own story?
           </motion.h2>
@@ -482,7 +489,7 @@ export default function TestimonialsContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
-            className="text-lg text-white/70 font-light max-w-xl mx-auto leading-relaxed mb-10"
+            className="text-lg text-white/80 font-light max-w-xl mx-auto leading-relaxed mb-10"
           >
             Start by finding the pattern that&apos;s running your life. It takes two
             minutes and it&apos;s free.
@@ -503,7 +510,7 @@ export default function TestimonialsContent() {
             </Link>
             <Link
               href="/contact"
-              className="border border-white/50 hover:border-white text-white/70 hover:text-white px-8 py-4 rounded-button text-sm uppercase tracking-widest font-medium transition-all duration-300 text-center"
+              className="border border-white/50 hover:border-white text-white hover:bg-white/10 px-8 py-4 rounded-button text-sm uppercase tracking-widest font-medium transition-all duration-300 text-center"
             >
               Book a Discovery Call
             </Link>

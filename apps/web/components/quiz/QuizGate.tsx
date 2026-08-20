@@ -84,12 +84,7 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
   }
 
   return (
-    <section className="relative min-h-screen w-full bg-brand-primary text-white overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[500px] rounded-full bg-brand-accent/10 blur-3xl"
-      />
-
+    <section className="relative min-h-screen w-full bg-gray-50 overflow-hidden">
       {/* Top-aligned, deliberately tight padding (not flex-centered) —
           centering this short content in a min-h-screen section risks
           landing the submit button behind the fixed cookie-consent banner /
@@ -99,18 +94,18 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
       <div className="relative z-10 w-full max-w-md mx-auto px-4 sm:px-6 pt-4 sm:pt-6 pb-16 sm:pb-24">
         {mode === 'gate' && (
           <div className="text-center">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
               Before You Begin
             </p>
-            <h1 className="text-3xl lg:text-4xl font-light leading-tight mb-3">{quiz.title}</h1>
-            <p className="text-base text-white/70 font-light leading-relaxed mb-6">
+            <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary leading-tight mb-3">{quiz.title}</h1>
+            <p className="text-base text-gray-600 font-light leading-relaxed mb-6">
               Tell us where to send your diagnostic link: you&apos;ll get your result the
               moment you finish.
             </p>
 
             <form onSubmit={submit} className="text-left space-y-3">
               <div>
-                <label htmlFor="quiz-gate-first-name" className="block text-sm text-white/70 mb-2">
+                <label htmlFor="quiz-gate-first-name" className="block text-sm text-gray-600 mb-2">
                   First name
                 </label>
                 <input
@@ -119,11 +114,11 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
                   required
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="w-full min-h-[52px] rounded-button bg-white/5 border border-white/15 px-5 text-white placeholder-white/30 focus:border-brand-accent focus:outline-none"
+                  className="w-full min-h-[52px] rounded-button bg-white border border-gray-300 px-5 text-gray-900 placeholder-gray-400 focus:border-brand-accent focus:outline-none"
                 />
               </div>
               <div>
-                <label htmlFor="quiz-gate-last-name" className="block text-sm text-white/70 mb-2">
+                <label htmlFor="quiz-gate-last-name" className="block text-sm text-gray-600 mb-2">
                   Last name
                 </label>
                 <input
@@ -132,11 +127,11 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
                   required
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  className="w-full min-h-[52px] rounded-button bg-white/5 border border-white/15 px-5 text-white placeholder-white/30 focus:border-brand-accent focus:outline-none"
+                  className="w-full min-h-[52px] rounded-button bg-white border border-gray-300 px-5 text-gray-900 placeholder-gray-400 focus:border-brand-accent focus:outline-none"
                 />
               </div>
               <div>
-                <label htmlFor="quiz-gate-email" className="block text-sm text-white/70 mb-2">
+                <label htmlFor="quiz-gate-email" className="block text-sm text-gray-600 mb-2">
                   Email
                 </label>
                 <input
@@ -146,12 +141,12 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full min-h-[52px] rounded-button bg-white/5 border border-white/15 px-5 text-white placeholder-white/30 focus:border-brand-accent focus:outline-none"
+                  className="w-full min-h-[52px] rounded-button bg-white border border-gray-300 px-5 text-gray-900 placeholder-gray-400 focus:border-brand-accent focus:outline-none"
                 />
               </div>
 
               {status === 'error' && (
-                <p className="text-sm text-red-300" role="alert">
+                <p className="text-sm text-red-600" role="alert">
                   {errorMessage}
                 </p>
               )}
@@ -169,20 +164,20 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
 
         {mode === 'checkEmail' && (
           <div className="text-center">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
               Check Your Inbox
             </p>
-            <h1 className="text-3xl lg:text-4xl font-light leading-tight mb-3">
+            <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary leading-tight mb-3">
               Your {quiz.title} link is on its way
             </h1>
-            <p className="text-base text-white/70 font-light leading-relaxed mb-6">
-              We&apos;ve sent it to <span className="text-white">{sentTo}</span>. Check your
+            <p className="text-base text-gray-600 font-light leading-relaxed mb-6">
+              We&apos;ve sent it to <span className="text-brand-primary font-medium">{sentTo}</span>. Check your
               inbox (and spam folder) to begin.
             </p>
             <button
               type="button"
               onClick={() => setMode('gate')}
-              className="text-sm text-white/60 hover:text-white underline underline-offset-4 transition-colors duration-200"
+              className="text-sm text-gray-500 hover:text-brand-primary underline underline-offset-4 transition-colors duration-200"
             >
               Didn&apos;t get it? Resend
             </button>
@@ -191,13 +186,13 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
 
         {mode === 'rateLimited' && (
           <div className="text-center">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
               Just a Moment
             </p>
-            <h1 className="text-3xl lg:text-4xl font-light leading-tight mb-3">
+            <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary leading-tight mb-3">
               Too many requests
             </h1>
-            <p className="text-base text-white/70 font-light leading-relaxed mb-6">
+            <p className="text-base text-gray-600 font-light leading-relaxed mb-6">
               This page has been requested too many times in a short period. Wait a
               minute, then refresh to continue to your diagnostic.
             </p>
@@ -206,13 +201,13 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
 
         {mode === 'invalid' && (
           <div className="text-center">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
               Link Expired
             </p>
-            <h1 className="text-3xl lg:text-4xl font-light leading-tight mb-3">
+            <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary leading-tight mb-3">
               This link isn&apos;t valid
             </h1>
-            <p className="text-base text-white/70 font-light leading-relaxed mb-6">
+            <p className="text-base text-gray-600 font-light leading-relaxed mb-6">
               It may have expired or already been used. Request a new one below.
             </p>
             <button

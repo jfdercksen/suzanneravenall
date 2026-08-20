@@ -21,20 +21,15 @@ export function ShopHeroBanner() {
       >
         <source src="/videos/generated/hero-shop.mp4" type="video/mp4" />
       </video>
-      <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/90 via-brand-primary/70 to-brand-primary/40" />
-
-      {/* Ambient glow */}
-      <div
-        aria-hidden="true"
-        className="absolute top-1/3 right-1/4 w-96 h-96 rounded-full bg-brand-accent/10 blur-[140px]"
-      />
+      {/* Neutral black scrim — never navy or accent tints under text over imagery */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/10" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
         >
           Transform Your Life
         </motion.p>
@@ -44,18 +39,18 @@ export function ShopHeroBanner() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-4xl lg:text-6xl font-light text-white mb-6 leading-tight max-w-3xl"
+          className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white mb-6 leading-[1.05] max-w-3xl"
         >
           Your Breakthrough
           <br />
-          <span className="text-brand-accent-300">Starts Here</span>
+          <span className="underline decoration-brand-accent-400 decoration-[6px] underline-offset-8">Starts Here</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-lg text-white/70 leading-relaxed mb-8 max-w-xl"
+          className="text-lg text-white/80 leading-relaxed mb-8 max-w-xl"
         >
           48 programmes. One destination. The tools Suzanne has used to transform 2,000+ lives, now available to you.
         </motion.p>
@@ -73,8 +68,8 @@ export function ShopHeroBanner() {
             { value: '30+',    label: 'Countries reached' },
           ].map(({ value, label }) => (
             <div key={label}>
-              <span className="block text-3xl font-bold text-white">{value}</span>
-              <span className="block text-sm text-white/70 mt-0.5">{label}</span>
+              <span className="block text-3xl font-semibold tracking-tight text-white">{value}</span>
+              <span className="block text-sm text-white/80 mt-0.5">{label}</span>
             </div>
           ))}
         </motion.div>
@@ -113,7 +108,7 @@ export function ShopHeroBanner() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.8 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 text-white/40 hover:text-white/80 transition-colors duration-300"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 text-white/60 hover:text-white transition-colors duration-300"
       >
         <span className="text-xs uppercase tracking-[0.2em] font-medium">Scroll</span>
         <motion.svg

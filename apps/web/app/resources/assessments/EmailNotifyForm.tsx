@@ -37,8 +37,8 @@ export default function EmailNotifyForm() {
   if (status === 'success') {
     return (
       <div className="text-center py-6">
-        <p className="text-lg text-white font-medium">You&apos;re on the list!</p>
-        <p className="text-white/60 mt-2">
+        <p className="text-lg text-brand-primary font-medium">You&apos;re on the list!</p>
+        <p className="text-gray-600 mt-2">
           We&apos;ll let you know as soon as assessments are available.
         </p>
       </div>
@@ -57,7 +57,7 @@ export default function EmailNotifyForm() {
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Your name"
-        className="flex-1 bg-gray-800 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-colors duration-200"
+        className="flex-1 bg-gray-100 border border-gray-200 rounded-xl px-5 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-colors duration-200"
       />
       <input
         type="email"
@@ -65,7 +65,7 @@ export default function EmailNotifyForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Your email"
-        className="flex-1 bg-gray-800 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-colors duration-200"
+        className="flex-1 bg-gray-100 border border-gray-200 rounded-xl px-5 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-colors duration-200"
       />
       <button
         type="submit"
@@ -75,7 +75,7 @@ export default function EmailNotifyForm() {
         {status === 'loading' ? 'Sending…' : 'Notify Me'}
       </button>
       {status === 'error' && errorMessage && (
-        <p className="sm:col-span-3 text-red-400 text-sm text-center">
+        <p className="sm:col-span-3 text-red-500 text-sm text-center">
           {errorMessage}
         </p>
       )}

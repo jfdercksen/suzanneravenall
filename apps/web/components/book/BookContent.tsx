@@ -138,16 +138,11 @@ export default function BookContent() {
           <source src="/videos/generated/hero-brain-video.mp4" type="video/mp4" />
         </video>
 
-        {/* Gradient overlay */}
+        {/* Gradient overlay — neutral black scrim, no navy/accent tint under text */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/70 via-brand-primary/50 to-brand-primary"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/85"
         />
-
-        {/* Ambient glow */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute bg-brand-accent/10 blur-[160px] rounded-full w-[600px] h-[600px] top-1/3 left-1/2 -translate-x-1/2" />
-        </div>
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-48">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -156,7 +151,7 @@ export default function BookContent() {
             <div>
               <motion.p
                 {...fadeUp(0)}
-                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+                className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
               >
                 The Breakthrough Trilogy
               </motion.p>
@@ -164,21 +159,21 @@ export default function BookContent() {
               <motion.h1
                 id="book-hero-heading"
                 {...fadeUp(0.1)}
-                className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-4"
+                className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-4"
               >
                 Overcoming the Impossible &amp; Living Life Beyond Limitation
               </motion.h1>
 
               <motion.p
                 {...fadeUp(0.2)}
-                className="text-xl lg:text-2xl font-light text-brand-accent-300 italic mb-6"
+                className="text-xl lg:text-2xl font-light text-white/85 italic mb-6"
               >
                 A Quest to Find an Upgraded Version of You
               </motion.p>
 
               <motion.p
                 {...fadeUp(0.25)}
-                className="text-lg text-white/75 leading-relaxed mb-10 max-w-xl"
+                className="text-lg text-white/80 leading-relaxed mb-10 max-w-xl"
               >
                 Three books. One journey. The complete roadmap to decoding the patterns that keep
                 you stuck, and upgrading every area of your life.
@@ -255,13 +250,13 @@ export default function BookContent() {
               <motion.h2
                 id="book-detail-heading"
                 {...scrollFadeUp(0.1)}
-                className="text-4xl lg:text-5xl font-light text-brand-primary leading-tight mb-2"
+                className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-2"
               >
                 Breakthrough Trilogy
               </motion.h2>
               <motion.p
                 {...scrollFadeUp(0.15)}
-                className="text-xl text-gray-400 font-light mb-8"
+                className="text-xl text-gray-500 font-light mb-8"
               >
                 Overcoming the Impossible &amp; Living Life Beyond Limitation
               </motion.p>
@@ -310,10 +305,10 @@ export default function BookContent() {
                 className="flex flex-col sm:flex-row sm:items-center gap-6"
               >
                 <div>
-                  <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">
+                  <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">
                     Pre-order price
                   </p>
-                  <p className="text-3xl font-semibold text-brand-primary">R165</p>
+                  <p className="text-3xl font-semibold tracking-tight text-brand-primary">R165</p>
                 </div>
                 <Link
                   href="/shop/the-latest-book-by-suzanne"
@@ -327,20 +322,20 @@ export default function BookContent() {
         </div>
       </section>
 
-      {/* ─── 3. What You'll Discover — dark, bg-gray-950 ──────────────── */}
-      <section aria-labelledby="trilogy-heading" className="w-full bg-gray-950 py-20 lg:py-32">
+      {/* ─── 3. What You'll Discover — light, bg-gray-50 ──────────────── */}
+      <section aria-labelledby="trilogy-heading" className="w-full bg-gray-50 py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <motion.p
               {...scrollFadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
             >
               Inside the Trilogy
             </motion.p>
             <motion.h2
               id="trilogy-heading"
               {...scrollFadeUp(0.1)}
-              className="text-4xl lg:text-6xl font-light text-white"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary"
             >
               Three books that work as one system
             </motion.h2>
@@ -351,25 +346,25 @@ export default function BookContent() {
               <motion.div
                 key={book.title}
                 {...scrollFadeUp(i * 0.1)}
-                className="group relative bg-gray-900 rounded-card overflow-hidden p-8 hover:shadow-[0_8px_32px_rgba(23,25,244,0.15)] transition-all duration-500 hover:-translate-y-1"
+                className="group relative bg-white border border-gray-100 rounded-card overflow-hidden p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative">
-                  <p className="text-7xl font-light text-brand-accent/15 mb-4 leading-none select-none">
+                  <p className="text-7xl font-semibold tracking-tight text-brand-accent/15 mb-4 leading-none select-none">
                     {book.number}
                   </p>
                   <span
                     className={`inline-block px-3 py-1 text-xs font-medium rounded-full mb-4 ${
                       book.tagAccent
-                        ? 'bg-brand-accent/20 text-brand-accent-400'
-                        : 'bg-white/10 text-white/50'
+                        ? 'bg-brand-accent/10 text-brand-accent'
+                        : 'bg-gray-100 text-gray-500'
                     }`}
                   >
                     {book.tag}
                   </span>
-                  <h3 className="text-xl font-semibold text-white mb-1">{book.title}</h3>
-                  <p className="text-sm text-brand-accent-400 mb-4">{book.subtitle}</p>
-                  <p className="text-gray-400 text-sm leading-relaxed">{book.description}</p>
+                  <h3 className="text-xl font-semibold text-brand-primary mb-1">{book.title}</h3>
+                  <p className="text-sm text-brand-accent mb-4">{book.subtitle}</p>
+                  <p className="text-gray-600 text-sm leading-relaxed">{book.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -377,12 +372,12 @@ export default function BookContent() {
         </div>
       </section>
 
-      {/* ─── 4. Excerpt — light, bg-gray-50 ───────────────────────────── */}
+      {/* ─── 4. Excerpt — light, bg-white ─────────────────────────────── */}
       {/* TODO: Replace pull quote and paragraph below with real book excerpt when available */}
       <section
         id="excerpt"
         aria-labelledby="excerpt-heading"
-        className="w-full bg-gray-50 py-20 lg:py-32"
+        className="w-full bg-white py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
@@ -395,7 +390,7 @@ export default function BookContent() {
             <motion.h2
               id="excerpt-heading"
               {...scrollFadeUp(0.1)}
-              className="text-3xl lg:text-5xl font-light text-brand-primary mb-16"
+              className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-16"
             >
               A taste of the journey
             </motion.h2>
@@ -417,7 +412,7 @@ export default function BookContent() {
                 When this system is interrogated, it reveals a series of challenges: depression,
                 illness, addiction, broken relationships.
               </p>
-              <footer className="text-sm font-medium text-gray-400 uppercase tracking-widest">
+              <footer className="text-sm font-medium text-gray-500 uppercase tracking-widest">
                 Dr. Suzanne Ravenall, Breakthrough Trilogy
               </footer>
             </motion.blockquote>
@@ -443,17 +438,11 @@ export default function BookContent() {
         </div>
       </section>
 
-      {/* ─── 5. About the Author — dark, bg-brand-primary ─────────────── */}
+      {/* ─── 5. About the Author — light, bg-gray-50 ──────────────────── */}
       <section
         aria-labelledby="author-heading"
-        className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
+        className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden"
       >
-        {/* Glow blob */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-40 right-0 w-[600px] h-[600px] bg-brand-accent/10 blur-[140px] rounded-full"
-        />
-
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 items-center">
 
@@ -461,29 +450,29 @@ export default function BookContent() {
             <div>
               <motion.p
                 {...scrollFadeUp(0)}
-                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4"
+                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
               >
                 About the Author
               </motion.p>
               <motion.h2
                 id="author-heading"
                 {...scrollFadeUp(0.1)}
-                className="text-4xl lg:text-5xl font-light text-white leading-tight mb-6"
+                className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
               >
                 Written from lived experience
               </motion.h2>
-              <motion.p {...scrollFadeUp(0.2)} className="text-white/75 leading-relaxed mb-5">
+              <motion.p {...scrollFadeUp(0.2)} className="text-gray-600 leading-relaxed mb-5">
                 This trilogy is not written from theory. It is written from the trenches of real
                 transformation, both Suzanne&apos;s own journey and thousands of client breakthroughs
                 over 20+ years.
               </motion.p>
-              <motion.p {...scrollFadeUp(0.3)} className="text-white/75 leading-relaxed mb-5">
+              <motion.p {...scrollFadeUp(0.3)} className="text-gray-600 leading-relaxed mb-5">
                 Dr. Suzanne Ravenall climbed Mount Elbrus, founded a successful international
                 coaching institution, and overcame experiences that would have stopped most people
                 in their tracks. Every insight in this trilogy was hard-won and battle-tested before
                 it ever reached the page.
               </motion.p>
-              <motion.p {...scrollFadeUp(0.4)} className="text-white/75 leading-relaxed mb-10">
+              <motion.p {...scrollFadeUp(0.4)} className="text-gray-600 leading-relaxed mb-10">
                 As the founder of Rapid Repatterning® and Neuro-repatterning® methodology, Suzanne
                 brings a unique fusion of neuroscience, quantum physics, and energetic psychology
                 to every page, giving you tools that work at the deepest level of your being.
@@ -491,7 +480,7 @@ export default function BookContent() {
               <motion.div {...scrollFadeUp(0.5)}>
                 <Link
                   href="/about"
-                  className="inline-flex items-center text-brand-accent-300 font-semibold text-sm uppercase tracking-widest hover:text-brand-accent-200 transition-colors duration-300 group"
+                  className="inline-flex items-center text-brand-accent font-semibold text-sm uppercase tracking-widest hover:text-brand-accent-700 transition-colors duration-300 group"
                 >
                   Meet Dr. Ravenall
                   <svg
@@ -547,7 +536,7 @@ export default function BookContent() {
             <motion.h2
               id="responses-heading"
               {...scrollFadeUp(0.1)}
-              className="text-4xl lg:text-6xl font-light text-brand-primary"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary"
             >
               Transformation that speaks for itself
             </motion.h2>
@@ -578,7 +567,7 @@ export default function BookContent() {
                 </p>
                 <div>
                   <p className="font-semibold text-brand-primary text-sm">{t.name}</p>
-                  {t.title && <p className="text-gray-400 text-xs mt-0.5">{t.title}</p>}
+                  {t.title && <p className="text-gray-500 text-xs mt-0.5">{t.title}</p>}
                 </div>
               </motion.div>
             ))}
@@ -587,15 +576,22 @@ export default function BookContent() {
       </section>
       )}
 
-      {/* ─── 7. Pre-Order CTA — dark, bg-brand-primary-900 ────────────── */}
+      {/* ─── 7. Pre-Order CTA — dark, photo-backed band ───────────────── */}
       <section
         aria-labelledby="preorder-heading"
-        className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
+        className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
       >
-        {/* Vignette overlay */}
+        <Image
+          src="/images/hero-bg-suzanne-ravenall.jpg"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-brand-primary-900/50"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
         />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -605,27 +601,27 @@ export default function BookContent() {
             <div>
               <motion.p
                 {...scrollFadeUp(0)}
-                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4"
+                className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-4"
               >
                 Get Your Copy
               </motion.p>
               <motion.h2
                 id="preorder-heading"
                 {...scrollFadeUp(0.1)}
-                className="text-4xl lg:text-6xl font-light text-white leading-tight mb-6"
+                className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-6"
               >
                 Your transformation starts on page one
               </motion.h2>
-              <motion.p {...scrollFadeUp(0.2)} className="text-white/70 text-lg leading-relaxed mb-8">
+              <motion.p {...scrollFadeUp(0.2)} className="text-white/80 text-lg leading-relaxed mb-8">
                 Pre-order the Breakthrough Trilogy and be among the first to receive your copy
                 when it launches.
               </motion.p>
 
               <motion.div {...scrollFadeUp(0.3)} className="mb-10">
-                <p className="text-xs text-white/40 uppercase tracking-widest mb-2">
+                <p className="text-xs text-white/80 uppercase tracking-widest mb-2">
                   Pre-order price
                 </p>
-                <p className="text-5xl font-semibold text-white">R165</p>
+                <p className="text-5xl font-semibold tracking-tight text-white">R165</p>
               </motion.div>
 
               <motion.div

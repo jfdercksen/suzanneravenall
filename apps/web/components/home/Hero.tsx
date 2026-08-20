@@ -150,20 +150,25 @@ export default function Hero() {
             <Link
               href="/discover-your-pattern"
               aria-label="Take the free Pattern Scan"
-              className="inline-flex items-center justify-center px-6 py-3.5 lg:px-8 lg:py-4 bg-brand-accent hover:bg-brand-accent/90 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.5)]"
+              className="inline-flex items-center justify-center px-6 py-3.5 lg:px-7 bg-brand-accent hover:bg-brand-accent/90 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.5)]"
             >
               Take the Free Pattern Scan
             </Link>
-            {/* Two CTAs only — a third hero button wrapped to its own row and
-                fell below the fold at 1440x900. Discovery-call paths remain:
-                nav CTA (>=1280px), mobile nav overlay (<1024px), nav Contact
-                link, and three discovery-call CTAs further down the page */}
+            {/* Three CTAs (approved copy set) — compact padding so the row
+                wraps cleanly inside the centered hero instead of clipping */}
             <Link
               href="/explore"
               aria-label="Explore Pattern Intelligence"
-              className="inline-flex items-center justify-center px-6 py-3.5 lg:px-8 lg:py-4 border border-white/50 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10"
+              className="inline-flex items-center justify-center px-6 py-3.5 lg:px-7 border border-white/50 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10"
             >
               Explore Pattern Intelligence
+            </Link>
+            <Link
+              href="/contact"
+              aria-label="Book a free discovery call with Dr. Suzanne Ravenall"
+              className="inline-flex items-center justify-center px-6 py-3.5 lg:px-7 border border-white/50 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10"
+            >
+              Book a Discovery Call
             </Link>
           </motion.div>
 

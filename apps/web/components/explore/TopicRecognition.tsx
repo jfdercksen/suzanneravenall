@@ -14,25 +14,19 @@ export default function TopicRecognition({ topic }: { topic: Topic }) {
   return (
     <section
       aria-labelledby="topic-recognition-heading"
-      className="relative w-full bg-brand-primary overflow-hidden py-20 lg:py-32"
+      className="relative w-full bg-white overflow-hidden py-20 lg:py-32"
     >
-      {/* Subtle accent glow */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-32 -right-32 h-[500px] w-[500px] rounded-full bg-brand-accent/8 blur-3xl"
-      />
-
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           {...fadeUp(0)}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6 text-center"
+          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6 text-center"
         >
           Sound Familiar?
         </motion.p>
         <motion.h2
           id="topic-recognition-heading"
           {...fadeUp(0.1)}
-          className="text-4xl lg:text-6xl font-light text-white leading-tight text-center max-w-3xl mx-auto mb-16 lg:mb-20"
+          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight text-center max-w-3xl mx-auto mb-16 lg:mb-20"
         >
           You Might Recognise This&hellip;
         </motion.h2>
@@ -46,9 +40,9 @@ export default function TopicRecognition({ topic }: { topic: Topic }) {
             >
               <span
                 aria-hidden="true"
-                className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent-400"
+                className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent"
               />
-              <span className="text-lg text-white/80 font-light leading-relaxed">
+              <span className="text-lg text-gray-600 font-light leading-relaxed">
                 {item}
               </span>
             </motion.li>

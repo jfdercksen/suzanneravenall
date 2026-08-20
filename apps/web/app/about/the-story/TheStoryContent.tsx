@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
@@ -37,34 +38,42 @@ const disciplines = [
 export default function TheStoryContent() {
   return (
     <>
-      {/* Hero — dark navy */}
+      {/* Hero — photo-backed dark navy */}
       <section
         aria-labelledby="story-hero-heading"
         className="relative bg-brand-primary pt-40 pb-24 lg:pt-52 lg:pb-32 overflow-hidden"
       >
+        <Image
+          src="/images/hero-bg-suzanne-ravenall.jpg"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
         <div
           aria-hidden="true"
-          className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-brand-accent/15 blur-[120px]"
+          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
         />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <motion.p
               {...fadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
             >
               About: The Story
             </motion.p>
             <motion.h1
               id="story-hero-heading"
               {...fadeUp(0.2)}
-              className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
+              className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-8"
             >
               Before the method, there was a life that had to be{' '}
-              <span className="text-brand-accent-300">rebuilt</span>.
+              <span className="underline decoration-brand-accent-400 decoration-[6px] underline-offset-8">rebuilt</span>.
             </motion.h1>
             <motion.p
               {...fadeUp(0.4)}
-              className="text-lg lg:text-xl text-white/75 font-light max-w-xl"
+              className="text-lg lg:text-xl text-white/80 font-light max-w-xl"
             >
               Dr. Suzanne Ravenall is a modern-day explorer of human potential, a
               transformation and performance coach, speaker, and multiple
@@ -87,7 +96,7 @@ export default function TheStoryContent() {
             <motion.h2
               {...reveal(0.1)}
               id="rise-heading"
-              className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               Transformation was her business, long before it became personal.
             </motion.h2>
@@ -112,29 +121,29 @@ export default function TheStoryContent() {
         </div>
       </section>
 
-      {/* The Turning Point — dark */}
+      {/* The Turning Point — light */}
       <section
         aria-labelledby="turning-point-heading"
-        className="bg-gray-950 py-20 lg:py-32"
+        className="bg-gray-50 py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <motion.p
               {...sectionReveal}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
             >
               The Turning Point
             </motion.p>
             <motion.h2
               {...reveal(0.1)}
               id="turning-point-heading"
-              className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               Then everything broke.
             </motion.h2>
             <motion.p
               {...reveal(0.2)}
-              className="text-white/70 text-lg font-light leading-relaxed mb-6"
+              className="text-gray-600 text-lg font-light leading-relaxed mb-6"
             >
               A series of profound traumas shattered Suzanne&rsquo;s health and
               sense of identity, and triggered old, covered-up traumas from years
@@ -142,7 +151,7 @@ export default function TheStoryContent() {
             </motion.p>
             <motion.p
               {...reveal(0.3)}
-              className="text-white/70 text-lg font-light leading-relaxed"
+              className="text-gray-600 text-lg font-light leading-relaxed"
             >
               She was forced to begin again, not from scratch, but from new
               awareness, truth, and a new way of being. The question was no longer
@@ -154,7 +163,7 @@ export default function TheStoryContent() {
       </section>
 
       {/* The Search — light */}
-      <section aria-labelledby="search-heading" className="bg-gray-50 py-20 lg:py-32">
+      <section aria-labelledby="search-heading" className="bg-white py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             <div>
@@ -167,7 +176,7 @@ export default function TheStoryContent() {
               <motion.h2
                 {...reveal(0.1)}
                 id="search-heading"
-                className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] mb-8"
+                className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
               >
                 She went looking for answers, everywhere.
               </motion.h2>
@@ -196,7 +205,7 @@ export default function TheStoryContent() {
                     delay: i * 0.1,
                     ease: 'easeOut' as const,
                   }}
-                  className="border-l-2 border-brand-accent bg-white px-5 py-4 text-brand-primary font-light shadow-sm"
+                  className="border-l-2 border-brand-accent bg-gray-50 px-5 py-4 text-brand-primary font-light shadow-sm"
                 >
                   {discipline}
                 </motion.li>
@@ -206,30 +215,30 @@ export default function TheStoryContent() {
         </div>
       </section>
 
-      {/* The Method Born — dark */}
+      {/* The Method Born — light */}
       <section
         aria-labelledby="method-born-heading"
-        className="bg-gray-950 py-20 lg:py-32"
+        className="bg-gray-50 py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <motion.p
               {...sectionReveal}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
             >
               The Method
             </motion.p>
             <motion.h2
               {...reveal(0.1)}
               id="method-born-heading"
-              className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               What she found became a method. What the method revealed became a
               philosophy.
             </motion.h2>
             <motion.p
               {...reveal(0.2)}
-              className="text-white/70 text-lg font-light leading-relaxed mb-6"
+              className="text-gray-600 text-lg font-light leading-relaxed mb-6"
             >
               Suzanne fused the best of these worlds into a practical methodology
               for lasting transformation: Rapid Repatterning&reg; and
@@ -239,7 +248,7 @@ export default function TheStoryContent() {
             </motion.p>
             <motion.p
               {...reveal(0.3)}
-              className="text-white/70 text-lg font-light leading-relaxed mb-10"
+              className="text-gray-600 text-lg font-light leading-relaxed mb-10"
             >
               At its heart is a single insight, proven first in her own life:
               radical transformation doesn&rsquo;t come from motivation or mindset
@@ -249,7 +258,7 @@ export default function TheStoryContent() {
             </motion.p>
             <motion.blockquote
               {...reveal(0.4)}
-              className="border-l-2 border-brand-accent pl-6 italic text-white text-2xl lg:text-3xl font-light leading-snug"
+              className="border-l-2 border-brand-accent pl-6 italic text-brand-primary text-2xl lg:text-3xl font-light leading-snug"
             >
               It&rsquo;s not you, it&rsquo;s your pattern.
             </motion.blockquote>
@@ -270,7 +279,7 @@ export default function TheStoryContent() {
             <motion.h2
               {...reveal(0.1)}
               id="mission-heading"
-              className="text-4xl lg:text-6xl font-light text-brand-primary leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               Rewriting the code of the human experience.
             </motion.h2>
@@ -303,32 +312,40 @@ export default function TheStoryContent() {
         </div>
       </section>
 
-      {/* Final CTA — dark navy */}
+      {/* Final CTA — photo-backed dark navy */}
       <section
         aria-labelledby="story-cta-heading"
         className="relative bg-brand-primary py-20 lg:py-32 overflow-hidden"
       >
+        <Image
+          src="/images/generated/session-coaching.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
         <div
           aria-hidden="true"
-          className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-brand-accent/15 blur-[120px]"
+          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
         />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
             {...sectionReveal}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
           >
             Your Turn
           </motion.p>
           <motion.h2
             {...reveal(0.1)}
             id="story-cta-heading"
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.08] mb-8"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.08] mb-8"
           >
             Your story has a pattern too.
           </motion.h2>
           <motion.p
             {...reveal(0.2)}
-            className="text-white/70 text-lg font-light leading-relaxed max-w-xl mx-auto mb-12"
+            className="text-white/80 text-lg font-light leading-relaxed max-w-xl mx-auto mb-12"
           >
             The first step is seeing it. Take the free Pattern Scan to discover
             the pattern running beneath your story, or speak with Suzanne

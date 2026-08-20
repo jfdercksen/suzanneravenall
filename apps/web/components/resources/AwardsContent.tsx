@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Award, ArrowRight } from 'lucide-react'
@@ -65,14 +66,14 @@ export default function AwardsContent() {
       {/* Hero */}
       <section
         aria-labelledby="awards-hero-heading"
-        className="w-full bg-brand-primary py-20 lg:py-32"
+        className="w-full bg-gray-50 py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
           >
             Resources
           </motion.p>
@@ -82,7 +83,7 @@ export default function AwardsContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-4xl lg:text-6xl font-light text-white leading-[1.1] max-w-3xl mb-6"
+            className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary leading-[1.05] max-w-3xl mb-6"
           >
             Awards &amp; Honours
           </motion.h1>
@@ -91,7 +92,7 @@ export default function AwardsContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg text-white/70 font-light max-w-xl leading-relaxed"
+            className="text-lg text-gray-600 font-light max-w-xl leading-relaxed"
           >
             Recognised across healthcare, business and leadership excellence for the Ravenall
             Institute&rsquo;s contribution to coaching and human development.
@@ -102,7 +103,7 @@ export default function AwardsContent() {
       {/* Awards Grid */}
       <section
         aria-labelledby="all-awards-heading"
-        className="w-full bg-gray-950 py-20 lg:py-32"
+        className="w-full bg-white py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
@@ -111,7 +112,7 @@ export default function AwardsContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="text-3xl lg:text-4xl font-light text-white mb-12"
+            className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary mb-12"
           >
             All Awards
           </motion.h2>
@@ -127,22 +128,22 @@ export default function AwardsContent() {
               <motion.div
                 key={item.name}
                 variants={cardVariants}
-                className="flex flex-col bg-gray-900 rounded-2xl p-6 h-full"
+                className="flex flex-col bg-gray-50 rounded-2xl p-6 h-full"
               >
                 <div className="flex items-center gap-3 mb-5">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-accent/10 text-brand-accent-400">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-accent/10 text-brand-accent">
                     <Award size={18} />
                   </div>
-                  <p className="text-xs uppercase tracking-wider font-medium text-brand-accent-400">
+                  <p className="text-xs uppercase tracking-wider font-medium text-brand-accent">
                     {item.organisation}
                   </p>
                 </div>
 
-                <h3 className="text-base font-semibold text-white mb-3 leading-snug flex-1">
+                <h3 className="text-base font-semibold text-gray-900 mb-3 leading-snug flex-1">
                   {item.name}
                 </h3>
 
-                <p className="text-sm text-gray-400 font-light leading-relaxed">
+                <p className="text-sm text-gray-600 font-light leading-relaxed">
                   {item.description}
                 </p>
               </motion.div>
@@ -151,18 +152,30 @@ export default function AwardsContent() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA — dark, photo-backed band */}
       <section
         aria-labelledby="awards-cta-heading"
-        className="w-full bg-brand-primary py-20 lg:py-32"
+        className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <Image
+          src="/images/generated/session-coaching.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4"
+            className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-4"
           >
             Work With Suzanne
           </motion.p>
@@ -173,7 +186,7 @@ export default function AwardsContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-light text-white mb-6"
+            className="text-4xl lg:text-5xl font-semibold tracking-tight text-white mb-6"
           >
             Ready to start your transformation?
           </motion.h2>
