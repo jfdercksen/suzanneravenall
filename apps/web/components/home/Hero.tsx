@@ -102,35 +102,29 @@ export default function Hero() {
       <div className="relative z-10 min-h-[600px] sm:min-h-[700px] lg:min-h-0 lg:h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col justify-center min-h-[600px] sm:min-h-[700px] lg:min-h-0 lg:h-full max-w-3xl py-16 lg:py-0">
 
-          {/* Name */}
+          {/* Name + role — single line so the headline owns the space */}
           <motion.p
             {...fadeUp(0)}
-            className="text-white/90 text-sm lg:text-base font-medium tracking-[0.3em] uppercase mb-2"
+            className="text-white/90 text-xs lg:text-sm font-medium tracking-[0.25em] uppercase mb-5 lg:mb-7"
           >
-            Dr. Suzanne Ravenall
+            Dr. Suzanne Ravenall · Founder of Pattern Intelligence™
           </motion.p>
 
-          {/* Eyebrow */}
-          <motion.p
-            {...fadeUp(0.1)}
-            className="text-xs tracking-[0.3em] text-white/70 uppercase font-medium mb-4 lg:mb-6"
-          >
-            Founder of Pattern Intelligence™
-          </motion.p>
-
-          {/* Headline */}
+          {/* Headline — heavy, tight and huge (the page's single loudest element) */}
           <motion.h1
             id="hero-heading"
-            {...fadeUp(0.25)}
-            className="text-4xl lg:text-6xl font-display text-white leading-[1.05] mb-4 lg:mb-6"
+            {...fadeUp(0.15)}
+            className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.02] mb-5 lg:mb-7"
           >
-            It&apos;s not you, <span className="underline decoration-brand-accent-400 decoration-4 underline-offset-8">it&apos;s your pattern</span>
+            It&apos;s not you,
+            <br />
+            <span className="underline decoration-brand-accent-400 decoration-[6px] underline-offset-8">it&apos;s your pattern.</span>
           </motion.h1>
 
           {/* Subheadline */}
           <motion.p
-            {...fadeUp(0.45)}
-            className="text-lg lg:text-xl text-white/80 font-light max-w-xl mb-6 lg:mb-5"
+            {...fadeUp(0.35)}
+            className="text-lg lg:text-xl text-white/85 max-w-xl mb-6 lg:mb-5"
           >
             For years you&apos;ve tried to change the outcome. We help you discover
             and transform the invisible patterns creating it. Because when the
@@ -160,19 +154,16 @@ export default function Hero() {
             >
               Take the Free Pattern Scan
             </Link>
+            {/* Two CTAs only — a third hero button wrapped to its own row and
+                fell below the fold at 1440x900. Discovery-call paths remain:
+                nav CTA (>=1280px), mobile nav overlay (<1024px), nav Contact
+                link, and three discovery-call CTAs further down the page */}
             <Link
               href="/explore"
               aria-label="Explore Pattern Intelligence"
               className="inline-flex items-center justify-center px-6 py-3.5 lg:px-8 lg:py-4 border border-white/50 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10"
             >
               Explore Pattern Intelligence
-            </Link>
-            <Link
-              href="/contact"
-              aria-label="Book a free discovery call with Dr. Suzanne Ravenall"
-              className="inline-flex items-center justify-center px-6 py-3.5 lg:px-8 lg:py-4 border border-white/50 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10"
-            >
-              Book a Discovery Call
             </Link>
           </motion.div>
 

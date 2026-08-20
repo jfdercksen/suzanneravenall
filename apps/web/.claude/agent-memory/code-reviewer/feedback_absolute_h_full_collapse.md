@@ -1,0 +1,12 @@
+---
+name: feedback_absolute_h_full_collapse
+description: absolute + h-full (percentage height) on a child collapses to ~0 height when its relative parent has no explicit height/aspect-ratio — a recurring decorative-panel bug, not just a nitpick
+metadata:
+  type: feedback
+---
+
+Flag `className="absolute ... w-full h-full ..."` (or `inset-0`) whenever the nearest `relative`-positioned ancestor has NO explicit height, no `aspect-*` class, and no both-`top-0`+`bottom-0` stretch — i.e. its height is purely derived from in-flow sibling content.
+
+**Why:** Per CSS2.1 §10.6.4, a percentage `height` on an absolutely positioned element computes to `auto` (not the resolved pixel value) when the containing block's height is itself content-derived rather than explicitly specified. Since the absolutely positioned element is removed from normal flow, it has no content of its own to size against either, so it typically renders at ~0 height — the decorative element silently fails to appear, with no console error, no build error, no visual diff tool catching it unless someone eyeballs the live page at the right breakpoint. Found in `apps/web/components/home/AboutTeaser.tsx` (2026-08-20 typography pass): the offset `bg-brand-accent` panel behind the portrait is `absolute top-4 -right-2 lg:top-6 lg:-right-4 w-full h-full`, sitting inside a `relative` wrapper whose height comes only from its in-flow children (the `aspect-[4/5]` image div + credentials card) — the accent block has no `top`+`bottom` pair and no explicit/aspect-ratio height on its containing block, so it is very likely rendering at ~0 height instead of matching the portrait. Contrast with the correct usage in `Hero.tsx` (`absolute inset-0` gradient overlay), which works because the ancestor `<section>` carries explicit `min-h-[600px] ... lg:h-screen`.
+
+**How to apply:** For every `absolute` + `h-full`/`inset-*` decorative or overlay div in a diff, walk up to the nearest `relative` (or otherwise positioned) ancestor and confirm it has one of: (a) an explicit height class, (b) an `aspect-*` class, or (c) both `top-*` and `bottom-*` set on the absolute child itself (which lets the browser solve for height via the top/bottom constraint instead of a percentage). If none apply, flag it — the fix is usually to mirror the sibling's sizing method (e.g. give the accent block the same `aspect-[4/5]` class as the photo it sits behind) rather than relying on `h-full`.

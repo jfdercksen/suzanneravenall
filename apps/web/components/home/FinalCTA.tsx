@@ -27,7 +27,7 @@ export default function FinalCTA() {
         <p className="text-white/80 text-xs font-medium uppercase tracking-[0.3em] mb-6">
           Take The First Step
         </p>
-        <h2 id="finalcta-heading" className="text-4xl lg:text-6xl font-light text-white leading-tight">
+        <h2 id="finalcta-heading" className="text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05]">
           Your breakthrough is one conversation away
         </h2>
         <motion.p

@@ -38,7 +38,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
             <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-2">
               UPCOMING PROGRAMS
             </p>
-            <h2 className="text-4xl lg:text-6xl font-light text-brand-primary">
+            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
               Your next step starts here
             </h2>
           </div>
@@ -96,7 +96,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                       </span>
                     </div>
 
-                    <h3 className="text-4xl lg:text-5xl font-light text-white leading-tight mb-3">
+                    <h3 className="text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-tight mb-3">
                       {cohort.productTitle}
                     </h3>
                     <p className="text-white/80 text-lg font-light mb-8">
@@ -120,7 +120,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
 
                   {/* Bottom row — price + CTA */}
                   <div className="flex items-center justify-between flex-wrap gap-4">
-                    <span className="text-3xl font-light text-white">
+                    <span className="text-3xl font-semibold tracking-tight text-white">
                       {cohort.priceZar !== null
                         ? `R${cohort.priceZar.toLocaleString('en-ZA', { maximumFractionDigits: 0 })}`
                         : 'Contact us'}
@@ -142,7 +142,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                     <p className="text-xs tracking-[0.3em] text-white/80 uppercase font-medium mb-8">
                       GROUP PROGRAMS
                     </p>
-                    <h3 className="text-4xl lg:text-5xl font-light text-white leading-tight mb-3">
+                    <h3 className="text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-tight mb-3">
                       New Cohorts Forming
                     </h3>
                     <p className="text-white/80 text-lg font-light mb-8 max-w-md">
@@ -188,7 +188,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                 <p className="text-xs tracking-[0.3em] text-white/80 uppercase font-medium mb-8">
                   {oneOnOne.label}
                 </p>
-                <h3 className="text-3xl font-light text-white leading-tight mb-3">
+                <h3 className="text-3xl font-semibold tracking-tight text-white leading-tight mb-3">
                   {oneOnOne.title}
                 </h3>
                 <p className="text-white/80 font-light mb-8">

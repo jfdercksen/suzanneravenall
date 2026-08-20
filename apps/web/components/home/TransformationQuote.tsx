@@ -41,7 +41,7 @@ export default function TransformationQuote() {
         </motion.p>
 
         <motion.blockquote {...fadeUp(0.2)}>
-          <p className="text-3xl lg:text-5xl xl:text-6xl font-display text-white leading-[1.2] italic mb-8">
+          <p className="text-3xl lg:text-5xl xl:text-6xl font-semibold tracking-tight text-white leading-[1.15] mb-8">
             &ldquo;I don&apos;t just help people change their minds.
             I help them change the structure that was
             running their mind all along.&rdquo;

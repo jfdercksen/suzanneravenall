@@ -63,7 +63,7 @@ export default function LeadMagnet() {
           <p className="text-white/80 text-xs font-medium uppercase tracking-[0.3em] mb-4">
             Free Chapter
           </p>
-          <h2 id="leadmagnet-heading" className="text-4xl lg:text-6xl font-light text-white">
+          <h2 id="leadmagnet-heading" className="text-4xl lg:text-6xl font-semibold tracking-tight text-white">
             Get the first chapter free
           </h2>
           <p className="mt-4 text-white/70 text-lg leading-relaxed">

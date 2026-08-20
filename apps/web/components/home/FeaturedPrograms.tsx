@@ -61,7 +61,7 @@ export default function FeaturedPrograms() {
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             Featured Programs
           </p>
-          <h2 id="programs-heading" className="text-4xl lg:text-6xl font-light text-brand-primary">
+          <h2 id="programs-heading" className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
             The fastest path to your breakthrough
           </h2>
         </motion.div>

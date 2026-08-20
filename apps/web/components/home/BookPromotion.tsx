@@ -75,7 +75,7 @@ export default function BookPromotion() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-4xl lg:text-5xl font-light text-brand-primary leading-tight mb-6"
+              className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-[1.1] mb-6"
             >
               Before you change your life, understand the architecture holding you back.
             </motion.h2>

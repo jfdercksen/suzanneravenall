@@ -45,7 +45,7 @@ export default function TestimonialSpotlight() {
               <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-6">
                 CLIENT RESULT
               </p>
-              <div className="text-7xl lg:text-9xl font-light text-brand-primary leading-none mb-2">
+              <div className="text-7xl lg:text-9xl font-semibold tracking-tight text-brand-primary leading-none mb-2">
                 {stat}
               </div>
               <p className="text-xl lg:text-2xl text-gray-600 font-light uppercase tracking-wider">
@@ -73,7 +73,7 @@ export default function TestimonialSpotlight() {
           >
             <QuoteMark />
 
-            <blockquote className="text-2xl lg:text-3xl font-light text-brand-primary leading-relaxed mb-8">
+            <blockquote className="text-2xl lg:text-3xl font-medium tracking-tight text-brand-primary leading-snug mb-8">
               <p>{quote}</p>
               <footer className="flex items-center gap-4 mt-8">
                 <div

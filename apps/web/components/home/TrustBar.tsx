@@ -78,12 +78,12 @@ export default function TrustBar() {
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.5, delay: i * 0.1, ease: 'easeOut' }}
             >
-              <dd className="text-4xl lg:text-5xl font-light text-brand-primary">
+              <dd className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary">
                 {numeric !== null
                   ? <CountUp target={numeric} suffix={suffix} isInView={isInView} />
                   : value}
               </dd>
-              <dt className="mt-2 text-sm font-medium text-gray-600 uppercase tracking-wider">{label}</dt>
+              <dt className="mt-3 text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-[0.2em]">{label}</dt>
             </motion.div>
           ))}
         </dl>

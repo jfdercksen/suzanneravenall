@@ -86,7 +86,7 @@ export default function FocusAreas() {
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             Areas of Focus
           </p>
-          <h2 className="text-4xl lg:text-6xl font-light text-brand-primary">
+          <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
             Where do you need the breakthrough?
           </h2>
         </motion.div>
@@ -109,17 +109,17 @@ export default function FocusAreas() {
                   type="button"
                   onClick={() => setActiveIndex(i)}
                   aria-current={isActive ? 'true' : undefined}
-                  className={`group flex items-start gap-4 w-full px-8 py-5 border-l-2 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-inset ${
+                  className={`group flex items-start gap-4 w-full px-8 py-4 border-l-2 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-inset ${
                     isActive
                       ? 'border-brand-accent bg-white'
                       : 'border-transparent hover:bg-white'
                   }`}
                 >
-                  <span className={`text-xs font-mono font-semibold mt-1 flex-shrink-0 transition-colors duration-300 ${isActive ? 'text-brand-accent' : 'text-gray-500 group-hover:text-brand-accent'}`}>
+                  <span className={`text-xs font-mono font-semibold mt-2.5 flex-shrink-0 transition-colors duration-300 ${isActive ? 'text-brand-accent' : 'text-gray-500 group-hover:text-brand-accent'}`}>
                     {area.number}
                   </span>
                   <div>
-                    <p className={`font-semibold text-base leading-snug transition-colors duration-300 ${isActive ? 'text-brand-primary' : 'text-gray-600 group-hover:text-brand-primary'}`}>{area.title}</p>
+                    <p className={`font-semibold tracking-tight text-2xl leading-snug transition-colors duration-300 ${isActive ? 'text-brand-primary' : 'text-gray-500 group-hover:text-brand-primary'}`}>{area.title}</p>
                     <p
                       className={`text-gray-600 text-sm mt-1 leading-snug transition-all duration-300 ${
                         isActive ? 'opacity-100 max-h-10' : 'opacity-0 max-h-0 overflow-hidden'
@@ -169,7 +169,7 @@ export default function FocusAreas() {
                 <p className="text-white/80 text-xs font-mono uppercase tracking-[0.3em] mb-3">
                   {activeArea.number}
                 </p>
-                <h3 className="text-4xl lg:text-5xl font-light text-white mb-4 leading-tight">
+                <h3 className="text-4xl lg:text-5xl font-semibold tracking-tight text-white mb-4 leading-tight">
                   {activeArea.title}
                 </h3>
                 <p className="text-white/70 text-lg mb-8 leading-relaxed">

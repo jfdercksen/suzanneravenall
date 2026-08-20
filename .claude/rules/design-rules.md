@@ -23,8 +23,11 @@ Every page must meet that standard. Flat, static, generic pages fail QA.
 ## Typography rules
 
 - Section labels: text-xs uppercase tracking-[0.3em] font-medium text-brand-accent
-- Section headlines: text-4xl md:text-6xl font-light
-- Never use default (font-normal) on headlines — always font-light or font-semibold
+- Section headlines: text-4xl lg:text-6xl font-semibold tracking-tight — heavy, tight statement type is the reference-site standard (changed 2026-08-20 after Johan rejected the font-light system as "basic"; the reference site's headlines are all bold/black weight)
+- font-light is for supporting subheads and body-adjacent text only — never for the statement headline of a section
+- Never use default (font-normal) on headlines
+- Hero headline: text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight — the single loudest element on the page
+- Big stats (count-up numbers): font-semibold tracking-tight, one size class up from the old font-light version
 - Poppins only — no other fonts
 
 ## Motion rules
@@ -47,7 +50,7 @@ Every page must meet that standard. Flat, static, generic pages fail QA.
 
 - Section background is always full-bleed (w-full)
 - Content container: max-w-7xl mx-auto px-4 sm:px-6 lg:px-8
-- Section vertical padding: py-20 md:py-32
+- Section vertical padding: py-20 lg:py-32
 - Never put max-width on the section background itself
 
 ## Components

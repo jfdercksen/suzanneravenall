@@ -113,11 +113,13 @@ export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             Upcoming Opportunities
           </p>
+          {/* Copy differs from UpcomingPrograms on purpose — the page had the
+              identical headline twice, which read as template filler */}
           <h2
             id="upcoming-events-heading"
-            className="text-4xl lg:text-6xl font-light text-brand-primary"
+            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary"
           >
-            Your next step starts here
+            Three ways to begin
           </h2>
         </motion.div>
 

@@ -24,7 +24,7 @@ export default function AboutTeaser() {
             <p className="text-sm text-gray-500 font-light italic mb-5 max-w-sm leading-relaxed">
               Dr. Suzanne Ravenall, Neuro-Repatterning® pioneer, author, keynote speaker and transformation coach to 2,000+ clients across 30+ countries.
             </p>
-            <h2 id="about-heading" className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight">
+            <h2 id="about-heading" className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08]">
               Science-backed coaching with a track record of real results
             </h2>
             <p className="mt-6 text-gray-600 leading-relaxed">
@@ -58,6 +58,13 @@ export default function AboutTeaser() {
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
           >
+            {/* Offset electric-blue block behind the portrait — flat accent as a
+                graphic element (never as text colour), echoing the reference site's
+                signature blue panel */}
+            <div
+              aria-hidden="true"
+              className="absolute top-4 -right-2 lg:top-6 lg:-right-4 w-full h-full bg-brand-accent rounded-card"
+            />
             <div className="relative aspect-[4/5] rounded-card overflow-hidden shadow-card-hover">
               <Image
                 src="/images/suzanne-casual.jpg"
@@ -68,7 +75,7 @@ export default function AboutTeaser() {
               />
             </div>
             <div className="mt-4 lg:mt-0 lg:absolute lg:-bottom-4 lg:-left-8 bg-white border border-gray-100 text-brand-primary rounded-card p-4 shadow-card-hover inline-block lg:block">
-              <p className="text-xs text-brand-primary/50 uppercase tracking-wider mb-0.5">Academic credentials</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider mb-0.5">Academic credentials</p>
               <p className="font-semibold text-sm text-brand-primary">B.Msc · M.Msc · Msc.D.</p>
             </div>
           </motion.div>
