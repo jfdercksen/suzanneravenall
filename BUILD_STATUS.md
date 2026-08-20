@@ -1,9 +1,9 @@
 # Build Status — Suzanne Ravenall Platform
 
 Current Phase: Phase 5 — QA and Launch
-Current Task: FIX 13 QA sweep DONE (2026-08-19) — all 8 Diagnostic Hub quizzes verified server-side end-to-end, sitewide 60-route pass clean, KI030 inventory fixed on VPS (links repaired + 12-seat levels live), MeiliSearch seeded (KI020), email_unsubscribes migration applied, EMAIL_UNSUBSCRIBE_SECRET + COMPANY_PHYSICAL_ADDRESS set (VAT unset = plain-invoice mode), VAT verified clean (zero tax rates). Reply draft for Suzanne awaiting Johan approval (C:\Johan Brain\drafts\2026-08-19-suzanne-review-reply.md). BLOCKED ON JOHAN: PayFast sandbox checkout (creds in Vaultwarden), Sentry DSNs (KI001), Resend domain decision (quiz emails + contact form dead until verified). NEW: KI034 (USD region pricing), KI035 (contact form silent drop). FIX 12 (pattern-coach trial CTA → old Pocket Coach site) open, needs destination decision.
-Current Branch: main (VPS also on main at 77ef5f9 since 2026-08-19)
-Last Updated: 2026-08-19
+Current Task: HOMEPAGE BRIGHTNESS PROTOTYPE (2026-08-20) — colour diagnosis vs tonyrobbins.com done (root cause of Suzanne's "dark and moody": dark sections are FLAT colour fills with no imagery + text at 30-60% opacity; the reference only goes dark behind full-bleed photos). Homepage rebuilt as prototype on feature/homepage-brightness-pass (a473c6c, pushed, NOT merged/deployed): light-first, all remaining dark sections photo-backed, contrast raised. Build green, 159/159 component tests pass, code-reviewer issues fixed. AWAITING JOHAN: review before/after screenshots, deploy branch to VPS for Suzanne, then decide sitewide rollout (audit ranked /shop and /about next-worst; per-page audit in the 2026-08-20 session). Still blocked from 2026-08-19: PayFast sandbox checkout (Vaultwarden), Sentry DSNs (KI001), Resend domain decision (KI035), FIX 12 destination, KI034 USD pricing. Reply draft for Suzanne still awaiting approval (C:\Johan Brain\drafts\2026-08-19-suzanne-review-reply.md).
+Current Branch: feature/homepage-brightness-pass locally (main + VPS unchanged at f1b8d17)
+Last Updated: 2026-08-20
 Last Updated By: Claude
 
 ---
