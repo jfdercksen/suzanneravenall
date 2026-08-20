@@ -183,7 +183,7 @@ export default function Hero() {
       <button
         onClick={scrollToMedia}
         aria-label="Scroll to next section"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/40 hover:text-white/70 transition-colors duration-300 cursor-pointer"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 hover:text-white transition-colors duration-300 cursor-pointer"
       >
         <ChevronDown className="w-6 h-6 motion-safe:animate-bounce" />
       </button>

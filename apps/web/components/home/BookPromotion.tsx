@@ -106,7 +106,7 @@ export default function BookPromotion() {
               <p className="text-lg font-light italic text-brand-primary leading-relaxed">
                 &ldquo;When we decode hidden patterns, we transform in unimaginable ways. That shift radiates outward: into how we lead, grow, relate, love, and show up.&rdquo;
               </p>
-              <footer className="mt-3 text-sm text-gray-400 uppercase tracking-wider not-italic">
+              <footer className="mt-3 text-sm text-gray-500 uppercase tracking-wider not-italic">
                 Dr. Suzanne Ravenall
               </footer>
             </motion.blockquote>

@@ -87,35 +87,37 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
-      {/* 1 — dark */}
+      {/* Colour system: light is the default; dark only where full-bleed
+          imagery carries it (hero, quote video, photo-backed CTAs). */}
+      {/* 1 — dark (video hero) */}
       <Hero />
-      {/* 2 — light */}
+      {/* 2 — light (bg-white) */}
       <TrustBar />
-      {/* 3 — dark (bg-gray-950) */}
-      <MediaLogos id="media-logos" />
-      {/* 4 — dark (bg-brand-primary) */}
+      {/* 3 — light (bg-gray-50 press band) */}
+      <MediaLogos id="media-logos" tone="light" />
+      {/* 4 — light (bg-white, dark photo cards) */}
       <UpcomingPrograms cohort={featuredCohort} />
       {/* 5 — light (bg-white) */}
       <MagazineCovers />
-      {/* 5 — light (bg-gray-50) */}
+      {/* 6 — light (bg-gray-50) */}
       <AboutTeaser />
-      {/* 6 — light (bg-white) */}
+      {/* 7 — light (bg-white) */}
       <FeaturedPrograms />
-      {/* 7 — dark (full-bleed video) */}
+      {/* 8 — dark (full-bleed video) */}
       <TransformationQuote />
-      {/* 8 — dark (bg-gray-950) */}
+      {/* 9 — light (bg-white, photo panel) */}
       <FocusAreas />
-      {/* 9 — dark */}
+      {/* 10 — light (bg-gray-50) */}
       <TestimonialSpotlight />
-      {/* 10 — mixed dark/light (BookPromotion split layout) */}
+      {/* 11 — mixed dark/light (BookPromotion split layout) */}
       <BookPromotion />
-      {/* 11 — light (bg-gray-50) */}
+      {/* 12 — light (bg-gray-50) */}
       <UpcomingEvents cohort={featuredCohort} />
-      {/* 12 — dark (bg-brand-primary) */}
+      {/* 13 — dark (photo + navy overlay) */}
       <LeadMagnet />
-      {/* 13 — light (bg-white) */}
+      {/* 14 — light (bg-white) */}
       <VideoTestimonials />
-      {/* 14 — dark (bg-brand-primary) */}
+      {/* 15 — dark (photo + navy overlay) */}
       <FinalCTA />
     </>
   )

@@ -22,13 +22,16 @@ const logos = [
 const row1 = logos.slice(0, 6)
 const row2 = logos.slice(6)
 
+type Tone = 'dark' | 'light'
+
 interface LogoStripProps {
   items: typeof logos
   reverse?: boolean
   size?: 'sm' | 'lg'
+  tone?: Tone
 }
 
-function LogoStrip({ items, reverse = false, size = 'sm' }: LogoStripProps) {
+function LogoStrip({ items, reverse = false, size = 'sm', tone = 'dark' }: LogoStripProps) {
   // Duplicate for seamless loop — the -50% keyframe relies on the strip being exactly 2× the natural width
   const doubled = [...items, ...items]
   const animClass = reverse ? 'animate-logo-scroll-reverse' : 'animate-logo-scroll'
@@ -37,6 +40,9 @@ function LogoStrip({ items, reverse = false, size = 'sm' }: LogoStripProps) {
     : 'flex-shrink-0 h-10 w-28 relative'
   const gapClass = size === 'lg' ? 'gap-14' : 'gap-10'
   const imgSizes = size === 'lg' ? '144px' : '112px'
+  const logoClass = tone === 'light'
+    ? 'object-contain brightness-0 opacity-55'
+    : 'object-contain brightness-0 invert opacity-70'
 
   // No overflow-hidden here — the parent masked wrapper handles clipping+fading
   return (
@@ -48,7 +54,7 @@ function LogoStrip({ items, reverse = false, size = 'sm' }: LogoStripProps) {
             alt={alt}
             fill
             sizes={imgSizes}
-            className="object-contain brightness-0 invert opacity-70"
+            className={logoClass}
           />
         </div>
       ))}
@@ -60,15 +66,25 @@ interface MediaLogosProps {
   id?: string
   quote?: string
   quoteAttribution?: string
+  /** 'dark' (default) keeps the original gray-950 band; 'light' renders the
+   *  Tony-Robbins-style press band on a light background. */
+  tone?: Tone
 }
 
 export default function MediaLogos({
   id,
-  quote = '\u201cDecode the Pattern. Unlock Your Potential.\u201d',
+  quote = '“Decode the Pattern. Unlock Your Potential.”',
   quoteAttribution = 'Dr. Suzanne Ravenall',
+  tone = 'dark',
 }: MediaLogosProps) {
+  const isLight = tone === 'light'
+
   return (
-    <section id={id} aria-label="As seen in media" className="bg-gray-950 py-16">
+    <section
+      id={id}
+      aria-label="As seen in media"
+      className={isLight ? 'bg-gray-50 py-16 border-y border-gray-100' : 'bg-gray-950 py-16'}
+    >
 
       {/* Quote */}
       <motion.blockquote
@@ -78,10 +94,10 @@ export default function MediaLogos({
         transition={{ duration: 0.8, ease: 'easeOut' as const }}
         className="text-center max-w-3xl mx-auto px-4 mb-12"
       >
-        <p className="text-white/70 text-base lg:text-lg font-light italic leading-relaxed">
+        <p className={`text-base lg:text-lg font-light italic leading-relaxed ${isLight ? 'text-brand-primary' : 'text-white/80'}`}>
           {quote}
         </p>
-        <footer className="mt-3 text-white/40 text-sm tracking-widest uppercase not-italic">
+        <footer className={`mt-3 text-sm tracking-widest uppercase not-italic ${isLight ? 'text-gray-500' : 'text-white/60'}`}>
           {quoteAttribution}
         </footer>
       </motion.blockquote>
@@ -94,7 +110,7 @@ export default function MediaLogos({
         transition={{ duration: 0.6, ease: 'easeOut' as const }}
         className="max-w-7xl mx-auto px-4 mb-6"
       >
-        <p className="text-center text-xs font-medium tracking-[0.3em] uppercase text-white/70">
+        <p className={`text-center text-xs font-medium tracking-[0.3em] uppercase ${isLight ? 'text-gray-500' : 'text-white/70'}`}>
           As seen in
         </p>
       </motion.div>
@@ -106,13 +122,13 @@ export default function MediaLogos({
       <div className="logo-ticker-fade">
         {/* Mobile: two rows scrolling in opposite directions */}
         <div className="flex flex-col gap-8 lg:hidden">
-          <LogoStrip items={row1} />
-          <LogoStrip items={row2} reverse />
+          <LogoStrip items={row1} tone={tone} />
+          <LogoStrip items={row2} reverse tone={tone} />
         </div>
 
         {/* Desktop: single larger row with all logos */}
         <div className="hidden lg:block">
-          <LogoStrip items={logos} size="lg" />
+          <LogoStrip items={logos} size="lg" tone={tone} />
         </div>
       </div>
     </section>

@@ -69,7 +69,7 @@ export default function FocusAreas() {
   return (
     <section
       aria-label="Areas of Focus"
-      className="bg-gray-950 py-14 lg:py-24"
+      className="bg-white py-14 lg:py-24"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
@@ -83,24 +83,24 @@ export default function FocusAreas() {
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="text-brand-accent-400 text-xs font-medium uppercase tracking-[0.3em] mb-3">
+          <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             Areas of Focus
           </p>
-          <h2 className="text-4xl lg:text-6xl font-light text-white">
+          <h2 className="text-4xl lg:text-6xl font-light text-brand-primary">
             Where do you need the breakthrough?
           </h2>
         </motion.div>
 
         {/* Desktop: two-panel layout */}
         <motion.div
-          className="hidden lg:flex h-[620px] rounded-card overflow-hidden"
+          className="hidden lg:flex h-[620px] rounded-card overflow-hidden border border-gray-200 shadow-card-hover"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
           {/* Left panel — 35% — numbered list */}
-          <div className="w-[35%] bg-gray-900 flex flex-col justify-center overflow-y-auto">
+          <div className="w-[35%] bg-gray-50 flex flex-col justify-center overflow-y-auto">
             {areas.map((area, i) => {
               const isActive = activeIndex === i
               return (
@@ -109,19 +109,19 @@ export default function FocusAreas() {
                   type="button"
                   onClick={() => setActiveIndex(i)}
                   aria-current={isActive ? 'true' : undefined}
-                  className={`flex items-start gap-4 w-full px-8 py-5 border-l-2 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-inset ${
+                  className={`group flex items-start gap-4 w-full px-8 py-5 border-l-2 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-inset ${
                     isActive
-                      ? 'border-brand-accent bg-white/5 opacity-100'
-                      : 'border-transparent hover:bg-white/5 opacity-50 hover:opacity-75'
+                      ? 'border-brand-accent bg-white'
+                      : 'border-transparent hover:bg-white'
                   }`}
                 >
-                  <span className="text-brand-accent-400 text-xs font-mono font-semibold mt-1 flex-shrink-0">
+                  <span className={`text-xs font-mono font-semibold mt-1 flex-shrink-0 transition-colors duration-300 ${isActive ? 'text-brand-accent' : 'text-gray-500 group-hover:text-brand-accent'}`}>
                     {area.number}
                   </span>
                   <div>
-                    <p className="text-white font-semibold text-base leading-snug">{area.title}</p>
+                    <p className={`font-semibold text-base leading-snug transition-colors duration-300 ${isActive ? 'text-brand-primary' : 'text-gray-600 group-hover:text-brand-primary'}`}>{area.title}</p>
                     <p
-                      className={`text-white/50 text-sm mt-1 leading-snug transition-all duration-300 ${
+                      className={`text-gray-600 text-sm mt-1 leading-snug transition-all duration-300 ${
                         isActive ? 'opacity-100 max-h-10' : 'opacity-0 max-h-0 overflow-hidden'
                       }`}
                     >
@@ -214,7 +214,7 @@ export default function FocusAreas() {
                     {area.number}
                   </p>
                   <h3 className="text-xl font-semibold text-white leading-tight">{area.title}</h3>
-                  <p className="text-white/60 text-sm mt-1">{area.outcome}</p>
+                  <p className="text-white/80 text-sm mt-1">{area.outcome}</p>
                 </div>
               </Link>
             </motion.div>

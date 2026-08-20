@@ -12,7 +12,7 @@ function QuoteMark() {
       aria-hidden="true"
       viewBox="0 0 512 512"
       fill="currentColor"
-      className="w-14 h-14 text-brand-accent-400 mb-6"
+      className="w-14 h-14 text-brand-accent mb-6"
     >
       {/* Font Awesome quote-left path — thick, cinematic block quote mark */}
       <path d="M464 256h-80v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8c-88.4 0-160 71.6-160 160v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48zm-288 0H96v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8C71.6 32 0 103.6 0 192v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48z" />
@@ -28,7 +28,7 @@ export default function TestimonialSpotlight() {
   const { stat, statLabel, supporting, quote, name, role, initials } = spotlightTestimonial
 
   return (
-    <section className="bg-gray-950 py-14 lg:py-24 overflow-hidden">
+    <section className="bg-gray-50 py-14 lg:py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -42,13 +42,13 @@ export default function TestimonialSpotlight() {
             transition={{ duration: 0.7, ease: 'easeOut' as const }}
           >
             <div className="mb-8">
-              <p className="text-xs tracking-[0.3em] text-brand-accent-400 uppercase font-medium mb-6">
+              <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-6">
                 CLIENT RESULT
               </p>
-              <div className="text-7xl lg:text-9xl font-light text-white leading-none mb-2">
+              <div className="text-7xl lg:text-9xl font-light text-brand-primary leading-none mb-2">
                 {stat}
               </div>
-              <p className="text-xl lg:text-2xl text-white/60 font-light uppercase tracking-wider">
+              <p className="text-xl lg:text-2xl text-gray-600 font-light uppercase tracking-wider">
                 {statLabel}
               </p>
             </div>
@@ -57,7 +57,7 @@ export default function TestimonialSpotlight() {
             <div className="w-16 h-px bg-brand-accent mb-8" />
 
             {/* Supporting context */}
-            <p className="text-white/60 text-sm font-light leading-relaxed max-w-sm">
+            <p className="text-gray-600 text-sm font-light leading-relaxed max-w-sm">
               {supporting}
             </p>
           </motion.div>
@@ -73,25 +73,25 @@ export default function TestimonialSpotlight() {
           >
             <QuoteMark />
 
-            <blockquote className="text-2xl lg:text-3xl font-light text-white leading-relaxed mb-8">
+            <blockquote className="text-2xl lg:text-3xl font-light text-brand-primary leading-relaxed mb-8">
               <p>{quote}</p>
               <footer className="flex items-center gap-4 mt-8">
                 <div
                   aria-label={`${name} — avatar`}
-                  className="w-12 h-12 rounded-full bg-brand-primary border border-brand-accent/70 flex items-center justify-center flex-shrink-0"
+                  className="w-12 h-12 rounded-full bg-brand-primary flex items-center justify-center flex-shrink-0"
                 >
-                  <span className="text-brand-accent-400 text-sm font-medium" aria-hidden="true">{initials}</span>
+                  <span className="text-white text-sm font-medium" aria-hidden="true">{initials}</span>
                 </div>
                 <cite className="not-italic">
-                  <p className="text-white font-medium">{name}</p>
-                  <p className="text-white/60 text-sm">{role}</p>
+                  <p className="text-brand-primary font-medium">{name}</p>
+                  <p className="text-gray-500 text-sm">{role}</p>
                 </cite>
               </footer>
             </blockquote>
 
             {/* CTA */}
             <div className="space-y-4">
-              <p className="text-white/60 text-sm uppercase tracking-widest">
+              <p className="text-gray-500 text-sm uppercase tracking-widest">
                 Start your transformation
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
@@ -103,7 +103,7 @@ export default function TestimonialSpotlight() {
                 </Link>
                 <Link
                   href="/testimonials"
-                  className="border border-white/50 hover:border-white/80 text-white/60 hover:text-white px-8 py-4 rounded-button text-sm uppercase tracking-widest font-medium transition-all duration-300 text-center"
+                  className="border border-gray-300 hover:border-brand-primary text-gray-600 hover:text-brand-primary px-8 py-4 rounded-button text-sm uppercase tracking-widest font-medium transition-all duration-300 text-center"
                 >
                   More Results
                 </Link>

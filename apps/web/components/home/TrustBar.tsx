@@ -83,7 +83,7 @@ export default function TrustBar() {
                   ? <CountUp target={numeric} suffix={suffix} isInView={isInView} />
                   : value}
               </dd>
-              <dt className="mt-2 text-sm font-medium text-gray-400 uppercase tracking-wider">{label}</dt>
+              <dt className="mt-2 text-sm font-medium text-gray-600 uppercase tracking-wider">{label}</dt>
             </motion.div>
           ))}
         </dl>
@@ -96,7 +96,7 @@ export default function TrustBar() {
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="text-center text-xs uppercase tracking-[0.3em] font-medium text-gray-400 mb-8">
+          <p className="text-center text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mb-8">
             Our Accreditations
           </p>
           <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6" aria-label="Accreditation bodies">
@@ -107,7 +107,7 @@ export default function TrustBar() {
                   alt={alt}
                   fill
                   sizes="160px"
-                  className="object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                  className="object-contain grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
                 />
               </li>
             ))}

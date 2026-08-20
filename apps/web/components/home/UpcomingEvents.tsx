@@ -138,7 +138,7 @@ export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
                   >
                     {type}
                   </span>
-                  <span className="text-gray-400 text-xs text-right max-w-[120px]">{badge}</span>
+                  <span className="text-gray-500 text-xs text-right max-w-[120px]">{badge}</span>
                 </div>
 
                 <h3 className="text-xl font-semibold text-brand-primary mb-3">{title}</h3>

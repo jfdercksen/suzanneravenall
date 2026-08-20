@@ -29,22 +29,22 @@ interface UpcomingProgramsProps {
 
 export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
   return (
-    <section className="bg-brand-primary py-14 lg:py-24">
+    <section className="bg-white py-14 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}
         <div className="flex items-center justify-between mb-12">
           <div>
-            <p className="text-xs tracking-[0.3em] text-brand-accent-300 uppercase font-medium mb-2">
+            <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-2">
               UPCOMING PROGRAMS
             </p>
-            <h2 className="text-4xl lg:text-6xl font-light text-white">
+            <h2 className="text-4xl lg:text-6xl font-light text-brand-primary">
               Your next step starts here
             </h2>
           </div>
           <Link
             href="/programs"
-            className="hidden lg:flex items-center gap-2 text-white/70 hover:text-white text-sm uppercase tracking-widest transition-colors duration-300"
+            className="hidden lg:flex items-center gap-2 text-gray-500 hover:text-brand-primary text-sm uppercase tracking-widest transition-colors duration-300"
           >
             All programs <ChevronRight className="w-4 h-4" />
           </Link>
@@ -87,7 +87,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                         className={`text-xs px-3 py-1 uppercase tracking-wider ${
                           cohort.spotsRemaining > 0
                             ? 'bg-brand-accent/20 border border-brand-accent-400 text-brand-accent-400'
-                            : 'bg-gray-800 border border-gray-700 text-gray-400'
+                            : 'bg-gray-800 border border-gray-700 text-gray-200'
                         }`}
                       >
                         {cohort.spotsRemaining > 0
@@ -99,7 +99,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                     <h3 className="text-4xl lg:text-5xl font-light text-white leading-tight mb-3">
                       {cohort.productTitle}
                     </h3>
-                    <p className="text-white/60 text-lg font-light mb-8">
+                    <p className="text-white/80 text-lg font-light mb-8">
                       Small group. Live via Zoom. Permanent change.
                     </p>
 
@@ -145,7 +145,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                     <h3 className="text-4xl lg:text-5xl font-light text-white leading-tight mb-3">
                       New Cohorts Forming
                     </h3>
-                    <p className="text-white/60 text-lg font-light mb-8 max-w-md">
+                    <p className="text-white/80 text-lg font-light mb-8 max-w-md">
                       Suzanne is finalising the next round of live group sessions. Register your
                       interest and be the first to know when a spot opens.
                     </p>
@@ -172,7 +172,17 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
             transition={{ duration: 0.6, delay: 0.15, ease: 'easeOut' as const }}
             whileHover={{ y: -4 }}
           >
-            <div className="p-8 flex flex-col justify-between min-h-[380px]">
+            {/* Background photo + overlay — dark cards carry imagery, never flat colour */}
+            <Image
+              src="/images/suzanne-casual.jpg"
+              alt=""
+              aria-hidden="true"
+              fill
+              sizes="(min-width: 1024px) 33vw, 100vw"
+              className="object-cover opacity-30 group-hover:opacity-40 transition-opacity duration-500"
+            />
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-gray-950/80 via-gray-950/60 to-gray-950/90" />
+            <div className="relative z-10 p-8 flex flex-col justify-between min-h-[380px]">
 
               <div>
                 <p className="text-xs tracking-[0.3em] text-brand-accent-300 uppercase font-medium mb-8">
@@ -181,7 +191,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                 <h3 className="text-3xl font-light text-white leading-tight mb-3">
                   {oneOnOne.title}
                 </h3>
-                <p className="text-white/60 font-light mb-8">
+                <p className="text-white/80 font-light mb-8">
                   {oneOnOne.subtitle}
                 </p>
 
@@ -192,7 +202,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                     {oneOnOne.availability}
                   </span>
                 </div>
-                <p className="text-white/30 text-sm pl-5">
+                <p className="text-white/60 text-sm pl-5">
                   Next available: {oneOnOne.nextAvailable}
                 </p>
               </div>
@@ -212,7 +222,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
         <div className="mt-8 text-center lg:hidden">
           <Link
             href="/programs"
-            className="text-white/70 hover:text-white text-sm uppercase tracking-widest transition-colors duration-300"
+            className="text-gray-500 hover:text-brand-primary text-sm uppercase tracking-widest transition-colors duration-300"
           >
             View all programs &rarr;
           </Link>

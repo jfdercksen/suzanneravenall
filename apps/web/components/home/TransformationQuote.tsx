@@ -28,7 +28,7 @@ export default function TransformationQuote() {
       </video>
 
       {/* Layer 2 — Heavy dark overlay */}
-      <div aria-hidden="true" className="absolute inset-0 bg-black/25" />
+      <div aria-hidden="true" className="absolute inset-0 bg-black/45" />
 
       {/* Layer 3 — Content */}
       <div className="relative z-10 w-full max-w-4xl mx-auto px-4 text-center py-20">
@@ -47,7 +47,7 @@ export default function TransformationQuote() {
             running their mind all along.&rdquo;
           </p>
           <footer>
-            <cite className="text-white/50 text-sm tracking-widest uppercase not-italic">
+            <cite className="text-white/80 text-sm tracking-widest uppercase not-italic">
               Dr. Suzanne Ravenall
             </cite>
           </footer>

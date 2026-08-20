@@ -1,13 +1,24 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 export default function FinalCTA() {
   return (
-    <section aria-labelledby="finalcta-heading" className="py-14 lg:py-24 bg-brand-primary">
+    <section aria-labelledby="finalcta-heading" className="relative py-14 lg:py-24 bg-brand-primary overflow-hidden">
+      {/* Background photo + navy overlay — dark sections carry imagery, never flat colour */}
+      <Image
+        src="/images/generated/session-coaching.webp"
+        alt=""
+        aria-hidden="true"
+        fill
+        sizes="100vw"
+        className="object-cover opacity-50"
+      />
+      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/70 to-brand-primary/90" />
       <motion.div
-        className="max-w-3xl mx-auto px-4 text-center"
+        className="relative z-10 max-w-3xl mx-auto px-4 text-center"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '0px' }}
@@ -20,7 +31,7 @@ export default function FinalCTA() {
           Your breakthrough is one conversation away
         </h2>
         <motion.p
-          className="mt-6 text-white/60 text-lg leading-relaxed max-w-xl mx-auto"
+          className="mt-6 text-white/80 text-lg leading-relaxed max-w-xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
@@ -40,7 +51,7 @@ export default function FinalCTA() {
           >
             Book Discovery Call
           </Link>
-          <p className="mt-4 text-white/40 text-sm">Complimentary 30-minute session · No obligation</p>
+          <p className="mt-4 text-white/70 text-sm">Complimentary 30-minute session · No obligation</p>
         </motion.div>
       </motion.div>
     </section>

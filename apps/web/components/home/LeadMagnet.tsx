@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 // TODO: Wire to real PDF delivery once Suzanne provides the chapter PDF.
@@ -41,8 +42,18 @@ export default function LeadMagnet() {
   }
 
   return (
-    <section id="lead-magnet" aria-labelledby="leadmagnet-heading" className="py-14 lg:py-24 bg-brand-primary">
-      <div className="max-w-3xl mx-auto px-4 text-center">
+    <section id="lead-magnet" aria-labelledby="leadmagnet-heading" className="relative py-14 lg:py-24 bg-brand-primary overflow-hidden">
+      {/* Background photo + navy overlay — dark sections carry imagery, never flat colour */}
+      <Image
+        src="/images/generated/group-coaching-real.webp"
+        alt=""
+        aria-hidden="true"
+        fill
+        sizes="100vw"
+        className="object-cover opacity-50"
+      />
+      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90" />
+      <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -87,7 +98,7 @@ export default function LeadMagnet() {
                 disabled={status === 'loading'}
                 aria-invalid={status === 'error'}
                 aria-describedby={status === 'error' ? 'lead-magnet-error' : undefined}
-                className="flex-1 px-5 py-3.5 rounded-button bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent disabled:opacity-50 text-sm"
+                className="flex-1 px-5 py-3.5 rounded-button bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent disabled:opacity-50 text-sm"
               />
               <button
                 type="submit"
@@ -105,7 +116,7 @@ export default function LeadMagnet() {
             </p>
           )}
 
-          <p className="mt-4 text-white/40 text-xs">
+          <p className="mt-4 text-white/70 text-xs">
             No spam. Unsubscribe at any time.
           </p>
         </motion.div>
