@@ -100,7 +100,7 @@ export default function Hero() {
 
       {/* Layer 3 — Content */}
       <div className="relative z-10 min-h-[600px] sm:min-h-[700px] lg:min-h-0 lg:h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-center min-h-[600px] sm:min-h-[700px] lg:min-h-0 lg:h-full max-w-3xl py-16 lg:py-0">
+        <div className="flex flex-col justify-center min-h-[600px] sm:min-h-[700px] lg:min-h-0 lg:h-full max-w-3xl xl:max-w-4xl py-16 lg:py-0">
 
           {/* Name + role — single line so the headline owns the space */}
           <motion.p
@@ -114,7 +114,7 @@ export default function Hero() {
           <motion.h1
             id="hero-heading"
             {...fadeUp(0.15)}
-            className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.02] mb-5 lg:mb-7"
+            className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-semibold tracking-tight text-white leading-[1.02] mb-5 lg:mb-7"
           >
             It&apos;s not you,
             <br />

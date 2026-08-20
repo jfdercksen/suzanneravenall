@@ -72,6 +72,10 @@ export default function FocusAreas() {
       className="bg-white py-14 lg:py-24"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      // Keyboard parity with the mouse pause (WCAG 2.2.2): React's onFocus/onBlur
+      // use focusin/focusout, so focus anywhere inside pauses the auto-advance
+      onFocus={() => setIsPaused(true)}
+      onBlur={() => setIsPaused(false)}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -91,50 +95,52 @@ export default function FocusAreas() {
           </h2>
         </motion.div>
 
-        {/* Desktop: two-panel layout */}
+        {/* Desktop: giant stacked words + tall image — the reference site's
+            "pillars" editorial pattern. No card frame: the type IS the layout. */}
         <motion.div
-          className="hidden lg:flex h-[620px] rounded-card overflow-hidden border border-gray-200 shadow-card-hover"
+          className="hidden lg:grid grid-cols-2 gap-12 xl:gap-20 items-center"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
-          {/* Left panel — 35% — numbered list */}
-          <div className="w-[35%] bg-gray-50 flex flex-col justify-center overflow-y-auto">
+          {/* Left — area names as giant statement type */}
+          <div>
             {areas.map((area, i) => {
               const isActive = activeIndex === i
               return (
+                // h3 wraps the button (valid: h3 takes phrasing content) so the
+                // area names stay in the heading outline, matching the mobile cards
+                <h3 key={area.slug}>
                 <button
-                  key={area.slug}
                   type="button"
                   onClick={() => setActiveIndex(i)}
                   aria-current={isActive ? 'true' : undefined}
-                  className={`group flex items-start gap-4 w-full px-8 py-4 border-l-2 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-inset ${
-                    isActive
-                      ? 'border-brand-accent bg-white'
-                      : 'border-transparent hover:bg-white'
-                  }`}
+                  className="group block w-full py-2 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent rounded-sm"
                 >
-                  <span className={`text-xs font-mono font-semibold mt-2.5 flex-shrink-0 transition-colors duration-300 ${isActive ? 'text-brand-accent' : 'text-gray-500 group-hover:text-brand-accent'}`}>
-                    {area.number}
+                  <span
+                    className={`block text-4xl xl:text-5xl font-semibold tracking-tight leading-[1.08] transition-colors duration-300 ${
+                      isActive ? 'text-brand-primary' : 'text-gray-500 group-hover:text-brand-primary'
+                    }`}
+                  >
+                    {area.title}
                   </span>
-                  <div>
-                    <p className={`font-semibold tracking-tight text-2xl leading-snug transition-colors duration-300 ${isActive ? 'text-brand-primary' : 'text-gray-500 group-hover:text-brand-primary'}`}>{area.title}</p>
-                    <p
-                      className={`text-gray-600 text-sm mt-1 leading-snug transition-all duration-300 ${
-                        isActive ? 'opacity-100 max-h-10' : 'opacity-0 max-h-0 overflow-hidden'
-                      }`}
-                    >
-                      {area.outcome}
-                    </p>
-                  </div>
+                  {/* Flat accent bar marks the active word — constant height so the
+                      stack never jumps when selection changes */}
+                  <span
+                    aria-hidden="true"
+                    className={`block h-1 mt-2 bg-brand-accent transition-all duration-500 ${
+                      isActive ? 'w-16' : 'w-0'
+                    }`}
+                  />
                 </button>
+                </h3>
               )
             })}
           </div>
 
-          {/* Right panel — 65% — full-height image */}
-          <div className="relative flex-1 overflow-hidden">
+          {/* Right — tall image pane, crossfades with selection */}
+          <div className="relative h-[560px] xl:h-[620px] rounded-card overflow-hidden shadow-card-hover">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeIndex}
@@ -148,7 +154,7 @@ export default function FocusAreas() {
                   src={activeArea.image}
                   alt={activeArea.title}
                   fill
-                  sizes="65vw"
+                  sizes="50vw"
                   className="object-cover"
                   priority={activeIndex === 0}
                 />
@@ -156,23 +162,21 @@ export default function FocusAreas() {
               </motion.div>
             </AnimatePresence>
 
-            {/* Panel content — fades with image */}
+            {/* Pane content — the giant word on the left is the title, so the
+                pane carries only number, outcome and the explore link */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={`content-${activeIndex}`}
-                className="absolute bottom-0 left-0 right-0 p-10"
+                className="absolute bottom-0 left-0 right-0 p-8 xl:p-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.4, ease: 'easeOut' }}
               >
-                <p className="text-white/80 text-xs font-mono uppercase tracking-[0.3em] mb-3">
+                <p className="text-white/80 text-xs font-mono uppercase tracking-[0.3em] mb-2">
                   {activeArea.number}
                 </p>
-                <h3 className="text-4xl lg:text-5xl font-semibold tracking-tight text-white mb-4 leading-tight">
-                  {activeArea.title}
-                </h3>
-                <p className="text-white/70 text-lg mb-8 leading-relaxed">
+                <p className="text-white text-xl xl:text-2xl font-medium mb-6 leading-snug">
                   {activeArea.outcome}
                 </p>
                 <Link

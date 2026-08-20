@@ -10,6 +10,7 @@ import TransformationQuote from '../components/home/TransformationQuote'
 import FocusAreas from '../components/home/FocusAreas'
 import TestimonialSpotlight from '../components/home/TestimonialSpotlight'
 import BookPromotion from '../components/home/BookPromotion'
+import StatementBand from '../components/home/StatementBand'
 import UpcomingEvents from '../components/home/UpcomingEvents'
 import LeadMagnet from '../components/home/LeadMagnet'
 import VideoTestimonials from '../components/shared/VideoTestimonials'
@@ -111,13 +112,15 @@ export default async function HomePage() {
       <TestimonialSpotlight />
       {/* 11 — mixed dark/light (BookPromotion split layout) */}
       <BookPromotion />
-      {/* 12 — light (bg-gray-50) */}
+      {/* 12 — light (bg-white, full-width centered statement) */}
+      <StatementBand />
+      {/* 13 — light (bg-gray-50) */}
       <UpcomingEvents cohort={featuredCohort} />
-      {/* 13 — dark (photo + navy overlay) */}
+      {/* 14 — dark (photo + navy overlay) */}
       <LeadMagnet />
-      {/* 14 — light (bg-white) */}
+      {/* 15 — light (bg-white) */}
       <VideoTestimonials />
-      {/* 15 — dark (photo + navy overlay) */}
+      {/* 16 — dark (photo + navy overlay) */}
       <FinalCTA />
     </>
   )

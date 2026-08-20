@@ -4,45 +4,40 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
+// Poster-style cards modelled on the reference site's event carousel: full-bleed
+// portrait photo, neutral black scrim, centered white type lockup. All text over
+// imagery is white per no-bad-patterns.md.
 const programs: {
   title: string
   subtitle: string
-  description: string
+  tagline: string
   price: string | null
   image: string
   href: string
-  badge: string | null
-  urgency: string | null
 }[] = [
   {
     title: 'Precision Pattern Sessions',
     subtitle: 'Private 1:1 Work',
-    description: 'Behaviour and pattern-level transformation, one-on-one with Suzanne. Nine session types: from Rapid Repatterning® to Akashic Intuitive Mastery.',
+    tagline: 'One-on-one with Suzanne. Nine session types.',
     price: null,
     image: '/images/generated/session-coaching.webp',
     href: '/services',
-    badge: null,
-    urgency: null,
   },
   {
     title: 'Recorded Group Repatterning',
     subtitle: 'Rapid Repatterning® Groups',
-    description: 'Powerful group repatterning sessions on money, confidence, boundaries, attraction and more, recorded so you can start today.',
+    tagline: 'Money, confidence, boundaries, attraction and more.',
     price: 'From $90 · R1,500',
     image: '/images/generated/group-coaching-real.webp',
     href: '/programs#group',
-    badge: null,
-    urgency: null,
   },
   {
-    title: 'The Basic Five (Programs 1–5)',
+    title: 'The Basic Five',
     subtitle: 'Practitioner Certification',
-    description: 'Train as an internationally certified Resonance Repatterning practitioner. Self-study online with mentoring. Transform your life and gain the tools to transform others.',
+    tagline: 'Train as an internationally certified practitioner.',
     price: '$2,540 · R13,950',
     image: '/images/products/resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg',
     href: '/programs/resonance-repatterning-basic-5-series',
-    badge: null,
-    urgency: null,
   },
 ]
 
@@ -67,50 +62,54 @@ export default function FeaturedPrograms() {
         </motion.div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {programs.map(({ title, subtitle, description, price, image, href, badge, urgency }, i) => (
+          {programs.map(({ title, subtitle, tagline, price, image, href }, i) => (
             <motion.div
               key={title}
-              className="group relative bg-gray-50 border border-gray-100 rounded-card overflow-hidden hover:border-brand-accent/30 hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1 flex flex-col"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
             >
-              <div className="relative h-52 overflow-hidden">
+              <Link
+                href={href}
+                aria-label={`${title} - ${subtitle}. Learn more`}
+                className="group relative block aspect-[3/4] rounded-card overflow-hidden shadow-card-hover transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+              >
                 <Image
                   src={image}
-                  alt={title}
+                  alt=""
+                  aria-hidden="true"
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                {badge && (
-                  <div className="absolute top-4 left-4">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-brand-accent text-white text-xs font-semibold uppercase tracking-wide">
-                      {badge}
-                    </span>
-                  </div>
-                )}
-              </div>
+                {/* Neutral black scrim — heavier at the foot for the meta row */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/25 transition-opacity duration-500 group-hover:from-black/90"
+                />
 
-              <div className="p-6 flex flex-col flex-1">
-                <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.2em] mb-1">{subtitle}</p>
-                <h3 className="text-xl font-semibold text-brand-primary">{title}</h3>
-                <p className="mt-3 text-gray-600 text-sm leading-relaxed flex-1">{description}</p>
-                {urgency && (
-                  <p className="mt-3 text-xs text-brand-accent font-medium">{urgency}</p>
-                )}
-                <div className="mt-6 flex items-center justify-between">
-                  <span className="text-brand-primary font-semibold">{price ?? 'Priced per session'}</span>
-                  <Link
-                    href={href}
-                    className="inline-flex items-center justify-center px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm rounded-button transition-colors duration-150"
-                  >
-                    Learn More
-                  </Link>
+                {/* Centered type lockup */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pb-16">
+                  <p className="text-white/80 text-xs font-medium uppercase tracking-[0.3em] mb-4">
+                    {subtitle}
+                  </p>
+                  <h3 className="text-3xl xl:text-4xl font-semibold tracking-tight uppercase text-white leading-[1.08]">
+                    {title}
+                  </h3>
                 </div>
-              </div>
+
+                {/* Foot — tagline, price, affordance */}
+                <div className="absolute bottom-0 inset-x-0 p-6 text-center">
+                  <p className="text-white/80 text-sm leading-snug">{tagline}</p>
+                  <p className="mt-3 text-white text-sm font-semibold uppercase tracking-widest">
+                    {price ?? 'Priced per session'}
+                  </p>
+                  <p className="mt-3 inline-flex items-center gap-2 text-white text-xs font-semibold uppercase tracking-widest border-b border-white/40 group-hover:border-white pb-0.5 transition-colors duration-300">
+                    Learn more <span aria-hidden="true">→</span>
+                  </p>
+                </div>
+              </Link>
             </motion.div>
           ))}
         </div>

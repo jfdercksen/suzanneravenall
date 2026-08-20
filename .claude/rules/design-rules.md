@@ -12,6 +12,7 @@ Every page must meet that standard. Flat, static, generic pages fail QA.
 
 - Use brand tokens from tailwind.config.ts — never hardcode colours
 - Mobile-first — build 375px layout first, then scale to 1280px+
+- Breakpoints: sm (640px) and lg (1024px) are the primary pair; md (768px) is banned; xl (1280px) is permitted ONLY for large-screen type/size scaling (e.g. xl:text-8xl, xl:h-[620px]) — never for layout restructuring
 - No inline styles — Tailwind classes only
 - framer-motion on every section — scroll-triggered entrance animations
 - Alternate dark and light sections — never same background twice in a row
