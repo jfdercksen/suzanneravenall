@@ -71,7 +71,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
               sizes="(min-width: 1024px) 66vw, 100vw"
               className="object-cover opacity-45 group-hover:opacity-55 transition-opacity duration-500"
             />
-            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-brand-primary/80 to-transparent" />
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent" />
 
             {/* Content */}
             <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-between min-h-[380px]">
@@ -80,13 +80,13 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                   <div>
                     {/* Top row — label + real spots badge */}
                     <div className="flex items-start justify-between mb-8">
-                      <p className="text-xs tracking-[0.3em] text-brand-accent-300 uppercase font-medium">
+                      <p className="text-xs tracking-[0.3em] text-white/80 uppercase font-medium">
                         GROUP PROGRAM · NEXT INTAKE
                       </p>
                       <span
                         className={`text-xs px-3 py-1 uppercase tracking-wider ${
                           cohort.spotsRemaining > 0
-                            ? 'bg-brand-accent/20 border border-brand-accent-400 text-brand-accent-400'
+                            ? 'bg-gray-950/70 border border-white/40 text-white'
                             : 'bg-gray-800 border border-gray-700 text-gray-200'
                         }`}
                       >
@@ -139,7 +139,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                       honest fallback, matches the tone of /events rather than
                       inventing a number. */}
                   <div>
-                    <p className="text-xs tracking-[0.3em] text-brand-accent-300 uppercase font-medium mb-8">
+                    <p className="text-xs tracking-[0.3em] text-white/80 uppercase font-medium mb-8">
                       GROUP PROGRAMS
                     </p>
                     <h3 className="text-4xl lg:text-5xl font-light text-white leading-tight mb-3">
@@ -185,7 +185,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
             <div className="relative z-10 p-8 flex flex-col justify-between min-h-[380px]">
 
               <div>
-                <p className="text-xs tracking-[0.3em] text-brand-accent-300 uppercase font-medium mb-8">
+                <p className="text-xs tracking-[0.3em] text-white/80 uppercase font-medium mb-8">
                   {oneOnOne.label}
                 </p>
                 <h3 className="text-3xl font-light text-white leading-tight mb-3">
