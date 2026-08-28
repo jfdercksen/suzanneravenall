@@ -12,7 +12,7 @@ export default function AboutHero() {
   return (
     <section
       aria-labelledby="about-hero-heading"
-      className="relative min-h-[560px] lg:h-screen lg:min-h-[640px] overflow-hidden"
+      className="relative min-h-[560px] lg:min-h-[calc(100vh-5rem)] overflow-hidden"
     >
       <video
         autoPlay
@@ -30,8 +30,8 @@ export default function AboutHero() {
         className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/20"
       />
 
-      <div className="relative z-10 min-h-[560px] lg:min-h-0 lg:h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-center min-h-[560px] lg:min-h-0 lg:h-full max-w-3xl py-16 lg:py-0">
+      <div className="relative z-10 min-h-[560px] lg:min-h-[calc(100vh-5rem)] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col justify-center min-h-[560px] lg:min-h-[calc(100vh-5rem)] max-w-3xl py-16 lg:py-12">
           <motion.p
             {...fadeUp(0)}
             className="text-xs tracking-[0.3em] text-white/80 uppercase font-medium mb-6"
@@ -42,7 +42,7 @@ export default function AboutHero() {
           <motion.h1
             id="about-hero-heading"
             {...fadeUp(0.2)}
-            className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-8"
+            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-8"
           >
             Championing the change in the human condition{' '}
             <span className="underline decoration-brand-accent-400 decoration-[6px] underline-offset-8">one person at a time</span>

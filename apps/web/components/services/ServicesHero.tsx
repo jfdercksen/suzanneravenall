@@ -16,7 +16,7 @@ export default function ServicesHero() {
     <section
       id="hero"
       aria-labelledby="services-hero-heading"
-      className="relative min-h-[600px] lg:h-screen lg:min-h-[640px] flex items-center overflow-hidden"
+      className="relative min-h-[600px] lg:min-h-[calc(100vh-5rem)] flex items-center overflow-hidden"
     >
       {/* Cinematic background video — client transformation montage (faces, crossfading) */}
       <video
@@ -41,7 +41,7 @@ export default function ServicesHero() {
         className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60"
       />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-32">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-12">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left — copy */}
           <div>
@@ -63,7 +63,7 @@ export default function ServicesHero() {
 
             <motion.p
               {...fadeUp(0.3)}
-              className="text-lg lg:text-xl text-white/75 font-light max-w-xl mb-6 lg:mb-12 leading-relaxed"
+              className="text-lg lg:text-xl text-white/90 max-w-xl mb-6 lg:mb-8 leading-relaxed"
             >
               Through a comfortable, authentic and safe environment, Suzanne helps you
               get to the root cause of key issues that disrupt life, track the patterns
@@ -94,7 +94,7 @@ export default function ServicesHero() {
             transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
             className="hidden lg:flex justify-end items-center"
           >
-            <div className="relative w-[420px] h-[520px] rounded-card overflow-hidden shadow-2xl border border-white/10">
+            <div className="relative w-[420px] h-[520px] max-h-[calc(100vh-16rem)] rounded-card overflow-hidden shadow-2xl border border-white/10">
               <Image
                 src="/images/suzanne-portrait.jpg"
                 alt="Dr. Suzanne Ravenall"

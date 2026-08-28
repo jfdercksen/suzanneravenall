@@ -190,7 +190,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
       {/* ── 1. HERO — dark ──────────────────────────────────────────── */}
       <section
         aria-labelledby="program-hero-heading"
-        className="relative h-screen min-h-[640px] flex items-center overflow-hidden"
+        className="relative min-h-[640px] lg:min-h-[calc(100vh-5rem)] flex items-center py-16 lg:py-8 overflow-hidden"
       >
         <Image
           src={program.image ?? '/images/hero-bg-suzanne-ravenall.jpg'}
@@ -203,7 +203,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/40" />
         <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             {/* Back link */}
             <motion.div {...fadeUp(0)}>
@@ -231,17 +231,17 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
             <motion.h1
               id="program-hero-heading"
               {...fadeUp(0.15)}
-              className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-6"
+              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-6"
             >
               {program.name}
             </motion.h1>
 
-            <motion.p {...fadeUp(0.25)} className="text-lg lg:text-xl text-white/75 font-light max-w-2xl mb-8 leading-relaxed">
+            <motion.p {...fadeUp(0.25)} className="text-lg lg:text-xl text-white/90 max-w-2xl mb-8 leading-relaxed">
               {program.shortDescription}
             </motion.p>
 
             {/* Duration + price row */}
-            <motion.div {...fadeUp(0.3)} className="flex flex-wrap gap-6 mb-10">
+            <motion.div {...fadeUp(0.3)} className="flex flex-wrap gap-6 mb-8">
               {program.duration && (
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-white/80 mb-1">Duration</p>

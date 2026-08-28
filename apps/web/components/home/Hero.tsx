@@ -40,13 +40,15 @@ export default function Hero() {
     document.getElementById('media-logos')?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  // min-h + py on mobile (not fixed h-screen) — the fuller approved copy and
-  // three CTAs can exceed short viewports, and overflow-hidden would clip
-  // them silently. Fixed full-viewport height only from lg.
+  // min-h + py at every breakpoint (never a fixed h-screen). The fuller
+  // approved copy and three CTAs exceed short viewports — on a 1280x720
+  // laptop the stack needs 852px — and with a fixed height + overflow-hidden
+  // the centred content is clipped top and bottom, taking the CTA row with
+  // it. min-h lets the hero grow instead of swallowing the buttons.
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative min-h-[600px] sm:min-h-[700px] lg:h-screen overflow-hidden"
+      className="relative min-h-[600px] sm:min-h-[700px] lg:min-h-[calc(100vh-5rem)] overflow-hidden"
     >
       {/* Layer 1 — Background videos (crossfade on toggle) */}
       {heroVideos.map((video, i) => (
@@ -99,22 +101,28 @@ export default function Hero() {
       />
 
       {/* Layer 3 — Content */}
-      <div className="relative z-10 min-h-[600px] sm:min-h-[700px] lg:min-h-0 lg:h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-center min-h-[600px] sm:min-h-[700px] lg:min-h-0 lg:h-full max-w-3xl xl:max-w-4xl py-16 lg:py-0">
+      <div className="relative z-10 min-h-[600px] sm:min-h-[700px] lg:min-h-[calc(100vh-5rem)] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col justify-center min-h-[600px] sm:min-h-[700px] lg:min-h-[calc(100vh-5rem)] max-w-3xl xl:max-w-4xl py-16 lg:py-12">
 
           {/* Name + role — single line so the headline owns the space */}
           <motion.p
             {...fadeUp(0)}
-            className="text-white/90 text-xs lg:text-sm font-medium tracking-[0.25em] uppercase mb-5 lg:mb-7"
+            className="text-white/90 text-xs lg:text-sm font-medium tracking-[0.25em] uppercase mb-4 lg:mb-5"
           >
             Dr. Suzanne Ravenall · Founder of Pattern Intelligence™
           </motion.p>
 
-          {/* Headline — heavy, tight and huge (the page's single loudest element) */}
+          {/* Headline — the page's single loudest element. text-8xl (the
+              approved impact-pass size) is kept, but gated on vertical room:
+              at 96px the two lines alone run 192px, and on a 720px-tall
+              laptop that pushed the CTA row clean off the bottom of the
+              screen — Suzanne's 27 Aug screenshot. Above ~960px of viewport
+              there is room for it, so tall displays still get the full
+              statement size. */}
           <motion.h1
             id="hero-heading"
             {...fadeUp(0.15)}
-            className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-semibold tracking-tight text-white leading-[1.02] mb-5 lg:mb-7"
+            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl [@media(min-width:1280px)_and_(min-height:960px)]:text-8xl font-semibold tracking-tight text-white leading-[1.05] mb-4 lg:mb-6"
           >
             It&apos;s not you,
             <br />
@@ -124,17 +132,25 @@ export default function Hero() {
           {/* Subheadline */}
           <motion.p
             {...fadeUp(0.35)}
-            className="text-lg lg:text-xl text-white/85 max-w-xl mb-6 lg:mb-5"
+            className="text-lg lg:text-xl text-white/90 max-w-2xl mb-5"
           >
             For years you&apos;ve tried to change the outcome. We help you discover
             and transform the invisible patterns creating it. Because when the
             pattern changes, everything changes.
           </motion.p>
 
-          {/* Supporting line — hidden below sm so the CTAs stay above the fold on phones */}
+          {/* Supporting line — gated on viewport HEIGHT as well as width. It is
+              the longest and least essential block in the hero, so it is the
+              one that yields when there is no vertical room: a 1080p laptop at
+              150% scaling leaves ~625px, and without this gate the CTA row
+              lands ~53px below the fold again.
+              Was text-sm/white-70/font-light, which is the "small writing
+              difficult to read" in Suzanne's 27 Aug screenshot: light weight at
+              70% opacity over video is the least legible pairing on the page.
+              Now text-base at 80% and normal weight. */}
           <motion.p
             {...fadeUp(0.55)}
-            className="hidden sm:block text-sm lg:text-base text-white/70 font-light max-w-xl mb-10"
+            className="hidden [@media(min-width:640px)_and_(min-height:780px)]:block text-base text-white/80 max-w-2xl mb-8"
           >
             Decoding the invisible patterns that shape human potential.
             Introducing Pattern Intelligence™, a new science and way of
