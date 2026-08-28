@@ -59,11 +59,33 @@ export function useCart(): CartContextType {
 }
 
 export function formatPrice(amountInCents: number, currencyCode = 'zar'): string {
-  const amount = amountInCents / 100
+  // Guard against a missing amount. Medusa omits several money fields unless
+  // they are explicitly requested, and dividing undefined by 100 rendered the
+  // literal string "RNaN" on the cart and checkout pages.
+  const amount = Number.isFinite(amountInCents) ? amountInCents / 100 : 0
   if (currencyCode.toLowerCase() === 'usd') {
     return `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   }
   return `R${amount.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+}
+
+// GET /store/carts/:id does not return per-line subtotal/total unless they are
+// asked for by name, so every line row rendered "RNaN" next to a correct order
+// summary. Derive them from the fields Medusa does send. A line subtotal is
+// unit price times quantity by definition, so this is the same number Medusa
+// would have computed, not an approximation.
+function normaliseCart(cart: Cart): Cart {
+  return {
+    ...cart,
+    items: (cart.items ?? []).map((item) => {
+      const derived = (item.unit_price ?? 0) * (item.quantity ?? 0)
+      return {
+        ...item,
+        subtotal: Number.isFinite(item.subtotal) ? item.subtotal : derived,
+        total: Number.isFinite(item.total) ? item.total : derived,
+      }
+    }),
+  }
 }
 
 function getMedusaBase(): string {
@@ -117,7 +139,7 @@ async function createCart(regionId: string): Promise<Cart | null> {
     })
     if (!res.ok) return null
     const data = (await res.json()) as { cart: Cart }
-    return data.cart
+    return normaliseCart(data.cart)
   } catch {
     return null
   }
@@ -130,7 +152,7 @@ async function fetchCart(cartId: string): Promise<Cart | null> {
     })
     if (!res.ok) return null
     const data = (await res.json()) as { cart: Cart }
-    return data.cart
+    return normaliseCart(data.cart)
   } catch {
     return null
   }
@@ -200,7 +222,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         throw new Error(err.message ?? `Add to cart failed (${res.status})`)
       }
       const data = (await res.json()) as { cart: Cart }
-      setCart(data.cart)
+      setCart(normaliseCart(data.cart))
     },
     [getOrCreateCart]
   )
@@ -261,7 +283,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         })
         if (!res.ok) return
         const data = (await res.json()) as { cart: Cart }
-        setCart(data.cart)
+        setCart(normaliseCart(data.cart))
       } catch {
         // silently fail
       }
