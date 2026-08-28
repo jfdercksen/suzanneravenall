@@ -62,7 +62,8 @@ describe('Footer', () => {
     it('"Ai Dynamic Advisory" link points to the correct URL', () => {
       render(<Footer />)
       const link = screen.getByRole('link', { name: 'Ai Dynamic Advisory' })
-      expect(link).toHaveAttribute('href', 'https://aidynamicadvisory.com')
+      // Was aidynamicadvisory.com, which does not resolve.
+      expect(link).toHaveAttribute('href', 'https://www.aiautomations.co.za')
     })
 
     it('"Ai Dynamic Advisory" link opens in a new tab', () => {

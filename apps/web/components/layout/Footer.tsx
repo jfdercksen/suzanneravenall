@@ -173,8 +173,10 @@ export default function Footer() {
           </p>
           <p className="text-xs text-white/70">
             Built by{' '}
+            {/* aidynamicadvisory.com does not resolve. This credit sits on every
+                page of a client site, so it pointed at a dead host sitewide. */}
             <a
-              href="https://aidynamicadvisory.com"
+              href="https://www.aiautomations.co.za"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-white/80 transition-colors duration-150 underline underline-offset-2"
