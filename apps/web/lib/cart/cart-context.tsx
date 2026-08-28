@@ -146,11 +146,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const cartId = localStorage.getItem(CART_ID_KEY)
       if (cartId) {
         const existing = await fetchCart(cartId)
-        const validRegions = [
-          process.env.NEXT_PUBLIC_MEDUSA_REGION_ID,
-          process.env.NEXT_PUBLIC_MEDUSA_REGION_USD_ID,
-        ].filter(Boolean) as string[]
-        if (existing && (validRegions.length === 0 || validRegions.includes(existing.region_id))) {
+        // Validate against the region this visitor resolves to NOW, not against
+        // "any configured region". A cart created while /api/region was handing
+        // out USD is permanently broken for most of the catalogue, and keeping
+        // it would carry the 500 across the fix for every returning visitor.
+        const resolved = await fetchRegionId()
+        regionIdRef.current = resolved
+        if (existing && (!resolved || existing.region_id === resolved)) {
           setCart(existing)
           setIsLoading(false)
           return
