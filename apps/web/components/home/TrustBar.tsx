@@ -66,9 +66,9 @@ export default function TrustBar() {
   const isInView = useInView(sectionRef, { once: true, margin: '0px' })
 
   return (
-    <section ref={sectionRef} aria-label="Trust indicators" className="bg-white py-12 lg:py-16 border-y border-gray-100">
+    <section ref={sectionRef} aria-label="Trust indicators" className="bg-brand-cream py-12 lg:py-16 border-y border-brand-border">
       <div className="max-w-7xl mx-auto px-4">
-        <dl className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-gray-200">
+        <dl className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-brand-border">
           {stats.map(({ value, label, numeric, suffix }, i) => (
             <motion.div
               key={label}
@@ -83,7 +83,7 @@ export default function TrustBar() {
                   ? <CountUp target={numeric} suffix={suffix} isInView={isInView} />
                   : value}
               </dd>
-              <dt className="mt-3 text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-[0.2em]">{label}</dt>
+              <dt className="mt-3 text-xs lg:text-sm font-medium text-brand-muted uppercase tracking-[0.2em]">{label}</dt>
             </motion.div>
           ))}
         </dl>
@@ -96,7 +96,7 @@ export default function TrustBar() {
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="text-center text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mb-8">
+          <p className="text-center text-xs uppercase tracking-[0.3em] font-medium text-brand-muted mb-8">
             Our Accreditations
           </p>
           <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6" aria-label="Accreditation bodies">

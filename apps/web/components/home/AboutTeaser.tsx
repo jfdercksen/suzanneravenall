@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 
 export default function AboutTeaser() {
   return (
-    <section aria-labelledby="about-heading" className="py-14 lg:py-24 bg-gray-50">
+    <section aria-labelledby="about-heading" className="py-14 lg:py-24 bg-brand-sand">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
@@ -21,16 +21,16 @@ export default function AboutTeaser() {
             <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
               Meet Your Guide
             </p>
-            <p className="text-sm text-gray-500 font-light italic mb-5 max-w-sm leading-relaxed">
+            <p className="text-sm text-brand-muted font-light italic mb-5 max-w-sm leading-relaxed">
               Dr. Suzanne Ravenall, Neuro-Repatterning® pioneer, author, keynote speaker and transformation coach to 2,000+ clients across 30+ countries.
             </p>
             <h2 id="about-heading" className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08]">
               Science-backed coaching with a track record of real results
             </h2>
-            <p className="mt-6 text-gray-600 leading-relaxed">
+            <p className="mt-6 text-brand-ink leading-relaxed">
               Dr. Suzanne Ravenall developed Neuro-Repatterning® after two decades of clinical study and thousands of hours with private clients across four continents. Her methodology targets the childhood brain patterns that sabotage adult success, and dissolves them at the root.
             </p>
-            <p className="mt-4 text-gray-600 leading-relaxed">
+            <p className="mt-4 text-brand-ink leading-relaxed">
               The result is not motivation. It is permanent, measurable change.
             </p>
 
@@ -74,8 +74,8 @@ export default function AboutTeaser() {
                 className="object-cover object-top"
               />
             </div>
-            <div className="mt-4 lg:mt-0 lg:absolute lg:-bottom-4 lg:-left-8 bg-white border border-gray-100 text-brand-primary rounded-card p-4 shadow-card-hover inline-block lg:block">
-              <p className="text-xs text-gray-500 uppercase tracking-wider mb-0.5">Academic credentials</p>
+            <div className="mt-4 lg:mt-0 lg:absolute lg:-bottom-4 lg:-left-8 bg-white border border-brand-border text-brand-primary rounded-card p-4 shadow-card-hover inline-block lg:block">
+              <p className="text-xs text-brand-muted uppercase tracking-wider mb-0.5">Academic credentials</p>
               <p className="font-semibold text-sm text-brand-primary">B.Msc · M.Msc · Msc.D.</p>
             </div>
           </motion.div>

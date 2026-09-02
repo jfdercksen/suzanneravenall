@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 // single giant line of type. No CTA on purpose: the statement is the moment.
 export default function StatementBand() {
   return (
-    <section aria-label="Pattern-level change" className="bg-white py-20 lg:py-32">
+    <section aria-label="Pattern-level change" className="bg-brand-cream py-20 lg:py-32">
       <motion.div
         className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
         initial={{ opacity: 0, y: 30 }}
@@ -19,7 +19,7 @@ export default function StatementBand() {
           Your pattern isn&apos;t your destiny.
         </h2>
         <motion.p
-          className="mt-6 text-lg lg:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto"
+          className="mt-6 text-lg lg:text-xl text-brand-ink leading-relaxed max-w-2xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}

@@ -97,7 +97,7 @@ export default function Hero() {
       {/* Layer 2 — Gradient overlay */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/10"
+        className="absolute inset-0 bg-gradient-to-r from-brand-primary-900/85 via-brand-primary-900/55 to-brand-primary-900/10"
       />
 
       {/* Layer 3 — Content */}
@@ -175,14 +175,14 @@ export default function Hero() {
             <Link
               href="/explore"
               aria-label="Explore Pattern Intelligence"
-              className="inline-flex items-center justify-center px-6 py-3.5 lg:px-7 border border-white/50 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10"
+              className="inline-flex items-center justify-center px-6 py-3.5 lg:px-7 border border-white/50 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-brand-cream/10"
             >
               Explore Pattern Intelligence
             </Link>
             <Link
               href="/contact"
               aria-label="Book a free discovery call with Dr. Suzanne Ravenall"
-              className="inline-flex items-center justify-center px-6 py-3.5 lg:px-7 border border-white/50 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10"
+              className="inline-flex items-center justify-center px-6 py-3.5 lg:px-7 border border-white/50 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-brand-cream/10"
             >
               Book a Discovery Call
             </Link>

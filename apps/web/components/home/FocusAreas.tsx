@@ -69,7 +69,7 @@ export default function FocusAreas() {
   return (
     <section
       aria-label="Areas of Focus"
-      className="bg-white py-14 lg:py-24"
+      className="bg-brand-cream py-14 lg:py-24"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       // Keyboard parity with the mouse pause (WCAG 2.2.2): React's onFocus/onBlur
@@ -120,7 +120,7 @@ export default function FocusAreas() {
                 >
                   <span
                     className={`block text-4xl xl:text-5xl font-semibold tracking-tight leading-[1.08] transition-colors duration-300 ${
-                      isActive ? 'text-brand-primary' : 'text-gray-500 group-hover:text-brand-primary'
+                      isActive ? 'text-brand-primary' : 'text-brand-muted group-hover:text-brand-primary'
                     }`}
                   >
                     {area.title}
@@ -158,7 +158,7 @@ export default function FocusAreas() {
                   className="object-cover"
                   priority={activeIndex === 0}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-primary-900/80 via-brand-primary-900/20 to-transparent" />
               </motion.div>
             </AnimatePresence>
 
@@ -212,7 +212,7 @@ export default function FocusAreas() {
                   sizes="100vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-primary-900/80 via-brand-primary-900/30 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-5">
                   <p className="text-white/80 text-xs font-mono uppercase tracking-[0.3em] mb-1">
                     {area.number}

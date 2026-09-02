@@ -28,7 +28,7 @@ const covers = [
 
 export function MagazineCovers() {
   return (
-    <section aria-labelledby="magazine-covers-heading" className="bg-white py-14 lg:py-24">
+    <section aria-labelledby="magazine-covers-heading" className="bg-brand-cream py-14 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -73,7 +73,7 @@ export function MagazineCovers() {
                   priority={i === 0}
                 />
               </motion.div>
-              <p className="text-gray-500 text-xs font-medium uppercase tracking-[0.2em]">
+              <p className="text-brand-muted text-xs font-medium uppercase tracking-[0.2em]">
                 {cover.publication}
               </p>
             </motion.div>

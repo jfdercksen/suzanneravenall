@@ -13,60 +13,66 @@
 // ---------------------------------------------------------------------------
 
 export const colors = {
-  /** Primary brand colour — dark navy. Used for nav, footer, dark section backgrounds. */
-  primary: '#012B43',
-  /** CTA / accent colour — electric blue. Used for all buttons, links, highlights. */
-  accent: '#1719F4',
-  /** Button hover state for electric blue. */
-  accentHover: '#0E11C2',
+  /** Primary brand colour — warm ink. Used for nav, footer, dark section backgrounds. */
+  primary: '#1A1512',
+  /** CTA / accent colour — warm amber. Used for all buttons, links, highlights. */
+  accent: '#A84C07',
+  /** Button hover state for warm amber. */
+  accentHover: '#8F4108',
+  /** Accent variant for labels sitting ON dark sections. */
+  accentOnDark: '#F0A952',
   /** Amber accent — used sparingly for badges and highlights. */
   amber: '#ffba00',
   black: '#000000',
   white: '#FFFFFF',
+  /** Suzanne's navy — identity colour only (logo lockups, marks). NOT a background. */
+  blue: '#012B43',
   /** Body text on light backgrounds */
-  textDark: '#333333',
+  textDark: '#3D342E',
   /** Muted / secondary text */
-  textMuted: '#737373',
+  textMuted: '#6E5F53',
   /** Dividers and subtle borders */
-  border: '#E5E5E5',
-  /** Light page background */
-  backgroundLight: '#F9F9F9',
+  border: '#E7DED2',
+  /** Light page background — cream */
+  backgroundLight: '#FDFAF6',
+  /** Alternating light section band — sand */
+  backgroundSand: '#F5EDE3',
 } as const
 
 // ---------------------------------------------------------------------------
-// Primary (navy) tint scale — based on #012B43
+// Primary (warm ink) tint scale — based on #1A1512
 // Lower numbers are lighter tints; higher numbers are darker shades.
-// brand-primary-900 is the confirmed brand colour.
+// brand-primary-900 is the confirmed dark ground (warm direction, 2026-09-02).
 // ---------------------------------------------------------------------------
 
 export const primaryScale = {
-  100: '#e6eef2',
-  200: '#bdd6e2',
-  300: '#8db5c8',
-  400: '#5994ae',
-  500: '#2e7694',
-  600: '#1d5c76',
-  700: '#0f4159',
-  800: '#022f4b',
-  900: '#012B43',
+  100: '#EFE8E1',
+  200: '#DBCEC2',
+  300: '#C0AE9E',
+  400: '#9C8878',
+  500: '#7A6656',
+  600: '#5C4B3E',
+  700: '#40332A',
+  800: '#2A211B',
+  900: '#1A1512',
 } as const
 
 // ---------------------------------------------------------------------------
-// Accent (electric blue) tint scale — based on #1719F4
+// Accent (warm amber) tint scale — based on #A84C07
 // brand-accent-600 is the confirmed CTA colour.
 // brand-accent-700 is the confirmed hover state.
 // ---------------------------------------------------------------------------
 
 export const accentScale = {
-  100: '#e8e9fd',
-  200: '#c2c3fb',
-  300: '#9b9ef9',
-  400: '#7578f7',
-  500: '#4e52f5',
-  600: '#1719F4',
-  700: '#0E11C2',
-  800: '#0a0d91',
-  900: '#070861',
+  100: '#FDF2E4',
+  200: '#FAE0BF',
+  300: '#F5C88C',
+  400: '#F0A952',
+  500: '#D97706',
+  600: '#A84C07',
+  700: '#8F4108',
+  800: '#6E3206',
+  900: '#4F2404',
 } as const
 
 // ---------------------------------------------------------------------------

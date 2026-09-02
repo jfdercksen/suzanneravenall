@@ -56,7 +56,7 @@ export default function BookPromotion() {
         </motion.div>
 
         {/* RIGHT — Copy panel */}
-        <div className="bg-gray-50 flex items-center">
+        <div className="bg-brand-sand flex items-center">
           <div className="w-full max-w-xl mx-auto py-14 lg:py-24 px-8 lg:px-16">
 
             <motion.p
@@ -85,7 +85,7 @@ export default function BookPromotion() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="space-y-4 text-gray-600 leading-relaxed mb-8"
+              className="space-y-4 text-brand-ink leading-relaxed mb-8"
             >
               <p>
                 Consciousness is a meaning field. Your brain adapted to the worldview imposed on it in childhood, and unless that operating system is updated, life becomes a series of repeating patterns.
@@ -106,7 +106,7 @@ export default function BookPromotion() {
               <p className="text-lg font-light italic text-brand-primary leading-relaxed">
                 &ldquo;When we decode hidden patterns, we transform in unimaginable ways. That shift radiates outward: into how we lead, grow, relate, love, and show up.&rdquo;
               </p>
-              <footer className="mt-3 text-sm text-gray-500 uppercase tracking-wider not-italic">
+              <footer className="mt-3 text-sm text-brand-muted uppercase tracking-wider not-italic">
                 Dr. Suzanne Ravenall
               </footer>
             </motion.blockquote>

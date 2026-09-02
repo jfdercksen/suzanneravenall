@@ -100,7 +100,7 @@ export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
   ]
 
   return (
-    <section aria-labelledby="upcoming-events-heading" className="bg-gray-50 py-14 lg:py-24">
+    <section aria-labelledby="upcoming-events-heading" className="bg-brand-sand py-14 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <motion.div
@@ -127,7 +127,7 @@ export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
           {opportunities.map(({ type, variant, title, description, cta, href, badge, price }, i) => (
             <motion.div
               key={title}
-              className="group bg-white border border-gray-200 rounded-card overflow-hidden hover:border-brand-accent/30 hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1 flex flex-col"
+              className="group bg-white border border-brand-border rounded-card overflow-hidden hover:border-brand-accent/30 hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1 flex flex-col"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
@@ -140,11 +140,11 @@ export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
                   >
                     {type}
                   </span>
-                  <span className="text-gray-500 text-xs text-right max-w-[120px]">{badge}</span>
+                  <span className="text-brand-muted text-xs text-right max-w-[120px]">{badge}</span>
                 </div>
 
                 <h3 className="text-xl font-semibold text-brand-primary mb-3">{title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed flex-1">{description}</p>
+                <p className="text-brand-ink text-sm leading-relaxed flex-1">{description}</p>
 
                 <div className="mt-6 flex items-center justify-between">
                   {price ? (

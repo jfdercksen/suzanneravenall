@@ -98,7 +98,7 @@ export default function LeadMagnet() {
                 disabled={status === 'loading'}
                 aria-invalid={status === 'error'}
                 aria-describedby={status === 'error' ? 'lead-magnet-error' : undefined}
-                className="flex-1 px-5 py-3.5 rounded-button bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent disabled:opacity-50 text-sm"
+                className="flex-1 px-5 py-3.5 rounded-button bg-brand-cream/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent disabled:opacity-50 text-sm"
               />
               <button
                 type="submit"

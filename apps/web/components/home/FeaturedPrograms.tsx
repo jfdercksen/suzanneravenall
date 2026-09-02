@@ -43,7 +43,7 @@ const programs: {
 
 export default function FeaturedPrograms() {
   return (
-    <section aria-labelledby="programs-heading" className="py-14 lg:py-24 bg-white">
+    <section aria-labelledby="programs-heading" className="py-14 lg:py-24 bg-brand-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <motion.div
@@ -86,7 +86,7 @@ export default function FeaturedPrograms() {
                 {/* Neutral black scrim — heavier at the foot for the meta row */}
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/25 transition-opacity duration-500 group-hover:from-black/90"
+                  className="absolute inset-0 bg-gradient-to-t from-brand-primary-900/85 via-brand-primary-900/55 to-brand-primary-900/25 transition-opacity duration-500 group-hover:from-brand-primary-900/90"
                 />
 
                 {/* Centered type lockup */}

@@ -66,7 +66,7 @@ interface MediaLogosProps {
   id?: string
   quote?: string
   quoteAttribution?: string
-  /** 'dark' (default) keeps the original gray-950 band; 'light' renders the
+  /** 'dark' (default) keeps the dark warm-ink band; 'light' renders the
    *  Tony-Robbins-style press band on a light background. */
   tone?: Tone
 }
@@ -83,7 +83,7 @@ export default function MediaLogos({
     <section
       id={id}
       aria-label="As seen in media"
-      className={isLight ? 'bg-gray-50 py-16 border-y border-gray-100' : 'bg-gray-950 py-16'}
+      className={isLight ? 'bg-brand-sand py-16 border-y border-brand-border' : 'bg-brand-primary-900 py-16'}
     >
 
       {/* Quote */}
@@ -97,7 +97,7 @@ export default function MediaLogos({
         <p className={`text-base lg:text-lg font-light italic leading-relaxed ${isLight ? 'text-brand-primary' : 'text-white/80'}`}>
           {quote}
         </p>
-        <footer className={`mt-3 text-sm tracking-widest uppercase not-italic ${isLight ? 'text-gray-500' : 'text-white/60'}`}>
+        <footer className={`mt-3 text-sm tracking-widest uppercase not-italic ${isLight ? 'text-brand-muted' : 'text-white/60'}`}>
           {quoteAttribution}
         </footer>
       </motion.blockquote>
@@ -110,7 +110,7 @@ export default function MediaLogos({
         transition={{ duration: 0.6, ease: 'easeOut' as const }}
         className="max-w-7xl mx-auto px-4 mb-6"
       >
-        <p className={`text-center text-xs font-medium tracking-[0.3em] uppercase ${isLight ? 'text-gray-500' : 'text-white/70'}`}>
+        <p className={`text-center text-xs font-medium tracking-[0.3em] uppercase ${isLight ? 'text-brand-muted' : 'text-white/70'}`}>
           As seen in
         </p>
       </motion.div>

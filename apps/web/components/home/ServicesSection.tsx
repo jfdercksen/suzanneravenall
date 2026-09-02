@@ -35,7 +35,7 @@ const services = [
 
 export default function ServicesSection() {
   return (
-    <section aria-labelledby="services-heading" className="py-20 lg:py-32 bg-gray-50">
+    <section aria-labelledby="services-heading" className="py-20 lg:py-32 bg-brand-sand">
       <div className="max-w-7xl mx-auto px-4">
 
         <motion.div
@@ -76,7 +76,7 @@ export default function ServicesSection() {
 
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-brand-primary">{title}</h3>
-                <p className="mt-2 text-gray-600 text-sm leading-relaxed">{promise}</p>
+                <p className="mt-2 text-brand-ink text-sm leading-relaxed">{promise}</p>
                 <Link
                   href={href}
                   className="mt-5 inline-flex items-center text-brand-accent font-semibold text-sm hover:text-brand-accent-700 transition-colors duration-150"

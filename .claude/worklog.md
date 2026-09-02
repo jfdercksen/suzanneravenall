@@ -19,3 +19,86 @@ Newest at the bottom. Never rewrite old lines.
 2026-08-20 ~12:30 | web/design | Claude | Impact pass round 2 per Johan (push further before rollout): FocusAreas desktop rebuilt as giant stacked-words editorial (TR pillars pattern), FeaturedPrograms rebuilt as poster cards (3/4 photo, black scrim, centered white lockup), new StatementBand section (Your pattern isn't your destiny), hero xl:text-8xl; review fixes (WCAG 2.2.2 focus-pause, h3 outline, scrim strength, aria-labels, xl codified size-scaling-only); deployed VPS 3163948, verified live 1440+375 | open: Suzanne review, sitewide rollout after approval, nav CTA gap 1024-1279 spawned as separate task
 2026-08-20 ~17:15 | web/design | Claude | SITEWIDE ROLLOUT: six scoped agents applied the approved standard (light-first, no blue over imagery, bold statement type) to all public pages; hero 3rd CTA restored per Johan; build green, 686 component tests pass (28 API/data failures pre-existing on HEAD), zero md:/font-light-headline violations in diff; visual QA shop/about/services/events/programs/pattern-coach/topic/testimonials at 1440; deployed VPS 99289bc, all 8 key routes 200 | open: Suzanne full-site review, then PR to main; nav CTA gap task chip pending; portal+speaking excluded by design
 2026-08-28 ~09:15 | web/design | Claude | HERO FOLD REGRESSION FIXED (Suzanne 27 Aug 19:56 "SR website" screenshot: huge writing, cant see whats underneath, small writing hard to read). Root cause: heroes were fixed-height (h-screen / lg:h-screen) + overflow-hidden with the content stack vertically centred inside. min-h-screen is also wrong here because the header is sticky and 80px IN FLOW, so 100vh always overshoots by 80px. Measured on the live dev server at 1280x720: hero stack needed 852px in a 720px box, 66px clipped off the top and the CTA row sitting 66px BELOW THE FOLD - reproduces her screenshot exactly. Fixes: (1) all four heroes (home Hero, AboutHero, ServicesHero, programs/[slug] ProgramDetailClient) now min-h-[calc(100vh-5rem)] so they grow instead of clipping; (2) homepage h1 keeps the approved impact-pass text-8xl but gated on [@media(min-width:1280px)and(min-height:960px)] so 96px only renders where there is vertical room, 72px below that; (3) the long hero supporting paragraph gated on min-height:780px - it is the least essential block so it yields first on short screens; (4) legibility, the "small writing" half of her complaint: font-light at white/70-75 over video was the least readable pairing on the page, now normal weight at white/80-90 across home/services/program heroes; (5) ServicesHero portrait capped max-h-[calc(100vh-16rem)] (it was a hard h-[520px] driving the whole section) and duplicate py-32 padding removed from services + program heroes. VERIFIED by measurement (browser pane not compositing, so no screenshots): all 3 homepage CTAs visible with 86px clearance at 1280x720, 39px at 1366x625, 150px at 1920x1000 with the full 96px headline restored; /about /services /programs-detail all clear the fold at 625px; mobile 375x812 clean, no horizontal scroll; nothing clipped at any size. tsc: 0 errors in the 4 changed files (167 pre-existing errors in 8 unrelated files). vitest: 699 pass / 15 fail, and the same 15 fail at HEAD with the changes stashed (lead-magnet route + privateSessions data, pre-existing). WHY THE ROLLOUT MISSED IT: the 20 Aug sitewide QA was run at 1440 wide on a tall viewport only, so no short-viewport case was ever exercised. | open: NOT deployed and NOT committed - Johan to review; separately confirmed the known nav CTA gap is real (at exactly 1280px wide the hidden xl:inline-flex header button appears but layout width is 1265 after the scrollbar, giving 16px of horizontal scroll on every page)
+2026-08-28 ~12:55 | deploy | Claude | a037a35 DEPLOYED to review VPS. Server was on feature/homepage-brightness-pass at 759614d with a clean tree, so a plain fast-forward pull (no reset needed); infra-web rebuilt and recreated, container healthy, localhost 200. Verified on the LIVE site at 169.239.180.49, not just locally: at 1280x720 all three hero CTAs visible with 86px clearance and nothing clipped; at 1366x625 all visible with 40px clearance, no horizontal scroll; hero section exactly viewport-minus-header at both. Access note: this laptop could not SSH at first - the key was offered and the server said "Server accepts key" then denied, which is the signature of a passphrase-protected key under BatchMode. Git Bash ssh has no agent here; the WINDOWS ssh-agent service is running with id_ed25519 already loaded, so deploys from this machine must use C:\WINDOWS\System32\OpenSSH\ssh.exe, not the Git Bash ssh. | open: server-side git fetch prints "no such identity: /root/.ssh/github: No such file or directory" on every fetch - harmless today because another auth path succeeds, but the referenced deploy key is missing and should be tidied; .github/workflows/deploy.yml has a workflow_dispatch review-deploy job written and STAGED BUT NOT COMMITTED (needs Johan - it only takes effect once on the default branch anyway)
+2026-08-28 ~13:30 | qa | Claude | FIX 13 CLICK-TEST run against the LIVE review site 169.239.180.49 (not localhost). Method: crawled every internal page reachable from the homepage plus targeted browser interaction; deliberately GET-only, no form ever submitted, because the contact form and the 8 quiz gates create real subscriber rows and send mail. PASSES: 146 internal pages crawled, ZERO non-200; every external link resolves except one (below); mobile menu opens and carries all 25 nav items including the 24/7 Coaching App entry; cookie banner sits in the bottom 88px and overlaps none of the 7 hero CTAs, so FIX 1 / KI027 still holds on live; site search returns real results (KI020 stays closed - note the payload key is results, not hits); contact form renders name/email/phone/enquiry/message with a submit control; no Careers route exists and nothing links to one, so FIX 9 is a content decision with nothing dangling. FAILURES: (1) BLOCKER - Add to Cart 500s for EVERY visitor. POST /store/carts 200 then POST line-items 500; Medusa logs "Cannot read properties of undefined reading calculated_amount" in core-flows get-variants-and-items-with-prices. GET /api/region returns the International/usd region even to a South African IP, and only 84 of 211 variants carry a USD price while all 211 carry ZAR - so the cart is USD, the variant has no USD price, Medusa throws. This is KI034 but much wider than recorded: not an international-visitor edge case, region detection defaults everyone to USD, so roughly 60% of the catalogue is unbuyable by anyone. Also found THREE regions with TWO duplicate South Africa/zar rows, a likely contributor to the misresolution. (2) FIX 12 still live and degrades at cutover - the external coach app still targets https://suzanneravenall.com/my-account/pattern-coach/ (old WordPress) with the real chat UI at display:none; that URL 404s once DNS moves. (3) footer "Built by" credit points at https://aidynamicadvisory.com which is DEAD, on every page. (4) booking CTA is http://169.239.180.49:3002/... raw IP + port + plain http, breaks at cutover. (5) KI001 confirmed still open - console shows Invalid Sentry Dsn on every page. Left behind: one empty Medusa cart cart_01M140QQ7PGNES004KTT6SQF3T with no line items (the add failed), harmless. | open: the cart blocker must be fixed before Suzanne is invited to review - she will click Buy
+
+## 2026-08-28 - Shop blocker: region resolution (KI034) + cart RNaN (KI036)
+
+Dug into the Add-to-Cart 500 found by the FIX 13 sweep. Root cause was not an
+international edge case, it was every visitor.
+
+`/api/region` read the visitor country from `CF-IPCountry`. Nothing in the stack
+sets that header: DNS is at Xneelo (ns1.host-h.net / ns1.dns-h.com), there is no
+Cloudflare proxy in front, and the VPS nginx is built without the geoip module
+(`nginx -V` has no geo entries, no CF header handling anywhere in /etc/nginx).
+So `country` was always `''`, the ternary read that as "not ZA", and every
+visitor - South Africans included - was issued a USD cart. Only 84 of 207
+variants carry a USD price, so adding any of the other 123 threw an unhandled
+`Cannot read properties of undefined (reading 'calculated_amount')`.
+
+Proved by probe: no header -> USD region, `CF-IPCountry: ZA` -> ZAR region.
+
+Two corrections to the sweep report:
+- The "three regions, two duplicate South Africa rows" is not a live data
+  problem. One SA/zar row is soft-deleted (deleted_at 2026-05-05). Two live
+  regions only.
+- 207 live variants, not 211. 178 of those are exposed to the store API and all
+  178 are priced in ZAR.
+
+Fixes (a6bf940, 09c1a3c, 39ffca7 - deployed and verified live):
+- `/api/region` resolves ZAR unless a geo header positively reports a non-ZA
+  country; Cloudflare's XX (anonymised) and T1 (Tor) are treated as unknown.
+- USD region gated behind `MEDUSA_USD_REGION_ENABLED`, default false, wired
+  through docker-compose. Putting a CDN in front later cannot silently
+  re-break the catalogue before USD prices exist.
+- Persisted carts are validated against the region the visitor resolves to NOW.
+  Previously any cart in `localStorage` matching *any* configured region was
+  reused, so returning visitors would have carried the 500 across the fix.
+- Found while verifying: cart and checkout rendered `RNaN` as every line total
+  (correct order summary beside it). Medusa omits per-line subtotal/total
+  unless requested by name. Cart responses are now normalised (line subtotal =
+  unit_price x quantity) and `formatPrice` refuses to emit NaN. KI036.
+- 14 new tests (9 region, 5 formatPrice), all green.
+
+Verified live on 169.239.180.49 after rebuild:
+- `/api/region` returns the ZAR region for no header, ZA, US and XX.
+- API add-to-cart on the variant that reproduced the 500: HTTP 200, cart in zar,
+  R165.00.
+- Catalogue sweep: 98 products / 178 variants, 0 missing a ZAR price.
+- UI: Add to Cart works, cart shows R165,00 line total, qty 2 -> R330,00,
+  checkout summary R330,00. No NaN.
+- Planted a USD cart id in localStorage, reloaded: discarded as intended, next
+  add-to-cart created a fresh ZAR cart.
+
+Checked and NOT a problem: the checkout "Billing country" selector only chooses
+the payment gateway (PayFast vs PayPal). It does not switch cart currency, so it
+is not a second route into the USD region. Consequence to flag: international
+buyers are billed in ZAR via PayPal until USD prices are seeded.
+
+Left behind: 4 abandoned test carts. Harmless, not deleted.
+Local drift noted: laptop `infra/.env` is missing `NEXT_PUBLIC_MEDUSA_REGION_ID`,
+which the server has. Local dev would fall through to the regions lookup.
+
+## 2026-08-28 - Footer credit repointed (4b64d0e)
+
+"Built by Ai Dynamic Advisory" in the site footer linked to
+https://aidynamicadvisory.com, which does not resolve (curl returns 000). The
+credit renders on every page, so a client site carried a dead link sitewide, on
+our own name, right before we invited the client to click around it. Repointed
+at https://www.aiautomations.co.za (200; the apex 307-redirects, so the www host
+is the one to use).
+
+Deployed and verified live: the footer href is the new host on /, /shop, /about
+and /contact, and zero occurrences of aidynamicadvisory remain in the homepage
+HTML.
+
+NOT verified by unit test, on purpose and worth knowing: Footer.test.tsx cannot
+run at all. All 27 tests fail with "React is not defined", identically with and
+without this change (confirmed by stashing it). Header.test.tsx and
+CookieConsent.test.tsx fail the same way, 15 more, and Header already has the
+`import React` that Footer lacks. So it is a component-test environment config
+problem, not a missing import, and it means there is currently NO unit-test
+safety net on Footer, Header or CookieConsent. Worth fixing separately before
+anyone leans on those suites.
+
+2026-09-02 | web | EA session | WARM DIRECTION, homepage. Branch `feature/warm-direction`. The Friday 5 Sep commitment to Suzanne. Diagnosis carried over from 31 Aug: the palette (navy #012B43 + electric blue #1719F4) was inherited from the old WordPress site while the design reference has always been tonyrobbins.com, which is warm - so three brightness passes could never answer "it needs to be a warm site", because brightening a cold palette yields a lighter cold. TOKENS (packages/config/tailwind.config.ts + packages/ui/src/tokens.ts, kept in step): brand-primary 900 is now #1A1512 warm ink, brand-accent 600 #A84C07 warm amber, hover 700 #8F4108, plus new brand-cream #FDFAF6 (page ground), brand-sand #F5EDE3 (alternating band), brand-border #E7DED2, brand-ink/brand-muted warm text, and brand-blue #012B43 retaining Suzanne's navy as an IDENTITY colour only. accent-600 is deliberately the dark end of the amber ramp so ONE token passes WCAG AA on both light grounds rather than needing a per-background variant; accent-400 #F0A952 is the label colour on dark. Every pair contrast-checked before applying: white-on-accent 5.67, accent-on-cream 5.45, accent-on-sand 4.89, accent-400-on-ink 8.43, ink-on-cream 17.1, muted-on-cream 5.89, muted-on-sand 5.29. The three brain/pulse glow keyframes hardcoded the electric blue and were moved to #D97706. SWEEP across components/home/*.tsx + shared/MagazineCovers + shared/VideoTestimonials: 17 bg-white, 6 bg-gray-50, 5 dark greys, 16 gradient stops, 25 text greys, 5 borders. One deliberate exception, and it is the point of the design: WHITE CARDS STAY WHITE on the cream ground - that contrast is where the depth now comes from, so AboutTeaser's floating card, ServicesSection's cards and UpcomingEvents' cards keep bg-white while every section GROUND went warm. Design rules updated with the two rules that are easy to get wrong (white is a card colour not a section colour; accent on dark is the 400). VERIFIED in-browser: computed styles confirm CTA rgb(168,76,7), cream rgb(253,250,246), sand rgb(245,237,227), dark rgb(26,21,18), and ZERO elements still painting #1719F4 or #012B43 as a background; 0 console errors; mobile 375x812 all three hero CTAs above the fold, nothing clipped. tsc: 167 errors before and 167 after, all pre-existing in components/invoice (react-pdf typings), 0 in any file I touched - confirmed by stashing the change and re-running. | open: UNCOMMITTED and NOT deployed, awaiting Johan's eye - this is a client-facing direction decision, not a mechanical change. A bug worth recording: my sweep script keyed a protect-list on 'home/X.tsx' while Windows glob returned 'home\X.tsx', so the lookup silently returned nothing, the guard assert never ran, and the three white cards were swept anyway; caught on visual inspection and restored by hand. Two cream sections still sit adjacent (the FeaturedPrograms band and MagazineCovers), violating "never the same background twice in a row" - it pre-existed as white-on-white and MagazineCovers is SHARED, so changing it reaches other pages; left for the 15 Sep rollout. The hero photograph is still a cold blue stage shot and now fights the warm page - worth a warmer image or a warm overlay before Suzanne looks. Rollout to the remaining pages is the same mechanical pass as 20 Aug once she says yes.

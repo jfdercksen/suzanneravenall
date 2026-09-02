@@ -32,7 +32,7 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
   }
 
   return (
-    <section aria-labelledby="video-testimonials-heading" className="bg-white py-14 lg:py-24">
+    <section aria-labelledby="video-testimonials-heading" className="bg-brand-cream py-14 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -49,7 +49,7 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
           <h2 id="video-testimonials-heading" className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4">
             Real transformations. Real people.
           </h2>
-          <p className="text-gray-500 text-lg font-light max-w-2xl mx-auto">
+          <p className="text-brand-muted text-lg font-light max-w-2xl mx-auto">
             Hear directly from clients who have experienced the Rapid Repatterning® process with Suzanne.
           </p>
         </motion.div>
@@ -117,7 +117,7 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
                 </div>
 
                 {/* Title overlay */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-6 pb-5 pt-16">
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-primary-900/80 to-transparent px-6 pb-5 pt-16">
                   <p className="text-white font-medium text-sm lg:text-base">{activeVideo.name}</p>
                 </div>
               </motion.button>
@@ -163,10 +163,10 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
               {/* Small play icon */}
               <div className="absolute inset-0 flex items-center justify-center bg-black/25">
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center ${
-                  i === activeIndex ? 'bg-brand-accent' : 'bg-white/80'
+                  i === activeIndex ? 'bg-brand-accent' : 'bg-brand-cream/80'
                 }`}>
                   <svg
-                    className={`w-3 h-3 translate-x-px ${i === activeIndex ? 'text-white' : 'text-gray-800'}`}
+                    className={`w-3 h-3 translate-x-px ${i === activeIndex ? 'text-white' : 'text-brand-primary-900'}`}
                     fill="currentColor"
                     viewBox="0 0 24 24"
                     aria-hidden="true"
@@ -177,7 +177,7 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
               </div>
 
               {/* Name label */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-1.5 pt-6">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-primary-900/80 to-transparent px-2 pb-1.5 pt-6">
                 <p className="text-white text-xs font-medium truncate">{video.name}</p>
               </div>
             </motion.button>

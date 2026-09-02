@@ -29,7 +29,7 @@ interface UpcomingProgramsProps {
 
 export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
   return (
-    <section className="bg-white py-14 lg:py-24">
+    <section className="bg-brand-cream py-14 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}
@@ -44,7 +44,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
           </div>
           <Link
             href="/programs"
-            className="hidden lg:flex items-center gap-2 text-gray-500 hover:text-brand-primary text-sm uppercase tracking-widest transition-colors duration-300"
+            className="hidden lg:flex items-center gap-2 text-brand-muted hover:text-brand-primary text-sm uppercase tracking-widest transition-colors duration-300"
           >
             All programs <ChevronRight className="w-4 h-4" />
           </Link>
@@ -55,7 +55,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
 
           {/* TIER 1 — Featured cohort (spans 2 cols) */}
           <motion.div
-            className="lg:col-span-2 relative overflow-hidden bg-gray-900 border border-white/5 shadow-2xl group"
+            className="lg:col-span-2 relative overflow-hidden bg-brand-primary-800 border border-white/5 shadow-2xl group"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
@@ -71,7 +71,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
               sizes="(min-width: 1024px) 66vw, 100vw"
               className="object-cover opacity-45 group-hover:opacity-55 transition-opacity duration-500"
             />
-            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent" />
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-brand-primary-900/85 via-brand-primary-900/40 to-transparent" />
 
             {/* Content */}
             <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-between min-h-[380px]">
@@ -86,8 +86,8 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                       <span
                         className={`text-xs px-3 py-1 uppercase tracking-wider ${
                           cohort.spotsRemaining > 0
-                            ? 'bg-gray-950/70 border border-white/40 text-white'
-                            : 'bg-gray-800 border border-gray-700 text-gray-200'
+                            ? 'bg-brand-primary-900/70 border border-white/40 text-white'
+                            : 'bg-brand-primary-700 border border-brand-primary-600 text-brand-primary-100'
                         }`}
                       >
                         {cohort.spotsRemaining > 0
@@ -165,7 +165,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
 
           {/* TIER 2 — 1-on-1 card (spans 1 col) */}
           <motion.div
-            className="relative overflow-hidden bg-gray-950 border border-white/10 group hover:border-brand-accent/40 transition-colors duration-500"
+            className="relative overflow-hidden bg-brand-primary-900 border border-white/10 group hover:border-brand-accent/40 transition-colors duration-500"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
@@ -181,7 +181,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
               sizes="(min-width: 1024px) 33vw, 100vw"
               className="object-cover opacity-30 group-hover:opacity-40 transition-opacity duration-500"
             />
-            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-gray-950/80 via-gray-950/60 to-gray-950/90" />
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-brand-primary-900/80 via-brand-primary-900/60 to-brand-primary-900/90" />
             <div className="relative z-10 p-8 flex flex-col justify-between min-h-[380px]">
 
               <div>
@@ -222,7 +222,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
         <div className="mt-8 text-center lg:hidden">
           <Link
             href="/programs"
-            className="text-gray-500 hover:text-brand-primary text-sm uppercase tracking-widest transition-colors duration-300"
+            className="text-brand-muted hover:text-brand-primary text-sm uppercase tracking-widest transition-colors duration-300"
           >
             View all programs &rarr;
           </Link>

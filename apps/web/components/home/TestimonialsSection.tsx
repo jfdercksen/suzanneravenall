@@ -23,7 +23,7 @@ export default function TestimonialsSection() {
   if (homepageTestimonials.length === 0) return null
 
   return (
-    <section aria-labelledby="testimonials-heading" className="py-20 lg:py-32 bg-gray-950">
+    <section aria-labelledby="testimonials-heading" className="py-20 lg:py-32 bg-brand-primary-900">
       <div className="max-w-7xl mx-auto px-4">
 
         <motion.div
@@ -45,7 +45,7 @@ export default function TestimonialsSection() {
           {homepageTestimonials.map(({ quote, name, title, result }, i) => (
             <motion.figure
               key={name}
-              className="relative flex flex-col bg-white/5 border border-white/10 rounded-card p-8 hover:border-brand-accent/30 hover:bg-white/10 transition-all duration-500 hover:-translate-y-1"
+              className="relative flex flex-col bg-brand-cream/5 border border-white/10 rounded-card p-8 hover:border-brand-accent/30 hover:bg-brand-cream/10 transition-all duration-500 hover:-translate-y-1"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}

@@ -28,7 +28,7 @@ export default function TestimonialSpotlight() {
   const { stat, statLabel, supporting, quote, name, role, initials } = spotlightTestimonial
 
   return (
-    <section className="bg-gray-50 py-14 lg:py-24 overflow-hidden">
+    <section className="bg-brand-sand py-14 lg:py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -48,7 +48,7 @@ export default function TestimonialSpotlight() {
               <div className="text-7xl lg:text-9xl font-semibold tracking-tight text-brand-primary leading-none mb-2">
                 {stat}
               </div>
-              <p className="text-xl lg:text-2xl text-gray-600 font-light uppercase tracking-wider">
+              <p className="text-xl lg:text-2xl text-brand-ink font-light uppercase tracking-wider">
                 {statLabel}
               </p>
             </div>
@@ -57,7 +57,7 @@ export default function TestimonialSpotlight() {
             <div className="w-16 h-px bg-brand-accent mb-8" />
 
             {/* Supporting context */}
-            <p className="text-gray-600 text-sm font-light leading-relaxed max-w-sm">
+            <p className="text-brand-ink text-sm font-light leading-relaxed max-w-sm">
               {supporting}
             </p>
           </motion.div>
@@ -84,14 +84,14 @@ export default function TestimonialSpotlight() {
                 </div>
                 <cite className="not-italic">
                   <p className="text-brand-primary font-medium">{name}</p>
-                  <p className="text-gray-500 text-sm">{role}</p>
+                  <p className="text-brand-muted text-sm">{role}</p>
                 </cite>
               </footer>
             </blockquote>
 
             {/* CTA */}
             <div className="space-y-4">
-              <p className="text-gray-500 text-sm uppercase tracking-widest">
+              <p className="text-brand-muted text-sm uppercase tracking-widest">
                 Start your transformation
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
@@ -103,7 +103,7 @@ export default function TestimonialSpotlight() {
                 </Link>
                 <Link
                   href="/testimonials"
-                  className="border border-gray-300 hover:border-brand-primary text-gray-600 hover:text-brand-primary px-8 py-4 rounded-button text-sm uppercase tracking-widest font-medium transition-all duration-300 text-center"
+                  className="border border-brand-border hover:border-brand-primary text-brand-ink hover:text-brand-primary px-8 py-4 rounded-button text-sm uppercase tracking-widest font-medium transition-all duration-300 text-center"
                 >
                   More Results
                 </Link>
