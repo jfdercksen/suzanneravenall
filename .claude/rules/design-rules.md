@@ -69,6 +69,11 @@ Below sm (phones): if overlaid text would cover the subject's face, STACK. Pictu
 on top, text on black beneath it, the fade running to solid black exactly where the
 picture ends. `components/home/Hero.tsx` is the reference implementation.
 
+**Use `components/shared/PageHeader.tsx` for every inner page with a photo header**
+(props: id, eyebrow, title, description, image, mobileCrop, children for CTAs;
+`HEADER_UNDERLINE` for emphasised words). It already implements everything above.
+Video headers (homepage Hero, AboutHero) keep their own component with the same rule.
+
 ## Non-negotiable rules
 
 - Use brand tokens from tailwind.config.ts — never hardcode colours

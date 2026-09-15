@@ -3,12 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-
-const fadeUp = (delay: number) => ({
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.8, delay, ease: 'easeOut' as const },
-})
+import { PageHeader, HEADER_UNDERLINE } from '@/components/shared/PageHeader'
 
 const sectionReveal = {
   initial: { opacity: 0, y: 50 },
@@ -80,53 +75,28 @@ const outcomes = [
 export default function TheScienceContent() {
   return (
     <>
-      {/* Hero — photo-backed dark navy */}
-      <section
-        aria-labelledby="science-hero-heading"
-        className="relative bg-brand-primary pt-40 pb-24 lg:pt-52 lg:pb-32 overflow-hidden"
-      >
-        <Image
-          src="/images/hero-bg-suzanne-ravenall.jpg"
-          alt=""
-          aria-hidden="true"
-          fill
-          sizes="100vw"
-          className="object-cover opacity-50"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
-        />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <motion.p
-              {...fadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
-            >
-              About: The Science
-            </motion.p>
-            <motion.h1
-              id="science-hero-heading"
-              {...fadeUp(0.2)}
-              className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-8"
-            >
-              It&rsquo;s not you,{' '}
-              <span className="underline decoration-brand-accent-400 decoration-[6px] underline-offset-8">it&rsquo;s your pattern</span>.
-            </motion.h1>
-            <motion.p
-              {...fadeUp(0.4)}
-              className="text-lg lg:text-xl text-white/80 font-light max-w-xl"
-            >
-              The science behind Pattern Intelligence&trade;: how the brain and
-              nervous system learn patterns, why they persist below conscious
-              thought, and what actually changes them.
-            </motion.p>
-          </div>
-        </div>
-      </section>
+      {/* Header: shared PageHeader, the header rule */}
+      <PageHeader
+        id="science-hero-heading"
+        eyebrow="About: The Science"
+        image="/images/hero-bg-suzanne-ravenall.jpg"
+        title={
+          <>
+            It&rsquo;s not you,{' '}
+            <span className={HEADER_UNDERLINE}>it&rsquo;s your pattern</span>.
+          </>
+        }
+        description={
+          <>
+            The science behind Pattern Intelligence&trade;: how the brain and
+            nervous system learn patterns, why they persist below conscious
+            thought, and what actually changes them.
+          </>
+        }
+      />
 
-      {/* The Premise — light */}
-      <section aria-labelledby="premise-heading" className="bg-white py-20 lg:py-32">
+      {/* The Premise: light */}
+      <section aria-labelledby="premise-heading" className="bg-brand-cream py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <motion.p
@@ -138,13 +108,13 @@ export default function TheScienceContent() {
             <motion.h2
               {...reveal(0.1)}
               id="premise-heading"
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               Emotions are not the cause. They are the output.
             </motion.h2>
             <motion.p
               {...reveal(0.2)}
-              className="text-gray-700 text-lg font-light leading-relaxed mb-6"
+              className="text-brand-ink text-lg font-light leading-relaxed mb-6"
             >
               Most people believe their emotions are the problem.
               &ldquo;I&rsquo;m anxious.&rdquo; &ldquo;I overreact.&rdquo;
@@ -154,7 +124,7 @@ export default function TheScienceContent() {
             </motion.p>
             <motion.p
               {...reveal(0.3)}
-              className="text-gray-700 text-lg font-light leading-relaxed mb-6"
+              className="text-brand-ink text-lg font-light leading-relaxed mb-6"
             >
               If your nervous system feels unsafe, you will experience anxiety,
               even in safe environments. If your system expects pressure, you
@@ -172,10 +142,10 @@ export default function TheScienceContent() {
         </div>
       </section>
 
-      {/* The Nervous System — light */}
+      {/* The Nervous System: light */}
       <section
         aria-labelledby="nervous-system-heading"
-        className="bg-gray-50 py-20 lg:py-32"
+        className="bg-brand-sand py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
@@ -187,13 +157,13 @@ export default function TheScienceContent() {
           <motion.h2
             {...reveal(0.1)}
             id="nervous-system-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] max-w-3xl mb-8"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] max-w-3xl mb-8"
           >
             How your system learned the pattern.
           </motion.h2>
           <motion.p
             {...reveal(0.2)}
-            className="text-gray-600 text-lg font-light leading-relaxed max-w-3xl mb-16"
+            className="text-brand-muted text-lg font-light leading-relaxed max-w-3xl mb-16"
           >
             Your nervous system is designed for survival. When it senses threat,
             it activates one of three responses, and when repeated over time,
@@ -212,12 +182,12 @@ export default function TheScienceContent() {
                   delay: i * 0.1,
                   ease: 'easeOut' as const,
                 }}
-                className="rounded-card border border-gray-100 bg-white p-8 transition-all duration-500 hover:border-brand-accent/40 hover:shadow-2xl hover:-translate-y-1"
+                className="rounded-card border border-brand-border bg-white p-8 transition-all duration-500 hover:border-brand-primary-300 hover:shadow-2xl hover:-translate-y-1"
               >
                 <h3 className="text-2xl font-light text-brand-primary mb-4">
                   {response.title}
                 </h3>
-                <p className="text-gray-600 font-light leading-relaxed">
+                <p className="text-brand-muted font-light leading-relaxed">
                   {response.description}
                 </p>
               </motion.div>
@@ -234,10 +204,10 @@ export default function TheScienceContent() {
         </div>
       </section>
 
-      {/* The Childhood Brain — light */}
+      {/* The Childhood Brain: light */}
       <section
         aria-labelledby="childhood-brain-heading"
-        className="bg-white py-20 lg:py-32"
+        className="bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
@@ -250,13 +220,13 @@ export default function TheScienceContent() {
             <motion.h2
               {...reveal(0.1)}
               id="childhood-brain-heading"
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               Where the pattern was written.
             </motion.h2>
             <motion.p
               {...reveal(0.2)}
-              className="text-gray-700 text-lg font-light leading-relaxed mb-6"
+              className="text-brand-ink text-lg font-light leading-relaxed mb-6"
             >
               Brain development is much more than a story about biology. From our
               earliest years, relationships with others play a key role in
@@ -266,7 +236,7 @@ export default function TheScienceContent() {
             </motion.p>
             <motion.p
               {...reveal(0.3)}
-              className="text-gray-700 text-lg font-light leading-relaxed mb-6"
+              className="text-brand-ink text-lg font-light leading-relaxed mb-6"
             >
               The child adapts, learns a new way of being, and makes it the new
               familiar. Fast-forward to adulthood: the decisions are long
@@ -287,10 +257,10 @@ export default function TheScienceContent() {
         </div>
       </section>
 
-      {/* Why Insight Isn't Enough — light */}
+      {/* Why Insight Isn't Enough: light */}
       <section
         aria-labelledby="insight-heading"
-        className="bg-gray-50 py-20 lg:py-32"
+        className="bg-brand-sand py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
@@ -304,13 +274,13 @@ export default function TheScienceContent() {
               <motion.h2
                 {...reveal(0.1)}
                 id="insight-heading"
-                className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
+                className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-8"
               >
                 You can&rsquo;t think your way out of a pattern.
               </motion.h2>
               <motion.p
                 {...reveal(0.2)}
-                className="text-gray-600 text-lg font-light leading-relaxed mb-6"
+                className="text-brand-muted text-lg font-light leading-relaxed mb-6"
               >
                 You can understand your behaviour. You can be aware of it. And
                 still repeat it. Why? Because the pattern doesn&rsquo;t live in
@@ -320,7 +290,7 @@ export default function TheScienceContent() {
               </motion.p>
               <motion.p
                 {...reveal(0.3)}
-                className="text-gray-600 text-lg font-light leading-relaxed"
+                className="text-brand-muted text-lg font-light leading-relaxed"
               >
                 That is why Rapid Repatterning&reg; works at the level where
                 patterns are formed, not coping strategies layered on top, but a
@@ -340,7 +310,7 @@ export default function TheScienceContent() {
                     delay: i * 0.1,
                     ease: 'easeOut' as const,
                   }}
-                  className="flex gap-6 rounded-card border border-gray-100 bg-white p-6 transition-all duration-500 hover:border-brand-accent/40"
+                  className="flex gap-6 rounded-card border border-brand-border bg-white p-6 transition-all duration-500 hover:border-brand-primary-300"
                 >
                   <span className="text-brand-accent text-2xl font-light shrink-0">
                     {step.number}
@@ -349,7 +319,7 @@ export default function TheScienceContent() {
                     <h3 className="text-brand-primary text-lg font-medium mb-2">
                       {step.title}
                     </h3>
-                    <p className="text-gray-600 font-light leading-relaxed">
+                    <p className="text-brand-muted font-light leading-relaxed">
                       {step.description}
                     </p>
                   </div>
@@ -360,10 +330,10 @@ export default function TheScienceContent() {
         </div>
       </section>
 
-      {/* When the Pattern Changes — light */}
+      {/* When the Pattern Changes: light */}
       <section
         aria-labelledby="change-heading"
-        className="bg-white py-20 lg:py-32"
+        className="bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
@@ -376,13 +346,13 @@ export default function TheScienceContent() {
             <motion.h2
               {...reveal(0.1)}
               id="change-heading"
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               What happens when the pattern changes.
             </motion.h2>
             <motion.p
               {...reveal(0.2)}
-              className="text-gray-700 text-lg font-light leading-relaxed mb-10"
+              className="text-brand-ink text-lg font-light leading-relaxed mb-10"
             >
               When your nervous system becomes regulated, the change shows up
               everywhere at once, because one pattern was driving multiple areas
@@ -400,7 +370,7 @@ export default function TheScienceContent() {
                     delay: i * 0.1,
                     ease: 'easeOut' as const,
                   }}
-                  className="flex items-baseline gap-4 border-b border-gray-200 py-4 text-brand-primary text-lg font-light"
+                  className="flex items-baseline gap-4 border-b border-brand-border py-4 text-brand-primary text-lg font-light"
                 >
                   <span
                     aria-hidden="true"
@@ -421,7 +391,7 @@ export default function TheScienceContent() {
         </div>
       </section>
 
-      {/* Final CTA — photo-backed dark navy */}
+      {/* Final CTA: photo-backed, black overlay */}
       <section
         aria-labelledby="science-cta-heading"
         className="relative bg-brand-primary py-20 lg:py-32 overflow-hidden"
@@ -448,7 +418,7 @@ export default function TheScienceContent() {
           <motion.h2
             {...reveal(0.1)}
             id="science-cta-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.08] mb-8"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08] mb-8"
           >
             The science only matters once you know your pattern.
           </motion.h2>
@@ -466,13 +436,13 @@ export default function TheScienceContent() {
           >
             <Link
               href="/discover-your-pattern"
-              className="inline-flex items-center justify-center px-10 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
+              className="inline-flex items-center justify-center px-10 py-4 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
             >
               Take the Free Pattern Scan
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center px-10 py-4 border border-white/40 hover:border-white text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/5"
+              className="inline-flex items-center justify-center px-10 py-4 border border-white/50 hover:border-white text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
             >
               Book a Discovery Call
             </Link>

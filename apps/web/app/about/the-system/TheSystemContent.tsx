@@ -3,12 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-
-const fadeUp = (delay: number) => ({
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.8, delay, ease: 'easeOut' as const },
-})
+import { PageHeader, HEADER_UNDERLINE } from '@/components/shared/PageHeader'
 
 const sectionReveal = {
   initial: { opacity: 0, y: 50 },
@@ -80,55 +75,24 @@ const frameworks: {
 export default function TheSystemContent() {
   return (
     <>
-      {/* Hero — photo-backed dark navy */}
-      <section
-        aria-labelledby="system-hero-heading"
-        className="relative bg-brand-primary pt-40 pb-24 lg:pt-52 lg:pb-32 overflow-hidden"
-      >
-        <Image
-          src="/images/hero-bg-suzanne-ravenall.jpg"
-          alt=""
-          aria-hidden="true"
-          fill
-          sizes="100vw"
-          className="object-cover opacity-50"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
-        />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <motion.p
-              {...fadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
-            >
-              About: The System
-            </motion.p>
-            <motion.h1
-              id="system-hero-heading"
-              {...fadeUp(0.2)}
-              className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-8"
-            >
-              One philosophy. An entire system built on it:{' '}
-              <span className="underline decoration-brand-accent-400 decoration-[6px] underline-offset-8">Pattern Intelligence&trade;</span>
-            </motion.h1>
-            <motion.p
-              {...fadeUp(0.4)}
-              className="text-lg lg:text-xl text-white/80 font-light max-w-xl"
-            >
-              A behavioural performance methodology that helps people, leaders and
-              organisations identify and change the unconscious patterns that
-              drive performance.
-            </motion.p>
-          </div>
-        </div>
-      </section>
+      {/* Header: shared PageHeader, the header rule */}
+      <PageHeader
+        id="system-hero-heading"
+        eyebrow="About: The System"
+        image="/images/hero-bg-suzanne-ravenall.jpg"
+        title={
+          <>
+            One philosophy. An entire system built on it:{' '}
+            <span className={HEADER_UNDERLINE}>Pattern Intelligence&trade;</span>
+          </>
+        }
+        description="A behavioural performance methodology that helps people, leaders and organisations identify and change the unconscious patterns that drive performance."
+      />
 
-      {/* The Philosophy — light */}
+      {/* The Philosophy: light */}
       <section
         aria-labelledby="philosophy-heading"
-        className="bg-white py-20 lg:py-32"
+        className="bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
@@ -141,13 +105,13 @@ export default function TheSystemContent() {
             <motion.h2
               {...reveal(0.1)}
               id="philosophy-heading"
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               It&rsquo;s not you, it&rsquo;s your pattern.
             </motion.h2>
             <motion.p
               {...reveal(0.2)}
-              className="text-gray-700 text-lg font-light leading-relaxed mb-6"
+              className="text-brand-ink text-lg font-light leading-relaxed mb-6"
             >
               Pattern Intelligence is the foundation underpinning all of
               Suzanne&rsquo;s work, products and intellectual property. It starts
@@ -157,7 +121,7 @@ export default function TheSystemContent() {
             </motion.p>
             <motion.p
               {...reveal(0.3)}
-              className="text-gray-700 text-lg font-light leading-relaxed"
+              className="text-brand-ink text-lg font-light leading-relaxed"
             >
               A philosophy alone doesn&rsquo;t change anyone. So around it,
               Suzanne has built a coherent system of instruments and methods,
@@ -168,10 +132,10 @@ export default function TheSystemContent() {
         </div>
       </section>
 
-      {/* The Frameworks — light */}
+      {/* The Frameworks: light */}
       <section
         aria-labelledby="frameworks-heading"
-        className="bg-gray-50 py-20 lg:py-32"
+        className="bg-brand-sand py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
@@ -183,7 +147,7 @@ export default function TheSystemContent() {
           <motion.h2
             {...reveal(0.1)}
             id="frameworks-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] max-w-3xl mb-16"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] max-w-3xl mb-16"
           >
             Seven instruments. One intelligence.
           </motion.h2>
@@ -200,7 +164,7 @@ export default function TheSystemContent() {
                   delay: i * 0.1,
                   ease: 'easeOut' as const,
                 }}
-                className="group relative h-full rounded-card border border-gray-100 bg-white p-8 transition-all duration-500 hover:border-brand-accent/40 hover:shadow-2xl hover:-translate-y-1"
+                className="group relative h-full rounded-card border border-brand-border bg-white p-8 transition-all duration-500 hover:border-brand-primary-300 hover:shadow-2xl hover:-translate-y-1"
               >
                 <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-5">
                   {framework.label}
@@ -208,11 +172,11 @@ export default function TheSystemContent() {
                 <h3 className="text-2xl font-light text-brand-primary mb-4">
                   {framework.title}
                 </h3>
-                <p className="text-gray-600 font-light leading-relaxed">
+                <p className="text-brand-muted font-light leading-relaxed">
                   {framework.description}
                 </p>
                 {framework.inDevelopment && (
-                  <p className="mt-6 inline-flex items-center text-xs uppercase tracking-widest font-medium text-gray-500 border border-gray-300 rounded-button px-3 py-1">
+                  <p className="mt-6 inline-flex items-center text-xs uppercase tracking-widest font-medium text-brand-muted border border-brand-primary-300 rounded-button px-3 py-1">
                     In development
                   </p>
                 )}
@@ -222,10 +186,10 @@ export default function TheSystemContent() {
         </div>
       </section>
 
-      {/* The Governing Principle — light */}
+      {/* The Governing Principle: light */}
       <section
         aria-labelledby="principle-heading"
-        className="bg-white py-20 lg:py-32"
+        className="bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
@@ -238,7 +202,7 @@ export default function TheSystemContent() {
             <motion.h2
               {...reveal(0.1)}
               id="principle-heading"
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               Nothing random. Ever again.
             </motion.h2>
@@ -252,13 +216,13 @@ export default function TheSystemContent() {
                 must answer one question: does this strengthen Pattern
                 Intelligence? If it doesn&rsquo;t, we don&rsquo;t build it.
               </p>
-              <footer className="mt-3 text-gray-500 text-sm tracking-widest uppercase not-italic">
+              <footer className="mt-3 text-brand-muted text-sm tracking-widest uppercase not-italic">
                 Dr. Suzanne Ravenall
               </footer>
             </motion.blockquote>
             <motion.p
               {...reveal(0.3)}
-              className="text-gray-700 text-lg font-light leading-relaxed"
+              className="text-brand-ink text-lg font-light leading-relaxed"
             >
               That discipline is why the system holds together. Whether you enter
               through the free{' '}
@@ -289,7 +253,7 @@ export default function TheSystemContent() {
         </div>
       </section>
 
-      {/* Final CTA — photo-backed dark navy */}
+      {/* Final CTA: photo-backed, black overlay */}
       <section
         aria-labelledby="system-cta-heading"
         className="relative bg-brand-primary py-20 lg:py-32 overflow-hidden"
@@ -316,7 +280,7 @@ export default function TheSystemContent() {
           <motion.h2
             {...reveal(0.1)}
             id="system-cta-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.08] mb-8"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08] mb-8"
           >
             Every part of the system starts in the same place: your pattern.
           </motion.h2>
@@ -333,13 +297,13 @@ export default function TheSystemContent() {
           >
             <Link
               href="/discover-your-pattern"
-              className="inline-flex items-center justify-center px-10 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
+              className="inline-flex items-center justify-center px-10 py-4 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
             >
               Take the Free Pattern Scan
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center px-10 py-4 border border-white/40 hover:border-white text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/5"
+              className="inline-flex items-center justify-center px-10 py-4 border border-white/50 hover:border-white text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
             >
               Book a Discovery Call
             </Link>
