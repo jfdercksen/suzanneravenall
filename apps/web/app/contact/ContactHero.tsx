@@ -13,7 +13,7 @@ export default function ContactHero() {
   return (
     <section
       aria-labelledby="contact-hero-heading"
-      className="relative bg-gray-50 w-full py-20 lg:py-32 overflow-hidden"
+      className="relative bg-brand-sand w-full py-20 lg:py-32 overflow-hidden"
     >
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.p
@@ -26,14 +26,14 @@ export default function ContactHero() {
         <motion.h1
           id="contact-hero-heading"
           {...fadeUp(0.15)}
-          className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
+          className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-8"
         >
           Let&rsquo;s Start Your Transformation
         </motion.h1>
 
         <motion.p
           {...fadeUp(0.3)}
-          className="text-gray-600 text-lg lg:text-xl font-light max-w-2xl mx-auto"
+          className="text-brand-muted text-lg lg:text-xl font-light max-w-2xl mx-auto"
         >
           Book a discovery call, send a message, or find out which path is right for you.
         </motion.p>

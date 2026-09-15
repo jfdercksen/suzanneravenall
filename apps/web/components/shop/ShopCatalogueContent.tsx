@@ -204,33 +204,33 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
 
   return (
     <main className="min-h-screen">
-      {/* 1 — Video-backed hero (dark, neutral scrim) */}
+      {/* 1: Video-backed header (PageHeader) and black stats band */}
       <ShopHeroBanner />
 
-      {/* 2 — Light sticky filter bar */}
+      {/* 2: Light sticky filter bar (cream) */}
       <CategoryFilterBar
         categories={initialCategories}
         filters={filters}
         onFiltersChange={handleFiltersChange}
       />
 
-      {/* 3 — Light product grid (gray-50 so white cards read as cards) */}
-      <section id="programmes" className="w-full bg-gray-50 scroll-mt-48">
+      {/* 3: Light product grid (sand so white cards read as cards) */}
+      <section id="programmes" className="w-full bg-brand-sand scroll-mt-48">
         {/* Search + sort toolbar */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted pointer-events-none" />
             <input
               type="text"
               placeholder="Search programmes…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-lg pl-9 pr-8 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200 placeholder-gray-400"
+              className="w-full bg-brand-cream border border-brand-border text-brand-ink text-sm rounded-lg pl-9 pr-8 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200 placeholder-brand-muted"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-brand-muted hover:text-brand-ink transition-colors"
                 aria-label="Clear search"
               >
                 <X className="w-3.5 h-3.5" />
@@ -239,7 +239,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
           </div>
 
           <div className="flex items-center gap-3">
-            <p className="text-sm text-gray-500 whitespace-nowrap">
+            <p className="text-sm text-brand-muted whitespace-nowrap">
               {searchLoading
                 ? 'Searching…'
                 : searchResults !== null
@@ -252,7 +252,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortOption)}
-                className="bg-white border border-gray-200 text-gray-700 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200"
+                className="bg-brand-cream border border-brand-border text-brand-ink text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200"
               >
                 <option value="featured">Featured</option>
                 <option value="price_asc">Price: Low to High</option>
@@ -297,7 +297,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
 
               {!loading && error && (
                 <div className="flex flex-col items-center gap-6 py-24 text-center">
-                  <p className="text-gray-500 text-lg">Unable to load programmes. Please try again.</p>
+                  <p className="text-brand-muted text-lg">Unable to load programmes. Please try again.</p>
                   <button
                     onClick={() => void fetchProducts()}
                     className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium rounded-button transition-colors duration-200"
@@ -330,7 +330,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
         </div>
       </section>
 
-      {/* 4 — Photo-backed final CTA (dark, allowed as CTA band) */}
+      {/* 4: Photo-backed final CTA (dark, allowed as CTA band) */}
       <ShopFinalCTA />
     </main>
   )
@@ -348,10 +348,10 @@ function EmptyState({ message, action }: EmptyStateProps) {
       animate={{ opacity: 1 }}
       className="flex flex-col items-center gap-4 py-24 text-center"
     >
-      <p className="text-gray-500 text-lg">{message}</p>
+      <p className="text-brand-muted text-lg">{message}</p>
       <button
         onClick={action.onClick}
-        className="px-5 py-2.5 border border-gray-200 hover:border-brand-accent text-gray-500 hover:text-brand-accent rounded-lg text-sm transition-all duration-200"
+        className="px-5 py-2.5 border border-brand-border hover:border-brand-accent text-brand-muted hover:text-brand-accent rounded-lg text-sm transition-all duration-200"
       >
         {action.label}
       </button>

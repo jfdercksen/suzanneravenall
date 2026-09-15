@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { PageHeader } from '@/components/shared/PageHeader'
 import { isResonanceRepatterning, type Program } from '@/data/programs'
 
 type Props = {
@@ -52,12 +53,6 @@ function getCtaProps(program: Program): { label: string; href: string } {
 
 // -- motion variants --
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.8, delay, ease: 'easeOut' as const },
-})
-
 const sectionVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -75,7 +70,7 @@ const childVariants = {
 
 const viewport = { once: true, margin: '0px' } as const
 
-// -- icons (inline SVG — no external icon dependency) --
+// -- icons (inline SVG: no external icon dependency) --
 
 function SparklesIcon() {
   return (
@@ -109,7 +104,7 @@ function CheckIcon() {
   )
 }
 
-// -- outcome cards (placeholder — TODO: Suzanne to provide programme-specific outcomes) --
+// -- outcome cards (placeholder: TODO: Suzanne to provide programme-specific outcomes) --
 
 const OUTCOMES = [
   {
@@ -144,7 +139,7 @@ function RelatedProgramCard({ program }: { program: Program }) {
   return (
     <motion.div
       variants={childVariants}
-      className="group relative overflow-hidden min-h-[280px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl flex flex-col"
+      className="group relative overflow-hidden min-h-[280px] bg-brand-primary-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl flex flex-col"
     >
       <Image
         src={program.image ?? '/images/hero-bg-suzanne-ravenall.jpg'}
@@ -153,13 +148,13 @@ function RelatedProgramCard({ program }: { program: Program }) {
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-500"
       />
-      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent" />
+      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-black/85 via-black/40 to-transparent" />
       <div className="relative z-10 flex flex-col h-full p-8">
         <div className="flex-1">
           <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-3">
             {CATEGORY_LABELS[program.category]}
           </p>
-          <h3 className="text-xl font-semibold text-white mb-3 leading-snug">
+          <h3 className="text-xl font-medium text-white mb-3 leading-snug">
             {program.name}
           </h3>
           <p className="text-white/70 text-sm font-light leading-relaxed">{program.shortDescription}</p>
@@ -167,7 +162,7 @@ function RelatedProgramCard({ program }: { program: Program }) {
         <Link
           href={`/programs/${program.slug}`}
           aria-label={`Learn more about ${program.name}`}
-          className="mt-6 inline-flex items-center justify-center w-full py-3 px-6 border border-white/30 hover:border-brand-accent hover:bg-brand-accent text-white text-sm font-medium rounded-button transition-all duration-300"
+          className="mt-6 inline-flex items-center justify-center w-full py-3 px-6 border border-white/50 hover:border-white hover:bg-white/10 text-white text-sm font-medium rounded-button transition-all duration-300"
         >
           Learn More
         </Link>
@@ -187,110 +182,88 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
 
   return (
     <>
-      {/* ── 1. HERO — dark ──────────────────────────────────────────── */}
-      <section
-        aria-labelledby="program-hero-heading"
-        className="relative min-h-[640px] lg:min-h-[calc(100vh-5rem)] flex items-center py-16 lg:py-8 overflow-hidden"
+      {/* ── 1. HEADER: shared PageHeader, the header rule ─────────────── */}
+      {/* The picture is each programme's own image, so the default left
+          alignment and centre crop apply to all of them. */}
+      <PageHeader
+        id="program-hero-heading"
+        eyebrow={categoryLabel}
+        image={program.image ?? '/images/hero-bg-suzanne-ravenall.jpg'}
+        title={program.name}
+        description={program.shortDescription}
       >
-        <Image
-          src={program.image ?? '/images/hero-bg-suzanne-ravenall.jpg'}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-50"
-        />
-        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/40" />
-        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
+        <Link
+          href={cta.href}
+          className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
+        >
+          {cta.label}
+        </Link>
+        <Link
+          href="/programs"
+          className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
+        >
+          View All Programmes
+        </Link>
+      </PageHeader>
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            {/* Back link */}
-            <motion.div {...fadeUp(0)}>
-              <Link
-                href="/programs"
-                className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-white/80 hover:text-white transition-colors duration-200 mb-8"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                </svg>
-                All Programmes
-              </Link>
-            </motion.div>
+      {/* ── 1b. PROGRAMME FACTS: dark band under the header ───────────── */}
+      {/* Back link, delivery badge, duration and price: secondary copy that the
+          header rule moves out of the picture. Same content as before. */}
+      <section
+        aria-label="Programme facts"
+        className="w-full bg-brand-primary-900 border-t border-white/10 py-8"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-6 sm:gap-10">
+          {/* Back link */}
+          <Link
+            href="/programs"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-white/80 hover:text-white transition-colors duration-200"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            All Programmes
+          </Link>
 
-            {/* Category + delivery badges */}
-            <motion.div {...fadeUp(0.05)} className="flex flex-wrap gap-3 mb-6">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest bg-black/50 text-white border border-white/40">
-                {categoryLabel}
-              </span>
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest bg-white/10 text-white/80 border border-white/20">
-                {deliveryMethod}
-              </span>
-            </motion.div>
+          {/* Delivery badge (the category is the header eyebrow) */}
+          <span className="self-start sm:self-auto inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest bg-white/10 text-white/80 border border-white/20">
+            {deliveryMethod}
+          </span>
 
-            <motion.h1
-              id="program-hero-heading"
-              {...fadeUp(0.15)}
-              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-6"
-            >
-              {program.name}
-            </motion.h1>
-
-            <motion.p {...fadeUp(0.25)} className="text-lg lg:text-xl text-white/90 max-w-2xl mb-8 leading-relaxed">
-              {program.shortDescription}
-            </motion.p>
-
-            {/* Duration + price row */}
-            <motion.div {...fadeUp(0.3)} className="flex flex-wrap gap-6 mb-8">
-              {program.duration && (
-                <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-white/80 mb-1">Duration</p>
-                  <p className="text-sm text-white/80 font-light">{program.duration}</p>
-                </div>
-              )}
+          {/* Duration + price row */}
+          <div className="flex flex-wrap gap-6 sm:gap-10">
+            {program.duration && (
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-white/80 mb-1">Investment</p>
-                {priceUsd || priceZar ? (
-                  <p className="text-sm font-semibold text-white">
-                    {priceUsd && (
-                      <>
-                        {priceUsd}
-                        <span className="text-white/80 font-normal ml-1">USD</span>
-                      </>
-                    )}
-                    {priceUsd && priceZar && <span className="text-white/80 font-normal ml-2">/</span>}
-                    {priceZar && (
-                      <span className={priceUsd ? 'text-white/80 font-normal ml-2' : ''}>
-                        {priceZar} ZAR
-                      </span>
-                    )}
-                  </p>
-                ) : (
-                  <p className="text-sm text-white/80 font-light">Enquire</p>
-                )}
+                <p className="text-xs uppercase tracking-[0.2em] text-white/80 mb-1">Duration</p>
+                <p className="text-sm text-white/80 font-light">{program.duration}</p>
               </div>
-            </motion.div>
-
-            {/* CTAs */}
-            <motion.div {...fadeUp(0.4)} className="flex flex-wrap gap-4">
-              <Link
-                href={cta.href}
-                className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
-              >
-                {cta.label}
-              </Link>
-              <Link
-                href="/programs"
-                className="inline-flex items-center justify-center px-8 py-4 border border-white/40 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/5"
-              >
-                View All Programmes
-              </Link>
-            </motion.div>
+            )}
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-white/80 mb-1">Investment</p>
+              {priceUsd || priceZar ? (
+                <p className="text-sm font-semibold text-white">
+                  {priceUsd && (
+                    <>
+                      {priceUsd}
+                      <span className="text-white/80 font-normal ml-1">USD</span>
+                    </>
+                  )}
+                  {priceUsd && priceZar && <span className="text-white/80 font-normal ml-2">/</span>}
+                  {priceZar && (
+                    <span className={priceUsd ? 'text-white/80 font-normal ml-2' : ''}>
+                      {priceZar} ZAR
+                    </span>
+                  )}
+                </p>
+              ) : (
+                <p className="text-sm text-white/80 font-light">Enquire</p>
+              )}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── 2. WHAT YOU'LL EXPERIENCE — light ──────────────────────── */}
+      {/* ── 2. WHAT YOU'LL EXPERIENCE: cream ───────────────────────── */}
       {/* TODO: Suzanne to provide programme-specific outcome statements for each programme */}
       <motion.section
         aria-labelledby="outcomes-heading"
@@ -298,7 +271,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
-        className="relative w-full bg-white py-20 lg:py-32"
+        className="relative w-full bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-16">
@@ -307,11 +280,11 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
             </p>
             <h2
               id="outcomes-heading"
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight mb-6"
             >
               After this programme, you will&hellip;
             </h2>
-            <p className="text-lg text-gray-600 font-light leading-relaxed">
+            <p className="text-lg text-brand-muted font-light leading-relaxed">
               Every programme is designed to produce real, measurable shifts, not just insight,
               but transformation you can feel in your daily life.
             </p>
@@ -325,43 +298,43 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               <motion.div
                 key={title}
                 variants={childVariants}
-                className="flex flex-col p-8 bg-gray-50 border border-gray-100 rounded-card hover:shadow-lg transition-shadow duration-300"
+                className="flex flex-col p-8 bg-brand-sand border border-brand-border rounded-card hover:shadow-lg transition-shadow duration-300"
               >
                 <div className="text-brand-accent mb-6">
                   <Icon />
                 </div>
-                <h3 className="text-xl font-semibold text-brand-primary mb-4">{title}</h3>
-                <p className="text-gray-600 font-light leading-relaxed text-sm flex-1">{body}</p>
+                <h3 className="text-xl font-medium text-brand-primary mb-4">{title}</h3>
+                <p className="text-brand-muted font-light leading-relaxed text-sm flex-1">{body}</p>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </motion.section>
 
-      {/* ── 3. PROGRAMME DETAILS — light ────────────────────────────── */}
+      {/* ── 3. PROGRAMME DETAILS: sand ────────────────────────────── */}
       <motion.section
         aria-labelledby="details-heading"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
-        className="relative w-full bg-gray-50 py-20 lg:py-32"
+        className="relative w-full bg-brand-sand py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-2">
-            {/* Left — description + who this is for */}
+            {/* Left: description + who this is for */}
             <div>
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
                 Programme Details
               </p>
               <h2
                 id="details-heading"
-                className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-8"
+                className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary leading-tight mb-8"
               >
                 Everything you need to know.
               </h2>
 
-              <p className="text-gray-600 font-light leading-relaxed mb-10 text-base lg:text-lg">
+              <p className="text-brand-muted font-light leading-relaxed mb-10 text-base lg:text-lg">
                 {program.description}
               </p>
 
@@ -369,24 +342,24 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               <div className="grid grid-cols-2 gap-6 mb-10">
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-2">Format</p>
-                  <p className="text-gray-600 text-sm font-light">{categoryLabel}</p>
+                  <p className="text-brand-muted text-sm font-light">{categoryLabel}</p>
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-2">Delivery</p>
-                  <p className="text-gray-600 text-sm font-light">{deliveryMethod}</p>
+                  <p className="text-brand-muted text-sm font-light">{deliveryMethod}</p>
                 </div>
                 {program.duration && (
                   <div className="col-span-2">
                     <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-2">Duration</p>
-                    <p className="text-gray-600 text-sm font-light">{program.duration}</p>
+                    <p className="text-brand-muted text-sm font-light">{program.duration}</p>
                   </div>
                 )}
               </div>
 
-              {/* TODO: Suzanne to provide — "Who this is for" paragraph for each programme */}
+              {/* TODO: Suzanne to provide: "Who this is for" paragraph for each programme */}
               <div className="border-l-2 border-brand-accent/40 pl-6">
                 <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-3">Who This Is For</p>
-                <p className="text-gray-600 font-light leading-relaxed text-sm">
+                <p className="text-brand-muted font-light leading-relaxed text-sm">
                   This programme is for you if you are ready to move beyond surface-level change and
                   commit to a deeper journey of inner transformation. Whether you are facing a specific
                   challenge or simply know that there is more available to you, this is your next step.
@@ -394,7 +367,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               </div>
             </div>
 
-            {/* Right — what's included */}
+            {/* Right: what's included */}
             <div>
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
                 What&apos;s Included
@@ -407,7 +380,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                   <motion.li
                     key={feature}
                     variants={childVariants}
-                    className="flex items-start gap-4 text-gray-600 font-light leading-relaxed"
+                    className="flex items-start gap-4 text-brand-muted font-light leading-relaxed"
                   >
                     <span className="text-brand-accent mt-0.5">
                       <CheckIcon />
@@ -418,22 +391,22 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               </motion.ul>
 
               {/* Investment callout */}
-              <div className="mt-12 p-6 bg-white border border-gray-200 rounded-card shadow-sm">
+              <div className="mt-12 p-6 bg-white border border-brand-border rounded-card shadow-sm">
                 <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-3">Investment</p>
                 {priceUsd || priceZar ? (
                   <p className="text-3xl font-semibold tracking-tight text-brand-primary mb-4">
                     {priceUsd ?? `${priceZar} ZAR`}
-                    {priceUsd && <span className="text-gray-500 text-base font-normal ml-2">USD</span>}
+                    {priceUsd && <span className="text-brand-muted text-base font-normal ml-2">USD</span>}
                     {priceUsd && priceZar && (
-                      <span className="text-gray-500 text-base font-normal ml-2">/ {priceZar} ZAR</span>
+                      <span className="text-brand-muted text-base font-normal ml-2">/ {priceZar} ZAR</span>
                     )}
                   </p>
                 ) : (
-                  <p className="text-xl font-light text-gray-600 mb-4">Enquire</p>
+                  <p className="text-xl font-light text-brand-muted mb-4">Enquire</p>
                 )}
                 <Link
                   href={cta.href}
-                  className="inline-flex items-center justify-center w-full py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
+                  className="inline-flex items-center justify-center w-full py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
                 >
                   {cta.label}
                 </Link>
@@ -443,18 +416,18 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         </div>
       </motion.section>
 
-      {/* ── 4. ABOUT THE FACILITATOR — light ────────────────────────── */}
+      {/* ── 4. ABOUT THE FACILITATOR: cream ────────────────────────── */}
       <motion.section
         aria-labelledby="facilitator-heading"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
-        className="relative w-full bg-white py-20 lg:py-32"
+        className="relative w-full bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-2 items-center">
-            {/* Left — portrait */}
+            {/* Left: portrait */}
             <div className="flex justify-center lg:justify-start order-2 lg:order-1">
               <div className="relative w-full max-w-sm lg:max-w-none lg:w-[400px] h-[500px] rounded-card overflow-hidden shadow-2xl">
                 <Image
@@ -468,25 +441,25 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               </div>
             </div>
 
-            {/* Right — bio */}
+            {/* Right: bio */}
             <div className="order-1 lg:order-2">
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
                 Your Facilitator
               </p>
               <h2
                 id="facilitator-heading"
-                className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
+                className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary leading-tight mb-6"
               >
                 Dr. Suzanne Ravenall
               </h2>
               {/* TODO: Suzanne to review and approve facilitator bio copy */}
-              <p className="text-lg text-gray-600 font-light leading-relaxed mb-6">
+              <p className="text-lg text-brand-muted font-light leading-relaxed mb-6">
                 Dr. Suzanne Ravenall has spent over two decades guiding individuals and organisations
                 through profound inner transformation. A trauma survivor herself, having navigated
                 a traumatic brain injury, stroke, and multiple life-altering experiences, Suzanne
                 has turned her lived wisdom into a rigorous methodology for conscious healing.
               </p>
-              <p className="text-base text-gray-500 font-light leading-relaxed mb-10">
+              <p className="text-base text-brand-muted font-light leading-relaxed mb-10">
                 She is a certified Resonance Repatterning practitioner, Akashic Navigator, and Energy
                 Clearing facilitator, as well as an internationally recognised keynote speaker. Her
                 work weaves neuroscience, energy psychology, and ancient healing traditions into a
@@ -498,7 +471,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                 {CREDENTIALS.map(({ stat, label }) => (
                   <div key={label} className="text-center">
                     <p className="text-2xl font-semibold text-brand-primary mb-1">{stat}</p>
-                    <p className="text-xs text-gray-500 uppercase tracking-[0.15em]">{label}</p>
+                    <p className="text-xs text-brand-muted uppercase tracking-[0.15em]">{label}</p>
                   </div>
                 ))}
               </div>
@@ -507,7 +480,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         </div>
       </motion.section>
 
-      {/* ── 5. RELATED PROGRAMMES — light ──────────────────────────── */}
+      {/* ── 5. RELATED PROGRAMMES: sand ──────────────────────────── */}
       {relatedPrograms.length > 0 && (
         <motion.section
           aria-labelledby="related-heading"
@@ -515,7 +488,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
           initial="hidden"
           whileInView="visible"
           viewport={viewport}
-          className="relative w-full bg-gray-50 py-20 lg:py-32"
+          className="relative w-full bg-brand-sand py-20 lg:py-32"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-16">
@@ -525,14 +498,14 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                 </p>
                 <h2
                   id="related-heading"
-                  className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight"
+                  className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary leading-tight"
                 >
                   You might also like.
                 </h2>
               </div>
               <Link
                 href="/programs"
-                className="shrink-0 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-brand-primary transition-colors duration-200 uppercase tracking-widest"
+                className="shrink-0 inline-flex items-center gap-2 text-sm text-brand-muted hover:text-brand-primary transition-colors duration-200 uppercase tracking-widest"
               >
                 View All
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -556,17 +529,15 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         </motion.section>
       )}
 
-      {/* ── 6. FINAL CTA — light ────────────────────────────────────── */}
+      {/* ── 6. FINAL CTA: cream ────────────────────────────────────── */}
       <motion.section
         aria-labelledby="program-cta-heading"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
-        className="relative w-full bg-white py-20 lg:py-32 overflow-hidden"
+        className="relative w-full bg-brand-cream py-20 lg:py-32 overflow-hidden"
       >
-        <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_theme(colors.brand.accent/5%),_transparent_65%)]" />
-
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
             initial={{ opacity: 0 }}
@@ -584,7 +555,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight mb-6"
           >
             Ready to begin your transformation?
           </motion.h2>
@@ -594,7 +565,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg text-gray-600 font-light max-w-xl mx-auto mb-12 leading-relaxed"
+            className="text-lg text-brand-muted font-light max-w-xl mx-auto mb-12 leading-relaxed"
           >
             Take the first step. Secure your place in {program.name} and begin the work
             that changes everything.
@@ -609,13 +580,13 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
           >
             <Link
               href={cta.href}
-              className="inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_40px_theme(colors.brand.accent/40%)]"
+              className="inline-flex items-center justify-center px-10 py-5 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
             >
               {cta.label}
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center px-10 py-5 border border-gray-300 hover:border-brand-primary text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-gray-50"
+              className="inline-flex items-center justify-center px-10 py-5 border border-brand-primary-300 hover:border-brand-primary text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-brand-sand"
             >
               Have Questions? Book a Discovery Call
             </Link>

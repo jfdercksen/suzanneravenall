@@ -10,9 +10,9 @@ export function ShopFinalCTA() {
   return (
     <section
       aria-labelledby="shop-cta-heading"
-      className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
+      className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
     >
-      {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+      {/* Background photo + black overlay: dark CTA bands carry imagery, never flat colour */}
       <Image
         src="/images/generated/session-coaching.webp"
         alt=""
@@ -21,7 +21,7 @@ export function ShopFinalCTA() {
         sizes="100vw"
         className="object-cover opacity-50"
       />
-      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90" />
+      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/75 to-black/90" />
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.p
@@ -40,7 +40,7 @@ export function ShopFinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.08] mb-6"
+          className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08] mb-6"
         >
           Let&rsquo;s Find the Right Path Together
         </motion.h2>
@@ -67,13 +67,13 @@ export function ShopFinalCTA() {
             href={`${CAL_URL}/suzanneravenall/discovery-call`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-10 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_8px_30px_rgba(23,25,244,0.30)]"
+            className="inline-flex items-center justify-center px-10 py-4 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
           >
             Book Discovery Call &rarr;
           </a>
           <Link
             href="/programs"
-            className="inline-flex items-center justify-center px-10 py-4 border border-white/30 hover:border-white text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300"
+            className="inline-flex items-center justify-center px-10 py-4 border border-white/50 hover:border-white text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
           >
             Explore Programmes &rarr;
           </Link>

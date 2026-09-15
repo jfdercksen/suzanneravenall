@@ -21,7 +21,7 @@ export function FAQAccordion({ items }: FAQAccordionProps) {
   }
 
   return (
-    <ul className="divide-y divide-gray-200 border-t border-gray-200">
+    <ul className="divide-y divide-brand-border border-t border-brand-border">
       {items.map((item, index) => {
         const isOpen = openIndex === index
         return (
@@ -32,7 +32,7 @@ export function FAQAccordion({ items }: FAQAccordionProps) {
               aria-controls={`faq-panel-${index}`}
               className="flex w-full items-start justify-between gap-4 py-6 text-left"
             >
-              <span className="text-lg font-medium text-gray-900">{item.question}</span>
+              <span className="text-lg font-medium text-brand-ink">{item.question}</span>
               <motion.span
                 animate={{ rotate: isOpen ? 180 : 0 }}
                 transition={{ duration: 0.25 }}
@@ -53,7 +53,7 @@ export function FAQAccordion({ items }: FAQAccordionProps) {
                   transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                   className="overflow-hidden"
                 >
-                  <div className="pb-6 text-gray-600 leading-relaxed">{item.answer}</div>
+                  <div className="pb-6 text-brand-muted leading-relaxed">{item.answer}</div>
                 </motion.div>
               )}
             </AnimatePresence>

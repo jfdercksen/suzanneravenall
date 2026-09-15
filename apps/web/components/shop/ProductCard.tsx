@@ -68,7 +68,7 @@ function getRealSpotsBadge(handle: string, variants: ProductVariant[]): Delivery
   if (spots === null) return null
 
   if (spots.soldOut) {
-    return { label: 'Sold Out', className: 'bg-gray-100 text-gray-500 border border-gray-200' }
+    return { label: 'Sold Out', className: 'bg-brand-sand text-brand-muted border border-brand-border' }
   }
 
   return {
@@ -84,16 +84,16 @@ function getDeliveryBadge(handle: string, title: string): DeliveryBadge {
     return { label: 'Live', className: 'bg-brand-accent/10 text-brand-accent border border-brand-accent/30' }
   }
   if (text.includes('self-study') || text.includes('self-paced')) {
-    return { label: 'Self Paced', className: 'bg-emerald-50 text-emerald-700 border border-emerald-200' }
+    return { label: 'Self Paced', className: 'bg-brand-sand text-brand-ink border border-brand-border' }
   }
   if (text.includes('in-person')) {
-    return { label: 'In-Person', className: 'bg-amber-50 text-amber-700 border border-amber-200' }
+    return { label: 'In-Person', className: 'bg-brand-primary-900 text-white border border-brand-primary-900' }
   }
   if (text.includes('recorded')) {
-    return { label: 'Recorded', className: 'bg-purple-50 text-purple-700 border border-purple-200' }
+    return { label: 'Recorded', className: 'bg-white text-brand-ink border border-brand-primary-300' }
   }
 
-  return { label: 'Session', className: 'bg-gray-100 text-gray-600' }
+  return { label: 'Session', className: 'bg-brand-sand text-brand-muted' }
 }
 
 /**
@@ -149,7 +149,7 @@ function PriceDisplay({ variants, currency }: { variants: ProductVariant[]; curr
   const lowest = getLowestPriceForCurrency(variants, currency)
 
   if (!lowest) {
-    return <span className="text-2xl font-light text-gray-500">Contact us</span>
+    return <span className="text-2xl font-light text-brand-muted">Contact us</span>
   }
 
   const amount = lowest.amount / 100
@@ -158,14 +158,14 @@ function PriceDisplay({ variants, currency }: { variants: ProductVariant[]; curr
 
   if (lowest.currency_code === 'usd') {
     return (
-      <span className="text-2xl font-semibold tracking-tight text-gray-900">
+      <span className="text-2xl font-semibold tracking-tight text-brand-ink">
         {prefix}${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}
       </span>
     )
   }
 
   return (
-    <span className="text-2xl font-semibold tracking-tight text-gray-900">
+    <span className="text-2xl font-semibold tracking-tight text-brand-ink">
       {prefix}R{amount.toLocaleString('en-ZA', { maximumFractionDigits: 0 })}
     </span>
   )
@@ -205,7 +205,7 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
       transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
     >
       <Link href={`/shop/${product.handle}`} className="block group">
-        <div className="bg-white rounded-card overflow-hidden border border-gray-100 shadow-sm hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500">
+        <div className="bg-brand-cream rounded-card overflow-hidden border border-brand-border shadow-sm hover:border-brand-primary-300 hover:-translate-y-1 hover:shadow-2xl transition-all duration-500">
           {/* Change 1: aspect-[4/3] instead of aspect-video for taller, more impactful images */}
           <div className="relative aspect-[4/3] overflow-hidden">
             <Image
@@ -220,7 +220,7 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
             {/* Decision-guidance badge — absolutely positioned over the image so
                 unflagged cards keep an identical layout (no shift). */}
             {highlight && (
-              <span className="absolute top-3 left-3 text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-brand-accent-600 text-white shadow-lg">
+              <span className="absolute top-3 left-3 text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full bg-white text-brand-primary shadow-lg">
                 {highlight.label}
               </span>
             )}
@@ -234,7 +234,7 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
               </p>
             )}
 
-            <h3 className="text-xl font-semibold text-brand-primary leading-snug line-clamp-2">
+            <h3 className="text-xl font-medium text-brand-primary leading-snug line-clamp-2">
               {product.title}
             </h3>
 
@@ -246,7 +246,7 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
             </div>
 
             {/* Change 6: Stronger, action-oriented CTA */}
-            <p className="mt-2 text-sm font-medium text-gray-500 group-hover:text-brand-accent transition-colors duration-300">
+            <p className="mt-2 text-sm font-medium text-brand-muted group-hover:text-brand-accent transition-colors duration-300">
               Explore &amp; Enrol →
             </p>
           </div>

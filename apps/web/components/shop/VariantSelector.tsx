@@ -56,7 +56,7 @@ export function VariantSelector({
     return (
       <Link
         href="/contact"
-        className="inline-block py-4 px-8 rounded-button text-base font-semibold bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+        className="inline-block py-4 px-8 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
       >
         Contact Us to Discuss Options
       </Link>
@@ -70,9 +70,9 @@ export function VariantSelector({
     selectedVariant && isCapacityLimited ? getSpotsInfo(selectedVariant.inventory_quantity) : null
   const soldOut = spots?.soldOut ?? false
 
-  const headingClass = dark ? 'text-white' : 'text-gray-900'
-  const priceClass = dark ? 'text-white' : 'text-gray-900'
-  const noteClass = dark ? 'text-white/70' : 'text-gray-500'
+  const headingClass = dark ? 'text-white' : 'text-brand-ink'
+  const priceClass = dark ? 'text-white' : 'text-brand-ink'
+  const noteClass = dark ? 'text-white/70' : 'text-brand-muted'
 
   async function handleAddToCart() {
     if (!selectedVariant) return
@@ -120,7 +120,7 @@ export function VariantSelector({
                       ? 'bg-brand-accent-600 text-white border-brand-accent-600'
                       : dark
                         ? 'border-white/30 text-white/80 hover:border-brand-accent-400 hover:text-brand-accent-400 bg-transparent'
-                        : 'border-gray-300 text-gray-700 hover:border-brand-accent hover:text-brand-accent bg-transparent'
+                        : 'border-brand-primary-300 text-brand-ink hover:border-brand-accent hover:text-brand-accent bg-transparent'
                   }`}
                 >
                   {variant.title}
@@ -153,12 +153,12 @@ export function VariantSelector({
       {/* CTA */}
       {soldOut ? (
         <div className="space-y-3">
-          <p className={`text-sm font-medium ${dark ? 'text-white/70' : 'text-gray-500'}`}>
+          <p className={`text-sm font-medium ${dark ? 'text-white/70' : 'text-brand-muted'}`}>
             This cohort is fully booked.
           </p>
           <Link
             href="/contact"
-            className="inline-block w-full sm:w-auto sm:min-w-[240px] py-4 px-8 rounded-button text-base font-semibold text-center bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+            className="inline-block w-full sm:w-auto sm:min-w-[240px] py-4 px-8 rounded-button text-base font-medium text-center bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
           >
             Join the Waitlist
           </Link>
@@ -168,9 +168,9 @@ export function VariantSelector({
           <button
             onClick={handleAddToCart}
             disabled={buttonState !== 'idle'}
-            className={`w-full sm:w-auto sm:min-w-[240px] py-4 px-8 rounded-button text-base font-semibold transition-all duration-300 ${
+            className={`w-full sm:w-auto sm:min-w-[240px] py-4 px-8 rounded-button text-base font-medium transition-all duration-300 ${
               buttonState === 'added'
-                ? 'bg-emerald-600 text-white cursor-default'
+                ? 'bg-emerald-700 text-white cursor-default'
                 : buttonState === 'error'
                   ? 'bg-red-600 text-white cursor-default'
                   : buttonState === 'loading'
@@ -196,11 +196,11 @@ export function VariantSelector({
               View cart →
             </Link>
           ) : buttonState === 'error' && addToCartError ? (
-            <p className="text-sm font-medium text-red-400">
+            <p className={`text-sm font-medium ${dark ? 'text-red-400' : 'text-red-600'}`}>
               {addToCartError}{' '}
               <Link
                 href="/contact"
-                className="underline underline-offset-4 hover:text-red-300 transition-colors duration-200"
+                className={`underline underline-offset-4 transition-colors duration-200 ${dark ? 'hover:text-red-300' : 'hover:text-red-800'}`}
               >
                 Join waitlist
               </Link>
@@ -212,7 +212,7 @@ export function VariantSelector({
       ) : (
         <Link
           href="/contact"
-          className="inline-block py-4 px-8 rounded-button text-base font-semibold bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+          className="inline-block py-4 px-8 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
         >
           Contact Us to Discuss Pricing
         </Link>

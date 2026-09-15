@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { PageHeader } from '@/components/shared/PageHeader'
 import { getProgramsByCategory, PROGRAMS, type Program } from '@/data/programs'
 
 // Event data sources:
@@ -48,9 +49,11 @@ const confirmedOpportunities: ConfirmedOpportunity[] = [
   },
 ]
 
+// Neutral badges, as on the homepage: the standard has no colour accent, and
+// the old emerald-on-white badge was about 2:1.
 const variantStyles: Record<BadgeVariant, string> = {
-  free: 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/30',
-  group: 'bg-brand-accent/15 text-brand-accent border border-brand-accent/30',
+  free: 'bg-brand-primary-900 text-white border border-brand-primary-900',
+  group: 'bg-brand-sand text-brand-ink border border-brand-border',
 }
 
 // Live-via-Zoom trainings that run as recurring cohorts (from data/programs.ts)
@@ -83,25 +86,25 @@ function AwaitingDateCard({ program }: { program: Program }) {
   return (
     <motion.div
       variants={childVariants}
-      className="group flex flex-col bg-white border border-gray-200 rounded-card p-6 hover:border-brand-accent/30 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
+      className="group flex flex-col bg-white border border-brand-border rounded-card p-6 hover:border-brand-primary-300 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
     >
       <div className="flex-1">
         <div className="flex items-start justify-between gap-3 mb-4">
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-brand-accent/15 text-brand-accent border border-brand-accent/30">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wide bg-brand-sand text-brand-ink border border-brand-border">
             Group
           </span>
-          <span className="text-gray-400 text-xs text-right">
+          <span className="text-brand-muted text-xs text-right">
             New dates coming soon
           </span>
         </div>
-        <h3 className="text-xl font-semibold text-brand-primary mb-3 leading-snug">
+        <h3 className="text-xl font-medium text-brand-primary mb-3 leading-snug">
           {program.name}
         </h3>
-        <p className="text-gray-600 text-sm font-light leading-relaxed mb-4">
+        <p className="text-brand-muted text-sm font-light leading-relaxed mb-4">
           {program.shortDescription}
         </p>
         {program.duration && (
-          <p className="text-xs text-gray-400 mb-6">{program.duration}</p>
+          <p className="text-xs text-brand-muted mb-6">{program.duration}</p>
         )}
       </div>
       <div className="flex items-center justify-between gap-4">
@@ -113,7 +116,7 @@ function AwaitingDateCard({ program }: { program: Program }) {
         </Link>
         <Link
           href="/contact"
-          className="inline-flex items-center justify-center px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-button transition-colors duration-300"
+          className="inline-flex items-center justify-center px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm font-medium rounded-button transition-colors duration-300"
         >
           Register Your Interest
         </Link>
@@ -126,7 +129,7 @@ function LiveProgrammeCard({ program }: { program: Program }) {
   return (
     <motion.div
       variants={childVariants}
-      className="group relative overflow-hidden min-h-[320px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl flex flex-col"
+      className="group relative overflow-hidden min-h-[320px] bg-brand-primary-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl flex flex-col"
     >
       <Image
         src={program.image}
@@ -137,14 +140,14 @@ function LiveProgrammeCard({ program }: { program: Program }) {
       />
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent"
+        className="absolute inset-0 bg-gradient-to-br from-black/85 via-black/40 to-transparent"
       />
       <div className="relative z-10 flex flex-col h-full p-8">
         <div className="flex-1">
           <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-3">
             Live via Zoom
           </p>
-          <h3 className="text-xl font-semibold text-white mb-3 leading-snug">
+          <h3 className="text-xl font-medium text-white mb-3 leading-snug">
             {program.name}
           </h3>
           <p className="text-white/70 text-sm font-light leading-relaxed mb-4">
@@ -156,7 +159,7 @@ function LiveProgrammeCard({ program }: { program: Program }) {
         </div>
         <Link
           href={`/programs/${program.slug}`}
-          className="inline-flex items-center justify-center w-full py-3 px-6 border border-white/30 hover:border-brand-accent hover:bg-brand-accent text-white text-sm font-medium rounded-button transition-all duration-300"
+          className="inline-flex items-center justify-center w-full py-3 px-6 border border-white/30 hover:border-white hover:bg-white hover:text-brand-primary text-white text-sm font-medium rounded-button transition-all duration-300"
         >
           Learn More
         </Link>
@@ -173,71 +176,27 @@ export default function EventsContent() {
 
   return (
     <>
-      {/* Hero — DARK (photo-backed, neutral black scrim — no navy/accent tints over imagery) */}
-      <section
-        aria-labelledby="events-hero-heading"
-        className="relative w-full min-h-[560px] flex items-center overflow-hidden bg-gray-950"
+      {/* Header: shared PageHeader, the header rule */}
+      <PageHeader
+        id="events-hero-heading"
+        eyebrow="Events"
+        image="/images/generated/session-coaching.webp"
+        title={<>Live Events &amp; Training Dates</>}
+        description="Group sessions, live-via-Zoom trainings and events with Dr. Suzanne Ravenall, join from anywhere in the world."
       >
-        <Image
-          src="/images/generated/session-coaching.webp"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/30"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50"
-        />
+        <a href="#upcoming" className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300">
+          See Upcoming Events
+        </a>
+        <Link href="/contact" className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10">
+          Register Your Interest
+        </Link>
+      </PageHeader>
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl"
-          >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6">
-              Events
-            </p>
-            <h1
-              id="events-hero-heading"
-              className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white mb-6 leading-[1.05]"
-            >
-              Live Events &amp; Training Dates
-            </h1>
-            <p className="text-lg lg:text-xl text-white/75 font-light max-w-xl mb-10 leading-relaxed">
-              Group sessions, live-via-Zoom trainings and events with Dr.
-              Suzanne Ravenall, join from anywhere in the world.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a
-                href="#upcoming"
-                className="inline-flex items-center justify-center py-4 px-8 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
-              >
-                See Upcoming Events
-              </a>
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center py-4 px-8 border border-white/40 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/5"
-              >
-                Register Your Interest
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Upcoming Events — LIGHT */}
+      {/* Upcoming Events: LIGHT */}
       <section
         id="upcoming"
         aria-labelledby="upcoming-events-heading"
-        className="w-full bg-gray-50 py-20 lg:py-32 scroll-mt-16 lg:scroll-mt-20"
+        className="w-full bg-brand-sand py-20 lg:py-32 scroll-mt-16 lg:scroll-mt-20"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -251,11 +210,11 @@ export default function EventsContent() {
             </p>
             <h2
               id="upcoming-events-heading"
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4 max-w-2xl"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary mb-4 max-w-2xl"
             >
               Your Next Opportunity to Join Live
             </h2>
-            <p className="text-lg text-gray-600 font-light mb-12 max-w-2xl leading-relaxed">
+            <p className="text-lg text-brand-muted font-light mb-12 max-w-2xl leading-relaxed">
               Suzanne is finalising the new live calendar. Book what is open
               now, and register your interest for the sessions awaiting new
               dates. You will be the first to know when dates are confirmed.
@@ -275,31 +234,31 @@ export default function EventsContent() {
                 <motion.div
                   key={title}
                   variants={childVariants}
-                  className="group flex flex-col bg-white border border-gray-200 rounded-card p-6 hover:border-brand-accent/30 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
+                  className="group flex flex-col bg-white border border-brand-border rounded-card p-6 hover:border-brand-primary-300 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
                 >
                   <div className="flex items-start justify-between gap-3 mb-4">
                     <span
-                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${variantStyles[variant]}`}
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wide ${variantStyles[variant]}`}
                     >
                       {type}
                     </span>
-                    <span className="text-gray-400 text-xs text-right">
+                    <span className="text-brand-muted text-xs text-right">
                       {badge}
                     </span>
                   </div>
-                  <h3 className="text-xl font-semibold text-brand-primary mb-3">
+                  <h3 className="text-xl font-medium text-brand-primary mb-3">
                     {title}
                   </h3>
-                  <p className="text-gray-600 text-sm font-light leading-relaxed flex-1">
+                  <p className="text-brand-muted text-sm font-light leading-relaxed flex-1">
                     {description}
                   </p>
                   <div className="mt-6 flex items-center justify-between">
-                    <span className="text-emerald-600 text-sm font-medium">
+                    <span className="text-brand-ink text-sm font-medium">
                       Complimentary
                     </span>
                     <Link
                       href={href}
-                      className="inline-flex items-center justify-center px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-button transition-colors duration-300"
+                      className="inline-flex items-center justify-center px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm font-medium rounded-button transition-colors duration-300"
                     >
                       {cta}
                     </Link>
@@ -316,10 +275,10 @@ export default function EventsContent() {
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
           >
-            <h3 className="text-2xl lg:text-3xl font-semibold tracking-tight text-brand-primary mb-3">
+            <h3 className="text-2xl lg:text-3xl font-medium tracking-tight text-brand-primary mb-3">
               Group Sessions: New Dates Coming Soon
             </h3>
-            <p className="text-gray-600 font-light mb-10 max-w-2xl leading-relaxed">
+            <p className="text-brand-muted font-light mb-10 max-w-2xl leading-relaxed">
               These live group repatterning series are between cohorts. Register
               your interest and Suzanne&apos;s team will contact you as soon as
               the next dates are announced.
@@ -339,10 +298,10 @@ export default function EventsContent() {
         </div>
       </section>
 
-      {/* Recurring Live Programmes — LIGHT */}
+      {/* Recurring Live Programmes: LIGHT */}
       <section
         aria-labelledby="live-programmes-heading"
-        className="w-full bg-white py-20 lg:py-32"
+        className="w-full bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -356,11 +315,11 @@ export default function EventsContent() {
             </p>
             <h2
               id="live-programmes-heading"
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4 max-w-2xl"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary mb-4 max-w-2xl"
             >
               Trainings Run Live via Zoom
             </h2>
-            <p className="text-lg text-gray-600 font-light mb-12 max-w-2xl leading-relaxed">
+            <p className="text-lg text-brand-muted font-light mb-12 max-w-2xl leading-relaxed">
               These programmes run as live cohorts with Suzanne throughout the
               year: practitioner certification series, energy clearing levels
               and guided practice sessions. Attend from anywhere in the world.
@@ -380,10 +339,10 @@ export default function EventsContent() {
         </div>
       </section>
 
-      {/* Can't make a live date — LIGHT */}
+      {/* Can't make a live date: LIGHT */}
       <section
         aria-labelledby="self-study-heading"
-        className="w-full bg-gray-50 py-20 lg:py-32"
+        className="w-full bg-brand-sand py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -399,16 +358,16 @@ export default function EventsContent() {
               </p>
               <h2
                 id="self-study-heading"
-                className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight"
+                className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary leading-tight"
               >
                 Start Now, Your Way
               </h2>
             </motion.div>
             <motion.div variants={childVariants}>
-              <h3 className="text-xl font-semibold text-brand-primary mb-3">
+              <h3 className="text-xl font-medium text-brand-primary mb-3">
                 Study at Your Own Pace
               </h3>
-              <p className="text-gray-600 text-sm font-light leading-relaxed mb-6">
+              <p className="text-brand-muted text-sm font-light leading-relaxed mb-6">
                 Most live programmes are also available as recorded, self-study
                 versions: the same material, in your own time, with the same
                 energetic benefit as being in the class.
@@ -421,10 +380,10 @@ export default function EventsContent() {
               </Link>
             </motion.div>
             <motion.div variants={childVariants}>
-              <h3 className="text-xl font-semibold text-brand-primary mb-3">
+              <h3 className="text-xl font-medium text-brand-primary mb-3">
                 Be First to Hear About New Dates
               </h3>
-              <p className="text-gray-600 text-sm font-light leading-relaxed mb-6">
+              <p className="text-brand-muted text-sm font-light leading-relaxed mb-6">
                 Register your interest in any session and Suzanne&apos;s team
                 will let you know the moment new live dates are announced.
               </p>
@@ -439,12 +398,12 @@ export default function EventsContent() {
         </div>
       </section>
 
-      {/* Final CTA — DARK (photo-backed CTA band) */}
+      {/* Final CTA: DARK (photo-backed CTA band) */}
       <section
         aria-labelledby="events-cta-heading"
         className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
       >
-        {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+        {/* Background photo + black overlay: dark CTA bands carry imagery, never flat colour */}
         <Image
           src="/images/generated/group-coaching-real.webp"
           alt=""
@@ -469,7 +428,7 @@ export default function EventsContent() {
             </p>
             <h2
               id="events-cta-heading"
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-white mb-6"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-white mb-6"
             >
               Book a Discovery Call
             </h2>
@@ -480,7 +439,7 @@ export default function EventsContent() {
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center py-4 px-10 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_40px_theme(colors.brand.accent/60%)]"
+              className="inline-flex items-center justify-center py-4 px-10 bg-white hover:bg-brand-sand text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
             >
               Book a Discovery Call
             </Link>

@@ -2,65 +2,50 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { PageHeader, HEADER_UNDERLINE } from '@/components/shared/PageHeader'
 
 export function ShopHeroBanner() {
   return (
-    <section
-      aria-labelledby="shop-hero-heading"
-      className="relative w-full bg-brand-primary min-h-[50vh] flex items-center py-16 lg:py-32 overflow-hidden"
-    >
-      {/* Background video — poster handles static fallback */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover"
-        poster="/images/hero-bg-suzanne-ravenall.jpg"
+    <>
+      {/* Header: shared PageHeader, the header rule. The video plays behind
+          it with the photo as its poster, which handles the static fallback. */}
+      <PageHeader
+        id="shop-hero-heading"
+        eyebrow="Transform Your Life"
+        video={{ src: '/videos/generated/hero-shop.mp4', poster: '/images/hero-bg-suzanne-ravenall.jpg' }}
+        title={
+          <>
+            Your Breakthrough
+            <br />
+            <span className={HEADER_UNDERLINE}>Starts Here</span>
+          </>
+        }
+        description="48 programmes. One destination. The tools Suzanne has used to transform 2,000+ lives, now available to you."
       >
-        <source src="/videos/generated/hero-shop.mp4" type="video/mp4" />
-      </video>
-      {/* Neutral black scrim — never navy or accent tints under text over imagery */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/10" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
+        <button
+          type="button"
+          onClick={() =>
+            document.getElementById('programmes')?.scrollIntoView({ behavior: 'smooth' })
+          }
+          className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
         >
-          Transform Your Life
-        </motion.p>
-
-        <motion.h1
-          id="shop-hero-heading"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white mb-6 leading-[1.05] max-w-3xl"
+          Explore All Programmes
+        </button>
+        <Link
+          href="/contact"
+          className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
         >
-          Your Breakthrough
-          <br />
-          <span className="underline decoration-brand-accent-400 decoration-[6px] underline-offset-8">Starts Here</span>
-        </motion.h1>
+          Book a Discovery Call
+        </Link>
+      </PageHeader>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-lg text-white/80 leading-relaxed mb-8 max-w-xl"
-        >
-          48 programmes. One destination. The tools Suzanne has used to transform 2,000+ lives, now available to you.
-        </motion.p>
-
-        {/* Credibility stats */}
+      {/* Credibility stats: a slim black band directly under the header */}
+      <div className="bg-brand-primary-900 border-t border-white/10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          className="flex gap-4 sm:gap-8 mb-8 sm:mb-10"
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="flex gap-6 sm:gap-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8"
         >
           {[
             { value: '2,000+', label: 'Lives transformed' },
@@ -68,62 +53,12 @@ export function ShopHeroBanner() {
             { value: '30+',    label: 'Countries reached' },
           ].map(({ value, label }) => (
             <div key={label}>
-              <span className="block text-3xl font-semibold tracking-tight text-white">{value}</span>
-              <span className="block text-sm text-white/80 mt-0.5">{label}</span>
+              <span className="block text-2xl sm:text-3xl font-semibold tracking-tight text-white">{value}</span>
+              <span className="block mt-0.5 text-xs sm:text-sm text-white/70">{label}</span>
             </div>
           ))}
         </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-col sm:flex-row gap-4"
-        >
-          <button
-            type="button"
-            onClick={() =>
-              document.getElementById('programmes')?.scrollIntoView({ behavior: 'smooth' })
-            }
-            className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-all duration-300"
-          >
-            Explore All Programmes
-          </button>
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center px-8 py-4 border border-white/40 hover:border-white text-white font-semibold rounded-button transition-all duration-300"
-          >
-            Book a Discovery Call
-          </Link>
-        </motion.div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.button
-        type="button"
-        aria-label="Scroll to programmes"
-        onClick={() =>
-          document.getElementById('programmes')?.scrollIntoView({ behavior: 'smooth' })
-        }
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.8 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 text-white/60 hover:text-white transition-colors duration-300"
-      >
-        <span className="text-xs uppercase tracking-[0.2em] font-medium">Scroll</span>
-        <motion.svg
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.5}
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-        </motion.svg>
-      </motion.button>
-    </section>
+    </>
   )
 }

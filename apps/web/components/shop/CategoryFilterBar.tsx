@@ -61,8 +61,8 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
     <nav
       ref={barRef}
       aria-label="Shop categories"
-      className={`sticky top-16 lg:top-20 z-40 w-full bg-white border-b border-gray-200 transition-shadow duration-300 ${
-        isSticky ? 'shadow-lg shadow-gray-900/5' : ''
+      className={`sticky top-16 lg:top-20 z-40 w-full bg-brand-cream border-b border-brand-border transition-shadow duration-300 ${
+        isSticky ? 'shadow-lg shadow-black/5' : ''
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 lg:py-6 flex flex-col lg:flex-row lg:items-start gap-3 lg:gap-8">
@@ -99,7 +99,7 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.2 }}
-              className="mt-3 text-xs text-gray-500 font-light"
+              className="mt-3 text-xs text-brand-muted font-light"
             >
               Self-paced courses delivered via the Ravenall Institute
             </motion.p>
@@ -125,7 +125,7 @@ function FilterPill({ label, active, onClick }: FilterPillProps) {
       className={`px-6 py-3 rounded-full text-base font-medium transition-all duration-200 whitespace-nowrap ${
         active
           ? 'bg-brand-accent text-white shadow-lg shadow-brand-accent/25'
-          : 'border border-gray-300 text-gray-600 hover:border-brand-accent hover:text-brand-primary hover:bg-gray-50'
+          : 'border border-brand-primary-300 text-brand-muted hover:border-brand-accent hover:text-brand-primary hover:bg-brand-sand'
       }`}
     >
       {label}

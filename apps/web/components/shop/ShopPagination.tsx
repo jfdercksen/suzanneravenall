@@ -20,7 +20,7 @@ export function ShopPagination({ page, totalPages, onPageChange }: ShopPaginatio
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page === 0}
-        className="p-2 rounded-lg border border-gray-200 text-gray-400 hover:text-brand-primary hover:border-brand-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+        className="p-2 rounded-lg border border-brand-border text-brand-muted hover:text-brand-primary hover:border-brand-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
         aria-label="Previous page"
       >
         <ChevronLeft className="w-5 h-5" />
@@ -33,14 +33,14 @@ export function ShopPagination({ page, totalPages, onPageChange }: ShopPaginatio
         return (
           <span key={p} className="flex items-center gap-2">
             {showEllipsis && (
-              <span className="text-gray-400 px-1 select-none">…</span>
+              <span className="text-brand-muted px-1 select-none">…</span>
             )}
             <button
               onClick={() => onPageChange(p)}
               className={`w-10 h-10 rounded-lg text-sm font-medium transition-all duration-200 ${
                 p === page
                   ? 'bg-brand-accent-600 text-white'
-                  : 'border border-gray-200 text-gray-500 hover:text-brand-primary hover:border-brand-primary'
+                  : 'border border-brand-border text-brand-muted hover:text-brand-primary hover:border-brand-primary'
               }`}
             >
               {p + 1}
@@ -52,7 +52,7 @@ export function ShopPagination({ page, totalPages, onPageChange }: ShopPaginatio
       <button
         onClick={() => onPageChange(page + 1)}
         disabled={page === totalPages - 1}
-        className="p-2 rounded-lg border border-gray-200 text-gray-400 hover:text-brand-primary hover:border-brand-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+        className="p-2 rounded-lg border border-brand-border text-brand-muted hover:text-brand-primary hover:border-brand-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
         aria-label="Next page"
       >
         <ChevronRight className="w-5 h-5" />

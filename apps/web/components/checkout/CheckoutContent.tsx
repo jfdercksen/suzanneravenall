@@ -57,19 +57,19 @@ function StepIndicator({ step }: { step: Step }) {
           <div key={n} className="flex items-center">
             <div className="flex flex-col items-center gap-1.5">
               <div
-                className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 ${
+                className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
                   isDone
-                    ? 'bg-emerald-500 text-white'
+                    ? 'bg-brand-primary-900 text-white'
                     : isCurrent
                       ? 'bg-brand-accent-600 text-white'
-                      : 'bg-gray-100 text-gray-400'
+                      : 'bg-brand-border text-brand-primary-500'
                 }`}
               >
                 {isDone ? '✓' : n}
               </div>
               <span
                 className={`text-xs font-medium transition-colors duration-300 ${
-                  isCurrent ? 'text-gray-900' : 'text-gray-500'
+                  isCurrent ? 'text-brand-ink' : 'text-brand-muted'
                 }`}
               >
                 {label}
@@ -78,7 +78,7 @@ function StepIndicator({ step }: { step: Step }) {
             {i < steps.length - 1 && (
               <div
                 className={`h-px w-16 sm:w-24 mx-2 mb-5 transition-colors duration-300 ${
-                  step > n ? 'bg-emerald-500' : 'bg-gray-200'
+                  step > n ? 'bg-brand-primary-900' : 'bg-brand-primary-300'
                 }`}
               />
             )}
@@ -94,12 +94,12 @@ function OrderSideBar() {
   if (!cart || cart.items.length === 0) return null
 
   return (
-    <div className="bg-gray-50 rounded-2xl p-6">
-      <h3 className="text-sm font-semibold text-gray-900 mb-4">Order Summary</h3>
+    <div className="bg-white rounded-2xl border border-brand-border p-6">
+      <h3 className="text-sm font-medium text-brand-ink mb-4">Order Summary</h3>
       <ul className="space-y-3 mb-4">
         {cart.items.map((item) => (
           <li key={item.id} className="flex gap-3 items-start">
-            <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
+            <div className="w-10 h-10 rounded-lg overflow-hidden bg-brand-sand flex-shrink-0">
               {item.thumbnail ? (
                 <Image
                   src={item.thumbnail}
@@ -115,30 +115,30 @@ function OrderSideBar() {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-gray-900 leading-snug">{item.title}</p>
+              <p className="text-xs font-medium text-brand-ink leading-snug">{item.title}</p>
               {item.subtitle && (
-                <p className="text-xs text-gray-500">{item.subtitle}</p>
+                <p className="text-xs text-brand-muted">{item.subtitle}</p>
               )}
-              <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+              <p className="text-xs text-brand-muted">Qty: {item.quantity}</p>
             </div>
-            <p className="text-xs font-semibold text-gray-900 tabular-nums flex-shrink-0">
+            <p className="text-xs font-semibold text-brand-ink tabular-nums flex-shrink-0">
               {formatPrice(item.subtotal, cart.currency_code)}
             </p>
           </li>
         ))}
       </ul>
-      <div className="border-t border-gray-200 pt-4 space-y-2 text-sm">
-        <div className="flex justify-between text-gray-500">
+      <div className="border-t border-brand-border pt-4 space-y-2 text-sm">
+        <div className="flex justify-between text-brand-muted">
           <span>Subtotal</span>
           <span className="tabular-nums">{formatPrice(cart.subtotal, cart.currency_code)}</span>
         </div>
         {cart.tax_total > 0 && (
-          <div className="flex justify-between text-gray-500">
+          <div className="flex justify-between text-brand-muted">
             <span>Tax</span>
             <span className="tabular-nums">{formatPrice(cart.tax_total, cart.currency_code)}</span>
           </div>
         )}
-        <div className="flex justify-between font-semibold text-gray-900 pt-1">
+        <div className="flex justify-between font-semibold text-brand-ink pt-1">
           <span>Total</span>
           <span className="tabular-nums">{formatPrice(cart.total, cart.currency_code)}</span>
         </div>
@@ -149,7 +149,7 @@ function OrderSideBar() {
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
-  return <p className="mt-1 text-xs text-red-500">{message}</p>
+  return <p className="mt-1 text-xs text-red-600">{message}</p>
 }
 
 function InputField({
@@ -173,9 +173,9 @@ function InputField({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1.5">
+      <label htmlFor={id} className="block text-sm font-medium text-brand-ink mb-1.5">
         {label}
-        {required && <span className="text-red-400 ml-1">*</span>}
+        {required && <span className="text-red-600 ml-1">*</span>}
       </label>
       <input
         id={id}
@@ -185,12 +185,12 @@ function InputField({
         autoComplete={autoComplete}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={`w-full px-4 py-3 rounded-xl border text-gray-900 placeholder-gray-400 text-sm transition-colors duration-200 outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent ${
-          error ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-white hover:border-gray-300'
+        className={`w-full px-4 py-3 rounded-xl border text-brand-ink placeholder-brand-muted text-sm transition-colors duration-200 outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent ${
+          error ? 'border-red-600 bg-red-50' : 'border-brand-primary-300 bg-white hover:border-brand-primary-400'
         }`}
       />
       {error && (
-        <p id={`${id}-error`} className="mt-1 text-xs text-red-500" role="alert">
+        <p id={`${id}-error`} className="mt-1 text-xs text-red-600" role="alert">
           {error}
         </p>
       )}
@@ -224,7 +224,7 @@ function PayFastRedirectForm({
   )
 }
 
-// PayPal redirect — uses window.location since PayPal uses GET approval URL
+// PayPal redirect: uses window.location since PayPal uses GET approval URL
 function PayPalRedirect({ approvalUrl }: { approvalUrl: string }) {
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -375,14 +375,14 @@ export default function CheckoutContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 lg:py-20">
+    <div className="min-h-screen bg-brand-sand py-12 lg:py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back to cart */}
         {step < 3 && (
           <div className="mb-6">
             <Link
               href="/cart"
-              className="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200 inline-flex items-center gap-1"
+              className="text-sm text-brand-muted hover:text-brand-ink transition-colors duration-200 inline-flex items-center gap-1"
             >
               ← Back to cart
             </Link>
@@ -392,14 +392,14 @@ export default function CheckoutContent() {
         <StepIndicator step={step} />
 
         <div className="lg:grid lg:grid-cols-5 lg:gap-10">
-          {/* Main form area — 3 cols */}
+          {/* Main form area: 3 cols */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-brand-border p-6 lg:p-8">
               <AnimatePresence mode="wait">
-                {/* Step 1 — Contact Details */}
+                {/* Step 1: Contact Details */}
                 {step === 1 && (
                   <motion.div key="step1" {...slideProps}>
-                    <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                    <h2 className="text-xl font-medium text-brand-ink mb-6">
                       Contact Details
                     </h2>
                     <form onSubmit={handleContactSubmit} noValidate className="space-y-5">
@@ -442,11 +442,11 @@ export default function CheckoutContent() {
                         autoComplete="tel"
                       />
 
-                      {/* Country — determines payment provider */}
+                      {/* Country: determines payment provider */}
                       <div>
                         <label
                           htmlFor="country"
-                          className="block text-sm font-medium text-gray-700 mb-1.5"
+                          className="block text-sm font-medium text-brand-ink mb-1.5"
                         >
                           Billing country
                         </label>
@@ -456,7 +456,7 @@ export default function CheckoutContent() {
                           onChange={(e) =>
                             updateContact('country', e.target.value as 'ZA' | 'INTL')
                           }
-                          className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent transition-colors duration-200"
+                          className="w-full px-4 py-3 rounded-xl border border-brand-primary-300 bg-white text-brand-ink text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent transition-colors duration-200"
                         >
                           <option value="ZA">South Africa</option>
                           <option value="INTL">Outside South Africa (International)</option>
@@ -467,7 +467,7 @@ export default function CheckoutContent() {
                         <button
                           type="submit"
                           disabled={isSubmitting}
-                          className="w-full py-4 px-6 rounded-button text-base font-semibold bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
+                          className="w-full py-4 px-6 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
                         >
                           {isSubmitting ? 'Saving...' : 'Continue to Payment'}
                           {!isSubmitting && <ChevronRight className="w-4 h-4" />}
@@ -477,28 +477,28 @@ export default function CheckoutContent() {
                   </motion.div>
                 )}
 
-                {/* Step 2 — Payment */}
+                {/* Step 2: Payment */}
                 {step === 2 && (
                   <motion.div key="step2" {...slideProps}>
-                    <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h2 className="text-xl font-medium text-brand-ink mb-2">
                       Payment
                     </h2>
-                    <p className="text-sm text-gray-500 mb-6">
+                    <p className="text-sm text-brand-muted mb-6">
                       {contact.country === 'ZA'
                         ? 'You will be securely redirected to PayFast to complete your payment.'
                         : 'You will be securely redirected to PayPal to complete your payment.'}
                     </p>
 
                     {/* Billing summary */}
-                    <div className="bg-gray-50 rounded-xl p-4 mb-6 space-y-1 text-sm">
-                      <p className="text-gray-700">
+                    <div className="bg-brand-sand rounded-xl p-4 mb-6 space-y-1 text-sm">
+                      <p className="text-brand-ink">
                         <span className="font-medium">Name:</span>{' '}
                         {contact.firstName} {contact.lastName}
                       </p>
-                      <p className="text-gray-700">
+                      <p className="text-brand-ink">
                         <span className="font-medium">Email:</span> {contact.email}
                       </p>
-                      <p className="text-gray-700">
+                      <p className="text-brand-ink">
                         <span className="font-medium">Billing country:</span>{' '}
                         {contact.country === 'ZA' ? 'South Africa' : 'International'}
                       </p>
@@ -511,7 +511,7 @@ export default function CheckoutContent() {
                     </div>
 
                     {paymentError && (
-                      <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-600" role="alert">
+                      <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700" role="alert">
                         {paymentError}
                       </div>
                     )}
@@ -521,26 +521,29 @@ export default function CheckoutContent() {
                         <button
                           onClick={handlePayWithPayFast}
                           disabled={isSubmitting}
-                          className="w-full py-4 px-6 rounded-button text-base font-semibold bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
+                          className="w-full py-4 px-6 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
                         >
                           <Lock className="w-4 h-4" />
                           {isSubmitting ? 'Preparing payment...' : 'Pay with PayFast'}
                         </button>
-                        <p className="text-xs text-gray-500 text-center mt-4">
+                        <p className="text-xs text-brand-muted text-center mt-4">
                           Secured by PayFast · South Africa&apos;s leading payment gateway
                         </p>
                       </>
                     ) : (
                       <>
+                        {/* PayPal's own blue, kept on purpose: it is PayPal's
+                            button, not ours, so it stays outside the monochrome
+                            tokens (flagged for Johan, 15 Sep). */}
                         <button
                           onClick={handlePayWithPayPal}
                           disabled={isSubmitting}
-                          className="w-full py-4 px-6 rounded-button text-base font-semibold bg-[#0070BA] hover:bg-[#005ea6] disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
+                          className="w-full py-4 px-6 rounded-button text-base font-medium bg-[#0070BA] hover:bg-[#005ea6] disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
                         >
                           <Lock className="w-4 h-4" />
                           {isSubmitting ? 'Preparing payment...' : 'Pay with PayPal'}
                         </button>
-                        <p className="text-xs text-gray-500 text-center mt-4">
+                        <p className="text-xs text-brand-muted text-center mt-4">
                           Secured by PayPal · Accepted worldwide
                         </p>
                       </>
@@ -548,16 +551,16 @@ export default function CheckoutContent() {
                   </motion.div>
                 )}
 
-                {/* Step 3 — Redirecting */}
+                {/* Step 3: Redirecting */}
                 {step === 3 && (
                   <motion.div key="step3" {...slideProps} className="text-center py-8">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-accent/10 mb-6">
                       <Lock className="w-6 h-6 text-brand-accent" />
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h2 className="text-xl font-medium text-brand-ink mb-2">
                       {payPalApprovalUrl ? 'Redirecting to PayPal' : 'Redirecting to PayFast'}
                     </h2>
-                    <p className="text-sm text-gray-500 mb-6">
+                    <p className="text-sm text-brand-muted mb-6">
                       Please wait, you are being securely redirected to complete your payment.
                     </p>
                     <div className="flex justify-center gap-1.5">
@@ -587,7 +590,7 @@ export default function CheckoutContent() {
             </div>
           </div>
 
-          {/* Order summary — 2 cols */}
+          {/* Order summary: 2 cols */}
           <div className="mt-8 lg:mt-0 lg:col-span-2">
             <OrderSideBar />
           </div>

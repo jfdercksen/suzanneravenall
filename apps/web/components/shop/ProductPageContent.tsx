@@ -70,19 +70,19 @@ function getDeliveryBadge(handle: string, title: string = ''): { label: string; 
   if (/self-study|self-paced/.test(text))
     return {
       label: 'Self Paced',
-      className: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+      className: 'bg-brand-sand text-brand-ink border border-brand-border',
     }
   if (/in-person/.test(text))
     return {
       label: 'In-Person',
-      className: 'bg-amber-50 text-amber-700 border border-amber-200',
+      className: 'bg-brand-primary-900 text-white border border-brand-primary-900',
     }
   if (/recorded/.test(text))
     return {
       label: 'Recorded',
-      className: 'bg-purple-50 text-purple-700 border border-purple-200',
+      className: 'bg-white text-brand-ink border border-brand-primary-300',
     }
-  return { label: 'Session', className: 'bg-gray-100 text-gray-600' }
+  return { label: 'Session', className: 'bg-brand-sand text-brand-muted' }
 }
 
 interface ProductPageContentProps {
@@ -101,7 +101,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
     product.metadata.thinkific_course_id !== ''
 
   const badge = isThinkificCourse
-    ? { label: 'Self-Paced', className: 'bg-emerald-50 text-emerald-700 border border-emerald-200' }
+    ? { label: 'Self-Paced', className: 'bg-brand-sand text-brand-ink border border-brand-border' }
     : getDeliveryBadge(product.handle, product.title)
 
   const includedItems = isThinkificCourse
@@ -122,11 +122,11 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
 
   return (
     <div>
-      {/* 1 — Hero (dark) */}
+      {/* 1: Hero (dark) */}
       <ProductHero product={product} />
 
-      {/* 2 — Variant Selector / primary conversion zone (light) */}
-      <section className="w-full bg-white py-20 lg:py-32">
+      {/* 2: Variant Selector / primary conversion zone (cream) */}
+      <section className="w-full bg-brand-cream py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -151,7 +151,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-brand-accent/15 flex items-center justify-center">
                   <Check className="w-3 h-3 text-brand-accent" />
                 </span>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-sm text-brand-ink leading-relaxed">
                   After purchase, you&apos;ll receive instant access to this course via the Ravenall
                   Institute. A welcome email with your login details will be sent to your registered
                   email address.
@@ -162,14 +162,14 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         </div>
       </section>
 
-      {/* 3 — Transformation Promise (light) */}
-      <section className="w-full bg-gray-50 py-20 lg:py-32">
+      {/* 3: Transformation Promise (sand) */}
+      <section className="w-full bg-brand-sand py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="text-center mb-16">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               The Shift
             </p>
-            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary">
               What You&apos;ll Experience
             </h2>
           </motion.div>
@@ -184,13 +184,13 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '0px' }}
                   transition={{ duration: 0.6, delay: i * 0.1 }}
-                  className="group relative bg-white rounded-card p-8 border border-gray-100 hover:border-brand-accent hover:-translate-y-1 hover:shadow-2xl transition-all duration-500"
+                  className="group relative bg-brand-cream rounded-card p-8 border border-brand-border hover:border-brand-primary-300 hover:-translate-y-1 hover:shadow-2xl transition-all duration-500"
                 >
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-accent/10 text-brand-accent mb-6 group-hover:bg-brand-accent group-hover:text-white transition-all duration-300">
                     <Icon className="w-5 h-5" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">{card.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{card.description}</p>
+                  <h3 className="text-xl font-medium text-brand-ink mb-3">{card.title}</h3>
+                  <p className="text-brand-muted leading-relaxed">{card.description}</p>
                 </motion.div>
               )
             })}
@@ -198,20 +198,20 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         </div>
       </section>
 
-      {/* 4 — Programme Details (light) */}
-      <section className="w-full bg-white py-20 lg:py-32">
+      {/* 4: Programme Details (cream) */}
+      <section className="w-full bg-brand-cream py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="mb-12">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Programme Details
             </p>
-            <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary">
               Everything You Need to Know
             </h2>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
-            {/* Left — detail list */}
+            {/* Left: detail list */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -231,47 +231,47 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
 
               {primaryCategory && (
                 <div>
-                  <dt className="text-xs uppercase tracking-[0.2em] font-medium text-gray-400 mb-1">
+                  <dt className="text-xs uppercase tracking-[0.2em] font-medium text-brand-muted mb-1">
                     Category
                   </dt>
-                  <dd className="text-gray-900 font-medium">{primaryCategory.name}</dd>
+                  <dd className="text-brand-ink font-medium">{primaryCategory.name}</dd>
                 </div>
               )}
 
               {product.metadata?.duration && (
                 <div>
-                  <dt className="text-xs uppercase tracking-[0.2em] font-medium text-gray-400 mb-1">
+                  <dt className="text-xs uppercase tracking-[0.2em] font-medium text-brand-muted mb-1">
                     Duration
                   </dt>
-                  <dd className="text-gray-900 font-medium">{String(product.metadata.duration)}</dd>
+                  <dd className="text-brand-ink font-medium">{String(product.metadata.duration)}</dd>
                 </div>
               )}
 
               {product.metadata?.who_its_for && (
                 <div>
-                  <dt className="text-xs uppercase tracking-[0.2em] font-medium text-gray-400 mb-1">
+                  <dt className="text-xs uppercase tracking-[0.2em] font-medium text-brand-muted mb-1">
                     Who It&apos;s For
                   </dt>
-                  <dd className="text-gray-900 font-medium">{String(product.metadata.who_its_for)}</dd>
+                  <dd className="text-brand-ink font-medium">{String(product.metadata.who_its_for)}</dd>
                 </div>
               )}
 
               <div>
-                <dt className="text-xs uppercase tracking-[0.2em] font-medium text-gray-400 mb-1">
+                <dt className="text-xs uppercase tracking-[0.2em] font-medium text-brand-muted mb-1">
                   Prerequisites
                 </dt>
-                <dd className="text-gray-900 font-medium">None required</dd>
+                <dd className="text-brand-ink font-medium">None required</dd>
               </div>
             </motion.div>
 
-            {/* Right — what's included */}
+            {/* Right: what's included */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6 }}
             >
-              <h3 className="text-xl font-semibold text-gray-900 mb-6">
+              <h3 className="text-xl font-medium text-brand-ink mb-6">
                 What&apos;s Included
               </h3>
               <ul className="space-y-4">
@@ -280,7 +280,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                     <div className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-brand-accent/10 flex items-center justify-center">
                       <Check className="w-3 h-3 text-brand-accent" />
                     </div>
-                    <span className="text-gray-700">{item}</span>
+                    <span className="text-brand-ink">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -289,16 +289,16 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         </div>
       </section>
 
-      {/* 5 — Testimonials (light) — hidden entirely until data/testimonials.ts
+      {/* 5: Testimonials (sand): hidden entirely until data/testimonials.ts
           holds entries verified and signed off by Suzanne */}
       {productTestimonials.length > 0 && (
-      <section className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden">
+      <section className="relative w-full bg-brand-sand py-20 lg:py-32 overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="text-center mb-16">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Client Stories
             </p>
-            <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary">
               Real Results, Real People
             </h2>
           </motion.div>
@@ -311,7 +311,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="bg-white rounded-card p-8 border border-gray-100"
+                className="bg-brand-cream rounded-card p-8 border border-brand-border"
               >
                 <p
                   className="text-6xl font-serif leading-none text-brand-accent mb-4"
@@ -319,15 +319,15 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 >
                   &ldquo;
                 </p>
-                <blockquote className="text-gray-600 leading-relaxed text-lg mb-6 italic">
+                <blockquote className="text-brand-muted leading-relaxed text-lg mb-6 italic">
                   {t.quote}
                 </blockquote>
-                <footer className="text-gray-700 text-sm font-medium">
+                <footer className="text-brand-ink text-sm font-medium">
                   {t.name}
                   {t.location && (
                     <>
                       ,{' '}
-                      <span className="text-gray-500 font-normal">{t.location}</span>
+                      <span className="text-brand-muted font-normal">{t.location}</span>
                     </>
                   )}
                 </footer>
@@ -338,14 +338,14 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       </section>
       )}
 
-      {/* 6 — FAQ Accordion (light, gray-50 to alternate with the white details section) */}
-      <section className="w-full bg-gray-50 py-20 lg:py-32">
+      {/* 6: FAQ Accordion (sand, to alternate with the cream details section) */}
+      <section className="w-full bg-brand-sand py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="mb-12">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               FAQ
             </p>
-            <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary">
               Frequently Asked Questions
             </h2>
           </motion.div>
@@ -362,17 +362,17 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         </div>
       </section>
 
-      {/* 7 — Final CTA (light) */}
-      <section className="w-full bg-white py-20 lg:py-32">
+      {/* 7: Final CTA (cream) */}
+      <section className="w-full bg-brand-cream py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="text-center mb-16">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Your next step
             </p>
-            <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-4">
+            <h2 className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary mb-4">
               Ready to Transform?
             </h2>
-            <p className="text-gray-600 text-lg max-w-xl mx-auto">
+            <p className="text-brand-muted text-lg max-w-xl mx-auto">
               Choose your programme below and take the first step toward permanent change.
             </p>
           </motion.div>
@@ -399,7 +399,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-center mt-12 space-y-3"
           >
-            <p className="text-gray-600 text-sm">
+            <p className="text-brand-muted text-sm">
               Not sure which programme is right for you?{' '}
               <Link
                 href="/contact"
@@ -412,7 +412,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             <p>
               <Link
                 href="/shop"
-                className="text-gray-500 hover:text-brand-primary text-sm transition-colors duration-200"
+                className="text-brand-muted hover:text-brand-primary text-sm transition-colors duration-200"
               >
                 &larr; Back to all programmes
               </Link>

@@ -67,7 +67,7 @@ function FAQItem({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.5, delay, ease: 'easeOut' }}
-      className="border-b border-gray-200 last:border-b-0"
+      className="border-b border-brand-border last:border-b-0"
     >
       <button
         type="button"
@@ -77,7 +77,7 @@ function FAQItem({
         onClick={() => setIsOpen((prev) => !prev)}
         className="w-full flex items-center justify-between py-6 text-left group"
       >
-        <span className="text-brand-primary font-semibold text-base lg:text-lg pr-4 group-hover:text-brand-accent transition-colors duration-200">
+        <span className="text-brand-primary font-medium text-base lg:text-lg pr-4 group-hover:text-brand-accent transition-colors duration-200">
           {question}
         </span>
         <ChevronDown
@@ -101,7 +101,7 @@ function FAQItem({
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <p className="pb-6 text-gray-600 text-sm lg:text-base leading-relaxed">{answer}</p>
+            <p className="pb-6 text-brand-muted text-sm lg:text-base leading-relaxed">{answer}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -113,7 +113,7 @@ export default function ContactFAQ() {
   return (
     <section
       aria-labelledby="contact-faq-heading"
-      className="w-full bg-gray-50 py-20 lg:py-32"
+      className="w-full bg-brand-sand py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
@@ -127,7 +127,7 @@ export default function ContactFAQ() {
           id="contact-faq-heading"
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
-          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary text-center mb-14"
+          className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary text-center mb-14"
         >
           Quick Answers
         </motion.h2>

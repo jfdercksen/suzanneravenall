@@ -53,8 +53,8 @@ export default function ContactForm({ light = false }: { light?: boolean }) {
   if (formState === 'success') {
     return (
       <div className="py-8 text-center">
-        <p className="text-brand-accent text-lg font-semibold mb-2">Message sent!</p>
-        <p className={`text-sm ${light ? 'text-gray-500' : 'text-white/70'}`}>
+        <p className="text-brand-accent text-lg font-medium mb-2">Message sent!</p>
+        <p className={`text-sm ${light ? 'text-brand-muted' : 'text-white/70'}`}>
           Thank you. Suzanne&rsquo;s team will be in touch within 2 business days.
         </p>
       </div>
@@ -63,11 +63,11 @@ export default function ContactForm({ light = false }: { light?: boolean }) {
 
   const isSubmitting = formState === 'submitting'
 
-  const labelClass = `block text-xs mb-1 uppercase tracking-wider ${light ? 'text-gray-500' : 'text-white/60'}`
+  const labelClass = `block text-xs mb-1 uppercase tracking-wider ${light ? 'text-brand-muted' : 'text-white/60'}`
   const inputClass = `w-full border rounded-lg px-4 py-3 text-sm focus:outline-none transition-colors disabled:opacity-50 ${
     light
-      ? 'bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:border-brand-accent'
-      : 'bg-gray-800 border-gray-700 text-white placeholder-white/30 focus:border-brand-accent'
+      ? 'bg-white border-brand-primary-300 text-brand-ink placeholder-brand-primary-400 focus:border-brand-accent'
+      : 'bg-brand-primary-800 border-brand-primary-600 text-white placeholder-white/30 focus:border-white'
   }`
 
   return (
@@ -106,7 +106,7 @@ export default function ContactForm({ light = false }: { light?: boolean }) {
 
       <div>
         <label htmlFor="contact-phone" className={labelClass}>
-          Phone <span className={light ? 'text-gray-600' : 'text-white/40'}>(optional)</span>
+          Phone <span className={light ? 'text-brand-muted' : 'text-white/40'}>(optional)</span>
         </label>
         <input
           id="contact-phone"
@@ -154,7 +154,7 @@ export default function ContactForm({ light = false }: { light?: boolean }) {
       </div>
 
       {formState === 'error' && (
-        <p role="alert" className="text-red-500 text-sm">
+        <p role="alert" className={`text-sm ${light ? 'text-red-600' : 'text-red-400'}`}>
           {errorMessage}
         </p>
       )}
@@ -162,7 +162,7 @@ export default function ContactForm({ light = false }: { light?: boolean }) {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-brand-accent hover:bg-brand-accent-700 disabled:opacity-60 text-white font-semibold py-4 rounded-button transition-all duration-300 text-sm uppercase tracking-wider"
+        className="w-full bg-brand-accent hover:bg-brand-accent-700 disabled:opacity-60 text-white font-medium py-4 rounded-button transition-all duration-300 text-sm uppercase tracking-wider"
       >
         {isSubmitting ? 'Sending…' : 'Send Message'}
       </button>
