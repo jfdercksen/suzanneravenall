@@ -44,22 +44,29 @@ export default function AboutHero() {
         <div aria-hidden="true" className="h-24 lg:h-32 bg-gradient-to-t from-brand-primary-900 sm:from-black/65 to-transparent" />
         <div className="bg-gradient-to-t from-black/85 to-black/65">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 pb-20 lg:pb-24">
-            <motion.h1
-              id="about-hero-heading"
-              {...fadeUp(0)}
-              className="max-w-4xl text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white leading-[1.05] [text-wrap:balance] mb-4 lg:mb-5"
-            >
-              Championing the change in the human condition{' '}
-              <span className="underline decoration-white/60 decoration-2 underline-offset-8 sm:underline-offset-[10px]">one person at a time</span>
-            </motion.h1>
+            {/* From sm the text sits in a right-hand column (Johan, 15 Sep):
+                Suzanne stands on the left of this footage and the brain fills
+                the right, so bottom-left text covered her. Left-aligned inside
+                the column, because ragged-left lines are harder to read. The
+                column is narrower on tablets so its left edge clears her face. */}
+            <div className="sm:ml-auto sm:max-w-md lg:max-w-2xl">
+              <motion.h1
+                id="about-hero-heading"
+                {...fadeUp(0)}
+                className="text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white leading-[1.05] [text-wrap:balance] mb-4 lg:mb-5"
+              >
+                Championing the change in the human condition{' '}
+                <span className="underline decoration-white/60 decoration-2 underline-offset-8 sm:underline-offset-[10px]">one person at a time</span>
+              </motion.h1>
 
-            <motion.p
-              {...fadeUp(0.2)}
-              className="text-sm sm:text-base lg:text-lg text-white/85 max-w-xl"
-            >
-              B.Msc. M.Msc. Msc.D.: Transformation &amp; Performance Coach, Speaker,
-              and multiple award-winning entrepreneur.
-            </motion.p>
+              <motion.p
+                {...fadeUp(0.2)}
+                className="text-sm sm:text-base lg:text-lg text-white/85 max-w-xl"
+              >
+                B.Msc. M.Msc. Msc.D.: Transformation &amp; Performance Coach, Speaker,
+                and multiple award-winning entrepreneur.
+              </motion.p>
+            </div>
           </div>
         </div>
       </div>

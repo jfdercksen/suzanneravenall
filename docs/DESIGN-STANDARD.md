@@ -128,7 +128,7 @@ From 640px up (tablet and desktop):
 
 | Part | Rule |
 |---|---|
-| Position | content anchored bottom-left; the top of the frame stays clear. The description carries the width cap, so the CTA row can run to one line |
+| Position | content anchored bottom-left; the top of the frame stays clear. The description carries the width cap, so the CTA row can run to one line. When the subject stands on the left of the frame, anchor bottom-right instead, in a right-hand column with the text still left-aligned (the About page, Johan 15 Sep) |
 | Eyebrow | optional: `text-xs uppercase tracking-[0.25em] font-medium text-white/80`. Never one that repeats the name in the logo above it; the homepage hero has none (option B, chosen by Johan on the 15 Sep design canvas) |
 | Headline | `text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.05] text-white` (36 / 48 / 60px). Never above 60px, never semibold or bold over a picture |
 | Description | one paragraph at most, `text-sm sm:text-base lg:text-lg text-white/85 max-w-xl`. Secondary copy moves below the header |

@@ -49,7 +49,11 @@ background picture. The picture is the header; the text sits on it and must not
 hide it.
 
 From sm (640px) up:
-- Content anchored bottom-left; the top of the frame stays clear. The description
+- Content anchored bottom-left; the top of the frame stays clear. When the subject
+  stands on the left of the frame, anchor bottom-right instead: a right-hand column
+  (`sm:ml-auto sm:max-w-md lg:max-w-2xl`, narrow on tablets so the column clears the
+  subject), text still left-aligned. AboutHero is the
+  example (Johan, 15 Sep). The description
   carries the width cap (`max-w-xl`), not the wrapper, so a CTA row can run wider
 - Eyebrow (optional): `text-xs uppercase tracking-[0.25em] font-medium text-white/80`.
   Never one that repeats the name in the logo directly above it: the homepage hero
