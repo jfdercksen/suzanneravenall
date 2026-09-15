@@ -17,9 +17,14 @@ const videos = [
 interface VideoTestimonialsProps {
   /** Hide the "View all testimonials" link when the component is rendered on /testimonials itself */
   showViewAllLink?: boolean
+  /** Section ground: 'cream' (white, the default) or 'sand' (light grey), so
+   *  each page can pick the one its neighbours do not use (see MagazineCovers). */
+  tone?: 'cream' | 'sand'
 }
 
-export default function VideoTestimonials({ showViewAllLink = true }: VideoTestimonialsProps) {
+export default function VideoTestimonials({ showViewAllLink = true, tone = 'cream' }: VideoTestimonialsProps) {
+  const ground = tone === 'sand' ? 'bg-brand-sand' : 'bg-brand-cream'
+  const ringOffset = tone === 'sand' ? 'ring-offset-brand-sand' : 'ring-offset-white'
   const [activeIndex, setActiveIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const activeVideo = videos[activeIndex]!
@@ -32,7 +37,7 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
   }
 
   return (
-    <section aria-labelledby="video-testimonials-heading" className="bg-brand-cream py-14 lg:py-24">
+    <section aria-labelledby="video-testimonials-heading" className={`${ground} py-14 lg:py-24`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -102,11 +107,12 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-300" />
 
-                {/* Play button */}
+                {/* Play button: white on the photo, never the near-black accent,
+                    which vanishes on a dark frame (design rules) */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-brand-accent flex items-center justify-center shadow-[0_0_40px_rgba(0,0,0,0.45)] group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-white flex items-center justify-center shadow-[0_0_40px_rgba(0,0,0,0.45)] group-hover:scale-110 transition-transform duration-300">
                     <svg
-                      className="w-6 h-6 lg:w-8 lg:h-8 text-white translate-x-0.5"
+                      className="w-6 h-6 lg:w-8 lg:h-8 text-brand-primary translate-x-0.5"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                       aria-hidden="true"
@@ -145,7 +151,7 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
               aria-checked={i === activeIndex}
               className={`relative flex-none w-40 lg:w-auto aspect-video rounded-sm overflow-hidden transition-shadow duration-300 ${
                 i === activeIndex
-                  ? 'ring-2 ring-brand-accent ring-offset-2 ring-offset-white'
+                  ? `ring-2 ring-brand-accent ring-offset-2 ${ringOffset}`
                   : ''
               }`}
               animate={{ opacity: i === activeIndex ? 1 : 0.5 }}
@@ -163,10 +169,10 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
               {/* Small play icon */}
               <div className="absolute inset-0 flex items-center justify-center bg-black/25">
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center ${
-                  i === activeIndex ? 'bg-brand-accent' : 'bg-brand-cream/80'
+                  i === activeIndex ? 'bg-white' : 'bg-white/70'
                 }`}>
                   <svg
-                    className={`w-3 h-3 translate-x-px ${i === activeIndex ? 'text-white' : 'text-brand-primary-900'}`}
+                    className="w-3 h-3 translate-x-px text-brand-primary-900"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                     aria-hidden="true"

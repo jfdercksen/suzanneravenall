@@ -12,7 +12,7 @@ const sectionReveal = {
 
 export default function TheStory() {
   return (
-    <section aria-labelledby="story-heading" className="bg-white py-20 lg:py-32">
+    <section aria-labelledby="story-heading" className="bg-brand-cream py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* Image left */}
@@ -42,7 +42,7 @@ export default function TheStory() {
               {...sectionReveal}
               transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
               id="story-heading"
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-8"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-8"
             >
               From trauma to mastery
             </motion.h2>
@@ -50,7 +50,7 @@ export default function TheStory() {
             <motion.p
               {...sectionReveal}
               transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' as const }}
-              className="text-gray-700 text-lg font-light leading-relaxed mb-6"
+              className="text-brand-ink text-lg font-light leading-relaxed mb-6"
             >
               Suzanne is a modern-day explorer of human potential, a transformation
               and performance coach, speaker, and multiple award-winning entrepreneur
@@ -62,7 +62,7 @@ export default function TheStory() {
             <motion.p
               {...sectionReveal}
               transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' as const }}
-              className="text-gray-700 text-lg font-light leading-relaxed mb-6"
+              className="text-brand-ink text-lg font-light leading-relaxed mb-6"
             >
               After building one of South Africa&rsquo;s respected corporate
               transformation companies and being recognised as one of the top 11 women
@@ -76,7 +76,7 @@ export default function TheStory() {
             <motion.p
               {...sectionReveal}
               transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' as const }}
-              className="text-gray-700 text-lg font-light leading-relaxed mb-6"
+              className="text-brand-ink text-lg font-light leading-relaxed mb-6"
             >
               What followed (trauma, a stroke, and a multiple sclerosis diagnosis)
               became a radical journey into metaphysics, neuroscience, trauma science,
@@ -98,7 +98,7 @@ export default function TheStory() {
                 trauma, and consciously shape a future driven by coherence, purpose
                 and limitless potential.
               </p>
-              <footer className="mt-3 text-gray-500 text-sm tracking-widest uppercase not-italic">
+              <footer className="mt-3 text-brand-muted text-sm tracking-widest uppercase not-italic">
                 The Big Why
               </footer>
             </motion.blockquote>

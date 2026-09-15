@@ -17,7 +17,7 @@ export default function AboutFinalCTA() {
       aria-labelledby="about-cta-heading"
       className="relative bg-brand-primary py-20 lg:py-32 overflow-hidden"
     >
-      {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+      {/* Background photo + black overlay: dark CTA bands carry imagery, never flat colour */}
       <Image
         src="/images/generated/session-coaching.webp"
         alt=""
@@ -43,7 +43,7 @@ export default function AboutFinalCTA() {
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
           id="about-cta-heading"
-          className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.08] mb-8"
+          className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08] mb-8"
         >
           Step into who you were always meant to be.
         </motion.h2>
@@ -64,13 +64,13 @@ export default function AboutFinalCTA() {
         >
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center px-10 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
+            className="inline-flex items-center justify-center px-10 py-4 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
           >
             Book Discovery Call
           </Link>
           <Link
             href="/services"
-            className="inline-flex items-center justify-center px-10 py-4 border border-white/40 hover:border-white text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/5"
+            className="inline-flex items-center justify-center px-10 py-4 border border-white/50 hover:border-white text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
           >
             View Services
           </Link>

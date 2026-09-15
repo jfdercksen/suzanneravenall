@@ -19,6 +19,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function AboutPage() {
+  // Grounds, top to bottom: picture, grey, white, grey, black, white, grey,
+  // white, grey, picture. Never the same ground twice in a row.
   return (
     <>
       <AboutHero />
@@ -33,7 +35,7 @@ export default function AboutPage() {
         quoteAttribution="Dr. Suzanne Ravenall"
       />
       <TheEcosystem />
-      <VideoTestimonials />
+      <VideoTestimonials tone="sand" />
       <AboutFinalCTA />
     </>
   )

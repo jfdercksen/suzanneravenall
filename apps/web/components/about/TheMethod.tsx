@@ -11,7 +11,7 @@ const sectionReveal = {
 
 export default function TheMethod() {
   return (
-    <section aria-labelledby="method-heading" className="bg-gray-50 py-20 lg:py-32">
+    <section aria-labelledby="method-heading" className="bg-brand-sand py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           {...sectionReveal}
@@ -24,7 +24,7 @@ export default function TheMethod() {
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
           id="method-heading"
-          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] max-w-4xl mb-16"
+          className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] max-w-4xl mb-16"
         >
           Rewiring from the inside out through{' '}
           <span className="text-brand-accent">Rapid Repatterning&reg; &amp; Neuro-repatterning&reg;</span>
@@ -38,7 +38,7 @@ export default function TheMethod() {
             <h3 className="text-brand-primary text-sm uppercase tracking-widest mb-4 font-medium">
               The approach
             </h3>
-            <p className="text-gray-600 text-lg font-light leading-relaxed">
+            <p className="text-brand-muted text-lg font-light leading-relaxed">
               A radical synthesis of metaphysics, neuroscience, trauma science, energy
               psychology, NLP, the neurobiology of decision making and performance,
               consciousness studies, and ancient healing arts, fused into a practical
@@ -54,7 +54,7 @@ export default function TheMethod() {
             <h3 className="text-brand-primary text-sm uppercase tracking-widest mb-4 font-medium">
               The differentiation
             </h3>
-            <p className="text-gray-600 text-lg font-light leading-relaxed">
+            <p className="text-brand-muted text-lg font-light leading-relaxed">
               Every individual, team and system is capable of radical transformation,
               not through motivation or mindset tricks, but by repatterning the
               biological and energetic roots of pain and limitation. This is about

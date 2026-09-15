@@ -35,7 +35,7 @@ const steps: { title: string; description: string }[] = [
 
 export default function HowItWorks() {
   return (
-    <section aria-labelledby="how-heading" className="bg-gray-50 py-20 lg:py-32">
+    <section aria-labelledby="how-heading" className="bg-brand-cream py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           {...sectionReveal}
@@ -48,7 +48,7 @@ export default function HowItWorks() {
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
           id="how-heading"
-          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] max-w-3xl mb-16"
+          className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] max-w-3xl mb-16"
         >
           Four movements from pattern to breakthrough.
         </motion.h2>
@@ -65,7 +65,7 @@ export default function HowItWorks() {
                 delay: i * 0.1,
                 ease: 'easeOut' as const,
               }}
-              className="group relative overflow-hidden bg-gray-900 rounded-card transition-all duration-500 hover:shadow-2xl hover:shadow-brand-accent/10 hover:-translate-y-1"
+              className="group relative overflow-hidden bg-brand-primary-900 rounded-card transition-all duration-500 hover:shadow-2xl hover:-translate-y-1"
             >
               <Image
                 src="/images/hero-bg-suzanne-ravenall.jpg"
@@ -76,13 +76,13 @@ export default function HowItWorks() {
               />
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+                className="absolute inset-0 bg-gradient-to-br from-black/80 to-transparent"
               />
               <div className="relative z-10 p-8">
                 <p className="text-6xl font-semibold tracking-tight text-white/40 mb-4 transition-colors duration-500 group-hover:text-white/70">
                   {String(i + 1).padStart(2, '0')}
                 </p>
-                <h3 className="text-2xl font-semibold text-white mb-3">
+                <h3 className="text-2xl font-medium text-white mb-3">
                   {step.title}
                 </h3>
                 <p className="text-white/80 leading-relaxed font-light">

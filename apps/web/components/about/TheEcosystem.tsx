@@ -48,7 +48,7 @@ export default function TheEcosystem() {
   return (
     <section
       aria-labelledby="ecosystem-heading"
-      className="bg-white py-20 lg:py-32"
+      className="bg-brand-cream py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
@@ -62,7 +62,7 @@ export default function TheEcosystem() {
           {...sectionReveal}
           transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' as const }}
           id="ecosystem-heading"
-          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] max-w-3xl mb-16"
+          className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] max-w-3xl mb-16"
         >
           Two arms of the same mission.
         </motion.h2>
@@ -83,7 +83,7 @@ export default function TheEcosystem() {
               <Link
                 href={card.href}
                 aria-label={card.title}
-                className="group relative block h-full overflow-hidden rounded-card border border-white/5 bg-gray-900 transition-all duration-500 hover:border-brand-accent/40 hover:shadow-2xl hover:-translate-y-1"
+                className="group relative block h-full overflow-hidden rounded-card border border-white/5 bg-brand-primary-900 transition-all duration-500 hover:border-white/30 hover:shadow-2xl hover:-translate-y-1"
               >
                 <Image
                   src="/images/hero-bg-suzanne-ravenall.jpg"
@@ -94,13 +94,13 @@ export default function TheEcosystem() {
                 />
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent"
+                  className="absolute inset-0 bg-gradient-to-br from-black/80 to-transparent"
                 />
                 <div className="relative z-10 p-10">
                   <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6">
                     {card.label}
                   </p>
-                  <h3 className="text-3xl font-semibold tracking-tight text-white mb-5">
+                  <h3 className="text-3xl font-medium tracking-tight text-white mb-5">
                     {card.title}
                   </h3>
                   <p className="text-white/80 font-light leading-relaxed mb-8">
