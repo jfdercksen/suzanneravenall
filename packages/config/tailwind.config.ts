@@ -36,63 +36,61 @@ const config = {
     extend: {
       colors: {
         brand: {
-          // ── Primary (warm ink) ─────────────────────────────────────────
-          // bg-brand-primary / text-brand-primary → #1A1512
-          // bg-brand-primary-100 … bg-brand-primary-900
+          // DESIGN STANDARD (2026-09-15): values are read off the live
+          // tonyrobbins.com CSS, not guessed. Source for every value is in
+          // docs/DESIGN-STANDARD.md. The site is monochrome: black, white and
+          // one light grey, with colour coming from photography. The warm
+          // palette (2 Sep) and the navy/electric blue before it are both gone.
+          // Token NAMES are kept so ~100 files do not churn; cream and sand are
+          // historical names for white and light grey.
           //
-          // WARM DIRECTION (2026-09-02): this token used to be #012B43 navy,
-          // carried over from the old WordPress site. The design reference has
-          // always been tonyrobbins.com, which is warm, so brightening a cold
-          // palette only ever produced a lighter cold. The dark ground is now a
-          // warm near-black brown. Suzanne's navy is retained as `brand-blue`
-          // below — an identity colour, no longer a background.
+          // ── Primary (black ramp) ───────────────────────────────────────
+          // 900/DEFAULT = TR --tr-black, 800 = shadcn --primary (#171717),
+          // 700 = --tr-black-1, 600 = --tr-black-2, 400 = --muted-foreground,
+          // 200 = --tr-white-2, 100 = --tr-white-1. 300 and 500 are derived.
           primary: {
-            DEFAULT: '#1A1512',
-            100: '#EFE8E1',
-            200: '#DBCEC2',
-            300: '#C0AE9E',
-            400: '#9C8878',
-            500: '#7A6656',
-            600: '#5C4B3E',
-            700: '#40332A',
-            800: '#2A211B',
-            900: '#1A1512',
+            DEFAULT: '#000000',
+            100: '#F6F6F7',
+            200: '#DADBDF',
+            300: '#A3A3A3',
+            400: '#737373',
+            500: '#525252',
+            600: '#303134',
+            700: '#232325',
+            800: '#171717',
+            900: '#000000',
           },
-          // ── Accent (warm amber) ─────────────────────────────────────────
-          // bg-brand-accent / text-brand-accent → #A84C07
-          // bg-brand-accent-600 is the main CTA colour
-          // bg-brand-accent-700 is the hover state
-          // bg-brand-accent-400 is the label colour ON DARK sections only
-          //
-          // Replaces #1719F4 electric blue. accent-600 is deliberately the
-          // darker end of the amber ramp so one token passes WCAG AA on BOTH
-          // light grounds (5.45 on cream, 4.89 on sand) and carries white text
-          // at 5.67 — a brighter amber would have needed a per-background variant.
+          // ── Accent (the CTA and the label colour) ───────────────────────
+          // TR has no brand accent: its buttons and eyebrow labels are black
+          // on light and white on dark. So the "accent" is near-black.
+          // bg-brand-accent-600  CTA fill on LIGHT grounds (white text 17.9:1)
+          // bg-brand-accent-700  hover
+          // text-brand-accent-400  label colour ON DARK grounds (15.2:1)
+          // On dark grounds and imagery a CTA is bg-white text-brand-primary,
+          // never bg-brand-accent (near-black on black disappears).
           accent: {
-            DEFAULT: '#A84C07',
-            100: '#FDF2E4',
-            200: '#FAE0BF',
-            300: '#F5C88C',
-            400: '#F0A952',
-            500: '#D97706',
-            600: '#A84C07',
-            700: '#8F4108',
-            800: '#6E3206',
-            900: '#4F2404',
+            DEFAULT: '#171717',
+            100: '#F6F6F7',
+            200: '#EEEEF0',
+            300: '#E5E5E5',
+            400: '#DADBDF',
+            500: '#737373',
+            600: '#171717',
+            700: '#000000',
+            800: '#000000',
+            900: '#000000',
           },
-          // ── Warm neutral grounds ────────────────────────────────────────
-          // Replace bg-white / bg-gray-50 as the light section backgrounds.
-          // cream is the page ground, sand the alternating band.
-          // Pure white stays available for cards sitting ON cream, which is
-          // where the depth now comes from.
-          cream: '#FDFAF6',
-          sand: '#F5EDE3',
-          // Hairline dividers and card borders on the light grounds.
-          // Replaces border-gray-100 / border-gray-200, which read cold on cream.
-          border: '#E7DED2',
-          // Warm body and muted text — replace text-gray-600 / text-gray-500.
-          ink: '#3D342E',
-          muted: '#6E5F53',
+          // ── Light grounds ───────────────────────────────────────────────
+          // cream = page ground (TR --tr-white #FFFFFF)
+          // sand  = alternating band and card fill (TR --tr-white-1 #F6F6F7)
+          cream: '#FFFFFF',
+          sand: '#F6F6F7',
+          // Hairline dividers and card borders (TR --border).
+          border: '#E5E5E5',
+          // Body text (TR --foreground) and muted text (TR computed muted
+          // paragraph colour; 5.49:1 on white, 5.08:1 on sand).
+          ink: '#0A0A0A',
+          muted: '#696969',
           // ── Identity ────────────────────────────────────────────────────
           // Suzanne's navy, kept as an identity colour (logo lockups, marks,
           // the occasional deliberate accent). NOT a background.
@@ -129,20 +127,22 @@ const config = {
         button: '0.75rem',
       },
       keyframes: {
+        // Glows are white light, not a hue: the palette has no colour accent,
+        // and these only ever run on dark grounds.
         'pulse-glow': {
-          '0%, 100%': { boxShadow: '0 0 20px 0 rgb(217 119 6 / 0.4)' },
-          '50%': { boxShadow: '0 0 40px 8px rgb(217 119 6 / 0.6)' },
+          '0%, 100%': { boxShadow: '0 0 20px 0 rgb(255 255 255 / 0.25)' },
+          '50%': { boxShadow: '0 0 40px 8px rgb(255 255 255 / 0.4)' },
         },
         'brain-glow': {
-          '0%, 100%': { filter: 'drop-shadow(0 0 4px #D97706)' },
-          '50%': { filter: 'drop-shadow(0 0 12px #D97706) drop-shadow(0 0 24px #D97706)' },
+          '0%, 100%': { filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.6))' },
+          '50%': { filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.7)) drop-shadow(0 0 24px rgba(255,255,255,0.4))' },
         },
         'brain-pulse': {
           '0%, 100%': {
-            filter: 'drop-shadow(0 0 8px #D97706) drop-shadow(0 0 16px rgba(217,119,6,0.4))',
+            filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.6)) drop-shadow(0 0 16px rgba(255,255,255,0.25))',
           },
           '50%': {
-            filter: 'drop-shadow(0 0 20px #D97706) drop-shadow(0 0 40px rgba(217,119,6,0.8)) drop-shadow(0 0 60px rgba(217,119,6,0.3))',
+            filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.7)) drop-shadow(0 0 40px rgba(255,255,255,0.45)) drop-shadow(0 0 60px rgba(255,255,255,0.2))',
           },
         },
       },

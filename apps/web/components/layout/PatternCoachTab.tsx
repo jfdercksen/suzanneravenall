@@ -14,22 +14,22 @@ function BrainIcon({ size = 52 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M50 20 C35 20 22 28 20 40 C18 48 20 55 24 60 C20 65 22 75 30 78 C35 80 42 78 48 75 L50 75"
-        stroke="#1719F4" strokeWidth="3" strokeLinecap="round" fill="none"
+        stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none"
       />
       <path
         d="M50 20 C65 20 78 28 80 40 C82 48 80 55 76 60 C80 65 78 75 70 78 C65 80 58 78 52 75 L50 75"
-        stroke="#1719F4" strokeWidth="3" strokeLinecap="round" fill="none"
+        stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none"
       />
-      <path d="M50 20 L50 75" stroke="#1719F4" strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round" />
-      <path d="M28 38 C32 35 38 38 36 44" stroke="#1719F4" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-      <path d="M24 52 C28 49 35 52 32 58" stroke="#1719F4" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-      <path d="M30 65 C34 62 40 64 38 70" stroke="#1719F4" strokeWidth="2" strokeLinecap="round" fill="none" />
-      <path d="M72 38 C68 35 62 38 64 44" stroke="#1719F4" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-      <path d="M76 52 C72 49 65 52 68 58" stroke="#1719F4" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-      <path d="M70 65 C66 62 60 64 62 70" stroke="#1719F4" strokeWidth="2" strokeLinecap="round" fill="none" />
-      <circle cx="50" cy="30" r="3" fill="#1719F4" />
-      <circle cx="50" cy="50" r="3" fill="#1719F4" />
-      <circle cx="50" cy="68" r="3" fill="#1719F4" />
+      <path d="M50 20 L50 75" stroke="currentColor" strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round" />
+      <path d="M28 38 C32 35 38 38 36 44" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+      <path d="M24 52 C28 49 35 52 32 58" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+      <path d="M30 65 C34 62 40 64 38 70" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d="M72 38 C68 35 62 38 64 44" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+      <path d="M76 52 C72 49 65 52 68 58" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+      <path d="M70 65 C66 62 60 64 62 70" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <circle cx="50" cy="30" r="3" fill="currentColor" />
+      <circle cx="50" cy="50" r="3" fill="currentColor" />
+      <circle cx="50" cy="68" r="3" fill="currentColor" />
     </svg>
   )
 }
@@ -87,14 +87,14 @@ export default function PatternCoachTab() {
           className="fixed top-1/2 right-0 z-[60] bg-white border-l-[5px] border-brand-accent w-[120px] py-5 px-4 rounded-[20px_0_0_20px] cursor-pointer"
           style={{
             translateY: '-50%',
-            boxShadow: '-12px 0 50px rgba(0,0,0,0.3), -6px 0 25px rgba(23,25,244,0.4)',
+            boxShadow: '-12px 0 50px rgba(0,0,0,0.3)',
           }}
           initial={{ x: 160, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: 160, opacity: 0, transition: { duration: 0.4, ease: 'easeIn' } }}
           whileHover={{
             x: -6,
-            boxShadow: '-16px 0 60px rgba(0,0,0,0.35), -8px 0 35px rgba(23,25,244,0.6)',
+            boxShadow: '-16px 0 60px rgba(0,0,0,0.35)',
             transition: { duration: 0.2, ease: 'easeOut' },
           }}
           transition={{ delay: 2, duration: 0.8, ease: springEase }}
@@ -105,7 +105,7 @@ export default function PatternCoachTab() {
               className="flex flex-col items-center gap-4 hover:scale-105 transition-transform duration-200"
               aria-label="Discover Pattern Coach: Brilliant Coach in Your Pocket. Start your 30-day free trial"
             >
-              <div className="motion-safe:animate-brain-pulse">
+              <div className="text-brand-primary-900">
                 <BrainIcon size={52} />
               </div>
               <div className="flex flex-col items-center gap-1 text-center">
@@ -125,7 +125,7 @@ export default function PatternCoachTab() {
               type="button"
               onClick={handleDismiss}
               aria-label="Dismiss Pattern Coach tab"
-              className="mt-2 flex items-center justify-center w-full gap-1 min-h-[44px] rounded-lg border border-gray-200 text-[9px] text-gray-400 hover:text-brand-accent hover:border-brand-accent transition-all duration-200"
+              className="mt-2 flex items-center justify-center w-full gap-1 min-h-[44px] rounded-lg border border-brand-border text-[9px] text-brand-muted hover:text-brand-accent hover:border-brand-accent transition-all duration-200"
             >
               <CloseXIcon size={8} />
               close
@@ -144,7 +144,7 @@ export default function PatternCoachTab() {
           className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 z-[60] flex flex-row items-center gap-3 bg-white rounded-[50px] border-t-4 border-brand-accent py-[10px] px-4 min-[415px]:px-5"
           style={{
             translateX: '-50%',
-            boxShadow: '0 8px 40px rgba(0,0,0,0.2), 0 4px 20px rgba(23,25,244,0.35)',
+            boxShadow: '0 8px 40px rgba(0,0,0,0.2)',
           }}
           initial={{ y: 120, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -156,7 +156,7 @@ export default function PatternCoachTab() {
             className="flex items-center gap-3"
             aria-label="Discover Pattern Coach: Brilliant Coach in Your Pocket. Start your 30-day free trial"
           >
-            <div className="motion-safe:animate-brain-pulse shrink-0">
+            <div className="text-brand-primary-900 shrink-0">
               <BrainIcon size={36} />
             </div>
             <span className="flex flex-col items-start leading-tight">
@@ -177,7 +177,7 @@ export default function PatternCoachTab() {
             type="button"
             onClick={handleDismiss}
             aria-label="Dismiss Pattern Coach tab"
-            className="-m-2.5 w-11 h-11 flex items-center justify-center text-gray-400 hover:text-brand-accent transition-colors duration-200 shrink-0"
+            className="-m-2.5 w-11 h-11 flex items-center justify-center text-brand-muted hover:text-brand-accent transition-colors duration-200 shrink-0"
           >
             <CloseXIcon size={10} />
           </button>

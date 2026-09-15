@@ -22,9 +22,9 @@ interface Opportunity {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  free: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
-  group: 'bg-brand-accent/15 text-brand-accent border border-brand-accent/30',
-  book: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
+  free: 'bg-brand-primary-900 text-white border border-brand-primary-900',
+  group: 'bg-brand-sand text-brand-ink border border-brand-border',
+  book: 'bg-brand-sand text-brand-ink border border-brand-border',
 }
 
 interface UpcomingEventsProps {
@@ -117,7 +117,7 @@ export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
               identical headline twice, which read as template filler */}
           <h2
             id="upcoming-events-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary"
           >
             Three ways to begin
           </h2>
@@ -150,7 +150,7 @@ export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
                   {price ? (
                     <span className="text-brand-primary font-semibold">{price}</span>
                   ) : (
-                    <span className="text-emerald-600 text-sm font-medium">Complimentary</span>
+                    <span className="text-brand-ink text-sm font-medium">Complimentary</span>
                   )}
                   <Link
                     href={href}

@@ -43,7 +43,7 @@ export default function LeadMagnet() {
 
   return (
     <section id="lead-magnet" aria-labelledby="leadmagnet-heading" className="relative py-14 lg:py-24 bg-brand-primary overflow-hidden">
-      {/* Background photo + navy overlay — dark sections carry imagery, never flat colour */}
+      {/* Background photo + black overlay — dark sections carry imagery, never flat colour */}
       <Image
         src="/images/generated/group-coaching-real.webp"
         alt=""
@@ -63,7 +63,7 @@ export default function LeadMagnet() {
           <p className="text-white/80 text-xs font-medium uppercase tracking-[0.3em] mb-4">
             Free Chapter
           </p>
-          <h2 id="leadmagnet-heading" className="text-4xl lg:text-6xl font-semibold tracking-tight text-white">
+          <h2 id="leadmagnet-heading" className="text-4xl lg:text-6xl font-medium tracking-tight text-white">
             Get the first chapter free
           </h2>
           <p className="mt-4 text-white/70 text-lg leading-relaxed">
@@ -78,7 +78,7 @@ export default function LeadMagnet() {
           transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
         >
           {status === 'success' ? (
-            <div className="mt-8 rounded-card bg-brand-accent/20 border border-brand-accent/40 px-8 py-6">
+            <div className="mt-8 rounded-card bg-white/10 border border-white/30 px-8 py-6">
               <p className="text-white font-semibold text-lg">Chapter 1 is on its way!</p>
               <p className="mt-2 text-white/70">We&apos;ll send your chapter download link to your inbox shortly.</p>
             </div>
@@ -98,12 +98,12 @@ export default function LeadMagnet() {
                 disabled={status === 'loading'}
                 aria-invalid={status === 'error'}
                 aria-describedby={status === 'error' ? 'lead-magnet-error' : undefined}
-                className="flex-1 px-5 py-3.5 rounded-button bg-brand-cream/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent disabled:opacity-50 text-sm"
+                className="flex-1 px-5 py-3.5 rounded-button bg-brand-cream/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent disabled:opacity-50 text-sm"
               />
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="px-7 py-3.5 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap text-sm"
+                className="px-7 py-3.5 bg-white hover:bg-brand-sand text-brand-primary font-semibold rounded-button transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap text-sm"
               >
                 {status === 'loading' ? 'Sending…' : 'Download Chapter 1'}
               </button>

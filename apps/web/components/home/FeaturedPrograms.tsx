@@ -56,7 +56,7 @@ export default function FeaturedPrograms() {
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             Featured Programs
           </p>
-          <h2 id="programs-heading" className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
+          <h2 id="programs-heading" className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary">
             The fastest path to your breakthrough
           </h2>
         </motion.div>
@@ -73,7 +73,7 @@ export default function FeaturedPrograms() {
               <Link
                 href={href}
                 aria-label={`${title} - ${subtitle}. Learn more`}
-                className="group relative block aspect-[3/4] rounded-card overflow-hidden shadow-card-hover transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+                className="group relative block aspect-[3/4] rounded-card overflow-hidden shadow-card-hover transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 <Image
                   src={image}
@@ -94,7 +94,7 @@ export default function FeaturedPrograms() {
                   <p className="text-white/80 text-xs font-medium uppercase tracking-[0.3em] mb-4">
                     {subtitle}
                   </p>
-                  <h3 className="text-3xl xl:text-4xl font-semibold tracking-tight uppercase text-white leading-[1.08]">
+                  <h3 className="text-3xl xl:text-4xl font-medium tracking-tight uppercase text-white leading-[1.08]">
                     {title}
                   </h3>
                 </div>

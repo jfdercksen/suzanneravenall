@@ -25,7 +25,7 @@ export default function AboutPage() {
       <TheMethod />
       <TheStory />
       <Credentials />
-      <MagazineCovers />
+      <MagazineCovers tone="dark" />
       <HowItWorks />
       <MediaLogos
         tone="light"

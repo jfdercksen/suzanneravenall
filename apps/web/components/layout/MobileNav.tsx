@@ -109,7 +109,7 @@ export default function MobileNav({ links }: MobileNavProps) {
         aria-expanded={isOpen}
         aria-controls="mobile-nav-overlay"
         onClick={() => setIsOpen(true)}
-        className="lg:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5 rounded-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+        className="lg:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5 rounded-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
       >
         <span className="block w-6 h-0.5 bg-current" />
         <span className="block w-6 h-0.5 bg-current" />
@@ -152,7 +152,7 @@ export default function MobileNav({ links }: MobileNavProps) {
                 close()
                 openButtonRef.current?.focus()
               }}
-              className="flex items-center justify-center w-10 h-10 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent rounded-sm"
+              className="flex items-center justify-center w-10 h-10 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-sm"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                 <line x1="18" y1="6" x2="6" y2="18" />
@@ -167,8 +167,8 @@ export default function MobileNav({ links }: MobileNavProps) {
               const isActive = isActivePath(pathname, link.href)
               const linkClassName = `flex items-center gap-3 font-semibold text-3xl py-3 border-b transition-colors duration-150 ${
                 isActive
-                  ? 'text-brand-accent-300 border-brand-accent-300'
-                  : 'text-white border-white/10 hover:text-brand-accent-300'
+                  ? 'text-white border-white'
+                  : 'text-white/75 border-white/10 hover:text-white'
               }`
               return link.external ? (
                 <a
@@ -202,14 +202,14 @@ export default function MobileNav({ links }: MobileNavProps) {
             <Link
               href="/discover-your-pattern"
               onClick={close}
-              className="flex items-center justify-center w-full px-6 py-4 border-2 border-brand-accent text-brand-accent-300 hover:bg-brand-accent hover:text-white font-semibold text-lg rounded-button transition-colors duration-150"
+              className="flex items-center justify-center w-full px-6 py-4 border-2 border-white/60 text-white hover:bg-white hover:text-brand-primary font-semibold text-lg rounded-button transition-colors duration-150"
             >
               Discover Your Pattern
             </Link>
             <Link
               href="/contact"
               onClick={close}
-              className="flex items-center justify-center w-full px-6 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-lg rounded-button transition-colors duration-150"
+              className="flex items-center justify-center w-full px-6 py-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold text-lg rounded-button transition-colors duration-150"
             >
               Book a Discovery Call
             </Link>

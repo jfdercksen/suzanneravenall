@@ -13,66 +13,67 @@
 // ---------------------------------------------------------------------------
 
 export const colors = {
-  /** Primary brand colour — warm ink. Used for nav, footer, dark section backgrounds. */
-  primary: '#1A1512',
-  /** CTA / accent colour — warm amber. Used for all buttons, links, highlights. */
-  accent: '#A84C07',
-  /** Button hover state for warm amber. */
-  accentHover: '#8F4108',
-  /** Accent variant for labels sitting ON dark sections. */
-  accentOnDark: '#F0A952',
-  /** Amber accent — used sparingly for badges and highlights. */
+  /** Dark ground — black (tonyrobbins.com --tr-black). Nav, footer, dark sections. */
+  primary: '#000000',
+  /** CTA fill on light grounds — near-black (TR shadcn --primary). */
+  accent: '#171717',
+  /** CTA hover. */
+  accentHover: '#000000',
+  /** Label colour ON dark grounds (TR --tr-white-2). */
+  accentOnDark: '#DADBDF',
+  /** Amber — legacy badge colour, book page only. Due for removal in its page pass. */
   amber: '#ffba00',
   black: '#000000',
   white: '#FFFFFF',
   /** Suzanne's navy — identity colour only (logo lockups, marks). NOT a background. */
   blue: '#012B43',
-  /** Body text on light backgrounds */
-  textDark: '#3D342E',
-  /** Muted / secondary text */
-  textMuted: '#6E5F53',
-  /** Dividers and subtle borders */
-  border: '#E7DED2',
-  /** Light page background — cream */
-  backgroundLight: '#FDFAF6',
-  /** Alternating light section band — sand */
-  backgroundSand: '#F5EDE3',
+  /** Body text on light backgrounds (TR --foreground) */
+  textDark: '#0A0A0A',
+  /** Muted / secondary text (TR computed muted paragraph colour) */
+  textMuted: '#696969',
+  /** Dividers and subtle borders (TR --border) */
+  border: '#E5E5E5',
+  /** Light page background — white (historical token name: cream) */
+  backgroundLight: '#FFFFFF',
+  /** Alternating light section band — light grey (TR --tr-white-1; historical name: sand) */
+  backgroundSand: '#F6F6F7',
 } as const
 
 // ---------------------------------------------------------------------------
-// Primary (warm ink) tint scale — based on #1A1512
-// Lower numbers are lighter tints; higher numbers are darker shades.
-// brand-primary-900 is the confirmed dark ground (warm direction, 2026-09-02).
+// Primary (black) scale — design standard 2026-09-15, see docs/DESIGN-STANDARD.md
+// Lower numbers are lighter; higher numbers are darker.
+// brand-primary-900 is the dark ground.
 // ---------------------------------------------------------------------------
 
 export const primaryScale = {
-  100: '#EFE8E1',
-  200: '#DBCEC2',
-  300: '#C0AE9E',
-  400: '#9C8878',
-  500: '#7A6656',
-  600: '#5C4B3E',
-  700: '#40332A',
-  800: '#2A211B',
-  900: '#1A1512',
+  100: '#F6F6F7',
+  200: '#DADBDF',
+  300: '#A3A3A3',
+  400: '#737373',
+  500: '#525252',
+  600: '#303134',
+  700: '#232325',
+  800: '#171717',
+  900: '#000000',
 } as const
 
 // ---------------------------------------------------------------------------
-// Accent (warm amber) tint scale — based on #A84C07
-// brand-accent-600 is the confirmed CTA colour.
-// brand-accent-700 is the confirmed hover state.
+// Accent scale — near-black CTA ramp (tonyrobbins.com has no colour accent)
+// brand-accent-600 is the CTA fill on light grounds.
+// brand-accent-700 is the hover state.
+// brand-accent-400 is the label colour on dark grounds.
 // ---------------------------------------------------------------------------
 
 export const accentScale = {
-  100: '#FDF2E4',
-  200: '#FAE0BF',
-  300: '#F5C88C',
-  400: '#F0A952',
-  500: '#D97706',
-  600: '#A84C07',
-  700: '#8F4108',
-  800: '#6E3206',
-  900: '#4F2404',
+  100: '#F6F6F7',
+  200: '#EEEEF0',
+  300: '#E5E5E5',
+  400: '#DADBDF',
+  500: '#737373',
+  600: '#171717',
+  700: '#000000',
+  800: '#000000',
+  900: '#000000',
 } as const
 
 // ---------------------------------------------------------------------------

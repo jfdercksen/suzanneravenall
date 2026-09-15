@@ -82,7 +82,7 @@ export default function CookieConsent({ clarityId }: CookieConsentProps) {
       role="dialog"
       aria-label="Cookie consent"
       aria-live="polite"
-      className="fixed bottom-0 left-0 right-0 z-[70] bg-brand-primary border-t border-brand-accent/30 px-4 pt-3 lg:pt-5 pb-[calc(0.75rem+env(safe-area-inset-bottom))] lg:pb-[calc(1.25rem+env(safe-area-inset-bottom))]"
+      className="fixed bottom-0 left-0 right-0 z-[70] bg-brand-primary border-t border-white/10 px-4 pt-3 lg:pt-5 pb-[calc(0.75rem+env(safe-area-inset-bottom))] lg:pb-[calc(1.25rem+env(safe-area-inset-bottom))]"
     >
       <div className="max-w-7xl mx-auto flex flex-row flex-wrap items-center gap-3 lg:gap-4">
         {/* min-w-0 below sm keeps the buttons inline with the text at 375px instead of
@@ -90,7 +90,7 @@ export default function CookieConsent({ clarityId }: CookieConsentProps) {
         <p className="flex-1 min-w-0 sm:min-w-[200px] text-[13px] sm:text-sm text-white/80 leading-relaxed">
           <span className="sm:hidden">We use cookies to improve your experience.</span>
           <span className="hidden sm:inline">We use cookies to understand how you use our site and to improve your experience.</span>{' '}
-          <Link href="/legal/cookies" className="text-brand-accent-300 underline underline-offset-2 hover:text-brand-accent-200 transition-colors duration-200">
+          <Link href="/legal/cookies" className="text-brand-accent-400 underline underline-offset-2 hover:text-white transition-colors duration-200">
             Cookie policy
           </Link>
         </p>
@@ -103,7 +103,7 @@ export default function CookieConsent({ clarityId }: CookieConsentProps) {
           </button>
           <button
             onClick={handleAccept}
-            className="text-sm font-medium bg-brand-accent-600 hover:bg-brand-accent-700 text-white px-4 sm:px-5 py-2 rounded-button transition-all duration-300"
+            className="text-sm font-medium bg-white hover:bg-brand-sand text-brand-primary px-4 sm:px-5 py-2 rounded-button transition-all duration-300"
           >
             Accept
           </button>

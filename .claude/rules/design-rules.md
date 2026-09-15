@@ -5,39 +5,68 @@ Every page must meet that standard. Flat, static, generic pages fail QA.
 
 ## Brand tokens (canonical — from packages/config/tailwind.config.ts)
 
-**This is a WARM site.** Changed 2026-09-02. The palette was previously deep navy
-(#012B43) and electric blue (#1719F4), both carried over from the old WordPress
-site, while the design reference has always been tonyrobbins.com — which is warm.
-Three separate brightness passes failed to answer the client's "it needs to be a
-warm site" note, because brightening a cold palette only produces a lighter cold.
-The temperature, not the brightness, was the problem.
+**This is a MONOCHROME site.** Changed 2026-09-15. Every value below was read off
+the live tonyrobbins.com CSS and computed styles, with the source for each one in
+`docs/DESIGN-STANDARD.md`. The reference is black, white and one light grey; its
+colour comes from photography. The warm palette (2 Sep) failed because Suzanne did
+not like the orange/brown, and the navy/electric blue before it failed too. Do not
+reintroduce a hue without Johan's say-so.
 
-- Dark background: `bg-brand-primary` / `bg-brand-primary-900` (#1A1512 warm ink)
-  — there is NO `brand-navy` token
-- Warm amber accent: `bg-brand-accent` / `text-brand-accent` (#A84C07)
-- CTA button: `bg-brand-accent-600` hover `bg-brand-accent-700`
-- Light grounds: `bg-brand-cream` (#FDFAF6, page ground) and `bg-brand-sand`
-  (#F5EDE3, the alternating band). Do NOT use `bg-white` or `bg-gray-50` for a
-  section background — they read cold against everything else.
-- Body/muted text: `text-brand-ink` (#3D342E) and `text-brand-muted` (#6E5F53).
-  Do NOT use `text-gray-500` / `text-gray-600`.
-- Borders and dividers: `border-brand-border` (#E7DED2), not `border-gray-*`.
-- Suzanne's navy survives as `brand-blue` (#012B43) — an IDENTITY colour for logo
-  lockups and marks. It is never a background again.
+Token NAMES are historical; the VALUES are what matter:
 
-### Two rules that are easy to get wrong
+- Dark ground: `bg-brand-primary` / `bg-brand-primary-900` (#000000). There is NO
+  `brand-navy` token
+- Light grounds: `bg-brand-cream` (#FFFFFF, page ground) and `bg-brand-sand`
+  (#F6F6F7, the alternating band). Use these, not `bg-white` / `bg-gray-50`, for
+  section backgrounds so the pairing stays in one place
+- "Accent" is near-black (#171717): the CTA fill and the eyebrow label colour on
+  light grounds. CTA: `bg-brand-accent-600` hover `bg-brand-accent-700`
+- Body/muted text: `text-brand-ink` (#0A0A0A) and `text-brand-muted` (#696969).
+  Do NOT use `text-gray-500` / `text-gray-600`
+- Borders and dividers: `border-brand-border` (#E5E5E5), not `border-gray-*`
+- Suzanne's navy survives as `brand-blue` (#012B43), an IDENTITY colour for logo
+  lockups and marks. It is never a background
 
-1. **White is still allowed, but only for CARDS sitting on cream.** That contrast
-   is where the depth now comes from. A white section background is a bug; a white
-   card on `bg-brand-cream` is correct.
-2. **Accent on dark sections uses `brand-accent-400` (#F0A952), not the default.**
-   `brand-accent-600` is deliberately the dark end of the amber ramp so one token
-   passes WCAG AA on both light grounds; that same token is too dark to read on
-   `bg-brand-primary-900`.
+### Three rules that are easy to get wrong
 
-Every pair in this palette was contrast-checked. AA or better throughout:
-white on accent-600 5.67, accent-600 on cream 5.45, accent-600 on sand 4.89,
-accent-400 on ink 8.43, ink on cream 17.1, muted on cream 5.89, muted on sand 5.29.
+1. **On a dark ground or a picture, the CTA is white.** `bg-white text-brand-primary
+   hover:bg-brand-sand`. `bg-brand-accent` there is near-black on black and the
+   button disappears.
+2. **Labels on dark grounds use `text-brand-accent-400` (#DADBDF).** The bare
+   `text-brand-accent` is near-black and only works on light grounds.
+3. **Cards need a contrasting ground.** White card on `bg-brand-sand`, or a
+   `bg-brand-sand` card on `bg-brand-cream`. A white card on a white ground is
+   invisible without `border-brand-border`.
+
+Every pair was contrast-checked (full table in docs/DESIGN-STANDARD.md). AA or
+better throughout: ink on cream 19.80, ink on sand 18.33, muted on cream 5.49,
+muted on sand 5.08, white on accent-600 17.93, accent-400 on black 15.18.
+
+## Header rule (every hero and page header)
+
+Suzanne, 14 Sep 2026: the headings were too big and too bold and blocked out the
+background picture. The picture is the header; the text sits on it and must not
+hide it.
+
+From sm (640px) up:
+- Content anchored bottom-left; the top of the frame stays clear. The description
+  carries the width cap (`max-w-xl`), not the wrapper, so a CTA row can run wider
+- Eyebrow: `text-xs uppercase tracking-[0.25em] font-medium text-white/80`
+- Headline: `text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.05] text-white`.
+  Never above 60px. Never semibold or bold over a picture
+- Description: ONE paragraph at most, `text-sm sm:text-base lg:text-lg text-white/85 max-w-xl`.
+  Anything more moves below the header
+- Scrim: black only (never a navy/accent tint) and only behind the text band: a fade
+  (`h-24 lg:h-32`, clear to `black/65`) then `from-black/85 to-black/65` behind the
+  text. At black/65 over a pure-white patch of photo, white text is 6.98:1 and
+  white/80 is 5.18:1, so AA holds whatever the picture shows
+- CTAs on a picture: primary `bg-white text-brand-primary`; secondary
+  `border border-white/50 text-white hover:bg-white/10`
+
+Below sm (phones): if overlaid text would cover the subject's face, STACK. Picture
+on top, text on black beneath it, the fade running to solid black exactly where the
+picture ends. `components/home/Hero.tsx` is the reference implementation.
+
 ## Non-negotiable rules
 
 - Use brand tokens from tailwind.config.ts — never hardcode colours
@@ -46,7 +75,8 @@ accent-400 on ink 8.43, ink on cream 17.1, muted on cream 5.89, muted on sand 5.
 - No inline styles — Tailwind classes only
 - framer-motion on every section — scroll-triggered entrance animations
 - Alternate dark and light sections — never same background twice in a row.
-  The light alternation is cream ↔ sand; the dark ground is brand-primary-900
+  The light alternation is cream (white) and sand (light grey); the dark ground is
+  brand-primary-900. Shared bands take a `tone` prop (see MagazineCovers)
 - next/image for all images — never bare <img>, never layout shift
 - next/link for internal navigation — never bare <a>
 - "use client" only on components that genuinely need it (animation, state, browser API)
@@ -55,12 +85,15 @@ accent-400 on ink 8.43, ink on cream 17.1, muted on cream 5.89, muted on sand 5.
 ## Typography rules
 
 - Section labels: text-xs uppercase tracking-[0.3em] font-medium text-brand-accent
-- Section headlines: text-4xl lg:text-6xl font-semibold tracking-tight — heavy, tight statement type is the reference-site standard (changed 2026-08-20 after Johan rejected the font-light system as "basic"; the reference site's headlines are all bold/black weight)
-- font-light is for supporting subheads and body-adjacent text only — never for the statement headline of a section
-- Never use default (font-normal) on headlines
-- Hero headline: text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight — the single loudest element on the page
-- Big stats (count-up numbers): font-semibold tracking-tight, one size class up from the old font-light version
-- Poppins only — no other fonts
+  (text-brand-accent-400 on dark)
+- Section headlines on flat grounds: text-4xl lg:text-6xl font-medium tracking-tight.
+  Weight 500 is the measured reference weight (changed 2026-09-15 from the 600 set
+  on 2026-08-20). font-light is still wrong for a statement headline: that was the
+  "basic" look Johan rejected
+- Headlines over a picture: font-normal, per the header rule above
+- Big stats (count-up numbers): font-semibold tracking-tight
+- Poppins only — no other fonts. The reference uses Suisse Intl (paid licence);
+  Poppins has heavier strokes, which is why we run one weight lighter than it
 
 ## Motion rules
 
@@ -74,7 +107,7 @@ accent-400 on ink 8.43, ink on cream 17.1, muted on cream 5.89, muted on sand 5.
 
 ## Card rules
 
-- Dark cards: bg-gray-900 with background image overlay at opacity-40
+- Dark cards: bg-brand-primary-800 or -900 with background image overlay at opacity-40
 - Hover: overlay fades (opacity-20), card lifts (shadow-2xl, -translate-y-1)
 - Use group + group-hover for coordinated multi-element hover effects
 

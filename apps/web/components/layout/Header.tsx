@@ -126,7 +126,7 @@ export default function Header() {
                 "Discover Your Pattern" button entirely. */}
             <Link
               href="/contact"
-              className="hidden xl:inline-flex items-center px-3 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white font-medium text-sm rounded-button transition-colors duration-150 whitespace-nowrap"
+              className="hidden xl:inline-flex items-center px-3 py-2.5 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm rounded-button transition-colors duration-150 whitespace-nowrap"
             >
               Book a Discovery Call
             </Link>

@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 export default function FinalCTA() {
   return (
     <section aria-labelledby="finalcta-heading" className="relative py-14 lg:py-24 bg-brand-primary overflow-hidden">
-      {/* Background photo + navy overlay — dark sections carry imagery, never flat colour */}
+      {/* Background photo + black overlay — dark sections carry imagery, never flat colour */}
       <Image
         src="/images/generated/session-coaching.webp"
         alt=""
@@ -27,7 +27,7 @@ export default function FinalCTA() {
         <p className="text-white/80 text-xs font-medium uppercase tracking-[0.3em] mb-6">
           Take The First Step
         </p>
-        <h2 id="finalcta-heading" className="text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05]">
+        <h2 id="finalcta-heading" className="text-5xl lg:text-7xl font-medium tracking-tight text-white leading-[1.05]">
           Your breakthrough is one conversation away
         </h2>
         <motion.p
@@ -47,7 +47,7 @@ export default function FinalCTA() {
         >
           <Link
             href="/contact"
-            className="mt-10 inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-lg rounded-button transition-all duration-300 hover:shadow-[0_0_40px_rgba(23,25,244,0.5)]"
+            className="mt-10 inline-flex items-center justify-center px-10 py-5 bg-white hover:bg-brand-sand text-brand-primary font-semibold text-lg rounded-button transition-all duration-300"
           >
             Book Discovery Call
           </Link>

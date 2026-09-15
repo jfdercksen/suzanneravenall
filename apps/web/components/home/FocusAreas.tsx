@@ -90,7 +90,7 @@ export default function FocusAreas() {
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             Areas of Focus
           </p>
-          <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
+          <h2 className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary">
             Where do you need the breakthrough?
           </h2>
         </motion.div>

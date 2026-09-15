@@ -88,39 +88,41 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
-      {/* Colour system: light is the default; dark only where full-bleed
-          imagery carries it (hero, quote video, photo-backed CTAs). */}
+      {/* Grounds (design standard 2026-09-15): white = brand-cream,
+          light grey = brand-sand, black = brand-primary-900. Never the same
+          ground twice in a row. */}
       {/* 1 — dark (video hero) */}
       <Hero />
-      {/* 2 — light (bg-white) */}
+      {/* 2 — white */}
       <TrustBar />
-      {/* 3 — light (bg-gray-50 press band) */}
+      {/* 3 — light grey (press band) */}
       <MediaLogos id="media-logos" tone="light" />
-      {/* 4 — light (bg-white, dark photo cards) */}
+      {/* 4 — white (dark photo cards) */}
       <UpcomingPrograms cohort={featuredCohort} />
-      {/* 5 — light (bg-white) */}
-      <MagazineCovers />
-      {/* 6 — light (bg-gray-50) */}
+      {/* 5 — black: white above, light grey below, so dark is the only
+          ground that does not repeat a neighbour */}
+      <MagazineCovers tone="dark" />
+      {/* 6 — light grey */}
       <AboutTeaser />
-      {/* 7 — light (bg-white) */}
+      {/* 7 — white */}
       <FeaturedPrograms />
       {/* 8 — dark (full-bleed video) */}
       <TransformationQuote />
-      {/* 9 — light (bg-white, photo panel) */}
+      {/* 9 — white (photo panel) */}
       <FocusAreas />
-      {/* 10 — light (bg-gray-50) */}
+      {/* 10 — light grey (renders nothing until a verified story exists) */}
       <TestimonialSpotlight />
-      {/* 11 — mixed dark/light (BookPromotion split layout) */}
+      {/* 11 — split: black book panel | light grey copy panel */}
       <BookPromotion />
-      {/* 12 — light (bg-white, full-width centered statement) */}
+      {/* 12 — white (full-width centered statement) */}
       <StatementBand />
-      {/* 13 — light (bg-gray-50) */}
+      {/* 13 — light grey */}
       <UpcomingEvents cohort={featuredCohort} />
-      {/* 14 — dark (photo + navy overlay) */}
+      {/* 14 — dark (photo + black overlay) */}
       <LeadMagnet />
-      {/* 15 — light (bg-white) */}
+      {/* 15 — white */}
       <VideoTestimonials />
-      {/* 16 — dark (photo + navy overlay) */}
+      {/* 16 — dark (photo + black overlay) */}
       <FinalCTA />
     </>
   )

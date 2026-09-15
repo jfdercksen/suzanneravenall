@@ -24,7 +24,7 @@ export default function AboutTeaser() {
             <p className="text-sm text-brand-muted font-light italic mb-5 max-w-sm leading-relaxed">
               Dr. Suzanne Ravenall, Neuro-Repatterning® pioneer, author, keynote speaker and transformation coach to 2,000+ clients across 30+ countries.
             </p>
-            <h2 id="about-heading" className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08]">
+            <h2 id="about-heading" className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08]">
               Science-backed coaching with a track record of real results
             </h2>
             <p className="mt-6 text-brand-ink leading-relaxed">

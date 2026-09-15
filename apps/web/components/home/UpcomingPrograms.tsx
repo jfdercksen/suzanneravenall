@@ -38,7 +38,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
             <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-2">
               UPCOMING PROGRAMS
             </p>
-            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary">
               Your next step starts here
             </h2>
           </div>
@@ -96,7 +96,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                       </span>
                     </div>
 
-                    <h3 className="text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-tight mb-3">
+                    <h3 className="text-4xl lg:text-5xl font-medium tracking-tight text-white leading-tight mb-3">
                       {cohort.productTitle}
                     </h3>
                     <p className="text-white/80 text-lg font-light mb-8">
@@ -127,7 +127,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                     </span>
                     <Link
                       href={`/shop/${cohort.productHandle}`}
-                      className="bg-brand-accent hover:bg-brand-accent-700 text-white px-8 py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.4)]"
+                      className="bg-white hover:bg-brand-sand text-brand-primary px-8 py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300"
                     >
                       {cohort.spotsRemaining > 0 ? 'Reserve Your Spot' : 'Join the Waitlist'} &rarr;
                     </Link>
@@ -142,7 +142,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                     <p className="text-xs tracking-[0.3em] text-white/80 uppercase font-medium mb-8">
                       GROUP PROGRAMS
                     </p>
-                    <h3 className="text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-tight mb-3">
+                    <h3 className="text-4xl lg:text-5xl font-medium tracking-tight text-white leading-tight mb-3">
                       New Cohorts Forming
                     </h3>
                     <p className="text-white/80 text-lg font-light mb-8 max-w-md">
@@ -153,7 +153,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                   <div>
                     <Link
                       href="/events"
-                      className="inline-flex bg-brand-accent hover:bg-brand-accent-700 text-white px-8 py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.4)]"
+                      className="inline-flex bg-white hover:bg-brand-sand text-brand-primary px-8 py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300"
                     >
                       Register Your Interest &rarr;
                     </Link>
@@ -165,7 +165,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
 
           {/* TIER 2 — 1-on-1 card (spans 1 col) */}
           <motion.div
-            className="relative overflow-hidden bg-brand-primary-900 border border-white/10 group hover:border-brand-accent/40 transition-colors duration-500"
+            className="relative overflow-hidden bg-brand-primary-900 border border-white/10 group hover:border-white/40 transition-colors duration-500"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
@@ -188,7 +188,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                 <p className="text-xs tracking-[0.3em] text-white/80 uppercase font-medium mb-8">
                   {oneOnOne.label}
                 </p>
-                <h3 className="text-3xl font-semibold tracking-tight text-white leading-tight mb-3">
+                <h3 className="text-3xl font-medium tracking-tight text-white leading-tight mb-3">
                   {oneOnOne.title}
                 </h3>
                 <p className="text-white/80 font-light mb-8">
@@ -209,7 +209,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
 
               <Link
                 href={oneOnOne.href}
-                className="w-full border border-white/30 hover:border-brand-accent text-white px-8 py-4 text-sm uppercase tracking-widest text-center transition-all duration-300 hover:bg-brand-accent/10 block mt-8"
+                className="w-full border border-white/30 hover:border-white text-white px-8 py-4 text-sm uppercase tracking-widest text-center transition-all duration-300 hover:bg-white/10 block mt-8"
               >
                 {oneOnOne.cta} &rarr;
               </Link>

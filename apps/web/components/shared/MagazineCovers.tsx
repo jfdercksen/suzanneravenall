@@ -26,9 +26,20 @@ const covers = [
   },
 ]
 
-export function MagazineCovers() {
+type MagazineCoversProps = {
+  /** The ground this band paints. Shared across pages, so each page picks the
+   *  tone that keeps it from matching the section above or below it. */
+  tone?: 'light' | 'dark'
+}
+
+export function MagazineCovers({ tone = 'light' }: MagazineCoversProps) {
+  const isDark = tone === 'dark'
+
   return (
-    <section aria-labelledby="magazine-covers-heading" className="bg-brand-cream py-14 lg:py-24">
+    <section
+      aria-labelledby="magazine-covers-heading"
+      className={`${isDark ? 'bg-brand-primary-900' : 'bg-brand-cream'} py-14 lg:py-24`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -39,10 +50,13 @@ export function MagazineCovers() {
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
+          <p className={`${isDark ? 'text-brand-accent-400' : 'text-brand-accent'} text-xs font-medium uppercase tracking-[0.3em] mb-3`}>
             Cover Features
           </p>
-          <h2 id="magazine-covers-heading" className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
+          <h2
+            id="magazine-covers-heading"
+            className={`text-4xl lg:text-6xl font-medium tracking-tight ${isDark ? 'text-white' : 'text-brand-primary'}`}
+          >
             Recognised as a leading voice in transformation
           </h2>
         </motion.div>
@@ -73,7 +87,7 @@ export function MagazineCovers() {
                   priority={i === 0}
                 />
               </motion.div>
-              <p className="text-brand-muted text-xs font-medium uppercase tracking-[0.2em]">
+              <p className={`${isDark ? 'text-white/70' : 'text-brand-muted'} text-xs font-medium uppercase tracking-[0.2em]`}>
                 {cover.publication}
               </p>
             </motion.div>

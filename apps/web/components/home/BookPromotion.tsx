@@ -9,7 +9,7 @@ export default function BookPromotion() {
     <section aria-labelledby="book-heading" className="relative overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-2">
 
-        {/* LEFT — Full-bleed book panel (navy bg makes cover pop) */}
+        {/* LEFT — Full-bleed book panel (black ground makes the cover pop) */}
         <motion.div
           className="relative bg-brand-primary flex flex-col items-center justify-center py-14 lg:py-24 px-8 lg:px-16 overflow-hidden min-h-[400px] lg:min-h-[680px]"
           initial={{ opacity: 0, x: -40 }}
@@ -20,7 +20,7 @@ export default function BookPromotion() {
           {/* Ambient glow behind cover */}
           <div
             aria-hidden="true"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-brand-accent/10 blur-[120px] pointer-events-none"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-white/5 blur-[120px] pointer-events-none"
           />
 
           {/* Available Now badge */}
@@ -31,7 +31,7 @@ export default function BookPromotion() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="relative mb-8 z-10"
           >
-            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-brand-accent text-white text-xs font-semibold uppercase tracking-wider">
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white text-brand-primary text-xs font-semibold uppercase tracking-wider">
               Available Now
             </span>
           </motion.div>
@@ -75,7 +75,7 @@ export default function BookPromotion() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-[1.1] mb-6"
+              className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary leading-[1.1] mb-6"
             >
               Before you change your life, understand the architecture holding you back.
             </motion.h2>
@@ -120,7 +120,7 @@ export default function BookPromotion() {
             >
               <Link
                 href="/shop/the-latest-book-by-suzanne"
-                className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.4)]"
+                className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-all duration-300 hover:shadow-lg"
               >
                 Order Now: R165
               </Link>

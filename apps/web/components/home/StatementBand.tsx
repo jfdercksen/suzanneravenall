@@ -15,7 +15,7 @@ export default function StatementBand() {
         viewport={{ once: true, margin: '0px' }}
         transition={{ duration: 0.7, ease: 'easeOut' }}
       >
-        <h2 className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary leading-[1.05]">
+        <h2 className="text-4xl sm:text-5xl lg:text-7xl font-medium tracking-tight text-brand-primary leading-[1.05]">
           Your pattern isn&apos;t your destiny.
         </h2>
         <motion.p

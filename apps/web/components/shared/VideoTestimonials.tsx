@@ -46,7 +46,7 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
           <p className="text-brand-accent text-xs font-medium uppercase tracking-[0.3em] mb-3">
             What Clients Say
           </p>
-          <h2 id="video-testimonials-heading" className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4">
+          <h2 id="video-testimonials-heading" className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary mb-4">
             Real transformations. Real people.
           </h2>
           <p className="text-brand-muted text-lg font-light max-w-2xl mx-auto">
@@ -104,7 +104,7 @@ export default function VideoTestimonials({ showViewAllLink = true }: VideoTesti
 
                 {/* Play button */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-brand-accent flex items-center justify-center shadow-[0_0_40px_rgba(23,25,244,0.6)] group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-brand-accent flex items-center justify-center shadow-[0_0_40px_rgba(0,0,0,0.45)] group-hover:scale-110 transition-transform duration-300">
                     <svg
                       className="w-6 h-6 lg:w-8 lg:h-8 text-white translate-x-0.5"
                       fill="currentColor"
