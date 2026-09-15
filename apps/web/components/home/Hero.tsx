@@ -116,12 +116,9 @@ export default function Hero() {
                 max-w-xl, and the three CTAs need ~900px to sit on one row. */}
             <div>
 
-              <motion.p
-                {...fadeUp(0)}
-                className="text-white/80 text-xs font-medium tracking-[0.25em] uppercase mb-4"
-              >
-                Dr. Suzanne Ravenall · Founder of Pattern Intelligence™
-              </motion.p>
+              {/* No eyebrow: Johan picked option B on the 15 Sep design
+                  canvas. The "Dr. Suzanne Ravenall · Founder of Pattern
+                  Intelligence" line repeated the logo directly above it. */}
 
               {/* Headline — regular weight, 36 / 48 / 60px. The measured
                   reference is 70px at weight 500 in Suisse Intl; Poppins has

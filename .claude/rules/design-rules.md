@@ -51,7 +51,9 @@ hide it.
 From sm (640px) up:
 - Content anchored bottom-left; the top of the frame stays clear. The description
   carries the width cap (`max-w-xl`), not the wrapper, so a CTA row can run wider
-- Eyebrow: `text-xs uppercase tracking-[0.25em] font-medium text-white/80`
+- Eyebrow (optional): `text-xs uppercase tracking-[0.25em] font-medium text-white/80`.
+  Never one that repeats the name in the logo directly above it: the homepage hero
+  has no eyebrow (Johan chose option B on the 15 Sep design canvas)
 - Headline: `text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.05] text-white`.
   Never above 60px. Never semibold or bold over a picture
 - Description: ONE paragraph at most, `text-sm sm:text-base lg:text-lg text-white/85 max-w-xl`.
