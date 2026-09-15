@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export default function PatternHubQuote() {
   return (
-    <section aria-label="Quote from Dr. Suzanne Ravenall" className="w-full bg-white py-20 lg:py-32">
+    <section aria-label="Quote from Dr. Suzanne Ravenall" className="w-full bg-brand-cream py-20 lg:py-32">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -12,7 +12,7 @@ export default function PatternHubQuote() {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-8xl text-brand-accent/20 leading-none mb-4" aria-hidden="true">
+          <p className="text-8xl text-brand-primary-200 leading-none mb-4" aria-hidden="true">
             &ldquo;
           </p>
           <blockquote>
@@ -21,7 +21,7 @@ export default function PatternHubQuote() {
               have before. Change the pattern, and everything built on top of
               it changes with it.
             </p>
-            <footer className="text-gray-500 text-sm uppercase tracking-[0.2em]">
+            <footer className="text-brand-muted text-sm uppercase tracking-[0.2em]">
               Dr. Suzanne Ravenall
             </footer>
           </blockquote>

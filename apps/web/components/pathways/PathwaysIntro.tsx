@@ -12,7 +12,7 @@ const fadeUp = (delay: number) => ({
   transition: { duration: 0.6, delay, ease: 'easeOut' as const },
 })
 
-// Meta tags for the featured card — sourced from
+// Meta tags for the featured card: sourced from
 // docs/content-source/pathways-overview-cards.md (Break the Loop featured block).
 const FEATURED_META = [
   { label: 'Pathway Type', value: 'Personal' },
@@ -23,25 +23,25 @@ export default function PathwaysIntro() {
   return (
     <section
       aria-labelledby="pathways-intro-heading"
-      className="w-full bg-gray-50 py-20 lg:py-32"
+      className="w-full bg-brand-sand py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-stretch">
-          {/* Left — guided entry framing */}
+          {/* Left: guided entry framing */}
           <motion.div
             {...fadeUp(0)}
-            className="flex flex-col justify-center rounded-card bg-white border border-gray-200 p-8 lg:p-12 shadow-sm"
+            className="flex flex-col justify-center rounded-card bg-white border border-brand-border p-8 lg:p-12 shadow-sm"
           >
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-5">
               A Guided Entry Point
             </p>
             <h2
               id="pathways-intro-heading"
-              className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-5"
+              className="text-3xl lg:text-5xl font-medium tracking-tight text-brand-primary leading-tight mb-5"
             >
               Choose the pathway that meets you where you are
             </h2>
-            <p className="text-base lg:text-lg text-gray-600 font-light leading-relaxed">
+            <p className="text-base lg:text-lg text-brand-muted font-light leading-relaxed">
               Every pathway is built around a distinct transformation theme. Some
               focus on personal breakthrough and pattern interruption, others on
               foundations for children and young people. Think of this as a clear
@@ -50,13 +50,13 @@ export default function PathwaysIntro() {
             </p>
           </motion.div>
 
-          {/* Right — featured pathway card */}
+          {/* Right: featured pathway card */}
           {featuredPathway && (
             <motion.div
               {...fadeUp(0.15)}
-              className="relative flex flex-col justify-center overflow-hidden rounded-card bg-gray-900 p-8 lg:p-12"
+              className="relative flex flex-col justify-center overflow-hidden rounded-card bg-brand-primary-900 p-8 lg:p-12"
             >
-              {/* Background photo + neutral scrim — dark cards carry imagery, never flat colour */}
+              {/* Background photo + neutral scrim: dark cards carry imagery, never flat colour */}
               <Image
                 src="/images/generated/hero-masterclass.webp"
                 alt=""
@@ -67,13 +67,13 @@ export default function PathwaysIntro() {
               />
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-gradient-to-b from-gray-950/85 via-gray-950/60 to-gray-950/90"
+                className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/85 via-black/60 to-black/90"
               />
               <div className="relative z-10">
-                <span className="inline-flex items-center rounded-button bg-gray-950/70 border border-white/40 px-4 py-1.5 text-xs uppercase tracking-[0.2em] font-semibold text-white mb-6">
+                <span className="inline-flex items-center rounded-button bg-black/70 border border-white/40 px-4 py-1.5 text-xs uppercase tracking-[0.2em] font-medium text-white mb-6">
                   Featured Pathway
                 </span>
-                <h3 className="text-3xl lg:text-4xl font-semibold tracking-tight text-white leading-tight mb-4">
+                <h3 className="text-3xl lg:text-4xl font-medium tracking-tight text-white leading-tight mb-4">
                   {featuredPathway.title}
                 </h3>
                 <p className="text-base lg:text-lg text-white/80 font-light leading-relaxed mb-6">
@@ -93,7 +93,7 @@ export default function PathwaysIntro() {
 
                 <Link
                   href={`/transformation-pathways/${featuredPathway.slug}`}
-                  className="group inline-flex items-center gap-3 rounded-button bg-brand-accent px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
+                  className="group inline-flex items-center gap-3 rounded-button bg-white px-7 py-3.5 text-sm font-medium uppercase tracking-[0.2em] text-brand-primary transition-all duration-300 hover:bg-brand-sand hover:shadow-2xl"
                 >
                   View Pathway
                   <span

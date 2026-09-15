@@ -12,7 +12,7 @@ export default function ResourcesHero() {
   return (
     <section
       aria-labelledby="resources-hero-heading"
-      className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden"
+      className="relative w-full bg-brand-sand py-20 lg:py-32 overflow-hidden"
     >
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
@@ -25,14 +25,14 @@ export default function ResourcesHero() {
         <motion.h1
           id="resources-hero-heading"
           {...fadeUp(0.15)}
-          className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary leading-[1.05] max-w-3xl mb-6"
+          className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.05] max-w-3xl mb-6"
         >
           Resources &amp; Insights
         </motion.h1>
 
         <motion.p
           {...fadeUp(0.3)}
-          className="text-lg text-gray-600 font-light max-w-xl leading-relaxed"
+          className="text-lg text-brand-muted font-light max-w-xl leading-relaxed"
         >
           Articles, media appearances, awards and tools to support your transformation journey.
         </motion.p>

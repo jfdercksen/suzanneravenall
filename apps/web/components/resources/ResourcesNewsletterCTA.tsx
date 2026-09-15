@@ -41,7 +41,7 @@ export default function ResourcesNewsletterCTA() {
     <section
       id="newsletter"
       aria-labelledby="newsletter-cta-heading"
-      className="w-full bg-white py-20 lg:py-32"
+      className="w-full bg-brand-cream py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center">
@@ -61,7 +61,7 @@ export default function ResourcesNewsletterCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-6"
+            className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary mb-6"
           >
             Stay Connected
           </motion.h2>
@@ -71,7 +71,7 @@ export default function ResourcesNewsletterCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-gray-600 font-light leading-relaxed mb-10"
+            className="text-brand-muted font-light leading-relaxed mb-10"
           >
             Each month, Dr. Suzanne Ravenall shares insights on consciousness, healing, inner
             regulation and transformation, the kind of wisdom that changes how you see yourself
@@ -85,8 +85,8 @@ export default function ResourcesNewsletterCTA() {
               transition={{ duration: 0.4 }}
               className="bg-brand-accent/10 border border-brand-accent/30 rounded-card p-8"
             >
-              <p className="text-lg font-semibold text-gray-900 mb-2">You&apos;re on the list.</p>
-              <p className="text-gray-600 font-light text-sm">
+              <p className="text-lg font-medium text-brand-ink mb-2">You&apos;re on the list.</p>
+              <p className="text-brand-muted font-light text-sm">
                 Watch your inbox for the next issue.
               </p>
             </motion.div>
@@ -108,7 +108,7 @@ export default function ResourcesNewsletterCTA() {
                 onChange={(e) => setFirstName(e.target.value)}
                 required
                 disabled={state === 'submitting'}
-                className="flex-1 min-w-0 bg-gray-100 border border-gray-200 rounded-xl px-5 py-4 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand-accent transition-all duration-300 disabled:opacity-60"
+                className="flex-1 min-w-0 bg-brand-sand border border-brand-border rounded-xl px-5 py-4 text-brand-ink placeholder-brand-muted text-sm focus:outline-none focus:border-brand-accent transition-all duration-300 disabled:opacity-60"
               />
               <label htmlFor="newsletter-email" className="sr-only">Email address</label>
               <input
@@ -119,12 +119,12 @@ export default function ResourcesNewsletterCTA() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={state === 'submitting'}
-                className="flex-1 min-w-0 bg-gray-100 border border-gray-200 rounded-xl px-5 py-4 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-brand-accent transition-all duration-300 disabled:opacity-60"
+                className="flex-1 min-w-0 bg-brand-sand border border-brand-border rounded-xl px-5 py-4 text-brand-ink placeholder-brand-muted text-sm focus:outline-none focus:border-brand-accent transition-all duration-300 disabled:opacity-60"
               />
               <button
                 type="submit"
                 disabled={state === 'submitting'}
-                className="whitespace-nowrap bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 text-white font-semibold text-sm px-8 py-4 rounded-button transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                className="whitespace-nowrap bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 text-white font-medium text-sm px-8 py-4 rounded-button transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               >
                 {state === 'submitting' ? 'Subscribing…' : 'Subscribe'}
               </button>
@@ -132,7 +132,7 @@ export default function ResourcesNewsletterCTA() {
           )}
 
           {state === 'error' && errorMessage && (
-            <p className="mt-3 text-red-500 text-sm">{errorMessage}</p>
+            <p className="mt-3 text-red-600 text-sm">{errorMessage}</p>
           )}
 
           <motion.p
@@ -140,7 +140,7 @@ export default function ResourcesNewsletterCTA() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-4 text-xs text-gray-500 font-light"
+            className="mt-4 text-xs text-brand-muted font-light"
           >
             No spam. Unsubscribe at any time.
           </motion.p>

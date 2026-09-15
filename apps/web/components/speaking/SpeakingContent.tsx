@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { HEADER_UNDERLINE, PageHeader } from '@/components/shared/PageHeader'
 
 // Suzanne's real, established signature keynote topics — same four talks
 // used in components/services/Speaking.tsx. Taglines are drawn directly
@@ -76,12 +77,6 @@ const personalAudiences = [
   'Coaching and therapy conferences',
 ]
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: 'easeOut' as const },
-})
-
 const scrollFadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
@@ -104,105 +99,49 @@ export default function SpeakingContent() {
 
   return (
     <>
-      {/* ─── 1. Hero — dark, min-h-screen ───────────────────────────────── */}
-      <section
-        aria-labelledby="speaking-hero-heading"
-        className="relative w-full overflow-hidden min-h-screen flex items-center"
+      {/* ─── 1. Header: shared PageHeader, the header rule ──────────────── */}
+      {/* Stage video. The poster has Suzanne in the centre of the frame with
+          the top half clear, so the default left alignment and centre crop
+          apply. The scroll indicator and accent glow are gone. */}
+      <PageHeader
+        id="speaking-hero-heading"
+        eyebrow="Keynote Speaker"
+        video={{
+          src: '/videos/generated/hero-stage-video.mp4',
+          poster: '/images/hero-bg-suzanne-ravenall.jpg',
+        }}
+        title={
+          <>
+            Transform Your Audience{' '}
+            <span className={HEADER_UNDERLINE}>From the Inside Out</span>
+          </>
+        }
+        description={
+          <>
+            Suzanne Ravenall delivers keynote experiences that don&rsquo;t just inspire.
+            They create measurable, lasting change in how people think,
+            lead, and perform.
+          </>
+        }
       >
-        {/* Video background */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          aria-hidden="true"
-          className="absolute inset-0 z-0 w-full h-full object-cover"
-          poster="/images/hero-bg-suzanne-ravenall.jpg"
+        <Link
+          href="/contact"
+          className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
         >
-          <source src="/videos/generated/hero-stage-video.mp4" type="video/mp4" />
-        </video>
-
-        {/* Gradient overlay */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/70 via-brand-primary/50 to-brand-primary"
-        />
-
-        {/* Ambient glow */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute bg-brand-accent/10 blur-[160px] rounded-full w-[500px] h-[500px] top-1/3 left-1/2 -translate-x-1/2" />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-48">
-          <div className="max-w-3xl">
-            <motion.p
-              {...fadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6"
-            >
-              Keynote Speaker
-            </motion.p>
-
-            <motion.h1
-              id="speaking-hero-heading"
-              {...fadeUp(0.1)}
-              className="text-4xl lg:text-6xl font-light text-white leading-[1.05] mb-8"
-            >
-              Transform Your Audience{' '}
-              <span className="text-brand-accent-300">From the Inside Out</span>
-            </motion.h1>
-
-            <motion.p
-              {...fadeUp(0.2)}
-              className="text-lg lg:text-xl text-white/75 font-light leading-relaxed mb-10 max-w-2xl"
-            >
-              Suzanne Ravenall delivers keynote experiences that don&rsquo;t just inspire.
-              They create measurable, lasting change in how people think,
-              lead, and perform.
-            </motion.p>
-
-            <motion.div
-              {...fadeUp(0.3)}
-              className="flex flex-col sm:flex-row gap-4"
-            >
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
-              >
-                Book Suzanne to Speak
-              </Link>
-              <a
-                href="#reel"
-                className="inline-flex items-center justify-center px-8 py-4 border border-white/30 hover:border-white/60 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-colors duration-300"
-              >
-                Watch a Preview &darr;
-              </a>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-          aria-hidden="true"
+          Book Suzanne to Speak
+        </Link>
+        <a
+          href="#reel"
+          className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
         >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <svg className="w-6 h-6 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </motion.div>
-        </motion.div>
-      </section>
+          Watch a Preview &darr;
+        </a>
+      </PageHeader>
 
-      {/* ─── 2. Speaking Topics — light, bg-white ───────────────────────── */}
+      {/* ─── 2. Speaking Topics: light, bg-brand-cream ──────────────────── */}
       <section
         aria-labelledby="topics-heading"
-        className="w-full bg-white py-20 lg:py-32"
+        className="w-full bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -214,7 +153,7 @@ export default function SpeakingContent() {
             </p>
             <h2
               id="topics-heading"
-              className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight"
             >
               Every talk is a pattern interrupt
             </h2>
@@ -225,7 +164,7 @@ export default function SpeakingContent() {
               <motion.article
                 key={talk.title}
                 {...scrollFadeUp(idx * 0.1)}
-                className="group relative overflow-hidden min-h-[260px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
+                className="group relative overflow-hidden min-h-[260px] bg-brand-primary-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl"
               >
                 <Image
                   src="/images/hero-bg-suzanne-ravenall.jpg"
@@ -234,9 +173,9 @@ export default function SpeakingContent() {
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   className="object-cover opacity-15 group-hover:opacity-30 transition-opacity duration-500"
                 />
-                <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-transparent" />
+                <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-black/80 to-transparent" />
                 <div className="relative z-10 p-8 flex flex-col h-full">
-                  <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-brand-accent-400 transition-colors duration-300">
+                  <h3 className="text-xl font-medium text-white mb-2 group-hover:text-brand-accent-400 transition-colors duration-300">
                     {talk.title}
                   </h3>
                   <p className="text-base text-brand-accent-400 font-light italic mb-4 leading-snug">
@@ -253,10 +192,10 @@ export default function SpeakingContent() {
         </div>
       </section>
 
-      {/* ─── 3. Transformation Promise — dark, bg-gray-950 ──────────────── */}
+      {/* ─── 3. Transformation Promise: dark, bg-brand-primary-900 ──────── */}
       <section
         aria-labelledby="promise-heading"
-        className="w-full bg-gray-950 py-20 lg:py-32"
+        className="w-full bg-brand-primary-900 py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...scrollFadeUp(0)} className="max-w-3xl mb-16">
@@ -265,7 +204,7 @@ export default function SpeakingContent() {
             </p>
             <h2
               id="promise-heading"
-              className="text-4xl lg:text-6xl font-light text-white leading-tight"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-tight"
             >
               Audiences leave different
             </h2>
@@ -276,12 +215,12 @@ export default function SpeakingContent() {
               <motion.div
                 key={item.heading}
                 {...scrollFadeUp(idx * 0.1)}
-                className="group flex flex-col gap-5 p-8 bg-gray-900 border border-white/5 rounded-card hover:border-brand-accent/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-accent/5"
+                className="group flex flex-col gap-5 p-8 bg-brand-primary-800 border border-white/5 rounded-card hover:border-white/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
               >
                 <div className="text-brand-accent-400 group-hover:scale-110 transition-transform duration-300 w-fit">
                   {item.icon}
                 </div>
-                <h3 className="text-lg font-semibold text-white">{item.heading}</h3>
+                <h3 className="text-lg font-medium text-white">{item.heading}</h3>
                 <p className="text-sm text-white/60 font-light leading-relaxed">{item.body}</p>
               </motion.div>
             ))}
@@ -289,11 +228,11 @@ export default function SpeakingContent() {
         </div>
       </section>
 
-      {/* ─── 4. Reel / Evidence — light, bg-gray-50 ─────────────────────── */}
+      {/* ─── 4. Reel / Evidence: light, bg-brand-sand ───────────────────── */}
       <section
         id="reel"
         aria-labelledby="reel-heading"
-        className="w-full bg-gray-50 py-20 lg:py-32"
+        className="w-full bg-brand-sand py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...scrollFadeUp(0)} className="max-w-3xl mb-12">
@@ -302,14 +241,14 @@ export default function SpeakingContent() {
             </p>
             <h2
               id="reel-heading"
-              className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight"
             >
               See the transformation in real time
             </h2>
           </motion.div>
 
           {/* Video player */}
-          <motion.div {...scrollFadeUp(0.1)} className="relative w-full rounded-card overflow-hidden bg-gray-900 shadow-2xl">
+          <motion.div {...scrollFadeUp(0.1)} className="relative w-full rounded-card overflow-hidden bg-brand-primary-900 shadow-2xl">
             {/* 16:9 aspect */}
             <div className="relative aspect-video w-full">
               <video
@@ -332,9 +271,9 @@ export default function SpeakingContent() {
                     type="button"
                     onClick={handleReelPlay}
                     aria-label="Play keynote preview"
-                    className="group flex items-center justify-center w-20 h-20 bg-brand-accent hover:bg-brand-accent-700 rounded-full shadow-[0_0_40px_theme(colors.brand.accent/60%)] transition-all duration-300 hover:scale-110"
+                    className="group flex items-center justify-center w-20 h-20 bg-white hover:bg-brand-sand rounded-full shadow-2xl transition-all duration-300 hover:scale-110"
                   >
-                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg className="w-8 h-8 text-brand-primary ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </button>
@@ -357,7 +296,7 @@ export default function SpeakingContent() {
             </div>
 
             {/* Caption */}
-            <div className="px-6 py-4 bg-gray-900">
+            <div className="px-6 py-4 bg-brand-primary-900">
               <p className="text-sm text-white/50 italic">
                 Keynote preview
               </p>
@@ -366,19 +305,19 @@ export default function SpeakingContent() {
 
           {/* TODO: Add real conference logos below the video */}
           <motion.div {...scrollFadeUp(0.2)} className="mt-12">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-gray-400 mb-8 text-center">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-muted mb-8 text-center">
               Trusted by
             </p>
             <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-16">
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="w-32 h-12 bg-gray-200 rounded-card animate-pulse"
+                  className="w-32 h-12 bg-brand-border rounded-card animate-pulse"
                   aria-hidden="true"
                 />
               ))}
             </div>
-            <p className="text-center text-xs text-gray-400 mt-6 italic">
+            <p className="text-center text-xs text-brand-muted mt-6 italic">
               {/* TODO: Replace placeholder logo tiles with real conference/corporate logos */}
               Conference and corporate client logos, to be provided by Suzanne
             </p>
@@ -386,24 +325,19 @@ export default function SpeakingContent() {
         </div>
       </section>
 
-      {/* ─── 5. Audience Types — dark, bg-brand-primary ─────────────────── */}
+      {/* ─── 5. Audience Types: dark, bg-brand-primary ──────────────────── */}
       <section
         aria-labelledby="audience-heading"
         className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
       >
-        {/* Glow blob */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute bg-brand-accent/10 blur-[160px] rounded-full w-[600px] h-[600px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-        </div>
-
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...scrollFadeUp(0)} className="max-w-3xl mb-16">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
               Who Suzanne Speaks To
             </p>
             <h2
               id="audience-heading"
-              className="text-4xl lg:text-6xl font-light text-white leading-tight"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-tight"
             >
               Built for leaders ready to go deeper
             </h2>
@@ -412,9 +346,9 @@ export default function SpeakingContent() {
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Corporate & Executive */}
             <motion.div {...scrollFadeUp(0.1)} className="p-8 bg-white/5 border border-white/10 rounded-card">
-              <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-full bg-brand-accent/20 border border-brand-accent/40 flex items-center justify-center shrink-0">
-                  <svg className="w-4 h-4 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+              <h3 className="text-lg font-medium text-white mb-6 flex items-center gap-3">
+                <span className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+                  <svg className="w-4 h-4 text-brand-accent-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
                   </svg>
                 </span>
@@ -423,7 +357,7 @@ export default function SpeakingContent() {
               <ul className="space-y-3">
                 {corporateAudiences.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-white/70 text-sm font-light">
-                    <svg className="w-4 h-4 text-brand-accent shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                    <svg className="w-4 h-4 text-brand-accent-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                     {item}
@@ -434,9 +368,9 @@ export default function SpeakingContent() {
 
             {/* Personal Growth & Wellness */}
             <motion.div {...scrollFadeUp(0.15)} className="p-8 bg-white/5 border border-white/10 rounded-card">
-              <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-full bg-brand-accent/20 border border-brand-accent/40 flex items-center justify-center shrink-0">
-                  <svg className="w-4 h-4 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+              <h3 className="text-lg font-medium text-white mb-6 flex items-center gap-3">
+                <span className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+                  <svg className="w-4 h-4 text-brand-accent-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
                   </svg>
                 </span>
@@ -445,7 +379,7 @@ export default function SpeakingContent() {
               <ul className="space-y-3">
                 {personalAudiences.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-white/70 text-sm font-light">
-                    <svg className="w-4 h-4 text-brand-accent shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                    <svg className="w-4 h-4 text-brand-accent-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                     {item}
@@ -457,10 +391,10 @@ export default function SpeakingContent() {
         </div>
       </section>
 
-      {/* ─── 6. Testimonials — light, bg-white ──────────────────────────── */}
+      {/* ─── 6. Testimonials: light, bg-brand-cream ─────────────────────── */}
       <section
         aria-labelledby="testimonials-heading"
-        className="w-full bg-white py-20 lg:py-32"
+        className="w-full bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...scrollFadeUp(0)} className="max-w-3xl mb-16">
@@ -469,7 +403,7 @@ export default function SpeakingContent() {
             </p>
             <h2
               id="testimonials-heading"
-              className="text-4xl lg:text-6xl font-light text-brand-primary leading-tight"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight"
             >
               What audiences say
             </h2>
@@ -480,9 +414,9 @@ export default function SpeakingContent() {
               provide real event organiser / attendee quotes. */}
           <motion.div
             {...scrollFadeUp(0.1)}
-            className="max-w-2xl mx-auto text-center p-12 bg-gray-50 border border-gray-100 rounded-card"
+            className="max-w-2xl mx-auto text-center p-12 bg-brand-sand border border-brand-border rounded-card"
           >
-            <p className="text-lg text-gray-600 font-light leading-relaxed">
+            <p className="text-lg text-brand-muted font-light leading-relaxed">
               Speaker testimonials from event organisers and attendees are coming
               soon.
             </p>
@@ -490,28 +424,23 @@ export default function SpeakingContent() {
         </div>
       </section>
 
-      {/* ─── 7. Booking CTA — dark, bg-brand-primary-900 ────────────────── */}
+      {/* ─── 7. Booking CTA: dark, bg-brand-primary-900 ─────────────────── */}
       <section
         aria-labelledby="cta-heading"
         className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
       >
-        {/* Ambient glow */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute bg-brand-accent/10 blur-[180px] rounded-full w-[700px] h-[500px] bottom-0 left-1/4 -translate-x-1/4" />
-        </div>
-
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 items-center">
 
             {/* Left — copy */}
             <div>
-              <motion.p {...scrollFadeUp(0)} className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-6">
+              <motion.p {...scrollFadeUp(0)} className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
                 Book Suzanne
               </motion.p>
               <motion.h2
                 id="cta-heading"
                 {...scrollFadeUp(0.1)}
-                className="text-4xl lg:text-6xl font-light text-white leading-tight mb-6"
+                className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-tight mb-6"
               >
                 Ready to transform your next event?
               </motion.h2>
@@ -529,7 +458,7 @@ export default function SpeakingContent() {
               >
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_0_40px_theme(colors.brand.accent/60%)] animate-[pulse-glow_3s_ease-in-out_infinite]"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 animate-[pulse-glow_3s_ease-in-out_infinite]"
                 >
                   Start the Conversation
                 </Link>
@@ -537,7 +466,7 @@ export default function SpeakingContent() {
                 <button
                   type="button"
                   disabled
-                  className="inline-flex items-center justify-center px-8 py-4 border border-white/10 text-white/30 font-semibold text-sm uppercase tracking-widest rounded-button cursor-not-allowed"
+                  className="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white/50 font-medium text-sm uppercase tracking-widest rounded-button cursor-not-allowed"
                   title="Speaking kit coming soon"
                 >
                   Download Speaking Kit

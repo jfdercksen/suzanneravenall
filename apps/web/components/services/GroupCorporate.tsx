@@ -70,7 +70,7 @@ export default function GroupCorporate() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.6 }}
-      className="relative w-full bg-gray-50 py-20 lg:py-32"
+      className="relative w-full bg-brand-sand py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-16">
@@ -79,11 +79,11 @@ export default function GroupCorporate() {
           </p>
           <h2
             id="group-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-8"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight mb-8"
           >
             Group Sessions &amp; Corporate Wellness Retreats.
           </h2>
-          <p className="text-lg text-gray-600 font-light leading-relaxed">
+          <p className="text-lg text-brand-muted font-light leading-relaxed">
             Through a comfortable, authentic and safe environment, Suzanne runs short
             group series that tackle the key issues affecting most people, getting
             into the unconscious beliefs that disrupt lives and helping participants
@@ -100,7 +100,7 @@ export default function GroupCorporate() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative overflow-hidden min-h-[220px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
+              className="group relative overflow-hidden min-h-[220px] bg-brand-primary-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl"
             >
               <Image
                 src={offering.image}
@@ -111,10 +111,10 @@ export default function GroupCorporate() {
               />
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent"
+                className="absolute inset-0 bg-gradient-to-br from-black/85 via-black/40 to-transparent"
               />
               <div className="relative z-10 p-8">
-                <h3 className="text-xl font-semibold text-white mb-4">
+                <h3 className="text-xl font-medium text-white mb-4">
                   {offering.name}
                 </h3>
                 <p className="text-sm text-white/70 font-light leading-relaxed">
@@ -125,20 +125,20 @@ export default function GroupCorporate() {
           ))}
         </div>
 
-        <div className="mt-16 rounded-card bg-white border border-gray-100 shadow-sm p-10 lg:p-14">
+        <div className="mt-16 rounded-card bg-white border border-brand-border shadow-sm p-10 lg:p-14">
           <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
             For Teams &amp; Organisations
           </p>
-          <h3 className="text-2xl lg:text-4xl font-semibold tracking-tight text-brand-primary mb-6 leading-tight">
+          <h3 className="text-2xl lg:text-4xl font-medium tracking-tight text-brand-primary mb-6 leading-tight">
             Corporate Wellness Retreats: bespoke programmes for your team.
           </h3>
-          <p className="text-gray-600 font-light leading-relaxed mb-8 max-w-3xl">
+          <p className="text-brand-muted font-light leading-relaxed mb-8 max-w-3xl">
             Retreats and in-house series designed around the issues your people carry
             into work every day. {/* [CONFIRM: exact corporate retreat formats, duration, and pricing — scraped page lists offering but no package detail] */}
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
+            className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
           >
             Enquire
           </Link>

@@ -83,7 +83,7 @@ export default function PatternCoachContent() {
   return (
     <>
       {/* ── Section 1: Hero (light) ──────────────────────────────────────── */}
-      <section className="relative w-full bg-white min-h-[70vh] flex items-center py-24 overflow-hidden">
+      <section className="relative w-full bg-brand-cream min-h-[70vh] flex items-center py-24 overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-3xl">
             <motion.p
@@ -99,7 +99,7 @@ export default function PatternCoachContent() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
+              className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight mb-6"
             >
               A Brilliant Coach in Your Pocket:{' '}
               <span className="text-brand-accent">24 Hours a Day</span>
@@ -109,7 +109,7 @@ export default function PatternCoachContent() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-xl text-gray-600 mt-4 max-w-2xl mb-10"
+              className="text-xl text-brand-muted mt-4 max-w-2xl mb-10"
             >
               The moments that shape you rarely happen in a coaching session. The
               Pattern Intelligence Coach&trade; is your always-on AI coach, built on
@@ -127,13 +127,13 @@ export default function PatternCoachContent() {
                 href={APP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-semibold rounded-button transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.5)]"
+                className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
               >
                 Start Your 30-Day Free Trial
               </a>
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 hover:border-brand-primary text-gray-600 hover:text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
+                className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary-300 hover:border-brand-primary text-brand-muted hover:text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
               >
                 Book a Discovery Call
               </Link>
@@ -143,13 +143,13 @@ export default function PatternCoachContent() {
       </section>
 
       {/* ── Section 2: How It Works (light) ─────────────────────────────── */}
-      <section className="w-full bg-gray-50 py-20 lg:py-32">
+      <section className="w-full bg-brand-sand py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="mb-16 text-center">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               How It Works
             </p>
-            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary">
               Three Simple Steps
             </h2>
           </motion.div>
@@ -162,18 +162,18 @@ export default function PatternCoachContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="relative p-8 rounded-card bg-white border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-500"
+                className="relative p-8 rounded-card bg-white border border-brand-border hover:shadow-lg hover:-translate-y-1 transition-all duration-500"
               >
                 <span
                   aria-hidden="true"
-                  className="absolute top-6 right-6 text-6xl font-bold text-brand-accent opacity-20 leading-none select-none"
+                  className="absolute top-6 right-6 text-6xl font-semibold text-brand-primary-200 leading-none select-none"
                 >
                   {step.number}
                 </span>
-                <h3 className="text-gray-900 text-xl font-semibold mb-3 pr-16">
+                <h3 className="text-brand-ink text-xl font-medium mb-3 pr-16">
                   {step.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                <p className="text-brand-muted leading-relaxed">{step.description}</p>
               </motion.div>
             ))}
           </div>
@@ -181,13 +181,13 @@ export default function PatternCoachContent() {
       </section>
 
       {/* ── Section 3: What It Does (light) ─────────────────────────────── */}
-      <section className="relative w-full bg-white py-20 lg:py-32 overflow-hidden">
+      <section className="relative w-full bg-brand-cream py-20 lg:py-32 overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="mb-16 text-center">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               What It Does
             </p>
-            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary">
               Coaching That Never Sleeps
             </h2>
           </motion.div>
@@ -200,13 +200,13 @@ export default function PatternCoachContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="bg-gray-50 rounded-card p-8 hover:shadow-lg hover:-translate-y-1 transition-all duration-500"
+                className="bg-brand-sand rounded-card p-8 hover:shadow-lg hover:-translate-y-1 transition-all duration-500"
               >
-                <div className="w-12 h-12 rounded-card bg-brand-accent/10 flex items-center justify-center mb-6">
+                <div className="w-12 h-12 rounded-card bg-white flex items-center justify-center mb-6">
                   <Icon className="w-6 h-6 text-brand-accent" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-brand-primary text-xl font-semibold mb-3">{title}</h3>
-                <p className="text-gray-600 leading-relaxed">{description}</p>
+                <h3 className="text-brand-primary text-xl font-medium mb-3">{title}</h3>
+                <p className="text-brand-muted leading-relaxed">{description}</p>
               </motion.div>
             ))}
           </div>
@@ -214,13 +214,13 @@ export default function PatternCoachContent() {
       </section>
 
       {/* ── Section 4: Reassurance / FAQ (light) ────────────────────────── */}
-      <section className="w-full bg-gray-50 py-20 lg:py-32">
+      <section className="w-full bg-brand-sand py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="mb-16 text-center">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Good to Know
             </p>
-            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary">
               Before You Start
             </h2>
           </motion.div>
@@ -235,10 +235,10 @@ export default function PatternCoachContent() {
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 className="bg-white rounded-card p-8 hover:shadow-lg transition-all duration-300"
               >
-                <h3 className="text-brand-primary text-lg font-semibold mb-3">
+                <h3 className="text-brand-primary text-lg font-medium mb-3">
                   {item.question}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">{item.answer}</p>
+                <p className="text-brand-muted leading-relaxed">{item.answer}</p>
               </motion.div>
             ))}
           </div>
@@ -246,8 +246,8 @@ export default function PatternCoachContent() {
       </section>
 
       {/* ── Section 5: Final CTA (dark, photo-backed) ───────────────────── */}
-      <section className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden">
-        {/* Background photo + navy overlay — dark sections carry imagery, never flat colour */}
+      <section className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden">
+        {/* Background photo + black overlay: dark sections carry imagery, never flat colour */}
         <Image
           src="/images/generated/session-coaching.webp"
           alt=""
@@ -258,14 +258,14 @@ export default function PatternCoachContent() {
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
+          className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/75 to-black/90"
         />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="max-w-2xl mx-auto text-center">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-4">
               Ready When You Are
             </p>
-            <h2 className="text-4xl lg:text-6xl font-semibold tracking-tight text-white mb-6">
+            <h2 className="text-4xl lg:text-6xl font-medium tracking-tight text-white mb-6">
               Your Coach Is Waiting
             </h2>
             <p className="text-white/80 text-lg mb-10">
@@ -276,7 +276,7 @@ export default function PatternCoachContent() {
               href={APP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-semibold rounded-button transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.5)]"
+              className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
             >
               Start Your 30-Day Free Trial
             </a>

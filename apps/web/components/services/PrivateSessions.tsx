@@ -30,7 +30,7 @@ export default function PrivateSessions() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.6 }}
-      className="relative w-full bg-white py-20 lg:py-32"
+      className="relative w-full bg-brand-cream py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-16">
@@ -39,11 +39,11 @@ export default function PrivateSessions() {
           </p>
           <h2
             id="private-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-8"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight mb-8"
           >
             Private Sessions to unlock the root cause, and go beyond it.
           </h2>
-          <p className="text-lg text-gray-600 font-light leading-relaxed">
+          <p className="text-lg text-brand-muted font-light leading-relaxed">
             Suzanne helps you get to the root cause of the key issues disrupting your
             life, track the patterns through the impact, and break through into self
             mastery. You close the gap from where you are to where you want to be.
@@ -58,7 +58,7 @@ export default function PrivateSessions() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative overflow-hidden min-h-[220px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
+              className="group relative overflow-hidden min-h-[220px] bg-brand-primary-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl"
             >
               <Image
                 src={sessionImages[session.slug] ?? fallbackImage}
@@ -69,10 +69,10 @@ export default function PrivateSessions() {
               />
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent"
+                className="absolute inset-0 bg-gradient-to-br from-black/85 via-black/40 to-transparent"
               />
               <div className="relative z-10 flex h-full flex-col p-8">
-                <h3 className="text-xl font-semibold text-white mb-4">
+                <h3 className="text-xl font-medium text-white mb-4">
                   {session.title}
                 </h3>
                 <p className="text-sm text-white/70 font-light leading-relaxed">
@@ -80,7 +80,7 @@ export default function PrivateSessions() {
                 </p>
                 <Link
                   href={`/services/private-sessions/${session.slug}`}
-                  className="mt-auto pt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/80 transition-colors duration-300 hover:text-white"
+                  className="mt-auto pt-6 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-white/80 transition-colors duration-300 hover:text-white"
                 >
                   More Information
                   <span
@@ -98,7 +98,7 @@ export default function PrivateSessions() {
         <div className="mt-16 flex justify-center">
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
+            className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
           >
             Book Discovery Call
           </Link>

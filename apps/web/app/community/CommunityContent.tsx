@@ -91,7 +91,7 @@ export default function CommunityContent() {
     <main className="w-full">
 
       {/* ── Section 1: Hero (light) ─────────────────────────────────────── */}
-      <section className="relative w-full bg-gray-50 min-h-screen flex items-center py-20 lg:py-32 overflow-hidden">
+      <section className="relative w-full bg-brand-sand min-h-screen flex items-center py-20 lg:py-32 overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-3xl">
 
@@ -103,10 +103,10 @@ export default function CommunityContent() {
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
                 Community
               </p>
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary mb-6 leading-[1.05]">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-brand-primary mb-6 leading-[1.05]">
                 Your Transformation<br />Community
               </h1>
-              <p className="text-xl text-gray-600 mb-12 leading-relaxed max-w-2xl">
+              <p className="text-xl text-brand-muted mb-12 leading-relaxed max-w-2xl">
                 A private space for members to connect, share breakthroughs, and support
                 each other&apos;s journey. Coming soon.
               </p>
@@ -119,7 +119,7 @@ export default function CommunityContent() {
               transition={{ duration: 0.6, delay: 0.15 }}
               className="mb-16"
             >
-              <p className="text-brand-primary font-semibold mb-4">
+              <p className="text-brand-primary font-medium mb-4">
                 Be the first to know when we launch
               </p>
 
@@ -143,12 +143,12 @@ export default function CommunityContent() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
                     disabled={state === 'loading'}
-                    className="flex-1 px-5 py-3.5 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-brand-accent transition-colors duration-200 disabled:opacity-60"
+                    className="flex-1 px-5 py-3.5 bg-white border border-brand-border rounded-xl text-brand-ink placeholder:text-brand-muted focus:outline-none focus:border-brand-accent transition-colors duration-200 disabled:opacity-60"
                   />
                   <button
                     type="submit"
                     disabled={state === 'loading'}
-                    className="px-6 py-3.5 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-colors duration-300 disabled:opacity-60 whitespace-nowrap"
+                    className="px-6 py-3.5 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium rounded-button transition-colors duration-300 disabled:opacity-60 whitespace-nowrap"
                   >
                     {state === 'loading' ? 'Sending…' : 'Notify me'}
                   </button>
@@ -156,7 +156,7 @@ export default function CommunityContent() {
               )}
 
               {state === 'error' && errorMessage && (
-                <p className="mt-3 text-red-500 text-sm">{errorMessage}</p>
+                <p className="mt-3 text-red-600 text-sm">{errorMessage}</p>
               )}
             </motion.div>
 
@@ -168,7 +168,7 @@ export default function CommunityContent() {
             >
               <Link
                 href="/portal/dashboard"
-                className="inline-flex items-center gap-2 text-brand-accent hover:text-brand-accent-700 font-semibold transition-colors duration-300 group"
+                className="inline-flex items-center gap-2 text-brand-accent hover:text-brand-accent-700 font-medium transition-colors duration-300 group"
               >
                 <svg
                   aria-hidden="true"
@@ -189,7 +189,7 @@ export default function CommunityContent() {
       </section>
 
       {/* ── Section 2: Explore (light) ──────────────────────────────────── */}
-      <section className="w-full bg-white py-20 lg:py-32">
+      <section className="w-full bg-brand-cream py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -201,7 +201,7 @@ export default function CommunityContent() {
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               While you wait
             </p>
-            <h2 className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-3xl lg:text-4xl font-medium tracking-tight text-brand-primary">
               Explore what&apos;s available now
             </h2>
           </motion.div>
@@ -217,10 +217,10 @@ export default function CommunityContent() {
               >
                 <Link
                   href={item.href}
-                  className="group flex flex-col gap-3 p-6 bg-gray-50 hover:bg-gray-100 rounded-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg h-full"
+                  className="group flex flex-col gap-3 p-6 border border-brand-border hover:border-brand-primary-300 hover:bg-brand-sand rounded-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg h-full"
                 >
-                  <h3 className="text-gray-900 font-semibold">{item.label}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed flex-1">{item.description}</p>
+                  <h3 className="text-brand-ink font-medium">{item.label}</h3>
+                  <p className="text-brand-muted text-sm leading-relaxed flex-1">{item.description}</p>
                   <span className="inline-flex items-center gap-1 text-brand-accent text-sm font-medium group-hover:gap-2 transition-all duration-300">
                     Explore
                     <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -235,7 +235,7 @@ export default function CommunityContent() {
       </section>
 
       {/* ── Section 3: Feature preview (light) ─────────────────────────── */}
-      <section className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden">
+      <section className="relative w-full bg-brand-sand py-20 lg:py-32 overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -247,7 +247,7 @@ export default function CommunityContent() {
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               What&apos;s coming
             </p>
-            <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-3xl lg:text-5xl font-medium tracking-tight text-brand-primary">
               Built for your growth
             </h2>
           </motion.div>
@@ -260,13 +260,13 @@ export default function CommunityContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
-                className="p-6 bg-white border border-gray-100 rounded-card"
+                className="p-6 bg-white border border-brand-border rounded-card"
               >
-                <div className="w-10 h-10 rounded-card bg-brand-accent/10 flex items-center justify-center text-brand-accent mb-4">
+                <div className="w-10 h-10 rounded-card bg-brand-sand flex items-center justify-center text-brand-accent mb-4">
                   {feature.icon}
                 </div>
-                <h3 className="text-brand-primary font-semibold mb-2">{feature.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
+                <h3 className="text-brand-primary font-medium mb-2">{feature.title}</h3>
+                <p className="text-brand-muted text-sm leading-relaxed">{feature.description}</p>
               </motion.div>
             ))}
           </div>

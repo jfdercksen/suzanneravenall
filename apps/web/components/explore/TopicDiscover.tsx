@@ -7,7 +7,7 @@ export default function TopicDiscover({ topic }: { topic: Topic }) {
   return (
     <section
       aria-labelledby="topic-discover-heading"
-      className="w-full bg-white py-20 lg:py-32"
+      className="w-full bg-brand-cream py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
@@ -23,14 +23,14 @@ export default function TopicDiscover({ topic }: { topic: Topic }) {
           </p>
           <h2
             id="topic-discover-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight"
           >
             Life after{' '}
             <span className="text-brand-accent">repatterning</span>
           </h2>
         </motion.div>
 
-        {/* Dark cards grid */}
+        {/* Sand cards grid */}
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {topic.discover.map((item, index) => (
             <motion.li
@@ -43,7 +43,7 @@ export default function TopicDiscover({ topic }: { topic: Topic }) {
                 delay: index * 0.1,
                 ease: 'easeOut',
               }}
-              className="group relative rounded-card bg-gray-50 border border-gray-100 border-t-2 border-t-brand-accent p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-accent/10 overflow-hidden"
+              className="group relative rounded-card bg-brand-sand border border-brand-border border-t-2 border-t-brand-accent p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl overflow-hidden"
             >
               {/* Large number background accent */}
               <span
@@ -62,7 +62,7 @@ export default function TopicDiscover({ topic }: { topic: Topic }) {
                 {item.title}
               </h3>
 
-              <p className="text-sm text-gray-600 font-light leading-relaxed">
+              <p className="text-sm text-brand-muted font-light leading-relaxed">
                 {item.body}
               </p>
             </motion.li>

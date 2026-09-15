@@ -9,9 +9,9 @@ export default function PatternHubFinalCta() {
   return (
     <section
       aria-labelledby="pattern-hub-final-cta-heading"
-      className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
+      className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
     >
-      {/* Background photo + navy overlay — dark sections carry imagery, never flat colour */}
+      {/* Background photo + black overlay: dark sections carry imagery, never flat colour */}
       <Image
         src="/images/generated/group-coaching-real.webp"
         alt=""
@@ -22,7 +22,7 @@ export default function PatternHubFinalCta() {
       />
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
+        className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/75 to-black/90"
       />
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
@@ -33,7 +33,7 @@ export default function PatternHubFinalCta() {
         >
           <h2
             id="pattern-hub-final-cta-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-4"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.05] mb-4"
           >
             Start Where It Speaks to You
           </h2>
@@ -43,7 +43,7 @@ export default function PatternHubFinalCta() {
           </p>
           <Link
             href={masterPatternQuizUrl}
-            className="inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white font-medium text-base rounded-button transition-colors duration-300"
+            className="inline-flex items-center justify-center px-10 py-5 bg-white hover:bg-brand-sand text-brand-primary font-medium text-base rounded-button transition-colors duration-300"
           >
             Take Your First Diagnostic
           </Link>

@@ -1,116 +1,47 @@
-'use client'
-
-import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { HEADER_UNDERLINE, PageHeader } from '@/components/shared/PageHeader'
 
-// Hero animations fire on mount (not scroll) — intentional for the first section on screen.
-const fadeUp = (delay: number) => ({
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.8, delay, ease: 'easeOut' as const },
-})
-
+// Header: shared PageHeader, the header rule. The video is the client
+// transformation montage; the poster is the stage photo with Suzanne in the
+// centre of the frame, so the default left alignment and centre crop apply.
+// The desktop-only portrait card that sat beside the copy is gone: the
+// picture is the header.
 export default function ServicesHero() {
   return (
-    <section
-      id="hero"
-      aria-labelledby="services-hero-heading"
-      className="relative min-h-[600px] lg:min-h-[calc(100vh-5rem)] flex items-center overflow-hidden"
+    <PageHeader
+      id="services-hero-heading"
+      eyebrow="Services with Dr. Suzanne Ravenall"
+      video={{
+        src: '/videos/generated/hero-services-testimonials.mp4',
+        poster: '/images/hero-bg-suzanne-ravenall.jpg',
+      }}
+      title={
+        <>
+          Unlock your life{' '}
+          <span className={HEADER_UNDERLINE}>and potential.</span>
+        </>
+      }
+      description={
+        <>
+          Through a comfortable, authentic and safe environment, Suzanne helps you
+          get to the root cause of key issues that disrupt life, track the patterns
+          through the impact and then helps you break through and go beyond these
+          challenges and into self mastery.
+        </>
+      }
     >
-      {/* Cinematic background video — client transformation montage (faces, crossfading) */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover"
-        poster="/images/hero-bg-suzanne-ravenall.jpg"
+      <Link
+        href="#private"
+        className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
       >
-        <source src="/videos/generated/hero-services-testimonials.mp4" type="video/mp4" />
-      </video>
-
-      {/* Dark gradient overlay */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/30"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60"
-      />
-
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-12">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left — copy */}
-          <div>
-            <motion.p
-              {...fadeUp(0)}
-              className="text-xs tracking-[0.3em] text-white/80 uppercase font-medium mb-4 lg:mb-6"
-            >
-              Services with Dr. Suzanne Ravenall
-            </motion.p>
-
-            <motion.h1
-              id="services-hero-heading"
-              {...fadeUp(0.15)}
-              className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-4 lg:mb-8"
-            >
-              Unlock your life{' '}
-              <span className="underline decoration-brand-accent-400 decoration-[5px] underline-offset-8">and potential.</span>
-            </motion.h1>
-
-            <motion.p
-              {...fadeUp(0.3)}
-              className="text-lg lg:text-xl text-white/90 max-w-xl mb-6 lg:mb-8 leading-relaxed"
-            >
-              Through a comfortable, authentic and safe environment, Suzanne helps you
-              get to the root cause of key issues that disrupt life, track the patterns
-              through the impact and then helps you break through and go beyond these
-              challenges and into self mastery.
-            </motion.p>
-
-            <motion.div {...fadeUp(0.45)} className="flex flex-wrap gap-3 lg:gap-4">
-              <Link
-                href="#private"
-                className="inline-flex items-center justify-center px-6 py-3.5 lg:px-8 lg:py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
-              >
-                Find Your Path
-              </Link>
-              <Link
-                href="/explore"
-                className="inline-flex items-center justify-center px-6 py-3.5 lg:px-8 lg:py-4 border border-white/40 hover:border-white text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/5"
-              >
-                Explore the Method
-              </Link>
-            </motion.div>
-          </div>
-
-          {/* Right — Suzanne portrait. Desktop only; right column, vertically centered. */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
-            className="hidden lg:flex justify-end items-center"
-          >
-            <div className="relative w-[420px] h-[520px] max-h-[calc(100vh-16rem)] rounded-card overflow-hidden shadow-2xl border border-white/10">
-              <Image
-                src="/images/suzanne-portrait.jpg"
-                alt="Dr. Suzanne Ravenall"
-                fill
-                sizes="420px"
-                // Suzanne sits upper-left in this landscape portrait — left-top keeps her face in frame
-                className="object-cover object-left-top"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"
-              />
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
+        Find Your Path
+      </Link>
+      <Link
+        href="/explore"
+        className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
+      >
+        Explore the Method
+      </Link>
+    </PageHeader>
   )
 }

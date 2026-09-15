@@ -13,7 +13,7 @@ export default function TopicRelated({ slug }: { slug: TopicSlug }) {
   return (
     <section
       aria-labelledby="topic-related-heading"
-      className="w-full bg-gray-50 py-20 lg:py-32"
+      className="w-full bg-brand-sand py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -28,7 +28,7 @@ export default function TopicRelated({ slug }: { slug: TopicSlug }) {
           </p>
           <h2
             id="topic-related-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight"
           >
             Patterns rarely live in{' '}
             <span className="text-brand-accent">isolation</span>
@@ -46,7 +46,7 @@ export default function TopicRelated({ slug }: { slug: TopicSlug }) {
             >
               <Link
                 href={`/explore/${topic.slug}`}
-                className="group relative flex h-full flex-col overflow-hidden rounded-card transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/40 min-h-[280px]"
+                className="group relative flex h-full flex-col overflow-hidden rounded-card bg-brand-primary-900 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/40 min-h-[280px]"
               >
                 {/* Topic image fill */}
                 <Image
@@ -57,7 +57,7 @@ export default function TopicRelated({ slug }: { slug: TopicSlug }) {
                   className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                 />
 
-                {/* Dark gradient overlay — stronger at bottom */}
+                {/* Dark gradient overlay: stronger at bottom */}
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 transition-opacity duration-500 group-hover:from-black/95 group-hover:via-black/55"

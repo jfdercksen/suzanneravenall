@@ -14,7 +14,7 @@ export default function TopicRecognition({ topic }: { topic: Topic }) {
   return (
     <section
       aria-labelledby="topic-recognition-heading"
-      className="relative w-full bg-white overflow-hidden py-20 lg:py-32"
+      className="relative w-full bg-brand-cream overflow-hidden py-20 lg:py-32"
     >
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
@@ -26,7 +26,7 @@ export default function TopicRecognition({ topic }: { topic: Topic }) {
         <motion.h2
           id="topic-recognition-heading"
           {...fadeUp(0.1)}
-          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight text-center max-w-3xl mx-auto mb-16 lg:mb-20"
+          className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight text-center max-w-3xl mx-auto mb-16 lg:mb-20"
         >
           You Might Recognise This&hellip;
         </motion.h2>
@@ -42,7 +42,7 @@ export default function TopicRecognition({ topic }: { topic: Topic }) {
                 aria-hidden="true"
                 className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent"
               />
-              <span className="text-lg text-gray-600 font-light leading-relaxed">
+              <span className="text-lg text-brand-muted font-light leading-relaxed">
                 {item}
               </span>
             </motion.li>

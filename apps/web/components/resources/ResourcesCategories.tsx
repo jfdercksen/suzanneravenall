@@ -83,7 +83,7 @@ const cardVariants = {
 
 export default function ResourcesCategories() {
   return (
-    <section aria-labelledby="categories-heading" className="w-full bg-white py-20 lg:py-32">
+    <section aria-labelledby="categories-heading" className="w-full bg-brand-cream py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -101,7 +101,7 @@ export default function ResourcesCategories() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-12"
+          className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary mb-12"
         >
           Everything in one place
         </motion.h2>
@@ -117,7 +117,7 @@ export default function ResourcesCategories() {
             <motion.div key={label} variants={cardVariants}>
               <Link
                 href={href}
-                className="group relative flex flex-col bg-gray-50 rounded-card p-8 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 h-full"
+                className="group relative flex flex-col border border-brand-border hover:border-brand-primary-300 rounded-card p-8 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 h-full"
               >
                 {badge && (
                   <span className="absolute top-6 right-6 text-xs font-medium uppercase tracking-wider bg-brand-accent/20 text-brand-accent rounded-full px-3 py-1">
@@ -133,9 +133,9 @@ export default function ResourcesCategories() {
                   {label}
                 </p>
 
-                <h3 className="text-xl font-semibold text-gray-900 mb-3 leading-snug">{title}</h3>
+                <h3 className="text-xl font-medium text-brand-ink mb-3 leading-snug">{title}</h3>
 
-                <p className="text-sm text-gray-500 font-light leading-relaxed flex-1">
+                <p className="text-sm text-brand-muted font-light leading-relaxed flex-1">
                   {description}
                 </p>
 

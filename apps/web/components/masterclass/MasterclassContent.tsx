@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Target, Users, Zap } from 'lucide-react'
+import { HEADER_UNDERLINE, PageHeader } from '@/components/shared/PageHeader'
 import EmailCaptureForm from './EmailCaptureForm'
 
 const outcomes = [
@@ -90,71 +91,63 @@ const sectionFadeUp = {
 export default function MasterclassContent() {
   return (
     <>
-      {/* ── Section 1: Hero (dark) ───────────────────────────────────────── */}
-      <section className="relative w-full bg-brand-primary min-h-[60vh] flex items-center py-24 overflow-hidden">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          aria-hidden="true"
-          className="absolute inset-0 z-0 w-full h-full object-cover opacity-25"
-          poster="/images/generated/hero-masterclass.webp"
-        >
-          <source src="/videos/generated/hero-brain-video.mp4" type="video/mp4" />
-        </video>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="max-w-2xl">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
-            >
-              Free Masterclass
-            </motion.p>
+      {/* ── Section 1: Header, shared PageHeader (the header rule) ───────── */}
+      {/* Brain video: Suzanne stands on the left of the frame and the brain on
+          the right, so the text takes the right-hand column from sm and the
+          phone crop leans left to keep her face in the 320px picture. The
+          poster (Suzanne centred) still clears both. */}
+      <PageHeader
+        id="masterclass-hero-heading"
+        eyebrow="Free Masterclass"
+        align="right"
+        mobileCrop="object-[25%_50%]"
+        video={{
+          src: '/videos/generated/hero-brain-video.mp4',
+          poster: '/images/generated/hero-masterclass.webp',
+        }}
+        title={
+          <>
+            Unlock Your Most Extraordinary Self and Become an{' '}
+            <span className={HEADER_UNDERLINE}>Unstoppable Force</span>
+          </>
+        }
+        description={
+          <>
+            Discover the pattern, decode and disrupt it, then rewire your mind and
+            nervous system to create radical inner and outer transformation. This
+            free masterclass is designed as a taster: your first experience of
+            working at the pattern level before going deeper.
+          </>
+        }
+      />
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-tight mb-6"
-            >
-              Unlock Your Most Extraordinary Self and Become an{' '}
-              <span className="underline decoration-brand-accent-400 decoration-4 underline-offset-8">Unstoppable Force</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-xl text-white/80 mt-4 max-w-2xl mb-10"
-            >
-              Discover the pattern, decode and disrupt it, then rewire your mind and
-              nervous system to create radical inner and outer transformation. This
-              free masterclass is designed as a taster: your first experience of
-              working at the pattern level before going deeper.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <EmailCaptureForm />
-            </motion.div>
-          </div>
+      {/* ── Section 1b: Sign-up form, black band under the header ──────── */}
+      {/* A form is more than a CTA row, so the header rule moves it out of
+          the picture. Same form as before. */}
+      <section
+        aria-label="Masterclass sign-up"
+        className="w-full bg-brand-primary-900 border-t border-white/10 py-8"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="max-w-2xl"
+          >
+            <EmailCaptureForm />
+          </motion.div>
         </div>
       </section>
 
       {/* ── Section 2: What You'll Discover (light) ─────────────────────── */}
-      <section className="w-full bg-white py-20 lg:py-32">
+      <section className="w-full bg-brand-cream py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="mb-16 text-center">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               What You&rsquo;ll Learn
             </p>
-            <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-3xl lg:text-5xl font-medium tracking-tight text-brand-primary">
               Inside This Free Masterclass
             </h2>
           </motion.div>
@@ -167,18 +160,18 @@ export default function MasterclassContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="relative p-8 rounded-card bg-gray-50 group hover:shadow-lg hover:-translate-y-1 transition-all duration-500"
+                className="relative p-8 rounded-card bg-brand-sand group hover:shadow-lg hover:-translate-y-1 transition-all duration-500"
               >
                 <span
                   aria-hidden="true"
-                  className="absolute top-6 right-6 text-6xl font-bold text-brand-accent opacity-20 leading-none select-none"
+                  className="absolute top-6 right-6 text-6xl font-semibold text-brand-accent opacity-20 leading-none select-none"
                 >
                   {item.number}
                 </span>
-                <h3 className="text-gray-900 text-xl font-semibold mb-3 pr-16">
+                <h3 className="text-brand-ink text-xl font-medium mb-3 pr-16">
                   {item.headline}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">{item.description}</p>
+                <p className="text-brand-muted leading-relaxed">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -186,13 +179,13 @@ export default function MasterclassContent() {
       </section>
 
       {/* ── Section 3: Who This Is For (light) ──────────────────────────── */}
-      <section className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden">
+      <section className="relative w-full bg-brand-sand py-20 lg:py-32 overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="mb-16 text-center">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Is This for You?
             </p>
-            <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-3xl lg:text-5xl font-medium tracking-tight text-brand-primary">
               This Masterclass Is Perfect If&hellip;
             </h2>
           </motion.div>
@@ -205,13 +198,13 @@ export default function MasterclassContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="bg-white border border-gray-100 rounded-card p-8 hover:shadow-lg hover:-translate-y-1 transition-all duration-500"
+                className="bg-white border border-brand-border rounded-card p-8 hover:shadow-lg hover:-translate-y-1 transition-all duration-500"
               >
                 <div className="w-12 h-12 rounded-card bg-brand-accent/10 flex items-center justify-center mb-6">
                   <Icon className="w-6 h-6 text-brand-accent" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-brand-primary text-xl font-semibold mb-3">{title}</h3>
-                <p className="text-gray-600 leading-relaxed">{description}</p>
+                <h3 className="text-brand-primary text-xl font-medium mb-3">{title}</h3>
+                <p className="text-brand-muted leading-relaxed">{description}</p>
               </motion.div>
             ))}
           </div>
@@ -219,34 +212,34 @@ export default function MasterclassContent() {
       </section>
 
       {/* ── Section 4: About Suzanne (light) ────────────────────────────── */}
-      <section className="w-full bg-white py-20 lg:py-32">
+      <section className="w-full bg-brand-cream py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="max-w-3xl">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Your Host
             </p>
-            <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-8">
+            <h2 className="text-3xl lg:text-5xl font-medium tracking-tight text-brand-primary mb-8">
               Dr. Suzanne Ravenall
             </h2>
-            <p className="text-gray-700 text-lg leading-relaxed mb-4">
+            <p className="text-brand-ink text-lg leading-relaxed mb-4">
               Dr. Suzanne Ravenall (B.Msc. M.Msc. Msc.D.) is a multiple award-winning
               transformation and performance coach, speaker, and entrepreneur with decades
               of experience working with individuals, executives, and corporations across
               four continents.
             </p>
-            <p className="text-gray-700 text-lg leading-relaxed mb-4">
+            <p className="text-brand-ink text-lg leading-relaxed mb-4">
               Her expertise spans neuroscience-informed coaching, Resonance Repatterning,
               and conscious engineering, a unique approach that addresses the root causes
               of limitation rather than just the symptoms.
             </p>
-            <p className="text-gray-700 text-lg leading-relaxed mb-8">
+            <p className="text-brand-ink text-lg leading-relaxed mb-8">
               Suzanne has been featured in leading publications and recognised with
               multiple business excellence awards for her profound impact on the people
               she works with around the world.
             </p>
             <Link
               href="/about"
-              className="inline-flex items-center text-brand-accent font-semibold hover:underline transition-all duration-300"
+              className="inline-flex items-center text-brand-accent font-medium hover:underline transition-all duration-300"
             >
               Learn more about Suzanne &rarr;
             </Link>
@@ -255,13 +248,13 @@ export default function MasterclassContent() {
       </section>
 
       {/* ── Section 5: Social Proof (light) ─────────────────────────────── */}
-      <section className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden">
+      <section className="relative w-full bg-brand-sand py-20 lg:py-32 overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="mb-16 text-center">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               What People Say
             </p>
-            <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary">
+            <h2 className="text-3xl lg:text-5xl font-medium tracking-tight text-brand-primary">
               Real Results, Real People
             </h2>
           </motion.div>
@@ -274,14 +267,14 @@ export default function MasterclassContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="bg-white border border-gray-100 rounded-card p-8"
+                className="bg-white border border-brand-border rounded-card p-8"
               >
-                <blockquote className="italic text-gray-600 leading-relaxed mb-6">
+                <blockquote className="italic text-brand-muted leading-relaxed mb-6">
                   &ldquo;{quote}&rdquo;
                 </blockquote>
-                <figcaption className="text-brand-primary font-semibold text-sm">
+                <figcaption className="text-brand-primary font-medium text-sm">
                   {name}
-                  <span className="text-gray-500 font-normal">, {location}</span>
+                  <span className="text-brand-muted font-normal">, {location}</span>
                 </figcaption>
               </motion.figure>
             ))}
@@ -290,20 +283,20 @@ export default function MasterclassContent() {
       </section>
 
       {/* ── Section 6: Second CTA (light) ───────────────────────────────── */}
-      <section className="w-full bg-white py-20 lg:py-32">
+      <section className="w-full bg-brand-cream py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...sectionFadeUp} className="max-w-2xl mx-auto text-center">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Ready to Begin?
             </p>
-            <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-4">
+            <h2 className="text-3xl lg:text-5xl font-medium tracking-tight text-brand-primary mb-4">
               Your Transformation Starts Here
             </h2>
-            <p className="text-gray-600 text-lg mb-10">
+            <p className="text-brand-muted text-lg mb-10">
               Join thousands of people who have already taken the first step.
             </p>
             <EmailCaptureForm variant="light" />
-            <p className="mt-4 text-gray-500 text-xs">
+            <p className="mt-4 text-brand-muted text-xs">
               Free. Takes 2 minutes. You can unsubscribe anytime.
             </p>
           </motion.div>

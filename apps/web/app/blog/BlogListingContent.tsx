@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
+import { PageHeader } from '@/components/shared/PageHeader'
 import type { BlogPost } from '@/types/payload'
 
 interface BlogListingContentProps {
@@ -30,56 +31,37 @@ function getExcerpt(post: BlogPost): string {
 export function ComingSoonSection() {
   return (
     <>
-      {/* Hero */}
-      <section className="relative min-h-[60vh] flex items-center bg-brand-primary-900 overflow-hidden py-20 lg:py-32">
-        {/* Background image with lightened overlay so image is visible */}
-        <div className="absolute inset-0" aria-hidden="true">
-          <Image
-            src="/images/suzanne-casual.jpg"
-            alt=""
-            fill
-            className="object-cover object-top"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
-        </div>
-
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-4">
-              Insights & Inspiration
-            </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white mb-6">
-              Our Blog is Launching Soon
-            </h1>
-            <p className="text-lg text-white/80 max-w-xl mx-auto mb-10">
-              Insights on transformation, pattern mastery, and the science of lasting change.
-              Subscribe to be the first to know when we go live.
-            </p>
-            <Link
-              href="/contact"
-              className="inline-block bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium px-8 py-4 rounded-button transition-all duration-300"
-            >
-              Stay Updated
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+      {/* Header: shared PageHeader, the header rule. The old photo
+          (suzanne-casual.jpg) has Suzanne in the middle of the frame, so any
+          text band crossed her face; this one has her on the left, so the text
+          takes the right-hand column (as on the blog posts). */}
+      <PageHeader
+        id="blog-coming-soon-heading"
+        eyebrow="Insights & Inspiration"
+        image="/images/suzanne-ravenall.jpg"
+        mobileCrop="object-left"
+        align="right"
+        title="Our Blog is Launching Soon"
+        description={
+          <>
+            Insights on transformation, pattern mastery, and the science of lasting change.
+            Subscribe to be the first to know when we go live.
+          </>
+        }
+      >
+        <Link
+          href="/contact"
+          className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
+        >
+          Stay Updated
+        </Link>
+      </PageHeader>
 
       {/* Final CTA */}
       <section
         aria-labelledby="coming-soon-cta-heading"
-        className="relative w-full bg-white py-20 lg:py-32 overflow-hidden"
+        className="relative w-full bg-brand-cream py-20 lg:py-32 overflow-hidden"
       >
-        <div
-          aria-hidden="true"
-          className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-brand-accent/10 blur-[120px]"
-        />
-
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -97,7 +79,7 @@ export function ComingSoonSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-6"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-6"
           >
             Ready to Transform Your Life?
           </motion.h2>
@@ -107,7 +89,7 @@ export function ComingSoonSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-gray-600 text-lg font-light leading-relaxed mb-10"
+            className="text-brand-muted text-lg font-light leading-relaxed mb-10"
           >
             Book a free discovery call with Dr. Suzanne Ravenall and find your path to lasting change.
           </motion.p>
@@ -123,13 +105,13 @@ export function ComingSoonSection() {
               href={`${CAL_URL}/suzanneravenall/discovery-call`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-10 py-4 bg-brand-primary hover:bg-brand-primary-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_8px_30px_theme(colors.brand.primary/30%)]"
+              className="inline-flex items-center justify-center px-10 py-4 bg-brand-primary hover:bg-brand-primary-700 text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_8px_30px_theme(colors.brand.primary/30%)]"
             >
               Book Discovery Call &rarr;
             </a>
             <Link
               href="/programs"
-              className="inline-flex items-center justify-center px-10 py-4 border border-brand-primary/30 hover:border-brand-primary text-brand-primary font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300"
+              className="inline-flex items-center justify-center px-10 py-4 border border-brand-primary/30 hover:border-brand-primary text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
             >
               Explore Programmes &rarr;
             </Link>
@@ -165,7 +147,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
       {/* Hero */}
       <motion.section
         aria-labelledby="blog-hero-heading"
-        className="relative py-20 lg:py-32 bg-gray-50 overflow-hidden"
+        className="relative py-20 lg:py-32 bg-brand-sand overflow-hidden"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -176,11 +158,11 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
           </p>
           <h1
             id="blog-hero-heading"
-            className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary"
+            className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-brand-primary"
           >
             The Blog
           </h1>
-          <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-6 text-lg text-brand-muted max-w-2xl mx-auto">
             Science-backed perspectives on transformation, pattern mastery, and the art of
             becoming who you were always meant to be.
           </p>
@@ -189,7 +171,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
 
       {/* Tag filter bar */}
       {allTags.length > 0 && (
-        <section className="bg-white border-b border-gray-100 sticky top-16 lg:top-20 z-20">
+        <section className="bg-brand-primary-900 border-b border-white/10 sticky top-16 lg:top-20 z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-wrap gap-2 py-4">
               {['All', ...allTags].map((tag) => (
@@ -198,8 +180,8 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
                   onClick={() => setActiveTag(tag)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                     activeTag === tag
-                      ? 'bg-brand-accent text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-white text-brand-primary'
+                      : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white'
                   }`}
                 >
                   {tag}
@@ -211,14 +193,14 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
       )}
 
       {/* Post grid */}
-      <section className="py-20 lg:py-32 bg-white">
+      <section className="py-20 lg:py-32 bg-brand-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filtered.length === 0 ? (
             <motion.p
               key={activeTag}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center text-gray-500 text-lg py-16"
+              className="text-center text-brand-muted text-lg py-16"
             >
               No posts found for &ldquo;{activeTag}&rdquo;.
             </motion.p>
@@ -231,7 +213,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '0px' }}
                   transition={{ duration: 0.6, delay: (index % 3) * 0.1 }}
-                  className="group bg-white rounded-card overflow-hidden border border-gray-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
+                  className="group bg-white rounded-card overflow-hidden border border-brand-border hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
                 >
                   {/* Featured image */}
                   <Link href={`/blog/${post.slug}`} className="block relative aspect-[16/9] overflow-hidden">
@@ -263,20 +245,20 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
                     )}
 
                     <Link href={`/blog/${post.slug}`}>
-                      <h2 className="text-xl font-semibold text-gray-900 group-hover:text-brand-accent transition-colors duration-300 mb-3 line-clamp-2">
+                      <h2 className="text-xl font-medium text-brand-ink group-hover:text-brand-accent transition-colors duration-300 mb-3 line-clamp-2">
                         {post.title}
                       </h2>
                     </Link>
 
                     {getExcerpt(post) && (
-                      <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3">
+                      <p className="text-brand-muted text-sm leading-relaxed mb-4 line-clamp-3">
                         {getExcerpt(post)}
                       </p>
                     )}
 
                     <div className="flex items-center justify-between">
                       {post.publishedAt && (
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-brand-muted">
                           {formatDate(post.publishedAt)}
                         </span>
                       )}
@@ -295,7 +277,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
         </div>
       </section>
 
-      {/* Final CTA — dark, photo-backed band */}
+      {/* Final CTA: dark, photo-backed band */}
       <section
         aria-labelledby="blog-cta-heading"
         className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
@@ -330,7 +312,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-6"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.05] mb-6"
           >
             Ready to Transform Your Life?
           </motion.h2>
@@ -356,13 +338,13 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
               href={`${CAL_URL}/suzanneravenall/discovery-call`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-10 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:shadow-[0_8px_30px_theme(colors.brand.accent/30%)]"
+              className="inline-flex items-center justify-center px-10 py-4 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
             >
               Book Discovery Call &rarr;
             </a>
             <Link
               href="/programs"
-              className="inline-flex items-center justify-center px-10 py-4 border border-white/30 hover:border-white text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300"
+              className="inline-flex items-center justify-center px-10 py-4 border border-white/50 hover:border-white text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
             >
               Explore Programmes &rarr;
             </Link>

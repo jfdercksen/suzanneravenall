@@ -6,7 +6,7 @@ const labeledAs = ['Anxiety', 'Burnout', 'Relationship struggles', 'Lack of clar
 
 export default function PatternHubDeeperPositioning() {
   return (
-    <section aria-labelledby="pattern-hub-deeper-heading" className="w-full bg-white py-20 lg:py-32">
+    <section aria-labelledby="pattern-hub-deeper-heading" className="w-full bg-brand-cream py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.h2
           id="pattern-hub-deeper-heading"
@@ -14,7 +14,7 @@ export default function PatternHubDeeperPositioning() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6 }}
-          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-16 lg:mb-20 max-w-3xl"
+          className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary mb-16 lg:mb-20 max-w-3xl"
         >
           This Isn&rsquo;t Personality. It&rsquo;s Patterning.
         </motion.h2>
@@ -31,7 +31,7 @@ export default function PatternHubDeeperPositioning() {
               What People Call It
             </p>
             {labeledAs.map((label) => (
-              <li key={label} className="flex items-center gap-3 text-gray-700 text-lg">
+              <li key={label} className="flex items-center gap-3 text-brand-ink text-lg">
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-accent shrink-0" aria-hidden="true" />
                 {label}
               </li>
@@ -43,7 +43,7 @@ export default function PatternHubDeeperPositioning() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-5 text-base lg:text-lg text-gray-600 leading-relaxed"
+            className="space-y-5 text-base lg:text-lg text-brand-muted leading-relaxed"
           >
             <p>
               These aren&rsquo;t fixed traits or flaws in your character.

@@ -11,7 +11,7 @@ const fadeUpInView = (delay: number) => ({
   transition: { duration: 0.6, delay, ease: 'easeOut' as const },
 })
 
-// Teaser subset — derived from the canonical quiz catalogue so titles and the
+// Teaser subset: derived from the canonical quiz catalogue so titles and the
 // "+N more" count can't drift when quizzes are added or reworded.
 const TEASER_SLUGS = ['nervous-system', 'relationships', 'identity-purpose']
 const teaserQuizzes = patternQuizzes.filter((quiz) => TEASER_SLUGS.includes(quiz.slug))
@@ -21,7 +21,7 @@ export default function ExploreDiagnosticCTA() {
   return (
     <section
       aria-labelledby="explore-diagnostic-heading"
-      className="py-12 lg:py-16 bg-white"
+      className="w-full py-12 lg:py-16 bg-brand-cream"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
@@ -32,11 +32,11 @@ export default function ExploreDiagnosticCTA() {
             </p>
             <h2
               id="explore-diagnostic-heading"
-              className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary mb-4"
+              className="text-3xl lg:text-4xl font-medium tracking-tight text-brand-primary mb-4"
             >
               Not sure where to start?
             </h2>
-            <p className="text-gray-600 text-base mb-8">
+            <p className="text-brand-muted text-base mb-8">
               Every topic on this page connects to a pattern running beneath
               the surface. Take a free diagnostic to find out which one is
               shaping your life right now.
@@ -66,15 +66,15 @@ export default function ExploreDiagnosticCTA() {
             {teaserQuizzes.map((quiz, i) => (
               <div
                 key={quiz.slug}
-                className="bg-gray-50 border border-gray-200 rounded-card px-5 py-3 flex items-center gap-3"
+                className="bg-brand-sand border border-brand-border rounded-card px-5 py-3 flex items-center gap-3"
               >
-                <span className="text-brand-accent font-bold text-sm shrink-0">
+                <span className="text-brand-accent font-medium text-sm shrink-0">
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                <span className="text-gray-600 text-sm leading-snug">{quiz.question}</span>
+                <span className="text-brand-muted text-sm leading-snug">{quiz.question}</span>
               </div>
             ))}
-            <p className="text-gray-500 text-xs text-right mt-1">
+            <p className="text-brand-muted text-xs text-right mt-1">
               + {remainingCount} more diagnostics available
             </p>
           </motion.div>

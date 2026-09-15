@@ -47,7 +47,7 @@ const cardVariants = {
 
 export default function ResourcesFeaturedMedia() {
   return (
-    <section id="articles" aria-labelledby="featured-media-heading" className="w-full bg-white py-20 lg:py-32">
+    <section id="articles" aria-labelledby="featured-media-heading" className="w-full bg-brand-cream py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -66,7 +66,7 @@ export default function ResourcesFeaturedMedia() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary"
+            className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary"
           >
             Press &amp; Media
           </motion.h2>
@@ -97,7 +97,7 @@ export default function ResourcesFeaturedMedia() {
             <motion.div
               key={item.title}
               variants={cardVariants}
-              className="bg-gray-50 rounded-card p-8 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
+              className="bg-brand-sand rounded-card p-8 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
             >
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex items-center justify-center w-10 h-10 rounded-card bg-brand-primary/10 text-brand-primary">
@@ -107,15 +107,15 @@ export default function ResourcesFeaturedMedia() {
                   <p className="text-xs uppercase tracking-wider font-medium text-brand-accent">
                     {item.type}
                   </p>
-                  <p className="text-sm font-semibold text-gray-900">{item.outlet}</p>
+                  <p className="text-sm font-medium text-brand-ink">{item.outlet}</p>
                 </div>
               </div>
 
-              <h3 className="text-lg font-semibold text-gray-900 mb-3 leading-snug">
+              <h3 className="text-lg font-medium text-brand-ink mb-3 leading-snug">
                 {item.title}
               </h3>
 
-              <p className="text-sm text-gray-600 font-light leading-relaxed">{item.description}</p>
+              <p className="text-sm text-brand-muted font-light leading-relaxed">{item.description}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -125,7 +125,7 @@ export default function ResourcesFeaturedMedia() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-8 flex items-center gap-3 text-sm text-gray-500 font-light"
+          className="mt-8 flex items-center gap-3 text-sm text-brand-muted font-light"
         >
           <Star size={14} className="text-brand-accent flex-shrink-0" />
           <span>

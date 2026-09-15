@@ -29,12 +29,12 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
       {/* ── Hero (light) ────────────────────────────────────────────────── */}
       <section
         aria-labelledby="session-hero-heading"
-        className="relative w-full overflow-hidden bg-white"
+        className="relative w-full overflow-hidden bg-brand-cream"
       >
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-36">
           <motion.span
             {...fadeUpAnimate(0)}
-            className="inline-flex items-center rounded-button px-4 py-1.5 text-xs uppercase tracking-[0.2em] font-semibold mb-6 bg-brand-accent/10 text-brand-accent border border-brand-accent/30"
+            className="inline-flex items-center rounded-button px-4 py-1.5 text-xs uppercase tracking-[0.2em] font-medium mb-6 bg-brand-sand text-brand-ink border border-brand-border"
           >
             Private Session
           </motion.span>
@@ -42,14 +42,14 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
           <motion.h1
             id="session-hero-heading"
             {...fadeUpAnimate(0.1)}
-            className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.08] mb-6"
+            className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-6"
           >
             {session.title}
           </motion.h1>
 
           <motion.p
             {...fadeUpAnimate(0.2)}
-            className="text-lg lg:text-xl text-gray-600 font-light max-w-2xl leading-relaxed"
+            className="text-lg lg:text-xl text-brand-muted font-light max-w-2xl leading-relaxed"
           >
             {session.shortDescription}
           </motion.p>
@@ -57,7 +57,7 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
       </section>
 
       {/* ── About this session (light) ──────────────────────────────────── */}
-      <section className="w-full bg-gray-50 py-20 lg:py-32">
+      <section className="w-full bg-brand-sand py-20 lg:py-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
             {...fadeUpInView(0)}
@@ -72,17 +72,17 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
                 <motion.p
                   key={idx}
                   {...fadeUpInView(0.05 + idx * 0.05)}
-                  className="text-base lg:text-lg text-gray-600 font-light leading-relaxed"
+                  className="text-base lg:text-lg text-brand-muted font-light leading-relaxed"
                 >
                   {paragraph}
                 </motion.p>
               ))}
             </div>
           ) : (
-            /* Coming-soon placeholder — same pattern as the Pathways pages */
+            /* Coming-soon placeholder: same pattern as the Pathways pages */
             <motion.div
               {...fadeUpInView(0.1)}
-              className="rounded-card border border-dashed border-gray-300 bg-white p-8 lg:p-10 text-center"
+              className="rounded-card border border-dashed border-brand-primary-300 bg-white p-8 lg:p-10 text-center"
             >
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
                 Coming Soon
@@ -90,7 +90,7 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
               <p className="text-lg lg:text-xl font-light text-brand-primary leading-relaxed">
                 Full details for this session are coming soon.
               </p>
-              <p className="mt-3 text-sm text-gray-500 font-light">
+              <p className="mt-3 text-sm text-brand-muted font-light">
                 What the session involves, who it is best suited for and how to
                 prepare will be added here shortly.
               </p>
@@ -120,7 +120,7 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
         aria-labelledby="session-cta-heading"
         className="relative w-full overflow-hidden bg-brand-primary"
       >
-        {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+        {/* Background photo + black overlay: dark CTA bands carry imagery, never flat colour */}
         <Image
           src="/images/generated/session-coaching.webp"
           alt=""
@@ -137,7 +137,7 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
           <motion.h2
             id="session-cta-heading"
             {...fadeUpInView(0)}
-            className="text-3xl lg:text-5xl font-semibold tracking-tight text-white leading-tight mb-8"
+            className="text-3xl lg:text-5xl font-medium tracking-tight text-white leading-tight mb-8"
           >
             Ready to begin?
           </motion.h2>
@@ -150,7 +150,7 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
               <>
                 <Link
                   href={`/shop/${session.medusaHandle}`}
-                  className="group inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
+                  className="group inline-flex items-center justify-center gap-3 rounded-button bg-white px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-brand-primary transition-all duration-300 hover:bg-brand-sand hover:shadow-2xl"
                 >
                   Book Transformational Coaching
                   <span
@@ -162,7 +162,7 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
                 </Link>
                 <Link
                   href={`/shop/${session.dualProduct.handle}`}
-                  className="group inline-flex items-center justify-center gap-3 rounded-button border border-white/30 px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:border-white/60 hover:bg-white/10"
+                  className="group inline-flex items-center justify-center gap-3 rounded-button border border-white/30 px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:border-white/60 hover:bg-white/10"
                 >
                   Book {session.dualProduct.label}
                   <span
@@ -176,7 +176,7 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
             ) : (
               <Link
                 href={`/shop/${session.medusaHandle}`}
-                className="group inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
+                className="group inline-flex items-center justify-center gap-3 rounded-button bg-white px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-brand-primary transition-all duration-300 hover:bg-brand-sand hover:shadow-2xl"
               >
                 Book a Session
                 <span

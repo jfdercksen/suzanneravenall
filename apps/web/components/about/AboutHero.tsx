@@ -48,8 +48,9 @@ export default function AboutHero() {
                 Suzanne stands on the left of this footage and the brain fills
                 the right, so bottom-left text covered her. Left-aligned inside
                 the column, because ragged-left lines are harder to read. The
-                column is narrower on tablets so its left edge clears her face. */}
-            <div className="sm:ml-auto sm:max-w-md lg:max-w-2xl">
+                column is narrower on tablets so its left edge clears her face.
+                lg:pr-24 keeps long lines clear of the Brilliant Coach tab. */}
+            <div className="sm:ml-auto sm:max-w-md lg:max-w-2xl lg:pr-24">
               <motion.h1
                 id="about-hero-heading"
                 {...fadeUp(0)}

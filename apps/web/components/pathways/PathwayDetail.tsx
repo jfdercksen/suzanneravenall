@@ -3,13 +3,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { categoryLabel, type Pathway, type PathwayCategory } from '@/data/pathways'
-
-const fadeUpAnimate = (delay: number) => ({
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: 'easeOut' as const },
-})
+import { PageHeader } from '@/components/shared/PageHeader'
+import { categoryLabel, type Pathway } from '@/data/pathways'
 
 const fadeUpInView = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -17,11 +12,6 @@ const fadeUpInView = (delay: number) => ({
   viewport: { once: true, margin: '0px' },
   transition: { duration: 0.6, delay, ease: 'easeOut' as const },
 })
-
-const heroBadgeClasses = (category: PathwayCategory): string =>
-  category === 'youth'
-    ? 'bg-white/10 text-white/80 border border-white/25'
-    : 'bg-brand-accent/25 text-white border border-brand-accent/50'
 
 function BulletList({ items }: { items: string[] }) {
   return (
@@ -32,7 +22,7 @@ function BulletList({ items }: { items: string[] }) {
             aria-hidden="true"
             className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent"
           />
-          <span className="text-base text-gray-600 font-light leading-relaxed">{item}</span>
+          <span className="text-base text-brand-muted font-light leading-relaxed">{item}</span>
         </li>
       ))}
     </ul>
@@ -44,80 +34,42 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
 
   return (
     <main>
-      {/* ── Hero (dark) ─────────────────────────────────────────────────── */}
-      <section
-        aria-labelledby="pathway-hero-heading"
-        className="relative w-full overflow-hidden bg-brand-primary"
+      {/* ── Header: shared PageHeader, the header rule ──────────────────── */}
+      {/* The category badge is now the eyebrow. One picture serves every
+          pathway, so the default left alignment and centre crop apply. */}
+      <PageHeader
+        id="pathway-hero-heading"
+        eyebrow={categoryLabel(pathway.category)}
+        image="/images/generated/explore-repatterning.webp"
+        title={pathway.title}
+        description={detail?.heroSubhead ?? pathway.description}
       >
-        {/* Background photo + navy scrim — dark heroes carry imagery, never flat colour */}
-        <Image
-          src="/images/generated/explore-repatterning.webp"
-          alt=""
-          aria-hidden="true"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-50"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
-        />
-
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-36">
-          <motion.span
-            {...fadeUpAnimate(0)}
-            className={`inline-flex items-center rounded-button px-4 py-1.5 text-xs uppercase tracking-[0.2em] font-semibold mb-6 ${heroBadgeClasses(
-              pathway.category,
-            )}`}
+        {detail?.heroCtaPrimaryLabel && (
+          <Link
+            href={detail.heroCtaPrimaryHref ?? '/contact'}
+            className="inline-flex items-center justify-center gap-3 px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
           >
-            {categoryLabel(pathway.category)}
-          </motion.span>
-
-          <motion.h1
-            id="pathway-hero-heading"
-            {...fadeUpAnimate(0.1)}
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.08] mb-6"
-          >
-            {pathway.title}
-          </motion.h1>
-
-          <motion.p
-            {...fadeUpAnimate(0.2)}
-            className="text-lg lg:text-xl text-white/75 font-light max-w-2xl leading-relaxed mb-10"
-          >
-            {detail?.heroSubhead ?? pathway.description}
-          </motion.p>
-
-          <motion.div {...fadeUpAnimate(0.3)} className="flex flex-wrap items-center gap-4">
-            {detail?.heroCtaPrimaryLabel && (
-              <Link
-                href={detail.heroCtaPrimaryHref ?? '/contact'}
-                className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
-              >
-                {detail.heroCtaPrimaryLabel}
-                <span aria-hidden="true">→</span>
-              </Link>
-            )}
-            <Link
-              href="/contact"
-              className={
-                detail?.heroCtaPrimaryLabel
-                  ? 'inline-flex items-center justify-center px-8 py-4 border border-white/30 hover:border-white/60 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10'
-                  : 'inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30'
-              }
-            >
-              Book a Discovery Session
-              {!detail?.heroCtaPrimaryLabel && <span aria-hidden="true">→</span>}
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+            {detail.heroCtaPrimaryLabel}
+            <span aria-hidden="true">→</span>
+          </Link>
+        )}
+        <Link
+          href="/contact"
+          className={
+            detail?.heroCtaPrimaryLabel
+              ? 'inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300'
+              : 'inline-flex items-center justify-center gap-3 px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300'
+          }
+        >
+          Book a Discovery Session
+          {!detail?.heroCtaPrimaryLabel && <span aria-hidden="true">→</span>}
+        </Link>
+      </PageHeader>
 
       {detail ? (
         <>
           {/* ── What This Pathway Is (light) ─────────────────────────────── */}
-          <section className="w-full bg-gray-50 py-20 lg:py-32">
+          <section className="w-full bg-brand-sand py-20 lg:py-32">
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
               <motion.div {...fadeUpInView(0)}>
                 <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-8">
@@ -127,7 +79,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
                   {detail.whatThisPathwayIs.map((paragraph) => (
                     <p
                       key={paragraph}
-                      className="text-base lg:text-lg text-gray-600 font-light leading-relaxed"
+                      className="text-base lg:text-lg text-brand-muted font-light leading-relaxed"
                     >
                       {paragraph}
                     </p>
@@ -139,7 +91,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
 
           {/* ── Who It's For / What We Work On (light) ─────────────────────── */}
           {(detail.whoItsFor.length > 0 || detail.whatWeWorkOn.length > 0) && (
-            <section className="w-full bg-white py-20 lg:py-32">
+            <section className="w-full bg-brand-cream py-20 lg:py-32">
               <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-16 lg:grid-cols-2">
                 {detail.whoItsFor.length > 0 && (
                   <motion.div {...fadeUpInView(0)}>
@@ -163,7 +115,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
 
           {/* ── Outcomes / Signature Message (light) ──────────────────────── */}
           {(detail.outcomes.length > 0 || detail.signatureMessage) && (
-            <section className="w-full bg-gray-50 py-20 lg:py-32">
+            <section className="w-full bg-brand-sand py-20 lg:py-32">
               <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                 {detail.outcomes.length > 0 && (
                   <motion.div {...fadeUpInView(0)} className="mb-16">
@@ -193,12 +145,12 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
           )}
         </>
       ) : (
-        /* "Coming soon" placeholder — only for pathways without supplied content */
-        <section className="w-full bg-gray-50 py-20 lg:py-32">
+        /* "Coming soon" placeholder: only for pathways without supplied content */
+        <section className="w-full bg-brand-sand py-20 lg:py-32">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               {...fadeUpInView(0)}
-              className="rounded-card border border-dashed border-gray-300 bg-white p-8 lg:p-10 text-center"
+              className="rounded-card border border-dashed border-brand-primary-300 bg-white p-8 lg:p-10 text-center"
             >
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
                 Coming Soon
@@ -206,7 +158,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
               <p className="text-lg lg:text-xl font-light text-brand-primary leading-relaxed">
                 Full programme details for this pathway are coming soon.
               </p>
-              <p className="mt-3 text-sm text-gray-500 font-light">
+              <p className="mt-3 text-sm text-brand-muted font-light">
                 Session structure, format and who it is best suited for will be
                 added here shortly.
               </p>
@@ -215,14 +167,14 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
         </section>
       )}
 
-      {/* ── How the Work Happens (light) — shared across every pathway ────── */}
-      <section className="w-full bg-white py-20 lg:py-32">
+      {/* ── How the Work Happens (light): shared across every pathway ────── */}
+      <section className="w-full bg-brand-cream py-20 lg:py-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div {...fadeUpInView(0)}>
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
               How the Work Happens
             </p>
-            <p className="text-lg lg:text-xl text-gray-600 font-light leading-relaxed">
+            <p className="text-lg lg:text-xl text-brand-muted font-light leading-relaxed">
               Each pathway combines deep pattern recognition with practical
               transformation tools to help create lasting change. Depending on
               the pathway, this may include coaching, subconscious
@@ -233,14 +185,14 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
         </div>
       </section>
 
-      {/* ── Why This Work Is Different (light) — shared ───────────────────── */}
-      <section className="w-full bg-gray-50 py-20 lg:py-32">
+      {/* ── Why This Work Is Different (light): shared ───────────────────── */}
+      <section className="w-full bg-brand-sand py-20 lg:py-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div {...fadeUpInView(0)}>
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
               Why This Work Is Different
             </p>
-            <p className="text-lg lg:text-xl text-gray-600 font-light leading-relaxed">
+            <p className="text-lg lg:text-xl text-brand-muted font-light leading-relaxed">
               This is not just about talking about the problem. It is about
               identifying the underlying pattern, shifting it at root level,
               and helping you build a stronger way of being moving forward.
@@ -254,7 +206,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
         aria-labelledby="pathway-cta-heading"
         className="relative w-full overflow-hidden bg-brand-primary"
       >
-        {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+        {/* Background photo + black overlay: dark CTA bands carry imagery, never flat colour */}
         <Image
           src="/images/generated/session-coaching.webp"
           alt=""
@@ -272,7 +224,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
             <motion.h2
               id="pathway-cta-heading"
               {...fadeUpInView(0)}
-              className="text-3xl lg:text-5xl font-semibold tracking-tight text-white leading-tight mb-6"
+              className="text-3xl lg:text-5xl font-medium tracking-tight text-white leading-tight mb-6"
             >
               {detail.ctaSectionHeadline}
             </motion.h2>
@@ -301,7 +253,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
           >
             <Link
               href="/contact"
-              className="group inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
+              className="group inline-flex items-center justify-center gap-3 rounded-button bg-white px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-brand-primary transition-all duration-300 hover:bg-brand-sand hover:shadow-2xl"
             >
               Book a Discovery Session
               <span
@@ -313,7 +265,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
             </Link>
             <Link
               href="/transformation-pathways"
-              className="inline-flex items-center justify-center px-8 py-4 border border-white/30 hover:border-white/60 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
+              className="inline-flex items-center justify-center px-8 py-4 border border-white/50 hover:border-white text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
             >
               All Pathways
             </Link>

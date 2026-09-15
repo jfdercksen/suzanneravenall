@@ -16,7 +16,7 @@ export default function CalBookingSection() {
     getCalApi({ embedJsUrl: `${CAL_URL}/embed/embed.js` }).then((cal) => {
       cal('ui', {
         theme: 'dark',
-        styles: { branding: { brandColor: '#1719F4' } },
+        styles: { branding: { brandColor: '#171717' } },
         hideEventTypeDetails: false,
       })
       setCalReady(true)
@@ -37,7 +37,7 @@ export default function CalBookingSection() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.6 }}
-      className="relative w-full bg-white py-20 lg:py-32"
+      className="relative w-full bg-brand-cream py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.p
@@ -56,7 +56,7 @@ export default function CalBookingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
+          className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight mb-6"
         >
           Ready to begin?
         </motion.h2>
@@ -66,7 +66,7 @@ export default function CalBookingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="text-lg text-gray-600 font-light max-w-xl mx-auto mb-12"
+          className="text-lg text-brand-muted font-light max-w-xl mx-auto mb-12"
         >
           A 30-minute discovery call, no obligation. Find out which path is right for you.
         </motion.p>
@@ -80,7 +80,7 @@ export default function CalBookingSection() {
           <button
             onClick={openModal}
             disabled={!calReady}
-            className="inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_40px_theme(colors.brand.accent/60%)] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Book a Discovery Call
           </button>

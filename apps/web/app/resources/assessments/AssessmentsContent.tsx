@@ -21,7 +21,7 @@ const assessmentTypes = [
 export default function AssessmentsContent() {
   return (
     <main>
-      <section className="w-full bg-gray-50 min-h-[70vh] flex items-center py-20 lg:py-32">
+      <section className="w-full bg-brand-sand min-h-[70vh] flex items-center py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -33,15 +33,15 @@ export default function AssessmentsContent() {
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
               Coming Soon
             </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary mb-6">Assessments</h1>
-            <p className="text-lg lg:text-xl text-gray-600 leading-relaxed">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-brand-primary mb-6">Assessments</h1>
+            <p className="text-lg lg:text-xl text-brand-muted leading-relaxed">
               Self-assessment tools to help you identify your patterns and chart your transformation path.
             </p>
           </motion.div>
         </div>
       </section>
 
-      <section className="w-full bg-white py-20 lg:py-32">
+      <section className="w-full bg-brand-cream py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -50,8 +50,8 @@ export default function AssessmentsContent() {
             transition={{ duration: 0.6 }}
             className="text-center mb-10"
           >
-            <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-4">Be First to Know</h2>
-            <p className="text-lg text-gray-600">We&apos;ll notify you when assessments launch.</p>
+            <h2 className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary mb-4">Be First to Know</h2>
+            <p className="text-lg text-brand-muted">We&apos;ll notify you when assessments launch.</p>
           </motion.div>
 
           <motion.div
@@ -65,7 +65,7 @@ export default function AssessmentsContent() {
         </div>
       </section>
 
-      <section className="w-full bg-gray-50 py-20 lg:py-32">
+      <section className="w-full bg-brand-sand py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -77,7 +77,7 @@ export default function AssessmentsContent() {
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
               Coming Soon
             </p>
-            <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary">What to Expect</h2>
+            <h2 className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary">What to Expect</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -88,10 +88,10 @@ export default function AssessmentsContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white border border-gray-100 rounded-2xl p-8"
+                className="bg-white border border-brand-border rounded-2xl p-8"
               >
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{title}</h3>
-                <p className="text-gray-600 leading-relaxed">{description}</p>
+                <h3 className="text-xl font-medium text-brand-ink mb-3">{title}</h3>
+                <p className="text-brand-muted leading-relaxed">{description}</p>
               </motion.div>
             ))}
           </div>

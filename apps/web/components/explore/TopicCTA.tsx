@@ -27,22 +27,12 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
   return (
     <section
       aria-labelledby="topic-cta-heading"
-      className="relative w-full bg-white overflow-hidden"
+      className="relative w-full bg-brand-cream overflow-hidden"
     >
-      {/* Background gradient */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white via-gray-50 to-white"
-      />
-      {/* Glow */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-brand-accent/5 blur-3xl"
-      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-24 items-center">
-          {/* Left — copy + CTAs */}
+          {/* Left: copy + CTAs */}
           <div>
             <motion.p
               {...fadeUp(0)}
@@ -55,14 +45,14 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
             <motion.h2
               id="topic-cta-heading"
               {...fadeUp(0.1)}
-              className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
+              className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary leading-tight mb-6"
             >
               {topic.ctaHook}
             </motion.h2>
 
             <motion.p
               {...fadeUp(0.2)}
-              className="text-lg text-gray-600 font-light leading-relaxed mb-8"
+              className="text-lg text-brand-muted font-light leading-relaxed mb-8"
             >
               Start with the free pattern diagnostic. It shows you the pattern
               running underneath what you&apos;re working with. Then book{' '}
@@ -71,26 +61,26 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
               directly with Suzanne.
             </motion.p>
 
-            {/* Social proof — real client outcome, when provided */}
+            {/* Social proof: real client outcome, when provided */}
             {topic.testimonial?.outcome && (
               <motion.div
                 {...fadeUp(0.25)}
                 className="mb-8 pl-5 border-l border-brand-accent/40"
               >
-                <p className="text-sm text-gray-500 font-light italic leading-relaxed">
+                <p className="text-sm text-brand-muted font-light italic leading-relaxed">
                   {topic.testimonial.outcome}
                 </p>
               </motion.div>
             )}
 
-            {/* CTAs — quiz first (Suzanne, 27 Jul 2026), then the topic's Rapid
+            {/* CTAs: quiz first (Suzanne, 27 Jul 2026), then the topic's Rapid
                 Repatterning session, then the pathway CTA (Suzanne's button
                 mapping, forwarded email) */}
             <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
               {quiz ? (
                 <Link
                   href={`/explore/${topic.slug}/quiz`}
-                  className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
+                  className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl"
                 >
                   {quizLabel}
                   <span aria-hidden="true">→</span>
@@ -98,7 +88,7 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
               ) : (
                 <Link
                   href="/discover-your-pattern"
-                  className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
+                  className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl"
                 >
                   Take the Free Pattern Scan
                   <span aria-hidden="true">→</span>
@@ -106,20 +96,20 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
               )}
               <Link
                 href={RAPID_REPATTERNING_SESSION_HREF}
-                className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary/30 hover:border-brand-primary/60 text-brand-primary font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-brand-primary/5"
+                className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary/30 hover:border-brand-primary/60 text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-brand-primary/5"
               >
                 Book {articleFor(pathway.sessionCtaLabel)} {pathway.sessionCtaLabel}
               </Link>
               <Link
                 href={`/transformation-pathways/${pathway.pathwaySlug}`}
-                className="inline-flex items-center justify-center px-8 py-4 border border-brand-accent/50 hover:border-brand-accent text-brand-primary font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-brand-accent/10"
+                className="inline-flex items-center justify-center px-8 py-4 border border-brand-accent/50 hover:border-brand-accent text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-brand-accent/10"
               >
                 {pathway.pathwayCtaLabel}
               </Link>
               {isRelationships && (
                 <Link
                   href="/programs/love-and-relationships"
-                  className="inline-flex items-center justify-center px-8 py-4 border border-brand-accent/50 hover:border-brand-accent text-brand-primary font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-brand-accent/10"
+                  className="inline-flex items-center justify-center px-8 py-4 border border-brand-accent/50 hover:border-brand-accent text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-brand-accent/10"
                 >
                   Transform Your Relationship
                 </Link>
@@ -129,13 +119,13 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
             {/* Reassurance line */}
             <motion.p
               {...fadeUp(0.4)}
-              className="mt-4 text-xs text-gray-400 font-light tracking-wide"
+              className="mt-4 text-xs text-brand-muted font-light tracking-wide"
             >
               The pattern diagnostic is free and takes a few minutes.
             </motion.p>
           </div>
 
-          {/* Right — Suzanne portrait */}
+          {/* Right: Suzanne portrait */}
           <motion.div
             {...fadeUp(0.15)}
             className="relative hidden lg:block"
@@ -148,7 +138,7 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
                 sizes="(max-width: 1280px) 50vw, 640px"
                 className="object-cover object-left-top"
               />
-              {/* Inner gradient — fade to brand at bottom */}
+              {/* Inner gradient: fade to brand at bottom */}
               <div
                 aria-hidden="true"
                 className="absolute inset-0 bg-gradient-to-t from-brand-primary/60 via-transparent to-transparent"
@@ -158,7 +148,7 @@ export default function TopicCTA({ topic }: { topic: Topic }) {
             {/* Floating name badge */}
             <div className="absolute bottom-6 left-6 right-6 bg-brand-primary/80 backdrop-blur-sm rounded-card p-4 border border-white/10">
               <p className="text-sm font-medium text-white">Dr. Suzanne Ravenall</p>
-              <p className="text-xs text-brand-accent-300 font-light mt-0.5">
+              <p className="text-xs text-brand-accent-400 font-light mt-0.5">
                 Rapid Repatterning® Specialist
               </p>
             </div>

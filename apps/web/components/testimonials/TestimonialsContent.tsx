@@ -276,10 +276,10 @@ const writtenTestimonials = [
 export default function TestimonialsContent() {
   return (
     <>
-      {/* ── Hero — light, short ────────────────────────────────────────── */}
+      {/* ── Hero: flat (no picture), sand ──────────────────────────────── */}
       <section
         aria-labelledby="testimonials-hero-heading"
-        className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden"
+        className="relative w-full bg-brand-sand py-20 lg:py-32 overflow-hidden"
       >
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
@@ -292,14 +292,14 @@ export default function TestimonialsContent() {
           <motion.h1
             id="testimonials-hero-heading"
             {...fadeUp(0.15)}
-            className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary leading-[1.05] max-w-3xl mb-6"
+            className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.05] max-w-3xl mb-6"
           >
             Real People. Real Patterns. Real Change.
           </motion.h1>
 
           <motion.p
             {...fadeUp(0.3)}
-            className="text-lg text-gray-600 font-light max-w-xl leading-relaxed"
+            className="text-lg text-brand-muted font-light max-w-xl leading-relaxed"
           >
             Clients around the world share what shifted when they found, and broke, the
             patterns that were holding them back.
@@ -307,17 +307,19 @@ export default function TestimonialsContent() {
         </div>
       </section>
 
-      {/* ── Video testimonials — light (bg-white inside component) ─────── */}
+      {/* ── Video testimonials: cream (VideoTestimonials default tone) ─── */}
       <VideoTestimonials showViewAllLink={false} />
 
-      {/* ── Results spotlight — light stats band ─────────────────────────
+      {/* ── Results spotlight: dark stats band ───────────────────────────
+          Black so the page alternates whether or not it renders: it sits
+          between the cream video band and the sand written grid.
           Driven by spotlightTestimonial in data/testimonials.ts (the single
           source of truth, shared with the homepage TestimonialSpotlight).
           Hidden entirely until Suzanne signs off a real, verified story. */}
       {spotlightTestimonial && (
       <section
         aria-labelledby="testimonials-result-heading"
-        className="bg-white py-20 lg:py-32 overflow-hidden"
+        className="bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -329,28 +331,28 @@ export default function TestimonialsContent() {
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, ease: 'easeOut' as const }}
             >
-              <p className="text-xs tracking-[0.3em] text-brand-accent uppercase font-medium mb-3">
+              <p className="text-xs tracking-[0.3em] text-brand-accent-400 uppercase font-medium mb-3">
                 The Numbers Behind the Stories
               </p>
               <h2
                 id="testimonials-result-heading"
-                className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-[1.1] mb-8"
+                className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.1] mb-8"
               >
                 When the pattern breaks, everything moves
               </h2>
-              <div className="text-7xl lg:text-9xl font-semibold tracking-tight text-brand-primary leading-none mb-2">
+              <div className="text-7xl lg:text-9xl font-semibold tracking-tight text-white leading-none mb-2">
                 {spotlightTestimonial.stat}
               </div>
-              <p className="text-xl lg:text-2xl text-gray-500 font-light uppercase tracking-wider mb-8">
+              <p className="text-xl lg:text-2xl text-white/70 font-light uppercase tracking-wider mb-8">
                 {spotlightTestimonial.statLabel}
               </p>
-              <div className="w-16 h-px bg-brand-accent mb-8" />
-              <p className="text-gray-600 text-sm font-light leading-relaxed max-w-sm">
+              <div className="w-16 h-px bg-white/40 mb-8" />
+              <p className="text-white/70 text-sm font-light leading-relaxed max-w-sm">
                 {spotlightTestimonial.supporting}
               </p>
             </motion.div>
 
-            {/* Outcomes — the homepage TestimonialSpotlight already carries the
+            {/* Outcomes: the homepage TestimonialSpotlight already carries the
                 spotlight quote and links here, so this band summarises what
                 clients consistently report instead of repeating it. */}
             <motion.div
@@ -359,7 +361,7 @@ export default function TestimonialsContent() {
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' as const }}
             >
-              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-8">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-8">
                 What Clients Report
               </p>
               <ul className="space-y-6 list-none">
@@ -370,8 +372,8 @@ export default function TestimonialsContent() {
                   'Momentum in business and career once the invisible handbrake comes off.',
                 ].map((outcome) => (
                   <li key={outcome} className="flex gap-4">
-                    <span aria-hidden="true" className="mt-2.5 w-8 h-px bg-brand-accent flex-shrink-0" />
-                    <span className="text-lg lg:text-xl font-light text-gray-600 leading-relaxed">
+                    <span aria-hidden="true" className="mt-2.5 w-8 h-px bg-white/40 flex-shrink-0" />
+                    <span className="text-lg lg:text-xl font-light text-white/80 leading-relaxed">
                       {outcome}
                     </span>
                   </li>
@@ -384,10 +386,10 @@ export default function TestimonialsContent() {
       </section>
       )}
 
-      {/* ── Written testimonials grid — light ──────────────────────────── */}
+      {/* ── Written testimonials grid: sand ─────────────────────────────── */}
       <section
         aria-labelledby="written-testimonials-heading"
-        className="bg-gray-50 py-20 lg:py-32"
+        className="bg-brand-sand py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -402,11 +404,11 @@ export default function TestimonialsContent() {
             </p>
             <h2
               id="written-testimonials-heading"
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-4"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary mb-4"
             >
               What clients say
             </h2>
-            <p className="text-gray-500 text-lg font-light max-w-2xl mx-auto">
+            <p className="text-brand-muted text-lg font-light max-w-2xl mx-auto">
               From private sessions to group programmes, in their own words, exactly as
               they shared them.
             </p>
@@ -416,7 +418,7 @@ export default function TestimonialsContent() {
             {writtenTestimonials.map(({ quote, name, location }, i) => (
               <motion.figure
                 key={`${name}-${location}-${i}`}
-                className="relative flex flex-col bg-white border border-gray-100 rounded-card p-8 shadow-sm hover:shadow-2xl hover:border-brand-accent/30 transition-all duration-500 hover:-translate-y-1"
+                className="relative flex flex-col bg-white border border-brand-border rounded-card p-8 shadow-sm hover:shadow-2xl hover:border-brand-primary-300 transition-all duration-500 hover:-translate-y-1"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
@@ -426,18 +428,18 @@ export default function TestimonialsContent() {
                   aria-hidden="true"
                   viewBox="0 0 512 512"
                   fill="currentColor"
-                  className="w-8 h-8 text-brand-accent/30 mb-6 flex-none"
+                  className="w-8 h-8 text-brand-primary-200 mb-6 flex-none"
                 >
                   <path d="M464 256h-80v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8c-88.4 0-160 71.6-160 160v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48zm-288 0H96v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8C71.6 32 0 103.6 0 192v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48z" />
                 </svg>
 
-                <blockquote className="text-gray-600 text-base font-light leading-relaxed flex-1">
+                <blockquote className="text-brand-muted text-base font-light leading-relaxed flex-1">
                   {quote}
                 </blockquote>
 
-                <figcaption className="mt-6 pt-6 border-t border-gray-100">
+                <figcaption className="mt-6 pt-6 border-t border-brand-border">
                   <p className="text-brand-primary font-medium text-sm">{name}</p>
-                  <p className="text-gray-500 text-xs mt-0.5">{location}</p>
+                  <p className="text-brand-muted text-xs mt-0.5">{location}</p>
                 </figcaption>
               </motion.figure>
             ))}
@@ -445,10 +447,10 @@ export default function TestimonialsContent() {
         </div>
       </section>
 
-      {/* ── Final CTA — dark, photo-backed band ────────────────────────── */}
+      {/* ── Final CTA: dark, photo-backed band ─────────────────────────── */}
       <section
         aria-labelledby="testimonials-cta-heading"
-        className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
+        className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
       >
         <Image
           src="/images/generated/session-coaching.webp"
@@ -460,7 +462,7 @@ export default function TestimonialsContent() {
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
+          className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/75 to-black/90"
         />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
@@ -479,7 +481,7 @@ export default function TestimonialsContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] max-w-3xl mx-auto mb-6"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.05] max-w-3xl mx-auto mb-6"
           >
             Ready to write your own story?
           </motion.h2>
@@ -504,7 +506,7 @@ export default function TestimonialsContent() {
           >
             <Link
               href="/discover-your-pattern"
-              className="bg-brand-accent-600 hover:bg-brand-accent-700 text-white px-8 py-4 rounded-button text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:shadow-[0_0_30px_rgba(23,25,244,0.4)] text-center"
+              className="bg-white hover:bg-brand-sand text-brand-primary px-8 py-4 rounded-button text-sm uppercase tracking-widest font-medium transition-all duration-300 text-center"
             >
               Take the Free Pattern Scan &rarr;
             </Link>

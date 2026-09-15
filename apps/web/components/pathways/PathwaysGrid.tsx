@@ -16,17 +16,17 @@ const cardVariants = {
 
 const badgeClasses = (category: PathwayCategory): string =>
   category === 'youth'
-    ? 'bg-emerald-100 text-emerald-700'
-    : 'bg-brand-accent/10 text-brand-accent'
+    ? 'bg-white text-brand-ink border border-brand-primary-300'
+    : 'bg-brand-primary-900 text-white'
 
 const cardAccentClass = (category: PathwayCategory): string =>
-  category === 'youth' ? 'border-l-emerald-500' : 'border-l-brand-accent'
+  category === 'youth' ? 'border-l-brand-primary-300' : 'border-l-brand-accent'
 
 export default function PathwaysGrid() {
   return (
     <section
       aria-labelledby="pathways-grid-heading"
-      className="w-full bg-white py-20 lg:py-32"
+      className="w-full bg-brand-cream py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
@@ -42,17 +42,17 @@ export default function PathwaysGrid() {
           </p>
           <h2
             id="pathways-grid-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight"
           >
             Individual Transformation Pathways
           </h2>
-          <p className="mt-5 text-base lg:text-lg text-gray-600 font-light max-w-2xl leading-relaxed">
+          <p className="mt-5 text-base lg:text-lg text-brand-muted font-light max-w-2xl leading-relaxed">
             Focused transformation journeys for individuals: personal pathways
             for adults, and dedicated pathways for children and young people.
           </p>
         </motion.div>
 
-        {/* Personal Pathways — 7 cards, lg:grid-cols-4 = 2 rows (4+3) */}
+        {/* Personal Pathways: 7 cards, lg:grid-cols-4 = 2 rows (4+3) */}
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -70,23 +70,23 @@ export default function PathwaysGrid() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >
           {personalPathways.map((pathway) => (
-            <motion.li key={pathway.slug} variants={cardVariants}>
+            <motion.li key={pathway.slug} variants={cardVariants} className="rounded-card bg-brand-sand">
               <Link
                 href={`/transformation-pathways/${pathway.slug}`}
-                className={`group flex h-full flex-col rounded-card bg-gray-50 border border-gray-200 border-l-2 ${cardAccentClass(pathway.category)} p-6 transition-all duration-500 hover:-translate-y-1 hover:border-t-brand-accent/40 hover:border-r-brand-accent/40 hover:border-b-brand-accent/40 hover:bg-white hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white`}
+                className={`group flex h-full flex-col rounded-card border border-brand-border border-l-2 ${cardAccentClass(pathway.category)} p-6 transition-all duration-500 hover:-translate-y-1 hover:border-t-brand-primary-300 hover:border-r-brand-primary-300 hover:border-b-brand-primary-300 hover:bg-white hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white`}
               >
                 <span
-                  className={`inline-flex w-fit items-center rounded-button px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold mb-4 ${badgeClasses(pathway.category)}`}
+                  className={`inline-flex w-fit items-center rounded-button px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-medium mb-4 ${badgeClasses(pathway.category)}`}
                 >
                   {categoryLabel(pathway.category)}
                 </span>
                 <h3 className="text-base lg:text-lg font-light text-brand-primary leading-tight mb-3">
                   {pathway.title}
                 </h3>
-                <p className="text-sm text-gray-600 font-light leading-relaxed mb-5">
+                <p className="text-sm text-brand-muted font-light leading-relaxed mb-5">
                   {pathway.description}
                 </p>
-                <span className="mt-auto inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-gray-500 transition-colors duration-300 group-hover:text-brand-accent">
+                <span className="mt-auto inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-brand-muted transition-colors duration-300 group-hover:text-brand-accent">
                   Learn More
                   <span
                     aria-hidden="true"
@@ -100,7 +100,7 @@ export default function PathwaysGrid() {
           ))}
         </motion.ul>
 
-        {/* Young People Pathways — 5 cards, lg:grid-cols-3 = 2 rows (3+2) */}
+        {/* Young People Pathways: 5 cards, lg:grid-cols-3 = 2 rows (3+2) */}
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -118,23 +118,23 @@ export default function PathwaysGrid() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {youthPathways.map((pathway) => (
-            <motion.li key={pathway.slug} variants={cardVariants}>
+            <motion.li key={pathway.slug} variants={cardVariants} className="rounded-card bg-brand-sand">
               <Link
                 href={`/transformation-pathways/${pathway.slug}`}
-                className={`group flex h-full flex-col rounded-card bg-gray-50 border border-gray-200 border-l-2 ${cardAccentClass(pathway.category)} p-7 transition-all duration-500 hover:-translate-y-1 hover:border-t-brand-accent/40 hover:border-r-brand-accent/40 hover:border-b-brand-accent/40 hover:bg-white hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white`}
+                className={`group flex h-full flex-col rounded-card border border-brand-border border-l-2 ${cardAccentClass(pathway.category)} p-7 transition-all duration-500 hover:-translate-y-1 hover:border-t-brand-primary-300 hover:border-r-brand-primary-300 hover:border-b-brand-primary-300 hover:bg-white hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white`}
               >
                 <span
-                  className={`inline-flex w-fit items-center rounded-button px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-semibold mb-5 ${badgeClasses(pathway.category)}`}
+                  className={`inline-flex w-fit items-center rounded-button px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-medium mb-5 ${badgeClasses(pathway.category)}`}
                 >
                   {categoryLabel(pathway.category)}
                 </span>
                 <h3 className="text-xl lg:text-2xl font-light text-brand-primary leading-tight mb-3">
                   {pathway.title}
                 </h3>
-                <p className="text-sm lg:text-base text-gray-600 font-light leading-relaxed mb-6">
+                <p className="text-sm lg:text-base text-brand-muted font-light leading-relaxed mb-6">
                   {pathway.description}
                 </p>
-                <span className="mt-auto inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-gray-500 transition-colors duration-300 group-hover:text-brand-accent">
+                <span className="mt-auto inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-brand-muted transition-colors duration-300 group-hover:text-brand-accent">
                   Learn More
                   <span
                     aria-hidden="true"

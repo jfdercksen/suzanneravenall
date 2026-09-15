@@ -84,7 +84,7 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
   }
 
   return (
-    <section className="relative min-h-screen w-full bg-gray-50 overflow-hidden">
+    <section className="relative min-h-screen w-full bg-brand-sand overflow-hidden">
       {/* Top-aligned, deliberately tight padding (not flex-centered) —
           centering this short content in a min-h-screen section risks
           landing the submit button behind the fixed cookie-consent banner /
@@ -97,15 +97,15 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
               Before You Begin
             </p>
-            <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary leading-tight mb-3">{quiz.title}</h1>
-            <p className="text-base text-gray-600 font-light leading-relaxed mb-6">
+            <h1 className="text-3xl lg:text-4xl font-medium tracking-tight text-brand-primary leading-tight mb-3">{quiz.title}</h1>
+            <p className="text-base text-brand-muted font-light leading-relaxed mb-6">
               Tell us where to send your diagnostic link: you&apos;ll get your result the
               moment you finish.
             </p>
 
             <form onSubmit={submit} className="text-left space-y-3">
               <div>
-                <label htmlFor="quiz-gate-first-name" className="block text-sm text-gray-600 mb-2">
+                <label htmlFor="quiz-gate-first-name" className="block text-sm text-brand-muted mb-2">
                   First name
                 </label>
                 <input
@@ -114,11 +114,11 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
                   required
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="w-full min-h-[52px] rounded-button bg-white border border-gray-300 px-5 text-gray-900 placeholder-gray-400 focus:border-brand-accent focus:outline-none"
+                  className="w-full min-h-[52px] rounded-button bg-white border border-brand-primary-300 px-5 text-brand-ink placeholder-brand-muted focus:border-brand-accent focus:outline-none"
                 />
               </div>
               <div>
-                <label htmlFor="quiz-gate-last-name" className="block text-sm text-gray-600 mb-2">
+                <label htmlFor="quiz-gate-last-name" className="block text-sm text-brand-muted mb-2">
                   Last name
                 </label>
                 <input
@@ -127,11 +127,11 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
                   required
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  className="w-full min-h-[52px] rounded-button bg-white border border-gray-300 px-5 text-gray-900 placeholder-gray-400 focus:border-brand-accent focus:outline-none"
+                  className="w-full min-h-[52px] rounded-button bg-white border border-brand-primary-300 px-5 text-brand-ink placeholder-brand-muted focus:border-brand-accent focus:outline-none"
                 />
               </div>
               <div>
-                <label htmlFor="quiz-gate-email" className="block text-sm text-gray-600 mb-2">
+                <label htmlFor="quiz-gate-email" className="block text-sm text-brand-muted mb-2">
                   Email
                 </label>
                 <input
@@ -141,7 +141,7 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full min-h-[52px] rounded-button bg-white border border-gray-300 px-5 text-gray-900 placeholder-gray-400 focus:border-brand-accent focus:outline-none"
+                  className="w-full min-h-[52px] rounded-button bg-white border border-brand-primary-300 px-5 text-brand-ink placeholder-brand-muted focus:border-brand-accent focus:outline-none"
                 />
               </div>
 
@@ -154,7 +154,7 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
               <button
                 type="submit"
                 disabled={status === 'submitting'}
-                className="w-full inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-10 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30 disabled:opacity-60"
+                className="w-full inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-10 py-4 text-sm font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl disabled:opacity-60"
               >
                 {status === 'submitting' ? 'Sending…' : 'Send Me the Diagnostic'}
               </button>
@@ -167,17 +167,17 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
               Check Your Inbox
             </p>
-            <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary leading-tight mb-3">
+            <h1 className="text-3xl lg:text-4xl font-medium tracking-tight text-brand-primary leading-tight mb-3">
               Your {quiz.title} link is on its way
             </h1>
-            <p className="text-base text-gray-600 font-light leading-relaxed mb-6">
+            <p className="text-base text-brand-muted font-light leading-relaxed mb-6">
               We&apos;ve sent it to <span className="text-brand-primary font-medium">{sentTo}</span>. Check your
               inbox (and spam folder) to begin.
             </p>
             <button
               type="button"
               onClick={() => setMode('gate')}
-              className="text-sm text-gray-500 hover:text-brand-primary underline underline-offset-4 transition-colors duration-200"
+              className="text-sm text-brand-muted hover:text-brand-primary underline underline-offset-4 transition-colors duration-200"
             >
               Didn&apos;t get it? Resend
             </button>
@@ -189,10 +189,10 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
               Just a Moment
             </p>
-            <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary leading-tight mb-3">
+            <h1 className="text-3xl lg:text-4xl font-medium tracking-tight text-brand-primary leading-tight mb-3">
               Too many requests
             </h1>
-            <p className="text-base text-gray-600 font-light leading-relaxed mb-6">
+            <p className="text-base text-brand-muted font-light leading-relaxed mb-6">
               This page has been requested too many times in a short period. Wait a
               minute, then refresh to continue to your diagnostic.
             </p>
@@ -204,16 +204,16 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
               Link Expired
             </p>
-            <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary leading-tight mb-3">
+            <h1 className="text-3xl lg:text-4xl font-medium tracking-tight text-brand-primary leading-tight mb-3">
               This link isn&apos;t valid
             </h1>
-            <p className="text-base text-gray-600 font-light leading-relaxed mb-6">
+            <p className="text-base text-brand-muted font-light leading-relaxed mb-6">
               It may have expired or already been used. Request a new one below.
             </p>
             <button
               type="button"
               onClick={() => setMode('gate')}
-              className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-10 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700"
+              className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-10 py-4 text-sm font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700"
             >
               Get a New Link
             </button>

@@ -17,7 +17,7 @@ export default function PathwaysQuizCTA() {
       aria-labelledby="pathways-quiz-cta-heading"
       className="relative w-full overflow-hidden bg-brand-primary py-20 lg:py-32"
     >
-      {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+      {/* Background photo + black overlay: dark CTA bands carry imagery, never flat colour */}
       <Image
         src="/images/generated/group-coaching-real.webp"
         alt=""
@@ -42,7 +42,7 @@ export default function PathwaysQuizCTA() {
         <motion.h2
           id="pathways-quiz-cta-heading"
           {...fadeUp(0.1)}
-          className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-tight mb-6"
+          className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-tight mb-6"
         >
           Not sure which pathway is right for you?
         </motion.h2>
@@ -59,7 +59,7 @@ export default function PathwaysQuizCTA() {
         <motion.div {...fadeUp(0.3)}>
           <Link
             href="/discover-your-pattern"
-            className="group inline-flex items-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
+            className="group inline-flex items-center gap-3 rounded-button bg-white px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-brand-primary transition-all duration-300 hover:bg-brand-sand hover:shadow-2xl"
           >
             Take the Free Pattern Scan
             <span

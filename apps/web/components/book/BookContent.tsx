@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { PageHeader } from '@/components/shared/PageHeader'
 import { bookTestimonials } from '@/data/testimonials'
 
 // TODO: Suzanne to confirm book titles, descriptions, and release dates for all 3 books in the trilogy
@@ -14,7 +15,7 @@ const books = [
     description:
       'Identify and decode the hidden patterns that have been running your life beneath conscious awareness: the programs installed early in life that shape every decision, relationship, and result you experience today.',
     tag: 'Pre-Order',
-    // TODO: Confirm with Suzanne — "Available Now" or "Pre-Order"?
+    // TODO: Confirm with Suzanne: "Available Now" or "Pre-Order"?
     tagAccent: true,
   },
   {
@@ -100,16 +101,10 @@ const themes = [
   },
 ]
 
-// Reader testimonials live in data/testimonials.ts (bookTestimonials) — the
+// Reader testimonials live in data/testimonials.ts (bookTestimonials): the
 // single source of truth. Entries require Dr. Suzanne Ravenall's verified
 // sign-off; while the list is empty the "Early Readers Say" section below
 // renders nothing.
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: 'easeOut' as const },
-})
 
 const scrollFadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -121,113 +116,53 @@ const scrollFadeUp = (delay = 0) => ({
 export default function BookContent() {
   return (
     <>
-      {/* ─── 1. Hero — dark, min-h-screen ─────────────────────────────── */}
-      <section
-        aria-labelledby="book-hero-heading"
-        className="relative w-full overflow-hidden min-h-screen flex items-center"
+      {/* ─── 1. Header: shared PageHeader, the header rule ─────────────── */}
+      {/* Suzanne stands on the left of this footage (as on About), so the text
+          takes the right-hand column. The floating book mockup that sat on the
+          right came out: PageHeader has no side slot, and the same cover is the
+          first thing in the section below. The second paragraph moves to the
+          slim band under the header (one paragraph at most in a header). */}
+      <PageHeader
+        id="book-hero-heading"
+        eyebrow="The Breakthrough Trilogy"
+        video={{
+          src: '/videos/generated/hero-brain-video.mp4',
+          poster: '/images/hero-bg-suzanne-ravenall.jpg',
+        }}
+        align="right"
+        title={<>Overcoming the Impossible &amp; Living Life Beyond Limitation</>}
+        description="A Quest to Find an Upgraded Version of You"
       >
-        {/* Video background */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          aria-hidden="true"
-          className="absolute inset-0 z-0 w-full h-full object-cover"
+        <Link
+          href="/shop/the-latest-book-by-suzanne"
+          className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
         >
-          <source src="/videos/generated/hero-brain-video.mp4" type="video/mp4" />
-        </video>
+          Pre-Order Now
+        </Link>
+        <a
+          href="#excerpt"
+          className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
+        >
+          Read an Excerpt ↓
+        </a>
+      </PageHeader>
 
-        {/* Gradient overlay — neutral black scrim, no navy/accent tint under text */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/85"
-        />
-
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-48">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-
-            {/* Left: text */}
-            <div>
-              <motion.p
-                {...fadeUp(0)}
-                className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-6"
-              >
-                The Breakthrough Trilogy
-              </motion.p>
-
-              <motion.h1
-                id="book-hero-heading"
-                {...fadeUp(0.1)}
-                className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-4"
-              >
-                Overcoming the Impossible &amp; Living Life Beyond Limitation
-              </motion.h1>
-
-              <motion.p
-                {...fadeUp(0.2)}
-                className="text-xl lg:text-2xl font-light text-white/85 italic mb-6"
-              >
-                A Quest to Find an Upgraded Version of You
-              </motion.p>
-
-              <motion.p
-                {...fadeUp(0.25)}
-                className="text-lg text-white/80 leading-relaxed mb-10 max-w-xl"
-              >
-                Three books. One journey. The complete roadmap to decoding the patterns that keep
-                you stuck, and upgrading every area of your life.
-              </motion.p>
-
-              <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/shop/the-latest-book-by-suzanne"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 animate-pulse-glow"
-                >
-                  Pre-Order Now
-                </Link>
-                <a
-                  href="#excerpt"
-                  className="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white hover:bg-white/10 font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300"
-                >
-                  Read an Excerpt ↓
-                </a>
-              </motion.div>
-            </div>
-
-            {/* Right: floating book mockup — hidden on mobile */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
-              className="hidden lg:flex justify-center items-center"
-            >
-              <motion.div
-                animate={{ y: [0, -14, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-                className="drop-shadow-[0_32px_56px_rgba(0,0,0,0.7)]"
-              >
-                <Image
-                  src="/images/book-cover.png"
-                  alt="Breakthrough Trilogy by Dr. Suzanne Ravenall"
-                  width={380}
-                  height={500}
-                  priority
-                  className="rounded-card"
-                />
-              </motion.div>
-            </motion.div>
-
-          </div>
+      {/* Slim band under the header, lined up with its text column */}
+      <div className="bg-brand-primary-900 border-t border-white/10 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="sm:ml-auto sm:max-w-md lg:max-w-2xl text-sm sm:text-base lg:text-lg text-white/85 leading-relaxed">
+            Three books. One journey. The complete roadmap to decoding the patterns that keep
+            you stuck, and upgrading every area of your life.
+          </p>
         </div>
-      </section>
+      </div>
 
-      {/* ─── 2. The Book — light, bg-white ────────────────────────────── */}
-      <section aria-labelledby="book-detail-heading" className="w-full bg-white py-20 lg:py-32">
+      {/* ─── 2. The Book: light, bg-brand-cream ────────────────────────────── */}
+      <section aria-labelledby="book-detail-heading" className="w-full bg-brand-cream py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-2 items-center">
 
-            {/* Book cover — left */}
+            {/* Book cover: left */}
             <motion.div {...scrollFadeUp(0)} className="flex justify-center">
               <Image
                 src="/images/book-cover.png"
@@ -238,7 +173,7 @@ export default function BookContent() {
               />
             </motion.div>
 
-            {/* Description — right */}
+            {/* Description: right */}
             <div>
               <motion.p
                 {...scrollFadeUp(0)}
@@ -250,33 +185,33 @@ export default function BookContent() {
               <motion.h2
                 id="book-detail-heading"
                 {...scrollFadeUp(0.1)}
-                className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-2"
+                className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary leading-tight mb-2"
               >
                 Breakthrough Trilogy
               </motion.h2>
               <motion.p
                 {...scrollFadeUp(0.15)}
-                className="text-xl text-gray-500 font-light mb-8"
+                className="text-xl text-brand-muted font-light mb-8"
               >
                 Overcoming the Impossible &amp; Living Life Beyond Limitation
               </motion.p>
 
               <div className="space-y-4 mb-10">
-                <motion.p {...scrollFadeUp(0.2)} className="text-gray-600 leading-relaxed">
+                <motion.p {...scrollFadeUp(0.2)} className="text-brand-muted leading-relaxed">
                   Consciousness is a meaning field. The mind adapts to the worldview imposed on it.
                   When this system is interrogated, it reveals a series of challenges: depression,
                   illness, addiction, broken relationships.
                 </motion.p>
-                <motion.p {...scrollFadeUp(0.25)} className="text-gray-600 leading-relaxed">
+                <motion.p {...scrollFadeUp(0.25)} className="text-brand-muted leading-relaxed">
                   Brain development is much more than a story about biology. From our earliest years,
                   relationships with others play a key role in shaping how our brain grows and develops.
                 </motion.p>
-                <motion.p {...scrollFadeUp(0.3)} className="text-gray-600 leading-relaxed">
+                <motion.p {...scrollFadeUp(0.3)} className="text-brand-muted leading-relaxed">
                   For a moment, just one moment, imagine you had the ability to alter your relationship
                   with everything happening in your life. Imagine having the ability to deeply
                   understand it, improve how you respond to it and how to navigate it successfully.
                 </motion.p>
-                <motion.p {...scrollFadeUp(0.35)} className="text-gray-600 leading-relaxed font-medium text-brand-primary">
+                <motion.p {...scrollFadeUp(0.35)} className="text-brand-muted leading-relaxed font-medium text-brand-primary">
                   The Breakthrough Trilogy is your roadmap to finding an upgraded version of you.
                 </motion.p>
               </div>
@@ -293,8 +228,8 @@ export default function BookContent() {
                       {theme.icon}
                     </div>
                     <div>
-                      <p className="font-semibold text-brand-primary text-sm mb-1">{theme.heading}</p>
-                      <p className="text-gray-500 text-sm leading-relaxed">{theme.body}</p>
+                      <p className="font-medium text-brand-primary text-sm mb-1">{theme.heading}</p>
+                      <p className="text-brand-muted text-sm leading-relaxed">{theme.body}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -305,14 +240,14 @@ export default function BookContent() {
                 className="flex flex-col sm:flex-row sm:items-center gap-6"
               >
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">
+                  <p className="text-xs text-brand-muted uppercase tracking-widest mb-1">
                     Pre-order price
                   </p>
                   <p className="text-3xl font-semibold tracking-tight text-brand-primary">R165</p>
                 </div>
                 <Link
                   href="/shop/the-latest-book-by-suzanne"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
                 >
                   Pre-Order Your Copy
                 </Link>
@@ -322,8 +257,8 @@ export default function BookContent() {
         </div>
       </section>
 
-      {/* ─── 3. What You'll Discover — light, bg-gray-50 ──────────────── */}
-      <section aria-labelledby="trilogy-heading" className="w-full bg-gray-50 py-20 lg:py-32">
+      {/* ─── 3. What You'll Discover: light, bg-brand-sand ──────────────── */}
+      <section aria-labelledby="trilogy-heading" className="w-full bg-brand-sand py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <motion.p
@@ -335,7 +270,7 @@ export default function BookContent() {
             <motion.h2
               id="trilogy-heading"
               {...scrollFadeUp(0.1)}
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary"
             >
               Three books that work as one system
             </motion.h2>
@@ -346,25 +281,25 @@ export default function BookContent() {
               <motion.div
                 key={book.title}
                 {...scrollFadeUp(i * 0.1)}
-                className="group relative bg-white border border-gray-100 rounded-card overflow-hidden p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
+                className="group relative bg-white border border-brand-border rounded-card overflow-hidden p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative">
-                  <p className="text-7xl font-semibold tracking-tight text-brand-accent/15 mb-4 leading-none select-none">
+                  <p className="text-7xl font-medium tracking-tight text-brand-accent/15 mb-4 leading-none select-none">
                     {book.number}
                   </p>
                   <span
                     className={`inline-block px-3 py-1 text-xs font-medium rounded-full mb-4 ${
                       book.tagAccent
-                        ? 'bg-brand-accent/10 text-brand-accent'
-                        : 'bg-gray-100 text-gray-500'
+                        ? 'bg-brand-primary-900 text-white border border-brand-primary-900'
+                        : 'bg-brand-sand text-brand-ink border border-brand-border'
                     }`}
                   >
                     {book.tag}
                   </span>
-                  <h3 className="text-xl font-semibold text-brand-primary mb-1">{book.title}</h3>
+                  <h3 className="text-xl font-medium text-brand-primary mb-1">{book.title}</h3>
                   <p className="text-sm text-brand-accent mb-4">{book.subtitle}</p>
-                  <p className="text-gray-600 text-sm leading-relaxed">{book.description}</p>
+                  <p className="text-brand-muted text-sm leading-relaxed">{book.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -372,12 +307,12 @@ export default function BookContent() {
         </div>
       </section>
 
-      {/* ─── 4. Excerpt — light, bg-white ─────────────────────────────── */}
+      {/* ─── 4. Excerpt: light, bg-brand-cream ─────────────────────────────── */}
       {/* TODO: Replace pull quote and paragraph below with real book excerpt when available */}
       <section
         id="excerpt"
         aria-labelledby="excerpt-heading"
-        className="w-full bg-white py-20 lg:py-32"
+        className="w-full bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
@@ -390,7 +325,7 @@ export default function BookContent() {
             <motion.h2
               id="excerpt-heading"
               {...scrollFadeUp(0.1)}
-              className="text-3xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-16"
+              className="text-3xl lg:text-5xl font-medium tracking-tight text-brand-primary mb-16"
             >
               A taste of the journey
             </motion.h2>
@@ -407,19 +342,19 @@ export default function BookContent() {
               >
                 &ldquo;
               </div>
-              <p className="text-2xl lg:text-3xl font-light text-gray-700 leading-relaxed italic mb-8">
+              <p className="text-2xl lg:text-3xl font-light text-brand-ink leading-relaxed italic mb-8">
                 Consciousness is a meaning field. The mind adapts to the worldview imposed on it.
                 When this system is interrogated, it reveals a series of challenges: depression,
                 illness, addiction, broken relationships.
               </p>
-              <footer className="text-sm font-medium text-gray-500 uppercase tracking-widest">
+              <footer className="text-sm font-medium text-brand-muted uppercase tracking-widest">
                 Dr. Suzanne Ravenall, Breakthrough Trilogy
               </footer>
             </motion.blockquote>
 
             <motion.p
               {...scrollFadeUp(0.3)}
-              className="text-gray-600 leading-relaxed mb-10 max-w-2xl mx-auto"
+              className="text-brand-muted leading-relaxed mb-10 max-w-2xl mx-auto"
             >
               The Breakthrough Trilogy is not a self-help book. It is a practical operating manual
               for the human mind, drawing on neuroscience, energy psychology, and over two decades
@@ -429,7 +364,7 @@ export default function BookContent() {
             <motion.div {...scrollFadeUp(0.4)}>
               <Link
                 href="/shop/the-latest-book-by-suzanne"
-                className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300"
+                className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
               >
                 Get the Full Book
               </Link>
@@ -438,15 +373,15 @@ export default function BookContent() {
         </div>
       </section>
 
-      {/* ─── 5. About the Author — light, bg-gray-50 ──────────────────── */}
+      {/* ─── 5. About the Author: light, bg-brand-sand ──────────────────── */}
       <section
         aria-labelledby="author-heading"
-        className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden"
+        className="relative w-full bg-brand-sand py-20 lg:py-32 overflow-hidden"
       >
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 items-center">
 
-            {/* Text — left */}
+            {/* Text: left */}
             <div>
               <motion.p
                 {...scrollFadeUp(0)}
@@ -457,22 +392,22 @@ export default function BookContent() {
               <motion.h2
                 id="author-heading"
                 {...scrollFadeUp(0.1)}
-                className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
+                className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary leading-tight mb-6"
               >
                 Written from lived experience
               </motion.h2>
-              <motion.p {...scrollFadeUp(0.2)} className="text-gray-600 leading-relaxed mb-5">
+              <motion.p {...scrollFadeUp(0.2)} className="text-brand-muted leading-relaxed mb-5">
                 This trilogy is not written from theory. It is written from the trenches of real
                 transformation, both Suzanne&apos;s own journey and thousands of client breakthroughs
                 over 20+ years.
               </motion.p>
-              <motion.p {...scrollFadeUp(0.3)} className="text-gray-600 leading-relaxed mb-5">
+              <motion.p {...scrollFadeUp(0.3)} className="text-brand-muted leading-relaxed mb-5">
                 Dr. Suzanne Ravenall climbed Mount Elbrus, founded a successful international
                 coaching institution, and overcame experiences that would have stopped most people
                 in their tracks. Every insight in this trilogy was hard-won and battle-tested before
                 it ever reached the page.
               </motion.p>
-              <motion.p {...scrollFadeUp(0.4)} className="text-gray-600 leading-relaxed mb-10">
+              <motion.p {...scrollFadeUp(0.4)} className="text-brand-muted leading-relaxed mb-10">
                 As the founder of Rapid Repatterning® and Neuro-repatterning® methodology, Suzanne
                 brings a unique fusion of neuroscience, quantum physics, and energetic psychology
                 to every page, giving you tools that work at the deepest level of your being.
@@ -480,7 +415,7 @@ export default function BookContent() {
               <motion.div {...scrollFadeUp(0.5)}>
                 <Link
                   href="/about"
-                  className="inline-flex items-center text-brand-accent font-semibold text-sm uppercase tracking-widest hover:text-brand-accent-700 transition-colors duration-300 group"
+                  className="inline-flex items-center text-brand-accent font-medium text-sm uppercase tracking-widest hover:text-brand-accent-700 transition-colors duration-300 group"
                 >
                   Meet Dr. Ravenall
                   <svg
@@ -497,7 +432,7 @@ export default function BookContent() {
               </motion.div>
             </div>
 
-            {/* Portrait — right */}
+            {/* Portrait: right */}
             <motion.div
               {...scrollFadeUp(0.15)}
               className="flex justify-center lg:justify-end"
@@ -517,13 +452,13 @@ export default function BookContent() {
         </div>
       </section>
 
-      {/* ─── 6. Reader Responses — light, bg-white ──────────────────── */}
+      {/* ─── 6. Reader Responses: light, bg-brand-cream ──────────────────── */}
       {/* Hidden entirely until data/testimonials.ts holds verified,
           Suzanne-approved reader quotes */}
       {bookTestimonials.length > 0 && (
       <section
         aria-labelledby="responses-heading"
-        className="w-full bg-white py-20 lg:py-32"
+        className="w-full bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -536,7 +471,7 @@ export default function BookContent() {
             <motion.h2
               id="responses-heading"
               {...scrollFadeUp(0.1)}
-              className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary"
             >
               Transformation that speaks for itself
             </motion.h2>
@@ -547,14 +482,14 @@ export default function BookContent() {
               <motion.div
                 key={`${t.name}-${i}`}
                 {...scrollFadeUp(i * 0.1)}
-                className="group bg-gray-50 hover:bg-white border border-gray-100 hover:border-gray-200 rounded-card p-8 hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1"
+                className="group bg-brand-sand hover:bg-white border border-brand-border hover:border-brand-primary-300 rounded-card p-8 hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1"
               >
                 {/* Stars */}
                 <div className="flex gap-1 mb-6" role="img" aria-label="5 out of 5 stars">
                   {Array.from({ length: 5 }).map((_, j) => (
                     <svg
                       key={j}
-                      className="w-4 h-4 text-brand-amber fill-current"
+                      className="w-4 h-4 text-brand-ink fill-current"
                       viewBox="0 0 20 20"
                       aria-hidden="true"
                     >
@@ -562,12 +497,12 @@ export default function BookContent() {
                     </svg>
                   ))}
                 </div>
-                <p className="text-gray-600 leading-relaxed mb-6 italic">
+                <p className="text-brand-muted leading-relaxed mb-6 italic">
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div>
-                  <p className="font-semibold text-brand-primary text-sm">{t.name}</p>
-                  {t.title && <p className="text-gray-500 text-xs mt-0.5">{t.title}</p>}
+                  <p className="font-medium text-brand-primary text-sm">{t.name}</p>
+                  {t.title && <p className="text-brand-muted text-xs mt-0.5">{t.title}</p>}
                 </div>
               </motion.div>
             ))}
@@ -576,7 +511,7 @@ export default function BookContent() {
       </section>
       )}
 
-      {/* ─── 7. Pre-Order CTA — dark, photo-backed band ───────────────── */}
+      {/* ─── 7. Pre-Order CTA: dark, photo-backed band ───────────────── */}
       <section
         aria-labelledby="preorder-heading"
         className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
@@ -597,7 +532,7 @@ export default function BookContent() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 items-center">
 
-            {/* CTA content — left */}
+            {/* CTA content: left */}
             <div>
               <motion.p
                 {...scrollFadeUp(0)}
@@ -608,7 +543,7 @@ export default function BookContent() {
               <motion.h2
                 id="preorder-heading"
                 {...scrollFadeUp(0.1)}
-                className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-6"
+                className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.05] mb-6"
               >
                 Your transformation starts on page one
               </motion.h2>
@@ -630,20 +565,20 @@ export default function BookContent() {
               >
                 <Link
                   href="/shop/the-latest-book-by-suzanne"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 animate-pulse-glow"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
                 >
                   Pre-Order Now: R165
                 </Link>
                 <Link
                   href="/shop/the-latest-book-by-suzanne"
-                  className="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white hover:bg-white/10 font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 border border-white/50 hover:border-white text-white hover:bg-white/10 font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
                 >
                   Gift This Book
                 </Link>
               </motion.div>
             </div>
 
-            {/* Suzanne casual photo — right, hidden on mobile */}
+            {/* Suzanne casual photo: right, hidden on mobile */}
             <motion.div
               {...scrollFadeUp(0.15)}
               className="hidden lg:flex justify-end"

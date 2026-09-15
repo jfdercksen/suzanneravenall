@@ -42,16 +42,16 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
 
   const inputClass =
     variant === 'light'
-      ? 'flex-1 rounded-xl bg-gray-100 border border-gray-200 px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent text-sm'
-      : 'flex-1 rounded-xl bg-white/10 border border-white/20 px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent text-sm'
+      ? 'flex-1 rounded-xl bg-brand-sand border border-brand-border px-4 py-3 text-brand-ink placeholder-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent text-sm'
+      : 'flex-1 rounded-xl bg-white/10 border border-white/20 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/60 focus:border-transparent text-sm'
 
   if (state === 'success') {
     return (
-      <div className="rounded-card bg-brand-accent/10 border border-brand-accent/30 p-6 text-center">
-        <p className={`font-semibold text-lg ${variant === 'light' ? 'text-gray-900' : 'text-white'}`}>
+      <div className="rounded-card bg-brand-accent/5 border border-brand-primary-300/40 p-6 text-center">
+        <p className={`font-medium text-lg ${variant === 'light' ? 'text-brand-ink' : 'text-white'}`}>
           You&rsquo;re in!
         </p>
-        <p className={`mt-1 text-sm ${variant === 'light' ? 'text-gray-600' : 'text-gray-300'}`}>
+        <p className={`mt-1 text-sm ${variant === 'light' ? 'text-brand-muted' : 'text-white/80'}`}>
           Check your inbox: your access link is on its way.
         </p>
       </div>
@@ -84,7 +84,8 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
         <button
           type="submit"
           disabled={state === 'submitting'}
-          className="rounded-button bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 disabled:cursor-not-allowed px-6 py-3 text-white font-semibold text-sm transition-all duration-300 whitespace-nowrap sm:w-auto w-full"
+          // White on the dark variant: the near-black accent vanishes on black.
+          className={`rounded-button ${variant === 'light' ? 'bg-brand-accent-600 hover:bg-brand-accent-700 text-white' : 'bg-white hover:bg-brand-sand text-brand-primary'} disabled:opacity-60 disabled:cursor-not-allowed px-6 py-3 font-medium text-sm transition-all duration-300 whitespace-nowrap sm:w-auto w-full`}
         >
           {state === 'submitting' ? 'Sending…' : 'Get Instant Access →'}
         </button>
@@ -94,7 +95,7 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
         <p className={`mt-2 text-xs ${variant === 'light' ? 'text-red-600' : 'text-red-400'}`}>{errorMessage}</p>
       )}
 
-      <p className={`mt-3 text-xs ${variant === 'light' ? 'text-gray-500' : 'text-white/70'}`}>
+      <p className={`mt-3 text-xs ${variant === 'light' ? 'text-brand-muted' : 'text-white/70'}`}>
         Free. No credit card required. Instant access.
       </p>
 

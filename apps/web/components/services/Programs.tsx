@@ -120,7 +120,7 @@ export default function Programs() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.6 }}
-      className="relative w-full bg-gray-50 py-20 lg:py-32"
+      className="relative w-full bg-brand-sand py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-20">
@@ -129,11 +129,11 @@ export default function Programs() {
           </p>
           <h2
             id="programs-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-8"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight mb-8"
           >
             Programmes for dramatic change: unlock your super powers now.
           </h2>
-          <p className="text-lg text-gray-600 font-light leading-relaxed">
+          <p className="text-lg text-brand-muted font-light leading-relaxed">
             Programmes to transform yourself and others, utilising conscious
             engineering and natural healing practices. Dive deep into the unconscious
             and flip open self mastery, both yours and others’.
@@ -148,7 +148,7 @@ export default function Programs() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.5, delay: colIdx * 0.1 }}
-              className="group relative overflow-hidden flex flex-col min-h-[320px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
+              className="group relative overflow-hidden flex flex-col min-h-[320px] bg-brand-primary-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl"
             >
               {/* TODO: Replace with programme-specific image — Suzanne to provide: images representing each programme track (Practitioner, Self-Paced, Live) */}
               <Image
@@ -160,13 +160,13 @@ export default function Programs() {
               />
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent"
+                className="absolute inset-0 bg-gradient-to-br from-black/85 via-black/40 to-transparent"
               />
               <div className="relative z-10 flex flex-col h-full p-8 lg:p-10">
                 <p className="text-xs uppercase tracking-[0.3em] font-medium text-white/80 mb-4">
                   {col.eyebrow}
                 </p>
-                <h3 className="text-2xl lg:text-3xl font-semibold tracking-tight text-white leading-tight mb-6">
+                <h3 className="text-2xl lg:text-3xl font-medium tracking-tight text-white leading-tight mb-6">
                   {col.title}
                 </h3>
                 <p className="text-sm text-white/70 font-light leading-relaxed mb-8">
@@ -186,7 +186,7 @@ export default function Programs() {
 
                 <Link
                   href={col.ctaHref}
-                  className="inline-flex items-center justify-center px-6 py-3 border border-white/30 hover:border-brand-accent hover:bg-brand-accent text-white text-xs uppercase tracking-widest font-medium rounded-button transition-all duration-300"
+                  className="inline-flex items-center justify-center px-6 py-3 border border-white/30 hover:border-white hover:bg-white hover:text-brand-primary text-white text-xs uppercase tracking-widest font-medium rounded-button transition-all duration-300"
                 >
                   {col.ctaLabel}
                 </Link>

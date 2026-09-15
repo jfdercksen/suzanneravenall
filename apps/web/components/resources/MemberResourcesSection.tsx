@@ -40,7 +40,7 @@ export default function MemberResourcesSection({ tier }: MemberResourcesSectionP
   return (
     <section
       aria-labelledby="member-resources-heading"
-      className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden"
+      className="relative w-full bg-brand-sand py-20 lg:py-32 overflow-hidden"
     >
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -56,7 +56,7 @@ export default function MemberResourcesSection({ tier }: MemberResourcesSectionP
             </p>
             <h2
               id="member-resources-heading"
-              className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary"
+              className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary"
             >
               For members only
             </h2>
@@ -65,13 +65,13 @@ export default function MemberResourcesSection({ tier }: MemberResourcesSectionP
             <div className="flex gap-3">
               <Link
                 href="/portal/login"
-                className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 hover:border-brand-primary text-brand-primary text-sm font-semibold rounded-button transition-colors duration-300"
+                className="inline-flex items-center justify-center px-6 py-3 border border-brand-primary-300 hover:border-brand-primary text-brand-primary text-sm font-medium rounded-button transition-colors duration-300"
               >
                 Log in
               </Link>
               <Link
                 href="/portal/signup"
-                className="inline-flex items-center justify-center px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-button transition-colors duration-300"
+                className="inline-flex items-center justify-center px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-medium rounded-button transition-colors duration-300"
               >
                 Join free
               </Link>
@@ -95,7 +95,7 @@ export default function MemberResourcesSection({ tier }: MemberResourcesSectionP
                 {unlocked ? (
                   <Link
                     href={item.href}
-                    className="group flex flex-col gap-4 p-6 bg-white border border-gray-100 hover:border-gray-200 rounded-card transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl h-full"
+                    className="group flex flex-col gap-4 p-6 bg-white border border-brand-border hover:border-brand-primary-300 rounded-card transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl h-full"
                   >
                     <div className="flex items-center justify-between">
                       <svg aria-hidden="true" className="w-6 h-6 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -106,8 +106,8 @@ export default function MemberResourcesSection({ tier }: MemberResourcesSectionP
                       </svg>
                     </div>
                     <div>
-                      <p className="text-brand-primary font-semibold mb-2">{item.title}</p>
-                      <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
+                      <p className="text-brand-primary font-medium mb-2">{item.title}</p>
+                      <p className="text-brand-muted text-sm leading-relaxed">{item.description}</p>
                     </div>
                     <span className="inline-flex items-center gap-1 text-brand-accent text-sm font-medium mt-auto">
                       Access now
@@ -117,18 +117,18 @@ export default function MemberResourcesSection({ tier }: MemberResourcesSectionP
                     </span>
                   </Link>
                 ) : (
-                  <div className="relative flex flex-col gap-4 p-6 bg-gray-100/70 rounded-card border border-gray-200 h-full">
+                  <div className="relative flex flex-col gap-4 p-6 bg-brand-sand rounded-card border border-brand-border h-full">
                     <div className="flex items-center justify-between">
-                      <svg aria-hidden="true" className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <svg aria-hidden="true" className="w-6 h-6 text-brand-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                       </svg>
-                      <span className="text-xs font-semibold uppercase tracking-widest text-gray-500 bg-gray-200 px-2 py-0.5 rounded-full">
+                      <span className="text-xs font-medium uppercase tracking-widest text-brand-ink bg-white border border-brand-primary-300 px-2 py-0.5 rounded-full">
                         {tierLabel(minTier)}
                       </span>
                     </div>
                     <div>
-                      <p className="text-gray-500 font-semibold mb-2">{item.title}</p>
-                      <p className="text-gray-500 text-sm leading-relaxed">{item.description}</p>
+                      <p className="text-brand-muted font-medium mb-2">{item.title}</p>
+                      <p className="text-brand-muted text-sm leading-relaxed">{item.description}</p>
                     </div>
                     <div className="mt-auto">
                       {tier ? (

@@ -51,8 +51,9 @@ hide it.
 From sm (640px) up:
 - Content anchored bottom-left; the top of the frame stays clear. When the subject
   stands on the left of the frame, anchor bottom-right instead: a right-hand column
-  (`sm:ml-auto sm:max-w-md lg:max-w-2xl`, narrow on tablets so the column clears the
-  subject), text still left-aligned. AboutHero is the
+  (`sm:ml-auto sm:max-w-md lg:max-w-2xl lg:pr-24`: narrow on tablets so the column clears
+  the subject; the lg right padding keeps long lines clear of the fixed Brilliant Coach
+  tab on the right edge), text still left-aligned. AboutHero is the
   example (Johan, 15 Sep). The description
   carries the width cap (`max-w-xl`), not the wrapper, so a CTA row can run wider
 - Eyebrow (optional): `text-xs uppercase tracking-[0.25em] font-medium text-white/80`.

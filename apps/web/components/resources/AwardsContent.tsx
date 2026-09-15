@@ -66,7 +66,7 @@ export default function AwardsContent() {
       {/* Hero */}
       <section
         aria-labelledby="awards-hero-heading"
-        className="w-full bg-gray-50 py-20 lg:py-32"
+        className="w-full bg-brand-sand py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
@@ -83,7 +83,7 @@ export default function AwardsContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary leading-[1.05] max-w-3xl mb-6"
+            className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.05] max-w-3xl mb-6"
           >
             Awards &amp; Honours
           </motion.h1>
@@ -92,7 +92,7 @@ export default function AwardsContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg text-gray-600 font-light max-w-xl leading-relaxed"
+            className="text-lg text-brand-muted font-light max-w-xl leading-relaxed"
           >
             Recognised across healthcare, business and leadership excellence for the Ravenall
             Institute&rsquo;s contribution to coaching and human development.
@@ -103,7 +103,7 @@ export default function AwardsContent() {
       {/* Awards Grid */}
       <section
         aria-labelledby="all-awards-heading"
-        className="w-full bg-white py-20 lg:py-32"
+        className="w-full bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
@@ -112,7 +112,7 @@ export default function AwardsContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary mb-12"
+            className="text-3xl lg:text-4xl font-medium tracking-tight text-brand-primary mb-12"
           >
             All Awards
           </motion.h2>
@@ -128,7 +128,7 @@ export default function AwardsContent() {
               <motion.div
                 key={item.name}
                 variants={cardVariants}
-                className="flex flex-col bg-gray-50 rounded-2xl p-6 h-full"
+                className="flex flex-col bg-brand-sand rounded-2xl p-6 h-full"
               >
                 <div className="flex items-center gap-3 mb-5">
                   <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-accent/10 text-brand-accent">
@@ -139,11 +139,11 @@ export default function AwardsContent() {
                   </p>
                 </div>
 
-                <h3 className="text-base font-semibold text-gray-900 mb-3 leading-snug flex-1">
+                <h3 className="text-base font-medium text-brand-ink mb-3 leading-snug flex-1">
                   {item.name}
                 </h3>
 
-                <p className="text-sm text-gray-600 font-light leading-relaxed">
+                <p className="text-sm text-brand-muted font-light leading-relaxed">
                   {item.description}
                 </p>
               </motion.div>
@@ -152,7 +152,7 @@ export default function AwardsContent() {
         </div>
       </section>
 
-      {/* CTA — dark, photo-backed band */}
+      {/* CTA: dark, photo-backed band */}
       <section
         aria-labelledby="awards-cta-heading"
         className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
@@ -186,7 +186,7 @@ export default function AwardsContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-semibold tracking-tight text-white mb-6"
+            className="text-4xl lg:text-5xl font-medium tracking-tight text-white mb-6"
           >
             Ready to start your transformation?
           </motion.h2>
@@ -199,7 +199,7 @@ export default function AwardsContent() {
           >
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm px-8 py-4 rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+              className="inline-flex items-center gap-2 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm px-8 py-4 rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
             >
               Get in touch <ArrowRight size={16} />
             </Link>

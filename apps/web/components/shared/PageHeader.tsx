@@ -87,8 +87,10 @@ export function PageHeader({
         <div className="bg-gradient-to-t from-black/85 to-black/65">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 pb-20 lg:pb-24">
             {/* Right-aligned headers use the AboutHero column: narrow on
-                tablets so its left edge clears the subject. */}
-            <div className={align === 'right' ? 'sm:ml-auto sm:max-w-md lg:max-w-2xl' : undefined}>
+                tablets so its left edge clears the subject. lg:pr-24 keeps
+                long headline lines clear of the fixed Brilliant Coach tab,
+                which covers the right ~115px mid-screen. */}
+            <div className={align === 'right' ? 'sm:ml-auto sm:max-w-md lg:max-w-2xl lg:pr-24' : undefined}>
               {eyebrow && (
                 <motion.p
                   {...fadeUp(0)}

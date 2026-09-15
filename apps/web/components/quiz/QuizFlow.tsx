@@ -133,7 +133,7 @@ export default function QuizFlow({
   const currentQuestion = isQuestion ? quiz.questions[step - 1] : undefined
 
   return (
-    <section className="relative min-h-screen w-full bg-gray-50 overflow-hidden">
+    <section className="relative min-h-screen w-full bg-brand-sand overflow-hidden">
       {/* Progress bar — questions only */}
       {isQuestion && (
         <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 pt-8">
@@ -141,11 +141,11 @@ export default function QuizFlow({
             <button
               type="button"
               onClick={goBack}
-              className="text-xs uppercase tracking-[0.2em] text-gray-500 hover:text-brand-primary transition-colors duration-150"
+              className="text-xs uppercase tracking-[0.2em] text-brand-muted hover:text-brand-primary transition-colors duration-150"
             >
               ← Back
             </button>
-            <span className="text-xs uppercase tracking-[0.2em] text-gray-500">
+            <span className="text-xs uppercase tracking-[0.2em] text-brand-muted">
               {step} of {total}
             </span>
           </div>
@@ -155,7 +155,7 @@ export default function QuizFlow({
             aria-valuenow={step}
             aria-valuemin={0}
             aria-valuemax={total}
-            className="h-1.5 w-full rounded-full bg-gray-200 overflow-hidden"
+            className="h-1.5 w-full rounded-full bg-brand-border overflow-hidden"
           >
             <motion.div
               className="h-full rounded-full bg-brand-accent"
@@ -184,22 +184,22 @@ export default function QuizFlow({
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
                 2-Minute Diagnostic
               </p>
-              <h1 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-5">{quiz.title}</h1>
+              <h1 className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight mb-5">{quiz.title}</h1>
               <p className="text-lg lg:text-xl text-brand-accent font-light mb-8">
                 {quiz.subtitle}
               </p>
-              <div className="text-left text-base text-gray-600 font-light leading-relaxed whitespace-pre-line mb-10">
+              <div className="text-left text-base text-brand-muted font-light leading-relaxed whitespace-pre-line mb-10">
                 {quiz.intro}
               </div>
               <button
                 type="button"
                 onClick={start}
-                className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-10 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
+                className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-10 py-4 text-sm font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl"
               >
                 Start the Diagnostic
                 <span aria-hidden="true">→</span>
               </button>
-              <p className="mt-4 text-xs text-gray-500 tracking-wide">2 minutes · {total} questions</p>
+              <p className="mt-4 text-xs text-brand-muted tracking-wide">2 minutes · {total} questions</p>
             </motion.div>
           )}
 
@@ -216,7 +216,7 @@ export default function QuizFlow({
             >
               <h2
                 id="quiz-current-question"
-                className="text-2xl lg:text-4xl font-semibold tracking-tight text-brand-primary leading-snug text-center min-h-[3.5em] flex items-center justify-center mb-10"
+                className="text-2xl lg:text-4xl font-medium tracking-tight text-brand-primary leading-snug text-center min-h-[3.5em] flex items-center justify-center mb-10"
               >
                 {currentQuestion.text}
               </h2>
@@ -236,7 +236,7 @@ export default function QuizFlow({
                         'border transition-all duration-200',
                         selected
                           ? 'bg-brand-accent border-brand-accent text-white scale-[1.02]'
-                          : 'bg-white border-gray-200 text-gray-700 hover:border-brand-accent/60 hover:shadow-sm',
+                          : 'bg-white border-brand-border text-brand-ink hover:border-brand-primary-300 hover:shadow-sm',
                       ].join(' ')}
                     >
                       {option.label}
@@ -259,7 +259,7 @@ export default function QuizFlow({
               transition={{ duration: 0.4, ease: 'easeOut' }}
               className="text-center"
             >
-              <p className="text-base text-gray-600 font-light">
+              <p className="text-base text-brand-muted font-light">
                 We couldn&apos;t load your result. Please retake the diagnostic.
               </p>
             </motion.div>
@@ -279,7 +279,7 @@ export default function QuizFlow({
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4 text-center">
                 Your Result
               </p>
-              <h1 className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-3 text-center">
+              <h1 className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight mb-3 text-center">
                 {result.title}
               </h1>
               <p className="text-base text-brand-accent font-light mb-12 text-center">
@@ -294,7 +294,7 @@ export default function QuizFlow({
                   <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
                     {block.label}
                   </p>
-                  <p className="text-base lg:text-lg text-gray-600 font-light leading-relaxed">
+                  <p className="text-base lg:text-lg text-brand-muted font-light leading-relaxed">
                     {block.body}
                   </p>
                 </div>
@@ -310,11 +310,11 @@ export default function QuizFlow({
                   </p>
                   <ul className="space-y-2.5">
                     {list.items.map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-base text-gray-600 font-light">
+                      <li key={item} className="flex items-start gap-3 text-base text-brand-muted font-light">
                         <span
                           aria-hidden="true"
                           className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${
-                            list.accent ? 'bg-brand-accent' : 'bg-gray-400'
+                            list.accent ? 'bg-brand-accent' : 'bg-brand-primary-300'
                           }`}
                         />
                         {item}
@@ -328,7 +328,7 @@ export default function QuizFlow({
               <div className="mt-12 flex flex-col gap-4">
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl hover:shadow-brand-accent/30"
+                  className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl"
                 >
                   {result.cta}
                   <span aria-hidden="true">→</span>
@@ -342,7 +342,7 @@ export default function QuizFlow({
                     type="button"
                     onClick={emailReport}
                     disabled={status === 'submitting'}
-                    className="inline-flex items-center justify-center px-8 py-4 border border-gray-300 hover:border-brand-primary text-gray-600 hover:text-brand-primary font-semibold text-sm uppercase tracking-widest rounded-button transition-all duration-300 disabled:opacity-60"
+                    className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary-300 hover:border-brand-primary text-brand-muted hover:text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 disabled:opacity-60"
                   >
                     {status === 'submitting' ? 'Sending…' : 'Email Me the Full Report'}
                   </button>
@@ -356,7 +356,7 @@ export default function QuizFlow({
 
               {status === 'success' && (
                 <p
-                  className="mt-6 rounded-card bg-brand-accent/10 border border-brand-accent/30 p-5 text-center text-base text-brand-primary"
+                  className="mt-6 rounded-card bg-white border border-brand-border p-5 text-center text-base text-brand-primary"
                   role="status"
                 >
                   {message}

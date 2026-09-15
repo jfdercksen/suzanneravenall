@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
-// Section is light (bg-white) — position 4 in dark/light alternation after GroupCorporate (dark).
+// Section is light (bg-brand-cream): position 4 in the alternation, after GroupCorporate (sand).
 const topics = [
   {
     name: 'Conversations with My Brain',
@@ -41,7 +41,7 @@ export default function Speaking() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px' }}
       transition={{ duration: 0.6 }}
-      className="relative w-full bg-white py-20 lg:py-32"
+      className="relative w-full bg-brand-cream py-20 lg:py-32"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-16">
@@ -50,18 +50,18 @@ export default function Speaking() {
           </p>
           <h2
             id="speaking-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-8"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight mb-8"
           >
             Customised, real, authentic: keynotes that cut to what underlies human
             behaviour.
           </h2>
-          <p className="text-lg text-gray-600 font-light leading-relaxed mb-6">
+          <p className="text-lg text-brand-muted font-light leading-relaxed mb-6">
             As a keynote speaker, Suzanne takes audiences on a journey of inner
             transformation, changing lives from the inside out. When we turn on the
             magic on the inside and capitalise on it, we begin to transform in
             unimaginable ways, and that shows up in every-day life.
           </p>
-          <p className="text-lg text-gray-600 font-light leading-relaxed">
+          <p className="text-lg text-brand-muted font-light leading-relaxed">
             More resilience to navigate today&apos;s challenging world. More courage and
             confidence than you ever thought possible. The power of our own innate
             wisdom, energy and mind, to respond, not react, to life.
@@ -74,7 +74,7 @@ export default function Speaking() {
             That shift radiates outward, into how we lead, grow, relate, love, and
             show up.&rdquo;
           </blockquote>
-          <figcaption className="mt-4 text-xs uppercase tracking-[0.3em] font-medium text-gray-600">
+          <figcaption className="mt-4 text-xs uppercase tracking-[0.3em] font-medium text-brand-muted">
             Dr. Suzanne Ravenall
           </figcaption>
         </figure>
@@ -93,7 +93,7 @@ export default function Speaking() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative overflow-hidden min-h-[280px] bg-gray-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-brand-accent/40 hover:shadow-2xl"
+              className="group relative overflow-hidden min-h-[280px] bg-brand-primary-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl"
             >
               <Image
                 src={topic.image}
@@ -104,10 +104,10 @@ export default function Speaking() {
               />
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-br from-gray-950/85 via-gray-950/40 to-transparent"
+                className="absolute inset-0 bg-gradient-to-br from-black/85 via-black/40 to-transparent"
               />
               <div className="relative z-10 p-8">
-                <h3 className="text-2xl font-semibold text-white mb-4">
+                <h3 className="text-2xl font-medium text-white mb-4">
                   {topic.name}
                 </h3>
                 <p className="text-sm text-white/70 font-light leading-relaxed">
@@ -121,7 +121,7 @@ export default function Speaking() {
         <div className="mt-16 flex justify-center">
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_30px_theme(colors.brand.accent/50%)]"
+            className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
           >
             Book Suzanne to Speak
           </Link>

@@ -43,7 +43,7 @@ export default function ResourcesFeaturedAwards() {
     <section
       id="awards"
       aria-labelledby="featured-awards-heading"
-      className="relative w-full bg-gray-50 py-20 lg:py-32 overflow-hidden"
+      className="relative w-full bg-brand-sand py-20 lg:py-32 overflow-hidden"
     >
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
@@ -63,7 +63,7 @@ export default function ResourcesFeaturedAwards() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary"
+            className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary"
           >
             Awards &amp; Honours
           </motion.h2>
@@ -94,22 +94,22 @@ export default function ResourcesFeaturedAwards() {
             <motion.div
               key={award.name}
               variants={cardVariants}
-              className="bg-white border border-gray-100 rounded-card p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group"
+              className="bg-white border border-brand-border rounded-card p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group"
             >
               <div className="flex items-center gap-3 mb-6">
                 <div className="flex items-center justify-center w-12 h-12 rounded-card bg-brand-accent/10 text-brand-accent group-hover:bg-brand-accent/20 transition-colors duration-300">
                   <Award size={22} />
                 </div>
-                <span className="text-3xl font-semibold tracking-tight text-brand-accent">{award.year}</span>
+                <span className="text-3xl font-medium tracking-tight text-brand-accent">{award.year}</span>
               </div>
 
-              <h3 className="text-lg font-semibold text-brand-primary mb-2 leading-snug">
+              <h3 className="text-lg font-medium text-brand-primary mb-2 leading-snug">
                 {award.name}
               </h3>
 
               <p className="text-sm font-medium text-brand-accent mb-4">{award.organisation}</p>
 
-              <p className="text-sm text-gray-600 font-light leading-relaxed">{award.description}</p>
+              <p className="text-sm text-brand-muted font-light leading-relaxed">{award.description}</p>
             </motion.div>
           ))}
         </motion.div>

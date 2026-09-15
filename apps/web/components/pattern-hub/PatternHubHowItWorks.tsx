@@ -27,7 +27,7 @@ const steps = [
 
 export default function PatternHubHowItWorks() {
   return (
-    <section aria-labelledby="pattern-hub-how-heading" className="w-full bg-white py-20 lg:py-32">
+    <section aria-labelledby="pattern-hub-how-heading" className="w-full bg-brand-cream py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.h2
           id="pattern-hub-how-heading"
@@ -35,7 +35,7 @@ export default function PatternHubHowItWorks() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6 }}
-          className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary mb-16 lg:mb-20"
+          className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary mb-16 lg:mb-20"
         >
           How This Works
         </motion.h2>
@@ -49,11 +49,11 @@ export default function PatternHubHowItWorks() {
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.6, delay: idx * 0.15 }}
             >
-              <p className="text-6xl font-black text-brand-accent/20 mb-4" aria-hidden="true">
+              <p className="text-6xl font-semibold text-brand-primary-200 mb-4" aria-hidden="true">
                 {step.number}
               </p>
-              <h3 className="text-lg font-semibold text-brand-primary mb-2">{step.title}</h3>
-              <p className="text-sm text-gray-600">{step.description}</p>
+              <h3 className="text-lg font-medium text-brand-primary mb-2">{step.title}</h3>
+              <p className="text-sm text-brand-muted">{step.description}</p>
             </motion.div>
           ))}
         </div>

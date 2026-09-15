@@ -11,7 +11,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
     <section
       id="approach"
       aria-labelledby="topic-approach-heading"
-      className="w-full bg-gray-50 py-20 lg:py-32 border-b border-gray-200"
+      className="w-full bg-brand-sand py-20 lg:py-32 border-b border-brand-border"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
@@ -27,12 +27,12 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
           </p>
           <h2
             id="topic-approach-heading"
-            className="text-4xl lg:text-6xl font-semibold tracking-tight text-brand-primary leading-tight mb-6"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight mb-6"
           >
             How Suzanne works{' '}
             <span className="text-brand-accent">through this</span>
           </h2>
-          <p className="text-lg text-gray-600 font-light leading-relaxed max-w-2xl">
+          <p className="text-lg text-brand-muted font-light leading-relaxed max-w-2xl">
             Using Rapid Repatterning®, we work at the level where patterns are
             formed. This is not about coping. This is about changing the pattern.
           </p>
@@ -51,7 +51,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
             {/* Connecting line */}
             <div
               aria-hidden="true"
-              className="absolute top-6 left-6 right-6 h-px bg-gray-200"
+              className="absolute top-6 left-6 right-6 h-px bg-brand-border"
             />
 
             {topic.approach.map((stage, index) => (
@@ -67,8 +67,8 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
                 <div
                   className={`relative z-10 w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300
                     ${activeStep === index
-                      ? 'border-brand-accent bg-brand-accent text-white shadow-[0_0_20px_theme(colors.brand.accent/40%)]'
-                      : 'border-gray-300 bg-white text-gray-400 group-hover:border-brand-accent/60 group-hover:text-gray-600'
+                      ? 'border-brand-accent bg-brand-accent text-white'
+                      : 'border-brand-primary-300 bg-white text-brand-muted group-hover:border-brand-primary-500 group-hover:text-brand-ink'
                     }`}
                 >
                   <span className="text-xs font-medium tracking-wider">{stage.step}</span>
@@ -77,7 +77,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
                 {/* Step title below node */}
                 <span
                   className={`text-xs uppercase tracking-[0.2em] font-medium text-center leading-tight transition-colors duration-300 px-2
-                    ${activeStep === index ? 'text-brand-accent' : 'text-gray-400 group-hover:text-gray-600'}`}
+                    ${activeStep === index ? 'text-brand-accent' : 'text-brand-muted group-hover:text-brand-ink'}`}
                 >
                   {stage.title}
                 </span>
@@ -108,7 +108,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
                       <h3 className="text-2xl font-light text-brand-primary mb-3">
                         {topic.approach[activeStep].title}
                       </h3>
-                      <p className="text-lg text-gray-600 font-light leading-relaxed max-w-2xl">
+                      <p className="text-lg text-brand-muted font-light leading-relaxed max-w-2xl">
                         {topic.approach[activeStep].body}
                       </p>
                     </div>
@@ -126,6 +126,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
             return (
               <motion.li
                 key={stage.step}
+                className="rounded-card bg-white"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '0px' }}
@@ -136,26 +137,26 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
                   onClick={() => setActiveStep(isOpen ? -1 : index)}
                   className={`w-full flex items-center gap-5 p-6 rounded-card border transition-all duration-300 text-left
                     ${isOpen
-                      ? 'border-brand-accent bg-white'
-                      : 'border-gray-200 bg-white hover:border-gray-300'
+                      ? 'border-brand-accent'
+                      : 'border-brand-border hover:border-brand-primary-300'
                     }`}
                   aria-expanded={isOpen}
                 >
                   <span
                     className={`shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center text-xs font-medium tracking-wider transition-all duration-300
-                      ${isOpen ? 'border-brand-accent bg-brand-accent text-white' : 'border-gray-300 text-gray-400'}`}
+                      ${isOpen ? 'border-brand-accent bg-brand-accent text-white' : 'border-brand-primary-300 text-brand-muted'}`}
                   >
                     {stage.step}
                   </span>
                   <span
                     className={`flex-1 text-base font-light uppercase tracking-[0.15em] transition-colors duration-300
-                      ${isOpen ? 'text-brand-primary' : 'text-gray-500'}`}
+                      ${isOpen ? 'text-brand-primary' : 'text-brand-muted'}`}
                   >
                     {stage.title}
                   </span>
                   <span
                     aria-hidden="true"
-                    className={`text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                    className={`text-brand-muted transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -173,7 +174,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
                       className="overflow-hidden"
                     >
                       <div className="px-6 pb-6 pt-3 border-x border-b border-brand-accent bg-white rounded-b-card">
-                        <p className="text-base text-gray-600 font-light leading-relaxed">
+                        <p className="text-base text-brand-muted font-light leading-relaxed">
                           {stage.body}
                         </p>
                       </div>

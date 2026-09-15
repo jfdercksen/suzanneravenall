@@ -14,7 +14,7 @@ export default function ServicesFinalCTA() {
       transition={{ duration: 0.6 }}
       className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
     >
-      {/* Background photo + navy overlay — dark CTA bands carry imagery, never flat colour */}
+      {/* Background photo + black overlay: dark CTA bands carry imagery, never flat colour */}
       <Image
         src="/images/generated/session-coaching.webp"
         alt=""
@@ -45,7 +45,7 @@ export default function ServicesFinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-tight mb-6"
+          className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-tight mb-6"
         >
           Not sure which path is right for you?
         </motion.h2>
@@ -70,7 +70,7 @@ export default function ServicesFinalCTA() {
         >
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:shadow-[0_0_40px_theme(colors.brand.accent/60%)]"
+            className="inline-flex items-center justify-center px-10 py-5 bg-white hover:bg-brand-sand text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
           >
             Book a Free Discovery Call
           </Link>

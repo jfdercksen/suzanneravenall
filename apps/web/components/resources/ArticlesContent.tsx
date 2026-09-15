@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { FileText, ArrowRight, ExternalLink } from 'lucide-react'
 import { MEDIA_ARTICLES, type MediaArticle } from '@/data/mediaArticles'
 
-// KI025: shared dataset — entries without an `href` (status
+// KI025: shared dataset: entries without an `href` (status
 // 'needs-content-decision') render as unlinked citation cards.
 const articles = MEDIA_ARTICLES
 
@@ -28,18 +28,18 @@ function ArticleCard({ article }: { article: MediaArticle }) {
           <FileText size={16} />
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-semibold text-brand-accent uppercase tracking-wider">
+          <span className="text-xs font-medium text-brand-accent uppercase tracking-wider">
             {article.outlet}
           </span>
-          <span className="text-xs text-gray-500">{article.date}</span>
+          <span className="text-xs text-brand-muted">{article.date}</span>
         </div>
       </div>
 
-      <h3 className="text-lg font-semibold text-gray-900 mb-3 leading-snug group-hover:text-brand-primary transition-colors duration-300">
+      <h3 className="text-lg font-medium text-brand-ink mb-3 leading-snug group-hover:text-brand-primary transition-colors duration-300">
         {article.title}
       </h3>
 
-      <p className="text-sm text-gray-600 font-light leading-relaxed flex-1">
+      <p className="text-sm text-brand-muted font-light leading-relaxed flex-1">
         {article.description}
       </p>
     </>
@@ -51,7 +51,7 @@ function ArticleCard({ article }: { article: MediaArticle }) {
         href={article.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex flex-col bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300 h-full"
+        className="group flex flex-col bg-brand-sand rounded-2xl p-6 hover:shadow-lg transition-all duration-300 h-full"
       >
         {inner}
         <div className="mt-5 flex items-center gap-2 text-sm font-medium text-brand-accent group-hover:gap-3 transition-all duration-300">
@@ -62,8 +62,8 @@ function ArticleCard({ article }: { article: MediaArticle }) {
     )
   }
 
-  // No live destination yet (KI025) — static citation card, no anchor.
-  return <div className="flex flex-col bg-gray-50 rounded-2xl p-6 h-full">{inner}</div>
+  // No live destination yet (KI025): static citation card, no anchor.
+  return <div className="flex flex-col bg-brand-sand rounded-2xl p-6 h-full">{inner}</div>
 }
 
 export default function ArticlesContent() {
@@ -72,7 +72,7 @@ export default function ArticlesContent() {
       {/* Hero */}
       <section
         aria-labelledby="articles-hero-heading"
-        className="w-full bg-gray-50 py-20 lg:py-32"
+        className="w-full bg-brand-sand py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.p
@@ -89,7 +89,7 @@ export default function ArticlesContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-brand-primary leading-[1.05] max-w-3xl mb-6"
+            className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.05] max-w-3xl mb-6"
           >
             Articles &amp; Publications
           </motion.h1>
@@ -98,7 +98,7 @@ export default function ArticlesContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg text-gray-600 font-light max-w-xl leading-relaxed"
+            className="text-lg text-brand-muted font-light max-w-xl leading-relaxed"
           >
             Thought leadership from Dr. Suzanne Ravenall, published across leading business
             and leadership magazines covering transformation, execution and human potential.
@@ -109,7 +109,7 @@ export default function ArticlesContent() {
       {/* Articles Grid */}
       <section
         aria-labelledby="articles-grid-heading"
-        className="w-full bg-white py-20 lg:py-32"
+        className="w-full bg-brand-cream py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
@@ -118,7 +118,7 @@ export default function ArticlesContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="text-3xl lg:text-4xl font-semibold tracking-tight text-brand-primary mb-12"
+            className="text-3xl lg:text-4xl font-medium tracking-tight text-brand-primary mb-12"
           >
             All Published Articles
           </motion.h2>
@@ -139,7 +139,7 @@ export default function ArticlesContent() {
         </div>
       </section>
 
-      {/* Newsletter CTA — dark, photo-backed band */}
+      {/* Newsletter CTA: dark, photo-backed band */}
       <section
         aria-labelledby="articles-newsletter-cta-heading"
         className="relative w-full bg-brand-primary py-20 lg:py-32 overflow-hidden"
@@ -173,7 +173,7 @@ export default function ArticlesContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl lg:text-5xl font-semibold tracking-tight text-white mb-6"
+            className="text-4xl lg:text-5xl font-medium tracking-tight text-white mb-6"
           >
             Want more insights?
           </motion.h2>
@@ -198,7 +198,7 @@ export default function ArticlesContent() {
           >
             <Link
               href="/resources/newsletter"
-              className="inline-flex items-center gap-2 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold text-sm px-8 py-4 rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+              className="inline-flex items-center gap-2 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm px-8 py-4 rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
             >
               Subscribe to the newsletter <ArrowRight size={16} />
             </Link>

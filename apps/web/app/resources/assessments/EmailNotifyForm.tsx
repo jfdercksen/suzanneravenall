@@ -38,7 +38,7 @@ export default function EmailNotifyForm() {
     return (
       <div className="text-center py-6">
         <p className="text-lg text-brand-primary font-medium">You&apos;re on the list!</p>
-        <p className="text-gray-600 mt-2">
+        <p className="text-brand-muted mt-2">
           We&apos;ll let you know as soon as assessments are available.
         </p>
       </div>
@@ -57,7 +57,7 @@ export default function EmailNotifyForm() {
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Your name"
-        className="flex-1 bg-gray-100 border border-gray-200 rounded-xl px-5 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-colors duration-200"
+        className="flex-1 bg-brand-sand border border-brand-border rounded-xl px-5 py-4 text-brand-ink placeholder-brand-muted focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-colors duration-200"
       />
       <input
         type="email"
@@ -65,17 +65,17 @@ export default function EmailNotifyForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Your email"
-        className="flex-1 bg-gray-100 border border-gray-200 rounded-xl px-5 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-colors duration-200"
+        className="flex-1 bg-brand-sand border border-brand-border rounded-xl px-5 py-4 text-brand-ink placeholder-brand-muted focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-colors duration-200"
       />
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="shrink-0 bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold px-8 py-4 rounded-xl transition-colors duration-300"
+        className="shrink-0 bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium px-8 py-4 rounded-xl transition-colors duration-300"
       >
         {status === 'loading' ? 'Sending…' : 'Notify Me'}
       </button>
       {status === 'error' && errorMessage && (
-        <p className="sm:col-span-3 text-red-500 text-sm text-center">
+        <p className="sm:col-span-3 text-red-600 text-sm text-center">
           {errorMessage}
         </p>
       )}

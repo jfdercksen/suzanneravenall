@@ -16,22 +16,8 @@ export default function TopicSocialProof({ topic }: { topic: Topic }) {
   return (
     <section
       aria-label="Client outcome"
-      className="relative w-full bg-white overflow-hidden py-20 lg:py-32"
+      className="relative w-full bg-brand-cream overflow-hidden py-20 lg:py-32"
     >
-      {/* Subtle gradient */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white via-gray-50 to-white"
-      />
-      {/* Glow orbs */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-32 -left-32 h-[500px] w-[500px] rounded-full bg-brand-accent/8 blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-32 right-0 h-[400px] w-[400px] rounded-full bg-brand-accent/5 blur-3xl"
-      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
@@ -52,11 +38,11 @@ export default function TopicSocialProof({ topic }: { topic: Topic }) {
               </span>
 
               <blockquote>
-                <p className="text-xl lg:text-2xl text-gray-900 font-light italic leading-relaxed mb-8">
+                <p className="text-xl lg:text-2xl text-brand-ink font-light italic leading-relaxed mb-8">
                   {topic.testimonial.quote}
                 </p>
                 <footer className="space-y-1">
-                  <p className="text-sm font-medium text-gray-900 tracking-wide">
+                  <p className="text-sm font-medium text-brand-ink tracking-wide">
                     {topic.testimonial.name}
                   </p>
                   {topic.testimonial.outcome && (
@@ -77,7 +63,7 @@ export default function TopicSocialProof({ topic }: { topic: Topic }) {
               <p className="text-8xl lg:text-9xl font-semibold tracking-tight text-brand-accent leading-none mb-4">
                 {topic.stat.value}
               </p>
-              <p className="text-base lg:text-lg text-gray-600 font-light leading-relaxed max-w-xs lg:ml-auto">
+              <p className="text-base lg:text-lg text-brand-muted font-light leading-relaxed max-w-xs lg:ml-auto">
                 {topic.stat.label}
               </p>
             </motion.div>
