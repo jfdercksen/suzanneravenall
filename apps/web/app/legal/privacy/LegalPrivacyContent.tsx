@@ -17,14 +17,14 @@ export default function LegalPrivacyContent() {
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
               Legal
             </p>
-            <h1 className="text-4xl lg:text-6xl font-light text-white mb-6">
+            <h1 className="text-4xl lg:text-6xl font-medium tracking-tight text-white mb-6">
               Privacy Policy
             </h1>
-            <p className="text-gray-300 text-sm">Last updated: {LAST_UPDATED}</p>
-            <p className="text-gray-300 text-sm mt-1">
+            <p className="text-white/70 text-sm">Last updated: {LAST_UPDATED}</p>
+            <p className="text-white/70 text-sm mt-1">
               Governing law: Protection of Personal Information Act 4 of 2013 (POPIA), South Africa
             </p>
           </motion.div>
@@ -32,7 +32,7 @@ export default function LegalPrivacyContent() {
       </section>
 
       {/* Content */}
-      <section className="py-20 lg:py-32 bg-white">
+      <section className="py-20 lg:py-32 bg-brand-cream">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -44,16 +44,16 @@ export default function LegalPrivacyContent() {
 
             {/* 1. Introduction */}
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 1. Introduction &amp; Identity of the Responsible Party
               </h2>
               {/* TODO (legal review): Confirm full legal name of the responsible party, registered address, and registration number if applicable */}
-              <p className="text-gray-600 leading-relaxed mb-3">
+              <p className="text-brand-ink leading-relaxed mb-3">
                 Dr. Suzanne Ravenall (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;) operates the website at{' '}
                 <strong>suzanneravenall.com</strong> and is the Responsible Party as defined under the
                 Protection of Personal Information Act 4 of 2013 (&ldquo;POPIA&rdquo;).
               </p>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-brand-ink leading-relaxed">
                 This Privacy Policy explains how we collect, use, share, and protect personal information
                 you provide to us, and outlines your rights as a data subject.
               </p>
@@ -61,12 +61,12 @@ export default function LegalPrivacyContent() {
 
             {/* 2. What We Collect */}
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 2. What Information We Collect
               </h2>
-              {/* TODO (legal review): Confirm the complete list of data fields actually collected — cross-check against Supabase schema and form implementations */}
-              <p className="text-gray-600 leading-relaxed mb-3">We may collect the following categories of personal information:</p>
-              <ul className="list-disc list-outside pl-6 space-y-2 text-gray-600">
+              {/* TODO (legal review): Confirm the complete list of data fields actually collected: cross-check against Supabase schema and form implementations */}
+              <p className="text-brand-ink leading-relaxed mb-3">We may collect the following categories of personal information:</p>
+              <ul className="list-disc list-outside pl-6 space-y-2 text-brand-ink">
                 <li>
                   <strong>Identity data:</strong> first name, last name, title, date of birth (where provided)
                 </li>
@@ -93,12 +93,12 @@ export default function LegalPrivacyContent() {
 
             {/* 3. Purpose of Processing */}
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 3. Purpose of Processing (POPIA Section 13 Basis)
               </h2>
-              {/* TODO (legal review): Verify each processing purpose against POPIA Section 11 grounds — ensure consent, legitimate interest, or contract basis is documented for each */}
-              <p className="text-gray-600 leading-relaxed mb-3">We process personal information for the following purposes:</p>
-              <ul className="list-disc list-outside pl-6 space-y-2 text-gray-600">
+              {/* TODO (legal review): Verify each processing purpose against POPIA Section 11 grounds: ensure consent, legitimate interest, or contract basis is documented for each */}
+              <p className="text-brand-ink leading-relaxed mb-3">We process personal information for the following purposes:</p>
+              <ul className="list-disc list-outside pl-6 space-y-2 text-brand-ink">
                 <li>To create and manage your member account</li>
                 <li>To process payments for programmes, products, and memberships</li>
                 <li>To deliver digital content, resources, and coaching services you have purchased</li>
@@ -112,15 +112,15 @@ export default function LegalPrivacyContent() {
 
             {/* 4. Sharing */}
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 4. Sharing of Information
               </h2>
               {/* TODO (legal review): Confirm the complete list of third-party processors and add Data Processing Agreements (DPAs) for each */}
-              <p className="text-gray-600 leading-relaxed mb-3">
+              <p className="text-brand-ink leading-relaxed mb-3">
                 We do not sell your personal information. We may share it with trusted third parties only
                 where necessary:
               </p>
-              <ul className="list-disc list-outside pl-6 space-y-2 text-gray-600">
+              <ul className="list-disc list-outside pl-6 space-y-2 text-brand-ink">
                 <li>
                   <strong>Supabase</strong>: database and authentication hosting
                 </li>
@@ -151,12 +151,12 @@ export default function LegalPrivacyContent() {
 
             {/* 5. Your Rights */}
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 5. Your Rights as a Data Subject (POPIA Chapter 2)
               </h2>
-              {/* TODO (legal review): Confirm the process and response timeframes for exercising each right — POPIA requires response within 30 days */}
-              <p className="text-gray-600 leading-relaxed mb-3">Under POPIA you have the right to:</p>
-              <ul className="list-disc list-outside pl-6 space-y-2 text-gray-600">
+              {/* TODO (legal review): Confirm the process and response timeframes for exercising each right: POPIA requires response within 30 days */}
+              <p className="text-brand-ink leading-relaxed mb-3">Under POPIA you have the right to:</p>
+              <ul className="list-disc list-outside pl-6 space-y-2 text-brand-ink">
                 <li>
                   <strong>Access</strong>: request a copy of the personal information we hold about you
                 </li>
@@ -173,7 +173,7 @@ export default function LegalPrivacyContent() {
                   <strong>Withdraw consent</strong>: where processing is based on consent, withdraw it at any time without affecting the lawfulness of prior processing
                 </li>
               </ul>
-              <p className="text-gray-600 leading-relaxed mt-4">
+              <p className="text-brand-ink leading-relaxed mt-4">
                 To exercise any of these rights, contact us at{' '}
                 {/* TODO: Confirm official privacy contact email before go-live */}
                 <a href="mailto:privacy@suzanneravenall.com" className="text-brand-accent underline hover:no-underline">
@@ -185,11 +185,11 @@ export default function LegalPrivacyContent() {
 
             {/* 6. Retention */}
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 6. Retention Period
               </h2>
-              {/* TODO (legal review): Define specific retention periods for each data category — align with South African tax law (5 years for financial records) and POPIA minimisation principle */}
-              <p className="text-gray-600 leading-relaxed">
+              {/* TODO (legal review): Define specific retention periods for each data category: align with South African tax law (5 years for financial records) and POPIA minimisation principle */}
+              <p className="text-brand-ink leading-relaxed">
                 We retain personal information only for as long as necessary to fulfil the purposes for
                 which it was collected, or as required by law. Financial transaction records are retained
                 for a minimum of five years in compliance with South African tax legislation. Account
@@ -200,11 +200,11 @@ export default function LegalPrivacyContent() {
 
             {/* 7. Security */}
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 7. Security Measures
               </h2>
-              {/* TODO (legal review / security audit): Confirm technical and organisational measures before go-live — include encryption at rest, TLS, access controls, audit logging */}
-              <p className="text-gray-600 leading-relaxed">
+              {/* TODO (legal review / security audit): Confirm technical and organisational measures before go-live: include encryption at rest, TLS, access controls, audit logging */}
+              <p className="text-brand-ink leading-relaxed">
                 We implement appropriate technical and organisational measures to protect your personal
                 information against unauthorised access, disclosure, alteration, and destruction. These
                 include TLS encryption for data in transit, encrypted storage, role-based access controls,
@@ -215,10 +215,10 @@ export default function LegalPrivacyContent() {
 
             {/* 8. Cookies */}
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 8. Cookies
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-brand-ink leading-relaxed">
                 We use cookies and similar tracking technologies on our website. For full details of the
                 cookies we use and how to control them, please read our{' '}
                 <Link href="/legal/cookies" className="text-brand-accent underline hover:no-underline">
@@ -230,19 +230,19 @@ export default function LegalPrivacyContent() {
 
             {/* 9. Information Officer */}
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 9. Contact the Information Officer
               </h2>
-              {/* TODO (legal review): Register the Information Officer with the Information Regulator if not yet done — required under POPIA for all Responsible Parties */}
-              <p className="text-gray-600 leading-relaxed">
+              {/* TODO (legal review): Register the Information Officer with the Information Regulator if not yet done: required under POPIA for all Responsible Parties */}
+              <p className="text-brand-ink leading-relaxed">
                 Our designated Information Officer is responsible for ensuring compliance with POPIA.
                 For privacy-related enquiries, requests, or complaints:
               </p>
-              <div className="mt-4 bg-gray-50 rounded-xl p-6 border border-gray-100">
-                <p className="text-gray-700 font-medium">Information Officer</p>
+              <div className="mt-4 bg-brand-sand rounded-xl p-6 border border-brand-border">
+                <p className="text-brand-ink font-medium">Information Officer</p>
                 {/* TODO: Insert full name of designated Information Officer */}
-                <p className="text-gray-600 mt-1">Dr. Suzanne Ravenall</p>
-                <p className="text-gray-600">
+                <p className="text-brand-ink mt-1">Dr. Suzanne Ravenall</p>
+                <p className="text-brand-ink">
                   Email:{' '}
                   <a href="mailto:privacy@suzanneravenall.com" className="text-brand-accent underline hover:no-underline">
                     privacy@suzanneravenall.com
@@ -254,23 +254,23 @@ export default function LegalPrivacyContent() {
 
             {/* 10. Complaints */}
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 10. Complaints to the Information Regulator
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-brand-ink leading-relaxed">
                 If you are not satisfied with our response to your privacy complaint, you have the right
                 to lodge a complaint with the Information Regulator of South Africa:
               </p>
-              <div className="mt-4 bg-gray-50 rounded-xl p-6 border border-gray-100 space-y-1">
-                <p className="text-gray-700 font-medium">The Information Regulator (South Africa)</p>
-                <p className="text-gray-600">JD House, 27 Stiemens Street, Braamfontein, Johannesburg, 2001</p>
-                <p className="text-gray-600">
+              <div className="mt-4 bg-brand-sand rounded-xl p-6 border border-brand-border space-y-1">
+                <p className="text-brand-ink font-medium">The Information Regulator (South Africa)</p>
+                <p className="text-brand-ink">JD House, 27 Stiemens Street, Braamfontein, Johannesburg, 2001</p>
+                <p className="text-brand-ink">
                   Email:{' '}
                   <a href="mailto:inforeg@justice.gov.za" className="text-brand-accent underline hover:no-underline">
                     inforeg@justice.gov.za
                   </a>
                 </p>
-                <p className="text-gray-600">
+                <p className="text-brand-ink">
                   Website:{' '}
                   <a href="https://www.justice.gov.za/inforeg/" target="_blank" rel="noopener noreferrer" className="text-brand-accent underline hover:no-underline">
                     www.justice.gov.za/inforeg
@@ -281,10 +281,10 @@ export default function LegalPrivacyContent() {
 
             {/* 11. Changes */}
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 11. Changes to this Policy
               </h2>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-brand-ink leading-relaxed">
                 We may update this Privacy Policy from time to time to reflect changes in our practices
                 or applicable law. When we make material changes we will update the &ldquo;Last updated&rdquo; date
                 at the top of this page. We encourage you to review this policy periodically. Continued

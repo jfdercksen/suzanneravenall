@@ -50,9 +50,17 @@ try {
   await send('Page.navigate', { url })
   await sleep(6000)
 
-  const total = await evaluate(`(async () => {
-    for (let y = 0; y < document.body.scrollHeight; y += 400) { scrollTo(0, y); await new Promise(r => setTimeout(r, 150)) }
-    scrollTo(0, 0); await new Promise(r => setTimeout(r, 1000)); return document.body.scrollHeight })()`)
+  // The dev server can reload a page while it recompiles (other edits in the
+  // tree, the not-found route). The evaluation then comes back empty, so
+  // retry a few times before giving up with a clear message.
+  let total
+  for (let attempt = 0; attempt < 4 && typeof total !== 'number'; attempt++) {
+    if (attempt) await sleep(3000)
+    total = await evaluate(`(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += 400) { scrollTo(0, y); await new Promise(r => setTimeout(r, 150)) }
+      scrollTo(0, 0); await new Promise(r => setTimeout(r, 1000)); return document.body.scrollHeight })()`)
+  }
+  if (typeof total !== 'number') throw new Error(`${url}: the page kept reloading, no height measured`)
   const n = Math.min(+max, Math.ceil(total / H))
   for (let i = 0; i < n; i++) {
     await evaluate(`scrollTo(0, ${i * H})`)

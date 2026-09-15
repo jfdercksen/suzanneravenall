@@ -130,22 +130,22 @@ export default function LegalDisclaimerContent() {
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
               Legal
             </p>
-            <h1 className="text-4xl lg:text-6xl font-light text-white mb-6">
+            <h1 className="text-4xl lg:text-6xl font-medium tracking-tight text-white mb-6">
               Disclaimer
             </h1>
-            <p className="text-gray-300 text-sm">
+            <p className="text-white/70 text-sm">
               Sessions, practices &amp; online programmes by Dr. Suzanne Ravenall / Ravenall Institute
             </p>
-            <p className="text-gray-300 text-sm mt-1">Last updated: {LAST_UPDATED}</p>
+            <p className="text-white/70 text-sm mt-1">Last updated: {LAST_UPDATED}</p>
           </motion.div>
         </div>
       </section>
 
       {/* Content */}
-      <section className="py-20 lg:py-32 bg-white">
+      <section className="py-20 lg:py-32 bg-brand-cream">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -156,9 +156,9 @@ export default function LegalDisclaimerContent() {
           >
             {sections.map((section) => (
               <div key={section.title}>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{section.title}</h2>
+                <h2 className="text-2xl font-medium text-brand-primary mb-4">{section.title}</h2>
                 {section.paragraphs.map((paragraph) => (
-                  <p key={paragraph.slice(0, 40)} className="text-gray-600 leading-relaxed mb-3">
+                  <p key={paragraph.slice(0, 40)} className="text-brand-ink leading-relaxed mb-3">
                     {paragraph}
                   </p>
                 ))}
@@ -166,8 +166,8 @@ export default function LegalDisclaimerContent() {
             ))}
 
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">17. Questions</h2>
-              <p className="text-gray-600 leading-relaxed">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">17. Questions</h2>
+              <p className="text-brand-ink leading-relaxed">
                 By using the Website You are agreeing to all parts of the above Disclaimer. If You have
                 any questions about this Disclaimer, please contact{' '}
                 <a

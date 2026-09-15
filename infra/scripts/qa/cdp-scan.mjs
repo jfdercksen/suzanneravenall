@@ -52,7 +52,11 @@ try {
   ws.onmessage = e => { const m = JSON.parse(e.data); if (m.id && pending.has(m.id)) { pending.get(m.id)(m); pending.delete(m.id) } }
   const send = (method, params = {}) => new Promise(r => { const id = ++seq; pending.set(id, r); ws.send(JSON.stringify({ id, method, params })) })
   const evaluate = async expression => {
-    const res = (await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true })).result
+    const msg = await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true })
+    // A protocol error (e.g. "Execution context was destroyed" when the page
+    // reloads mid-scan) comes back as msg.error, not as an exception.
+    if (msg.error) throw new Error(msg.error.message)
+    const res = msg.result
     if (res?.exceptionDetails) throw new Error(res.exceptionDetails.exception?.description ?? res.exceptionDetails.text)
     return res?.result?.value
   }
