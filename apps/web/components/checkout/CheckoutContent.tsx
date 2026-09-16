@@ -532,13 +532,13 @@ export default function CheckoutContent() {
                       </>
                     ) : (
                       <>
-                        {/* PayPal's own blue, kept on purpose: it is PayPal's
-                            button, not ours, so it stays outside the monochrome
-                            tokens (flagged for Johan, 15 Sep). */}
+                        {/* PayPal's own blue was the last colour on the site;
+                            Johan asked for it black on 16 Sep, so it now uses
+                            the same accent fill as the PayFast button. */}
                         <button
                           onClick={handlePayWithPayPal}
                           disabled={isSubmitting}
-                          className="w-full py-4 px-6 rounded-button text-base font-medium bg-[#0070BA] hover:bg-[#005ea6] disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
+                          className="w-full py-4 px-6 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
                         >
                           <Lock className="w-4 h-4" />
                           {isSubmitting ? 'Preparing payment...' : 'Pay with PayPal'}
