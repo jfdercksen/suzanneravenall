@@ -115,13 +115,13 @@ export default function PortalNav({ tier }: PortalNavProps) {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex fixed top-20 left-0 w-64 h-[calc(100vh-5rem)] flex-col bg-brand-primary border-r border-white/[0.07] overflow-y-auto z-30">
+      <aside className="hidden lg:flex fixed top-20 left-0 w-64 h-[calc(100vh-5rem)] flex-col bg-brand-primary border-r border-white/20 overflow-y-auto z-30">
         <div className="flex flex-col h-full px-4 py-6">
 
           {/* Logo */}
           <Link href="/" className="block mb-8 px-2">
             <Image
-              src="/images/suzanne-white-logo.svg"
+              src="/logos/suzanne-white-logo.svg"
               alt="Suzanne Ravenall"
               width={140}
               height={36}
@@ -146,11 +146,11 @@ export default function PortalNav({ tier }: PortalNavProps) {
                   href={link.href}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                     active
-                      ? 'bg-brand-accent/10 text-brand-accent-300'
-                      : 'text-white/60 hover:text-white hover:bg-white/5'
+                      ? 'bg-white/10 text-white'
+                      : 'text-white/70 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  <span className={active ? 'text-brand-accent-300' : 'text-white/40'}>
+                  <span className={active ? 'text-white' : 'text-white/70'}>
                     {link.icon}
                   </span>
                   {link.label}
@@ -160,10 +160,10 @@ export default function PortalNav({ tier }: PortalNavProps) {
           </nav>
 
           {/* Logout */}
-          <div className="pt-4 border-t border-white/[0.07]">
+          <div className="pt-4 border-t border-white/15">
             <button
               onClick={handleLogout}
-              className="flex items-center gap-3 px-3 py-2.5 w-full rounded-lg text-sm font-medium text-white/40 hover:text-white hover:bg-white/5 transition-all duration-200"
+              className="flex items-center gap-3 px-3 py-2.5 w-full rounded-lg text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 transition-all duration-200"
             >
               <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
@@ -177,7 +177,7 @@ export default function PortalNav({ tier }: PortalNavProps) {
 
       {/* Mobile bottom nav */}
       <nav
-        className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-brand-primary border-t border-white/[0.07]"
+        className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-brand-primary border-t border-white/20"
         aria-label="Portal navigation"
       >
         <div className="flex items-center justify-around h-16 px-2">
@@ -188,7 +188,7 @@ export default function PortalNav({ tier }: PortalNavProps) {
                 key={link.href}
                 href={link.href}
                 className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-colors duration-200 ${
-                  active ? 'text-brand-accent-300' : 'text-white/40'
+                  active ? 'text-white' : 'text-white/70'
                 }`}
               >
                 {link.icon}

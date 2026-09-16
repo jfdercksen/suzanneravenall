@@ -73,7 +73,7 @@ export default function ResetPasswordPage() {
           <p className="text-white/50 text-sm mt-2">Set a new password</p>
         </div>
 
-        <div className="bg-brand-primary-800 border border-white/15 rounded-2xl p-8">
+        <div className="bg-brand-primary-800 border border-white/25 rounded-2xl p-8">
           <h1 className="text-2xl font-light text-white mb-1">New Password</h1>
           <p className="text-white/50 text-sm mb-8">
             Choose a strong password for your account.
@@ -93,7 +93,7 @@ export default function ResetPasswordPage() {
                 autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-brand-primary-700 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
+                className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                 placeholder="••••••••"
               />
             </div>
@@ -110,7 +110,7 @@ export default function ResetPasswordPage() {
                 autoComplete="new-password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full bg-brand-primary-700 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
+                className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                 placeholder="••••••••"
               />
             </div>

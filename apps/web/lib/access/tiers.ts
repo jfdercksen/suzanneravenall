@@ -88,11 +88,14 @@ export function minimumTierFor(resource: ResourceKey): TierSlug {
   return 'practitioner'
 }
 
+// Monochrome since 2026-09-15: the tiers differ by FILL BRIGHTNESS, not by hue,
+// and every badge sits on a dark portal ground. The gold badge used to be yellow
+// and the practitioner badge brand-accent, which is near-black on black.
 export const TIER_BADGE_STYLES: Record<TierSlug, string> = {
-  free: 'bg-gray-700 text-gray-300',
-  silver: 'bg-gray-400/20 text-gray-200 border border-gray-400/40',
-  gold: 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/40',
-  practitioner: 'bg-brand-accent/20 text-brand-accent-300 border border-brand-accent/40',
+  free: 'bg-white/10 text-white/80 border border-white/20',
+  silver: 'bg-white/20 text-white border border-white/30',
+  gold: 'bg-white/35 text-white border border-white/50',
+  practitioner: 'bg-white text-brand-primary border border-white',
 }
 
 // ─── 29-tier membership system (Wild Apricot / real structure) ────────────────

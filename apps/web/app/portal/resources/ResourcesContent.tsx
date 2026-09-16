@@ -178,12 +178,17 @@ const RESOURCE_CATEGORIES: ResourceCategory[] = [
   },
 ]
 
+// Monochrome since 2026-09-15: the five types are told apart by fill and edge,
+// not by hue. Each pair is AA or better on the dark card ground.
 const TYPE_BADGE: Record<Resource['type'], string> = {
-  PDF: 'bg-blue-500/20 text-blue-300',
-  Workbook: 'bg-purple-500/20 text-purple-300',
-  Recording: 'bg-brand-accent/20 text-brand-accent-300',
-  Template: 'bg-green-500/20 text-green-300',
-  Assessment: 'bg-yellow-500/20 text-yellow-300',
+  // A five-step ladder from outline to solid. brand-primary-600 was tried for
+  // Assessment and dropped: these pills render on a brand-primary-700 card, so
+  // #303134 on #232325 is 1.20:1 and the fill simply vanished.
+  Template: 'text-white/85 border border-white/40',
+  PDF: 'bg-white/10 text-white/90 border border-white/20',
+  Workbook: 'bg-white/20 text-white border border-white/30',
+  Assessment: 'bg-white/35 text-white border border-white/40',
+  Recording: 'bg-white text-brand-primary',
 }
 
 interface ResourcesContentProps {
@@ -197,18 +202,18 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
     return (
       <Link
         href={`/portal/videos?category=group-sessions`}
-        className="group flex flex-col gap-3 p-5 bg-gray-800 hover:bg-gray-700 rounded-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+        className="group flex flex-col gap-3 p-5 bg-brand-primary-700 hover:bg-brand-primary-600 border border-white/25 rounded-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
       >
         <div className="flex items-start justify-between gap-3">
           <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${TYPE_BADGE[resource.type]}`}>
             {resource.type}
           </span>
-          <svg className="w-4 h-4 text-brand-accent-300 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-4 h-4 text-brand-accent-400 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </div>
         <p className="text-white font-semibold text-sm leading-snug">{resource.title}</p>
-        <p className="text-white/50 text-xs leading-relaxed">{resource.description}</p>
+        <p className="text-white/70 text-xs leading-relaxed">{resource.description}</p>
       </Link>
     )
   }
@@ -217,19 +222,19 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
     return (
       <a
         href={resource.href}
-        className="group flex flex-col gap-3 p-5 bg-gray-800 hover:bg-gray-700 rounded-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+        className="group flex flex-col gap-3 p-5 bg-brand-primary-700 hover:bg-brand-primary-600 border border-white/25 rounded-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
         download
       >
         <div className="flex items-start justify-between gap-3">
           <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${TYPE_BADGE[resource.type]}`}>
             {resource.type}
           </span>
-          <svg className="w-4 h-4 text-brand-accent-300 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-4 h-4 text-brand-accent-400 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
           </svg>
         </div>
         <p className="text-white font-semibold text-sm leading-snug">{resource.title}</p>
-        <p className="text-white/50 text-xs leading-relaxed">{resource.description}</p>
+        <p className="text-white/70 text-xs leading-relaxed">{resource.description}</p>
       </a>
     )
   }
@@ -240,13 +245,13 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
     ) ?? 'silver'
 
     return (
-      <div className="relative flex flex-col gap-3 p-5 bg-gray-900/50 rounded-card border border-white/5 select-none">
-        <div className="absolute inset-0 rounded-card backdrop-blur-[1px] bg-gray-950/40 flex items-center justify-center">
+      <div className="relative flex flex-col gap-3 p-5 bg-brand-primary-800/60 rounded-card border border-white/20 select-none">
+        <div className="absolute inset-0 rounded-card backdrop-blur-[1px] bg-black/60 flex items-center justify-center">
           <div className="text-center px-4">
-            <svg className="w-5 h-5 text-white/30 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-5 h-5 text-white/60 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
             </svg>
-            <p className="text-white/40 text-xs">
+            <p className="text-white/70 text-xs">
               Unlock with{' '}
               {/* TODO: Build /portal/upgrade page */}
               <Link href="/shop?collection=membership" className="text-brand-accent-400 hover:underline">
@@ -261,18 +266,18 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
           </span>
         </div>
         <p className="text-white font-semibold text-sm leading-snug opacity-20">{resource.title}</p>
-        <p className="text-white/50 text-xs leading-relaxed opacity-20">{resource.description}</p>
+        <p className="text-white/70 text-xs leading-relaxed opacity-20">{resource.description}</p>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-3 p-5 bg-gray-800 rounded-card">
+    <div className="flex flex-col gap-3 p-5 bg-brand-primary-700 border border-white/25 rounded-card">
       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium w-fit ${TYPE_BADGE[resource.type]}`}>
         {resource.type}
       </span>
       <p className="text-white font-semibold text-sm leading-snug">{resource.title}</p>
-      <p className="text-white/50 text-xs leading-relaxed">{resource.description}</p>
+      <p className="text-white/70 text-xs leading-relaxed">{resource.description}</p>
     </div>
   )
 }
@@ -282,7 +287,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
     <main className="relative w-full bg-brand-primary min-h-screen py-20 lg:py-32 overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+        <div className="absolute bg-white/[0.06] blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -293,7 +298,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
             Member Portal
           </p>
           <h1 className="text-4xl lg:text-6xl font-light text-white mb-4">
@@ -322,7 +327,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
                   {!categoryUnlocked && (
                     <Link
                       href="/shop?collection=membership"
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-brand-accent/10 text-brand-accent-300 text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-brand-accent/20 transition-colors"
+                      className="inline-flex items-center gap-1 px-3 py-1 bg-white/10 text-white text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-white/20 transition-colors"
                     >
                       <svg aria-hidden="true" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
@@ -348,11 +353,11 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="mt-20 relative overflow-hidden rounded-card bg-gray-900 p-8 lg:p-12"
+            className="mt-20 relative overflow-hidden rounded-card bg-brand-primary-800 border border-white/25 p-8 lg:p-12"
           >
             <div className="flex flex-col lg:flex-row lg:items-center gap-8">
               <div className="flex-1">
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
                   Unlock Everything
                 </p>
                 <h2 className="text-2xl lg:text-3xl font-light text-white mb-3">

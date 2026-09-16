@@ -14,10 +14,11 @@ type FilterKey = 'All' | 'Live' | 'Self Study' | 'In-Person'
 
 const FILTERS: FilterKey[] = ['All', 'Live', 'Self Study', 'In-Person']
 
+// Monochrome since 2026-09-15: delivery is told apart by fill, not by hue.
 const DELIVERY_BADGE: Record<string, string> = {
-  Live: 'bg-brand-accent/20 text-brand-accent-400 border border-brand-accent/30',
-  'Self Study': 'bg-green-500/20 text-green-300 border border-green-500/30',
-  'In-Person': 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30',
+  Live: 'bg-white text-brand-primary',
+  'Self Study': 'bg-white/20 text-white border border-white/30',
+  'In-Person': 'text-white/85 border border-white/40',
 }
 
 function formatDate(dateStr: string): string {
@@ -47,10 +48,10 @@ function ProgrammeCard({ programme }: { programme: ProgrammeItem }) {
         hidden: { opacity: 0, y: 24 },
         show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
       }}
-      className="group flex flex-col bg-gray-900 rounded-card overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+      className="group flex flex-col bg-brand-primary-800 border border-white/25 rounded-card overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
     >
       {/* Thumbnail */}
-      <div className="relative h-44 bg-gradient-to-br from-brand-primary to-gray-900 overflow-hidden">
+      <div className="relative h-44 bg-gradient-to-br from-brand-primary-900 to-brand-primary-700 overflow-hidden">
         {programme.thumbnailUrl ? (
           <Image
             src={programme.thumbnailUrl}
@@ -67,7 +68,7 @@ function ProgrammeCard({ programme }: { programme: ProgrammeItem }) {
           </div>
         )}
         {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
       </div>
 
       {/* Content */}
@@ -76,7 +77,7 @@ function ProgrammeCard({ programme }: { programme: ProgrammeItem }) {
           <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${badgeClass}`}>
             {delivery}
           </span>
-          <span className="text-white/30 text-xs">Purchased {formatDate(programme.purchasedAt)}</span>
+          <span className="text-white/70 text-xs">Purchased {formatDate(programme.purchasedAt)}</span>
         </div>
 
         <h3 className="text-white font-semibold leading-snug mb-4 flex-1">
@@ -87,7 +88,7 @@ function ProgrammeCard({ programme }: { programme: ProgrammeItem }) {
             Currently links to portal resources as a placeholder. */}
         <Link
           href="/portal/resources"
-          className="inline-flex items-center justify-center gap-2 w-full py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-button transition-colors duration-300"
+          className="inline-flex items-center justify-center gap-2 w-full py-3 bg-white hover:bg-brand-sand text-brand-primary text-sm font-semibold rounded-button transition-colors duration-300"
         >
           Access Programme
           <svg aria-hidden="true" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -111,7 +112,7 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
     <main className="relative w-full bg-brand-primary min-h-screen py-16 lg:py-24 overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+        <div className="absolute bg-white/[0.06] blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -123,7 +124,7 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
           transition={{ duration: 0.6 }}
           className="mb-10"
         >
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
             Member Portal
           </p>
           <h1 className="text-3xl lg:text-5xl font-light text-white mb-3">My Programmes</h1>
@@ -145,13 +146,13 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
                 onClick={() => setActiveFilter(filter)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                   activeFilter === filter
-                    ? 'bg-brand-accent text-white'
-                    : 'bg-gray-900 text-white/50 hover:text-white hover:bg-gray-800'
+                    ? 'bg-white text-brand-primary'
+                    : 'bg-brand-primary-800 border border-white/25 text-white/70 hover:text-white hover:bg-brand-primary-700'
                 }`}
               >
                 {filter}
                 {filter !== 'All' && (
-                  <span className="ml-1.5 text-xs opacity-60">
+                  <span className="ml-1.5 text-xs opacity-80">
                     ({programmes.filter((p) => normaliseDelivery(p.deliveryMethod) === filter).length})
                   </span>
                 )}
@@ -168,18 +169,18 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
             transition={{ duration: 0.5 }}
             className="py-20 text-center"
           >
-            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gray-900 flex items-center justify-center text-white/20">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-brand-primary-800 border border-white/25 flex items-center justify-center text-white/70">
               <svg aria-hidden="true" className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" />
               </svg>
             </div>
             <h2 className="text-2xl font-light text-white mb-3">No programmes yet</h2>
-            <p className="text-white/50 mb-8 max-w-md mx-auto">
+            <p className="text-white/70 mb-8 max-w-md mx-auto">
               Start your transformation journey by enrolling in one of Suzanne&apos;s coaching programmes.
             </p>
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-colors duration-300"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold rounded-button transition-colors duration-300"
             >
               Browse Programmes
               <svg aria-hidden="true" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -189,8 +190,8 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
           </motion.div>
         ) : filtered.length === 0 ? (
           <div className="py-12 text-center">
-            <p className="text-white/50">No programmes match the &quot;{activeFilter}&quot; filter.</p>
-            <button onClick={() => setActiveFilter('All')} className="mt-3 text-brand-accent-300 text-sm hover:underline">
+            <p className="text-white/70">No programmes match the &quot;{activeFilter}&quot; filter.</p>
+            <button onClick={() => setActiveFilter('All')} className="mt-3 text-brand-accent-400 text-sm hover:underline">
               Show all
             </button>
           </div>
@@ -216,15 +217,15 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="mt-16 flex flex-col sm:flex-row items-center gap-4 p-6 bg-gray-900 rounded-card"
+            className="mt-16 flex flex-col sm:flex-row items-center gap-4 p-6 bg-brand-primary-800 border border-white/25 rounded-card"
           >
             <div className="flex-1 text-center sm:text-left">
               <p className="text-white font-semibold mb-1">Explore more programmes</p>
-              <p className="text-white/50 text-sm">Deepen your practice with additional coaching programmes from Suzanne.</p>
+              <p className="text-white/70 text-sm">Deepen your practice with additional coaching programmes from Suzanne.</p>
             </div>
             <Link
               href="/shop"
-              className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 border border-white/20 hover:border-white/40 text-white text-sm font-semibold rounded-button transition-colors duration-300"
+              className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 border border-white/40 hover:border-white/60 text-white text-sm font-semibold rounded-button transition-colors duration-300"
             >
               Browse Shop
             </Link>

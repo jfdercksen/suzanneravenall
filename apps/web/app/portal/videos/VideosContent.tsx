@@ -66,12 +66,12 @@ function VideoPlayerModal({ videoId, title, onClose }: VideoPlayerModalProps) {
       aria-modal="true"
       aria-labelledby="video-modal-title"
     >
-      <div className="relative w-full max-w-4xl bg-gray-900 rounded-card overflow-hidden shadow-2xl">
-        <div className="flex items-center justify-between p-4 border-b border-white/10">
+      <div className="relative w-full max-w-4xl bg-brand-primary-800 border border-white/25 rounded-card overflow-hidden shadow-2xl">
+        <div className="flex items-center justify-between p-4 border-b border-white/15">
           <p id="video-modal-title" className="text-white font-semibold text-sm">{title}</p>
           <button
             onClick={onClose}
-            className="text-white/50 hover:text-white transition-colors"
+            className="text-white/70 hover:text-white transition-colors"
             aria-label="Close video"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -86,7 +86,7 @@ function VideoPlayerModal({ videoId, title, onClose }: VideoPlayerModalProps) {
             </div>
           )}
           {error && (
-            <div className="h-full flex items-center justify-center text-white/50 text-sm">
+            <div className="h-full flex items-center justify-center text-white/70 text-sm">
               {error}
             </div>
           )}
@@ -118,7 +118,7 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
   const duration = formatDuration(video.duration_seconds)
 
   return (
-    <div className="group flex flex-col bg-gray-900 rounded-card overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+    <div className="group flex flex-col bg-brand-primary-800 border border-white/25 rounded-card overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
       <div className="relative aspect-video bg-brand-primary-900 flex items-center justify-center">
         {video.thumbnail_url ? (
           <Image
@@ -129,7 +129,7 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-primary-900 to-gray-800" />
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-primary-900 to-brand-primary-700" />
         )}
 
         <div className="relative z-10">
@@ -145,10 +145,10 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
             </button>
           ) : (
             <div className="flex flex-col items-center gap-2">
-              <svg className="w-8 h-8 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <svg className="w-8 h-8 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
               </svg>
-              <span className="text-white/40 text-xs">{tierLabel(minTier)}</span>
+              <span className="text-white/70 text-xs">{tierLabel(minTier)}</span>
             </div>
           )}
         </div>
@@ -163,11 +163,11 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
       </div>
 
       <div className="flex flex-col flex-1 p-5">
-        <p className="text-xs uppercase tracking-widest text-brand-accent-300 font-medium mb-2">
+        <p className="text-xs uppercase tracking-widest text-brand-accent-400 font-medium mb-2">
           {video.category}
         </p>
         <p className="text-white font-semibold leading-snug mb-2 text-sm">{video.title}</p>
-        <p className="text-white/40 text-xs leading-relaxed flex-1">{video.description ?? ''}</p>
+        <p className="text-white/70 text-xs leading-relaxed flex-1">{video.description ?? ''}</p>
 
         <div className="mt-4">
           {unlocked ? (
@@ -181,7 +181,7 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
             /* TODO: Build /portal/upgrade page */
             <Link
               href="/shop?collection=membership"
-              className="block w-full py-2.5 px-4 bg-gray-800 hover:bg-gray-700 text-white/50 hover:text-white text-sm font-semibold rounded-button transition-colors duration-300 text-center"
+              className="block w-full py-2.5 px-4 bg-brand-primary-700 hover:bg-brand-primary-600 border border-white/25 text-white/80 hover:text-white text-sm font-semibold rounded-button transition-colors duration-300 text-center"
             >
               Unlock with {tierLabel(minTier)}
             </Link>
@@ -217,7 +217,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
 
       {/* Ambient glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+        <div className="absolute bg-white/[0.06] blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -228,7 +228,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
           transition={{ duration: 0.6 }}
           className="mb-12"
         >
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
             Member Portal
           </p>
           <h1 className="text-4xl lg:text-6xl font-light text-white mb-4">
@@ -250,8 +250,8 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
             <svg className="w-16 h-16 text-white/10 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
-            <p className="text-white/40 text-lg font-light mb-2">Videos coming soon</p>
-            <p className="text-white/25 text-sm max-w-sm">
+            <p className="text-white/70 text-lg font-light mb-2">Videos coming soon</p>
+            <p className="text-white/60 text-sm max-w-sm">
               New sessions are uploaded after each cohort. Check back after your next live session.
             </p>
           </motion.div>
@@ -270,7 +270,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
                     activeCategory === cat
                       ? 'bg-white text-brand-primary'
-                      : 'bg-gray-900 text-white/60 hover:text-white hover:bg-gray-800'
+                      : 'bg-brand-primary-800 border border-white/25 text-white/70 hover:text-white hover:bg-brand-primary-700'
                   }`}
                 >
                   {cat}
@@ -304,11 +304,11 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
-            className="mt-16 relative overflow-hidden rounded-card bg-gray-900 p-8 lg:p-12"
+            className="mt-16 relative overflow-hidden rounded-card bg-brand-primary-800 border border-white/25 p-8 lg:p-12"
           >
             <div className="flex flex-col lg:flex-row lg:items-center gap-8">
               <div className="flex-1">
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-3">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
                   Unlock the Library
                 </p>
                 <h2 className="text-2xl lg:text-3xl font-light text-white mb-3">

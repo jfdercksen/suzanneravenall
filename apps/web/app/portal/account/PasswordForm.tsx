@@ -53,16 +53,16 @@ export default function PasswordForm({ className }: PasswordFormProps) {
 
   return (
     <section
-      className={`mb-8 p-6 lg:p-8 bg-gray-900 rounded-card${className ? ` ${className}` : ''}`}
+      className={`mb-8 p-6 lg:p-8 bg-brand-primary-800 border border-white/25 rounded-card${className ? ` ${className}` : ''}`}
       aria-labelledby="password-heading"
     >
       <h2 id="password-heading" className="text-lg font-semibold text-white mb-2">Change Password</h2>
-      <p className="text-white/40 text-sm mb-6">
+      <p className="text-white/70 text-sm mb-6">
         Password changes are secured by your active session. You do not need to re-enter your current password.
       </p>
       <form onSubmit={handlePasswordChange} className="space-y-5">
         <div>
-          <label htmlFor="newPassword" className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
+          <label htmlFor="newPassword" className="block text-xs font-medium text-white/70 uppercase tracking-widest mb-2">
             New password
           </label>
           <input
@@ -72,13 +72,13 @@ export default function PasswordForm({ className }: PasswordFormProps) {
             onChange={(e) => setNewPassword(e.target.value)}
             required
             minLength={8}
-            className="w-full px-4 py-3 bg-gray-800 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-brand-accent/60 transition-colors"
+            className="w-full px-4 py-3 bg-brand-primary-700 border border-white/35 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors"
             placeholder="At least 8 characters"
           />
         </div>
 
         <div>
-          <label htmlFor="confirmPassword" className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
+          <label htmlFor="confirmPassword" className="block text-xs font-medium text-white/70 uppercase tracking-widest mb-2">
             Confirm new password
           </label>
           <input
@@ -88,7 +88,7 @@ export default function PasswordForm({ className }: PasswordFormProps) {
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
             minLength={8}
-            className="w-full px-4 py-3 bg-gray-800 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-brand-accent/60 transition-colors"
+            className="w-full px-4 py-3 bg-brand-primary-700 border border-white/35 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors"
             placeholder="Repeat new password"
           />
         </div>
@@ -104,7 +104,7 @@ export default function PasswordForm({ className }: PasswordFormProps) {
           <button
             type="submit"
             disabled={passwordSaving}
-            className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-50 text-white font-semibold rounded-button transition-colors duration-300"
+            className="px-6 py-3 bg-white hover:bg-brand-sand disabled:opacity-50 text-brand-primary font-semibold rounded-button transition-colors duration-300"
           >
             {passwordSaving ? 'Updating…' : 'Update Password'}
           </button>

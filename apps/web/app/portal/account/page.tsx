@@ -79,14 +79,14 @@ export default async function AccountPage() {
     <main className="relative w-full bg-brand-primary min-h-screen py-16 lg:py-24 overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute bg-brand-accent/10 blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
+        <div className="absolute bg-white/[0.06] blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
       </div>
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
         <div className={`mb-10 ${styles.fadeUp}`}>
-          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-300 mb-4">
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
             Member Portal
           </p>
           <h1 className="text-3xl lg:text-5xl font-light text-white mb-3">My Account</h1>
@@ -107,44 +107,44 @@ export default async function AccountPage() {
 
         {/* Membership details — read-only, server-rendered (KI016) */}
         <section
-          className={`mb-8 p-6 lg:p-8 bg-gray-900 rounded-card ${styles.fadeUp} ${styles.delay3}`}
+          className={`mb-8 p-6 lg:p-8 bg-brand-primary-800 border border-white/25 rounded-card ${styles.fadeUp} ${styles.delay3}`}
           aria-labelledby="membership-heading"
         >
           <h2 id="membership-heading" className="text-lg font-semibold text-white mb-6">Membership Details</h2>
           <dl className="space-y-4">
-            <div className="flex justify-between items-center py-3 border-b border-white/[0.06]">
-              <dt className="text-white/50 text-sm">Current tier</dt>
+            <div className="flex justify-between items-center py-3 border-b border-white/15">
+              <dt className="text-white/70 text-sm">Current tier</dt>
               <dd className="text-white font-semibold text-sm">{tierName}</dd>
             </div>
             {accessInfo.sku && (
-              <div className="flex justify-between items-center py-3 border-b border-white/[0.06]">
-                <dt className="text-white/50 text-sm">Membership code</dt>
+              <div className="flex justify-between items-center py-3 border-b border-white/15">
+                <dt className="text-white/70 text-sm">Membership code</dt>
                 <dd className="text-white font-semibold text-sm font-mono">{accessInfo.sku}</dd>
               </div>
             )}
             {trackLabel && (
-              <div className="flex justify-between items-center py-3 border-b border-white/[0.06]">
-                <dt className="text-white/50 text-sm">Track</dt>
+              <div className="flex justify-between items-center py-3 border-b border-white/15">
+                <dt className="text-white/70 text-sm">Track</dt>
                 <dd className="text-white font-semibold text-sm">{trackLabel}</dd>
               </div>
             )}
-            <div className="flex justify-between items-center py-3 border-b border-white/[0.06]">
-              <dt className="text-white/50 text-sm">Access level</dt>
+            <div className="flex justify-between items-center py-3 border-b border-white/15">
+              <dt className="text-white/70 text-sm">Access level</dt>
               <dd className="text-white font-semibold text-sm">Level {accessInfo.accessLevel} of 10</dd>
             </div>
-            <div className="flex justify-between items-center py-3 border-b border-white/[0.06]">
-              <dt className="text-white/50 text-sm">Member since</dt>
+            <div className="flex justify-between items-center py-3 border-b border-white/15">
+              <dt className="text-white/70 text-sm">Member since</dt>
               <dd className="text-white font-semibold text-sm">{formatDate(memberSince)}</dd>
             </div>
             <div className="flex justify-between items-center py-3">
-              <dt className="text-white/50 text-sm">Annual renewal</dt>
+              <dt className="text-white/70 text-sm">Annual renewal</dt>
               <dd className="text-white font-semibold text-sm">{formatDate(memberUntil)}</dd>
             </div>
           </dl>
           <div className="mt-5">
             <Link
               href="/portal/upgrade"
-              className="inline-flex items-center gap-2 text-brand-accent-300 text-sm font-medium hover:underline"
+              className="inline-flex items-center gap-2 text-brand-accent-400 text-sm font-medium hover:underline"
             >
               View upgrade options
               <svg aria-hidden="true" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -156,17 +156,17 @@ export default async function AccountPage() {
 
         {/* Danger zone — read-only, server-rendered (KI016) */}
         <section
-          className={`p-6 lg:p-8 bg-gray-900 rounded-card border border-red-900/30 ${styles.fadeUp} ${styles.delay4}`}
+          className={`p-6 lg:p-8 bg-brand-primary-800 rounded-card border border-red-400/60 ${styles.fadeUp} ${styles.delay4}`}
           aria-labelledby="danger-heading"
         >
           <h2 id="danger-heading" className="text-lg font-semibold text-red-400 mb-2">Danger Zone</h2>
-          <p className="text-white/50 text-sm mb-5">
+          <p className="text-white/70 text-sm mb-5">
             To cancel your membership or delete your account, please contact us directly so we can assist you.
           </p>
           <Link
             href="/contact"
             aria-label="Contact us to cancel membership"
-            className="inline-flex items-center gap-2 px-5 py-2.5 border border-red-900/50 hover:border-red-700/60 text-red-400 hover:text-red-300 text-sm font-semibold rounded-button transition-colors duration-300"
+            className="inline-flex items-center gap-2 px-5 py-2.5 border border-red-400/70 hover:border-red-400 text-red-400 hover:text-red-300 text-sm font-semibold rounded-button transition-colors duration-300"
           >
             Cancel Membership
           </Link>

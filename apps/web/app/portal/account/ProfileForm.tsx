@@ -60,14 +60,14 @@ export default function ProfileForm({
 
   return (
     <section
-      className={`mb-8 p-6 lg:p-8 bg-gray-900 rounded-card${className ? ` ${className}` : ''}`}
+      className={`mb-8 p-6 lg:p-8 bg-brand-primary-800 border border-white/25 rounded-card${className ? ` ${className}` : ''}`}
       aria-labelledby="profile-heading"
     >
       <h2 id="profile-heading" className="text-lg font-semibold text-white mb-6">Profile</h2>
       <form onSubmit={handleProfileSave} className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label htmlFor="firstName" className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
+            <label htmlFor="firstName" className="block text-xs font-medium text-white/70 uppercase tracking-widest mb-2">
               First name
             </label>
             <input
@@ -75,12 +75,12 @@ export default function ProfileForm({
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-800 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-brand-accent/60 transition-colors"
+              className="w-full px-4 py-3 bg-brand-primary-700 border border-white/35 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors"
               placeholder="First name"
             />
           </div>
           <div>
-            <label htmlFor="lastName" className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
+            <label htmlFor="lastName" className="block text-xs font-medium text-white/70 uppercase tracking-widest mb-2">
               Last name
             </label>
             <input
@@ -88,14 +88,14 @@ export default function ProfileForm({
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-800 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-brand-accent/60 transition-colors"
+              className="w-full px-4 py-3 bg-brand-primary-700 border border-white/35 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors"
               placeholder="Last name"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
+          <label htmlFor="email" className="block text-xs font-medium text-white/70 uppercase tracking-widest mb-2">
             Email address
           </label>
           <input
@@ -103,16 +103,16 @@ export default function ProfileForm({
             type="email"
             value={email}
             readOnly
-            className="w-full px-4 py-3 bg-gray-800/50 border border-white/5 rounded-xl text-white/50 cursor-not-allowed"
+            className="w-full px-4 py-3 bg-brand-primary-700/60 border border-white/20 rounded-xl text-white/70 cursor-not-allowed"
             aria-describedby="email-note"
           />
-          <p id="email-note" className="mt-1.5 text-xs text-white/30">
+          <p id="email-note" className="mt-1.5 text-xs text-white/70">
             Email cannot be changed here. Contact support if you need to update your email address.
           </p>
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-xs font-medium text-white/50 uppercase tracking-widest mb-2">
+          <label htmlFor="phone" className="block text-xs font-medium text-white/70 uppercase tracking-widest mb-2">
             Phone number
           </label>
           <input
@@ -120,7 +120,7 @@ export default function ProfileForm({
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full px-4 py-3 bg-gray-800 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-brand-accent/60 transition-colors"
+            className="w-full px-4 py-3 bg-brand-primary-700 border border-white/35 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors"
             placeholder="+27 82 000 0000"
           />
         </div>
@@ -136,7 +136,7 @@ export default function ProfileForm({
           <button
             type="submit"
             disabled={profileSaving}
-            className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-50 text-white font-semibold rounded-button transition-colors duration-300"
+            className="px-6 py-3 bg-white hover:bg-brand-sand disabled:opacity-50 text-brand-primary font-semibold rounded-button transition-colors duration-300"
           >
             {profileSaving ? 'Saving…' : 'Save Changes'}
           </button>

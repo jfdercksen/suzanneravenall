@@ -51,7 +51,7 @@ export default function SignupPage() {
   if (success) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
-        <div className="w-full max-w-md bg-brand-primary-800 border border-white/15 rounded-2xl p-8 text-center">
+        <div className="w-full max-w-md bg-brand-primary-800 border border-white/25 rounded-2xl p-8 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/10 text-white mb-6">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
@@ -90,7 +90,7 @@ export default function SignupPage() {
           <p className="text-white/50 text-sm mt-2">Create your account</p>
         </div>
 
-        <div className="bg-brand-primary-800 border border-white/15 rounded-2xl p-8">
+        <div className="bg-brand-primary-800 border border-white/25 rounded-2xl p-8">
           <h1 className="text-2xl font-light text-white mb-1">Sign Up</h1>
           <p className="text-white/50 text-sm mb-8">
             Join the community and access member resources
@@ -108,7 +108,7 @@ export default function SignupPage() {
                 autoComplete="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-brand-primary-700 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
+                className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                 placeholder="Jane Smith"
               />
             </div>
@@ -124,7 +124,7 @@ export default function SignupPage() {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-brand-primary-700 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
+                className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                 placeholder="you@example.com"
               />
             </div>
@@ -142,7 +142,7 @@ export default function SignupPage() {
                 autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-brand-primary-700 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
+                className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                 placeholder="••••••••"
               />
             </div>
@@ -159,7 +159,7 @@ export default function SignupPage() {
                 autoComplete="new-password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full bg-brand-primary-700 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
+                className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                 placeholder="••••••••"
               />
             </div>
