@@ -11,7 +11,7 @@ const areas = [
     title: 'Emotional & Nervous System',
     slug: 'emotional-nervous-system-mastery',
     outcome: 'Rewire from anxiety to sustainable calm',
-    image: '/images/focus/neuro.jpg',
+    image: '/images/generated/explore-repatterning.webp',
   },
   {
     number: '02',

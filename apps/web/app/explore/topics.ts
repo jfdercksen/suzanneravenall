@@ -17,7 +17,6 @@
  * Orphaned assets (not assigned to any topic -- available for approach section
  * card backgrounds or other phase-2 decorative use):
  *   - /images/generated/explore-akashic.webp   (cosmic library, deep blue/gold)
- *   - /images/generated/explore-repatterning.webp (neural pathways, electric blue)
  *   - /images/generated/explore-mindfulness.webp  (freed by neuro.jpg swap)
  *   - /images/generated/explore-purpose.webp   (open road at sunrise)
  */
@@ -60,7 +59,7 @@ export const topics: Topic[] = [
     title: 'Emotional & Nervous System Mastery',
     shortDescription:
       'You don’t have an emotional problem. You have a nervous system pattern.',
-    image: '/images/focus/neuro.jpg',
+    image: '/images/generated/explore-repatterning.webp',
     openingQuestion:
       'Do you feel wired but exhausted: calm on the outside, running hard on the inside?',
     heroHeadline: 'Emotional Mastery Begins in the Nervous System',
