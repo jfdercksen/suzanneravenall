@@ -26,7 +26,7 @@ const TOKEN_TTL_DAYS = 30
  * Service-role Supabase client for quiz-subscriber writes. Quiz-takers never
  * have a Supabase Auth session — there is no auth.uid() to scope RLS to — so
  * this bypasses RLS entirely, same pattern as
- * apps/web/app/api/auth/signup-sync/route.ts. Never expose this client or
+ * apps/web/app/api/portal/ensure-membership/route.ts. Never expose this client or
  * the underlying key to the browser.
  *
  * Returns null when required env vars are missing so callers can fail loudly

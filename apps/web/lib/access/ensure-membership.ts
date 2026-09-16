@@ -20,7 +20,7 @@
 export async function ensureMembership(userId: string): Promise<boolean> {
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const res = await fetch('/api/auth/signup-sync', {
+      const res = await fetch('/api/portal/ensure-membership', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId }),

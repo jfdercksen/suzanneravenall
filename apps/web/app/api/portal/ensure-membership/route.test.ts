@@ -66,7 +66,7 @@ const EXISTING_SUB_ID = 'sub-uuid-exist-0000-0000-000000000000'
 const NEW_SUB_ID = 'sub-uuid-new00-0000-0000-000000000000'
 
 function makeRequest(body: unknown): Request {
-  return new Request('http://localhost/api/auth/signup-sync', {
+  return new Request('http://localhost/api/portal/ensure-membership', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -126,7 +126,7 @@ function setupHappyPath({
 // Tests
 // ---------------------------------------------------------------------------
 
-describe('POST /api/auth/signup-sync', () => {
+describe('POST /api/portal/ensure-membership', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', 'https://example.supabase.co')
@@ -202,7 +202,7 @@ describe('POST /api/auth/signup-sync', () => {
   describe('request body validation', () => {
     it('returns 400 when body is not valid JSON', async () => {
       resetClientMock({ id: VALID_UUID })
-      const req = new Request('http://localhost/api/auth/signup-sync', {
+      const req = new Request('http://localhost/api/portal/ensure-membership', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: '{not valid json',
@@ -322,7 +322,7 @@ describe('POST /api/auth/signup-sync', () => {
       await POST(makeRequest({ userId: VALID_UUID }))
       // KI017: the route now logs the full insert-error object (via lib/log's
       // logError, which also forwards it to Sentry), not just the message string.
-      expect(consoleSpy).toHaveBeenCalledWith('[signup-sync] insert error:', { message: 'db write failed' })
+      expect(consoleSpy).toHaveBeenCalledWith('[ensure-membership] insert error:', { message: 'db write failed' })
       consoleSpy.mockRestore()
     })
   })

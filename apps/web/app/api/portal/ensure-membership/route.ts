@@ -107,7 +107,7 @@ export async function POST(request: Request) {
     .single()
 
   if (insertError) {
-    logError('[signup-sync] insert error:', insertError)
+    logError('[ensure-membership] insert error:', insertError)
     return NextResponse.json(
       { error: 'Failed to create subscription' },
       { status: 500 }
