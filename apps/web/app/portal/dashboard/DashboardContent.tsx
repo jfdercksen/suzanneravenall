@@ -240,7 +240,7 @@ export default function DashboardContent({
               </div>
               <Link
                 href="/shop"
-                className="flex-shrink-0 inline-flex items-center px-5 py-2.5 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-button transition-colors duration-300"
+                className="flex-shrink-0 inline-flex items-center px-5 py-2.5 bg-white hover:bg-brand-sand text-brand-primary text-sm font-semibold rounded-button transition-colors duration-300"
               >
                 Browse Shop
               </Link>
@@ -358,7 +358,7 @@ export default function DashboardContent({
                 {/* Temporarily linking to shop membership collection */}
                 <Link
                   href="/shop?collection=membership"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-colors duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold rounded-button transition-colors duration-300"
                 >
                   View Membership Plans
                 </Link>

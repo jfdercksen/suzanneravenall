@@ -56,7 +56,7 @@ export default function ResetPasswordPage() {
   if (!sessionChecked) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-brand-primary">
-        <div className="w-8 h-8 border-2 border-brand-accent border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-white/70 border-t-transparent rounded-full animate-spin" />
       </main>
     )
   }
@@ -73,7 +73,7 @@ export default function ResetPasswordPage() {
           <p className="text-white/50 text-sm mt-2">Set a new password</p>
         </div>
 
-        <div className="bg-gray-900 rounded-2xl p-8">
+        <div className="bg-brand-primary-800 border border-white/15 rounded-2xl p-8">
           <h1 className="text-2xl font-light text-white mb-1">New Password</h1>
           <p className="text-white/50 text-sm mb-8">
             Choose a strong password for your account.
@@ -83,7 +83,7 @@ export default function ResetPasswordPage() {
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-white/70 mb-2">
                 New password{' '}
-                <span className="text-white/30 font-normal">(min. 8 characters)</span>
+                <span className="text-white/60 font-normal">(min. 8 characters)</span>
               </label>
               <input
                 id="password"
@@ -93,7 +93,7 @@ export default function ResetPasswordPage() {
                 autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-gray-800 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-colors duration-200"
+                className="w-full bg-brand-primary-700 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                 placeholder="••••••••"
               />
             </div>
@@ -110,7 +110,7 @@ export default function ResetPasswordPage() {
                 autoComplete="new-password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full bg-gray-800 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-colors duration-200"
+                className="w-full bg-brand-primary-700 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                 placeholder="••••••••"
               />
             </div>
@@ -120,7 +120,7 @@ export default function ResetPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-colors duration-300"
+              className="w-full bg-white hover:bg-brand-sand disabled:opacity-50 disabled:cursor-not-allowed text-brand-primary font-semibold py-4 rounded-xl transition-colors duration-300"
             >
               {loading ? 'Updating…' : 'Update Password'}
             </button>

@@ -366,7 +366,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
                 {/* TODO: Build /portal/upgrade page */}
                 <Link
                   href="/shop?collection=membership"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-colors duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold rounded-button transition-colors duration-300"
                 >
                   View Upgrade Options
                 </Link>

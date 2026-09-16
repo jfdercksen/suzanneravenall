@@ -82,7 +82,7 @@ function VideoPlayerModal({ videoId, title, onClose }: VideoPlayerModalProps) {
         <div className="aspect-video bg-black">
           {loading && (
             <div className="h-full flex items-center justify-center">
-              <div className="w-8 h-8 border-2 border-brand-accent border-t-transparent rounded-full animate-spin" />
+              <div className="w-8 h-8 border-2 border-white/70 border-t-transparent rounded-full animate-spin" />
             </div>
           )}
           {error && (
@@ -173,7 +173,7 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
           {unlocked ? (
             <button
               onClick={() => onWatch(video.bunny_video_id, video.title)}
-              className="w-full py-2.5 px-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-semibold rounded-button transition-colors duration-300"
+              className="w-full py-2.5 px-4 bg-white hover:bg-brand-sand text-brand-primary text-sm font-semibold rounded-button transition-colors duration-300"
             >
               Watch Now
             </button>
@@ -269,7 +269,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
                   onClick={() => setActiveCategory(cat)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
                     activeCategory === cat
-                      ? 'bg-brand-accent text-white'
+                      ? 'bg-white text-brand-primary'
                       : 'bg-gray-900 text-white/60 hover:text-white hover:bg-gray-800'
                   }`}
                 >
@@ -322,7 +322,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
                 {/* TODO: Build /portal/upgrade page */}
                 <Link
                   href="/shop?collection=membership"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-colors duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold rounded-button transition-colors duration-300"
                 >
                   Upgrade Membership
                 </Link>
