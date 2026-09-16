@@ -231,7 +231,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
           <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
             Member Portal
           </p>
-          <h1 className="text-4xl lg:text-6xl font-medium tracking-tight text-white mb-4">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white leading-[1.05] mb-4">
             Video Library
           </h1>
           <p className="text-xl text-white/60 max-w-2xl">

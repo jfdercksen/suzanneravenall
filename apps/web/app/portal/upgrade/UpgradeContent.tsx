@@ -146,7 +146,7 @@ export default function UpgradeContent({
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
               Membership Upgrade
             </p>
-            <h1 className="text-4xl lg:text-6xl font-medium tracking-tight text-white mb-6 leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white leading-[1.05] mb-6">
               {fromLabel ? `Unlock ${fromLabel}` : 'Advance your membership'}
             </h1>
             <p className="text-lg lg:text-xl text-white/60 leading-relaxed mb-8">

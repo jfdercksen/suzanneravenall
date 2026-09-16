@@ -127,7 +127,7 @@ export default function ProgrammesContent({ programmes }: ProgrammesContentProps
           <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
             Member Portal
           </p>
-          <h1 className="text-3xl lg:text-5xl font-medium tracking-tight text-white mb-3">My Programmes</h1>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white leading-[1.05] mb-3">My Programmes</h1>
           <p className="text-lg text-white/60">
             Every programme you&apos;ve purchased: your personal transformation library.
           </p>

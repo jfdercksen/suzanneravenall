@@ -79,6 +79,20 @@ picture ends. `components/home/Hero.tsx` is the reference implementation.
 `HEADER_UNDERLINE` for emphasised words). It already implements everything above.
 Video headers (homepage Hero, AboutHero) keep their own component with the same rule.
 
+**Page titles on a FLAT ground carry the same headline recipe** (Johan, 16 Sep:
+"Must be like the home page hero section"). The member portal has no photo
+headers, but its page titles are still page titles, so they use the Hero /
+PageHeader string verbatim:
+`text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white leading-[1.05]`
+plus that page's own bottom margin. One page-title treatment for the whole site.
+
+Do NOT "correct" these to font-medium: that is the SECTION headline weight (see
+Typography below), and the two rules are easy to confuse. font-normal is right
+for a page title, font-medium for a section headline inside the page. The
+exception is a heading inside a narrow card, such as "Log In" or "Forgot
+Password" in the 448px auth card, which stays `text-2xl font-medium`; at 60px it
+would wrap to three lines and swamp the form.
+
 ## Non-negotiable rules
 
 - Use brand tokens from tailwind.config.ts — never hardcode colours

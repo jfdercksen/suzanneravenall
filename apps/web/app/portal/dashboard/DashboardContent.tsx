@@ -79,7 +79,7 @@ export default function DashboardContent({
             Member Portal
           </p>
           <div className="flex flex-wrap items-center gap-4 mb-3">
-            <h1 className="text-3xl lg:text-5xl font-medium tracking-tight text-white">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white leading-[1.05]">
               Welcome back{firstName ? `, ${firstName}` : ''}
             </h1>
             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest ${badgeClass}`}>
