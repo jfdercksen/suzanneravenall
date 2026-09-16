@@ -57,7 +57,7 @@ export default function SignupPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>
           </div>
-          <h1 className="text-2xl font-light text-white mb-3">Check your email</h1>
+          <h1 className="text-2xl font-medium tracking-tight text-white mb-3">Check your email</h1>
           <p className="text-white/60 mb-2">
             We&apos;ve sent a confirmation link to
           </p>
@@ -91,7 +91,7 @@ export default function SignupPage() {
         </div>
 
         <div className="bg-brand-primary-800 border border-white/25 rounded-2xl p-8">
-          <h1 className="text-2xl font-light text-white mb-1">Sign Up</h1>
+          <h1 className="text-2xl font-medium tracking-tight text-white mb-1">Sign Up</h1>
           <p className="text-white/50 text-sm mb-8">
             Join the community and access member resources
           </p>

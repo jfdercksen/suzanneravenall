@@ -79,7 +79,7 @@ export default function DashboardContent({
             Member Portal
           </p>
           <div className="flex flex-wrap items-center gap-4 mb-3">
-            <h1 className="text-3xl lg:text-5xl font-light text-white">
+            <h1 className="text-3xl lg:text-5xl font-medium tracking-tight text-white">
               Welcome back{firstName ? `, ${firstName}` : ''}
             </h1>
             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest ${badgeClass}`}>
@@ -345,7 +345,7 @@ export default function DashboardContent({
                 <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
                   Unlock More
                 </p>
-                <h2 className="text-2xl lg:text-3xl font-light text-white mb-3">
+                <h2 className="text-2xl lg:text-3xl font-medium tracking-tight text-white mb-3">
                   Ready to go deeper?
                 </h2>
                 <p className="text-white/60 max-w-xl">

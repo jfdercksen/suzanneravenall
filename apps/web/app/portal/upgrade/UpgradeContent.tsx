@@ -146,7 +146,7 @@ export default function UpgradeContent({
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6">
               Membership Upgrade
             </p>
-            <h1 className="text-4xl lg:text-6xl font-light text-white mb-6 leading-tight">
+            <h1 className="text-4xl lg:text-6xl font-medium tracking-tight text-white mb-6 leading-tight">
               {fromLabel ? `Unlock ${fromLabel}` : 'Advance your membership'}
             </h1>
             <p className="text-lg lg:text-xl text-white/60 leading-relaxed mb-8">
@@ -182,7 +182,7 @@ export default function UpgradeContent({
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
               Open to Everyone
             </p>
-            <h2 className="text-3xl lg:text-4xl font-light text-white">Starting Point</h2>
+            <h2 className="text-3xl lg:text-4xl font-medium tracking-tight text-white">Starting Point</h2>
             <p className="text-white/70 text-sm mt-2">
               Entry memberships: no training required.
             </p>
@@ -213,7 +213,7 @@ export default function UpgradeContent({
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
               Practitioner Pathways
             </p>
-            <h2 className="text-3xl lg:text-4xl font-light text-white">Choose your track</h2>
+            <h2 className="text-3xl lg:text-4xl font-medium tracking-tight text-white">Choose your track</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">

@@ -74,7 +74,7 @@ export default function ResetPasswordPage() {
         </div>
 
         <div className="bg-brand-primary-800 border border-white/25 rounded-2xl p-8">
-          <h1 className="text-2xl font-light text-white mb-1">New Password</h1>
+          <h1 className="text-2xl font-medium tracking-tight text-white mb-1">New Password</h1>
           <p className="text-white/50 text-sm mb-8">
             Choose a strong password for your account.
           </p>

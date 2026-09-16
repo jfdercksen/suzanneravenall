@@ -82,7 +82,7 @@ export default function LoginPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
             </svg>
           </div>
-          <h1 className="text-2xl font-light text-white mb-3">Check your email</h1>
+          <h1 className="text-2xl font-medium tracking-tight text-white mb-3">Check your email</h1>
           <p className="text-white/60 mb-2">We sent a sign-in link to</p>
           <p className="text-brand-accent-400 font-medium mb-8">{email}</p>
           <p className="text-white/70 text-sm mb-8">
@@ -142,7 +142,7 @@ export default function LoginPage() {
 
           {mode === 'password' ? (
             <>
-              <h1 className="text-2xl font-light text-white mb-1">Log In</h1>
+              <h1 className="text-2xl font-medium tracking-tight text-white mb-1">Log In</h1>
               <p className="text-white/50 text-sm mb-8">Access your member account</p>
 
               <form onSubmit={handlePasswordLogin} className="space-y-5" noValidate>
@@ -199,7 +199,7 @@ export default function LoginPage() {
             </>
           ) : (
             <>
-              <h1 className="text-2xl font-light text-white mb-1">Sign In</h1>
+              <h1 className="text-2xl font-medium tracking-tight text-white mb-1">Sign In</h1>
               <p className="text-white/50 text-sm mb-8">
                 We&apos;ll email you a one-click sign-in link. No password needed.
               </p>

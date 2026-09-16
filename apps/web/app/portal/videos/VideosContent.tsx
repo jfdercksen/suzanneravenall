@@ -231,7 +231,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
           <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-4">
             Member Portal
           </p>
-          <h1 className="text-4xl lg:text-6xl font-light text-white mb-4">
+          <h1 className="text-4xl lg:text-6xl font-medium tracking-tight text-white mb-4">
             Video Library
           </h1>
           <p className="text-xl text-white/60 max-w-2xl">
@@ -311,7 +311,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
                 <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
                   Unlock the Library
                 </p>
-                <h2 className="text-2xl lg:text-3xl font-light text-white mb-3">
+                <h2 className="text-2xl lg:text-3xl font-medium tracking-tight text-white mb-3">
                   90+ hours of coaching sessions
                 </h2>
                 <p className="text-white/60 max-w-xl">
