@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
+import { ensureMembership } from '@/lib/access/ensure-membership'
 
 type LoginMode = 'password' | 'magic-link'
 
@@ -38,7 +39,7 @@ export default function LoginPage() {
     setLoading(true)
 
     const supabase = createClient()
-    const { error: authError } = await supabase.auth.signInWithPassword({
+    const { data, error: authError } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
@@ -47,6 +48,13 @@ export default function LoginPage() {
       setError(authError.message)
       setLoading(false)
     } else {
+      // Self-heal for KI038: members who signed up while GoTrue had autoconfirm
+      // on, before that path created the row, have no membership record. The
+      // call is idempotent and authorises against this session, so it is a
+      // no-op for everyone else and makes each login a recovery point.
+      if (data.user) {
+        await ensureMembership(data.user.id)
+      }
       router.push(redirect)
     }
   }

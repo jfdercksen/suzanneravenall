@@ -2,9 +2,12 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
+import { ensureMembership } from '@/lib/access/ensure-membership'
 
 export default function SignupPage() {
+  const router = useRouter()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -40,12 +43,41 @@ export default function SignupPage() {
       return
     }
 
-    // The free-tier membership record is created server-side in /portal/callback
-    // after the user confirms their email and exchanges the auth code for a session.
-    // No client-side subscription call is needed here.
+    // Two legitimate outcomes, and the flow has to handle BOTH (KI038).
+    //
+    // 1. No session: GoTrue has email confirmation on, so it has sent a
+    //    confirmation mail. The free-tier membership record is created later,
+    //    server-side in /portal/callback, once the link is clicked. Show the
+    //    "check your email" screen.
+    // 2. A session: GOTRUE_MAILER_AUTOCONFIRM is on, so NO mail was sent and
+    //    the account is already confirmed and signed in. /portal/callback will
+    //    never run, so the membership record has to be created here instead,
+    //    and telling the member to check their email would strand them waiting
+    //    for a mail that is never coming.
+    //
+    // Branching on the session rather than on a build-time flag means this
+    // keeps working whichever way autoconfirm is set, so turning it off later
+    // needs no code change.
+    if (!data.session) {
+      setSuccess(true)
+      setLoading(false)
+      return
+    }
 
-    setSuccess(true)
-    setLoading(false)
+    // Best-effort: a failure here degrades display-only (the portal layout
+    // falls back to the free tier), so it must not strand a member who has a
+    // perfectly good account. The login path calls this too, so a miss here is
+    // picked up on their next sign-in rather than being permanent.
+    if (data.user) {
+      await ensureMembership(data.user.id)
+    } else {
+      // Supabase's types make session-without-user impossible, so this should
+      // never fire; log it rather than skipping in silence if it ever does.
+      console.error('[signup] session returned with no user; membership not created')
+    }
+
+    router.push('/portal/dashboard')
+    router.refresh()
   }
 
   if (success) {
