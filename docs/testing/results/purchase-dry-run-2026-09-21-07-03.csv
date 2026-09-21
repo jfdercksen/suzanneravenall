@@ -1,0 +1,4 @@
+page_or_product,test,problem,screenshot,link,status,found_on,fixed_in,variant,price_zar,order_display_id,order_id,thinkific_course_id,enrolment,expected_emails
+Rapid Repatterning Session / 60 min in-person,T1 voucher purchase,"set email 400: Customer with email: qa-selftest@aiautomations.co.za, has_account: false, already exists.",,http://169.239.180.49/shop/rapid-repatterning-session,fail,2026-09-21,,60 min in-person,1995,,,,,order-confirmation; order-confirmation carries the Cal.com booking link
+Rapid Repatterning Session / 90 min online,T1 voucher purchase,,,http://169.239.180.49/shop/rapid-repatterning-session,pass,2026-09-21,,90 min online,2490,,,,,order-confirmation; order-confirmation carries the Cal.com booking link
+Rapid Repatterning Session / 90 min in-person,T1 voucher purchase,,,http://169.239.180.49/shop/rapid-repatterning-session,pass,2026-09-21,,90 min in-person,2990,,,,,order-confirmation; order-confirmation carries the Cal.com booking link

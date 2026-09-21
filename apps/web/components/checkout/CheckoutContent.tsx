@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShoppingBag, ChevronRight, Lock } from 'lucide-react'
+import { ShoppingBag, ChevronRight, Lock, Tag, X } from 'lucide-react'
 import { useCart, formatPrice } from '@/lib/cart'
 
 type Step = 1 | 2 | 3
@@ -93,6 +93,8 @@ function OrderSideBar() {
   const { cart } = useCart()
   if (!cart || cart.items.length === 0) return null
 
+  const voucherCode = cart.promotions.find((p) => p.code)?.code ?? null
+
   return (
     <div className="bg-white rounded-2xl border border-brand-border p-6">
       <h3 className="text-sm font-medium text-brand-ink mb-4">Order Summary</h3>
@@ -132,6 +134,12 @@ function OrderSideBar() {
           <span>Subtotal</span>
           <span className="tabular-nums">{formatPrice(cart.subtotal, cart.currency_code)}</span>
         </div>
+        {cart.discount_total > 0 && (
+          <div className="flex justify-between text-brand-muted">
+            <span>Voucher{voucherCode ? ` (${voucherCode})` : ''}</span>
+            <span className="tabular-nums">-{formatPrice(cart.discount_total, cart.currency_code)}</span>
+          </div>
+        )}
         {cart.tax_total > 0 && (
           <div className="flex justify-between text-brand-muted">
             <span>Tax</span>
@@ -238,7 +246,7 @@ function PayPalRedirect({ approvalUrl }: { approvalUrl: string }) {
 
 export default function CheckoutContent() {
   const router = useRouter()
-  const { cart, setEmail } = useCart()
+  const { cart, setEmail, applyPromoCode, removePromoCode } = useCart()
 
   const [step, setStep] = useState<Step>(1)
   const [contact, setContact] = useState<ContactForm>({
@@ -256,6 +264,14 @@ export default function CheckoutContent() {
   } | null>(null)
   const [paymentError, setPaymentError] = useState<string | null>(null)
   const [payPalApprovalUrl, setPayPalApprovalUrl] = useState<string | null>(null)
+  const [voucherInput, setVoucherInput] = useState('')
+  const [voucherBusy, setVoucherBusy] = useState(false)
+  const [voucherError, setVoucherError] = useState<string | null>(null)
+
+  const appliedVoucher = cart?.promotions.find((p) => p.code)?.code ?? null
+  // A cart the voucher has taken to zero skips the gateway entirely. Number()
+  // because Medusa's money fields are not always plain numbers on the wire.
+  const isFreeOrder = Boolean(cart && appliedVoucher && Number(cart.total) === 0)
 
   // Redirect to /cart if cart is empty (after initial load)
   useEffect(() => {
@@ -279,8 +295,12 @@ export default function CheckoutContent() {
       return
     }
     setIsSubmitting(true)
-    await setEmail(contact.email)
+    const saved = await setEmail(contact.email)
     setIsSubmitting(false)
+    if (!saved) {
+      setErrors({ email: 'We could not save your email address. Please check your connection and try again.' })
+      return
+    }
     setStep(2)
   }
 
@@ -363,6 +383,66 @@ export default function CheckoutContent() {
         err instanceof Error ? err.message : 'Unable to initialise PayPal payment. Please try again.'
       )
     } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  async function handleApplyVoucher(e: React.FormEvent) {
+    e.preventDefault()
+    const code = voucherInput.trim()
+    if (!code) return
+    setVoucherBusy(true)
+    setVoucherError(null)
+    try {
+      await applyPromoCode(code)
+      setVoucherInput('')
+    } catch (err) {
+      setVoucherError(err instanceof Error ? err.message : 'That voucher code is not valid')
+    } finally {
+      setVoucherBusy(false)
+    }
+  }
+
+  async function handleRemoveVoucher() {
+    if (!appliedVoucher) return
+    setVoucherBusy(true)
+    setVoucherError(null)
+    try {
+      await removePromoCode(appliedVoucher)
+    } catch (err) {
+      setVoucherError(err instanceof Error ? err.message : 'Could not remove the voucher')
+    } finally {
+      setVoucherBusy(false)
+    }
+  }
+
+  async function handlePlaceFreeOrder() {
+    if (!cart) return
+    setIsSubmitting(true)
+    setPaymentError(null)
+    try {
+      const res = await fetch('/api/checkout/free', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cartId: cart.id }),
+      })
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string
+        alreadyPlaced?: boolean
+        order?: { id: string; display_id: number }
+      }
+      if (res.status === 409 && data.alreadyPlaced) {
+        // A retry after a dropped response: the first attempt did place it.
+        router.push('/checkout/confirmation?free=1')
+        return
+      }
+      if (!res.ok || !data.order) {
+        throw new Error(data.error ?? 'Could not place the order. Please try again.')
+      }
+      // The confirmation page clears the cart once it mounts.
+      router.push(`/checkout/confirmation?free=1&order=${encodeURIComponent(String(data.order.display_id))}`)
+    } catch (err) {
+      setPaymentError(err instanceof Error ? err.message : 'Could not place the order. Please try again.')
       setIsSubmitting(false)
     }
   }
@@ -484,9 +564,11 @@ export default function CheckoutContent() {
                       Payment
                     </h2>
                     <p className="text-sm text-brand-muted mb-6">
-                      {contact.country === 'ZA'
-                        ? 'You will be securely redirected to PayFast to complete your payment.'
-                        : 'You will be securely redirected to PayPal to complete your payment.'}
+                      {isFreeOrder
+                        ? 'Your voucher covers the full amount. There is nothing to pay.'
+                        : contact.country === 'ZA'
+                          ? 'You will be securely redirected to PayFast to complete your payment.'
+                          : 'You will be securely redirected to PayPal to complete your payment.'}
                     </p>
 
                     {/* Billing summary */}
@@ -510,13 +592,86 @@ export default function CheckoutContent() {
                       </button>
                     </div>
 
+                    {/* Voucher code */}
+                    <div className="mb-6">
+                      {appliedVoucher ? (
+                        <div className="flex items-center justify-between gap-3 rounded-xl border border-brand-border bg-brand-sand px-4 py-3 text-sm">
+                          <span className="inline-flex items-center gap-2 text-brand-ink">
+                            <Tag className="w-4 h-4" aria-hidden="true" />
+                            Voucher <span className="font-mono font-medium">{appliedVoucher}</span> applied
+                          </span>
+                          <button
+                            type="button"
+                            onClick={handleRemoveVoucher}
+                            disabled={voucherBusy || isSubmitting}
+                            aria-label={`Remove voucher ${appliedVoucher}`}
+                            className="inline-flex items-center gap-1 text-xs text-brand-muted hover:text-brand-ink underline underline-offset-4 disabled:opacity-60 transition-colors duration-200"
+                          >
+                            <X className="w-3 h-3" aria-hidden="true" />
+                            Remove
+                          </button>
+                        </div>
+                      ) : (
+                        <form onSubmit={handleApplyVoucher} noValidate className="flex gap-2">
+                          <div className="flex-1">
+                            <label htmlFor="voucher" className="sr-only">
+                              Voucher code
+                            </label>
+                            <input
+                              id="voucher"
+                              type="text"
+                              value={voucherInput}
+                              onChange={(e) => {
+                                setVoucherInput(e.target.value)
+                                if (voucherError) setVoucherError(null)
+                              }}
+                              placeholder="Voucher code"
+                              autoComplete="off"
+                              autoCapitalize="characters"
+                              aria-invalid={!!voucherError}
+                              aria-describedby={voucherError ? 'voucher-error' : undefined}
+                              className={`w-full px-4 py-3 rounded-xl border text-brand-ink placeholder-brand-muted text-sm uppercase transition-colors duration-200 outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent ${
+                                voucherError ? 'border-red-600 bg-red-50' : 'border-brand-primary-300 bg-white hover:border-brand-primary-400'
+                              }`}
+                            />
+                          </div>
+                          <button
+                            type="submit"
+                            disabled={voucherBusy || isSubmitting || !voucherInput.trim()}
+                            className="px-5 py-3 rounded-xl text-sm font-medium border border-brand-primary-300 text-brand-ink hover:bg-brand-sand disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300"
+                          >
+                            {voucherBusy ? 'Applying...' : 'Apply'}
+                          </button>
+                        </form>
+                      )}
+                      {voucherError && (
+                        <p id="voucher-error" className="mt-1 text-xs text-red-600" role="alert">
+                          {voucherError}
+                        </p>
+                      )}
+                    </div>
+
                     {paymentError && (
                       <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700" role="alert">
                         {paymentError}
                       </div>
                     )}
 
-                    {contact.country === 'ZA' ? (
+                    {isFreeOrder ? (
+                      <>
+                        <button
+                          onClick={handlePlaceFreeOrder}
+                          disabled={isSubmitting || voucherBusy}
+                          className="w-full py-4 px-6 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
+                        >
+                          <Lock className="w-4 h-4" />
+                          {isSubmitting ? 'Placing your order...' : 'Place order'}
+                        </button>
+                        <p className="text-xs text-brand-muted text-center mt-4">
+                          No payment needed · Your confirmation will arrive by email
+                        </p>
+                      </>
+                    ) : contact.country === 'ZA' ? (
                       <>
                         <button
                           onClick={handlePayWithPayFast}

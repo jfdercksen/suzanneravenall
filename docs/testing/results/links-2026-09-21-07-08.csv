@@ -1,0 +1,6 @@
+page_or_product,test,problem,screenshot,link,status,found_on,fixed_in,link_text,kind
+/services/private-sessions /portal /portal/login /portal/signup /portal/dashboard /portal/forgot-password,T5 content,"duplicate <title> ""Dr. Suzanne Ravenall"" on 6 pages",,,fail,2026-09-21,,,content
+"135 pages (/services/private-sessions, /, /programs, ...)",T4 links,"""Private Sessions"" goes to /services, expected /services/private-sessions [sitewide, 135 pages]",,/services,fail,2026-09-21,,Private Sessions,wrong-target
+"135 pages (/services/private-sessions, /, /programs, ...)",T4 links,"external link answers 999 [sitewide, 135 pages]",,https://www.linkedin.com/in/sravenall,fail,2026-09-21,,LinkedIn,external
+"3 pages (/, /about, /testimonials)",T4 links,"asset answers 404 [sitewide, 3 pages]",,http://169.239.180.49/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FE4x3YETXHSA%2Fmqdefault.jpg&w=3840&q=75,fail,2026-09-21,,(image),link
+/legal/cookies,T4 links,external link answers 403,,https://privacy.microsoft.com/en-us/privacystatement,fail,2026-09-21,,Microsoft Privacy Statement,external

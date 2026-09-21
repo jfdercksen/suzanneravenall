@@ -37,6 +37,13 @@ export interface Cart {
   currency_code: string
   region_id: string
   email: string | null
+  promotions: CartPromotion[]
+}
+
+// Voucher (Medusa promotion) applied to the cart, as returned by the store API.
+export interface CartPromotion {
+  id: string
+  code: string | null
 }
 
 export interface CartContextType {
@@ -46,7 +53,9 @@ export interface CartContextType {
   addItem: (variantId: string, quantity?: number) => Promise<void>
   updateItem: (lineItemId: string, quantity: number) => Promise<void>
   removeItem: (lineItemId: string) => Promise<void>
-  setEmail: (email: string) => Promise<void>
+  setEmail: (email: string) => Promise<boolean>
+  applyPromoCode: (code: string) => Promise<void>
+  removePromoCode: (code: string) => Promise<void>
   clearCart: () => void
 }
 
@@ -77,6 +86,7 @@ export function formatPrice(amountInCents: number, currencyCode = 'zar'): string
 function normaliseCart(cart: Cart): Cart {
   return {
     ...cart,
+    promotions: cart.promotions ?? [],
     items: (cart.items ?? []).map((item) => {
       const derived = (item.unit_price ?? 0) * (item.quantity ?? 0)
       return {
@@ -274,21 +284,63 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const setEmail = useCallback(
     async (email: string) => {
       const currentCart = await getOrCreateCart()
-      if (!currentCart) return
+      if (!currentCart) return false
       try {
         const res = await fetch(`${getMedusaBase()}/store/carts/${currentCart.id}`, {
           method: 'POST',
           headers: getMedusaHeaders(),
           body: JSON.stringify({ email }),
         })
-        if (!res.ok) return
+        if (!res.ok) return false
         const data = (await res.json()) as { cart: Cart }
         setCart(normaliseCart(data.cart))
+        return true
       } catch {
-        // silently fail
+        // The caller decides what to show; a free order needs the email on the cart.
+        return false
       }
     },
     [getOrCreateCart]
+  )
+
+  // Voucher codes. POST adds, DELETE removes; both return the recalculated cart.
+  // Medusa answers 200 with the code silently missing from cart.promotions when
+  // it is unknown or inactive, so the caller checks the cart, not the status.
+  const applyPromoCode = useCallback(
+    async (code: string) => {
+      const currentCart = await getOrCreateCart()
+      if (!currentCart) throw new Error('Could not create cart')
+      const res = await fetch(`${getMedusaBase()}/store/carts/${currentCart.id}/promotions`, {
+        method: 'POST',
+        headers: getMedusaHeaders(),
+        body: JSON.stringify({ promo_codes: [code] }),
+      })
+      // Fixed copy only: Medusa's own message is not shown to the buyer.
+      if (res.status === 400 || res.status === 404) throw new Error('That voucher code is not valid')
+      if (!res.ok) throw new Error('Could not apply the voucher right now. Please try again.')
+      const data = (await res.json()) as { cart: Cart }
+      const next = normaliseCart(data.cart)
+      setCart(next)
+      if (!next.promotions.some((p) => p.code?.toLowerCase() === code.toLowerCase())) {
+        throw new Error('That voucher code is not valid')
+      }
+    },
+    [getOrCreateCart]
+  )
+
+  const removePromoCode = useCallback(
+    async (code: string) => {
+      if (!cart) return
+      const res = await fetch(`${getMedusaBase()}/store/carts/${cart.id}/promotions`, {
+        method: 'DELETE',
+        headers: getMedusaHeaders(),
+        body: JSON.stringify({ promo_codes: [code] }),
+      })
+      if (!res.ok) throw new Error('Could not remove the voucher right now. Please try again.')
+      const data = (await res.json()) as { cart: Cart }
+      setCart(normaliseCart(data.cart))
+    },
+    [cart]
   )
 
   const clearCart = useCallback(() => {
@@ -310,9 +362,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       updateItem,
       removeItem,
       setEmail,
+      applyPromoCode,
+      removePromoCode,
       clearCart,
     }),
-    [cart, isLoading, itemCount, addItem, updateItem, removeItem, setEmail, clearCart]
+    [cart, isLoading, itemCount, addItem, updateItem, removeItem, setEmail, applyPromoCode, removePromoCode, clearCart]
   )
 
   return <CartCtx.Provider value={value}>{children}</CartCtx.Provider>

@@ -1,0 +1,3247 @@
+{
+  "base": "http://169.239.180.49",
+  "at": "2026-09-21T07:03:51.472Z",
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/",
+      "error": null,
+      "title": "Dr. Suzanne Ravenall: Transformation Coaching",
+      "links": 93,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Faccreditations%2Ficf-member.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Faccreditations%2Faadp.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Faccreditations%2Fctaa.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Faccreditations%2Fctss.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Faccreditations%2Froyal-society-medicine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Faccreditations%2Fiqnet.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Faccreditations%2Fiso-9001.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Faccreditations%2Faccredited-mediator.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fwomen-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fafrica-investor.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fceo-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fentrepreneur.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsabc.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsunday-times.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fwomen-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fafrica-investor.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fceo-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fentrepreneur.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsabc.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsunday-times.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fthe-start.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fengineering-news-mining-weekly.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fglobal-100-2020.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fherald-international-tribune.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Ftop-women-in-business-and-government.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fbusiness-excellence.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fthe-start.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fengineering-news-mining-weekly.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fglobal-100-2020.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fherald-international-tribune.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Ftop-women-in-business-and-government.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fbusiness-excellence.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fwomen-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fafrica-investor.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fceo-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fentrepreneur.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsabc.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsunday-times.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fthe-start.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fengineering-news-mining-weekly.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fglobal-100-2020.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fherald-international-tribune.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Ftop-women-in-business-and-government.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fbusiness-excellence.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fwomen-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fafrica-investor.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fceo-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fentrepreneur.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsabc.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsunday-times.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fthe-start.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fengineering-news-mining-weekly.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fglobal-100-2020.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fherald-international-tribune.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Ftop-women-in-business-and-government.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fbusiness-excellence.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-casual.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fmedia%2Fmagazine-ceo-cover3.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fmedia%2Fmagazine-ceo-global.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fmedia%2Fmagazine-ceo.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fmedia%2Fmagazine-feature.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-casual.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Frelationships.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-energy.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fbusiness.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-transformation.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fpurpose.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fbook-cover.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2F8Yw_n8NribA%2Fmaxresdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2F8Yw_n8NribA%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FwPTh5Z8iwwU%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FE4x3YETXHSA%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FiHe9dZq1YdY%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FnLrXITVsXz8%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FGz3NUPWdxAI%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/services",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/services",
+      "error": null,
+      "title": "Services | Private Sessions, Group Programmes & Keynotes | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 84,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-transformation.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-resonance.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-akashic.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-mindfulness.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-energy.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-transformation.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fbusiness.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fbusiness.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fbusiness.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-transformation.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fbusiness.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/speaking",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/speaking",
+      "error": null,
+      "title": "Keynote Speaker | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/about",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/about",
+      "error": null,
+      "title": "About Dr. Suzanne Ravenall | Transformation & Performance Coach | Dr. Suzanne Ravenall",
+      "links": 71,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fmedia%2Fmagazine-ceo-cover3.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fmedia%2Fmagazine-ceo-global.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fmedia%2Fmagazine-ceo.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fmedia%2Fmagazine-feature.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fwomen-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fafrica-investor.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fceo-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fentrepreneur.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsabc.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsunday-times.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fwomen-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fafrica-investor.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fceo-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fentrepreneur.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsabc.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsunday-times.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fthe-start.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fengineering-news-mining-weekly.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fglobal-100-2020.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fherald-international-tribune.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Ftop-women-in-business-and-government.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fbusiness-excellence.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fthe-start.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fengineering-news-mining-weekly.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fglobal-100-2020.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fherald-international-tribune.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Ftop-women-in-business-and-government.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fbusiness-excellence.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fwomen-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fafrica-investor.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fceo-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fentrepreneur.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsabc.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsunday-times.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fthe-start.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fengineering-news-mining-weekly.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fglobal-100-2020.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fherald-international-tribune.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Ftop-women-in-business-and-government.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fbusiness-excellence.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fwomen-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fafrica-investor.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fceo-magazine.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fentrepreneur.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsabc.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fsunday-times.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fthe-start.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fengineering-news-mining-weekly.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fglobal-100-2020.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fherald-international-tribune.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Ftop-women-in-business-and-government.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fmedia%2Fbusiness-excellence.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2F8Yw_n8NribA%2Fmaxresdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2F8Yw_n8NribA%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FwPTh5Z8iwwU%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FE4x3YETXHSA%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FiHe9dZq1YdY%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FnLrXITVsXz8%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FGz3NUPWdxAI%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/masterclass",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/masterclass",
+      "error": null,
+      "title": "Unlock Your Most Extraordinary Self | Free Masterclass with Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 67,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs",
+      "error": null,
+      "title": "Programmes | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 98,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fmindset.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fbe-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fbe-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgetting-unstuck-self-study.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ffinding-my-life-purpose-live.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fcoherence-muscle-testing-self-study-online-2.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Frapid-repatterning-session.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fpost-traumatic-growth-self-study-online.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmoney-mastery-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fcareer-progression-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-attraction-frequency-recorded.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-develop-super-confidence.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-shedding-excess-weight.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-being-a-great-boundary-setter-booked-as-a-series-only.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-nice-or-not-nice-in-communication-booked-as-a-series-only.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/discover-your-pattern",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/discover-your-pattern",
+      "error": null,
+      "title": "Discover Your Pattern | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 79,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/services/private-sessions",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/services/private-sessions",
+      "error": null,
+      "title": "Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore",
+      "error": null,
+      "title": "Explore | Every Area of Your Life, Transformed | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 78,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-energy.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-energy.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-mindfulness.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-akashic.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-transformation.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-purpose.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-resonance.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/contact",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/contact",
+      "error": null,
+      "title": "Contact | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 71,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/resources/assessments",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/resources/assessments",
+      "error": null,
+      "title": "Assessments | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways",
+      "error": null,
+      "title": "Individual & Group Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 84,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-transformation.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fhero-masterclass.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/resources/media",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/resources/media",
+      "error": null,
+      "title": "Media & Press | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/resources",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/resources",
+      "error": null,
+      "title": "Resources | Articles, Media, Awards & Newsletter | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 79,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/legal/privacy",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/legal/privacy",
+      "error": null,
+      "title": "Privacy Policy | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 72,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/legal/terms",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/legal/terms",
+      "error": null,
+      "title": "Terms of Service | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 67,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/book",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/book",
+      "error": null,
+      "title": "The Breakthrough Trilogy | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 73,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fbook-cover.png&w=828&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-casual.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/blog",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/blog",
+      "error": null,
+      "title": "Blog | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/community",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/community",
+      "error": null,
+      "title": "Community | Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/shop",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop",
+      "error": null,
+      "title": "Shop | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/emotional-nervous-system-mastery",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/emotional-nervous-system-mastery",
+      "error": null,
+      "title": "Emotional & Nervous System Mastery | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 75,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Frelationships.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-vitality.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-transformation.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/next-level-health-vitality-longevity",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/next-level-health-vitality-longevity",
+      "error": null,
+      "title": "Next-Level Health, Vitality & Longevity | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 75,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-vitality.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-transformation.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fpurpose.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/relationships-attachment-patterns",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/relationships-attachment-patterns",
+      "error": null,
+      "title": "Relationships & Attachment Patterns | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Frelationships.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fpurpose.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-transformation.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/leadership-high-performance",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/leadership-high-performance",
+      "error": null,
+      "title": "Leadership & High Performance | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 75,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fbusiness.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fpurpose.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-resonance.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-vitality.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/identity-purpose-activation",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/identity-purpose-activation",
+      "error": null,
+      "title": "Identity & Purpose Activation | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 75,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fpurpose.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-transformation.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fbusiness.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-resonance.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/legal/cookies",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/legal/cookies",
+      "error": null,
+      "title": "Cookie Policy | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/intuition-as-patterned-intelligence",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/intuition-as-patterned-intelligence",
+      "error": null,
+      "title": "Intuition as Patterned Intelligence | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 75,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-resonance.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fbusiness.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fpurpose.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/life-transitions-reinvention",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/life-transitions-reinvention",
+      "error": null,
+      "title": "Life Transitions & Reinvention | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 75,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-transformation.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fpurpose.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Frelationships.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/health-energy-intelligence",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/health-energy-intelligence",
+      "error": null,
+      "title": "Health & Energy Intelligence | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 75,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fhealth.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-vitality.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-transformation.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways/break-the-loop",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways/break-the-loop",
+      "error": null,
+      "title": "Break the Loop | Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways/upgrade-your-operating-system",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways/upgrade-your-operating-system",
+      "error": null,
+      "title": "Upgrade Your Operating System | Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways/reclaim-your-power",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways/reclaim-your-power",
+      "error": null,
+      "title": "Reclaim Your Power | Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways/reinvent-your-life",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways/reinvent-your-life",
+      "error": null,
+      "title": "Reinvent Your Life | Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways/resilience-fortification",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways/resilience-fortification",
+      "error": null,
+      "title": "Resilience & Fortification | Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways/pattern-mastery",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways/pattern-mastery",
+      "error": null,
+      "title": "Pattern Mastery | Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways/trauma-to-breakthrough",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways/trauma-to-breakthrough",
+      "error": null,
+      "title": "Trauma to Breakthrough | Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways/children-young-people-foundations-for-life",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways/children-young-people-foundations-for-life",
+      "error": null,
+      "title": "Children & Young People Foundations for Life | Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways/emotional-mastery-for-young-minds",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways/emotional-mastery-for-young-minds",
+      "error": null,
+      "title": "Emotional Mastery for Young Minds | Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways/young-minds-architecture",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways/young-minds-architecture",
+      "error": null,
+      "title": "Young Minds Architecture | Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways/pattern-foundations",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways/pattern-foundations",
+      "error": null,
+      "title": "Pattern Foundations | Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/services/private-sessions/rapid-repatterning",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/services/private-sessions/rapid-repatterning",
+      "error": null,
+      "title": "Rapid Repatterning® | Private Sessions | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/services/private-sessions/rapid-transformational-therapy",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/services/private-sessions/rapid-transformational-therapy",
+      "error": null,
+      "title": "Rapid Transformational Therapy® | Private Sessions | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/services/private-sessions/transformational-coaching",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/services/private-sessions/transformational-coaching",
+      "error": null,
+      "title": "Transformational & Behavioural Coaching | Private Sessions | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/services/private-sessions/group-family-coaching",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/services/private-sessions/group-family-coaching",
+      "error": null,
+      "title": "Group Family Coaching | Private Sessions | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/services/private-sessions/akashic-intuitive-mastery",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/services/private-sessions/akashic-intuitive-mastery",
+      "error": null,
+      "title": "Akashic Intuitive Mastery | Private Sessions | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/events",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/events",
+      "error": null,
+      "title": "Events | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 96,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fdeep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fdeep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fakashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fakashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmindfulness-live.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmeditation-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/services/private-sessions/exploring-the-alpha-mind",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/services/private-sessions/exploring-the-alpha-mind",
+      "error": null,
+      "title": "Exploring the Alpha Mind | Private Sessions | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/services/private-sessions/energetic-realignment-optimisation",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/services/private-sessions/energetic-realignment-optimisation",
+      "error": null,
+      "title": "Energetic Realignment & Optimisation | Private Sessions | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/services/private-sessions/executive-coaching",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/services/private-sessions/executive-coaching",
+      "error": null,
+      "title": "Executive Coaching | Private Sessions | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/services/private-sessions/resonance-repatterning",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/services/private-sessions/resonance-repatterning",
+      "error": null,
+      "title": "Resonance Repatterning | Private Sessions | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/cart",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/cart",
+      "error": null,
+      "title": "Your Cart | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/about/the-story",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/about/the-story",
+      "error": null,
+      "title": "The Story | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 68,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/about/the-system",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/about/the-system",
+      "error": null,
+      "title": "The System | Pattern Intelligence™ | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 71,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/about/the-science",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/about/the-science",
+      "error": null,
+      "title": "The Science | Pattern-Level Transformation | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 68,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fhero-bg-suzanne-ravenall.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/transformation-pathways/inner-compass",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/transformation-pathways/inner-compass",
+      "error": null,
+      "title": "Inner Compass | Transformation Pathways | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/testimonials",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/testimonials",
+      "error": null,
+      "title": "Testimonials | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 68,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2F8Yw_n8NribA%2Fmaxresdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2F8Yw_n8NribA%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FwPTh5Z8iwwU%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FE4x3YETXHSA%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FiHe9dZq1YdY%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FnLrXITVsXz8%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FGz3NUPWdxAI%2Fmqdefault.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fsession-coaching.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/resonance-repatterning-basic-5-series",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/resonance-repatterning-basic-5-series",
+      "error": null,
+      "title": "The Basic Five (Programs 1–5) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/energy-clearing-basic",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/energy-clearing-basic",
+      "error": null,
+      "title": "Energy Clearing: Self Clearing Level 1 (Basic) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fdeep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fdeep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fakashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fakashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/energy-clearing-advanced",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/energy-clearing-advanced",
+      "error": null,
+      "title": "Energy Clearing: Clearing Others Level 2 (Advanced) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fdeep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fdeep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fakashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fakashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/shop/group-session-being-a-great-boundary-setter-booked-as-a-series-only",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/group-session-being-a-great-boundary-setter-booked-as-a-series-only",
+      "error": null,
+      "title": "Group Session — Being a Great Boundary Setter | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=http%3A%2F%2F169.239.180.49%2Fuploads%2F1780653857229-group-session-being-a-great-boundary-setter-booked-as-a-series-only.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/the-latest-book-by-suzanne",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/the-latest-book-by-suzanne",
+      "error": null,
+      "title": "Breakthrough Trilogy | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=http%3A%2F%2F169.239.180.49%2Fuploads%2Fbook-cover.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/portal",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/portal/login?redirect=%2Fportal",
+      "error": null,
+      "title": "Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/legal/disclaimer",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/legal/disclaimer",
+      "error": null,
+      "title": "Disclaimer | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 67,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/akashic-navigator-advanced",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/akashic-navigator-advanced",
+      "error": null,
+      "title": "Akashic Navigator: Advanced | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fakashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fdeep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fdeep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fakashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/trauma-to-transcendence",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/trauma-to-transcendence",
+      "error": null,
+      "title": "Trauma to Transcendence | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fmindset.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/love-and-relationships",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/love-and-relationships",
+      "error": null,
+      "title": "Love & Relationships | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fmindset.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/intuition-in-my-personal-capacity",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/intuition-in-my-personal-capacity",
+      "error": null,
+      "title": "Intuition in My Personal Capacity | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fmindset.webp&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/intuition-in-business",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/intuition-in-business",
+      "error": null,
+      "title": "Intuition in Business | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Ffocus%2Fmindset.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/become-an-energy-ninja",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/become-an-energy-ninja",
+      "error": null,
+      "title": "Become an Energy Ninja: Level 1 | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fbe-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/become-an-energy-ninja-level-2",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/become-an-energy-ninja-level-2",
+      "error": null,
+      "title": "Become an Energy Ninja: Level 2 | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fbe-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/getting-unstuck",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/getting-unstuck",
+      "error": null,
+      "title": "Getting Unstuck | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgetting-unstuck-self-study.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/rapid-repatterning-introduction",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/rapid-repatterning-introduction",
+      "error": null,
+      "title": "Rapid Repatterning: An Introduction | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Frapid-repatterning-session.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/finding-my-purpose",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/finding-my-purpose",
+      "error": null,
+      "title": "Finding My Purpose | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ffinding-my-life-purpose-live.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/coherence-muscle-testing",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/coherence-muscle-testing",
+      "error": null,
+      "title": "Coherence Muscle Testing | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fcoherence-muscle-testing-self-study-online-2.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/post-traumatic-growth",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/post-traumatic-growth",
+      "error": null,
+      "title": "Post-Traumatic Growth | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fpost-traumatic-growth-self-study-online.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/akashic-navigator-basic",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/akashic-navigator-basic",
+      "error": null,
+      "title": "Akashic Navigator: Basic | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fakashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fdeep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fdeep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fakashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/mindfulness",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/mindfulness",
+      "error": null,
+      "title": "Mindfulness | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmindfulness-live.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmeditation-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/career-progression",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/career-progression",
+      "error": null,
+      "title": "Career Progression | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fcareer-progression-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmoney-mastery-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-attraction-frequency-recorded.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-develop-super-confidence.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/meditation",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/meditation",
+      "error": null,
+      "title": "Meditation | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmeditation-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmindfulness-live.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/money-mastery",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/money-mastery",
+      "error": null,
+      "title": "Money Mastery | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmoney-mastery-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fcareer-progression-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-attraction-frequency-recorded.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-develop-super-confidence.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/attraction-frequency",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/attraction-frequency",
+      "error": null,
+      "title": "Attraction Frequency | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-attraction-frequency-recorded.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmoney-mastery-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fcareer-progression-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-develop-super-confidence.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/develop-super-confidence",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/develop-super-confidence",
+      "error": null,
+      "title": "Develop Super Confidence | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-develop-super-confidence.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmoney-mastery-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fcareer-progression-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-attraction-frequency-recorded.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/shedding-excess-weight",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/shedding-excess-weight",
+      "error": null,
+      "title": "Shedding Excess Weight | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-shedding-excess-weight.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmoney-mastery-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fcareer-progression-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-attraction-frequency-recorded.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/nice-or-not-nice-communication",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/nice-or-not-nice-communication",
+      "error": null,
+      "title": "Nice or Not Nice Communication | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-nice-or-not-nice-in-communication-booked-as-a-series-only.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmoney-mastery-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fcareer-progression-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-attraction-frequency-recorded.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/being-a-great-boundary-setter",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/being-a-great-boundary-setter",
+      "error": null,
+      "title": "Being a Great Boundary Setter | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-being-a-great-boundary-setter-booked-as-a-series-only.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmoney-mastery-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fcareer-progression-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-attraction-frequency-recorded.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/overcoming-the-need-to-fix-others",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/overcoming-the-need-to-fix-others",
+      "error": null,
+      "title": "Overcoming the Need to Fix Others | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fgroup-coaching-real.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmoney-mastery-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fcareer-progression-group-session.png&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-attraction-frequency-recorded.png&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/emotional-nervous-system-mastery/quiz",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/emotional-nervous-system-mastery/quiz",
+      "error": null,
+      "title": "What Nervous System Pattern Is Running Your Life? | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/health-energy-intelligence/quiz",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/health-energy-intelligence/quiz",
+      "error": null,
+      "title": "Is Stress Rewiring Your Body? | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/leadership-high-performance/quiz",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/leadership-high-performance/quiz",
+      "error": null,
+      "title": "What Performance Pattern Is Capping Your Potential? | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/identity-purpose-activation/quiz",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/identity-purpose-activation/quiz",
+      "error": null,
+      "title": "What Identity Pattern Is Limiting Your Growth? | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/life-transitions-reinvention/quiz",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/life-transitions-reinvention/quiz",
+      "error": null,
+      "title": "How Are You Navigating This Life Transition? | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/relationships-attachment-patterns/quiz",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/relationships-attachment-patterns/quiz",
+      "error": null,
+      "title": "What Attachment Pattern Is Shaping Your Relationships? | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/portal/login",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/portal/login",
+      "error": null,
+      "title": "Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/portal/signup",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/portal/signup",
+      "error": null,
+      "title": "Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/next-level-health-vitality-longevity/quiz",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/next-level-health-vitality-longevity/quiz",
+      "error": null,
+      "title": "Is Your System Built for Long-Term Performance? | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/explore/intuition-as-patterned-intelligence/quiz",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/explore/intuition-as-patterned-intelligence/quiz",
+      "error": null,
+      "title": "Is Your Intuition Helping You or Holding You Back? | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/resources/awards",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/resources/awards",
+      "error": null,
+      "title": "Awards & Honours | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 66,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/portal/dashboard",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/portal/login?redirect=%2Fportal%2Fdashboard",
+      "error": null,
+      "title": "Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/shop/rapid-repatterning-session",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/rapid-repatterning-session",
+      "error": null,
+      "title": "Rapid Repatterning Session | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=http%3A%2F%2F169.239.180.49%2Fuploads%2F1780653648391-rapid-repatterning-session.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/transformation-coaching-60-mins",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/transformation-coaching-60-mins",
+      "error": null,
+      "title": "Transformation Coaching Session | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=http%3A%2F%2F169.239.180.49%2Fuploads%2F1780653553665-transformation-coaching-60-mins.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/executive-coaching-30-mins",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/executive-coaching-30-mins",
+      "error": null,
+      "title": "Executive Coaching Session | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=http%3A%2F%2F169.239.180.49%2Fuploads%2F1780653542461-executive-coaching-30-mins.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/group-family-coaching-60-mins",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/group-family-coaching-60-mins",
+      "error": null,
+      "title": "Group Family Coaching | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=http%3A%2F%2F169.239.180.49%2Fuploads%2F1780653598139-group-family-coaching-60-mins.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/akashic-clearing-session",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/akashic-clearing-session",
+      "error": null,
+      "title": "Akashic Coaching / Clearing Session | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=http%3A%2F%2F169.239.180.49%2Fuploads%2F1780653525235-akashic-clearing-session.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/rapid-transformation-therapy-session",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/rapid-transformation-therapy-session",
+      "error": null,
+      "title": "Rapid Transformation Therapy Session | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=http%3A%2F%2F169.239.180.49%2Fuploads%2F1780653543340-rapid-transformation-therapy-session.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/programs/resonance-repatterning-08-principles-of-relationship",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/resonance-repatterning-08-principles-of-relationship",
+      "error": null,
+      "title": "Program 8: Principles of Relationship | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/programs/resonance-repatterning-06-inner-cultivation",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/resonance-repatterning-06-inner-cultivation",
+      "error": null,
+      "title": "Program 6: Inner Cultivation | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/shop/exploring-the-alpha-mind-45-minutes",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/exploring-the-alpha-mind-45-minutes",
+      "error": null,
+      "title": "Exploring the Alpha Mind | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=http%3A%2F%2F169.239.180.49%2Fuploads%2F1780653524416-exploring-the-alpha-mind-45-minutes.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/energetic-clearing-completed-remotely",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/energetic-clearing-completed-remotely",
+      "error": null,
+      "title": "Energetic Clearing | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=http%3A%2F%2F169.239.180.49%2Fuploads%2F1780653524925-energetic-clearing-completed-remotely.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/resonance-repatterning-session",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/resonance-repatterning-session",
+      "error": null,
+      "title": "Resonance Repatterning / Coaching Session | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 70,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=http%3A%2F%2F169.239.180.49%2Fuploads%2F1780653607357-resonance-repatterning-session.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/resonance-repatterning-full-basic-5-series-demo-s-self-study-online-with-mentoring",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/resonance-repatterning-full-basic-5-series-demo-s-self-study-online-with-mentoring",
+      "error": null,
+      "title": "Resonance Repatterning Full Basic Training, Programs 1-5 + Demos + Resources (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/programs/resonance-repatterning-09-energetics-of-relationship",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/programs/resonance-repatterning-09-energetics-of-relationship",
+      "error": null,
+      "title": "Program 9: Energetics of Relationship | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 76,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fsuzanne-portrait.jpg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fgenerated%2Fexplore-repatterning.webp&w=3840&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study.jpeg&w=3840&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/portal/forgot-password",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/portal/forgot-password",
+      "error": null,
+      "title": "Dr. Suzanne Ravenall",
+      "links": 68,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75"
+      ]
+    },
+    {
+      "path": "/shop/art-of-deep-clearing-level-1-self-study",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/art-of-deep-clearing-level-1-self-study",
+      "error": null,
+      "title": "Deep Energy Clearing Fundamentals: Clearing Self, Level 1 (Live via Zoom) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fdeep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/art-of-deep-clearing-level-2-self-study",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/art-of-deep-clearing-level-2-self-study",
+      "error": null,
+      "title": "Deep Energy Clearing Advanced: Clearing Others, Level 2 (Live via Zoom) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fdeep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/akashic-navigator-and-intuitive-coaching-clearing-others-level-2-advanced-live-via-zoom",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/akashic-navigator-and-intuitive-coaching-clearing-others-level-2-advanced-live-via-zoom",
+      "error": null,
+      "title": "Akashic Navigator & Intuitive Coaching Advanced: Clearing Others, Level 2 (Live via Zoom) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fakashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/new-trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-self-study-online",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/new-trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-self-study-online",
+      "error": null,
+      "title": "New: Trauma to Transcendence: Breaking the hold of the Childhood brain on your adult self (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ftrauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/intuition-in-my-personal-capacity-1-self-study",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/intuition-in-my-personal-capacity-1-self-study",
+      "error": null,
+      "title": "Intuition in My Personal Capacity (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/love-relationships-self-study",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/love-relationships-self-study",
+      "error": null,
+      "title": "Love & Relationships (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Flove-relationships-live.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/intuition-in-my-business-capacity-self-study",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/intuition-in-my-business-capacity-self-study",
+      "error": null,
+      "title": "Intuition in My Business Capacity (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fintuition-in-my-personal-capacity-live.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/be-an-energy-ninja-level-1-self-study",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/be-an-energy-ninja-level-1-self-study",
+      "error": null,
+      "title": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 1 (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fbe-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/getting-unstuck",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/getting-unstuck",
+      "error": null,
+      "title": "Getting Unstuck (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgetting-unstuck-self-study.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/finding-my-life-purpose-self-study",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/finding-my-life-purpose-self-study",
+      "error": null,
+      "title": "Finding My Life Purpose (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Ffinding-my-life-purpose-live.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/be-an-energy-ninja-mastering-energy-for-an-abundant-life-level-2-energy-practices-for-repatterning-your-life-self-study",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/be-an-energy-ninja-mastering-energy-for-an-abundant-life-level-2-energy-practices-for-repatterning-your-life-self-study",
+      "error": null,
+      "title": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 2 (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fbe-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/rapid-repatterning-session-introduction",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/rapid-repatterning-session-introduction",
+      "error": null,
+      "title": "Rapid Repatterning Session Introduction | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Frapid-repatterning-session.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/coherence-muscle-testing-self-study-online",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/coherence-muscle-testing-self-study-online",
+      "error": null,
+      "title": "Coherence Muscle Testing (Self Study Online) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fcoherence-muscle-testing-self-study-online-2.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/post-traumatic-growth",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/post-traumatic-growth",
+      "error": null,
+      "title": "Post Traumatic Growth Presentation | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fpost-traumatic-growth-self-study-online.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/mindfulness-live-via-zoom",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/mindfulness-live-via-zoom",
+      "error": null,
+      "title": "Mindfulness (Live via Zoom) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmindfulness-live.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/akashic-navigator-and-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/akashic-navigator-and-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+      "error": null,
+      "title": "Akashic Navigator & Intuitive Coaching Fundamentals: Clearing Self, Level 1 (Live via Zoom) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fakashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/meditation-self-study",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/meditation-self-study",
+      "error": null,
+      "title": "Meditation (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fmeditation-live-via-zoom.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/resonance-repatterning-group-session-shedding-excess-weight",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/resonance-repatterning-group-session-shedding-excess-weight",
+      "error": null,
+      "title": "Resonance Repatterning Recorded Group Session Series : Shedding Excess Weight | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-shedding-excess-weight.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/resonance-repatterning-group-session-communication",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/resonance-repatterning-group-session-communication",
+      "error": null,
+      "title": "Resonance Repatterning Recorded Group Session Series : Nice or Not Nice Communication | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fgroup-session-nice-or-not-nice-in-communication-booked-as-a-series-only.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/resonance-repatterning-group-session-boundary-setting",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/resonance-repatterning-group-session-boundary-setting",
+      "error": null,
+      "title": "Group Session Being a Great Boundary Setter (available as a recorded series) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-session.png&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/resonance-repatterning-inner-cultivation-self-study",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/resonance-repatterning-inner-cultivation-self-study",
+      "error": null,
+      "title": "Resonance Repatterning Program 6 Inner Cultivation Practical + Demos (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/resonance-repatterning-program-7-principle-of-relationships-self-study",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/resonance-repatterning-program-7-principle-of-relationships-self-study",
+      "error": null,
+      "title": "Resonance Repatterning Program 7 Principles of Relationships Practical + Demos (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg&w=3840&q=75"
+      ]
+    },
+    {
+      "path": "/shop/resonance-repatterning-program-9-energetics-of-relationships-self-study",
+      "status": 200,
+      "finalUrl": "http://169.239.180.49/shop/resonance-repatterning-program-9-energetics-of-relationships-self-study",
+      "error": null,
+      "title": "Resonance Repatterning Program 9 Energetics of Relationships Practical + Demos (Self Study) | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall",
+      "links": 69,
+      "images": [
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Flogos%2Fsuzanne-white-logo.png&w=384&q=75",
+        "/_next/image?url=%2Fimages%2Fproducts%2Fresonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg&w=3840&q=75"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "page": "/services/private-sessions /portal /portal/login /portal/signup /portal/dashboard /portal/forgot-password",
+      "kind": "content",
+      "problem": "duplicate <title> \"Dr. Suzanne Ravenall\" on 6 pages",
+      "link": "",
+      "text": ""
+    },
+    {
+      "page": "/",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/services",
+      "kind": "wrong-target",
+      "problem": "\"Book Suzanne to Speak\" goes to /contact, expected /speaking",
+      "link": "/contact",
+      "text": "Book Suzanne to Speak"
+    },
+    {
+      "page": "/services",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/speaking",
+      "kind": "wrong-target",
+      "problem": "\"Book Suzanne to Speak\" goes to /contact, expected /speaking",
+      "link": "/contact",
+      "text": "Book Suzanne to Speak"
+    },
+    {
+      "page": "/speaking",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/about",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/masterclass",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/discover-your-pattern",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/services/private-sessions",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/contact",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/resources/assessments",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/resources/media",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/resources",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/legal/privacy",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/legal/terms",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/book",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/blog",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/community",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/emotional-nervous-system-mastery",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/next-level-health-vitality-longevity",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/relationships-attachment-patterns",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/leadership-high-performance",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/identity-purpose-activation",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/legal/cookies",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/intuition-as-patterned-intelligence",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/life-transitions-reinvention",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/health-energy-intelligence",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways/break-the-loop",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways/upgrade-your-operating-system",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways/reclaim-your-power",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways/reinvent-your-life",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways/resilience-fortification",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways/pattern-mastery",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways/trauma-to-breakthrough",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways/children-young-people-foundations-for-life",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways/emotional-mastery-for-young-minds",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways/young-minds-architecture",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways/pattern-foundations",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/services/private-sessions/rapid-repatterning",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/services/private-sessions/rapid-transformational-therapy",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/services/private-sessions/transformational-coaching",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/services/private-sessions/group-family-coaching",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/services/private-sessions/akashic-intuitive-mastery",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/events",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/services/private-sessions/exploring-the-alpha-mind",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/services/private-sessions/energetic-realignment-optimisation",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/services/private-sessions/executive-coaching",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/services/private-sessions/resonance-repatterning",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/cart",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/about/the-story",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/about/the-system",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/about/the-science",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/transformation-pathways/inner-compass",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/testimonials",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/resonance-repatterning-basic-5-series",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/energy-clearing-basic",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/energy-clearing-advanced",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/group-session-being-a-great-boundary-setter-booked-as-a-series-only",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/the-latest-book-by-suzanne",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/portal",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/legal/disclaimer",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/akashic-navigator-advanced",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/trauma-to-transcendence",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/love-and-relationships",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/intuition-in-my-personal-capacity",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/intuition-in-business",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/become-an-energy-ninja",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/become-an-energy-ninja-level-2",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/getting-unstuck",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/rapid-repatterning-introduction",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/finding-my-purpose",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/coherence-muscle-testing",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/post-traumatic-growth",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/akashic-navigator-basic",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/mindfulness",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/career-progression",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/meditation",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/money-mastery",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/attraction-frequency",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/develop-super-confidence",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/shedding-excess-weight",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/nice-or-not-nice-communication",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/being-a-great-boundary-setter",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/overcoming-the-need-to-fix-others",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/emotional-nervous-system-mastery/quiz",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/health-energy-intelligence/quiz",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/leadership-high-performance/quiz",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/identity-purpose-activation/quiz",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/life-transitions-reinvention/quiz",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/relationships-attachment-patterns/quiz",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/portal/login",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/portal/signup",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/next-level-health-vitality-longevity/quiz",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/explore/intuition-as-patterned-intelligence/quiz",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/resources/awards",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/portal/dashboard",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/rapid-repatterning-session",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/transformation-coaching-60-mins",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/executive-coaching-30-mins",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/group-family-coaching-60-mins",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/akashic-clearing-session",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/rapid-transformation-therapy-session",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/resonance-repatterning-08-principles-of-relationship",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/resonance-repatterning-06-inner-cultivation",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/exploring-the-alpha-mind-45-minutes",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/energetic-clearing-completed-remotely",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/resonance-repatterning-session",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/resonance-repatterning-full-basic-5-series-demo-s-self-study-online-with-mentoring",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/programs/resonance-repatterning-09-energetics-of-relationship",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/portal/forgot-password",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/art-of-deep-clearing-level-1-self-study",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/art-of-deep-clearing-level-2-self-study",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/akashic-navigator-and-intuitive-coaching-clearing-others-level-2-advanced-live-via-zoom",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/new-trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-self-study-online",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/intuition-in-my-personal-capacity-1-self-study",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/love-relationships-self-study",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/intuition-in-my-business-capacity-self-study",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/be-an-energy-ninja-level-1-self-study",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/getting-unstuck",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/finding-my-life-purpose-self-study",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/be-an-energy-ninja-mastering-energy-for-an-abundant-life-level-2-energy-practices-for-repatterning-your-life-self-study",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/rapid-repatterning-session-introduction",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/coherence-muscle-testing-self-study-online",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/post-traumatic-growth",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/mindfulness-live-via-zoom",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/akashic-navigator-and-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/meditation-self-study",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/resonance-repatterning-group-session-shedding-excess-weight",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/resonance-repatterning-group-session-communication",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/resonance-repatterning-group-session-boundary-setting",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/resonance-repatterning-inner-cultivation-self-study",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/resonance-repatterning-program-7-principle-of-relationships-self-study",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/shop/resonance-repatterning-program-9-energetics-of-relationships-self-study",
+      "kind": "wrong-target",
+      "problem": "\"Private Sessions\" goes to /services, expected /services/private-sessions",
+      "link": "/services",
+      "text": "Private Sessions"
+    },
+    {
+      "page": "/",
+      "kind": "link",
+      "problem": "asset answers 404",
+      "link": "http://169.239.180.49/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FE4x3YETXHSA%2Fmqdefault.jpg&w=3840&q=75",
+      "text": "(image)"
+    },
+    {
+      "page": "/about",
+      "kind": "link",
+      "problem": "asset answers 404",
+      "link": "http://169.239.180.49/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FE4x3YETXHSA%2Fmqdefault.jpg&w=3840&q=75",
+      "text": "(image)"
+    },
+    {
+      "page": "/testimonials",
+      "kind": "link",
+      "problem": "asset answers 404",
+      "link": "http://169.239.180.49/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FE4x3YETXHSA%2Fmqdefault.jpg&w=3840&q=75",
+      "text": "(image)"
+    }
+  ]
+}

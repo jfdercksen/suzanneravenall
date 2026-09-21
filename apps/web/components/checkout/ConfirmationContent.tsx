@@ -22,6 +22,10 @@ export default function ConfirmationContent() {
   const payPalOrderId = searchParams.get('token') ?? null
   const payPalCartId = searchParams.get('cartId') ?? null
 
+  // Free (voucher) orders arrive already completed: free=1&order=<display id>
+  const isFreeOrder = searchParams.get('free') === '1'
+  const freeOrderNumber = searchParams.get('order') ?? null
+
   const cartId = isPayPal ? payPalCartId : payFastCartId
 
   // Guard against React Strict Mode double-invocation and page refreshes
@@ -32,7 +36,10 @@ export default function ConfirmationContent() {
     finalisedRef.current = true
 
     async function finalise() {
-      if (isPayPal && payPalOrderId && payPalCartId) {
+      if (isFreeOrder) {
+        // Completed server-side by /api/checkout/free before the redirect here.
+        // The order number in the URL is display only; nothing here trusts it.
+      } else if (isPayPal && payPalOrderId && payPalCartId) {
         try {
           const res = await fetch('/api/checkout/paypal/capture', {
             method: 'POST',
@@ -68,7 +75,7 @@ export default function ConfirmationContent() {
       clearCart()
     }
     void finalise()
-  }, [isPayPal, payPalOrderId, payPalCartId, payFastCartId, clearCart])
+  }, [isFreeOrder, isPayPal, payPalOrderId, payPalCartId, payFastCartId, clearCart])
 
   return (
     <div className="min-h-screen bg-brand-cream">
@@ -90,13 +97,15 @@ export default function ConfirmationContent() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
-              Payment Received
+              {isFreeOrder ? 'Order Confirmed' : 'Payment Received'}
             </p>
             <h1 className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary mb-4">
               Thank You!
             </h1>
             <p className="text-brand-muted text-lg max-w-md mx-auto">
-              Your purchase is confirmed. We&apos;re excited to support your transformation journey.
+              {isFreeOrder && freeOrderNumber
+                ? `Order #${freeOrderNumber} is confirmed. We're excited to support your transformation journey.`
+                : "Your purchase is confirmed. We're excited to support your transformation journey."}
             </p>
           </motion.div>
         </div>
