@@ -1,6 +1,6 @@
 page_or_product,test,problem,screenshot,link,status,found_on,fixed_in
-All 178 ZAR variants (98 products),T1 voucher purchase (API dry run),"Voucher QA-SELFTEST-100 applied via the store API; every cart reached total 0; no order placed yet (side effects need Johan's approval)",,docs/testing/results/purchase-dry-run-2026-09-21-07-04.csv,pass,2026-09-21,
-/checkout,T1 voucher purchase (UI),"No voucher field and no way to place a free order on the checkout page (KI040)",,http://169.239.180.49/checkout,fixed,2026-09-21,pending deploy
+All 178 ZAR variants (98 products),T1 voucher purchase (API dry run),"Voucher QA-SELFTEST-100 applied via the store API; every cart reached total 0; no order placed yet (side effects need Johan's approval)",,docs/testing/results/purchase-dry-run-2026-09-21-07-07.csv,pass,2026-09-21,
+/checkout,T1 voucher purchase (UI),"No voucher field and no way to place a free order on the checkout page (KI040)",,http://169.239.180.49/checkout,fixed,2026-09-21,ebe9cae (deployed)
 15 add-on products (KI006),T1 voucher purchase,"Products do not exist on the VPS yet; migration not run",,KNOWN_ISSUES.md KI006,blocked,2026-09-21,
 All 56 course products,T2 Thinkific enrolment,"Thinkific not wired on the VPS: env empty and n8n workflow not imported (KI041); token valid locally",,KNOWN_ISSUES.md KI041,blocked,2026-09-21,
 42 products without thinkific_course_id,T2 Thinkific enrolment,"Recorded as no-course; Suzanne to confirm none of them should enrol",,docs/testing/results/purchase-list-2026-09-21-07-02.csv,blocked,2026-09-21,
@@ -12,7 +12,7 @@ All products,T3 emails,"Confirmation email verified in code to send with Sage of
 135 pages (footer),T4 links,"Footer 'Private Sessions' goes to /services; by design, the hub lives at /services#private and /services/private-sessions redirects there",,http://169.239.180.49/services,pass,2026-09-21,
 /services /speaking,T4 links,"'Book Suzanne to Speak' goes to /contact; by design",,http://169.239.180.49/contact,pass,2026-09-21,
 "/ /about /testimonials",T5 content,"Video testimonial E4x3YETXHSA is private or removed on YouTube; thumbnail 404 (KI042)",,http://169.239.180.49/testimonials,fail,2026-09-21,
-/services,T5 content,"Tab title repeated 'Dr. Suzanne Ravenall' twice (KI043)",,http://169.239.180.49/services,fixed,2026-09-21,pending deploy
-"/portal/login /portal/signup /portal/forgot-password /portal/reset-password",T5 content,"No page title, tab read only 'Dr. Suzanne Ravenall' (KI043)",,http://169.239.180.49/portal/login,fixed,2026-09-21,pending deploy
+/services,T5 content,"Tab title repeated 'Dr. Suzanne Ravenall' twice (KI043)",,http://169.239.180.49/services,fixed,2026-09-21,ebe9cae (deployed)
+"/portal/login /portal/signup /portal/forgot-password /portal/reset-password",T5 content,"No page title, tab read only 'Dr. Suzanne Ravenall' (KI043)",,http://169.239.180.49/portal/login,fixed,2026-09-21,ebe9cae (deployed)
 /checkout/confirmation,T5 content,"'Team will be in touch within 24 hours to schedule your first session' shown for every order type (KI044); 'A receipt has been sent' while mail is blocked",,http://169.239.180.49/checkout/confirmation,fail,2026-09-21,
 Every page,T4/T5 manual phone + desktop read,"Not started",,,pending,2026-09-21,
