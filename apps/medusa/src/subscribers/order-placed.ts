@@ -1,4 +1,5 @@
 import type { SubscriberArgs, SubscriberConfig } from '@medusajs/framework'
+import { ContainerRegistrationKeys } from '@medusajs/framework/utils'
 import { createClient } from '@supabase/supabase-js'
 import { MEMBERSHIPS_MODULE } from '../modules/memberships'
 import type MembershipsModuleService from '../modules/memberships/service'
@@ -450,19 +451,44 @@ export default async function orderPlacedHandler({
 
   try {
     const orderService = container.resolve('order') as {
-      retrieveOrder: (id: string, options?: object) => Promise<unknown>
       listOrders: (filters?: object, config?: object) => Promise<{ id: string }[]>
     }
 
-    const order = await orderService.retrieveOrder(orderId, {
-      relations: [
-        'items',
-        'items.variant',
-        'items.variant.product',
-        'items.variant.product.categories',
-        'customer',
+    // The variant, product and customer are NOT relations of the Order module
+    // (they live in the Product and Customer modules, joined by module links),
+    // so orderService.retrieveOrder(..., { relations: ['items.variant', ...] })
+    // throws "Cannot read properties of undefined (reading 'targetMeta')" on
+    // every order and this whole handler never ran. Cross-module reads go
+    // through the Query graph.
+    const query = container.resolve(ContainerRegistrationKeys.QUERY)
+    const { data: orders } = await query.graph({
+      entity: 'order',
+      fields: [
+        'id',
+        'display_id',
+        'customer_id',
+        'email',
+        'currency_code',
+        'total',
+        'metadata',
+        'items.*',
+        'items.variant.*',
+        'items.variant.product.*',
+        'items.variant.product.categories.*',
+        'customer.*',
       ],
-    }) as RetrievedOrder
+      filters: { id: orderId },
+    })
+    const order = orders[0] as unknown as (RetrievedOrder & { email?: string | null }) | undefined
+    if (!order) {
+      console.error(`[order-placed] order ${orderId} not found`)
+      return
+    }
+    // A guest order may carry the email on the order only; downstream (n8n
+    // Thinkific and Vtiger workflows, the email routes) reads order.customer.
+    if (!order.customer?.email && order.email) {
+      order.customer = { ...(order.customer ?? {}), email: order.email }
+    }
 
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
