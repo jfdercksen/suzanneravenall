@@ -4,6 +4,20 @@ on:
   push:
     branches:
       - main
+  # Manual review deploys. Feature branches are shown to Suzanne on the same
+  # VPS before DNS cutover, and until now that meant hand-rolled SSH from
+  # whichever machine happened to hold an authorised key. This lets CI do it
+  # with the key it already has.
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy to the review VPS'
+        required: true
+        default: 'feature/homepage-brightness-pass'
+      services:
+        description: 'Docker services to rebuild (space separated)'
+        required: true
+        default: 'web'
 
 jobs:
   build-and-test:
@@ -49,7 +63,10 @@ jobs:
     name: Deploy to Production
     runs-on: ubuntu-latest
     needs: build-and-test
-    if: github.ref == 'refs/heads/main'
+    # Explicitly scoped to a push. Without the event check, dispatching this
+    # workflow against main would run the production deploy as a side effect
+    # of asking for a review deploy.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     # The production GitHub Environment enforces required reviewers before this
     # job is allowed to run. See .github/README.md for setup instructions.
     environment: production
@@ -106,3 +123,60 @@ jobs:
           curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
             -H "Content-Type: application/json" \
             -d '{"text":"PRODUCTION deploy failed — immediate attention required: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
+
+  deploy-review:
+    name: Deploy branch to review VPS
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Deploy branch to review VPS
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          DEPLOY_BRANCH: ${{ inputs.branch }}
+          DEPLOY_SERVICES: ${{ inputs.services }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # Passed as env rather than interpolated into the script, so a branch
+          # name is never able to become shell.
+          envs: DEPLOY_BRANCH,DEPLOY_SERVICES
+          command_timeout: 25m
+          script: |
+            set -euo pipefail
+            cd /var/www/suzanneravenall/suzanneravenall
+            echo "Was on: $(git branch --show-current) @ $(git rev-parse --short HEAD)"
+            git fetch origin "$DEPLOY_BRANCH"
+            git checkout -B "$DEPLOY_BRANCH" "origin/$DEPLOY_BRANCH"
+            echo "Now on: $(git branch --show-current) @ $(git rev-parse --short HEAD)"
+            cd infra
+            # shellcheck disable=SC2086
+            docker compose -f docker-compose.yml build $DEPLOY_SERVICES
+            # shellcheck disable=SC2086
+            docker compose -f docker-compose.yml up -d $DEPLOY_SERVICES
+
+      - name: Health check review site
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            for i in 1 2 3 4 5; do
+              if curl -sf http://localhost > /dev/null; then
+                echo "Health check passed on attempt $i"
+                exit 0
+              fi
+              echo "Attempt $i failed — waiting 15s"
+              sleep 15
+            done
+            echo "Health check failed after 5 attempts"
+            exit 1
+
+      - name: Notify failure
+        if: failure()
+        run: |
+          curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{"text":"Review deploy of ${{ inputs.branch }} failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
