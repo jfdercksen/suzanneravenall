@@ -20,3 +20,9 @@ getting-unstuck (order #1),T1+T2 proof order,"Order placed; subscriber crashed l
 getting-unstuck (order #2),T1+T2 proof order,"Subscriber ran; n8n Thinkific node 1 denied env access (KI047); invoice + email 500 for missing token (KI048); Vtiger 403 from VPS (KI046)",,docs/testing/results/purchase-run-2026-09-22-08-15.csv,fail,2026-09-22,
 Rapid Repatterning Session (duplicate),T5 content,"KI006 migration created a second published Rapid Repatterning Session (12 variants); needs deleting by Johan",,http://169.239.180.49/shop/rapid-repatterning-session-60-min-online,fail,2026-09-22,
 8 new add-on products (KI006),T1 voucher purchase,"Created on the VPS; descriptions and thumbnails still to run; now in the harness matrix (205 variants)",,docs/testing/results/purchase-list-2026-09-22-08-00.csv,pending,2026-09-22,
+getting-unstuck (orders #3 to #5),T1+T2+T3 proof orders,"Each order exposed the next defect: n8n webhook shape (KI049), Medusa field lists (KI050), react-pdf runtime (KI051), pdfkit fonts (KI052), n8n fetch (KI053), Thinkific last name blank",,docs/testing/results/,fixed,2026-09-22,b8ea075
+getting-unstuck (order #6),T2 Thinkific,"Enrolled in course 1284792 within 8s; Thinkific user 259072573 created",,docs/testing/results/purchase-run-2026-09-22-09-03.csv,pass,2026-09-22,
+getting-unstuck (order #6),T3 invoice,"PDF generated and stored (invoice_url on the order); content: Bill To name missing and no voucher row (KI055)",,,fixed,2026-09-22,b733ae4
+getting-unstuck (order #6),T3 confirmation email,"Route reaches Resend; blocked only by the unverified domain (KI035, Brevo tomorrow)",,,blocked,2026-09-22,
+getting-unstuck (orders #7 and #9),T2/CRM,"No n8n execution at all: orders placed inside the 90s after an n8n restart are lost (KI056)",,,fail,2026-09-22,
+getting-unstuck (orders #8 to #12),CRM Vtiger,"Contact 12x188 QA SelfTest created (#8) and updated (#11); activity needs Events + duration (KI054), proof on #13",,,fixed,2026-09-22,
