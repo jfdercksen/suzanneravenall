@@ -40,6 +40,16 @@ export interface Cart {
   promotions: CartPromotion[]
 }
 
+// Buyer details the checkout collects. Medusa keeps guest names on the billing
+// address (a guest customer record has none), and the order flow (Thinkific,
+// Vtiger, the invoice) reads them from there.
+export interface CartContact {
+  email: string
+  firstName: string
+  lastName: string
+  countryCode?: string
+}
+
 // Voucher (Medusa promotion) applied to the cart, as returned by the store API.
 export interface CartPromotion {
   id: string
@@ -54,6 +64,7 @@ export interface CartContextType {
   updateItem: (lineItemId: string, quantity: number) => Promise<void>
   removeItem: (lineItemId: string) => Promise<void>
   setEmail: (email: string) => Promise<boolean>
+  setContact: (contact: CartContact) => Promise<boolean>
   applyPromoCode: (code: string) => Promise<void>
   removePromoCode: (code: string) => Promise<void>
   clearCart: () => void
@@ -303,6 +314,34 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     [getOrCreateCart]
   )
 
+  const setContact = useCallback(
+    async ({ email, firstName, lastName, countryCode }: CartContact) => {
+      const currentCart = await getOrCreateCart()
+      if (!currentCart) return false
+      try {
+        const res = await fetch(`${getMedusaBase()}/store/carts/${currentCart.id}`, {
+          method: 'POST',
+          headers: getMedusaHeaders(),
+          body: JSON.stringify({
+            email,
+            billing_address: {
+              first_name: firstName,
+              last_name: lastName,
+              ...(countryCode ? { country_code: countryCode.toLowerCase() } : {}),
+            },
+          }),
+        })
+        if (!res.ok) return false
+        const data = (await res.json()) as { cart: Cart }
+        setCart(normaliseCart(data.cart))
+        return true
+      } catch {
+        return false
+      }
+    },
+    [getOrCreateCart]
+  )
+
   // Voucher codes. POST adds, DELETE removes; both return the recalculated cart.
   // Medusa answers 200 with the code silently missing from cart.promotions when
   // it is unknown or inactive, so the caller checks the cart, not the status.
@@ -362,11 +401,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       updateItem,
       removeItem,
       setEmail,
+      setContact,
       applyPromoCode,
       removePromoCode,
       clearCart,
     }),
-    [cart, isLoading, itemCount, addItem, updateItem, removeItem, setEmail, applyPromoCode, removePromoCode, clearCart]
+    [cart, isLoading, itemCount, addItem, updateItem, removeItem, setEmail, setContact, applyPromoCode, removePromoCode, clearCart]
   )
 
   return <CartCtx.Provider value={value}>{children}</CartCtx.Provider>

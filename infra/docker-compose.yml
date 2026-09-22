@@ -319,6 +319,8 @@ services:
       THINKIFIC_API_KEY: ${THINKIFIC_API_KEY}
       # n8n 2.x denies $env in Code nodes by default; every workflow here reads its secrets that way
       N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
+      # The Vtiger login hash is an md5 in a Code node; n8n disallows Node builtins unless listed
+      NODE_FUNCTION_ALLOW_BUILTIN: crypto
     networks:
       - suzanne_network
     healthcheck:

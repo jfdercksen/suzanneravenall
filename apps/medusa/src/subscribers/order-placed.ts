@@ -476,6 +476,8 @@ export default async function orderPlacedHandler({
         'items.variant.product.*',
         'items.variant.product.categories.*',
         'customer.*',
+        'billing_address.*',
+        'shipping_address.*',
       ],
       filters: { id: orderId },
     })

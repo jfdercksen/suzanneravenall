@@ -227,10 +227,12 @@ async function purchase(row, regionId, complete) {
 
   // Two carts setting the same new email at once race on guest-customer creation
   // ("Customer with email ... already exists"); the second attempt finds it.
-  let em = await store(`/carts/${out.cart_id}`, { method: 'POST', body: { email: BUYER_EMAIL } })
+  // Same body the checkout sends: email plus the buyer's names on the billing address.
+  const contact = { email: BUYER_EMAIL, billing_address: { first_name: BUYER_FIRST, last_name: BUYER_LAST, country_code: 'za' } }
+  let em = await store(`/carts/${out.cart_id}`, { method: 'POST', body: contact })
   if (!em.ok && /already exists/i.test(em.json?.message ?? '')) {
     await sleep(750)
-    em = await store(`/carts/${out.cart_id}`, { method: 'POST', body: { email: BUYER_EMAIL } })
+    em = await store(`/carts/${out.cart_id}`, { method: 'POST', body: contact })
   }
   if (!em.ok) return fail(`set email ${em.status}: ${em.json?.message ?? ''}`)
 

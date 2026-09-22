@@ -1,0 +1,2 @@
+page_or_product,test,problem,screenshot,link,status,found_on,fixed_in,variant,price_zar,order_display_id,order_id,thinkific_course_id,enrolment,expected_emails
+Getting Unstuck (Self Study) / Standard,T1 voucher purchase + T2 Thinkific,no Thinkific enrolment for course 1284792 within 90s,,http://169.239.180.49/cms,fail,2026-09-22,,Standard,1660,2,order_01M342VS9TW1SJ61MCMEHHCSJH,1284792,missing,"order-confirmation; thinkific-enrolment-confirmation; thinkific-welcome (Thinkific, first order only)"

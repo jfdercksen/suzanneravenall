@@ -246,7 +246,7 @@ function PayPalRedirect({ approvalUrl }: { approvalUrl: string }) {
 
 export default function CheckoutContent() {
   const router = useRouter()
-  const { cart, setEmail, applyPromoCode, removePromoCode } = useCart()
+  const { cart, setContact: saveContact, applyPromoCode, removePromoCode } = useCart()
 
   const [step, setStep] = useState<Step>(1)
   const [contact, setContact] = useState<ContactForm>({
@@ -295,7 +295,14 @@ export default function CheckoutContent() {
       return
     }
     setIsSubmitting(true)
-    const saved = await setEmail(contact.email)
+    // Names go on the billing address: a guest customer has none, and Thinkific,
+    // Vtiger and the invoice read them from there.
+    const saved = await saveContact({
+      email: contact.email,
+      firstName: contact.firstName.trim(),
+      lastName: contact.lastName.trim(),
+      countryCode: contact.country === 'ZA' ? 'za' : undefined,
+    })
     setIsSubmitting(false)
     if (!saved) {
       setErrors({ email: 'We could not save your email address. Please check your connection and try again.' })
