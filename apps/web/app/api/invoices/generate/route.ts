@@ -25,6 +25,7 @@ interface MedusaAdminOrder {
   display_id: number
   created_at: string
   currency_code: string
+  discount_total?: number
   status: string
   customer?: {
     first_name?: string
@@ -72,6 +73,10 @@ function getPaymentDetails(order: MedusaAdminOrder): {
         : undefined,
     }
   }
+  // A voucher that covers the whole order never reaches a gateway.
+  if (Number(order.total) === 0 && Number(order.discount_total ?? 0) > 0) {
+    return { method: 'Voucher', reference: undefined }
+  }
   return { method: 'Online Payment', reference: undefined }
 }
 
@@ -92,6 +97,7 @@ function buildInvoiceOrder(order: MedusaAdminOrder): InvoiceOrder {
       unit_price: item.unit_price,
     })),
     subtotal: order.subtotal,
+    discount_total: order.discount_total,
     tax_total: order.tax_total,
     total: order.total,
     payment_method: method,

@@ -24,12 +24,15 @@ export interface InvoiceOrder {
     email: string
   }
   billing_address?: {
+    first_name?: string
+    last_name?: string
     address_1?: string
     city?: string
     country_code?: string
   }
   items: InvoiceLineItem[]
   subtotal: number
+  discount_total?: number
   tax_total: number
   total: number
   payment_method?: string
@@ -275,9 +278,14 @@ export default function InvoiceDocument({ order }: Props) {
 
   const invoiceDate = dateFormat(order.created_at)
 
-  const customerName = [order.customer?.first_name, order.customer?.last_name]
-    .filter(Boolean)
-    .join(' ') || 'Customer'
+  // Guest customers carry no names in Medusa; the checkout stores them on the
+  // billing address, so fall back to it before the generic label.
+  const customerName =
+    [order.customer?.first_name, order.customer?.last_name].filter(Boolean).join(' ') ||
+    [order.billing_address?.first_name, order.billing_address?.last_name].filter(Boolean).join(' ') ||
+    'Customer'
+
+  const discountTotal = order.discount_total ?? 0
 
   const countryDisplay = order.billing_address?.country_code?.toUpperCase() ?? ''
 
@@ -396,6 +404,12 @@ export default function InvoiceDocument({ order }: Props) {
                   <Text style={s.totalLabel}>Subtotal (excl VAT)</Text>
                   <Text style={s.totalVal}>{zarFormat(order.subtotal)}</Text>
                 </View>
+                {discountTotal > 0 ? (
+                  <View style={s.totalRow}>
+                    <Text style={s.totalLabel}>Voucher / discount</Text>
+                    <Text style={s.totalVal}>-{zarFormat(discountTotal)}</Text>
+                  </View>
+                ) : null}
                 <View style={s.totalRow}>
                   <Text style={s.totalLabel}>VAT (15%)</Text>
                   <Text style={s.totalVal}>{zarFormat(order.tax_total)}</Text>
@@ -413,10 +427,18 @@ export default function InvoiceDocument({ order }: Props) {
               // company may not collect) - it must never surface as a VAT
               // line on a document from a non-registered vendor. Flag the
               // Medusa tax rate config instead of rendering it.
-              <View style={s.totalRowFinal}>
-                <Text style={s.totalLabelFinal}>TOTAL</Text>
-                <Text style={s.totalValFinal}>{zarFormat(order.total)}</Text>
-              </View>
+              <>
+                {discountTotal > 0 ? (
+                  <View style={s.totalRow}>
+                    <Text style={s.totalLabel}>Voucher / discount</Text>
+                    <Text style={s.totalVal}>-{zarFormat(discountTotal)}</Text>
+                  </View>
+                ) : null}
+                <View style={s.totalRowFinal}>
+                  <Text style={s.totalLabelFinal}>TOTAL</Text>
+                  <Text style={s.totalValFinal}>{zarFormat(order.total)}</Text>
+                </View>
+              </>
             )}
           </View>
         </View>
