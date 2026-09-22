@@ -3,6 +3,7 @@ import { timingSafeEqual, createHash } from 'crypto'
 import { sendOrderConfirmationEmail } from '@/lib/email/order-confirmation'
 import type { OrderEmailData, OrderProductType } from '@/lib/email/types'
 import { logError } from '@/lib/log'
+import { medusaAdminAuthHeader } from '@/lib/medusa/admin-auth'
 
 interface MedusaOrderItem {
   id: string
@@ -91,7 +92,7 @@ export async function POST(req: NextRequest) {
       `${medusaBase}/admin/orders/${orderId}?fields=${encodeURIComponent(fields)}`,
       {
         headers: {
-          Authorization: `Bearer ${medusaToken}`,
+          Authorization: medusaAdminAuthHeader(medusaToken),
           'Content-Type': 'application/json',
         },
       }

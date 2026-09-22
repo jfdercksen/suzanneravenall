@@ -317,6 +317,8 @@ services:
       VTIGER_USERNAME: ${VTIGER_USERNAME:-}
       VTIGER_ACCESS_KEY: ${VTIGER_ACCESS_KEY:-}
       THINKIFIC_API_KEY: ${THINKIFIC_API_KEY}
+      # n8n 2.x denies $env in Code nodes by default; every workflow here reads its secrets that way
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
     networks:
       - suzanne_network
     healthcheck:

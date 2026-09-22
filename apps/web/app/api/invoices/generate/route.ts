@@ -6,6 +6,7 @@ import { createElement } from 'react'
 import { z } from 'zod'
 import InvoiceDocument, { type InvoiceOrder } from '@/components/invoice/InvoiceDocument'
 import { logError } from '@/lib/log'
+import { medusaAdminAuthHeader } from '@/lib/medusa/admin-auth'
 
 const bodySchema = z.object({
   orderId: z.string().min(1).max(64).regex(/^[a-zA-Z0-9_-]+$/, 'Invalid order ID format'),
@@ -168,7 +169,7 @@ export async function POST(req: NextRequest) {
       `${medusaBase}/admin/orders/${orderId}?fields=${encodeURIComponent(fields)}`,
       {
         headers: {
-          Authorization: `Bearer ${medusaToken}`,
+          Authorization: medusaAdminAuthHeader(medusaToken),
           'Content-Type': 'application/json',
         },
       }
@@ -258,7 +259,7 @@ export async function POST(req: NextRequest) {
     const res = await fetch(`${medusaBase}/admin/orders/${orderId}`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${medusaToken}`,
+        Authorization: medusaAdminAuthHeader(medusaToken),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
