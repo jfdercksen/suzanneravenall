@@ -1,0 +1,2 @@
+page_or_product,test,problem,screenshot,link,status,found_on,fixed_in,variant,price_zar,order_display_id,order_id,thinkific_course_id,enrolment,expected_emails
+Getting Unstuck (Self Study) / Standard,T1 voucher purchase + T2 Thinkific,,,http://169.239.180.49/cms,pass,2026-09-22,,Standard,1660,8,order_01M345W9A2T8RRJRWCSTVZXJ1C,1284792,,"order-confirmation; thinkific-enrolment-confirmation; thinkific-welcome (Thinkific, first order only)"

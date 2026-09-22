@@ -1,0 +1,33 @@
+{
+  "mode": "run",
+  "medusa": "http://169.239.180.49/api",
+  "promo": "QA-SELFTEST-100",
+  "buyer": "dercksenjf+sr-selftest@gmail.com",
+  "at": "2026-09-22T09:03:51.120Z",
+  "rows": [
+    {
+      "product_id": "prod_01KVCEQZZ6Q3Y6C9RV4RD2GHJF",
+      "product": "Getting Unstuck (Self Study)",
+      "handle": "getting-unstuck",
+      "variant_id": "variant_01KVCER050HCADJME2HVKDY5HS",
+      "variant": "Standard",
+      "sku": "thinkific-1284792",
+      "price_zar": 1660,
+      "priced": true,
+      "thinkific_course_id": 1284792,
+      "product_type": null,
+      "categories": "",
+      "manage_inventory": false,
+      "cart_id": "cart_01M345PMGMV4YY5NCCM03RKNT8",
+      "order_id": "order_01M345PNX8TSQW7CQQWWV81K0H",
+      "order_display_id": 6,
+      "total_after_voucher": 0,
+      "discount_total": 166000,
+      "status": "ordered",
+      "problem": "",
+      "enrolment": "enrolled",
+      "enrolment_id": 882471268,
+      "thinkific_user_id": 259072573
+    }
+  ]
+}
