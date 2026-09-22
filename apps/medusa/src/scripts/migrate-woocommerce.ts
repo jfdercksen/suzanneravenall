@@ -95,7 +95,10 @@ interface ConsolidationEntry {
 const CONSOLIDATION_MAP: ConsolidationEntry[] = [
   // ── Private Sessions ─────────────────────────────────────────────────────
   {
-    canonical_slug: "rapid-repatterning-session-60-min-online",
+    // The live product carries the handle rapid-repatterning-session; matching by
+    // handle is what makes re-runs idempotent, and the 22 Sep 2026 run created a
+    // duplicate because this slug did not match it (KI006).
+    canonical_slug: "rapid-repatterning-session",
     title: "Rapid Repatterning Session",
     collection: "start-here",
     program_type: "session",
