@@ -62,7 +62,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// n8n's Webhook node emits { headers, params, query, body }; fall back to a bare payload.\nconst order = $input.first().json.body ?? $input.first().json;\nconst customer = order.customer ?? {};\nconst email = (customer.email ?? '').toLowerCase().trim();\nconst firstName = customer.first_name ?? email.split('@')[0] ?? '';\nconst lastName = customer.last_name ?? '';\nconst totalZar = (order.total ?? 0) / 100;\nconst createdAt = order.created_at ?? new Date().toISOString();\n\nconst productNames = (order.items ?? []).map(item => {\n  const product = item.variant?.product?.title ?? item.title ?? 'Unknown';\n  const variant = item.variant?.title;\n  return variant && variant !== 'Default' ? `${product} — ${variant}` : product;\n}).join(', ');\n\nconst vtigerUrl = $env.VTIGER_URL?.replace(/\\/$/, '') ?? '';\nconst vtigerUser = $env.VTIGER_USERNAME ?? '';\nconst vtigerKey = $env.VTIGER_ACCESS_KEY ?? '';\n\nif (!vtigerUrl || !vtigerUser || !vtigerKey) {\n  throw new Error('Vtiger env vars not set in n8n');\n}\n\nreturn [{\n  json: {\n    email,\n    firstName,\n    lastName,\n    totalZar,\n    createdAt,\n    productNames,\n    orderId: order.id,\n    displayId: order.display_id,\n    vtigerUrl,\n    vtigerUser,\n    vtigerKey,\n  }\n}];"
+        "jsCode": "// n8n's Webhook node emits { headers, params, query, body }; fall back to a bare payload.\nconst order = $input.first().json.body ?? $input.first().json;\nconst customer = order.customer ?? {};\nconst email = (customer.email ?? '').toLowerCase().trim();\n// Guest orders carry no customer names; the checkout puts them on the billing address.\nconst addr = order.billing_address ?? order.shipping_address ?? {};\nconst pick = (...vals) => vals.find((v) => typeof v === 'string' && v.trim() !== '') ?? '';\nconst firstName = pick(customer.first_name, addr.first_name, email.split('@')[0]);\nconst lastName = pick(customer.last_name, addr.last_name, firstName);\nconst totalZar = (order.total ?? 0) / 100;\nconst createdAt = order.created_at ?? new Date().toISOString();\n\nconst productNames = (order.items ?? []).map(item => {\n  const product = item.variant?.product?.title ?? item.title ?? 'Unknown';\n  const variant = item.variant?.title;\n  return variant && variant !== 'Default' ? `${product} — ${variant}` : product;\n}).join(', ');\n\nconst vtigerUrl = $env.VTIGER_URL?.replace(/\\/$/, '') ?? '';\nconst vtigerUser = $env.VTIGER_USERNAME ?? '';\nconst vtigerKey = $env.VTIGER_ACCESS_KEY ?? '';\n\nif (!vtigerUrl || !vtigerUser || !vtigerKey) {\n  throw new Error('Vtiger env vars not set in n8n');\n}\n\nreturn [{\n  json: {\n    email,\n    firstName,\n    lastName,\n    totalZar,\n    createdAt,\n    productNames,\n    orderId: order.id,\n    displayId: order.display_id,\n    vtigerUrl,\n    vtigerUser,\n    vtigerKey,\n  }\n}];"
       },
       "id": "mo2v-0003-0000-0000-000000000003",
       "name": "Prepare: Extract Order Data",
@@ -179,7 +179,7 @@
             },
             {
               "name": "query",
-              "value": "=SELECT * FROM Contacts WHERE email='{{ $json.safeEmail }}' LIMIT 1"
+              "value": "=SELECT * FROM Contacts WHERE email='{{ $json.safeEmail }}' LIMIT 1;"
             }
           ]
         },
@@ -236,7 +236,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Create new contact with Shop as lead source.\nconst prep = $('Prepare: Session').first().json;\nconst element = JSON.stringify({\n  email: prep.email,\n  firstname: prep.firstName || prep.email.split('@')[0],\n  lastname: prep.lastName || '',\n  leadsource: 'Shop',\n  cf_last_purchase_date: prep.createdAt.slice(0, 10),\n  cf_total_spend_zar: String(prep.totalZar.toFixed(2)),\n  cf_pipeline_stage: 'Closed Won',\n});\nreturn [{ json: { ...prep, element, isNew: true } }];"
+        "jsCode": "// Create new contact with Shop as lead source.\nconst prep = $('Prepare: Session').first().json;\nconst element = JSON.stringify({\n  email: prep.email,\n  firstname: prep.firstName || prep.email.split('@')[0],\n  lastname: prep.lastName || prep.firstName || prep.email.split('@')[0], // Vtiger: lastname is mandatory\n  leadsource: 'Shop',\n  cf_last_purchase_date: prep.createdAt.slice(0, 10),\n  cf_total_spend_zar: String(prep.totalZar.toFixed(2)),\n  cf_pipeline_stage: 'Closed Won',\n});\nreturn [{ json: { ...prep, element, isNew: true } }];"
       },
       "id": "mo2v-0011-0000-0000-000000000011",
       "name": "Prepare: New Contact Payload",

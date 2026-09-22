@@ -37,6 +37,12 @@ const nextConfig = {
   // @react-pdf/renderer uses Node.js built-ins and native binaries — must not
   // be bundled by webpack. Mark as external so Next.js loads it from node_modules at runtime.
   serverExternalPackages: ['@react-pdf/renderer'],
+  // pdfkit loads its standard fonts with a dynamic require, which the standalone
+  // file trace misses: the Docker image then throws "Cannot find module
+  // .../pdfkit/js/standard-fonts/Helvetica.cjs" on every invoice (order #5).
+  outputFileTracingIncludes: {
+    '/api/invoices/generate': ['../../node_modules/pdfkit/**', '../../node_modules/@react-pdf/**', '../../node_modules/fontkit/**'],
+  },
 
   // TypeScript and ESLint errors are caught in CI (turbo run build) and local dev.
   // Disabling these checks in next build prevents the Docker builder from
