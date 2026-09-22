@@ -87,7 +87,9 @@ export async function POST(req: NextRequest) {
   // Fetch order from Medusa admin API
   let order: MedusaAdminOrder
   try {
-    const fields = ['*items', '*items.variant', '*customer'].join(',')
+    // `fields=` REPLACES Medusa's default field list, so the scalars must be
+    // named or currency_code, total and created_at arrive undefined (order #3).
+    const fields = ['id', 'display_id', 'status', 'currency_code', 'email', 'customer_id', 'created_at', 'subtotal', 'discount_total', 'tax_total', 'shipping_total', 'total', 'metadata', '*items', '*items.variant', '*items.variant.product', '*customer'].join(',')
     const res = await fetch(
       `${medusaBase}/admin/orders/${orderId}?fields=${encodeURIComponent(fields)}`,
       {

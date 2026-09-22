@@ -14,18 +14,24 @@
       "name": "Webhook: Order Complete",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [240, 300],
+      "position": [
+        240,
+        300
+      ],
       "webhookId": "medusa-order-complete"
     },
     {
       "parameters": {
-        "jsCode": "// Verify shared webhook secret sent by the Medusa subscriber.\n// The secret is passed in the x-webhook-secret header.\nconst secret = $env.N8N_WEBHOOK_SECRET ?? '';\nconst received = $input.first().headers?.['x-webhook-secret'] ?? '';\n\nif (secret && received !== secret) {\n  throw new Error('Invalid webhook secret — request rejected');\n}\n\n// Extract customer fields from the order payload.\nconst order = $input.first().json;\nconst customer = order.customer ?? {};\nconst email = (customer.email ?? '').toLowerCase().trim();\nconst firstName = typeof customer.first_name === 'string' ? customer.first_name : email.split('@')[0];\nconst lastName = typeof customer.last_name === 'string' ? customer.last_name : '';\n\nif (!email) {\n  throw new Error('Order payload missing customer.email — cannot enroll');\n}\n\n// Extract thinkific_course_id from each line item's product metadata.\n// Only keep items that actually have a course ID.\nconst courseItems = (order.items ?? []).reduce((acc, item) => {\n  const meta = item?.variant?.product?.metadata;\n  const courseId = meta?.thinkific_course_id;\n  if (courseId != null && String(courseId).trim() !== '') {\n    const title = item?.variant?.product?.title ?? item?.title ?? 'Course';\n    acc.push({\n      thinkific_course_id: Number(courseId),\n      title,\n    });\n  }\n  return acc;\n}, []);\n\nreturn [{\n  json: {\n    orderId: order.id,\n    email,\n    firstName,\n    lastName,\n    courseItems,\n    hasCourseItems: courseItems.length > 0,\n    thinkificBaseUrl: 'https://api.thinkific.com/api/public/v1',\n    thinkificApiKey: $env.THINKIFIC_API_KEY ?? '',\n  }\n}];"
+        "jsCode": "// Verify shared webhook secret sent by the Medusa subscriber.\n// The secret is passed in the x-webhook-secret header.\nconst secret = $env.N8N_WEBHOOK_SECRET ?? '';\n// n8n's Webhook node emits { headers, params, query, body }; fall back to a bare payload.\nconst req = $input.first().json ?? {};\nconst received = (req.headers ?? $input.first().headers ?? {})['x-webhook-secret'] ?? '';\n\nif (secret && received !== secret) {\n  throw new Error('Invalid webhook secret — request rejected');\n}\n\n// Extract customer fields from the order payload.\nconst order = req.body ?? req;\nconst customer = order.customer ?? {};\nconst email = (customer.email ?? '').toLowerCase().trim();\nconst firstName = typeof customer.first_name === 'string' ? customer.first_name : email.split('@')[0];\nconst lastName = typeof customer.last_name === 'string' ? customer.last_name : '';\n\nif (!email) {\n  throw new Error('Order payload missing customer.email — cannot enroll');\n}\n\n// Extract thinkific_course_id from each line item's product metadata.\n// Only keep items that actually have a course ID.\nconst courseItems = (order.items ?? []).reduce((acc, item) => {\n  const meta = item?.variant?.product?.metadata;\n  const courseId = meta?.thinkific_course_id;\n  if (courseId != null && String(courseId).trim() !== '') {\n    const title = item?.variant?.product?.title ?? item?.title ?? 'Course';\n    acc.push({\n      thinkific_course_id: Number(courseId),\n      title,\n    });\n  }\n  return acc;\n}, []);\n\nreturn [{\n  json: {\n    orderId: order.id,\n    email,\n    firstName,\n    lastName,\n    courseItems,\n    hasCourseItems: courseItems.length > 0,\n    thinkificBaseUrl: 'https://api.thinkific.com/api/public/v1',\n    thinkificApiKey: $env.THINKIFIC_API_KEY ?? '',\n  }\n}];"
       },
       "id": "mte-0002-0000-0000-000000000002",
       "name": "Parse: Order + Extract Course IDs",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [460, 300]
+      "position": [
+        460,
+        300
+      ]
     },
     {
       "parameters": {
@@ -48,7 +54,10 @@
       "name": "IF: Has Course Items?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [680, 300]
+      "position": [
+        680,
+        300
+      ]
     },
     {
       "parameters": {
@@ -88,7 +97,10 @@
       "name": "Thinkific: Find User",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [900, 200],
+      "position": [
+        900,
+        200
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -112,7 +124,10 @@
       "name": "IF: User Exists in Thinkific?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [1120, 200]
+      "position": [
+        1120,
+        200
+      ]
     },
     {
       "parameters": {
@@ -122,7 +137,10 @@
       "name": "Prepare: Use Existing User ID",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1340, 100]
+      "position": [
+        1340,
+        100
+      ]
     },
     {
       "parameters": {
@@ -150,7 +168,10 @@
       "name": "Thinkific: Create User",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1340, 340],
+      "position": [
+        1340,
+        340
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -161,7 +182,10 @@
       "name": "Prepare: Capture New User ID",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1560, 340]
+      "position": [
+        1560,
+        340
+      ]
     },
     {
       "parameters": {
@@ -171,7 +195,10 @@
       "name": "Merge: Resolve User ID + Build Tasks",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1780, 220]
+      "position": [
+        1780,
+        220
+      ]
     },
     {
       "parameters": {
@@ -181,7 +208,10 @@
       "name": "Enroll: Per Course (isolated failures)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2000, 220]
+      "position": [
+        2000,
+        220
+      ]
     },
     {
       "parameters": {
@@ -204,7 +234,10 @@
       "name": "IF: Any Enrollments Succeeded?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [2220, 220]
+      "position": [
+        2220,
+        220
+      ]
     },
     {
       "parameters": {
@@ -214,7 +247,10 @@
       "name": "Prepare: Confirmation Email",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2440, 120]
+      "position": [
+        2440,
+        120
+      ]
     },
     {
       "parameters": {
@@ -242,7 +278,10 @@
       "name": "Resend: Send Confirmation Email",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2660, 120],
+      "position": [
+        2660,
+        120
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -266,7 +305,10 @@
       "name": "IF: Any Enrollment Errors?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [2880, 220]
+      "position": [
+        2880,
+        220
+      ]
     },
     {
       "parameters": {
@@ -276,7 +318,10 @@
       "name": "Prepare: Admin Error Alert",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [3100, 120]
+      "position": [
+        3100,
+        120
+      ]
     },
     {
       "parameters": {
@@ -304,7 +349,10 @@
       "name": "Alert: Admin Error Email",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [3320, 120],
+      "position": [
+        3320,
+        120
+      ],
       "onError": "continueRegularOutput"
     },
     {
@@ -315,7 +363,10 @@
       "name": "Done: Log Outcome",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [3540, 220]
+      "position": [
+        3540,
+        220
+      ]
     },
     {
       "parameters": {
@@ -325,7 +376,10 @@
       "name": "Error: Thinkific API Failure",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1120, 480]
+      "position": [
+        1120,
+        480
+      ]
     },
     {
       "parameters": {
@@ -353,7 +407,10 @@
       "name": "Alert: Fatal Error Email",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1340, 480],
+      "position": [
+        1340,
+        480
+      ],
       "onError": "continueRegularOutput"
     },
     {
@@ -364,7 +421,10 @@
       "name": "Done: Fatal Error Handled",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1560, 480]
+      "position": [
+        1560,
+        480
+      ]
     },
     {
       "parameters": {
@@ -377,111 +437,258 @@
       "name": "Notes",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [240, 560]
+      "position": [
+        240,
+        560
+      ]
     }
   ],
   "connections": {
     "Webhook: Order Complete": {
       "main": [
-        [{ "node": "Parse: Order + Extract Course IDs", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Parse: Order + Extract Course IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Parse: Order + Extract Course IDs": {
       "main": [
-        [{ "node": "IF: Has Course Items?", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "IF: Has Course Items?",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "IF: Has Course Items?": {
       "main": [
-        [{ "node": "Thinkific: Find User", "type": "main", "index": 0 }],
+        [
+          {
+            "node": "Thinkific: Find User",
+            "type": "main",
+            "index": 0
+          }
+        ],
         []
       ]
     },
     "Thinkific: Find User": {
       "main": [
-        [{ "node": "IF: User Exists in Thinkific?", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "IF: User Exists in Thinkific?",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ],
       "error": [
-        [{ "node": "Error: Thinkific API Failure", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Error: Thinkific API Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "IF: User Exists in Thinkific?": {
       "main": [
-        [{ "node": "Prepare: Use Existing User ID", "type": "main", "index": 0 }],
-        [{ "node": "Thinkific: Create User", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Prepare: Use Existing User ID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Thinkific: Create User",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Prepare: Use Existing User ID": {
       "main": [
-        [{ "node": "Merge: Resolve User ID + Build Tasks", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Merge: Resolve User ID + Build Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Thinkific: Create User": {
       "main": [
-        [{ "node": "Prepare: Capture New User ID", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Prepare: Capture New User ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ],
       "error": [
-        [{ "node": "Error: Thinkific API Failure", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Error: Thinkific API Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Prepare: Capture New User ID": {
       "main": [
-        [{ "node": "Merge: Resolve User ID + Build Tasks", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Merge: Resolve User ID + Build Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Merge: Resolve User ID + Build Tasks": {
       "main": [
-        [{ "node": "Enroll: Per Course (isolated failures)", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Enroll: Per Course (isolated failures)",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Enroll: Per Course (isolated failures)": {
       "main": [
-        [{ "node": "IF: Any Enrollments Succeeded?", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "IF: Any Enrollments Succeeded?",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "IF: Any Enrollments Succeeded?": {
       "main": [
-        [{ "node": "Prepare: Confirmation Email", "type": "main", "index": 0 }],
-        [{ "node": "IF: Any Enrollment Errors?", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Prepare: Confirmation Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "IF: Any Enrollment Errors?",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Prepare: Confirmation Email": {
       "main": [
-        [{ "node": "Resend: Send Confirmation Email", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Resend: Send Confirmation Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Resend: Send Confirmation Email": {
       "main": [
-        [{ "node": "IF: Any Enrollment Errors?", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "IF: Any Enrollment Errors?",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ],
       "error": [
-        [{ "node": "IF: Any Enrollment Errors?", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "IF: Any Enrollment Errors?",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "IF: Any Enrollment Errors?": {
       "main": [
-        [{ "node": "Prepare: Admin Error Alert", "type": "main", "index": 0 }],
-        [{ "node": "Done: Log Outcome", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Prepare: Admin Error Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Done: Log Outcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Prepare: Admin Error Alert": {
       "main": [
-        [{ "node": "Alert: Admin Error Email", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Alert: Admin Error Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Alert: Admin Error Email": {
       "main": [
-        [{ "node": "Done: Log Outcome", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Done: Log Outcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Error: Thinkific API Failure": {
       "main": [
-        [{ "node": "Alert: Fatal Error Email", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Alert: Fatal Error Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Alert: Fatal Error Email": {
       "main": [
-        [{ "node": "Done: Fatal Error Handled", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Done: Fatal Error Handled",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -495,7 +702,13 @@
   "versionId": "mte-ffff-0000-0000-000000000001",
   "id": "medusa-thinkific-enrollment-v1",
   "tags": [
-    { "id": "tag-thinkific", "name": "thinkific" },
-    { "id": "tag-orders", "name": "orders" }
+    {
+      "id": "tag-thinkific",
+      "name": "thinkific"
+    },
+    {
+      "id": "tag-orders",
+      "name": "orders"
+    }
   ]
 }

@@ -156,7 +156,9 @@ export async function POST(req: NextRequest) {
   // 1. Fetch order from Medusa admin API
   let order: MedusaAdminOrder
   try {
+    // `fields=` REPLACES Medusa's default field list; name the scalars too.
     const fields = [
+      'id', 'display_id', 'status', 'currency_code', 'email', 'customer_id', 'created_at', 'subtotal', 'discount_total', 'tax_total', 'shipping_total', 'total', 'metadata',
       '*items',
       '*items.variant',
       '*customer',

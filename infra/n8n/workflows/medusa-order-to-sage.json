@@ -14,7 +14,10 @@
       "name": "Webhook: Order Placed",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [240, 300],
+      "position": [
+        240,
+        300
+      ],
       "webhookId": "medusa-order-placed"
     },
     {
@@ -61,17 +64,23 @@
       "name": "Validate: Required Fields",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [460, 300]
+      "position": [
+        460,
+        300
+      ]
     },
     {
       "parameters": {
-        "jsCode": "// Extract order fields and build Sage Basic Auth header\nconst order = $input.first().json;\nconst email = $env.SAGE_EMAIL;\nconst password = $env.SAGE_PASSWORD;\nconst authHeader = 'Basic ' + Buffer.from(email + ':' + password).toString('base64');\n\nconst customerName = [\n  order.customer?.first_name,\n  order.customer?.last_name\n].filter(Boolean).join(' ') || order.customer?.email || 'Unknown';\n\nreturn [{\n  json: {\n    orderId: order.id,\n    displayId: order.display_id,\n    customerEmail: order.customer?.email,\n    customerName,\n    items: order.items,\n    totalCents: order.total,\n    currencyCode: order.currency_code,\n    authHeader,\n    apiKey: $env.SAGE_API_KEY,\n    companyId: $env.SAGE_COMPANY_ID,\n    sageBaseUrl: $env.SAGE_API_URL || 'https://accounting.sageone.co.za/api/2.0.0',\n  }\n}];"
+        "jsCode": "// Extract order fields and build Sage Basic Auth header\n// n8n's Webhook node emits { headers, params, query, body }; fall back to a bare payload.\nconst order = $input.first().json.body ?? $input.first().json;\nconst email = $env.SAGE_EMAIL;\nconst password = $env.SAGE_PASSWORD;\nconst authHeader = 'Basic ' + Buffer.from(email + ':' + password).toString('base64');\n\nconst customerName = [\n  order.customer?.first_name,\n  order.customer?.last_name\n].filter(Boolean).join(' ') || order.customer?.email || 'Unknown';\n\nreturn [{\n  json: {\n    orderId: order.id,\n    displayId: order.display_id,\n    customerEmail: order.customer?.email,\n    customerName,\n    items: order.items,\n    totalCents: order.total,\n    currencyCode: order.currency_code,\n    authHeader,\n    apiKey: $env.SAGE_API_KEY,\n    companyId: $env.SAGE_COMPANY_ID,\n    sageBaseUrl: $env.SAGE_API_URL || 'https://accounting.sageone.co.za/api/2.0.0',\n  }\n}];"
       },
       "id": "a1b2c3d4-0003-0000-0000-000000000003",
       "name": "Prepare: Extract Order + Build Auth",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [680, 200]
+      "position": [
+        680,
+        200
+      ]
     },
     {
       "parameters": {
@@ -127,7 +136,10 @@
       "name": "Sage: Search Customers",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [900, 200],
+      "position": [
+        900,
+        200
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -138,7 +150,10 @@
       "name": "Find: Customer By Email",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1120, 200]
+      "position": [
+        1120,
+        200
+      ]
     },
     {
       "parameters": {
@@ -161,7 +176,10 @@
       "name": "IF: Customer Exists?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [1340, 200]
+      "position": [
+        1340,
+        200
+      ]
     },
     {
       "parameters": {
@@ -202,7 +220,10 @@
       "name": "Sage: Create Customer",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1560, 320],
+      "position": [
+        1560,
+        320
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -213,7 +234,10 @@
       "name": "Merge: Set Customer ID",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1780, 200]
+      "position": [
+        1780,
+        200
+      ]
     },
     {
       "parameters": {
@@ -251,7 +275,10 @@
       "name": "Sage: Get Tax Types",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2000, 200],
+      "position": [
+        2000,
+        200
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -290,7 +317,10 @@
       "name": "Sage: Get Chart of Accounts",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2000, 400],
+      "position": [
+        2000,
+        400
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -302,7 +332,10 @@
       "name": "Merge: Tax + Accounts",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
-      "position": [2220, 300]
+      "position": [
+        2220,
+        300
+      ]
     },
     {
       "parameters": {
@@ -312,7 +345,10 @@
       "name": "Build: Invoice Payload",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2440, 300]
+      "position": [
+        2440,
+        300
+      ]
     },
     {
       "parameters": {
@@ -353,7 +389,10 @@
       "name": "Sage: Create Invoice",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2660, 300],
+      "position": [
+        2660,
+        300
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -364,7 +403,10 @@
       "name": "Extract: Invoice ID",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2880, 300]
+      "position": [
+        2880,
+        300
+      ]
     },
     {
       "parameters": {
@@ -392,7 +434,10 @@
       "name": "Medusa: Update Order Metadata",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [3100, 300],
+      "position": [
+        3100,
+        300
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -403,7 +448,10 @@
       "name": "Done: Log Success",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [3320, 300]
+      "position": [
+        3320,
+        300
+      ]
     },
     {
       "parameters": {
@@ -413,7 +461,10 @@
       "name": "Error: Log and Prepare Alert",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2000, 600]
+      "position": [
+        2000,
+        600
+      ]
     },
     {
       "parameters": {
@@ -441,7 +492,10 @@
       "name": "Alert: Send Error Email",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2220, 600],
+      "position": [
+        2220,
+        600
+      ],
       "onError": "continueRegularOutput"
     },
     {
@@ -452,7 +506,10 @@
       "name": "Done: Error Handled",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2440, 600]
+      "position": [
+        2440,
+        600
+      ]
     },
     {
       "parameters": {
@@ -465,7 +522,10 @@
       "name": "Notes",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [240, 560]
+      "position": [
+        240,
+        560
+      ]
     }
   ],
   "connections": {

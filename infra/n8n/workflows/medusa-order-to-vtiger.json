@@ -14,7 +14,10 @@
       "name": "Webhook: Medusa Order",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [240, 300],
+      "position": [
+        240,
+        300
+      ],
       "webhookId": "medusa-order-vtiger"
     },
     {
@@ -28,15 +31,21 @@
           "conditions": [
             {
               "id": "check-email",
-              "leftValue": "={{ $json.customer?.email }}",
+              "leftValue": "={{ $json.body.customer?.email }}",
               "rightValue": "",
-              "operator": { "type": "string", "operation": "notEmpty" }
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
             },
             {
               "id": "check-total",
-              "leftValue": "={{ $json.total }}",
+              "leftValue": "={{ $json.body.total }}",
               "rightValue": "0",
-              "operator": { "type": "number", "operation": "gte" }
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
             }
           ],
           "combinator": "and"
@@ -46,17 +55,23 @@
       "name": "Validate: Required Fields",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [460, 300]
+      "position": [
+        460,
+        300
+      ]
     },
     {
       "parameters": {
-        "jsCode": "const order = $input.first().json;\nconst customer = order.customer ?? {};\nconst email = (customer.email ?? '').toLowerCase().trim();\nconst firstName = customer.first_name ?? email.split('@')[0] ?? '';\nconst lastName = customer.last_name ?? '';\nconst totalZar = (order.total ?? 0) / 100;\nconst createdAt = order.created_at ?? new Date().toISOString();\n\nconst productNames = (order.items ?? []).map(item => {\n  const product = item.variant?.product?.title ?? item.title ?? 'Unknown';\n  const variant = item.variant?.title;\n  return variant && variant !== 'Default' ? `${product} — ${variant}` : product;\n}).join(', ');\n\nconst vtigerUrl = $env.VTIGER_URL?.replace(/\\/$/, '') ?? '';\nconst vtigerUser = $env.VTIGER_USERNAME ?? '';\nconst vtigerKey = $env.VTIGER_ACCESS_KEY ?? '';\n\nif (!vtigerUrl || !vtigerUser || !vtigerKey) {\n  throw new Error('Vtiger env vars not set in n8n');\n}\n\nreturn [{\n  json: {\n    email,\n    firstName,\n    lastName,\n    totalZar,\n    createdAt,\n    productNames,\n    orderId: order.id,\n    displayId: order.display_id,\n    vtigerUrl,\n    vtigerUser,\n    vtigerKey,\n  }\n}];"
+        "jsCode": "// n8n's Webhook node emits { headers, params, query, body }; fall back to a bare payload.\nconst order = $input.first().json.body ?? $input.first().json;\nconst customer = order.customer ?? {};\nconst email = (customer.email ?? '').toLowerCase().trim();\nconst firstName = customer.first_name ?? email.split('@')[0] ?? '';\nconst lastName = customer.last_name ?? '';\nconst totalZar = (order.total ?? 0) / 100;\nconst createdAt = order.created_at ?? new Date().toISOString();\n\nconst productNames = (order.items ?? []).map(item => {\n  const product = item.variant?.product?.title ?? item.title ?? 'Unknown';\n  const variant = item.variant?.title;\n  return variant && variant !== 'Default' ? `${product} — ${variant}` : product;\n}).join(', ');\n\nconst vtigerUrl = $env.VTIGER_URL?.replace(/\\/$/, '') ?? '';\nconst vtigerUser = $env.VTIGER_USERNAME ?? '';\nconst vtigerKey = $env.VTIGER_ACCESS_KEY ?? '';\n\nif (!vtigerUrl || !vtigerUser || !vtigerKey) {\n  throw new Error('Vtiger env vars not set in n8n');\n}\n\nreturn [{\n  json: {\n    email,\n    firstName,\n    lastName,\n    totalZar,\n    createdAt,\n    productNames,\n    orderId: order.id,\n    displayId: order.display_id,\n    vtigerUrl,\n    vtigerUser,\n    vtigerKey,\n  }\n}];"
       },
       "id": "mo2v-0003-0000-0000-000000000003",
       "name": "Prepare: Extract Order Data",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [680, 200]
+      "position": [
+        680,
+        200
+      ]
     },
     {
       "parameters": {
@@ -65,8 +80,14 @@
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "operation", "value": "getchallenge" },
-            { "name": "username", "value": "={{ $json.vtigerUser }}" }
+            {
+              "name": "operation",
+              "value": "getchallenge"
+            },
+            {
+              "name": "username",
+              "value": "={{ $json.vtigerUser }}"
+            }
           ]
         },
         "options": {}
@@ -75,7 +96,10 @@
       "name": "Vtiger: Get Challenge",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [900, 200],
+      "position": [
+        900,
+        200
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -86,7 +110,10 @@
       "name": "Prepare: Build Login Hash",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1120, 200]
+      "position": [
+        1120,
+        200
+      ]
     },
     {
       "parameters": {
@@ -96,9 +123,18 @@
         "contentType": "form-urlencoded",
         "bodyParameters": {
           "parameters": [
-            { "name": "operation", "value": "login" },
-            { "name": "username", "value": "={{ $json.vtigerUser }}" },
-            { "name": "accessKey", "value": "={{ $json.accessKeyHash }}" }
+            {
+              "name": "operation",
+              "value": "login"
+            },
+            {
+              "name": "username",
+              "value": "={{ $json.vtigerUser }}"
+            },
+            {
+              "name": "accessKey",
+              "value": "={{ $json.accessKeyHash }}"
+            }
           ]
         },
         "options": {}
@@ -107,7 +143,10 @@
       "name": "Vtiger: Login",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1340, 200],
+      "position": [
+        1340,
+        200
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -118,7 +157,10 @@
       "name": "Prepare: Session",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1560, 200]
+      "position": [
+        1560,
+        200
+      ]
     },
     {
       "parameters": {
@@ -127,9 +169,18 @@
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "operation", "value": "query" },
-            { "name": "sessionName", "value": "={{ $json.sessionName }}" },
-            { "name": "query", "value": "=SELECT * FROM Contacts WHERE email='{{ $json.safeEmail }}' LIMIT 1" }
+            {
+              "name": "operation",
+              "value": "query"
+            },
+            {
+              "name": "sessionName",
+              "value": "={{ $json.sessionName }}"
+            },
+            {
+              "name": "query",
+              "value": "=SELECT * FROM Contacts WHERE email='{{ $json.safeEmail }}' LIMIT 1"
+            }
           ]
         },
         "options": {}
@@ -138,7 +189,10 @@
       "name": "Vtiger: Find Contact",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1780, 200],
+      "position": [
+        1780,
+        200
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -149,7 +203,10 @@
               "id": "contact-found",
               "leftValue": "={{ $json.success && $json.result?.length > 0 }}",
               "rightValue": true,
-              "operator": { "type": "boolean", "operation": "equals" }
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
             }
           ],
           "combinator": "and"
@@ -159,7 +216,10 @@
       "name": "IF: Contact Exists?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [2000, 200]
+      "position": [
+        2000,
+        200
+      ]
     },
     {
       "parameters": {
@@ -169,7 +229,10 @@
       "name": "Prepare: Update Existing Contact",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2220, 100]
+      "position": [
+        2220,
+        100
+      ]
     },
     {
       "parameters": {
@@ -179,7 +242,10 @@
       "name": "Prepare: New Contact Payload",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2220, 340]
+      "position": [
+        2220,
+        340
+      ]
     },
     {
       "parameters": {
@@ -189,10 +255,22 @@
         "contentType": "form-urlencoded",
         "bodyParameters": {
           "parameters": [
-            { "name": "operation", "value": "={{ $json.isNew === false ? 'update' : 'create' }}" },
-            { "name": "sessionName", "value": "={{ $json.sessionName }}" },
-            { "name": "elementType", "value": "Contacts" },
-            { "name": "element", "value": "={{ $json.element }}" }
+            {
+              "name": "operation",
+              "value": "={{ $json.isNew === false ? 'update' : 'create' }}"
+            },
+            {
+              "name": "sessionName",
+              "value": "={{ $json.sessionName }}"
+            },
+            {
+              "name": "elementType",
+              "value": "Contacts"
+            },
+            {
+              "name": "element",
+              "value": "={{ $json.element }}"
+            }
           ]
         },
         "options": {}
@@ -201,7 +279,10 @@
       "name": "Vtiger: Upsert Contact",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2440, 220],
+      "position": [
+        2440,
+        220
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -212,7 +293,10 @@
       "name": "Merge: Resolve Contact ID",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2660, 220]
+      "position": [
+        2660,
+        220
+      ]
     },
     {
       "parameters": {
@@ -222,7 +306,10 @@
       "name": "Prepare: Activity Payload",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2880, 220]
+      "position": [
+        2880,
+        220
+      ]
     },
     {
       "parameters": {
@@ -232,10 +319,22 @@
         "contentType": "form-urlencoded",
         "bodyParameters": {
           "parameters": [
-            { "name": "operation", "value": "create" },
-            { "name": "sessionName", "value": "={{ $json.sessionName }}" },
-            { "name": "elementType", "value": "Activities" },
-            { "name": "element", "value": "={{ $json.element }}" }
+            {
+              "name": "operation",
+              "value": "create"
+            },
+            {
+              "name": "sessionName",
+              "value": "={{ $json.sessionName }}"
+            },
+            {
+              "name": "elementType",
+              "value": "Activities"
+            },
+            {
+              "name": "element",
+              "value": "={{ $json.element }}"
+            }
           ]
         },
         "options": {}
@@ -244,7 +343,10 @@
       "name": "Vtiger: Create Activity",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [3100, 220],
+      "position": [
+        3100,
+        220
+      ],
       "onError": "continueErrorOutput"
     },
     {
@@ -255,7 +357,10 @@
       "name": "Done: Log Success",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [3320, 220]
+      "position": [
+        3320,
+        220
+      ]
     },
     {
       "parameters": {
@@ -265,7 +370,10 @@
       "name": "Error: Log and Prepare Alert",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2000, 480]
+      "position": [
+        2000,
+        480
+      ]
     },
     {
       "parameters": {
@@ -274,8 +382,14 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "Authorization", "value": "=Bearer {{ $env.RESEND_API_KEY }}" },
-            { "name": "Content-Type", "value": "application/json" }
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.RESEND_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
           ]
         },
         "sendBody": true,
@@ -287,7 +401,10 @@
       "name": "Alert: Send Error Email",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2220, 480],
+      "position": [
+        2220,
+        480
+      ],
       "onError": "continueRegularOutput"
     },
     {
@@ -298,7 +415,10 @@
       "name": "Done: Error Handled",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2440, 480]
+      "position": [
+        2440,
+        480
+      ]
     },
     {
       "parameters": {
@@ -311,71 +431,252 @@
       "name": "Notes",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [240, 500]
+      "position": [
+        240,
+        500
+      ]
     }
   ],
   "connections": {
     "Webhook: Medusa Order": {
-      "main": [[{ "node": "Validate: Required Fields", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Validate: Required Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Validate: Required Fields": {
       "main": [
-        [{ "node": "Prepare: Extract Order Data", "type": "main", "index": 0 }],
+        [
+          {
+            "node": "Prepare: Extract Order Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
         []
       ]
     },
     "Prepare: Extract Order Data": {
-      "main": [[{ "node": "Vtiger: Get Challenge", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Vtiger: Get Challenge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Vtiger: Get Challenge": {
-      "main": [[{ "node": "Prepare: Build Login Hash", "type": "main", "index": 0 }]],
-      "error": [[{ "node": "Error: Log and Prepare Alert", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Prepare: Build Login Hash",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Error: Log and Prepare Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Prepare: Build Login Hash": {
-      "main": [[{ "node": "Vtiger: Login", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Vtiger: Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Vtiger: Login": {
-      "main": [[{ "node": "Prepare: Session", "type": "main", "index": 0 }]],
-      "error": [[{ "node": "Error: Log and Prepare Alert", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Prepare: Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Error: Log and Prepare Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Prepare: Session": {
-      "main": [[{ "node": "Vtiger: Find Contact", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Vtiger: Find Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Vtiger: Find Contact": {
-      "main": [[{ "node": "IF: Contact Exists?", "type": "main", "index": 0 }]],
-      "error": [[{ "node": "Error: Log and Prepare Alert", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "IF: Contact Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Error: Log and Prepare Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "IF: Contact Exists?": {
       "main": [
-        [{ "node": "Prepare: Update Existing Contact", "type": "main", "index": 0 }],
-        [{ "node": "Prepare: New Contact Payload", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Prepare: Update Existing Contact",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare: New Contact Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Prepare: Update Existing Contact": {
-      "main": [[{ "node": "Vtiger: Upsert Contact", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Vtiger: Upsert Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Prepare: New Contact Payload": {
-      "main": [[{ "node": "Vtiger: Upsert Contact", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Vtiger: Upsert Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Vtiger: Upsert Contact": {
-      "main": [[{ "node": "Merge: Resolve Contact ID", "type": "main", "index": 0 }]],
-      "error": [[{ "node": "Error: Log and Prepare Alert", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Merge: Resolve Contact ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Error: Log and Prepare Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Merge: Resolve Contact ID": {
-      "main": [[{ "node": "Prepare: Activity Payload", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Prepare: Activity Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Prepare: Activity Payload": {
-      "main": [[{ "node": "Vtiger: Create Activity", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Vtiger: Create Activity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Vtiger: Create Activity": {
-      "main": [[{ "node": "Done: Log Success", "type": "main", "index": 0 }]],
-      "error": [[{ "node": "Error: Log and Prepare Alert", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Done: Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Error: Log and Prepare Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Error: Log and Prepare Alert": {
-      "main": [[{ "node": "Alert: Send Error Email", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Alert: Send Error Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Alert: Send Error Email": {
-      "main": [[{ "node": "Done: Error Handled", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Done: Error Handled",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -388,7 +689,13 @@
   "versionId": "mo2v-ffff-0000-0000-000000000001",
   "id": "medusa-order-to-vtiger-v1",
   "tags": [
-    { "id": "tag-vtiger", "name": "vtiger" },
-    { "id": "tag-orders", "name": "orders" }
+    {
+      "id": "tag-vtiger",
+      "name": "vtiger"
+    },
+    {
+      "id": "tag-orders",
+      "name": "orders"
+    }
   ]
 }
