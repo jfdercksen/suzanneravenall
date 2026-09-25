@@ -61,7 +61,7 @@ suzanne-ravenall/
 | CRM | Vtiger (self-hosted, sales pipeline only) |
 | Accounting | Sage Business Cloud SA API (OAuth 2.0, JSON REST API) |
 | Payments | PayFast + PayPal via Medusa payment plugins |
-| Email | Resend |
+| Email | Brevo (transactional API for the app and n8n; SMTP relay for the login server) |
 | Marketing | Vibe Marketing (Ai Dynamic Advisory — Next.js + Supabase + Claude + n8n) |
 | Search | MeiliSearch (self-hosted) |
 | Community | Discourse (self-hosted, SSO via Supabase Auth) |
@@ -77,7 +77,7 @@ suzanne-ravenall/
 
 **Key API docs:**
 - Sage API: https://www.sage.com/en-za/sage-business-cloud/accounting/developer-api/
-- Resend: https://resend.com/docs
+- Brevo: https://developers.brevo.com/reference/sendtransacemail
 - Bunny Stream: https://docs.bunny.net/docs/stream-getting-started
 
 ---
@@ -221,7 +221,8 @@ Docs: https://developers.cloudflare.com/agents/
 | `MEDUSA_BACKEND_URL` | No | Medusa backend URL — server only |
 | `DATABASE_URL` | No | Direct PostgreSQL connection string |
 | `NEXT_PUBLIC_SITE_URL` | Yes | Base URL |
-| `RESEND_API_KEY` | No | Resend email API — server only |
+| `BREVO_API_KEY` | No | Brevo transactional API key (xkeysib-), server only |
+| `EMAIL_FROM_ADDRESS` | No | Sender for every transactional email, on the verified domain |
 | `PAYFAST_MERCHANT_ID` | No | PayFast merchant ID |
 | `PAYFAST_MERCHANT_KEY` | No | PayFast merchant key |
 | `PAYFAST_PASSPHRASE` | No | PayFast passphrase |
@@ -314,7 +315,7 @@ For unfamiliar integrations, spawn `research` agent first.
 | `add-docker-service` | New service in Docker Compose |
 | `add-rls-policy` | New Supabase Row Level Security policy |
 | `add-webhook` | New webhook handler between services |
-| `add-email-template` | New Resend email template |
+| `add-email-template` | New transactional email template (React Email, sent through Brevo) |
 | `add-payment-provider` | New Medusa payment provider plugin |
 | `audit` | 9-category parallel codebase health check |
 | `visualise` | Interactive HTML codebase tree |

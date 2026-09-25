@@ -2,10 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const { mockSend } = vi.hoisted(() => ({ mockSend: vi.fn() }))
 
-vi.mock('resend', () => ({
-  Resend: vi.fn().mockImplementation(() => ({
-    emails: { send: mockSend },
-  })),
+vi.mock('./send', () => ({
+  sendEmail: mockSend,
 }))
 
 vi.mock('./templates/QuizCompletionNotification', () => ({ default: () => null }))
@@ -31,11 +29,11 @@ describe('sendQuizCompletionNotificationEmail', () => {
     vi.clearAllMocks()
     // The send function fails loudly without an API key; stub it so tests
     // don't depend on the developer's local .env
-    vi.stubEnv('RESEND_API_KEY', 'test_resend_key')
+    vi.stubEnv('BREVO_API_KEY', 'test_brevo_key')
   })
 
   it('returns the emailId string on success', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_notify_001' }, error: null })
+    mockSend.mockResolvedValue('email_notify_001')
 
     const id = await sendQuizCompletionNotificationEmail(baseData)
 
@@ -43,7 +41,7 @@ describe('sendQuizCompletionNotificationEmail', () => {
   })
 
   it('sends to the default notify address with the lead as replyTo', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_notify_002' }, error: null })
+    mockSend.mockResolvedValue('email_notify_002')
 
     await sendQuizCompletionNotificationEmail(baseData)
 
@@ -57,23 +55,16 @@ describe('sendQuizCompletionNotificationEmail', () => {
   })
 
   // NOTIFY_EMAIL is a module-level constant captured once at import time via
-  // `?? fallback` chains — the env-var-override path can't be exercised
+  // `?? fallback` chains - the env-var-override path can't be exercised
   // without module re-loading (same reasoning as membership-welcome.test.ts's
   // FROM constant) and is covered by source code review instead.
 
-  it('throws when Resend returns an error object', async () => {
-    mockSend.mockResolvedValue({ data: null, error: { message: 'rate limited' } })
+  it('propagates a provider error', async () => {
+    mockSend.mockRejectedValue(new Error(`Brevo error: ${'rate limited'}`))
 
     await expect(sendQuizCompletionNotificationEmail(baseData)).rejects.toThrow(
-      'Resend error: rate limited',
+      'Brevo error: rate limited',
     )
   })
 
-  it('throws when Resend returns null result and no error', async () => {
-    mockSend.mockResolvedValue({ data: null, error: null })
-
-    await expect(sendQuizCompletionNotificationEmail(baseData)).rejects.toThrow(
-      'Resend returned no result',
-    )
-  })
 })

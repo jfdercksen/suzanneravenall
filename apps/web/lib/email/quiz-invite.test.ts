@@ -2,10 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const { mockSend } = vi.hoisted(() => ({ mockSend: vi.fn() }))
 
-vi.mock('resend', () => ({
-  Resend: vi.fn().mockImplementation(() => ({
-    emails: { send: mockSend },
-  })),
+vi.mock('./send', () => ({
+  sendEmail: mockSend,
 }))
 
 vi.mock('./templates/QuizInvite', () => ({ default: () => null }))
@@ -25,11 +23,11 @@ describe('sendQuizInviteEmail', () => {
     vi.clearAllMocks()
     // The send function fails loudly without an API key; stub it so tests
     // don't depend on the developer's local .env
-    vi.stubEnv('RESEND_API_KEY', 'test_resend_key')
+    vi.stubEnv('BREVO_API_KEY', 'test_brevo_key')
   })
 
   it('returns the emailId string on success', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_invite_001' }, error: null })
+    mockSend.mockResolvedValue('email_invite_001')
 
     const id = await sendQuizInviteEmail(baseData)
 
@@ -37,20 +35,20 @@ describe('sendQuizInviteEmail', () => {
   })
 
   it('sends to the lead email with the quiz title in the subject', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_invite_002' }, error: null })
+    mockSend.mockResolvedValue('email_invite_002')
 
     await sendQuizInviteEmail(baseData)
 
     expect(mockSend).toHaveBeenCalledWith(
       expect.objectContaining({
         to: ['lead@example.com'],
-        subject: 'Nervous System Pattern — your diagnostic is ready',
+        subject: 'Nervous System Pattern - your diagnostic is ready',
       }),
     )
   })
 
   it('includes the correct replyTo address', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_invite_003' }, error: null })
+    mockSend.mockResolvedValue('email_invite_003')
 
     await sendQuizInviteEmail(baseData)
 
@@ -59,23 +57,16 @@ describe('sendQuizInviteEmail', () => {
     )
   })
 
-  it('throws when Resend returns an error object', async () => {
-    mockSend.mockResolvedValue({ data: null, error: { message: 'rate limited' } })
+  it('propagates a provider error', async () => {
+    mockSend.mockRejectedValue(new Error(`Brevo error: ${'rate limited'}`))
 
-    await expect(sendQuizInviteEmail(baseData)).rejects.toThrow('Resend error: rate limited')
+    await expect(sendQuizInviteEmail(baseData)).rejects.toThrow('Brevo error: rate limited')
   })
 
-  it('throws when Resend returns null result and no error', async () => {
-    mockSend.mockResolvedValue({ data: null, error: null })
 
-    await expect(sendQuizInviteEmail(baseData)).rejects.toThrow('Resend returned no result')
-  })
+  it('propagates a missing-key error from the sender', async () => {
+    mockSend.mockRejectedValue(new Error('BREVO_API_KEY is not configured'))
 
-  it('throws when RESEND_API_KEY is not configured', async () => {
-    vi.stubEnv('RESEND_API_KEY', '')
-
-    await expect(sendQuizInviteEmail(baseData)).rejects.toThrow('RESEND_API_KEY is not configured')
-
-    vi.unstubAllEnvs()
+    await expect(sendQuizInviteEmail(baseData)).rejects.toThrow('BREVO_API_KEY is not configured')
   })
 })

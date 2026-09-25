@@ -3,6 +3,7 @@ import { timingSafeEqual, createHash } from 'crypto'
 import { sendCartAbandonmentEmail1 } from '@/lib/email/cart-abandonment-1'
 import { sendCartAbandonmentEmail2 } from '@/lib/email/cart-abandonment-2'
 import { sendCartAbandonmentEmail3 } from '@/lib/email/cart-abandonment-3'
+import { isEmailConfigured } from '@/lib/email/send'
 import { isEmailUnsubscribed } from '@/lib/email/suppression'
 import type { CartEmailData, CartItem } from '@/lib/email/types'
 import { logError } from '@/lib/log'
@@ -52,8 +53,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  if (!process.env.RESEND_API_KEY) {
-    logError('[email/cart-abandonment] RESEND_API_KEY is not set')
+  if (!isEmailConfigured()) {
+    logError('[email/cart-abandonment] BREVO_API_KEY is not set')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
 

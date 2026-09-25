@@ -1,5 +1,5 @@
 import { createElement } from 'react'
-import { Resend } from 'resend'
+import { sendEmail } from './send'
 import OrderConfirmation from '../../emails/OrderConfirmation'
 import type { OrderEmailData } from './types'
 import { companyVatNumber } from './company'
@@ -7,8 +7,6 @@ import { formatAmount } from './utils'
 
 export type { OrderEmailData }
 
-const FROM =
-  process.env.RESEND_FROM_ADDRESS ?? 'Dr Suzanne Ravenall <noreply@suzanneravenall.com>'
 const REPLY_TO = 'sravenall@suzanneravenall.com'
 
 export async function sendOrderConfirmationEmail({
@@ -18,23 +16,16 @@ export async function sendOrderConfirmationEmail({
   order: OrderEmailData
   invoiceUrl: string | null
 }): Promise<string> {
-  const resend = new Resend(process.env.RESEND_API_KEY ?? '')
-  const subject = `Your transformation begins — Order #${order.displayId}`
+  const subject = `Your transformation begins - Order #${order.displayId}`
   const text = buildPlainText(order, invoiceUrl)
 
-  const { data: result, error } = await resend.emails.send({
-    from: FROM,
+  return sendEmail({
     replyTo: REPLY_TO,
     to: [order.email],
     subject,
     react: createElement(OrderConfirmation, { ...order, invoiceUrl }),
     text,
   })
-
-  if (error) throw new Error(`Resend error: ${error.message}`)
-  if (!result) throw new Error('Resend returned no result')
-
-  return result.id
 }
 
 function buildPlainText(order: OrderEmailData, invoiceUrl: string | null): string {
@@ -62,7 +53,7 @@ function buildPlainText(order: OrderEmailData, invoiceUrl: string | null): strin
   for (const item of order.items) {
     const variant = item.variantTitle ? ` (${item.variantTitle})` : ''
     lines.push(
-      `${item.title}${variant} x${item.quantity} — ${formatAmount(item.unitPrice, order.currency)}`
+      `${item.title}${variant} x${item.quantity} - ${formatAmount(item.unitPrice, order.currency)}`
     )
   }
 
@@ -93,7 +84,7 @@ function buildPlainText(order: OrderEmailData, invoiceUrl: string | null): strin
     '=================',
     '1. You will receive access details within 24 hours.',
     '2. Check your email for joining instructions.',
-    "3. Reach out if you need anything — we're here.",
+    "3. Reach out if you need anything - we're here.",
     '',
     'QUESTIONS?',
     '==========',

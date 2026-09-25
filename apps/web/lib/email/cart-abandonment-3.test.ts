@@ -2,10 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const { mockSend } = vi.hoisted(() => ({ mockSend: vi.fn() }))
 
-vi.mock('resend', () => ({
-  Resend: vi.fn().mockImplementation(() => ({
-    emails: { send: mockSend },
-  })),
+vi.mock('./send', () => ({
+  sendEmail: mockSend,
 }))
 
 vi.mock('./templates/CartAbandonment3', () => ({ default: () => null }))
@@ -33,7 +31,7 @@ describe('sendCartAbandonmentEmail3', () => {
   })
 
   it('returns the emailId string on success', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_020' }, error: null })
+    mockSend.mockResolvedValue('email_id_020')
 
     const id = await sendCartAbandonmentEmail3(baseData)
 
@@ -41,7 +39,7 @@ describe('sendCartAbandonmentEmail3', () => {
   })
 
   it('always uses the fixed subject line', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_021' }, error: null })
+    mockSend.mockResolvedValue('email_id_021')
 
     await sendCartAbandonmentEmail3(baseData)
 
@@ -53,28 +51,23 @@ describe('sendCartAbandonmentEmail3', () => {
     )
   })
 
-  it('throws when Resend returns an error object', async () => {
-    mockSend.mockResolvedValue({ data: null, error: { message: 'domain not verified' } })
+  it('propagates a provider error', async () => {
+    mockSend.mockRejectedValue(new Error(`Brevo error: ${'domain not verified'}`))
 
     await expect(sendCartAbandonmentEmail3(baseData)).rejects.toThrow(
-      'Resend error: domain not verified',
+      'Brevo error: domain not verified',
     )
   })
 
-  it('throws when Resend returns null result and no error', async () => {
-    mockSend.mockResolvedValue({ data: null, error: null })
 
-    await expect(sendCartAbandonmentEmail3(baseData)).rejects.toThrow('Resend returned no result')
-  })
-
-  it('throws when the Resend SDK itself rejects', async () => {
+  it('propagates a transport failure', async () => {
     mockSend.mockRejectedValue(new Error('upstream 503'))
 
     await expect(sendCartAbandonmentEmail3(baseData)).rejects.toThrow('upstream 503')
   })
 
   it('sends to the correct email address', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_022' }, error: null })
+    mockSend.mockResolvedValue('email_id_022')
 
     await sendCartAbandonmentEmail3({ ...baseData, email: 'third@example.com' })
 

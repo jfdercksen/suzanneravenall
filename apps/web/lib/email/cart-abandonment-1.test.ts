@@ -4,10 +4,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 // the vi.mock factory (which itself is hoisted to the top of the file).
 const { mockSend } = vi.hoisted(() => ({ mockSend: vi.fn() }))
 
-vi.mock('resend', () => ({
-  Resend: vi.fn().mockImplementation(() => ({
-    emails: { send: mockSend },
-  })),
+vi.mock('./send', () => ({
+  sendEmail: mockSend,
 }))
 
 vi.mock('./templates/CartAbandonment1', () => ({ default: () => null }))
@@ -35,7 +33,7 @@ describe('sendCartAbandonmentEmail1', () => {
   })
 
   it('returns the emailId string on success', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_001' }, error: null })
+    mockSend.mockResolvedValue('email_id_001')
 
     const id = await sendCartAbandonmentEmail1(baseData)
 
@@ -43,7 +41,7 @@ describe('sendCartAbandonmentEmail1', () => {
   })
 
   it('includes the first name in the subject when firstName is provided', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_002' }, error: null })
+    mockSend.mockResolvedValue('email_id_002')
 
     await sendCartAbandonmentEmail1(baseData)
 
@@ -56,7 +54,7 @@ describe('sendCartAbandonmentEmail1', () => {
   })
 
   it('uses generic subject when firstName is not provided', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_003' }, error: null })
+    mockSend.mockResolvedValue('email_id_003')
     const dataWithoutName: CartEmailData = { ...baseData, firstName: undefined }
 
     await sendCartAbandonmentEmail1(dataWithoutName)
@@ -66,26 +64,21 @@ describe('sendCartAbandonmentEmail1', () => {
     )
   })
 
-  it('throws when Resend returns an error object', async () => {
-    mockSend.mockResolvedValue({ data: null, error: { message: 'rate limited' } })
+  it('propagates a provider error', async () => {
+    mockSend.mockRejectedValue(new Error(`Brevo error: ${'rate limited'}`))
 
-    await expect(sendCartAbandonmentEmail1(baseData)).rejects.toThrow('Resend error: rate limited')
+    await expect(sendCartAbandonmentEmail1(baseData)).rejects.toThrow('Brevo error: rate limited')
   })
 
-  it('throws when Resend returns null result and no error', async () => {
-    mockSend.mockResolvedValue({ data: null, error: null })
 
-    await expect(sendCartAbandonmentEmail1(baseData)).rejects.toThrow('Resend returned no result')
-  })
-
-  it('throws when the Resend SDK itself rejects', async () => {
+  it('propagates a transport failure', async () => {
     mockSend.mockRejectedValue(new Error('network failure'))
 
     await expect(sendCartAbandonmentEmail1(baseData)).rejects.toThrow('network failure')
   })
 
   it('sends to the correct email address', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_004' }, error: null })
+    mockSend.mockResolvedValue('email_id_004')
 
     await sendCartAbandonmentEmail1({ ...baseData, email: 'other@example.com' })
 

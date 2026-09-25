@@ -241,7 +241,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Build and send the customer confirmation email via Resend.\nconst ctx = $input.first().json;\nconst courses = ctx.enrollmentSuccessTitles ?? [];\nconst courseListHtml = courses.map(t => '<li>' + t + '</li>').join('');\nconst subject = 'Your course access is ready \\u2014 ' + courses.join(', ');\n\nconst html = [\n  '<h2>Welcome to the Ravenall Institute!</h2>',\n  '<p>Hi ' + ctx.firstName + ',</p>',\n  '<p>Your payment was received and your course access has been activated. You can now start learning:</p>',\n  '<ul>' + courseListHtml + '</ul>',\n  '<p><a href=\"https://ravenallinstitute-9629.thinkific.com/collections\">Access your courses on Thinkific</a></p>',\n  '<p>You will also receive a separate welcome email from Thinkific for the first course — this may land in your promotions or spam folder, so please check there if you do not see it.</p>',\n  '<p>If you have any questions, reply to this email and we will help you.</p>',\n  '<p>Warm regards,<br>Dr. Suzanne Ravenall</p>',\n].join('');\n\nconst resendPayload = JSON.stringify({\n  from: 'noreply@suzanneravenall.com',\n  to: [ctx.email],\n  subject,\n  html,\n});\n\nreturn [{\n  json: {\n    ...ctx,\n    resendPayload,\n    emailSubject: subject,\n  }\n}];"
+        "jsCode": "// Build and send the customer confirmation email via Brevo.\nconst ctx = $input.first().json;\nconst esc = (v) => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');\nconst courses = ctx.enrollmentSuccessTitles ?? [];\nconst courseListHtml = courses.map(t => '<li>' + esc(t) + '</li>').join('');\nconst subject = 'Your course access is ready - ' + courses.join(', ');\n\nconst html = [\n  '<h2>Welcome to the Ravenall Institute!</h2>',\n  '<p>Hi ' + esc(ctx.firstName) + ',</p>',\n  '<p>Your payment was received and your course access has been activated. You can now start learning:</p>',\n  '<ul>' + courseListHtml + '</ul>',\n  '<p><a href=\"https://ravenallinstitute-9629.thinkific.com/collections\">Access your courses on Thinkific</a></p>',\n  '<p>You will also receive a separate welcome email from Thinkific for the first course - this may land in your promotions or spam folder, so please check there if you do not see it.</p>',\n  '<p>If you have any questions, reply to this email and we will help you.</p>',\n  '<p>Warm regards,<br>Dr. Suzanne Ravenall</p>',\n].join('');\n\nconst emailPayload = JSON.stringify({\n  sender: { name: 'Dr Suzanne Ravenall', email: 'noreply@suzanneravenall.com' },\n  to: [{ email: ctx.email }],\n  replyTo: { email: 'sravenall@suzanneravenall.com' },\n  subject,\n  htmlContent: html,\n});\n\nreturn [{\n  json: {\n    ...ctx,\n    emailPayload,\n    emailSubject: subject,\n  }\n}];"
       },
       "id": "mte-0012-0000-0000-000000000012",
       "name": "Prepare: Confirmation Email",
@@ -255,13 +255,13 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.resend.com/emails",
+        "url": "https://api.brevo.com/v3/smtp/email",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.RESEND_API_KEY }}"
+              "name": "api-key",
+              "value": "={{ $env.BREVO_API_KEY }}"
             },
             {
               "name": "Content-Type",
@@ -271,11 +271,11 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ $json.resendPayload }}",
+        "jsonBody": "={{ $json.emailPayload }}",
         "options": {}
       },
       "id": "mte-0013-0000-0000-000000000013",
-      "name": "Resend: Send Confirmation Email",
+      "name": "Brevo: Send Confirmation Email",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
@@ -312,7 +312,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Build admin error alert for failed enrollments.\nconst enrollCtx = $('Enroll: Per Course (isolated failures)').first().json;\nconst errors = enrollCtx.enrollmentErrors ?? [];\nconst errorDetails = errors.map(e => `<li>Course ID ${e.course_id} (${e.title}): ${e.error}</li>`).join('');\n\nconst subject = '[ALERT] Thinkific enrollment partial failure — order ' + (enrollCtx.orderId ?? 'unknown');\nconst html = [\n  '<h3>Thinkific enrollment errors for order ' + (enrollCtx.orderId ?? 'unknown') + '</h3>',\n  '<p>Customer: ' + enrollCtx.email + '</p>',\n  '<p>Thinkific user ID: ' + enrollCtx.thinkificUserId + '</p>',\n  '<p>Failed enrollments:</p>',\n  '<ul>' + errorDetails + '</ul>',\n  '<p>Successful: ' + (enrollCtx.enrollmentSuccessTitles ?? []).join(', ') + '</p>',\n  '<p>Please manually enroll the customer for the failed course(s) in the Thinkific admin: https://ravenallinstitute-9629.thinkific.com</p>',\n  '<p>Time: ' + new Date().toISOString() + '</p>',\n].join('');\n\nconst sentryDsn = $env.SENTRY_DSN ?? $env.SENTRY_DSN_WEB ?? $env.SENTRY_DSN_MEDUSA ?? '';\n\nreturn [{\n  json: {\n    ...enrollCtx,\n    adminAlertSubject: subject,\n    adminAlertHtml: html,\n    sentryDsn,\n    hasSentryDsn: !!sentryDsn && !sentryDsn.includes('<DSN'),\n  }\n}];"
+        "jsCode": "// Build admin error alert for failed enrollments.\nconst enrollCtx = $('Enroll: Per Course (isolated failures)').first().json;\nconst errors = enrollCtx.enrollmentErrors ?? [];\nconst errorDetails = errors.map(e => `<li>Course ID ${e.course_id} (${e.title}): ${e.error}</li>`).join('');\n\nconst subject = '[ALERT] Thinkific enrollment partial failure - order ' + (enrollCtx.orderId ?? 'unknown');\nconst html = [\n  '<h3>Thinkific enrollment errors for order ' + (enrollCtx.orderId ?? 'unknown') + '</h3>',\n  '<p>Customer: ' + enrollCtx.email + '</p>',\n  '<p>Thinkific user ID: ' + enrollCtx.thinkificUserId + '</p>',\n  '<p>Failed enrollments:</p>',\n  '<ul>' + errorDetails + '</ul>',\n  '<p>Successful: ' + (enrollCtx.enrollmentSuccessTitles ?? []).join(', ') + '</p>',\n  '<p>Please manually enroll the customer for the failed course(s) in the Thinkific admin: https://ravenallinstitute-9629.thinkific.com</p>',\n  '<p>Time: ' + new Date().toISOString() + '</p>',\n].join('');\n\nconst sentryDsn = $env.SENTRY_DSN ?? $env.SENTRY_DSN_WEB ?? $env.SENTRY_DSN_MEDUSA ?? '';\n\nreturn [{\n  json: {\n    ...enrollCtx,\n    adminAlertSubject: subject,\n    adminAlertHtml: html,\n    sentryDsn,\n    hasSentryDsn: !!sentryDsn && !sentryDsn.includes('<DSN'),\n  }\n}];"
       },
       "id": "mte-0015-0000-0000-000000000015",
       "name": "Prepare: Admin Error Alert",
@@ -326,13 +326,13 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.resend.com/emails",
+        "url": "https://api.brevo.com/v3/smtp/email",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.RESEND_API_KEY }}"
+              "name": "api-key",
+              "value": "={{ $env.BREVO_API_KEY }}"
             },
             {
               "name": "Content-Type",
@@ -342,7 +342,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ from: 'noreply@suzanneravenall.com', to: ['admin@suzanneravenall.com'], subject: $json.adminAlertSubject, html: $json.adminAlertHtml }) }}",
+        "jsonBody": "={{ JSON.stringify({ sender: { name: 'Suzanne Ravenall Platform', email: 'noreply@suzanneravenall.com' }, to: [{ email: $env.ALERT_EMAIL || 'admin@suzanneravenall.com' }], subject: $json.adminAlertSubject, htmlContent: $json.adminAlertHtml }) }}",
         "options": {}
       },
       "id": "mte-0016-0000-0000-000000000016",
@@ -384,13 +384,13 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.resend.com/emails",
+        "url": "https://api.brevo.com/v3/smtp/email",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.RESEND_API_KEY }}"
+              "name": "api-key",
+              "value": "={{ $env.BREVO_API_KEY }}"
             },
             {
               "name": "Content-Type",
@@ -400,7 +400,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ from: 'noreply@suzanneravenall.com', to: ['admin@suzanneravenall.com'], subject: $json.adminAlertSubject, html: $json.adminAlertHtml }) }}",
+        "jsonBody": "={{ JSON.stringify({ sender: { name: 'Suzanne Ravenall Platform', email: 'noreply@suzanneravenall.com' }, to: [{ email: $env.ALERT_EMAIL || 'admin@suzanneravenall.com' }], subject: $json.adminAlertSubject, htmlContent: $json.adminAlertHtml }) }}",
         "options": {}
       },
       "id": "mte-0019-0000-0000-000000000019",
@@ -428,7 +428,7 @@
     },
     {
       "parameters": {
-        "content": "## Medusa Order → Thinkific Enrollment\n\n**Trigger:** POST /webhook/medusa-order-complete\nFired by order-placed.ts subscriber when the order contains course products.\n\n**Required env vars in n8n container:**\n- THINKIFIC_API_KEY (Bearer token, write:all scope)\n- RESEND_API_KEY\n- N8N_WEBHOOK_SECRET (shared secret for signature verification)\n- SENTRY_DSN / SENTRY_DSN_WEB / SENTRY_DSN_MEDUSA (any of these — optional)\n\n**Thinkific subdomain:** ravenallinstitute-9629\n**Thinkific API base:** https://api.thinkific.com/api/public/v1\n**Thinkific admin:** https://ravenallinstitute-9629.thinkific.com\n\n**What this workflow does:**\n1. Verifies webhook secret header\n2. Extracts customer + course IDs from order line item product.metadata.thinkific_course_id\n3. Exits cleanly if no course items found (non-course order)\n4. Finds or creates Thinkific user by email\n5. Enrolls user in each course (isolated — one failure does not abort others)\n6. Sends customer confirmation email via Resend\n7. Sends admin alert email for any enrollment failures\n\n**Error policy:**\nFatal (user create/find) → admin alert → stop.\nPartial (per-course) → continue other courses → customer email → admin alert for failures.\nOrder is NEVER blocked.",
+        "content": "## Medusa Order → Thinkific Enrollment\n\n**Trigger:** POST /webhook/medusa-order-complete\nFired by order-placed.ts subscriber when the order contains course products.\n\n**Required env vars in n8n container:**\n- THINKIFIC_API_KEY (Bearer token, write:all scope)\n- BREVO_API_KEY\n- N8N_WEBHOOK_SECRET (shared secret for signature verification)\n- SENTRY_DSN / SENTRY_DSN_WEB / SENTRY_DSN_MEDUSA (any of these — optional)\n\n**Thinkific subdomain:** ravenallinstitute-9629\n**Thinkific API base:** https://api.thinkific.com/api/public/v1\n**Thinkific admin:** https://ravenallinstitute-9629.thinkific.com\n\n**What this workflow does:**\n1. Verifies webhook secret header\n2. Extracts customer + course IDs from order line item product.metadata.thinkific_course_id\n3. Exits cleanly if no course items found (non-course order)\n4. Finds or creates Thinkific user by email\n5. Enrolls user in each course (isolated — one failure does not abort others)\n6. Sends customer confirmation email via Brevo\n7. Sends admin alert email for any enrollment failures\n\n**Error policy:**\nFatal (user create/find) → admin alert → stop.\nPartial (per-course) → continue other courses → customer email → admin alert for failures.\nOrder is NEVER blocked.",
         "height": 420,
         "width": 500,
         "color": 4
@@ -602,14 +602,14 @@
       "main": [
         [
           {
-            "node": "Resend: Send Confirmation Email",
+            "node": "Brevo: Send Confirmation Email",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Resend: Send Confirmation Email": {
+    "Brevo: Send Confirmation Email": {
       "main": [
         [
           {

@@ -194,13 +194,14 @@
     },
     {
       "parameters": {
-        "url": "=https://api.resend.com/emails",
+        "method": "POST",
+        "url": "https://api.brevo.com/v3/smtp/email",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.RESEND_API_KEY }}"
+              "name": "api-key",
+              "value": "={{ $env.BREVO_API_KEY }}"
             },
             {
               "name": "Content-Type",
@@ -210,11 +211,12 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"noreply@suzanneravenall.com\",\n  \"to\": [\"dercksenjf@gmail.com\"],\n  \"subject\": \"[ACTION REQUIRED] Sage Invoice Sync — {{ $json.data.length }} order(s) missing\",\n  \"html\": \"<h2>Sage Invoice Sync Alert</h2><p><strong>{{ $json.data.length }}</strong> order(s) from the last 24 hours are missing Sage invoices.</p><table border='1' cellpadding='8' style='border-collapse:collapse'><tr><th>Order ID</th><th>Display</th><th>Customer</th><th>Total (ZAR)</th><th>Status</th></tr>{{ $json.data.map(o => `<tr><td>${o.id}</td><td>#${o.display_id}</td><td>${o.customer?.email ?? 'unknown'}</td><td>R${((o.total ?? 0) / 100).toFixed(2)}</td><td>${o.status}</td></tr>`).join('') }}</table><p>Check the Medusa admin and Sage dashboard. Possible causes: Sage API was unavailable, missing credentials, or n8n workflow error.</p><p><em>Sent by: sage-invoice-sync n8n workflow — {{ new Date().toISOString() }}</em></p>\"\n}",
+        "jsonBody": "={{ JSON.stringify({ sender: { name: 'Suzanne Ravenall Platform', email: 'noreply@suzanneravenall.com' }, to: [{ email: $env.ALERT_EMAIL || 'admin@suzanneravenall.com' }], subject: \"[ACTION REQUIRED] Sage Invoice Sync - \" + ($json.data.length) + \" order(s) missing\", htmlContent: \"<h2>Sage Invoice Sync Alert</h2><p><strong>\" + ($json.data.length) + \"</strong> order(s) from the last 24 hours are missing Sage invoices.</p><table border='1' cellpadding='8' style='border-collapse:collapse'><tr><th>Order ID</th><th>Display</th><th>Customer</th><th>Total (ZAR)</th><th>Status</th></tr>\" + ($json.data.map(o => `<tr><td>${o.id}</td><td>#${o.display_id}</td><td>${o.customer?.email ?? 'unknown'}</td><td>R${((o.total ?? 0) / 100).toFixed(2)}</td><td>${o.status}</td></tr>`).join('')) + \"</table><p>Check the Medusa admin and Sage dashboard. Possible causes: Sage API was unavailable, missing credentials, or n8n workflow error.</p><p><em>Sent by: sage-invoice-sync n8n workflow - \" + (new Date().toISOString()) + \"</em></p>\" }) }}",
         "options": {}
       },
       "id": "sis00001-0000-0000-0000-000000000009",
-      "name": "Resend: Alert Admin — Missing Invoices",
+      "name": "Brevo: Alert Admin - Missing Invoices",
+      "onError": "continueRegularOutput",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [2000, 40],
@@ -308,7 +310,7 @@
     },
     "IF: Any Missing": {
       "main": [
-        [{ "node": "Resend: Alert Admin — Missing Invoices", "type": "main", "index": 0 }],
+        [{ "node": "Brevo: Alert Admin - Missing Invoices", "type": "main", "index": 0 }],
         [{ "node": "Log: All Synced OK", "type": "main", "index": 0 }]
       ]
     }

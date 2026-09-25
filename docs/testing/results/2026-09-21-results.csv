@@ -26,3 +26,5 @@ getting-unstuck (order #6),T3 invoice,"PDF generated and stored (invoice_url on 
 getting-unstuck (order #6),T3 confirmation email,"Route reaches Resend; blocked only by the unverified domain (KI035, Brevo tomorrow)",,,blocked,2026-09-22,
 getting-unstuck (orders #7 and #9),T2/CRM,"No n8n execution at all: orders placed inside the 90s after an n8n restart are lost (KI056)",,,fail,2026-09-22,
 getting-unstuck (orders #8 to #12),CRM Vtiger,"Contact 12x188 QA SelfTest created (#8) and updated (#11); activity needs Events + duration (KI054), proof on #13",,,fixed,2026-09-22,
+All products,T3 emails,"Provider switched to Brevo (domain verified 23 Sep): one sender for the app, contact form fails loudly (KI035), seven n8n workflows converted; waiting on the Brevo API key on the VPS to send the first real email",,apps/web/lib/email/send.ts,pending,2026-09-25,
+Portal login / forgot password,T3 emails,"GoTrue SMTP still empty (KI039): needs the Brevo SMTP key on aimate-db1, one env edit + auth restart, then autoconfirm off",,KNOWN_ISSUES.md KI039,blocked,2026-09-25,

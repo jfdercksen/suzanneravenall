@@ -48,8 +48,9 @@
 - Never store raw card data — always use the payment provider tokenisation
 
 ## Email
-- Resend for all transactional email — docs: https://resend.com/docs
-- Never use nodemailer, sendgrid, or any other email provider
+- Brevo for all transactional email, through `apps/web/lib/email/send.ts` (REST API v3, plain fetch): https://developers.brevo.com/reference/sendtransacemail. Chosen 2026-09-17 (Johan) and wired 2026-09-25 once suzanneravenall.com was verified in Brevo; Resend is retired
+- Never call a mail provider directly from a route or template; every send goes through `sendEmail()` so the provider can change in one place
+- Never use nodemailer, sendgrid, or any other email provider in the app; the login server (GoTrue) uses Brevo's SMTP relay
 - All email templates use React Email — docs: https://react.email/docs
 - Templates go in `packages/ui/emails/`
 

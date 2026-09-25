@@ -276,17 +276,17 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.resend.com/emails",
+        "url": "https://api.brevo.com/v3/smtp/email",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "Authorization", "value": "=Bearer {{ $env.RESEND_API_KEY }}" },
+            { "name": "api-key", "value": "={{ $env.BREVO_API_KEY }}" },
             { "name": "Content-Type", "value": "application/json" }
           ]
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ from: 'noreply@suzanneravenall.com', to: ['admin@suzanneravenall.com'], subject: $json.subject, html: '<p><strong>Lead Magnet → Vtiger sync failed.</strong></p><p>Email: ' + $json.email + '</p><p>Error: ' + $json.errorMessage + '</p><p>Time: ' + $json.timestamp + '</p>' }) }}",
+        "jsonBody": "={{ JSON.stringify({ sender: { name: 'Suzanne Ravenall Platform', email: 'noreply@suzanneravenall.com' }, to: [{ email: $env.ALERT_EMAIL || 'admin@suzanneravenall.com' }], subject: $json.subject, htmlContent: '<p><strong>Lead Magnet → Vtiger sync failed.</strong></p><p>Email: ' + $json.email + '</p><p>Error: ' + $json.errorMessage + '</p><p>Time: ' + $json.timestamp + '</p>' }) }}",
         "options": {}
       },
       "id": "lm2v-0018-0000-0000-000000000018",
@@ -308,7 +308,7 @@
     },
     {
       "parameters": {
-        "content": "## Lead Magnet Submission → Vtiger Contact\n\n**Trigger:** POST /webhook/lead-magnet-submission\nFired by /api/lead-magnet route in apps/web\n\n**Required env vars in n8n:**\n- VTIGER_URL\n- VTIGER_USERNAME\n- VTIGER_ACCESS_KEY\n- RESEND_API_KEY\n\n**What this workflow does:**\n1. Validates email, first_name, source\n2. Checks if contact exists in Vtiger\n3a. Exists → update lead_source if blank, log activity\n3b. New → create with lead_source='Lead Magnet', stage='New Lead'\n4. Creates Activity: 'Lead Magnet Download — {source}'\n\n**Error policy:** log + Resend alert, never blocks.",
+        "content": "## Lead Magnet Submission → Vtiger Contact\n\n**Trigger:** POST /webhook/lead-magnet-submission\nFired by /api/lead-magnet route in apps/web\n\n**Required env vars in n8n:**\n- VTIGER_URL\n- VTIGER_USERNAME\n- VTIGER_ACCESS_KEY\n- BREVO_API_KEY\n\n**What this workflow does:**\n1. Validates email, first_name, source\n2. Checks if contact exists in Vtiger\n3a. Exists → update lead_source if blank, log activity\n3b. New → create with lead_source='Lead Magnet', stage='New Lead'\n4. Creates Activity: 'Lead Magnet Download — {source}'\n\n**Error policy:** log + Brevo alert, never blocks.",
         "height": 300,
         "width": 440,
         "color": 4

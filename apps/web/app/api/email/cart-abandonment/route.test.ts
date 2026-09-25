@@ -17,6 +17,11 @@ vi.mock('@/lib/email/cart-abandonment-3', () => ({
   sendCartAbandonmentEmail3: mockSend3,
 }))
 
+// The suppression lookup hits Supabase; the route tests are about dispatch, not opt-outs.
+vi.mock('@/lib/email/suppression', () => ({
+  isEmailUnsubscribed: vi.fn().mockResolvedValue(false),
+}))
+
 import { POST } from './route'
 
 // ---------------------------------------------------------------------------
@@ -58,7 +63,7 @@ describe('POST /api/email/cart-abandonment', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.stubEnv('N8N_WEBHOOK_SECRET', TEST_SECRET)
-    vi.stubEnv('RESEND_API_KEY', 'test_resend_key')
+    vi.stubEnv('BREVO_API_KEY', 'test_brevo_key')
   })
 
   // -------------------------------------------------------------------------
@@ -364,8 +369,8 @@ describe('POST /api/email/cart-abandonment', () => {
       consoleSpy.mockRestore()
     })
 
-    it('returns 500 when RESEND_API_KEY is not set', async () => {
-      vi.stubEnv('RESEND_API_KEY', '')
+    it('returns 500 when BREVO_API_KEY is not set', async () => {
+      vi.stubEnv('BREVO_API_KEY', '')
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       const res = await POST(makeRequest(validBody) as any)

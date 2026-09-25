@@ -378,13 +378,13 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.resend.com/emails",
+        "url": "https://api.brevo.com/v3/smtp/email",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.RESEND_API_KEY }}"
+              "name": "api-key",
+              "value": "={{ $env.BREVO_API_KEY }}"
             },
             {
               "name": "Content-Type",
@@ -394,7 +394,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ from: 'noreply@suzanneravenall.com', to: ['admin@suzanneravenall.com'], subject: $json.subject, html: '<p><strong>Medusa → Vtiger sync failed.</strong></p><p>Email: ' + $json.email + '</p><p>Error: ' + $json.errorMessage + '</p><p>Time: ' + $json.timestamp + '</p>' }) }}",
+        "jsonBody": "={{ JSON.stringify({ sender: { name: 'Suzanne Ravenall Platform', email: 'noreply@suzanneravenall.com' }, to: [{ email: $env.ALERT_EMAIL || 'admin@suzanneravenall.com' }], subject: $json.subject, htmlContent: '<p><strong>Medusa → Vtiger sync failed.</strong></p><p>Email: ' + $json.email + '</p><p>Error: ' + $json.errorMessage + '</p><p>Time: ' + $json.timestamp + '</p>' }) }}",
         "options": {}
       },
       "id": "mo2v-0018-0000-0000-000000000018",
@@ -422,7 +422,7 @@
     },
     {
       "parameters": {
-        "content": "## Medusa Order → Vtiger Contact Update\n\n**Trigger:** POST /webhook/medusa-order-vtiger\nFired by order-placed.ts subscriber (separate from Sage webhook)\n\n**Required env vars in n8n:**\n- VTIGER_URL\n- VTIGER_USERNAME\n- VTIGER_ACCESS_KEY\n- RESEND_API_KEY\n\n**What this workflow does:**\n1. Validates customer email and order total\n2. Finds or creates Vtiger contact by email\n3. Updates: last_purchase_date, total_spend_zar (incremented), pipeline → Closed Won\n4. Creates Activity: 'Purchase — {products}, R{total}'\n\n**Note:** total_spend_zar is incremented, not replaced.",
+        "content": "## Medusa Order → Vtiger Contact Update\n\n**Trigger:** POST /webhook/medusa-order-vtiger\nFired by order-placed.ts subscriber (separate from Sage webhook)\n\n**Required env vars in n8n:**\n- VTIGER_URL\n- VTIGER_USERNAME\n- VTIGER_ACCESS_KEY\n- BREVO_API_KEY\n\n**What this workflow does:**\n1. Validates customer email and order total\n2. Finds or creates Vtiger contact by email\n3. Updates: last_purchase_date, total_spend_zar (incremented), pipeline → Closed Won\n4. Creates Activity: 'Purchase — {products}, R{total}'\n\n**Note:** total_spend_zar is incremented, not replaced.",
         "height": 300,
         "width": 440,
         "color": 4

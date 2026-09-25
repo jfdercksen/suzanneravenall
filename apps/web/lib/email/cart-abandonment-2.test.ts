@@ -2,10 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const { mockSend } = vi.hoisted(() => ({ mockSend: vi.fn() }))
 
-vi.mock('resend', () => ({
-  Resend: vi.fn().mockImplementation(() => ({
-    emails: { send: mockSend },
-  })),
+vi.mock('./send', () => ({
+  sendEmail: mockSend,
 }))
 
 vi.mock('./templates/CartAbandonment2', () => ({ default: () => null }))
@@ -33,7 +31,7 @@ describe('sendCartAbandonmentEmail2', () => {
   })
 
   it('returns the emailId string on success', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_010' }, error: null })
+    mockSend.mockResolvedValue('email_id_010')
 
     const id = await sendCartAbandonmentEmail2(baseData)
 
@@ -41,7 +39,7 @@ describe('sendCartAbandonmentEmail2', () => {
   })
 
   it('always uses the fixed subject line', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_011' }, error: null })
+    mockSend.mockResolvedValue('email_id_011')
 
     await sendCartAbandonmentEmail2(baseData)
 
@@ -53,28 +51,23 @@ describe('sendCartAbandonmentEmail2', () => {
     )
   })
 
-  it('throws when Resend returns an error object', async () => {
-    mockSend.mockResolvedValue({ data: null, error: { message: 'invalid api key' } })
+  it('propagates a provider error', async () => {
+    mockSend.mockRejectedValue(new Error(`Brevo error: ${'invalid api key'}`))
 
     await expect(sendCartAbandonmentEmail2(baseData)).rejects.toThrow(
-      'Resend error: invalid api key',
+      'Brevo error: invalid api key',
     )
   })
 
-  it('throws when Resend returns null result and no error', async () => {
-    mockSend.mockResolvedValue({ data: null, error: null })
 
-    await expect(sendCartAbandonmentEmail2(baseData)).rejects.toThrow('Resend returned no result')
-  })
-
-  it('throws when the Resend SDK itself rejects', async () => {
+  it('propagates a transport failure', async () => {
     mockSend.mockRejectedValue(new Error('connection timeout'))
 
     await expect(sendCartAbandonmentEmail2(baseData)).rejects.toThrow('connection timeout')
   })
 
   it('sends to the correct email address', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_012' }, error: null })
+    mockSend.mockResolvedValue('email_id_012')
 
     await sendCartAbandonmentEmail2({ ...baseData, email: 'another@example.com' })
 

@@ -32,7 +32,7 @@ export function createUnsubscribeToken(email: string): string {
 
 /**
  * Returns the verified email address, or null for a missing/tampered/garbled
- * token. Never throws — verification failures are indistinguishable from a
+ * token. Never throws - verification failures are indistinguishable from a
  * bad link to the caller.
  */
 export function verifyUnsubscribeToken(token: string | null | undefined): string | null {
@@ -64,7 +64,7 @@ export function buildUnsubscribeUrl(email: string): string {
 /**
  * RFC 8058 one-click unsubscribe headers for Resend's `headers` option.
  * Mail clients (Gmail, Outlook) POST straight to the API route with the
- * token in the query string — no page visit involved.
+ * token in the query string - no page visit involved.
  */
 export function buildListUnsubscribeHeaders(email: string): Record<string, string> {
   const token = encodeURIComponent(createUnsubscribeToken(email))

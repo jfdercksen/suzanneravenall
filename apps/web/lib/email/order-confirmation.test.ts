@@ -4,10 +4,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 // the vi.mock factory (which itself is hoisted to the top of the file).
 const { mockSend } = vi.hoisted(() => ({ mockSend: vi.fn() }))
 
-vi.mock('resend', () => ({
-  Resend: vi.fn().mockImplementation(() => ({
-    emails: { send: mockSend },
-  })),
+vi.mock('./send', () => ({
+  sendEmail: mockSend,
 }))
 
 vi.mock('../../emails/OrderConfirmation', () => ({ default: () => null }))
@@ -42,7 +40,7 @@ describe('sendOrderConfirmationEmail', () => {
   })
 
   it('returns the emailId string on success', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_001' }, error: null })
+    mockSend.mockResolvedValue('email_id_001')
 
     const id = await sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl: null })
 
@@ -50,19 +48,19 @@ describe('sendOrderConfirmationEmail', () => {
   })
 
   it('subject line uses order display number', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_002' }, error: null })
+    mockSend.mockResolvedValue('email_id_002')
 
     await sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl: null })
 
     expect(mockSend).toHaveBeenCalledWith(
       expect.objectContaining({
-        subject: 'Your transformation begins — Order #42',
+        subject: 'Your transformation begins - Order #42',
       }),
     )
   })
 
   it('sends to the correct email address from order.email', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_003' }, error: null })
+    mockSend.mockResolvedValue('email_id_003')
 
     await sendOrderConfirmationEmail({
       order: { ...baseOrder, email: 'other@example.com' },
@@ -74,23 +72,16 @@ describe('sendOrderConfirmationEmail', () => {
     )
   })
 
-  it('throws when Resend returns an error object', async () => {
-    mockSend.mockResolvedValue({ data: null, error: { message: 'rate limited' } })
+  it('propagates a provider error', async () => {
+    mockSend.mockRejectedValue(new Error(`Brevo error: ${'rate limited'}`))
 
     await expect(
       sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl: null }),
-    ).rejects.toThrow('Resend error: rate limited')
+    ).rejects.toThrow('Brevo error: rate limited')
   })
 
-  it('throws when Resend returns null result and no error', async () => {
-    mockSend.mockResolvedValue({ data: null, error: null })
 
-    await expect(
-      sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl: null }),
-    ).rejects.toThrow('Resend returned no result')
-  })
-
-  it('throws when Resend SDK rejects entirely', async () => {
+  it('propagates a transport failure', async () => {
     mockSend.mockRejectedValue(new Error('network failure'))
 
     await expect(
@@ -98,12 +89,12 @@ describe('sendOrderConfirmationEmail', () => {
     ).rejects.toThrow('network failure')
   })
 
-  it('passes the text field to resend.emails.send containing the order number', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_004' }, error: null })
+  it('passes a plain-text body containing the order number', async () => {
+    mockSend.mockResolvedValue('email_id_004')
 
     await sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl: null })
 
-    // The `await` above guarantees sendOrderConfirmationEmail called mockSend — calls[0] exists
+    // The `await` above guarantees sendOrderConfirmationEmail called mockSend - calls[0] exists
     const callArg = mockSend.mock.calls[0]![0] as Record<string, unknown>
     expect(callArg).toHaveProperty('text')
     expect(typeof callArg.text).toBe('string')
@@ -111,43 +102,43 @@ describe('sendOrderConfirmationEmail', () => {
   })
 
   it('includes invoiceUrl in plain text when invoiceUrl is provided', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_005' }, error: null })
+    mockSend.mockResolvedValue('email_id_005')
     const invoiceUrl = 'https://cdn.suzanneravenall.com/invoices/order_42.pdf'
 
     await sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl })
 
-    // The `await` above guarantees sendOrderConfirmationEmail called mockSend — calls[0] exists
+    // The `await` above guarantees sendOrderConfirmationEmail called mockSend - calls[0] exists
     const callArg = mockSend.mock.calls[0]![0] as Record<string, unknown>
     expect(callArg.text as string).toContain(invoiceUrl)
   })
 
   it('does not include invoice URL section in plain text when invoiceUrl is null', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_006' }, error: null })
+    mockSend.mockResolvedValue('email_id_006')
 
     await sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl: null })
 
-    // The `await` above guarantees sendOrderConfirmationEmail called mockSend — calls[0] exists
+    // The `await` above guarantees sendOrderConfirmationEmail called mockSend - calls[0] exists
     const callArg = mockSend.mock.calls[0]![0] as Record<string, unknown>
     expect(callArg.text as string).not.toContain('YOUR TAX INVOICE')
     expect(callArg.text as string).not.toContain('Download:')
   })
 
   it('uses firstName in plain text when provided', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_007' }, error: null })
+    mockSend.mockResolvedValue('email_id_007')
 
     await sendOrderConfirmationEmail({ order: { ...baseOrder, firstName: 'Alice' }, invoiceUrl: null })
 
-    // The `await` above guarantees sendOrderConfirmationEmail called mockSend — calls[0] exists
+    // The `await` above guarantees sendOrderConfirmationEmail called mockSend - calls[0] exists
     const callArg = mockSend.mock.calls[0]![0] as Record<string, unknown>
     expect(callArg.text as string).toContain('Dear Alice,')
   })
 
   it('falls back to "valued customer" in plain text when firstName is null', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_id_008' }, error: null })
+    mockSend.mockResolvedValue('email_id_008')
 
     await sendOrderConfirmationEmail({ order: { ...baseOrder, firstName: null }, invoiceUrl: null })
 
-    // The `await` above guarantees sendOrderConfirmationEmail called mockSend — calls[0] exists
+    // The `await` above guarantees sendOrderConfirmationEmail called mockSend - calls[0] exists
     const callArg = mockSend.mock.calls[0]![0] as Record<string, unknown>
     expect(callArg.text as string).toContain('Dear valued customer,')
   })

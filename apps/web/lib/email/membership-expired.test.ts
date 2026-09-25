@@ -4,10 +4,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 // the vi.mock factory (which itself is hoisted to the top of the file).
 const { mockSend } = vi.hoisted(() => ({ mockSend: vi.fn() }))
 
-vi.mock('resend', () => ({
-  Resend: vi.fn().mockImplementation(() => ({
-    emails: { send: mockSend },
-  })),
+vi.mock('./send', () => ({
+  sendEmail: mockSend,
 }))
 
 vi.mock('./templates/MembershipExpired', () => ({ default: () => null }))
@@ -29,13 +27,13 @@ describe('sendMembershipExpiredEmail', () => {
     vi.clearAllMocks()
     // The send function fails loudly without an API key; stub it so tests
     // don't depend on the developer's local .env
-    vi.stubEnv('RESEND_API_KEY', 'test_resend_key')
+    vi.stubEnv('BREVO_API_KEY', 'test_brevo_key')
     // Send functions now sign an unsubscribe link per recipient
     vi.stubEnv('EMAIL_UNSUBSCRIBE_SECRET', 'test-unsubscribe-secret')
   })
 
   it('returns the emailId string on success', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_expired_001' }, error: null })
+    mockSend.mockResolvedValue('email_expired_001')
 
     const id = await sendMembershipExpiredEmail(baseData)
 
@@ -43,7 +41,7 @@ describe('sendMembershipExpiredEmail', () => {
   })
 
   it('includes the first name in the subject when firstName is provided', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_expired_002' }, error: null })
+    mockSend.mockResolvedValue('email_expired_002')
 
     await sendMembershipExpiredEmail(baseData)
 
@@ -56,7 +54,7 @@ describe('sendMembershipExpiredEmail', () => {
   })
 
   it('uses generic subject when firstName is null', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_expired_003' }, error: null })
+    mockSend.mockResolvedValue('email_expired_003')
     const dataWithoutName: MembershipEmailData = { ...baseData, firstName: null }
 
     await sendMembershipExpiredEmail(dataWithoutName)
@@ -67,7 +65,7 @@ describe('sendMembershipExpiredEmail', () => {
   })
 
   it('sends to the correct email address', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_expired_004' }, error: null })
+    mockSend.mockResolvedValue('email_expired_004')
 
     await sendMembershipExpiredEmail({ ...baseData, email: 'other@example.com' })
 
@@ -77,7 +75,7 @@ describe('sendMembershipExpiredEmail', () => {
   })
 
   it('includes the correct replyTo address', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_expired_005' }, error: null })
+    mockSend.mockResolvedValue('email_expired_005')
 
     await sendMembershipExpiredEmail(baseData)
 
@@ -87,52 +85,30 @@ describe('sendMembershipExpiredEmail', () => {
   })
 
   // FROM is a module-level constant captured once at import time via `?? fallback`.
-  // The fallback value is always used in the test environment (no RESEND_FROM_ADDRESS set),
-  // which is what this test verifies. The env-var-override path is an infrastructure concern
-  // that cannot be tested without module re-loading and is covered by the source code review.
-  it('sends with a non-empty from address', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_expired_006' }, error: null })
+  it('leaves the sender to the shared default in lib/email/send.ts', async () => {
+    mockSend.mockResolvedValue('email_from_check')
 
     await sendMembershipExpiredEmail(baseData)
 
-    // The `await` above guarantees sendMembershipExpiredEmail called mockSend — calls[0] exists
-    const call = mockSend.mock.calls[0]![0] as { from: string }
-    expect(call.from).toBeTruthy()
-    expect(typeof call.from).toBe('string')
+    const call = mockSend.mock.calls[0]![0] as { from?: string }
+    expect(call.from).toBeUndefined()
   })
 
-  it('uses the default from address in test environment', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_expired_007' }, error: null })
+  it('propagates a provider error', async () => {
+    mockSend.mockRejectedValue(new Error(`Brevo error: ${'rate limited'}`))
 
-    await sendMembershipExpiredEmail(baseData)
-
-    expect(mockSend).toHaveBeenCalledWith(
-      expect.objectContaining({
-        from: 'Dr Suzanne Ravenall <hello@suzanneravenall.com>',
-      }),
-    )
+    await expect(sendMembershipExpiredEmail(baseData)).rejects.toThrow('Brevo error: rate limited')
   })
 
-  it('throws when Resend returns an error object', async () => {
-    mockSend.mockResolvedValue({ data: null, error: { message: 'rate limited' } })
 
-    await expect(sendMembershipExpiredEmail(baseData)).rejects.toThrow('Resend error: rate limited')
-  })
-
-  it('throws when Resend returns null result and no error', async () => {
-    mockSend.mockResolvedValue({ data: null, error: null })
-
-    await expect(sendMembershipExpiredEmail(baseData)).rejects.toThrow('Resend returned no result')
-  })
-
-  it('throws when the Resend SDK itself rejects', async () => {
+  it('propagates a transport failure', async () => {
     mockSend.mockRejectedValue(new Error('network failure'))
 
     await expect(sendMembershipExpiredEmail(baseData)).rejects.toThrow('network failure')
   })
 
   it('subject uses the firstName field not the tierLabel field', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_expired_008' }, error: null })
+    mockSend.mockResolvedValue('email_expired_008')
     const namedData: MembershipEmailData = { ...baseData, firstName: 'Bob', tierLabel: 'Practitioner' }
 
     await sendMembershipExpiredEmail(namedData)
@@ -143,7 +119,7 @@ describe('sendMembershipExpiredEmail', () => {
   })
 
   it('works correctly when renewalDate is null', async () => {
-    mockSend.mockResolvedValue({ data: { id: 'email_expired_009' }, error: null })
+    mockSend.mockResolvedValue('email_expired_009')
     const dataWithoutRenewal: MembershipEmailData = { ...baseData, renewalDate: null }
 
     const id = await sendMembershipExpiredEmail(dataWithoutRenewal)

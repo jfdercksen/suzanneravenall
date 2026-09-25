@@ -22,7 +22,7 @@ These are checked, not assumed. Each has an owner. Until B1 to B3 are cleared, t
 |---|---|---|---|---|
 | B1 | The checkout has no voucher field and no way to place a free order. T1 cannot be done from the site at all. | `components/checkout/CheckoutContent.tsx` only offers PayFast and PayPal; no call to `/store/carts/:id/promotions` anywhere in `apps/web`; the Medusa DB has 0 promotions | Add a voucher input to the checkout (applies `promo_codes` to the cart), and when the cart total is 0 show "Place order" that completes the cart without a gateway. Medusa 2.14 already completes a zero-total cart with no payment session (`validateCartPaymentsStep`, `canSkipPayment`). Create the QA voucher (100%, order level) via the admin API. Filed as KI040 | Build (this repo) |
 | B2 | Thinkific is not wired on the VPS. No order enrols anyone. | VPS `infra/.env`: `THINKIFIC_API_KEY` empty, `N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL` empty; the n8n workflow "Medusa Order → Thinkific Enrollment" is not imported (12 workflows listed, this one absent). The subscriber skips the call when the URL is empty | The token exists locally (`infra/.env`, a Thinkific API access token, scope write:all, valid to 17 Jun 2027, subdomain ravenallinstitute-9629, tested 200 on 21 Sep). Steps: (1) token into Vaultwarden, name only into the API catalog; (2) VPS `infra/.env`: `THINKIFIC_API_KEY`, `N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL=http://n8n:5678/webhook/medusa-order-complete`; (3) import and activate the workflow (`docker compose exec n8n n8n import:workflow --input=/workflows/medusa-thinkific-enrollment.json`, then activate); (4) `docker compose up -d medusa n8n`. Filed as KI041 | Johan approves the VPS write, then build applies |
-| B3 | No email can leave the platform. T3 fails for every product. | Resend domain unverified (KI035); GoTrue SMTP host empty (KI039); the n8n Thinkific and Vtiger workflows also send through Resend | Brevo: DNS records at host-h (Johan, never DMARC or SPF), Brevo SMTP key into Vaultwarden (Johan), then the app and GoTrue switch to Brevo SMTP. DNS propagation is the long pole; start now | Johan |
+| B3 | No email can leave the platform. T3 fails for every product. | Resend domain unverified (KI035); GoTrue SMTP host empty (KI039); the n8n Thinkific and Vtiger workflows also send through Resend | 25 Sep: DNS in and the domain green in Brevo (23 Sep). App, contact form and the seven n8n workflows switched to Brevo's API (code deployed). Left: the Brevo API key into the VPS `infra/.env` and the Brevo SMTP key into the login server env, both Johan, see the Brevo section below | Johan |
 | B4 | 15 add-on products (KI006) do not exist on the VPS yet, so they cannot be tested | Migration fixed in code 11 Aug, never run on the box | Run the migration on the VPS (dry run, then live), re-run descriptions and images scripts | Johan approves, build runs |
 | B5 | Every test order writes to Suzanne's live Thinkific and to our Vtiger (workflow "Medusa Order → Vtiger Contact Update" is active) | n8n list on the VPS | One named test buyer, one cleanup step, Johan approves per item before anything is removed (see Side effects) | Johan approves before the full run |
 
@@ -65,7 +65,7 @@ Expected mails per order (the harness writes this list per row):
 
 | Trigger | Mail | Sender | When |
 |---|---|---|---|
-| Every order | Order confirmation, with invoice link when the PDF generated | Next `/api/email/order-confirmation` via Resend (Brevo after B3) | Right after order.placed |
+| Every order | Order confirmation, with invoice link when the PDF generated | Next `/api/email/order-confirmation` via Brevo (`lib/email/send.ts`) | Right after order.placed |
 | Course product | Enrolment confirmation | n8n Thinkific workflow via Resend | After enrolment |
 | Course product, first time | Thinkific's own welcome and course access mail | Thinkific | On user creation |
 | Membership product | Membership welcome | Next `/api/email/membership-welcome` | After activation |
@@ -152,3 +152,32 @@ node infra/scripts/qa/purchase-harness.mjs --cleanup-plan --from=docs/testing/re
 ```
 
 Env the harness reads: `NEXT_PUBLIC_MEDUSA_URL` (default `http://169.239.180.49/api`), `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY`, `MEDUSA_ADMIN_EMAIL` and `MEDUSA_ADMIN_PASSWORD` (or `MEDUSA_API_TOKEN`), `QA_BUYER_EMAIL`, `QA_PROMO_CODE` (default `QA-SELFTEST-100`), `THINKIFIC_API_KEY` (for the enrolment check only).
+
+## Brevo: the two keys and where they go (25 Sep)
+
+Brevo issues two different credentials. Both live in Vaultwarden; neither is ever pasted into chat or a file in the repo.
+
+| Key | Looks like | Where it goes | Used by |
+|---|---|---|---|
+| API key (Brevo: SMTP & API, "API keys" tab) | `xkeysib-...` | Review VPS `/var/www/suzanneravenall/suzanneravenall/infra/.env`, line `BREVO_API_KEY=` (the line exists, empty) | Web app (`lib/email/send.ts`: order confirmation, contact form, quiz, membership, cart emails) and the seven n8n workflows (alerts, weekly report, the buyer's "course access is ready" email) |
+| SMTP key (Brevo: SMTP & API, "SMTP" tab) | `xsmtpsib-...` with the account login as user | aimate-db1 `~/apps/suzanne/.env` as `SMTP_USER` / `SMTP_PASS` | The login server (GoTrue): magic link, password reset, confirmation |
+
+After the API key is in place on the review VPS (run from `infra/`):
+
+```bash
+docker compose -f docker-compose.yml up -d --no-deps web n8n
+```
+
+Then one voucher order through the harness proves T3: the web log shows a Brevo message id for the confirmation, the Thinkific workflow's "Brevo: Send Confirmation Email" node goes green, and both land in the test inbox.
+
+Login server (KI039 step 5), on aimate-db1 in `~/apps/suzanne/.env`, then `cd ~/apps/suzanne && docker compose up -d auth`:
+
+```
+SMTP_HOST=smtp-relay.brevo.com
+SMTP_PORT=587
+SMTP_USER=<Brevo account login email>
+SMTP_PASS=<Brevo SMTP key>
+SMTP_ADMIN_EMAIL=noreply@suzanneravenall.com
+```
+
+The compose file already maps these to `GOTRUE_SMTP_*`. Still to add to that compose file in the same step (from the 17 Sep plan): `GOTRUE_SMTP_SENDER_NAME: Dr Suzanne Ravenall`, `GOTRUE_MAILER_OTP_EXP: 3600`, and the four `GOTRUE_MAILER_TEMPLATES_*` URLs at `http://169.239.180.49/email-templates/{confirm,magic-link,reset-password,email-change}.html` (move to https://suzanneravenall.com at cutover). Step 6 afterwards: `MAILER_AUTOCONFIRM=false` and a magic-link plus reset test to the test inbox.
