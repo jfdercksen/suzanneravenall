@@ -21,7 +21,7 @@ const FAQ_ITEMS = [
     id: 'faq-2',
     question: 'Where are sessions held?',
     answer:
-      'All sessions are online via Zoom. In-person sessions in Cape Town are available for local clients.', // TODO: Suzanne to review and personalise
+      'All sessions are online via Zoom. In-person sessions in Johannesburg are available for local clients.', // TODO: Suzanne to review and personalise
   },
   {
     id: 'faq-3',

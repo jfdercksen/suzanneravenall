@@ -93,7 +93,7 @@ function buildPlainText(order: OrderEmailData, invoiceUrl: string | null): strin
     '',
     '---',
     'Dr Suzanne Ravenall · Ravenall Institute',
-    'Cape Town, South Africa',
+    'Johannesburg, South Africa',
     'Powered by Ai Dynamic Advisory'
   )
 

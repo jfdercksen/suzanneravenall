@@ -31,6 +31,6 @@ function buildPlainText({ firstName, quizTitle, link }: QuizInviteEmailData): st
     'Dr Suzanne Ravenall',
     '',
     '---',
-    'Ravenall Institute · Cape Town, South Africa',
+    'Ravenall Institute · Johannesburg, South Africa',
   ].join('\n')
 }
