@@ -386,6 +386,30 @@ describe('POST /api/email/cart-abandonment', () => {
       }
     )
 
+    it('turns a site-relative thumbnail into an absolute URL and drops anything else', async () => {
+      vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'https://suzanneravenall.com/')
+      mockSend1.mockResolvedValue('id-thumb')
+      const item = { id: 'i1', title: 'T', quantity: 1, unit_price: 100 }
+
+      await POST(
+        makeRequest({
+          ...validBody,
+          items: [
+            { ...item, thumbnail: '/images/products/a.png' },
+            { ...item, id: 'i2', thumbnail: 'https://cdn.example.com/b.png' },
+            { ...item, id: 'i3', thumbnail: 'javascript:alert(1)' },
+          ],
+        }) as any
+      )
+
+      const sent = mockSend1.mock.calls[0]![0] as { items: Array<{ thumbnail?: string }> }
+      expect(sent.items.map((i) => i.thumbnail)).toEqual([
+        'https://suzanneravenall.com/images/products/a.png',
+        'https://cdn.example.com/b.png',
+        undefined,
+      ])
+    })
+
     it('returns 500 when BREVO_API_KEY is not set', async () => {
       vi.stubEnv('BREVO_API_KEY', '')
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})

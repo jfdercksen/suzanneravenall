@@ -23,6 +23,15 @@ function isValidTemplate(v: unknown): v is 1 | 2 | 3 {
   return v === 1 || v === 2 || v === 3
 }
 
+/** Mail clients cannot resolve a site-relative path; product images are stored as '/images/...'. */
+function absoluteImageUrl(value: unknown): string | undefined {
+  if (typeof value !== 'string' || value.length === 0) return undefined
+  if (/^https?:\/\//i.test(value)) return value
+  if (!value.startsWith('/')) return undefined
+  const site = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://suzanneravenall.com').replace(/\/$/, '')
+  return `${site}${value}`
+}
+
 function parseItems(raw: unknown[]): CartItem[] {
   return raw
     .filter(
@@ -39,7 +48,7 @@ function parseItems(raw: unknown[]): CartItem[] {
       variant_title: typeof item.variant_title === 'string' ? item.variant_title : undefined,
       quantity: item.quantity as number,
       unit_price: item.unit_price as number,
-      thumbnail: typeof item.thumbnail === 'string' ? item.thumbnail : undefined,
+      thumbnail: absoluteImageUrl(item.thumbnail),
     }))
 }
 
