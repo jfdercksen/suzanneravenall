@@ -29,7 +29,7 @@
           "conditions": [
             {
               "id": "check-email",
-              "leftValue": "={{ $json.email }}",
+              "leftValue": "={{ $json.body.email }}",
               "rightValue": "",
               "operator": {
                 "type": "string",
@@ -38,7 +38,7 @@
             },
             {
               "id": "check-items",
-              "leftValue": "={{ $json.items?.length ?? 0 }}",
+              "leftValue": "={{ $json.body.items?.length ?? 0 }}",
               "rightValue": 0,
               "operator": {
                 "type": "number",
@@ -57,7 +57,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const cart = $input.first().json;\nreturn [{\n  json: {\n    cartId: cart.cartId,\n    email: cart.email,\n    firstName: cart.firstName ?? '',\n    items: cart.items ?? [],\n    total: cart.total ?? 0,\n    currency: cart.currency ?? 'ZAR',\n    cartUrl: cart.cartUrl ?? '',\n  }\n}];"
+        "jsCode": "// Webhook v2 puts the posted JSON under .body and the headers under .headers.\nconst req = $input.first().json;\nconst cart = req.body ?? req;\nconst expected = $env.N8N_WEBHOOK_SECRET ?? '';\nconst provided = (req.headers ?? {})['x-webhook-secret'] ?? '';\nif (!expected || provided !== expected) {\n  throw new Error('Invalid webhook secret');\n}\nreturn [{\n  json: {\n    cartId: cart.cartId,\n    email: cart.email,\n    firstName: cart.firstName ?? '',\n    items: cart.items ?? [],\n    total: cart.total ?? 0,\n    currency: cart.currency ?? 'ZAR',\n    cartUrl: cart.cartUrl ?? '',\n  }\n}];"
       },
       "id": "ca000001-0000-0000-0000-000000000003",
       "name": "Code: Prepare Cart Data",
@@ -81,13 +81,13 @@
     {
       "parameters": {
         "method": "GET",
-        "url": "={{ 'http://medusa:9000/admin/orders?cart_id=' + $('Code: Prepare Cart Data').first().json.cartId + '&limit=1' }}",
+        "url": "={{ 'http://medusa:9000/store/carts/' + $('Code: Prepare Cart Data').first().json.cartId + '?fields=id,completed_at' }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.MEDUSA_API_TOKEN }}"
+              "name": "x-publishable-api-key",
+              "value": "={{ $env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY }}"
             }
           ]
         },
@@ -116,7 +116,7 @@
           "conditions": [
             {
               "id": "no-order-1",
-              "leftValue": "={{ $json.count ?? -1 }}",
+              "leftValue": "={{ $json.cart && !$json.cart.completed_at ? 0 : 1 }}",
               "rightValue": 0,
               "operator": {
                 "type": "number",
@@ -183,13 +183,13 @@
     {
       "parameters": {
         "method": "GET",
-        "url": "={{ 'http://medusa:9000/admin/orders?cart_id=' + $('Code: Prepare Cart Data').first().json.cartId + '&limit=1' }}",
+        "url": "={{ 'http://medusa:9000/store/carts/' + $('Code: Prepare Cart Data').first().json.cartId + '?fields=id,completed_at' }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.MEDUSA_API_TOKEN }}"
+              "name": "x-publishable-api-key",
+              "value": "={{ $env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY }}"
             }
           ]
         },
@@ -218,7 +218,7 @@
           "conditions": [
             {
               "id": "no-order-2",
-              "leftValue": "={{ $json.count ?? -1 }}",
+              "leftValue": "={{ $json.cart && !$json.cart.completed_at ? 0 : 1 }}",
               "rightValue": 0,
               "operator": {
                 "type": "number",
@@ -285,13 +285,13 @@
     {
       "parameters": {
         "method": "GET",
-        "url": "={{ 'http://medusa:9000/admin/orders?cart_id=' + $('Code: Prepare Cart Data').first().json.cartId + '&limit=1' }}",
+        "url": "={{ 'http://medusa:9000/store/carts/' + $('Code: Prepare Cart Data').first().json.cartId + '?fields=id,completed_at' }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.MEDUSA_API_TOKEN }}"
+              "name": "x-publishable-api-key",
+              "value": "={{ $env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY }}"
             }
           ]
         },
@@ -320,7 +320,7 @@
           "conditions": [
             {
               "id": "no-order-3",
-              "leftValue": "={{ $json.count ?? -1 }}",
+              "leftValue": "={{ $json.cart && !$json.cart.completed_at ? 0 : 1 }}",
               "rightValue": 0,
               "operator": {
                 "type": "number",

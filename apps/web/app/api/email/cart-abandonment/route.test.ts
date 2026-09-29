@@ -17,6 +17,9 @@ vi.mock('@/lib/email/cart-abandonment-3', () => ({
   sendCartAbandonmentEmail3: mockSend3,
 }))
 
+const { mockCartStatus } = vi.hoisted(() => ({ mockCartStatus: vi.fn() }))
+vi.mock('@/lib/medusa/cart-status', () => ({ getCartStatus: mockCartStatus }))
+
 // The suppression lookup hits Supabase; the route tests are about dispatch, not opt-outs.
 vi.mock('@/lib/email/suppression', () => ({
   isEmailUnsubscribed: vi.fn().mockResolvedValue(false),
@@ -64,6 +67,7 @@ describe('POST /api/email/cart-abandonment', () => {
     vi.clearAllMocks()
     vi.stubEnv('N8N_WEBHOOK_SECRET', TEST_SECRET)
     vi.stubEnv('BREVO_API_KEY', 'test_brevo_key')
+    mockCartStatus.mockResolvedValue('open')
   })
 
   // -------------------------------------------------------------------------
@@ -368,6 +372,19 @@ describe('POST /api/email/cart-abandonment', () => {
       expect(json.error).toBe('Failed to send email')
       consoleSpy.mockRestore()
     })
+
+    it.each(['completed', 'not_found', 'unknown'] as const)(
+      'skips the send when the cart is %s',
+      async (status) => {
+        mockCartStatus.mockResolvedValue(status)
+
+        const res = await POST(makeRequest(validBody) as any)
+
+        expect(res.status).toBe(200)
+        expect(await res.json()).toEqual({ skipped: true, reason: `cart_${status}` })
+        expect(mockSend1).not.toHaveBeenCalled()
+      }
+    )
 
     it('returns 500 when BREVO_API_KEY is not set', async () => {
       vi.stubEnv('BREVO_API_KEY', '')

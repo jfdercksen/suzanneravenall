@@ -6,6 +6,7 @@ import { sendCartAbandonmentEmail3 } from '@/lib/email/cart-abandonment-3'
 import { isEmailConfigured } from '@/lib/email/send'
 import { isEmailUnsubscribed } from '@/lib/email/suppression'
 import type { CartEmailData, CartItem } from '@/lib/email/types'
+import { getCartStatus } from '@/lib/medusa/cart-status'
 import { logError } from '@/lib/log'
 
 function verifySecret(provided: string, expected: string): boolean {
@@ -93,6 +94,14 @@ export async function POST(req: NextRequest) {
   const parsedItems = parseItems(items)
   if (parsedItems.length === 0 && items.length > 0) {
     return NextResponse.json({ error: 'items contains no valid line items' }, { status: 400 })
+  }
+
+  // The workflow waits hours between steps: never chase a cart that has since been
+  // ordered or removed. When Medusa cannot say, do not send (a missed reminder costs
+  // less than a reminder for something already bought).
+  const cartStatus = await getCartStatus(cartId)
+  if (cartStatus !== 'open') {
+    return NextResponse.json({ skipped: true, reason: `cart_${cartStatus}` })
   }
 
   // POPIA: cart-abandonment emails are marketing — honour the suppression list.
