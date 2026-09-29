@@ -119,6 +119,36 @@ Cleanup (`--cleanup-plan` prints it, nothing runs without `--cleanup --yes`, and
 | Vtiger contact and activities | Listed by the harness; removed by hand or by the EA `/crm` skill | Johan, per item |
 | The QA voucher | `DELETE /admin/promotions/:id` after the final run so it cannot be used by anyone else | Johan |
 
+### The client team's voucher: RI-TEAM-TEST-100 (29 Sep)
+
+A second voucher, separate from ours, for Suzanne's testing team (Shayna and Cassidy). Johan sends the code to them himself. `QA-SELFTEST-100` stays ours and is never shared.
+
+| Setting | Value |
+|---|---|
+| Code | `RI-TEAM-TEST-100` (`promo_01M3P52PCDC4NK2GB6R6F3EN61`) |
+| Discount | 100% off the order, every product and variant, no rules |
+| End date | Fri 16 Oct 2026, 23:59 SAST. Medusa holds dates on a campaign, so the code sits in campaign `RI-TEAM-TEST-2026` (`procamp_01M3P52PCKJ1R5R4SYQM20ZF3Y`) |
+| Usage limit | 300 completed orders (campaign budget, type usage) |
+| Where | Review box only |
+| Proof (29 Sep) | Three carts through the store API, no order placed: course (Program 1 Self Study, R3 100), direct (Rapid Repatterning Session 90 min, R2 490), Live via Zoom (Program 1, R5 315). Each total 0. `QA-SELFTEST-100` checked on a fourth cart and its record is unchanged |
+
+**Both codes must be removed before go-live.** The review database becomes the production database at the DNS cutover, so the code travels with it unless it is deleted. The end date is only the safety net. See the DNS Cutover Checklist in `infra/DEPLOYMENT.md`.
+
+Side effects: the team's orders create real enrolments in Suzanne's live Thinkific and contacts in our Vtiger under their own email addresses, plus cart abandonment reminders for any cart they leave with an email on it. Shayna sends Johan a daily list of what they bought.
+
+Finding their orders (review box, container `infra-postgres-1`, database `medusa`, read-only):
+
+```sql
+SELECT DISTINCT o.display_id, o.id, o.email, o.created_at, o.status
+FROM "order" o
+JOIN order_promotion op ON op.order_id = o.id AND op.deleted_at IS NULL
+JOIN promotion p ON p.id = op.promotion_id
+WHERE p.code = 'RI-TEAM-TEST-100'
+ORDER BY o.display_id;
+```
+
+The emails it returns are the keys for the Thinkific users and the Vtiger contacts, checked against Shayna's list. Removal follows the table above, per item, with Johan's ok.
+
 ## Results sheet
 
 `docs/testing/results/` holds one CSV per run, the same columns Suzanne asked Shayna for:

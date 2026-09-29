@@ -119,6 +119,8 @@ A mismatch causes broken login redirects and wrong absolute URLs (email links, O
 
 When pointing `suzanneravenall.com` DNS to the VPS:
 
+0. **Before anything else: remove the test vouchers.** The review database becomes production, so both 100% codes go live with it unless they are removed. Disable or delete `RI-TEAM-TEST-100` (the client team's, with its campaign `RI-TEAM-TEST-2026`) and `QA-SELFTEST-100` (ours) in Medusa admin under Promotions, then confirm `GET /admin/promotions` lists neither as active. Details in `docs/testing/SELF-TEST-PLAN.md`.
+
 1. Enable SSL via Certbot:
    ```bash
    cd /var/www/suzanneravenall/suzanneravenall/infra
