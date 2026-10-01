@@ -21,6 +21,16 @@ if (!MEDUSA_TOKEN) {
   process.exit(1)
 }
 
+// Medusa v2 takes a secret API key (sk_...) as Basic auth and rejects it as
+// Bearer with a 401 (KI048). A login JWT still goes as Bearer.
+function medusaAuthHeader(token: string): string {
+  const trimmed = token.trim()
+  if (trimmed.startsWith('sk_')) {
+    return `Basic ${Buffer.from(`${trimmed}:`).toString('base64')}`
+  }
+  return `Bearer ${trimmed}`
+}
+
 // ---------------------------------------------------------------------------
 // MeiliSearch helpers
 // ---------------------------------------------------------------------------
@@ -130,7 +140,7 @@ async function seedProducts(): Promise<void> {
       `${MEDUSA_URL}/admin/products?limit=${limit}&offset=${offset}&fields=${encodeURIComponent(fields)}&status[]=published`,
       {
         headers: {
-          Authorization: `Bearer ${MEDUSA_TOKEN}`,
+          Authorization: medusaAuthHeader(MEDUSA_TOKEN),
           'Content-Type': 'application/json',
         },
       }
