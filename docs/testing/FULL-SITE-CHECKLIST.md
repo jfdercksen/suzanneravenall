@@ -94,3 +94,10 @@ Run: header and footer links read from the page, missing-page handling on 7 addr
 | Search results page | PASS: results, the All / Programmes / Topics tabs, empty and no-result states. Shows at most 10 results with no "more" control. |
 | Search endpoint | PASS on odd input (script tags, quotes, %, blanks), and the limit of 20 requests a minute answers 429 as designed. All 43 result links resolve. |
 | Search index | FAIL, open: the index is out of date. 9 of 107 live products cannot be found by name (`bonus-lifetime-access-self-study-online`, `coaching-support-package`, `deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom`, `email-support`, `mentorship-single-session-live`, `rapid-repatterning-session-60-min-online`, `ravenall-institute-certification-observation-fee`, `resonance-repatterning-program-6-inner-cultivation-practical-demos-live-via-zoom`, `vip-package`), and titles in search differ from the product pages (older names with long dashes). Fix: re-run the index seed on the server (`docker compose exec medusa npx ts-node src/scripts/seed-meilisearch.ts`), Johan to run. Then re-test. Follow-up: confirm product edits update the index on their own. |
+
+### Section D re-test, 1 Oct 2026 (after deploy of 338311a and the index seed re-run)
+
+| Check | Result |
+|---|---|
+| Enter in the search box | PASS: typing a term and pressing Enter opens `/search?q=...` with results and closes the box. |
+| Search index | STILL FAIL: the same 9 products are not findable by name after the seed re-run; the other 98 are, and every title in search equals the title on its product page. Correction to the first run: the "older names" remark compared two different products with similar names, so there is no evidence the titles were ever out of date. The 9 are the products created by the 22 Sep migration (KI006) plus the duplicate. The seed asks Medusa for published products only, so the likely cause is on the Medusa side (status or how the admin list returns them); the seed's own output line "Fetched n / n products" will show it. Open. |
