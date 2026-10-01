@@ -16,10 +16,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params
   const session = privateSessionBySlug(slug)
   if (!session) {
-    return { title: 'Private Sessions | Dr. Suzanne Ravenall' }
+    return { title: 'Private Sessions' }
   }
   return {
-    title: `${session.title} | Private Sessions | Dr. Suzanne Ravenall`,
+    title: `${session.title} | Private Sessions`,
     description: session.shortDescription,
   }
 }

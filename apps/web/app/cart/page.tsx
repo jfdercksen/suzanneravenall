@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import CartPageContent from '@/components/cart/CartPageContent'
 
 export const metadata: Metadata = {
-  title: 'Your Cart | Dr. Suzanne Ravenall',
+  title: 'Your Cart',
   description: 'Review your selected programmes and proceed to checkout.',
 }
 

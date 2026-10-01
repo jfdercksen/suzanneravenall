@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params
   const topic = topicBySlug(slug)
   if (!topic) {
-    return { title: 'Explore | Dr. Suzanne Ravenall' }
+    return { title: 'Explore' }
   }
   return {
     title: topic.metaTitle,

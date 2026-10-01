@@ -1,0 +1,5 @@
+page_or_product,test,problem,screenshot,link,status,found_on,fixed_in,link_text,kind
+/portal /portal/login /portal/dashboard,T5 content,"duplicate <title> ""Log In | Dr. Suzanne Ravenall"" on 3 pages",,,fail,2026-10-01,,,content
+"135 pages (/, /about, /services/private-sessions, ...)",T4 links,"external site blocks robots (999); open by hand [sitewide, 135 pages]",,https://www.linkedin.com/in/sravenall,manual,2026-10-01,,LinkedIn,external-manual
+"3 pages (/, /about, /testimonials)",T4 links,"asset answers 404 [sitewide, 3 pages]",,http://169.239.180.49/_next/image?url=https%3A%2F%2Fimg.youtube.com%2Fvi%2FE4x3YETXHSA%2Fmqdefault.jpg&w=3840&q=75,fail,2026-10-01,,(image),link
+/legal/cookies,T4 links,external site blocks robots (403); open by hand,,https://privacy.microsoft.com/en-us/privacystatement,manual,2026-10-01,,Microsoft Privacy Statement,external-manual

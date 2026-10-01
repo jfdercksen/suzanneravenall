@@ -7,7 +7,7 @@ import PathwaysQuizCTA from '@/components/pathways/PathwaysQuizCTA'
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Individual & Group Transformation Pathways | Dr. Suzanne Ravenall',
+    title: 'Individual & Group Transformation Pathways',
     description:
       'Individual Transformation Pathways for adults and young people: focused journeys to uncover hidden patterns, interrupt old loops, and support lasting change, plus upcoming Group Transformation Pathway immersions guided live by Suzanne.',
   }

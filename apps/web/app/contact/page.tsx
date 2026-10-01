@@ -5,7 +5,7 @@ import ContactFAQ from './ContactFAQ'
 import ContactFinalCTA from './ContactFinalCTA'
 
 export const metadata: Metadata = {
-  title: 'Contact | Dr. Suzanne Ravenall',
+  title: 'Contact',
   description:
     'Book a discovery call, send a message, or find out which coaching path is right for you.',
 }

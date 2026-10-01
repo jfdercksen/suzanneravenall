@@ -12,7 +12,7 @@ import ResourcesNewsletterCTA from '@/components/resources/ResourcesNewsletterCT
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Resources | Articles, Media, Awards & Newsletter | Dr. Suzanne Ravenall',
+    title: 'Resources | Articles, Media, Awards & Newsletter',
     description:
       'Explore Dr. Suzanne Ravenall\'s resources hub: published articles, media appearances, awards and the monthly insights newsletter covering transformation, consciousness and human potential.',
   }

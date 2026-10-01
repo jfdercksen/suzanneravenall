@@ -5,7 +5,7 @@ import { requireAccess } from '@/lib/access/check-access'
 import AssessmentsContent from './AssessmentsContent'
 
 export const metadata: Metadata = {
-  title: 'Assessments | Dr. Suzanne Ravenall',
+  title: 'Assessments',
   description: 'Self-assessment tools for transformation. Silver membership required.',
 }
 

@@ -50,8 +50,8 @@ export async function generateMetadata({
   const product = await getProduct(handle)
   return {
     title: product
-      ? `${product.title} | Dr. Suzanne Ravenall`
-      : 'Programme | Dr. Suzanne Ravenall',
+      ? `${product.title}`
+      : 'Programme',
     description:
       product?.description?.slice(0, 155) ??
       'Transform your life with Dr. Suzanne Ravenall.',

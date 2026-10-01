@@ -3,7 +3,7 @@ import BlogListingContent from './BlogListingContent'
 import type { BlogPost, PayloadResponse } from '@/types/payload'
 
 export const metadata: Metadata = {
-  title: 'Blog | Dr. Suzanne Ravenall',
+  title: 'Blog',
   description:
     'Science-backed perspectives on transformation, pattern mastery, and the art of lasting change, from Dr. Suzanne Ravenall.',
 }

@@ -6,7 +6,7 @@ import AwardsContent from '@/components/resources/AwardsContent'
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Awards & Honours | Dr. Suzanne Ravenall',
+    title: 'Awards & Honours',
     description:
       'Dr. Suzanne Ravenall and the Ravenall Institute, recognised with Global 100, CRF and Healthcare & Pharmaceutical Excellence Awards.',
   }

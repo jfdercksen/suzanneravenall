@@ -7,7 +7,7 @@ interface SearchPageProps {
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Search | Dr. Suzanne Ravenall',
+    title: 'Search',
     description: 'Search programmes, transformation topics, and resources.',
     robots: { index: false },
   }

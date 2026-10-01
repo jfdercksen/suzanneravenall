@@ -38,10 +38,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params
   const quiz = quizBySlug(slug)
   if (!quiz) {
-    return { title: 'Diagnostic Coming Soon | Dr. Suzanne Ravenall' }
+    return { title: 'Diagnostic Coming Soon' }
   }
   return {
-    title: `${quiz.title} | Dr. Suzanne Ravenall`,
+    title: `${quiz.title}`,
     description: quiz.subtitle,
   }
 }

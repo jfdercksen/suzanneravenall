@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import BookContent from '@/components/book/BookContent'
 
 export const metadata: Metadata = {
-  title: 'The Breakthrough Trilogy | Dr. Suzanne Ravenall',
+  title: 'The Breakthrough Trilogy',
   description:
     'A Quest to Find an Upgraded Version of You. Three books. One journey. The complete roadmap to decoding the patterns that keep you stuck, and upgrading every area of your life.',
 }

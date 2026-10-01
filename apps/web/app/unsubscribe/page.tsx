@@ -3,7 +3,7 @@ import { verifyUnsubscribeToken } from '@/lib/email/unsubscribe'
 import UnsubscribeConfirm from './UnsubscribeConfirm'
 
 export const metadata: Metadata = {
-  title: 'Unsubscribe | Dr. Suzanne Ravenall',
+  title: 'Unsubscribe',
   description: 'Unsubscribe from Ravenall Institute marketing emails.',
   robots: { index: false, follow: false },
 }

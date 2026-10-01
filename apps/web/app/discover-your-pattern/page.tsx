@@ -12,7 +12,7 @@ import PatternHubFinalCta from '@/components/pattern-hub/PatternHubFinalCta'
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Discover Your Pattern | Dr. Suzanne Ravenall',
+    title: 'Discover Your Pattern',
     description:
       'Take a free diagnostic to uncover the emotional, relational, health or performance pattern quietly running your life, then learn how to change it.',
   }

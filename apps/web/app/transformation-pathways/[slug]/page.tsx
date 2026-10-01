@@ -16,10 +16,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params
   const pathway = pathwayBySlug(slug)
   if (!pathway) {
-    return { title: 'Transformation Pathways | Dr. Suzanne Ravenall' }
+    return { title: 'Transformation Pathways' }
   }
   return {
-    title: `${pathway.title} | Transformation Pathways | Dr. Suzanne Ravenall`,
+    title: `${pathway.title} | Transformation Pathways`,
     description: pathway.description,
   }
 }

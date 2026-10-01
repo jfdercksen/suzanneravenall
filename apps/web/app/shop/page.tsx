@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import { ShopCatalogueContent } from '@/components/shop/ShopCatalogueContent'
 
 export const metadata: Metadata = {
-  title: 'Shop | Dr. Suzanne Ravenall',
+  title: 'Shop',
   description:
     'Private sessions, guided programmes, and group coaching designed to create lasting change. Browse and invest in your transformation.',
 }

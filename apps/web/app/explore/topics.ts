@@ -136,7 +136,7 @@ export const topics: Topic[] = [
       'next-level-health-vitality-longevity',
       'life-transitions-reinvention',
     ],
-    metaTitle: 'Emotional & Nervous System Mastery | Dr. Suzanne Ravenall',
+    metaTitle: 'Emotional & Nervous System Mastery',
     metaDescription:
       'Emotional mastery begins in the nervous system. Repattern anxiety, overwhelm and reactivity at the level where they’re actually formed.',
   },
@@ -218,7 +218,7 @@ export const topics: Topic[] = [
       'identity-purpose-activation',
       'life-transitions-reinvention',
     ],
-    metaTitle: 'Relationships & Attachment Patterns | Dr. Suzanne Ravenall',
+    metaTitle: 'Relationships & Attachment Patterns',
     metaDescription:
       'You don’t choose relationships consciously. You choose what feels familiar to your nervous system. Repattern the attachment template underneath the cycle.',
   },
@@ -296,7 +296,7 @@ export const topics: Topic[] = [
       'life-transitions-reinvention',
       'identity-purpose-activation',
     ],
-    metaTitle: 'Next-Level Health, Vitality & Longevity | Dr. Suzanne Ravenall',
+    metaTitle: 'Next-Level Health, Vitality & Longevity',
     metaDescription:
       'Vitality is pattern, not willpower. Repattern the internal operating system so output becomes sustainable, not powered by pressure.',
   },
@@ -373,7 +373,7 @@ export const topics: Topic[] = [
       'identity-purpose-activation',
       'emotional-nervous-system-mastery',
     ],
-    metaTitle: 'Intuition as Patterned Intelligence | Dr. Suzanne Ravenall',
+    metaTitle: 'Intuition as Patterned Intelligence',
     metaDescription:
       'Intuition is pattern recognition, not magic. Repattern the nervous system and your internal read becomes reliable, strategic intelligence.',
   },
@@ -451,7 +451,7 @@ export const topics: Topic[] = [
       'intuition-as-patterned-intelligence',
       'next-level-health-vitality-longevity',
     ],
-    metaTitle: 'Leadership & High Performance | Dr. Suzanne Ravenall',
+    metaTitle: 'Leadership & High Performance',
     metaDescription:
       'High performance is pattern, not effort. Repattern the internal operating system so leadership, energy and output finally align.',
   },
@@ -529,7 +529,7 @@ export const topics: Topic[] = [
       'emotional-nervous-system-mastery',
       'relationships-attachment-patterns',
     ],
-    metaTitle: 'Life Transitions & Reinvention | Dr. Suzanne Ravenall',
+    metaTitle: 'Life Transitions & Reinvention',
     metaDescription:
       'You’re not lost. You’re between identities. Move through transition by repatterning the old identity and anchoring the next one.',
   },
@@ -609,7 +609,7 @@ export const topics: Topic[] = [
       'next-level-health-vitality-longevity',
       'life-transitions-reinvention',
     ],
-    metaTitle: 'Health & Energy Intelligence | Dr. Suzanne Ravenall',
+    metaTitle: 'Health & Energy Intelligence',
     metaDescription:
       'Your body is not broken. It is responding to patterns. Repattern the nervous system so energy, recovery and resilience return.',
   },
@@ -689,7 +689,7 @@ export const topics: Topic[] = [
       'leadership-high-performance',
       'intuition-as-patterned-intelligence',
     ],
-    metaTitle: 'Identity & Purpose Activation | Dr. Suzanne Ravenall',
+    metaTitle: 'Identity & Purpose Activation',
     metaDescription:
       'You don’t have a motivation problem. You have an identity pattern. Shift the identity and behaviour follows.',
   },
