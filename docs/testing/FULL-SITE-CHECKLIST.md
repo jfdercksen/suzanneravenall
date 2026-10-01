@@ -19,7 +19,7 @@ Target: review box `http://169.239.180.49`.
 | A | Every page loads | READ | 52 routes plus every dynamic page (shop products, programs, pathways, private sessions, explore topics, blog posts) | DONE 1 Oct: PASS after title fix |
 | B | Every link on every page | READ | internal, external, anchors, mailto/tel, images | RUN 1 Oct: PASS except the known video thumbnail |
 | C | Content | READ | placeholders, titles, duplicate titles, broken images, the 6 testimonial videos | RUN 1 Oct: PASS, 3 decisions with Johan |
-| D | Navigation and search | READ | header, footer, mobile menu, `/search`, 404 page | not started |
+| D | Navigation and search | READ | header, footer, mobile menu, `/search`, 404 page | RUN 1 Oct: 1 FAIL fixed awaiting deploy, 1 FAIL open (search index) |
 | E | Forms | MAIL | contact, homepage chapter request, masterclass, resources newsletter, assessments notify, community, unsubscribe | not started |
 | F | Diagnostics | MAIL | 8 quizzes: gate, invite mail, link, questions, result, full report mail, notification | not started |
 | G | Shop and checkout | WRITE | listing, product page, cart, voucher, free order, PayFast sandbox, PayPal sandbox, confirmation page, order mail, invoice PDF | not started |
@@ -79,3 +79,18 @@ Run: every one of the 207 pages (135 crawled plus the product pages) read for pl
 PASS. 207 pages read: 205 show the site name once. The other 2 (`/about`, `/masterclass`) carry her name inside the page's own headline as well, which reads correctly. Every page has the site name. Section A is closed.
 
 Noted, not a defect: 5 programme pages share a title with their shop product (`/programs/meditation` and `/shop/meditation-live-via-zoom`, and the same for mindfulness, coherence muscle testing, love and relationships, trauma to transcendence).
+
+### Section D, 1 Oct 2026
+
+Run: header and footer links read from the page, missing-page handling on 7 addresses, the search endpoint with 30 queries, and the search box and phone menu used in the browser.
+
+| Check | Result |
+|---|---|
+| Header menu (desktop) | PASS: 32 links, all resolve |
+| Footer | PASS: 32 links, all resolve (LinkedIn by hand). Noted: Private Sessions, Group Coaching, Executive Coaching and Corporate Programs all open `/services`; Practitioner Programmes, Self-Study Courses and Workshops all open `/programs`. |
+| Phone menu (375 wide) | PASS: opens, lists every item, a tap opens the page and closes the menu, no sideways scroll. Noted: until the cookie notice is answered it covers the Book a Discovery Call button at the bottom of the menu. |
+| 404 page | PASS: unknown address answers 404 with the "page could not be found" screen and a Go home button. Unknown product, programme, blog, session, topic and pathway addresses show the same screen and are marked noindex (they answer 200 because the page streams; not a visitor-facing problem). |
+| Search box (Ctrl+K) | Opens, results appear as you type, links open the right pages. FAIL, fixed: Enter did nothing unless a result was highlighted with the arrow keys. Enter now opens the full results page. Re-test after deploy. |
+| Search results page | PASS: results, the All / Programmes / Topics tabs, empty and no-result states. Shows at most 10 results with no "more" control. |
+| Search endpoint | PASS on odd input (script tags, quotes, %, blanks), and the limit of 20 requests a minute answers 429 as designed. All 43 result links resolve. |
+| Search index | FAIL, open: the index is out of date. 9 of 107 live products cannot be found by name (`bonus-lifetime-access-self-study-online`, `coaching-support-package`, `deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom`, `email-support`, `mentorship-single-session-live`, `rapid-repatterning-session-60-min-online`, `ravenall-institute-certification-observation-fee`, `resonance-repatterning-program-6-inner-cultivation-practical-demos-live-via-zoom`, `vip-package`), and titles in search differ from the product pages (older names with long dashes). Fix: re-run the index seed on the server (`docker compose exec medusa npx ts-node src/scripts/seed-meilisearch.ts`), Johan to run. Then re-test. Follow-up: confirm product edits update the index on their own. |

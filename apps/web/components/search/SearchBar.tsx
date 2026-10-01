@@ -99,6 +99,14 @@ export function SearchBar() {
   }, [debouncedQuery])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    // Enter with nothing highlighted opens the full results page.
+    if (e.key === 'Enter' && activeIndex < 0 && query.trim()) {
+      e.preventDefault()
+      router.push(`/search?q=${encodeURIComponent(query.trim())}`)
+      closeModal()
+      return
+    }
+
     if (!results.length) return
 
     if (e.key === 'ArrowDown') {

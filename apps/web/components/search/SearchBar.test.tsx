@@ -256,6 +256,20 @@ describe('SearchBar — keyboard navigation', () => {
 
     expect(mockPush).toHaveBeenCalledWith('/shop/clarity')
   })
+
+  it('Enter with no result highlighted opens the full results page', async () => {
+    vi.stubGlobal('fetch', mockFetchWith(makeResults([{ title: 'Clarity', url: '/shop/clarity' }])))
+
+    const user = userEvent.setup()
+    render(<SearchBar />)
+    await user.click(screen.getByRole('button', { name: /open search/i }))
+
+    const input = screen.getByPlaceholderText(/search programmes/i)
+    await user.type(input, 'deep clearing')
+    fireEvent.keyDown(input, { key: 'Enter' })
+
+    expect(mockPush).toHaveBeenCalledWith('/search?q=deep%20clearing')
+  })
 })
 
 describe('SearchBar — results display', () => {
