@@ -57,3 +57,19 @@ Run: `link-crawl.mjs --external --images` (135 pages, 1,753 asset and external l
 | Duplicate titles | `/portal`, `/portal/login`, `/portal/dashboard` share "Log In" (signed-out redirect, expected). Three pairs of PRODUCTS share an identical title: `getting-unstuck` + `getting-unstuck-self-study`; `rapid-repatterning-session` + `rapid-repatterning-session-60-min-online` (the KI006 duplicate); `resonance-repatterning-all-repatternings-as-demo-s-talk-throughs-resources-self-study` + `resonance-repatterning-full-basic-training-programs-1-5-demos-resources-live-via-zoom`. Johan to decide per pair: duplicate product to remove, or title to correct. |
 
 Not covered by A and B, moved to their own sections: pages behind login (I), the cart and checkout with items in them (G), `/search` results (D), blog posts (the blog index lists none).
+
+### Section C, 1 Oct 2026
+
+Run: every one of the 207 pages (135 crawled plus the product pages) read for placeholder text, main heading, description, image alt text and video status. Files: `results/content-2026-10-01.csv`, `results/titles-2026-10-01.csv`.
+
+| Check | Result |
+|---|---|
+| Placeholder text (lorem, TODO, TBC, undefined, NaN, raw HTML, zero prices) | PASS, none found |
+| "Coming soon" wording | 8 pages. Dates and launches, fine: `/programs`, 2 energy clearing programme pages, `/events`, `/transformation-pathways`, `/book`, `/community`. To decide: `/services/private-sessions/executive-coaching` has no session detail at all ("Full details for this session are coming soon"), and `/speaking` says testimonials from organisers are coming soon. |
+| Image alt text | PASS, no image without an alt attribute |
+| Testimonial videos | 5 of 6 public. `E4x3YETXHSA` private (KI042, with the client) |
+| Main heading | PASS on every page with content. `/services/private-sessions` redirects to `/services#private` by design; `/cart` is empty when signed out. |
+| Pages behind login | `/resources/awards`, `/resources/media`, `/resources/assessments` send a signed-out visitor to the login page (silver tier and up, by design in `lib/access/tiers.ts`). The public Resources page links to Awards and Media. Johan to decide whether awards and press belong behind a paid tier. |
+| Product descriptions | 35 of 107 product pages carry no product description: the page shows only the standard template copy and the search description is the fallback "Transform your life with Dr. Suzanne Ravenall." List in `content-2026-10-01.csv`. 1 product has no description tag at all (`rapid-repatterning-session-60-min-online`, the KI006 duplicate). |
+| Duplicate product titles | Exactly 3 pairs, as listed under A and B. |
+| Page titles re-test | NOT YET: review box still served the old titles at 12:05 (198 of 207 double). Re-run after the deploy lands. |
