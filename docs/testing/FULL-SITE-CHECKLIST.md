@@ -28,7 +28,7 @@ Target: review box `http://169.239.180.49`.
 | J | Bookings | WRITE | booking page, slots, host and attendee mails, cancel, reschedule, calendar connection, account email, CRM record | not started |
 | K | Automations | WRITE | each n8n workflow: trigger, run, result, error alert | not started |
 | L | Legal and technical | READ | legal pages, cookie notice, sitemap, robots, health, analytics ids, error tracking | RUN 1 Oct: 1 FAIL fixed awaiting deploy, 2 launch items |
-| M | Phone and desktop look | READ | every page at 375 and 1280: layout, contrast, overflow | not started |
+| M | Phone and desktop look | READ | every page at 375 and 1280: layout, contrast, overflow | RUN 1 Oct: 1 FAIL fixed awaiting deploy; pages behind login move to I |
 
 ## Known going in (1 Oct)
 
@@ -124,3 +124,21 @@ Run: robots, sitemap, health, legal pages, page head tags, analytics and respons
 ### Search index re-test, 1 Oct 2026 (after the fixed seed ran on the server)
 
 PASS. Seed output: 107 of 107 products and 8 topics indexed. Re-test: all 107 live products are findable by name and every title in search equals the product page. Section D is closed, except the open follow-up that the n8n workflow `meilisearch-content-sync` still sends the key as Bearer, so product edits do not update the index on their own.
+
+### Section M, 1 Oct 2026
+
+Run: `look-scan.mjs` over all 207 pages at 375 x 812 and at 1280 x 800 (414 page loads, no errors), plus header screenshots of ten page types read by eye. Per page it measures sideways overflow, elements past the screen edge, cut-off text, broken images, text under 12px, the page title size and weight, and text contrast (48,820 pieces of text checked). File: `results/look-2026-10-01.csv`.
+
+| Check | Result |
+|---|---|
+| Phone (375), sideways scroll | PASS: none on any of the 207 pages, nothing past the screen edge, no cut-off text. |
+| Desktop (1280), sideways scroll | FAIL, fixed: the header row is wider than the page at two window widths, so every page scrolls sideways there and the Book a Discovery Call button touches the screen edge. At 1280 to about 1297 wide (a common laptop size): 1 to 2px over without a scrollbar, about 17px with one. At 1024 to about 1045: 7px over, about 22px with a scrollbar. From 1100 to 1279 and from 1300 up it fits. This is the 28 Aug item that was never fixed. Fix: logo margin 48px to 24px, menu spacing one step tighter, menu text 14px at every desktop width (was 15px from 1280), the keyboard hint beside search shown from 1280 only. Measured on the local build with a real scrollbar: 40px to spare at 1280, 34px at 1024, no sideways scroll at 1009, 1024, 1040, 1265, 1280, 1300, 1440. Header and search tests 82 of 82 pass. Re-test on the review box after deploy. |
+| Text contrast | PASS: no text below AA on a flat ground on any page, no button that vanishes into its ground. The only entries are the three large decorative numerals on `/book` (01, 02, 03 at 15% strength, decoration by design, accepted in KI026). |
+| Text over pictures | Cannot be measured by the scan (862 pieces of text per width sit on pictures). By eye on ten page types: white text on a black fade, readable on every header. To decide: the three poster cards on the homepage (Precision Pattern Sessions, Recorded Group Repatterning, The Basic Five) set their headline across the faces in the photo; readable, but the small label above each headline is weak where the photo is light. |
+| Page titles | PASS against the header rule: 36px on the phone and 60px on desktop, never above 60px, weight normal on 172 pages and medium on the rest (flat-ground and card headings), none bold. Every page has exactly one main heading. |
+| Images | 1 FAIL, known: the private testimonial video thumbnail on `/testimonials` (KI042). No other broken image on any page at either width. |
+| Small text | Noted, low: the coaching app pill uses 9px ("24/7 Coaching App" on the phone, "close" on desktop) and 10 to 11px for its other lines, on every page. `/explore` step numbers, `/transformation-pathways` labels and badges are 10px. Under 12px is hard to read on a phone. Johan to decide. |
+| Phone headers by eye | PASS on home, about, shop, product, programmes, programme, services, events: picture on top, text on black beneath, buttons full width. Noted: the coaching app pill sits over the second button of the Services header until the visitor scrolls or closes it. |
+| Pages behind login | NOT COVERED: `/portal`, `/portal/dashboard`, `/resources/awards`, `/resources/media`, `/resources/assessments` land on the login page when signed out, so the scan measured the login page five times. Their look is checked in section I with a signed-in test member. `/cart` and `/checkout` were measured empty; with items in them they belong to section G. |
+
+Not a defect: the Services header looked black in one desktop capture. It is a video and the capture caught a dark frame; the phone capture shows it playing.
