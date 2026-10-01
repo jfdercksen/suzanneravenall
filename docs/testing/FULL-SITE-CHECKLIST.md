@@ -27,7 +27,7 @@ Target: review box `http://169.239.180.49`.
 | I | Member portal | WRITE | signup, login, login link mail, forgot and reset password, dashboard, programmes, resources, videos, account, upgrade | not started |
 | J | Bookings | WRITE | booking page, slots, host and attendee mails, cancel, reschedule, calendar connection, account email, CRM record | not started |
 | K | Automations | WRITE | each n8n workflow: trigger, run, result, error alert | not started |
-| L | Legal and technical | READ | legal pages, cookie notice, sitemap, robots, health, analytics ids, error tracking | not started |
+| L | Legal and technical | READ | legal pages, cookie notice, sitemap, robots, health, analytics ids, error tracking | RUN 1 Oct: 1 FAIL fixed awaiting deploy, 2 launch items |
 | M | Phone and desktop look | READ | every page at 375 and 1280: layout, contrast, overflow | not started |
 
 ## Known going in (1 Oct)
@@ -103,3 +103,20 @@ Run: header and footer links read from the page, missing-page handling on 7 addr
 | Search index | STILL FAIL: the same 9 products are not findable by name after the seed re-run; the other 98 are, and every title in search equals the title on its product page. Correction to the first run: the "older names" remark compared two different products with similar names, so there is no evidence the titles were ever out of date. The 9 are the products created by the 22 Sep migration (KI006) plus the duplicate. The seed asks Medusa for published products only, so the likely cause is on the Medusa side (status or how the admin list returns them); the seed's own output line "Fetched n / n products" will show it. Open. |
 
 Cause found (Johan's server output, 1 Oct): the seed did not run, it stopped on "Medusa products fetch failed: 401". The script sent the shop's secret key as Bearer, which Medusa v2 rejects (same fault as KI048). The index is therefore still the 19 Aug build with 98 products, and the 9 products added since are missing. Script fixed to send the key as Basic. The n8n workflow `meilisearch-content-sync` sends the same key as Bearer on both of its Medusa calls, so product edits do not reach the index either: open, to fix and re-import in n8n.
+
+### Section L, 1 Oct 2026
+
+Run: robots, sitemap, health, legal pages, page head tags, analytics and response headers, all read-only.
+
+| Check | Result |
+|---|---|
+| Legal pages | PASS: privacy, terms, cookies and disclaimer load, are dated (12 May and 29 July 2026), name POPIA and carry no placeholder text. Refunds and cancellations sit in section 4 of the terms; there is no separate refund page. To confirm with Johan: the contact addresses in them (`privacy@` and `hello@suzanneravenall.com`, `admin@ravenallinstitute.com`) must be real mailboxes. |
+| Cookie notice | PASS: shown until answered, analytics consent defaults to denied until Accept. |
+| robots.txt | PASS: allows the site, blocks `/portal/`, `/api/`, `/admin/`, names the sitemap. |
+| Health | PASS: `/api/health` answers ok. Hidden files (`/.env`, `/.git/config`) answer 404. |
+| Sitemap | FAIL, fixed: 50 addresses only. Missing were all 107 shop products, the 29 programme pages, `/events`, `/testimonials`, the three About sub-pages and the disclaimer. Listed but wrong: `/services/private-sessions` (a redirect) and the member-only `/resources/media` and `/resources/assessments`. Now built per request with products read from Medusa. Re-test after deploy. |
+| Site address in sitemap, robots and share tags | Shows the review box address `http://169.239.180.49`. LAUNCH ITEM: set `NEXT_PUBLIC_SITE_URL` to the real domain at cutover. |
+| Analytics | LAUNCH ITEM: the Google Analytics id is still the placeholder `G-XXXXXXXXXX`, so nothing is measured. Needs the real id from the client's Google account. |
+| Error tracking | Sentry code is in the page. Whether events arrive is not checked here (section K). |
+| Head tags | Icon, language, share title and image, 4 structured-data blocks present. No canonical link on pages: open, low priority. `/favicon.ico` itself answers 404 (the page names `/icon.png`, so browsers show the icon). |
+| Response headers | Security headers present, but each is sent twice (nginx and the app) and X-Frame-Options is sent as both DENY and SAMEORIGIN. No Content-Security-Policy. `X-Powered-By: Next.js` exposed. Open, low priority. |

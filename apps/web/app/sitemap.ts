@@ -2,8 +2,38 @@ import type { MetadataRoute } from 'next'
 import { topics } from '@/app/explore/topics'
 import { pathways } from '@/data/pathways'
 import { allPrivateSessions } from '@/data/privateSessions'
+import { PROGRAMS } from '@/data/programs'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+// Built per request: Medusa is not reachable while the image builds, so a
+// prerendered sitemap would ship without the shop products.
+export const dynamic = 'force-dynamic'
+
+// Shop products come from Medusa. A failed fetch leaves them out rather than
+// breaking the sitemap.
+async function fetchProductHandles(): Promise<string[]> {
+  const medusaUrl = process.env.NEXT_PUBLIC_MEDUSA_URL ?? ''
+  const pubKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? ''
+  const handles: string[] = []
+
+  try {
+    for (let offset = 0; offset < 1000; offset += 100) {
+      const res = await fetch(
+        `${medusaUrl}/store/products?limit=100&offset=${offset}&fields=handle`,
+        { headers: { 'x-publishable-api-key': pubKey }, next: { revalidate: 3600 } },
+      )
+      if (!res.ok) break
+      const data = (await res.json()) as { products?: { handle?: string }[]; count?: number }
+      const page = Array.isArray(data.products) ? data.products : []
+      for (const p of page) if (p.handle) handles.push(p.handle)
+      if (page.length < 100 || handles.length >= (data.count ?? 0)) break
+    }
+  } catch {
+    return handles
+  }
+  return handles
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ?? 'https://suzanneravenall.com'
 
@@ -25,12 +55,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.9,
-    },
-    {
-      url: `${siteUrl}/services/private-sessions`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
     },
     {
       url: `${siteUrl}/speaking`,
@@ -73,18 +97,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/resources/media`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${siteUrl}/resources/assessments`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
     },
     {
       url: `${siteUrl}/contact`,
@@ -134,6 +146,42 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.3,
     },
+    {
+      url: `${siteUrl}/legal/disclaimer`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${siteUrl}/about/the-story`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/about/the-system`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/about/the-science`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/testimonials`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/events`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
   ]
 
   const exploreRoutes: MetadataRoute.Sitemap = topics.map((topic) => ({
@@ -159,10 +207,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }),
   )
 
+  const programRoutes: MetadataRoute.Sitemap = PROGRAMS.filter((p) => p.isPublished).map(
+    (program) => ({
+      url: `${siteUrl}/programs/${program.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    }),
+  )
+
+  const productRoutes: MetadataRoute.Sitemap = (await fetchProductHandles()).map((handle) => ({
+    url: `${siteUrl}/shop/${handle}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }))
+
   return [
     ...staticRoutes,
     ...exploreRoutes,
     ...pathwayRoutes,
     ...privateSessionRoutes,
+    ...programRoutes,
+    ...productRoutes,
   ]
 }
