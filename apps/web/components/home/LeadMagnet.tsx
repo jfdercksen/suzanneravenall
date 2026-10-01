@@ -67,7 +67,7 @@ export default function LeadMagnet() {
             Get the first chapter free
           </h2>
           <p className="mt-4 text-white/70 text-lg leading-relaxed">
-            Download Chapter 1 of The Breakthrough Trilogy and discover the hidden patterns holding you back.
+            Request Chapter 1 of The Breakthrough Trilogy and discover the hidden patterns holding you back.
           </p>
         </motion.div>
 
@@ -79,8 +79,8 @@ export default function LeadMagnet() {
         >
           {status === 'success' ? (
             <div className="mt-8 rounded-card bg-white/10 border border-white/30 px-8 py-6">
-              <p className="text-white font-semibold text-lg">Chapter 1 is on its way!</p>
-              <p className="mt-2 text-white/70">We&apos;ll send your chapter download link to your inbox shortly.</p>
+              <p className="text-white font-semibold text-lg">Thank you, your request is in.</p>
+              <p className="mt-2 text-white/70">We have your details and will be in touch about Chapter 1.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
@@ -105,7 +105,7 @@ export default function LeadMagnet() {
                 disabled={status === 'loading'}
                 className="px-7 py-3.5 bg-white hover:bg-brand-sand text-brand-primary font-semibold rounded-button transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap text-sm"
               >
-                {status === 'loading' ? 'Sending…' : 'Download Chapter 1'}
+                {status === 'loading' ? 'Sending…' : 'Request Chapter 1'}
               </button>
             </form>
           )}

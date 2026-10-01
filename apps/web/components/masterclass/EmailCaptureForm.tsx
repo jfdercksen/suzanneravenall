@@ -49,10 +49,10 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
     return (
       <div className="rounded-card bg-brand-accent/5 border border-brand-primary-300/40 p-6 text-center">
         <p className={`font-medium text-lg ${variant === 'light' ? 'text-brand-ink' : 'text-white'}`}>
-          You&rsquo;re in!
+          Thank you, you&rsquo;re on the list.
         </p>
         <p className={`mt-1 text-sm ${variant === 'light' ? 'text-brand-muted' : 'text-white/80'}`}>
-          Check your inbox: your access link is on its way.
+          We have your details and will be in touch about the masterclass.
         </p>
       </div>
     )
@@ -87,7 +87,7 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
           // White on the dark variant: the near-black accent vanishes on black.
           className={`rounded-button ${variant === 'light' ? 'bg-brand-accent-600 hover:bg-brand-accent-700 text-white' : 'bg-white hover:bg-brand-sand text-brand-primary'} disabled:opacity-60 disabled:cursor-not-allowed px-6 py-3 font-medium text-sm transition-all duration-300 whitespace-nowrap sm:w-auto w-full`}
         >
-          {state === 'submitting' ? 'Sending…' : 'Get Instant Access →'}
+          {state === 'submitting' ? 'Sending…' : 'Register My Interest →'}
         </button>
       </div>
 
@@ -96,7 +96,7 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
       )}
 
       <p className={`mt-3 text-xs ${variant === 'light' ? 'text-brand-muted' : 'text-white/70'}`}>
-        Free. No credit card required. Instant access.
+        Free. No credit card required.
       </p>
 
       {/* TODO Phase 4: Wire to Vibe Marketing automation */}

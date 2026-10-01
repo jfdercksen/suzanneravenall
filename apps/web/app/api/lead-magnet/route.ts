@@ -75,5 +75,5 @@ export async function POST(request: Request) {
     })
   }
 
-  return NextResponse.json({ success: true, message: 'Thank you! Check your inbox for your free chapter.' })
+  return NextResponse.json({ success: true, message: 'Thank you! We have your details and will be in touch.' })
 }
