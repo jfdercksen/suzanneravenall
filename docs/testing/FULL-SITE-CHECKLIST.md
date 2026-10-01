@@ -19,7 +19,7 @@ Target: review box `http://169.239.180.49`.
 | A | Every page loads | READ | 52 routes plus every dynamic page (shop products, programs, pathways, private sessions, explore topics, blog posts) | DONE 1 Oct: PASS after title fix |
 | B | Every link on every page | READ | internal, external, anchors, mailto/tel, images | RUN 1 Oct: PASS except the known video thumbnail |
 | C | Content | READ | placeholders, titles, duplicate titles, broken images, the 6 testimonial videos | RUN 1 Oct: PASS, 3 decisions with Johan |
-| D | Navigation and search | READ | header, footer, mobile menu, `/search`, 404 page | RUN 1 Oct: 1 FAIL fixed awaiting deploy, 1 FAIL open (search index) |
+| D | Navigation and search | READ | header, footer, mobile menu, `/search`, 404 page | DONE 1 Oct: PASS after 2 fixes; follow-up open on the n8n index sync |
 | E | Forms | MAIL | contact, homepage chapter request, masterclass, resources newsletter, assessments notify, community, unsubscribe | not started |
 | F | Diagnostics | MAIL | 8 quizzes: gate, invite mail, link, questions, result, full report mail, notification | not started |
 | G | Shop and checkout | WRITE | listing, product page, cart, voucher, free order, PayFast sandbox, PayPal sandbox, confirmation page, order mail, invoice PDF | not started |
@@ -120,3 +120,7 @@ Run: robots, sitemap, health, legal pages, page head tags, analytics and respons
 | Error tracking | Sentry code is in the page. Whether events arrive is not checked here (section K). |
 | Head tags | Icon, language, share title and image, 4 structured-data blocks present. No canonical link on pages: open, low priority. `/favicon.ico` itself answers 404 (the page names `/icon.png`, so browsers show the icon). |
 | Response headers | Security headers present, but each is sent twice (nginx and the app) and X-Frame-Options is sent as both DENY and SAMEORIGIN. No Content-Security-Policy. `X-Powered-By: Next.js` exposed. Open, low priority. |
+
+### Search index re-test, 1 Oct 2026 (after the fixed seed ran on the server)
+
+PASS. Seed output: 107 of 107 products and 8 topics indexed. Re-test: all 107 live products are findable by name and every title in search equals the product page. Section D is closed, except the open follow-up that the n8n workflow `meilisearch-content-sync` still sends the key as Bearer, so product edits do not update the index on their own.
