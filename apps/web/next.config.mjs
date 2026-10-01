@@ -142,7 +142,6 @@ const nextConfig = {
       { source: '/test-page',   destination: '/', permanent: true },
       { source: '/testacuityapi', destination: '/', permanent: true },
       { source: '/affiliate-area', destination: '/', permanent: true },
-      { source: '/unsubscribe', destination: '/', permanent: true },
       { source: '/masterclass-test-page', destination: '/', permanent: true },
 
 { source: '/what-i-do',                   destination: '/services', permanent: true },

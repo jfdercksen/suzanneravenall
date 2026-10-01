@@ -118,7 +118,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const prep = $('Prepare: Build Login Hash').first().json;\nconst loginResult = $input.first().json;\nif (!loginResult.success) throw new Error('Vtiger login failed');\nconst sessionName = loginResult.result.sessionName;\nconst safeEmail = prep.email.replace(/'/g, \"\\\\'\");\nreturn [{ json: { ...prep, sessionName, safeEmail } }];"
+        "jsCode": "const prep = $('Prepare: Build Login Hash').first().json;\nconst loginResult = $input.first().json;\nif (!loginResult.success) throw new Error('Vtiger login failed');\nconst sessionName = loginResult.result.sessionName;\n// Vtiger requires assigned_user_id on every record; the webservice user owns them.\nconst userId = loginResult.result.userId;\nconst safeEmail = prep.email.replace(/'/g, \"\\\\'\");\nreturn [{ json: { ...prep, sessionName, safeEmail, userId } }];"
       },
       "id": "lm2v-0007-0000-0000-000000000007",
       "name": "Prepare: Session",
@@ -135,7 +135,7 @@
           "parameters": [
             { "name": "operation", "value": "query" },
             { "name": "sessionName", "value": "={{ $json.sessionName }}" },
-            { "name": "query", "value": "=SELECT * FROM Contacts WHERE email='{{ $json.safeEmail }}' LIMIT 1" }
+            { "name": "query", "value": "=SELECT * FROM Contacts WHERE email='{{ $json.safeEmail }}' LIMIT 1;" }
           ]
         },
         "options": {}
@@ -169,7 +169,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Existing contact — update lead_source only if blank, log activity.\nconst prep = $('Prepare: Session').first().json;\nconst findResult = $('Vtiger: Check Contact Exists').first().json;\nconst existing = findResult.result[0];\n\n// Only set leadsource if it's blank\nconst updates = {};\nif (!existing.leadsource) {\n  updates.leadsource = 'Lead Magnet';\n}\n\nconst element = JSON.stringify({ id: existing.id, ...updates });\nreturn [{ json: { ...prep, contactId: existing.id, element, isNew: false } }];"
+        "jsCode": "// Existing contact - set lead_source only if blank, log activity.\nconst prep = $('Prepare: Session').first().json;\nconst findResult = $('Vtiger: Check Contact Exists').first().json;\nconst existing = findResult.result[0];\n\n// Vtiger's update operation REPLACES the record, so the mandatory fields must\n// travel with it.\nconst element = JSON.stringify({\n  id: existing.id,\n  assigned_user_id: existing.assigned_user_id ?? prep.userId,\n  firstname: existing.firstname ?? prep.firstName,\n  lastname: existing.lastname || prep.lastName || prep.firstName,\n  email: existing.email ?? prep.email,\n  leadsource: existing.leadsource || 'Lead Magnet',\n});\nreturn [{ json: { ...prep, contactId: existing.id, element, isNew: false } }];"
       },
       "id": "lm2v-0010-0000-0000-000000000010",
       "name": "Prepare: Update Existing Contact",
@@ -179,7 +179,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// New contact — create with lead source and pipeline stage.\nconst prep = $('Prepare: Session').first().json;\nconst element = JSON.stringify({\n  email: prep.email,\n  firstname: prep.firstName,\n  lastname: prep.lastName,\n  leadsource: 'Lead Magnet',\n  cf_pipeline_stage: 'New Lead',\n});\nreturn [{ json: { ...prep, element, isNew: true } }];"
+        "jsCode": "// New contact - create with lead source and pipeline stage.\nconst prep = $('Prepare: Session').first().json;\nconst element = JSON.stringify({\n  email: prep.email,\n  firstname: prep.firstName,\n  lastname: prep.lastName || prep.firstName, // Vtiger: lastname is mandatory\n  assigned_user_id: prep.userId,\n  leadsource: 'Lead Magnet',\n  cf_pipeline_stage: 'New Lead',\n});\nreturn [{ json: { ...prep, element, isNew: true } }];"
       },
       "id": "lm2v-0011-0000-0000-000000000011",
       "name": "Prepare: New Contact Payload",
@@ -212,7 +212,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const upsertResult = $input.first().json;\nlet contactId = upsertResult.contactId ?? null;\nif (!contactId && upsertResult.success) {\n  contactId = upsertResult.result?.id ?? null;\n}\nif (!contactId) throw new Error('Could not resolve contactId for ' + upsertResult.email);\nreturn [{ json: { ...$('Prepare: Session').first().json, contactId } }];"
+        "jsCode": "// The input is Vtiger's HTTP response, which carries the record under result.\nconst upsertResult = $input.first().json;\nconst prep = $('Prepare: Session').first().json;\nconst contactId = upsertResult.success ? (upsertResult.result?.id ?? null) : null;\nif (!contactId) throw new Error('Could not resolve contactId: ' + JSON.stringify(upsertResult.error ?? upsertResult).slice(0, 300));\nreturn [{ json: { ...prep, contactId } }];"
       },
       "id": "lm2v-0013-0000-0000-000000000013",
       "name": "Merge: Resolve Contact ID",
@@ -222,7 +222,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const prep = $input.first().json;\nconst today = new Date().toISOString().slice(0, 10);\nconst nowTime = new Date().toTimeString().slice(0, 8);\nconst element = JSON.stringify({\n  activitytype: 'Call',\n  subject: `Lead Magnet Download — ${prep.source}`,\n  description: `Source: ${prep.source}. Email: ${prep.email}`,\n  contact_id: prep.contactId,\n  date_start: today,\n  time_start: nowTime,\n  eventstatus: 'Held',\n});\nreturn [{ json: { ...prep, element } }];"
+        "jsCode": "const prep = $input.first().json;\nconst today = new Date().toISOString().slice(0, 10);\nconst nowTime = new Date().toTimeString().slice(0, 8);\nconst element = JSON.stringify({\n  activitytype: 'Call',\n  subject: ('Website form - ' + prep.source).slice(0, 255),\n  description: 'Source: ' + prep.source + '. Email: ' + prep.email,\n  assigned_user_id: prep.userId,\n  contact_id: prep.contactId,\n  date_start: today,\n  time_start: nowTime,\n  due_date: today,\n  time_end: nowTime,\n  duration_hours: '0',\n  duration_minutes: '15',\n  eventstatus: 'Held',\n});\nreturn [{ json: { ...prep, element } }];"
       },
       "id": "lm2v-0014-0000-0000-000000000014",
       "name": "Prepare: Activity Payload",
@@ -240,7 +240,7 @@
           "parameters": [
             { "name": "operation", "value": "create" },
             { "name": "sessionName", "value": "={{ $json.sessionName }}" },
-            { "name": "elementType", "value": "Activities" },
+            { "name": "elementType", "value": "Events" },
             { "name": "element", "value": "={{ $json.element }}" }
           ]
         },
