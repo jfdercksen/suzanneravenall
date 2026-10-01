@@ -20,7 +20,7 @@ Target: review box `http://169.239.180.49`.
 | B | Every link on every page | READ | internal, external, anchors, mailto/tel, images | RUN 1 Oct: PASS except the known video thumbnail |
 | C | Content | READ | placeholders, titles, duplicate titles, broken images, the 6 testimonial videos | RUN 1 Oct: PASS, 3 decisions with Johan |
 | D | Navigation and search | READ | header, footer, mobile menu, `/search`, 404 page | DONE 1 Oct: PASS after 2 fixes; follow-up open on the n8n index sync |
-| E | Forms | MAIL | contact, homepage chapter request, masterclass, resources newsletter, assessments notify, community, unsubscribe | not started |
+| E | Forms | MAIL | contact, homepage chapter request, masterclass, resources newsletter, assessments notify, community, unsubscribe | PART RUN 1 Oct: no-mail checks done, 2 FAIL fixed awaiting deploy; real submissions wait for the notify address and Johan's go |
 | F | Diagnostics | MAIL | 8 quizzes: gate, invite mail, link, questions, result, full report mail, notification | not started |
 | G | Shop and checkout | WRITE | listing, product page, cart, voucher, free order, PayFast sandbox, PayPal sandbox, confirmation page, order mail, invoice PDF | not started |
 | H | Thinkific enrolment | WRITE | course product enrols, direct product does not, course access mail | not started |
@@ -142,3 +142,37 @@ Run: `look-scan.mjs` over all 207 pages at 375 x 812 and at 1280 x 800 (414 page
 | Pages behind login | NOT COVERED: `/portal`, `/portal/dashboard`, `/resources/awards`, `/resources/media`, `/resources/assessments` land on the login page when signed out, so the scan measured the login page five times. Their look is checked in section I with a signed-in test member. `/cart` and `/checkout` were measured empty; with items in them they belong to section G. |
 
 Not a defect: the Services header looked black in one desktop capture. It is a video and the capture caught a dark frame; the phone capture shows it playing.
+
+### Section E part 1, 1 Oct 2026 (checks that send no mail and create no records)
+
+Run: the code behind each form read end to end, 12 invalid submissions sent to the three form endpoints on the review box, and each form page loaded. No valid submission was sent, so no mail went out and no CRM record was written.
+
+Where each form goes:
+
+| Form | Page | Endpoint | What a submission does |
+|---|---|---|---|
+| Contact | `/contact` | `/api/contact` | One mail to `CONTACT_NOTIFY_EMAIL` (falls back to `hello@suzanneravenall.com`), reply-to the visitor. Nothing to the visitor, nothing to the CRM. |
+| Chapter request | `/` | `/api/lead-magnet` | CRM contact through the n8n workflow `lead-magnet-to-vtiger`, and the Vibe webhook when set. No mail to anyone. |
+| Masterclass (2 forms) | `/masterclass` | same | same |
+| Newsletter | `/resources` | same | same. The address is not added to any newsletter list: it becomes a CRM contact only. |
+| Notify me | `/resources/assessments` | same | same (page is behind login) |
+| Community | `/community` | same | same |
+| Unsubscribe | `/unsubscribe?token=` | `/api/email/unsubscribe` | Adds the address to the suppression list. |
+
+| Check | Result |
+|---|---|
+| Form pages load with their form | PASS: contact, home, masterclass (2), resources, community. |
+| Contact, invalid input (empty, not JSON, bad email, blank name, blank message) | PASS: all 400 with a clear message, nothing sent. |
+| Lead forms, invalid input (empty, not JSON, bad email, name over 100 characters) | PASS: 400 or 422, nothing sent. Noted: an over-long name answers "Please enter a valid email address", which names the wrong field. |
+| Unsubscribe, no token and forged token (body and query) | PASS: 400, nothing recorded. |
+| Unsubscribe page | FAIL, fixed: `/unsubscribe` answered 308 to the homepage. An old WordPress redirect in `next.config.mjs` (`/unsubscribe` to `/`) fires before the page, so the unsubscribe link in every marketing mail (cart reminders, membership renewal and expiry) lands on the homepage and unsubscribes nobody. The one-click header that mail apps use goes to the API and was not affected. Redirect removed; no other redirect hides a real page (161 checked). Re-test after deploy. |
+| CRM write behind the five lead forms | FAIL by code read, fixed in the file, NOT YET PROVEN: `lead-magnet-to-vtiger.json` still carried the four Vtiger faults that were found and fixed in the order workflow on 22 Sep (KI054): contact query without its closing semicolon, no owner on a new contact, an update that drops the mandatory fields, and the activity written to a type Vtiger refuses. On that evidence every chapter, masterclass, newsletter, notify and community submission has failed to reach the CRM, with an alert mail to `ALERT_EMAIL` each time. Fixed with the same changes proven on orders #8 to #13. Needs: re-import in n8n, then one test submission. |
+| Flood protection | Open, low: `/api/contact` and `/api/lead-magnet` have no request limit (the quiz and unsubscribe endpoints do). A script could fill the client's inbox or the CRM. |
+| Booking workflow | Noted for section J: `calcom-booking-to-vtiger.json` shows the same four Vtiger faults and still reads the webhook fields off the top level. Not changed here. |
+
+Still to run in section E, each needs a server step first:
+1. Contact form, one real submission: after `CONTACT_NOTIFY_EMAIL` points at our inbox.
+2. One lead form submission per source (5): after the workflow re-import. Writes one test CRM contact, listed for cleanup. Check whether the Vibe webhook is set on the box first, because it would put the test address into Vibe.
+3. Unsubscribe with a real signed link: after the redirect fix is deployed.
+
+To decide with Johan: the homepage form asks for an address for the chapter and the newsletter form says subscribe, but neither sends the visitor anything and neither feeds a newsletter list.
