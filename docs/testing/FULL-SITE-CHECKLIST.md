@@ -20,15 +20,15 @@ Target: review box `http://169.239.180.49`.
 | B | Every link on every page | READ | internal, external, anchors, mailto/tel, images | RUN 1 Oct: PASS except the known video thumbnail |
 | C | Content | READ | placeholders, titles, duplicate titles, broken images, the 6 testimonial videos | RUN 1 Oct: PASS, 3 decisions with Johan |
 | D | Navigation and search | READ | header, footer, mobile menu, `/search`, 404 page | DONE 1 Oct: PASS after 2 fixes; follow-up open on the n8n index sync |
-| E | Forms | MAIL | contact, homepage chapter request, masterclass, resources newsletter, assessments notify, community, unsubscribe | PART RUN 1 Oct: no-mail checks done, 2 FAIL fixed awaiting deploy; real submissions wait for the notify address and Johan's go |
-| F | Diagnostics | MAIL | 8 quizzes: gate, invite mail, link, questions, result, full report mail, notification | not started |
+| E | Forms | MAIL | contact, homepage chapter request, masterclass, resources newsletter, assessments notify, community, unsubscribe | PART RUN 1 Oct: no-mail checks PASS after 1 fix; real submissions wait for the workflow re-import and the notify address |
+| F | Diagnostics | MAIL | 8 quizzes: gate, invite mail, link, questions, result, full report mail, notification | PART RUN 1 Oct: no-mail checks PASS; the mail run waits for the notify address |
 | G | Shop and checkout | WRITE | listing, product page, cart, voucher, free order, PayFast sandbox, PayPal sandbox, confirmation page, order mail, invoice PDF | not started |
 | H | Thinkific enrolment | WRITE | course product enrols, direct product does not, course access mail | not started |
 | I | Member portal | WRITE | signup, login, login link mail, forgot and reset password, dashboard, programmes, resources, videos, account, upgrade | not started |
 | J | Bookings | WRITE | booking page, slots, host and attendee mails, cancel, reschedule, calendar connection, account email, CRM record | not started |
 | K | Automations | WRITE | each n8n workflow: trigger, run, result, error alert | not started |
 | L | Legal and technical | READ | legal pages, cookie notice, sitemap, robots, health, analytics ids, error tracking | RUN 1 Oct: 1 FAIL fixed awaiting deploy, 2 launch items |
-| M | Phone and desktop look | READ | every page at 375 and 1280: layout, contrast, overflow | RUN 1 Oct: 1 FAIL fixed awaiting deploy; pages behind login move to I |
+| M | Phone and desktop look | READ | every page at 375 and 1280: layout, contrast, overflow | DONE 1 Oct: PASS after the header fix; pages behind login move to I |
 
 ## Known going in (1 Oct)
 
@@ -176,3 +176,27 @@ Still to run in section E, each needs a server step first:
 3. Unsubscribe with a real signed link: after the redirect fix is deployed.
 
 To decide with Johan: the homepage form asks for an address for the chapter and the newsletter form says subscribe, but neither sends the visitor anything and neither feeds a newsletter list.
+
+### Re-tests after the deploy of 86ea858, 1 Oct 2026
+
+Deployed through the GitHub "Deploy" workflow (review job, web only, run 36864550937): build and test passed, review deploy passed, site answers 200.
+
+| Check | Result |
+|---|---|
+| Header, sideways scroll (section M) | PASS on the review box: 0px over and nothing past the edge on `/`, `/shop` and `/contact` at 1009, 1024, 1265, 1280 and 1366 wide. Section M is closed. |
+| Unsubscribe page (section E) | PASS: `/unsubscribe` answers 200 and shows its own page; a forged link shows "this unsubscribe link is incomplete or has been altered". Still to do with a real signed link. |
+
+### Section F part 1, 1 Oct 2026 (checks that send no mail and create no records)
+
+| Check | Result |
+|---|---|
+| The 8 diagnostic gates | PASS: every `/explore/<topic>/quiz` page answers 200 and shows its sign-up form. |
+| Sign-up endpoint, invalid input | PASS: empty and bad email 422 with a clear message, unknown diagnostic 404. |
+| Answers and report endpoints, invalid input | PASS: empty 422, forged link 404 "Invalid or expired link". |
+| Diagnostic content and scoring | PASS in the unit tests: 65 of 65 (the 8 question sets, results and the three endpoints). |
+| Who gets mail | Invite and full report go to the visitor. The completion notice goes to `QUIZ_NOTIFY_EMAIL`, then `CONTACT_NOTIFY_EMAIL`, then `hello@suzanneravenall.com`: so the full run waits until one of the first two points at our inbox. |
+
+Server steps still open before E and F can finish (not possible from this session: the server takes a key from the pipeline only, and password sign-in is not something the session does):
+1. Re-import `infra/n8n/workflows/lead-magnet-to-vtiger.json` in n8n (the file is on the box after the deploy).
+2. Set `CONTACT_NOTIFY_EMAIL` and `QUIZ_NOTIFY_EMAIL` in `infra/.env` to our inbox and recreate web; set them back after the run.
+3. Tell the session whether `VIBE_MARKETING_WEBHOOK_URL` is set on the box (a lead form test would send the test address to Vibe).
