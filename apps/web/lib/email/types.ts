@@ -72,6 +72,21 @@ export interface QuizInviteEmailData {
   link: string
 }
 
+/** The subscriber's own full report, the same content the results screen shows. */
+export interface QuizReportEmailData {
+  email: string
+  firstName: string
+  quizTitle: string
+  resultTitle: string
+  resultSubtitle: string
+  mirror: string
+  mechanism: string
+  impact: string[]
+  shift: string[]
+  ctaLabel: string
+  ctaLink: string
+}
+
 export interface QuizAnsweredQuestion {
   text: string
   answerLabel: string

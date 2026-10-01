@@ -102,18 +102,15 @@ export default function QuizFlow({
   }, [step, total, subscriberId, accessToken])
 
   const emailReport = async () => {
-    if (!subscriberEmail) return
+    if (!subscriberEmail || !accessToken) return
     setStatus('submitting')
     setMessage('')
     try {
-      const res = await fetch('/api/lead-magnet', {
+      // The report itself: sent to the subscriber's stored address.
+      const res = await fetch('/api/quiz/report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: subscriberEmail,
-          source: quiz.slug,
-          quizResult: resultKey,
-        }),
+        body: JSON.stringify({ quizSlug: quiz.slug, accessToken }),
       })
       if (res.status === 429) {
         setStatus('error')
@@ -121,6 +118,18 @@ export default function QuizFlow({
         return
       }
       if (!res.ok) throw new Error('Request failed')
+
+      // The CRM record of the request. Never blocks or fails the report.
+      void fetch('/api/lead-magnet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: subscriberEmail,
+          source: quiz.slug,
+          quizResult: resultKey,
+        }),
+      }).catch(() => {})
+
       setStatus('success')
       setMessage(`Your full ${quiz.title} Report is on its way!`)
     } catch {
@@ -334,9 +343,8 @@ export default function QuizFlow({
                   <span aria-hidden="true">→</span>
                 </Link>
 
-                {/* TODO: PDF report generation pending — currently sends email +
-                    result only. Build PDF per results structure in email when
-                    content is finalised. */}
+                {/* Emails the result sections shown above via /api/quiz/report.
+                    A PDF version is not built. */}
                 {subscriberEmail && status !== 'success' && (
                   <button
                     type="button"

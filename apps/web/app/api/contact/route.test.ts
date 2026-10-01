@@ -67,6 +67,16 @@ describe('POST /api/contact', () => {
     expect(call.subject).toBe('New contact message from Alice <script>')
   })
 
+  it('falls back to hello@ when CONTACT_NOTIFY_EMAIL is an empty string', async () => {
+    // docker-compose passes an unset variable as '' (30 Sep 2026: every send refused).
+    vi.stubEnv('CONTACT_NOTIFY_EMAIL', '')
+
+    const res = await POST(makeRequest(validBody) as never)
+
+    expect(res.status).toBe(200)
+    expect(mockSendEmail.mock.calls[0]![0].to).toEqual(['hello@suzanneravenall.com'])
+  })
+
   it('escapes HTML in the visitor fields', async () => {
     await POST(makeRequest(validBody) as never)
 

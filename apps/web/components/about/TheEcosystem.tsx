@@ -29,7 +29,7 @@ const cards: {
     title: 'Rapid Repatterning\u00ae',
     description:
       'The flagship method. A fusion of metaphysics, neuroscience, trauma science, energy psychology and NLP, helping people and organisations rewire from the inside out, unlock their potential, and rise.',
-    href: '/services',
+    href: '/services/private-sessions/rapid-repatterning',
   },
   {
     label: 'Scalable transformation',

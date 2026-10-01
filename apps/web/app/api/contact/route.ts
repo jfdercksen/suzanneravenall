@@ -80,7 +80,9 @@ export async function POST(request: NextRequest) {
   try {
     await sendEmail({
       // Read at call time, like the key, so a container env change needs no rebuild.
-      to: [process.env.CONTACT_NOTIFY_EMAIL ?? 'hello@suzanneravenall.com'],
+      // `||`, not `??`: docker-compose passes an unset variable as an empty string,
+      // which `??` kept, and Brevo then refused the send ("email is missing in to").
+      to: [process.env.CONTACT_NOTIFY_EMAIL || 'hello@suzanneravenall.com'],
       replyTo: email,
       subject: `New contact message from ${name}`,
       html,

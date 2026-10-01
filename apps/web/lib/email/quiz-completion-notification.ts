@@ -10,7 +10,8 @@ export async function sendQuizCompletionNotificationEmail(
   data: QuizCompletionEmailData
 ): Promise<string> {
   return sendEmail({
-    to: [process.env.QUIZ_NOTIFY_EMAIL ?? process.env.CONTACT_NOTIFY_EMAIL ?? 'hello@suzanneravenall.com'],
+    // `||`: docker-compose passes an unset variable as an empty string.
+    to: [process.env.QUIZ_NOTIFY_EMAIL || process.env.CONTACT_NOTIFY_EMAIL || 'hello@suzanneravenall.com'],
     replyTo: data.email,
     subject: `${data.firstName} ${data.lastName} completed: ${data.quizTitle}`,
     react: createElement(QuizCompletionNotification, data),
