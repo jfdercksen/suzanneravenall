@@ -56,10 +56,11 @@ export default function DesktopNav({ items }: DesktopNavProps) {
     }
   }, [openGroup, close])
 
-  // gap-4/text-sm at lg — 8 top-level items must fit 1024-1279px next to
-  // logo + search + cart; roomier gap-5 from xl where the container caps.
+  // gap-3/text-sm at lg — 8 top-level items must fit 1024-1279px next to
+  // logo + search + cart. Only gap-4 from xl and no larger type: at exactly
+  // 1280 the CTA button appears and a scrollbar takes 15px of the row.
   return (
-    <nav ref={navRef} aria-label="Main navigation" className="hidden lg:flex items-center gap-4 xl:gap-5">
+    <nav ref={navRef} aria-label="Main navigation" className="hidden lg:flex items-center gap-3 xl:gap-4">
       {items.map((item) => {
         if (isNavGroup(item)) {
           const isOpen = openGroup === item.label
@@ -74,7 +75,7 @@ export default function DesktopNav({ items }: DesktopNavProps) {
                 aria-expanded={isOpen}
                 onClick={() => setOpenGroup(isOpen ? null : item.label)}
                 aria-controls={panelId}
-                className={`flex items-center gap-1 whitespace-nowrap font-medium text-sm xl:text-[15px] transition-colors duration-150 ${
+                className={`flex items-center gap-1 whitespace-nowrap font-medium text-sm transition-colors duration-150 ${
                   isGroupActive
                     ? 'text-brand-accent-300 font-semibold'
                     : 'text-white/90 hover:text-white'
@@ -129,7 +130,7 @@ export default function DesktopNav({ items }: DesktopNavProps) {
               href={item.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-white/90 hover:text-white font-medium text-sm xl:text-[15px] transition-colors duration-150"
+              className="inline-flex items-center gap-1.5 text-white/90 hover:text-white font-medium text-sm transition-colors duration-150"
             >
               {item.label}
               <ExternalLink size={14} aria-hidden="true" />
@@ -144,7 +145,7 @@ export default function DesktopNav({ items }: DesktopNavProps) {
             key={item.label}
             href={item.href}
             aria-current={isActive ? 'page' : undefined}
-            className={`whitespace-nowrap font-medium text-sm xl:text-[15px] transition-colors duration-150 ${
+            className={`whitespace-nowrap font-medium text-sm transition-colors duration-150 ${
               isActive ? 'text-brand-accent-300 font-semibold' : 'text-white/90 hover:text-white'
             }`}
           >

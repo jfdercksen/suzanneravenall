@@ -133,7 +133,7 @@ export function SearchBar() {
         className="flex items-center gap-1.5 px-3 py-2 text-white/70 hover:text-white rounded-md transition-colors duration-150"
       >
         <Search className="w-4 h-4" />
-        <kbd className="hidden lg:inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-medium bg-white/10 rounded border border-white/20">
+        <kbd className="hidden xl:inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-medium bg-white/10 rounded border border-white/20">
           ⌘K
         </kbd>
       </button>
