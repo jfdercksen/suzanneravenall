@@ -39,7 +39,8 @@ const cards: {
     // language. Needs client review before shipping.
     description:
       'Suzanne\u2019s moonshot: making deep human transformation a replicable science that can be taught, scaled and licensed globally, so people, teams and entire systems can repattern their way to coherence, health optimisation and joy.',
-    href: '/services',
+    // HPR is a separate brand with its own site, as linked from the old homepage.
+    href: 'https://humanperformancereplicator.com/',
     confirm: true,
   },
 ]
@@ -82,6 +83,9 @@ export default function TheEcosystem() {
             >
               <Link
                 href={card.href}
+                {...(card.href.startsWith('http')
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
                 aria-label={card.title}
                 className="group relative block h-full overflow-hidden rounded-card border border-white/5 bg-brand-primary-900 transition-all duration-500 hover:border-white/30 hover:shadow-2xl hover:-translate-y-1"
               >
