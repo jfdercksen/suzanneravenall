@@ -16,9 +16,9 @@ Target: review box `http://169.239.180.49`.
 
 | # | Section | Type | Items | Status |
 |---|---|---|---|---|
-| A | Every page loads | READ | 52 routes plus every dynamic page (shop products, programs, pathways, private sessions, explore topics, blog posts) | RUN 1 Oct: 1 FAIL fixed, awaiting deploy + re-test |
+| A | Every page loads | READ | 52 routes plus every dynamic page (shop products, programs, pathways, private sessions, explore topics, blog posts) | DONE 1 Oct: PASS after title fix |
 | B | Every link on every page | READ | internal, external, anchors, mailto/tel, images | RUN 1 Oct: PASS except the known video thumbnail |
-| C | Content | READ | placeholders, titles, duplicate titles, broken images, the 6 testimonial videos | not started |
+| C | Content | READ | placeholders, titles, duplicate titles, broken images, the 6 testimonial videos | RUN 1 Oct: PASS, 3 decisions with Johan |
 | D | Navigation and search | READ | header, footer, mobile menu, `/search`, 404 page | not started |
 | E | Forms | MAIL | contact, homepage chapter request, masterclass, resources newsletter, assessments notify, community, unsubscribe | not started |
 | F | Diagnostics | MAIL | 8 quizzes: gate, invite mail, link, questions, result, full report mail, notification | not started |
@@ -73,3 +73,9 @@ Run: every one of the 207 pages (135 crawled plus the product pages) read for pl
 | Product descriptions | 35 of 107 product pages carry no product description: the page shows only the standard template copy and the search description is the fallback "Transform your life with Dr. Suzanne Ravenall." List in `content-2026-10-01.csv`. 1 product has no description tag at all (`rapid-repatterning-session-60-min-online`, the KI006 duplicate). |
 | Duplicate product titles | Exactly 3 pairs, as listed under A and B. |
 | Page titles re-test | NOT YET: review box still served the old titles at 12:05 (198 of 207 double). Re-run after the deploy lands. |
+
+### Page titles re-test, 1 Oct 2026 (after deploy of a87610d)
+
+PASS. 207 pages read: 205 show the site name once. The other 2 (`/about`, `/masterclass`) carry her name inside the page's own headline as well, which reads correctly. Every page has the site name. Section A is closed.
+
+Noted, not a defect: 5 programme pages share a title with their shop product (`/programs/meditation` and `/shop/meditation-live-via-zoom`, and the same for mindfulness, coherence muscle testing, love and relationships, trauma to transcendence).
