@@ -46,7 +46,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
       >
         {detail?.heroCtaPrimaryLabel && (
           <Link
-            href={detail.heroCtaPrimaryHref ?? '/contact'}
+            href={detail.heroCtaPrimaryHref ?? '/discover-your-pattern'}
             className="inline-flex items-center justify-center gap-3 px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
           >
             {detail.heroCtaPrimaryLabel}
