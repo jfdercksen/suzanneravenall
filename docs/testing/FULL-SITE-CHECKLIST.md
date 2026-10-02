@@ -200,3 +200,18 @@ Server steps still open before E and F can finish (not possible from this sessio
 1. Re-import `infra/n8n/workflows/lead-magnet-to-vtiger.json` in n8n (the file is on the box after the deploy).
 2. Set `CONTACT_NOTIFY_EMAIL` and `QUIZ_NOTIFY_EMAIL` in `infra/.env` to our inbox and recreate web; set them back after the run.
 3. Tell the session whether `VIBE_MARKETING_WEBHOOK_URL` is set on the box (a lead form test would send the test address to Vibe).
+
+### Test order #19 - session booking link (2 Oct)
+
+Rapid Repatterning Session, 60 min online, buyer johan@aiautomations.co.za, voucher QA-SELFTEST-100, total R0. Free-order path, no gateway.
+
+| Check | Result |
+|---|---|
+| Checkout contact, voucher, place order | PASS |
+| Confirmation page text (What Happens Next) | PASS |
+| Order mail arrives, to buyer only | PASS (1 min) |
+| Booking block and link to own booking page | PASS (http://169.239.180.49:3002/suzanneravenall/discovery-call) |
+| Greeting uses buyer name | FAIL - "Dear valued customer" |
+| Voucher line in mail summary | FAIL - Subtotal R1,660, Total R0, no discount row |
+| Wording | "Programme" heading for a session; em dashes; "2-3 business days" promise unconfirmed |
+| Invoice PDF link | not opened yet |

@@ -36,26 +36,26 @@ function getNextSteps(productType: OrderProductType | undefined): NextStep[] {
   switch (productType) {
     case 'session':
       return [
-        { step: '01', text: 'Your booking link is above — schedule your session at your convenience.' },
+        { step: '01', text: 'Your booking link is above. Schedule your session at your convenience.' },
         { step: '02', text: 'Prepare any questions, topics, or intentions you want to explore.' },
-        { step: '03', text: 'Join your session — Suzanne will guide the rest.' },
+        { step: '03', text: 'Join your session. Suzanne will guide the rest.' },
       ]
     case 'self-paced':
       return [
-        { step: '01', text: 'Create your member portal account at suzanneravenall.com/portal — your programme content will be waiting.' },
-        { step: '02', text: 'Work through the materials at your own pace — no deadlines, no pressure.' },
+        { step: '01', text: 'Create your member portal account at suzanneravenall.com/portal. Your programme content will be waiting.' },
+        { step: '02', text: 'Work through the materials at your own pace: no deadlines, no pressure.' },
         { step: '03', text: 'Reach out to support@ravenallinstitute.com any time you need guidance.' },
       ]
     case 'live':
       return [
         { step: '01', text: 'Watch your email for joining instructions and Zoom details.' },
         { step: '02', text: 'Joining instructions are sent 48 hours before your first session.' },
-        { step: '03', text: 'Join the live session — Suzanne will be there to guide you through every step.' },
+        { step: '03', text: 'Join the live session. Suzanne will be there to guide you through every step.' },
       ]
     case 'group':
       return [
         { step: '01', text: 'Your Zoom link will be emailed 24 hours before the session.' },
-        { step: '02', text: 'Sessions are recorded — you will receive the recording link after.' },
+        { step: '02', text: 'Sessions are recorded. You will receive the recording link after.' },
         { step: '03', text: 'Reach out if you have any questions before the session.' },
       ]
     default:
@@ -74,6 +74,7 @@ export default function OrderConfirmation({
   firstName,
   items,
   subtotal,
+  discountTotal,
   taxTotal,
   total,
   invoiceUrl,
@@ -98,7 +99,7 @@ export default function OrderConfirmation({
   return (
     <Html lang="en">
       <Head />
-      <Preview>Your transformation begins — Order #{displayId}</Preview>
+      <Preview>Your transformation begins - Order #{displayId}</Preview>
       <Body style={{ backgroundColor: '#ffffff', fontFamily: "'Poppins', Arial, sans-serif", margin: 0, padding: 0 }}>
         <Container style={{ maxWidth: '600px', margin: '0 auto' }}>
 
@@ -137,7 +138,7 @@ export default function OrderConfirmation({
                 Book Your Session
               </Text>
               <Text style={{ color: '#ffffff', fontSize: '16px', fontWeight: '600', margin: '0 0 8px' }}>
-                Your payment is confirmed — schedule now
+                Your order is confirmed. Schedule now
               </Text>
               <Text style={{ color: '#94a3b8', fontSize: '14px', lineHeight: '1.6', margin: '0 0 24px' }}>
                 Click below to choose a date and time that works for you.
@@ -196,7 +197,7 @@ export default function OrderConfirmation({
               <Row style={{ marginBottom: '8px' }}>
                 <Column style={{ width: '60%' }}>
                   <Text style={{ color: MEDIUM_GRAY, fontSize: '11px', fontWeight: '700', letterSpacing: '0.08em', textTransform: 'uppercase', margin: 0 }}>
-                    Programme
+                    Item
                   </Text>
                 </Column>
                 <Column style={{ width: '20%', textAlign: 'center' }}>
@@ -250,6 +251,18 @@ export default function OrderConfirmation({
                   </Text>
                 </Column>
               </Row>
+              {discountTotal && discountTotal > 0 ? (
+                <Row style={{ marginBottom: '4px' }}>
+                  <Column>
+                    <Text style={{ color: MEDIUM_GRAY, fontSize: '13px', margin: 0 }}>Voucher / discount</Text>
+                  </Column>
+                  <Column style={{ textAlign: 'right' }}>
+                    <Text style={{ color: DARK_TEXT, fontSize: '13px', margin: 0 }}>
+                      -{formatAmount(discountTotal, currency)}
+                    </Text>
+                  </Column>
+                </Row>
+              ) : null}
               {vatRegistered ? (
                 <Row style={{ marginBottom: '12px' }}>
                   <Column>

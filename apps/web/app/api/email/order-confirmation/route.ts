@@ -23,8 +23,12 @@ interface MedusaAdminOrder {
     last_name?: string
     email: string
   }
+  billing_address?: {
+    first_name?: string | null
+  } | null
   items: MedusaOrderItem[]
   subtotal: number
+  discount_total?: number
   tax_total: number
   total: number
 }
@@ -89,7 +93,7 @@ export async function POST(req: NextRequest) {
   try {
     // `fields=` REPLACES Medusa's default field list, so the scalars must be
     // named or currency_code, total and created_at arrive undefined (order #3).
-    const fields = ['id', 'display_id', 'status', 'currency_code', 'email', 'customer_id', 'created_at', 'subtotal', 'discount_total', 'tax_total', 'shipping_total', 'total', 'metadata', '*items', '*items.variant', '*items.variant.product', '*customer'].join(',')
+    const fields = ['id', 'display_id', 'status', 'currency_code', 'email', 'customer_id', 'created_at', 'subtotal', 'discount_total', 'tax_total', 'shipping_total', 'total', 'metadata', '*items', '*items.variant', '*items.variant.product', '*customer', '*billing_address'].join(',')
     const res = await fetch(
       `${medusaBase}/admin/orders/${orderId}?fields=${encodeURIComponent(fields)}`,
       {
@@ -132,7 +136,8 @@ export async function POST(req: NextRequest) {
     displayId: order.display_id,
     createdAt: order.created_at,
     currency: order.currency_code,
-    firstName: order.customer?.first_name ?? null,
+    // A guest customer has no name; checkout puts it on the billing address.
+    firstName: order.customer?.first_name || order.billing_address?.first_name || null,
     email: customerEmail,
     items: order.items.map((item) => ({
       id: item.id,
@@ -142,6 +147,7 @@ export async function POST(req: NextRequest) {
       unitPrice: item.unit_price,
     })),
     subtotal: order.subtotal,
+    discountTotal: Number(order.discount_total ?? 0),
     taxTotal: order.tax_total,
     total: order.total,
     productType,

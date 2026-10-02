@@ -43,6 +43,7 @@ function buildPlainText(order: OrderEmailData, invoiceUrl: string | null): strin
     "You've taken a powerful step towards transformation.",
     "We're honoured to be part of your journey.",
     '',
+    ...(order.calBookingUrl ? ['BOOK YOUR SESSION', '=================', `Choose a date and time: ${order.calBookingUrl}`, ''] : []),
     'ORDER SUMMARY',
     '=============',
     `Order: #${order.displayId}`,
@@ -62,6 +63,9 @@ function buildPlainText(order: OrderEmailData, invoiceUrl: string | null): strin
   const vatRegistered = companyVatNumber() !== null
 
   lines.push('', `Subtotal: ${formatAmount(order.subtotal, order.currency)}`)
+  if (order.discountTotal && order.discountTotal > 0) {
+    lines.push(`Voucher / discount: -${formatAmount(order.discountTotal, order.currency)}`)
+  }
   if (vatRegistered) {
     lines.push(`VAT (15%): ${formatAmount(order.taxTotal, order.currency)}`)
   }

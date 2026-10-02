@@ -59,6 +59,8 @@ export interface OrderEmailData {
   email: string
   items: OrderLineItem[]
   subtotal: number
+  /** Voucher or discount taken off the subtotal; shown as its own row when above 0. */
+  discountTotal?: number
   taxTotal: number
   total: number
   productType?: OrderProductType
