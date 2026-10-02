@@ -15,10 +15,10 @@ const SubscribeSchema = z.object({
   email: z.string().trim().email().max(255),
 })
 
-// 5 requests per IP per 10-minute window — stricter than search's 20/60s
+// 20 requests per IP per 10-minute window (an office shares one address) — stricter than search's 20/60s
 // since every hit here sends an email (KI028; shared limiter, in-memory,
 // single-container deployment).
-const limiter = createRateLimiter({ limit: 5, windowMs: 600_000 })
+const limiter = createRateLimiter({ limit: 20, windowMs: 600_000 })
 
 export async function POST(request: NextRequest) {
   const { limited, retryAfterSeconds } = limiter.check(getClientIp(request.headers))

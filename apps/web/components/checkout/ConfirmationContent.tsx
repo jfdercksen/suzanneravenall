@@ -124,7 +124,7 @@ export default function ConfirmationContent() {
               {
                 icon: Calendar,
                 heading: 'What Happens Next',
-                body: 'Dr. Ravenall\'s team will be in touch within 24 hours to schedule your first session.',
+                body: 'If you bought a session, click the booking link in your email to schedule it. For programmes, your access details are in your email. If you have any issues, please email us and we\'ll be happy to help.',
               },
               {
                 icon: ArrowRight,

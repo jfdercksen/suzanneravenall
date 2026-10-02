@@ -8,7 +8,10 @@ const N8N_BASE_URL = (process.env.N8N_WEBHOOK_URL ?? 'http://n8n:5678').replace(
 const N8N_WEBHOOK_SECRET = process.env.N8N_WEBHOOK_SECRET ?? ''
 const WEB_BASE_URL = (process.env.WEB_BASE_URL ?? 'http://web:3000').replace(/\/$/, '')
 const VIBE_MARKETING_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
-const CALCOM_SESSION_BOOKING_URL = process.env.CALCOM_SESSION_BOOKING_URL ?? 'https://cal.com/suzanneravenall/discovery-call'
+// docker-compose passes unset variables as empty strings, so || not ??.
+const CAL_BASE_URL = (process.env.NEXT_PUBLIC_CAL_URL || 'https://cal.suzanneravenall.com').replace(/\/$/, '')
+const CALCOM_SESSION_BOOKING_URL =
+  process.env.CALCOM_SESSION_BOOKING_URL || `${CAL_BASE_URL}/suzanneravenall/discovery-call`
 const N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL = (process.env.N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL ?? '').replace(/\/$/, '')
 
 if (!N8N_WEBHOOK_SECRET) {

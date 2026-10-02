@@ -60,6 +60,19 @@ const FAQ_ITEMS = [
   },
 ]
 
+const SESSION_CATEGORY_HANDLES = new Set([
+  'private-sessions',
+  'rapid-repatterning',
+  'resonance-repatterning-sessions',
+  'transformation-coaching',
+  'executive-coaching',
+  'akashic-coaching',
+  'family-coaching',
+  'exploring-the-alpha-mind',
+  'rapid-transformation-therapy',
+  'energetic-clearing',
+])
+
 function getDeliveryBadge(handle: string, title: string = ''): { label: string; className: string } {
   const text = `${handle} ${title}`.toLowerCase()
   if (/live(-via-zoom)?/.test(text) || text.includes(' live'))
@@ -104,6 +117,9 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
     ? { label: 'Self-Paced', className: 'bg-brand-sand text-brand-ink border border-brand-border' }
     : getDeliveryBadge(product.handle, product.title)
 
+  // Private sessions sit in their own shop categories; they are booked, not studied.
+  const isSession = product.categories.some((c) => SESSION_CATEGORY_HANDLES.has(c.handle))
+
   const includedItems = isThinkificCourse
     ? [
         'Self-paced online course',
@@ -111,12 +127,18 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         'Course materials and resources',
         'Study at your own pace, anywhere',
       ]
-    : [
-        'Live sessions via Zoom',
-        'Session recordings',
-        'Course materials',
-        'Email support between sessions',
-      ]
+    : isSession
+      ? [
+          'Private session via Zoom, unless booked as in-person',
+          'Session recordings',
+          'Email support between sessions',
+        ]
+      : [
+          'Live sessions via Zoom',
+          'Session recordings',
+          'Course materials',
+          'Email support between sessions',
+        ]
 
   const primaryCategory = product.categories[0]
 
@@ -203,7 +225,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="mb-12">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
-              Programme Details
+              {isSession ? 'Session Details' : 'Programme Details'}
             </p>
             <h2 className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary">
               Everything You Need to Know
@@ -373,7 +395,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               Ready to Transform?
             </h2>
             <p className="text-brand-muted text-lg max-w-xl mx-auto">
-              Choose your programme below and take the first step toward permanent change.
+              Choose your {isSession ? 'session' : 'programme'} below and take the first step toward permanent change.
             </p>
           </motion.div>
 

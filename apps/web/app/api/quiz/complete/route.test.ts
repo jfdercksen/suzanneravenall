@@ -203,9 +203,9 @@ describe('POST /api/quiz/complete', () => {
     expect(mockSendQuizCompletionNotificationEmail).not.toHaveBeenCalled()
   })
 
-  it('rate-limits after 5 requests from the same IP within the window, with a Retry-After header', async () => {
+  it('rate-limits after 20 requests from the same IP within the window, with a Retry-After header', async () => {
     const ip = '203.0.113.50'
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 20; i++) {
       const res = await POST(makeRequest(validBody, ip) as never)
       expect(res.status).toBe(200)
     }
@@ -220,7 +220,7 @@ describe('POST /api/quiz/complete', () => {
     vi.useFakeTimers()
     try {
       const ip = '203.0.113.51'
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 20; i++) {
         const res = await POST(makeRequest(validBody, ip) as never)
         expect(res.status).toBe(200)
       }

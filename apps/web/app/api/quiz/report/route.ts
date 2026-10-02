@@ -14,8 +14,8 @@ const ReportSchema = z.object({
 
 const SEND_FAILED = 'We could not send your report right now. Please try again in a moment.'
 
-// 5 requests per IP per 10-minute window: every successful call sends an email.
-const limiter = createRateLimiter({ limit: 5, windowMs: 600_000 })
+// 20 requests per IP per 10-minute window (an office shares one address): every successful call sends an email.
+const limiter = createRateLimiter({ limit: 20, windowMs: 600_000 })
 
 /**
  * Emails the subscriber their own full report ("Email Me the Full Report").

@@ -20,11 +20,11 @@ const CompleteSchema = z.object({
     }),
 })
 
-// 5 requests per IP per 10-minute window — a real user completes a quiz once,
+// 20 requests per IP per 10-minute window (an office shares one address) — a real user completes a quiz once,
 // and every successful call here writes to the DB and sends Suzanne a
 // notification email (KI028; shared limiter, in-memory, single-container
 // deployment).
-const limiter = createRateLimiter({ limit: 5, windowMs: 600_000 })
+const limiter = createRateLimiter({ limit: 20, windowMs: 600_000 })
 
 export async function POST(request: NextRequest) {
   const { limited, retryAfterSeconds } = limiter.check(getClientIp(request.headers))

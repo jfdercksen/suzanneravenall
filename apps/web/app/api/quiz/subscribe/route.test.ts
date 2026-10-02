@@ -129,9 +129,9 @@ describe('POST /api/quiz/subscribe', () => {
     expect(await res.json()).toMatchObject({ error: "We couldn't send your link — please try again." })
   })
 
-  it('rate-limits after 5 requests from the same IP within the window, with a Retry-After header', async () => {
+  it('rate-limits after 20 requests from the same IP within the window, with a Retry-After header', async () => {
     const ip = '198.51.100.9'
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 20; i++) {
       const res = await POST(makeRequest(validBody, ip) as never)
       expect(res.status).toBe(200)
     }
@@ -146,7 +146,7 @@ describe('POST /api/quiz/subscribe', () => {
     vi.useFakeTimers()
     try {
       const ip = '198.51.100.10'
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 20; i++) {
         const res = await POST(makeRequest(validBody, ip) as never)
         expect(res.status).toBe(200)
       }
