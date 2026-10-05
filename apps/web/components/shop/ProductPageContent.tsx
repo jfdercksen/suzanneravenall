@@ -221,7 +221,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       </section>
 
       {/* 4: Programme Details (cream) */}
-      <section className="w-full bg-brand-cream py-20 lg:py-32">
+      <section className="w-full bg-brand-cream py-20 lg:py-32 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="mb-12">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">

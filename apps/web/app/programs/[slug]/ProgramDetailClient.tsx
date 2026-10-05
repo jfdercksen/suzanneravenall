@@ -458,8 +458,9 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                 practical, transformative framework accessible to anyone ready to change.
               </p>
 
-              {/* Credentials strip */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+              {/* Credentials strip: two columns at every width. Four columns overflowed
+                  the half-width column ("International" is wider than a quarter). */}
+              <div className="grid grid-cols-2 gap-6">
                 {CREDENTIALS.map(({ stat, label }) => (
                   <div key={label} className="text-center">
                     <p className="text-2xl font-semibold text-brand-primary mb-1">{stat}</p>
