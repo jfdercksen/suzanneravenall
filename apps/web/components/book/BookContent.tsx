@@ -569,8 +569,10 @@ export default function BookContent() {
                 >
                   Pre-Order Now: R165
                 </Link>
+                {/* The shop product has no gift option yet, so gifting is an
+                    enquiry until one exists. */}
                 <Link
-                  href="/shop/the-latest-book-by-suzanne"
+                  href="/contact?enquiry=Other&topic=gift"
                   className="inline-flex items-center justify-center px-8 py-4 border border-white/50 hover:border-white text-white hover:bg-white/10 font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
                 >
                   Gift This Book

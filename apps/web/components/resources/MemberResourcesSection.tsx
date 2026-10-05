@@ -19,9 +19,11 @@ const GATED_ITEMS: GatedItem[] = [
     resource: 'resources_assessments',
   },
   {
-    title: 'Member Media Library',
+    // These live in the portal Resource Library ("Tools & Templates"), not on
+    // the press page at /resources/media.
+    title: 'Tools & Templates',
     description: 'Tools, templates, belief mapping worksheets, and relationship dynamics resources.',
-    href: '/resources/media',
+    href: '/portal/resources',
     resource: 'resources_media',
   },
   {

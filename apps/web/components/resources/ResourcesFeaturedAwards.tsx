@@ -78,7 +78,11 @@ export default function ResourcesFeaturedAwards() {
               href="/resources/awards"
               className="inline-flex items-center gap-2 text-sm font-medium text-brand-accent hover:gap-3 transition-all duration-300"
             >
-              See all awards <ArrowRight size={16} />
+              See all awards
+              <span className="text-xs font-medium uppercase tracking-wider bg-brand-accent/20 text-brand-accent rounded-full px-2 py-0.5">
+                Members
+              </span>
+              <ArrowRight size={16} />
             </Link>
           </motion.div>
         </div>

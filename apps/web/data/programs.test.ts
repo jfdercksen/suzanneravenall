@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   PROGRAMS,
   getProgramBySlug,
+  getProgramCta,
   getProgramsByCategory,
   getProgramsBySeries,
   getRelatedPrograms,
@@ -55,6 +56,47 @@ describe('programme catalogue data', () => {
       'Coherence Muscle Testing',
     )
     expect(getProgramBySlug('does-not-exist')).toBeUndefined()
+  })
+})
+
+describe('getProgramCta', () => {
+  it('says "View in Shop" when a product exists, since the button opens the shop page', () => {
+    const p = getProgramBySlug('getting-unstuck')
+    expect(p && getProgramCta(p)).toEqual({ label: 'View in Shop', href: '/shop/getting-unstuck' })
+  })
+
+  it('points the live Meditation programme at the live product, not self-study', () => {
+    const p = getProgramBySlug('meditation')
+    expect(p?.shopHandle).toBe('meditation-live-via-zoom')
+  })
+
+  it('links the recorded group series that have a shop product', () => {
+    expect(getProgramBySlug('money-mastery')?.shopHandle).toBe('money-mastery-group-session')
+    expect(getProgramBySlug('career-progression')?.shopHandle).toBe('career-progression-group-session')
+    expect(getProgramBySlug('attraction-frequency')?.shopHandle).toBe(
+      'group-session-attraction-frequency-recorded',
+    )
+    expect(getProgramBySlug('develop-super-confidence')?.shopHandle).toBe(
+      'group-session-develop-super-confidence',
+    )
+  })
+
+  it('sends a programme without a product to a named /contact enquiry', () => {
+    const p = getProgramBySlug('overcoming-the-need-to-fix-others')
+    expect(p).toBeDefined()
+    if (!p) return
+    const cta = getProgramCta(p)
+    expect(cta.label).toBe('Enquire')
+    const url = new URL(cta.href, 'https://example.com')
+    expect(url.pathname).toBe('/contact')
+    expect(url.searchParams.get('enquiry')).toBe('Group Program')
+    expect(url.searchParams.get('topic')).toBe('Overcoming the Need to Fix Others')
+  })
+
+  it('never labels a programme button "Add to Cart" or "Book Now"', () => {
+    for (const p of PROGRAMS) {
+      expect(['Add to Cart', 'Book Now']).not.toContain(getProgramCta(p).label)
+    }
   })
 })
 

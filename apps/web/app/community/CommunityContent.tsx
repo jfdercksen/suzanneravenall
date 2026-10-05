@@ -170,9 +170,14 @@ export default function CommunityContent() {
                 href="/portal/dashboard"
                 className="inline-flex items-center gap-2 text-brand-accent hover:text-brand-accent-700 font-medium transition-colors duration-300 group"
               >
+                Explore the Portal
+                {/* The portal needs a member login. */}
+                <span className="text-xs font-medium uppercase tracking-wider bg-brand-accent/20 text-brand-accent rounded-full px-2 py-0.5">
+                  Members
+                </span>
                 <svg
                   aria-hidden="true"
-                  className="w-5 h-5 rotate-180 transition-transform duration-300 group-hover:-translate-x-1"
+                  className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -180,7 +185,6 @@ export default function CommunityContent() {
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
-                Explore the Portal
               </Link>
             </motion.div>
 

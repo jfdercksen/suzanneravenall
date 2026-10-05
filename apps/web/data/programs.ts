@@ -543,7 +543,7 @@ export const PROGRAMS: Program[] = [
       'Meditation isn\'t about becoming a different person, a new person, or even a better person. It\'s about training in awareness and getting a healthy sense of perspective. You\'re not trying to turn off your thoughts or feelings. You\'re learning to observe them without judgement. And eventually, you may start to better understand them as well. Suzanne\'s meditation sessions incorporate deep healing practices that go beyond standard mindfulness.',
     priceUsd: 440,
     priceZar: 2770,
-    shopHandle: 'meditation-self-study',
+    shopHandle: 'meditation-live-via-zoom',
     duration: 'Live via Zoom: new dates to be announced',
     features: [
       'Learn to observe thoughts and feelings without judgement',
@@ -569,6 +569,7 @@ export const PROGRAMS: Program[] = [
       'Given the opportunity, pretty much everyone would love to accumulate more wealth, make more money, and live a more abundant life. However, many people have a poor relationship with money and as a result have trouble manifesting wealth into their lives. Financial success starts in the mind, and the number one thing holding many people back is their belief system concerning wealth and money. Over 6 repatterning sessions we cover the beliefs, blocks, and new patterns needed to shift your relationship with money permanently.',
     priceUsd: 90,
     priceZar: 1500,
+    shopHandle: 'money-mastery-group-session',
     duration: 'Recorded series: 6 sessions of 2 hours each',
     features: [
       'Discover and dissolve your limiting beliefs about money',
@@ -592,6 +593,7 @@ export const PROGRAMS: Program[] = [
       'To activate the Law of Attraction in your life, you must identify and change your limiting beliefs, particularly those about what you can achieve professionally. Throughout our lives, since childhood, we\'ve created limiting beliefs about our worth, capability, and potential that have been internalised over time and accepted as true, even when they are not. Over 6 repatterning sessions we move you towards being coherently aligned with the career that you desire.',
     priceUsd: 90,
     priceZar: 1500,
+    shopHandle: 'career-progression-group-session',
     duration: 'Recorded series: 6 sessions of 2 hours each',
     features: [
       'Discover the blocks preventing your career advancement',
@@ -615,6 +617,7 @@ export const PROGRAMS: Program[] = [
       'Join this group repatterning series and learn to resonate with the attraction frequency: manifest your own positivity, light, and love. How are you vibrating right now? How do you cope with your vibration in the world? How do you manage the challenges that arise: do you navigate around them and remain consistent, or do you hide, blame, and criticise when pushed into a corner? A vibration is a state of being, the atmosphere, or the energetic quality of a person, place, thought, or thing.',
     priceUsd: 90,
     priceZar: 1500,
+    shopHandle: 'group-session-attraction-frequency-recorded',
     duration: 'Recorded series: 4 sessions',
     features: [
       'Understand your current vibrational state and how to shift it',
@@ -638,6 +641,7 @@ export const PROGRAMS: Program[] = [
       'Confidence within oneself is a complete game changer. As Henry Ford famously said: "Whether you think you can, or you think you can\'t, you\'re right." Most of us struggle to have the confidence to tackle the various aspects of our lives we know we need to address in order to create the life we truly want. We need confidence to speak up, to try new career opportunities, to embark on health programmes, and to make the choices that can be absolute game changers in our lives.',
     priceUsd: 90,
     priceZar: 1500,
+    shopHandle: 'group-session-develop-super-confidence',
     duration: 'Recorded series: 4 sessions',
     features: [
       'Identify the root cause of your confidence blocks',
@@ -764,6 +768,33 @@ export function getProgramsBySeries(series: ProgramSeries): Program[] {
 
 export function isResonanceRepatterning(program: Program): boolean {
   return program.series === 'resonance-repatterning'
+}
+
+/** Option values of the "What are you looking for?" select on /contact. */
+const CONTACT_ENQUIRY: Record<Program['category'], string> = {
+  practitioner: 'Practitioner Program',
+  'self-paced': 'Other',
+  live: 'Group Program',
+  group: 'Group Program',
+}
+
+/**
+ * Main call to action on a programme detail page.
+ *
+ * With a Medusa product the button opens its shop page, where the visitor
+ * picks a variant and adds it to the cart, so it says "View in Shop" rather
+ * than "Add to Cart". Without a product there is nothing to buy online yet,
+ * so it opens a /contact enquiry naming the programme.
+ */
+export function getProgramCta(program: Program): { label: string; href: string } {
+  if (program.shopHandle) {
+    return { label: 'View in Shop', href: `/shop/${program.shopHandle}` }
+  }
+  const params = new URLSearchParams({
+    enquiry: CONTACT_ENQUIRY[program.category],
+    topic: program.name,
+  })
+  return { label: 'Enquire', href: `/contact?${params.toString()}` }
 }
 
 /**
