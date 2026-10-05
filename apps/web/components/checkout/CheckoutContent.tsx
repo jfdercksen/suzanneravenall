@@ -246,7 +246,7 @@ function PayPalRedirect({ approvalUrl }: { approvalUrl: string }) {
 
 export default function CheckoutContent() {
   const router = useRouter()
-  const { cart, setContact: saveContact, applyPromoCode, removePromoCode } = useCart()
+  const { cart, isLoading, setContact: saveContact, applyPromoCode, removePromoCode } = useCart()
 
   const [step, setStep] = useState<Step>(1)
   const [contact, setContact] = useState<ContactForm>({
@@ -273,12 +273,14 @@ export default function CheckoutContent() {
   // because Medusa's money fields are not always plain numbers on the wire.
   const isFreeOrder = Boolean(cart && appliedVoucher && Number(cart.total) === 0)
 
-  // Redirect to /cart if cart is empty (after initial load)
+  // Nothing to check out (no cart at all, or an empty one): back to /cart once
+  // the cart has loaded. A null cart counts too, for a fresh visitor.
+  const hasItems = Boolean(cart && cart.items.length > 0)
   useEffect(() => {
-    if (cart !== null && cart.items.length === 0) {
+    if (!isLoading && !hasItems) {
       router.replace('/cart')
     }
-  }, [cart, router])
+  }, [isLoading, hasItems, router])
 
   function updateContact(field: keyof ContactForm, value: string) {
     setContact((prev) => ({ ...prev, [field]: value }))
@@ -440,18 +442,32 @@ export default function CheckoutContent() {
       }
       if (res.status === 409 && data.alreadyPlaced) {
         // A retry after a dropped response: the first attempt did place it.
-        router.push('/checkout/confirmation?free=1')
+        router.push(`/checkout/confirmation?free=1&cartId=${encodeURIComponent(cart.id)}`)
         return
       }
       if (!res.ok || !data.order) {
         throw new Error(data.error ?? 'Could not place the order. Please try again.')
       }
       // The confirmation page clears the cart once it mounts.
-      router.push(`/checkout/confirmation?free=1&order=${encodeURIComponent(String(data.order.display_id))}`)
+      // cartId lets the page confirm the order with Medusa rather than trust the URL.
+      router.push(
+        `/checkout/confirmation?free=1&order=${encodeURIComponent(String(data.order.display_id))}&cartId=${encodeURIComponent(cart.id)}`
+      )
     } catch (err) {
       setPaymentError(err instanceof Error ? err.message : 'Could not place the order. Please try again.')
       setIsSubmitting(false)
     }
+  }
+
+  if (!hasItems) {
+    // Loading the cart, or about to redirect to /cart: no form for an empty order.
+    return (
+      <div className="min-h-screen bg-brand-sand py-12 lg:py-20">
+        <p className="text-center text-sm text-brand-muted" role="status">
+          {isLoading ? 'Loading your cart...' : 'Your cart is empty. Taking you to your cart...'}
+        </p>
+      </div>
+    )
   }
 
   const slideProps = {

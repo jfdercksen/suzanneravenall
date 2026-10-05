@@ -66,7 +66,9 @@ export async function POST(req: NextRequest) {
   const params: Record<string, string> = {
     merchant_id: merchantId,
     merchant_key: merchantKey,
-    return_url: `${siteUrl}/checkout/confirmation`,
+    // The cart id lets the confirmation page check with Medusa that the ITN
+    // has turned the cart into an order. PayFast adds nothing to return_url.
+    return_url: `${siteUrl}/checkout/confirmation?gateway=payfast&m_payment_id=${encodeURIComponent(parsed.cartId)}`,
     cancel_url: `${siteUrl}/cart`,
     notify_url: `${siteUrl}/api/webhooks/payfast`,
     name_first: parsed.firstName,

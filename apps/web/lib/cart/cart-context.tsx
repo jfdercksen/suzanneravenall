@@ -38,6 +38,8 @@ export interface Cart {
   region_id: string
   email: string | null
   promotions: CartPromotion[]
+  // Set once the cart has become an order. A completed cart cannot be reused.
+  completed_at?: string | null
 }
 
 // Buyer details the checkout collects. Medusa keeps guest names on the billing
@@ -67,7 +69,9 @@ export interface CartContextType {
   setContact: (contact: CartContact) => Promise<boolean>
   applyPromoCode: (code: string) => Promise<void>
   removePromoCode: (code: string) => Promise<void>
-  clearCart: () => void
+  // With a cart id, clears only if that is the cart this browser holds, so a
+  // stale confirmation link cannot empty a different, live cart.
+  clearCart: (cartId?: string) => void
 }
 
 const CartCtx = createContext<CartContextType | null>(null)
@@ -179,27 +183,66 @@ async function fetchCart(cartId: string): Promise<Cart | null> {
   }
 }
 
+// Only the shopping pages honour ?cartId=. The PayPal return to
+// /checkout/confirmation also carries a cartId, and that cart must not be
+// adopted as the live cart there.
+const RECOVERY_PATHS = new Set(['/checkout', '/cart'])
+const CART_ID_RE = /^cart_[A-Za-z0-9]{10,40}$/
+
+function readRecoveryCartId(): string | null {
+  if (typeof window === 'undefined') return null
+  const path = window.location.pathname.replace(/\/$/, '') || '/'
+  if (!RECOVERY_PATHS.has(path)) return null
+  const id = new URLSearchParams(window.location.search).get('cartId')
+  return id && CART_ID_RE.test(id) ? id : null
+}
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<Cart | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const regionIdRef = useRef<string | null>(null)
 
   useEffect(() => {
+    // Usable means: exists, not already an order, and in the region this
+    // visitor resolves to NOW, not "any configured region". A cart created
+    // while /api/region was handing out USD is permanently broken for most of
+    // the catalogue, and keeping it would carry the 500 across the fix for
+    // every returning visitor.
+    async function loadUsable(cartId: string): Promise<Cart | null> {
+      const existing = await fetchCart(cartId)
+      if (!regionIdRef.current) regionIdRef.current = await fetchRegionId()
+      const resolved = regionIdRef.current
+      if (existing && !existing.completed_at && (!resolved || existing.region_id === resolved)) {
+        return existing
+      }
+      return null
+    }
+
     async function init() {
+      // Cart-recovery links in the abandonment emails open
+      // /checkout?cartId=<id>, often on another device, so that id wins over
+      // whatever this browser had stored.
+      const recoveryId = readRecoveryCartId()
+      if (recoveryId) {
+        const recovered = await loadUsable(recoveryId)
+        if (recovered) {
+          localStorage.setItem(CART_ID_KEY, recovered.id)
+          setCart(recovered)
+          setIsLoading(false)
+          return
+        }
+      }
+
       const cartId = localStorage.getItem(CART_ID_KEY)
-      if (cartId) {
-        const existing = await fetchCart(cartId)
-        // Validate against the region this visitor resolves to NOW, not against
-        // "any configured region". A cart created while /api/region was handing
-        // out USD is permanently broken for most of the catalogue, and keeping
-        // it would carry the 500 across the fix for every returning visitor.
-        const resolved = await fetchRegionId()
-        regionIdRef.current = resolved
-        if (existing && (!resolved || existing.region_id === resolved)) {
+      if (cartId && cartId !== recoveryId) {
+        const existing = await loadUsable(cartId)
+        if (existing) {
           setCart(existing)
           setIsLoading(false)
           return
         }
+        localStorage.removeItem(CART_ID_KEY)
+      } else if (cartId) {
         localStorage.removeItem(CART_ID_KEY)
       }
       setIsLoading(false)
@@ -382,7 +425,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     [cart]
   )
 
-  const clearCart = useCallback(() => {
+  const clearCart = useCallback((cartId?: string) => {
+    if (cartId && localStorage.getItem(CART_ID_KEY) !== cartId) {
+      // Not this browser's cart. Still drop it from state if it is the one shown.
+      setCart((current) => (current?.id === cartId ? null : current))
+      return
+    }
     localStorage.removeItem(CART_ID_KEY)
     setCart(null)
   }, [])
