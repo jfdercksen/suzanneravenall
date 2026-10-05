@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import Script from 'next/script'
+import { Suspense } from 'react'
 import Header from '../components/layout/Header'
 import Footer from '../components/layout/Footer'
 import { Providers } from '../components/layout/Providers'
 import CookieConsent from '../components/layout/CookieConsent'
 import PatternCoachTab from '../components/layout/PatternCoachTab'
+import HashScroll from '../components/layout/HashScroll'
 import { buildGaInitScript, isUsableGaId } from '../lib/analytics'
 import './globals.css'
 
@@ -84,6 +86,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </main>
           <Footer />
+          {/* Scrolls to #hash targets after in-app navigation (site check A2).
+              Suspense: it reads useSearchParams, which must not opt the whole
+              page out of static rendering. */}
+          <Suspense fallback={null}>
+            <HashScroll />
+          </Suspense>
           {/* Cookie consent banner — manages gtag consent update and Clarity injection */}
           <CookieConsent clarityId={safeClarityId} />
         </Providers>

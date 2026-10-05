@@ -7,6 +7,9 @@ import { motion } from 'framer-motion'
 import { HEADER_UNDERLINE, PageHeader } from '@/components/shared/PageHeader'
 import { contactHref } from '@/app/contact/enquiry'
 
+/** "Request the Speaking Kit": the contact form, speaking enquiry preselected. */
+export const SPEAKING_KIT_HREF = contactHref('speaking', 'Speaking Kit')
+
 // Suzanne's real, established signature keynote topics — same four talks
 // used in components/services/Speaking.tsx. Taglines are drawn directly
 // from the source copy, not invented. Durations are as published on the
@@ -466,9 +469,10 @@ export default function SpeakingContent() {
                 {/* TODO: once the speaking kit PDF exists, link straight to it:
                     <a href="/speaking-kit.pdf" download>Download Speaking Kit</a>.
                     Until then organisers request it through the contact form,
-                    with "Speaking Enquiry" preselected. */}
+                    with "Speaking Enquiry" preselected and the message
+                    prefilled, landing on the form (#message). */}
                 <Link
-                  href="/contact?enquiry=Speaking%20Enquiry"
+                  href={SPEAKING_KIT_HREF}
                   className="inline-flex items-center justify-center px-8 py-4 border border-white/50 hover:border-white text-white hover:bg-white/10 font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
                 >
                   Request the Speaking Kit

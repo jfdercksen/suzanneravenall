@@ -1,7 +1,8 @@
 import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
-import CalBookingSection, { BOOKING_FALLBACK_HREF } from './CalBookingSection'
+import { getCalApi } from '@calcom/embed-react'
+import CalBookingSection, { BOOKING_FALLBACK_HREF, CAL_MODAL_NAMESPACE } from './CalBookingSection'
 
 vi.mock('next/link', () => ({
   default: ({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) => (
@@ -27,13 +28,13 @@ vi.mock('framer-motion', () => {
 })
 
 // getCalApi resolves with the snippet queue whether or not embed.js loads;
-// readiness comes from window.Cal.instance, which embed.js sets.
+// readiness comes from window.Cal.ns[namespace].instance, which embed.js sets.
 const calFn = vi.fn()
 vi.mock('@calcom/embed-react', () => ({
   getCalApi: vi.fn(() => Promise.resolve(calFn)),
 }))
 
-type CalWindow = { Cal?: { instance?: unknown } }
+type CalWindow = { Cal?: { instance?: unknown; ns?: Record<string, { instance?: unknown }> } }
 
 beforeEach(() => {
   vi.useFakeTimers()
@@ -71,12 +72,31 @@ describe('CalBookingSection', () => {
     await act(async () => {
       render(<CalBookingSection />)
     })
-    ;(window as unknown as CalWindow).Cal = { instance: {} }
+    ;(window as unknown as CalWindow).Cal = { ns: { [CAL_MODAL_NAMESPACE]: { instance: {} } } }
     await act(async () => {
       vi.advanceTimersByTime(250)
     })
     const button = screen.getByRole('button', { name: 'Book a Discovery Call' })
     expect(button).toBeEnabled()
     expect(screen.queryByRole('link', { name: 'Book a Discovery Call' })).not.toBeInTheDocument()
+  })
+
+  it('uses its own Cal namespace so it cannot clash with the /contact inline embed', async () => {
+    await act(async () => {
+      render(<CalBookingSection />)
+    })
+    expect(CAL_MODAL_NAMESPACE).toBe('discovery-modal')
+    expect(getCalApi).toHaveBeenCalledWith(expect.objectContaining({ namespace: CAL_MODAL_NAMESPACE }))
+  })
+
+  it('ignores a loaded default-namespace instance (that one belongs to another embed)', async () => {
+    await act(async () => {
+      render(<CalBookingSection />)
+    })
+    ;(window as unknown as CalWindow).Cal = { instance: {} }
+    await act(async () => {
+      vi.advanceTimersByTime(250)
+    })
+    expect(screen.getByRole('link', { name: 'Book a Discovery Call' })).toHaveAttribute('href', '/contact#book')
   })
 })
