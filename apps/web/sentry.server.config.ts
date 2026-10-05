@@ -1,8 +1,10 @@
 import * as Sentry from "@sentry/nextjs";
 import { scrubSentryEvent } from "./lib/sentry-scrub";
+import { resolveSentryDsn } from "./lib/sentry-dsn";
 
 Sentry.init({
-  dsn: process.env.SENTRY_DSN_WEB,
+  // Placeholder or malformed DSN -> disabled client, no "Invalid Sentry Dsn" log
+  dsn: resolveSentryDsn(process.env.SENTRY_DSN_WEB),
   environment: process.env.SENTRY_ENVIRONMENT ?? "development",
   tracesSampleRate: 0.1,
 

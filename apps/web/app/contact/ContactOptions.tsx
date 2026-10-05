@@ -66,7 +66,7 @@ export default function ContactOptions({ enquiry, topic }: ContactOptionsProps =
         </motion.h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-          {/* Card 1: Book Discovery Call (primary) */}
+          {/* Card 1: Book Discovery Call (primary). id="book" is the fallback target for the /services Cal button */}
           <motion.div
             id="book"
             {...cardReveal(0.15)}
