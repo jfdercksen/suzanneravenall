@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { hasAccess, type ResourceKey, type TierSlug, type MembershipTrack } from './tiers'
+import { hasAccess, upgradeHref, type ResourceKey, type TierSlug, type MembershipTrack } from './tiers'
 
 export async function getMemberTier(supabase: SupabaseClient): Promise<TierSlug> {
   const {
@@ -101,10 +101,7 @@ export async function requireAccess(
   const tier = await getMemberTier(supabase)
 
   if (!hasAccess(tier, resource)) {
-    const upgradePath = fromPath
-      ? `/portal/upgrade?from=${encodeURIComponent(fromPath)}`
-      : '/portal/upgrade'
-    redirect(upgradePath)
+    redirect(upgradeHref(fromPath))
   }
 
   return tier

@@ -81,6 +81,18 @@ export function tierLabel(tier: TierSlug): string {
   return labels[tier]
 }
 
+/**
+ * The one upgrade destination. requireAccess redirects here, and every
+ * "Unlock with ..." / "Upgrade" link points here too, so a member who is
+ * bounced by the gate and a member who clicks the lock land on the same page.
+ * `from` is the gated path, shown as context on the upgrade page.
+ */
+export const UPGRADE_PATH = '/portal/upgrade'
+
+export function upgradeHref(fromPath?: string): string {
+  return fromPath ? `${UPGRADE_PATH}?from=${encodeURIComponent(fromPath)}` : UPGRADE_PATH
+}
+
 export function minimumTierFor(resource: ResourceKey): TierSlug {
   for (const tier of TIER_ORDER) {
     if (TIER_ACCESS[tier][resource]) return tier

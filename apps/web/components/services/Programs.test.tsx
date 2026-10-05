@@ -2,6 +2,7 @@ import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import Programs from './Programs'
+import { getProgramBySlug } from '@/data/programs'
 
 // ---------------------------------------------------------------------------
 // Mock next/link — render as plain <a> so href is inspectable in tests
@@ -141,6 +142,19 @@ describe('Programs', () => {
       it(`does not render "${name}"`, () => {
         render(<Programs />)
         expect(screen.queryByText(name)).not.toBeInTheDocument()
+      })
+    }
+  })
+
+  describe('programme names link to their programme pages (site check M13)', () => {
+    for (const name of PROGRAMME_NAMES) {
+      it(`"${name}" links to a published /programs/<slug> page`, () => {
+        render(<Programs />)
+        const link = screen.getByRole('link', { name })
+        const href = link.getAttribute('href') ?? ''
+        expect(href).toMatch(/^\/programs\/[a-z0-9-]+$/)
+        const program = getProgramBySlug(href.replace('/programs/', ''))
+        expect(program?.isPublished, href).toBe(true)
       })
     }
   })

@@ -98,10 +98,11 @@ export default function ResourcesFeaturedAwards() {
             <motion.div
               key={award.name}
               variants={cardVariants}
-              className="bg-white border border-brand-border rounded-card p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group"
+              // Award citations have no destination, so the card does not lift on hover.
+              className="bg-white border border-brand-border rounded-card p-8"
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="flex items-center justify-center w-12 h-12 rounded-card bg-brand-accent/10 text-brand-accent group-hover:bg-brand-accent/20 transition-colors duration-300">
+                <div className="flex items-center justify-center w-12 h-12 rounded-card bg-brand-accent/10 text-brand-accent">
                   <Award size={22} />
                 </div>
                 <span className="text-3xl font-medium tracking-tight text-brand-accent">{award.year}</span>

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { hasAccess, tierLabel, minimumTierFor, type TierSlug, type ResourceKey } from '@/lib/access/tiers'
+import { hasAccess, tierLabel, minimumTierFor, upgradeHref, type TierSlug, type ResourceKey } from '@/lib/access/tiers'
 
 export interface VideoRow {
   id: string
@@ -178,9 +178,8 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
               Watch Now
             </button>
           ) : (
-            /* TODO: Build /portal/upgrade page */
             <Link
-              href="/shop?collection=membership"
+              href={upgradeHref('/portal/videos')}
               className="block w-full py-2.5 px-4 bg-brand-primary-700 hover:bg-brand-primary-600 border border-white/25 text-white/80 hover:text-white text-sm font-semibold rounded-button transition-colors duration-300 text-center"
             >
               Unlock with {tierLabel(minTier)}
@@ -319,9 +318,8 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
                 </p>
               </div>
               <div className="flex-shrink-0">
-                {/* TODO: Build /portal/upgrade page */}
                 <Link
-                  href="/shop?collection=membership"
+                  href={upgradeHref('/portal/videos')}
                   className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold rounded-button transition-colors duration-300"
                 >
                   Upgrade Membership

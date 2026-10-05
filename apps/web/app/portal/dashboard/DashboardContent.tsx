@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
-import { hasAccess, TIER_BADGE_STYLES, type TierSlug } from '@/lib/access/tiers'
+import { hasAccess, TIER_BADGE_STYLES, UPGRADE_PATH, type TierSlug } from '@/lib/access/tiers'
 
 function CountUp({ target }: { target: number }) {
   const ref = useRef<HTMLSpanElement>(null)
@@ -354,10 +354,8 @@ export default function DashboardContent({
                 </p>
               </div>
               <div className="flex-shrink-0 flex flex-col sm:flex-row gap-3">
-                {/* TODO: Build /portal/upgrade page (dedicated tier comparison + upgrade flow) */}
-                {/* Temporarily linking to shop membership collection */}
                 <Link
-                  href="/shop?collection=membership"
+                  href={UPGRADE_PATH}
                   className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold rounded-button transition-colors duration-300"
                 >
                   View Membership Plans

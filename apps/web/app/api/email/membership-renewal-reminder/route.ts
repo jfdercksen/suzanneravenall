@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
   }
 
   const { email, firstName, tier, renewalDate } = parsed.data
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://suzanneravenall.com'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://suzanneravenall.com'
 
   // POPIA: renewal reminders are promotional — honour the suppression list.
   if (await isEmailUnsubscribed(email)) {
