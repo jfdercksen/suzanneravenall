@@ -7,5 +7,12 @@ export const metadata: Metadata = {
 }
 
 export default function CheckoutPage() {
-  return <CheckoutContent />
+  return (
+    <>
+      {/* The design has no visible page heading; screen readers and crawlers
+          still get one (site check M12). */}
+      <h1 className="sr-only">Checkout</h1>
+      <CheckoutContent />
+    </>
+  )
 }

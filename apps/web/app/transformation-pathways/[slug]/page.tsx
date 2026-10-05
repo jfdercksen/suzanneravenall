@@ -15,9 +15,7 @@ export function generateStaticParams(): Array<{ slug: string }> {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const pathway = pathwayBySlug(slug)
-  if (!pathway) {
-    return { title: 'Transformation Pathways' }
-  }
+  if (!pathway) notFound()
   return {
     title: `${pathway.title} | Transformation Pathways`,
     description: pathway.description,

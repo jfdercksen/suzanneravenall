@@ -34,6 +34,12 @@ const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   reactStrictMode: true,
 
+  // Inlined at build time: the sitemap uses it as the lastmod of the pages
+  // that only change on a deploy (site check M4).
+  env: {
+    SITE_BUILD_DATE: new Date().toISOString(),
+  },
+
   // @react-pdf/renderer uses Node.js built-ins and native binaries — must not
   // be bundled by webpack. Mark as external so Next.js loads it from node_modules at runtime.
   serverExternalPackages: ['@react-pdf/renderer'],

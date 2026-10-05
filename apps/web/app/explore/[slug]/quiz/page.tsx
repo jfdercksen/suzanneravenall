@@ -36,6 +36,7 @@ export function generateStaticParams(): Array<{ slug: string }> {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
+  if (!topicBySlug(slug)) notFound()
   const quiz = quizBySlug(slug)
   if (!quiz) {
     return { title: 'Diagnostic Coming Soon' }

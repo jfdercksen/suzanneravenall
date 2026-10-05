@@ -12,7 +12,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const program = getProgramBySlug(slug)
-  if (!program) return { title: 'Programme Not Found' }
+  if (!program || !program.isPublished) notFound()
   return {
     title: `${program.name}`,
     description: program.shortDescription,
