@@ -50,7 +50,7 @@ export default function PatternHubQuizGrid() {
               <h3 className="text-lg font-medium text-brand-primary leading-snug">
                 {quiz.question}
               </h3>
-              <p className="text-sm text-brand-muted mt-2 flex-1">{quiz.description}</p>
+              <p className="text-sm text-brand-muted mt-2 mb-6 flex-1">{quiz.description}</p>
               <Link
                 href={`/explore/${quiz.topicSlug}/quiz`}
                 className="mt-auto rounded-button bg-brand-accent-600 text-white text-sm px-4 py-2 hover:bg-brand-accent-700 transition-colors duration-300 text-center w-full"

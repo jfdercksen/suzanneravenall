@@ -61,20 +61,24 @@ export default function AboutTeaser() {
             {/* Offset electric-blue block behind the portrait — flat accent as a
                 graphic element (never as text colour), echoing the reference site's
                 signature blue panel */}
-            <div
-              aria-hidden="true"
-              className="absolute top-4 -right-2 lg:top-6 lg:-right-4 w-full h-full bg-brand-accent rounded-card"
-            />
-            <div className="relative aspect-[4/5] rounded-card overflow-hidden shadow-card-hover">
-              <Image
-                src="/images/suzanne-casual.jpg"
-                alt="Dr. Suzanne Ravenall"
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-top"
+            {/* The block is sized to the portrait only: sized to the whole column it
+                also covered the credentials badge stacked below on mobile/tablet */}
+            <div className="relative">
+              <div
+                aria-hidden="true"
+                className="absolute top-4 -right-2 lg:top-6 lg:-right-4 w-full h-full bg-brand-accent rounded-card"
               />
+              <div className="relative aspect-[4/5] rounded-card overflow-hidden shadow-card-hover">
+                <Image
+                  src="/images/suzanne-casual.jpg"
+                  alt="Dr. Suzanne Ravenall"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover object-top"
+                />
+              </div>
             </div>
-            <div className="mt-4 lg:mt-0 lg:absolute lg:-bottom-4 lg:-left-8 bg-white border border-brand-border text-brand-primary rounded-card p-4 shadow-card-hover inline-block lg:block">
+            <div className="relative mt-8 lg:mt-0 lg:absolute lg:-bottom-4 lg:-left-8 bg-white border border-brand-border text-brand-primary rounded-card p-4 shadow-card-hover inline-block lg:block">
               <p className="text-xs text-brand-muted uppercase tracking-wider mb-0.5">Academic credentials</p>
               <p className="font-semibold text-sm text-brand-primary">B.Msc · M.Msc · Msc.D.</p>
             </div>

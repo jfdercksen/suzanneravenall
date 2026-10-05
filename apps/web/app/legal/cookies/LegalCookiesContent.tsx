@@ -70,8 +70,11 @@ export default function LegalCookiesContent() {
                   disabled without breaking core features. No consent is required for these cookies
                   under POPIA, as they are essential for a service you have explicitly requested.
                 </p>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm border-collapse">
+                <p data-scroll-hint className="sm:hidden text-xs text-brand-muted mb-2">
+                  Swipe sideways to see all four columns, including Duration.
+                </p>
+                <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Cookie table, scrolls sideways">
+                  <table className="w-full min-w-[30rem] text-sm border-collapse">
                     <thead>
                       <tr className="bg-brand-sand">
                         <th className="text-left px-4 py-3 text-brand-ink font-medium border border-brand-border">Cookie Name</th>
@@ -104,8 +107,11 @@ export default function LegalCookiesContent() {
                   collect anonymised information about page views, session duration, and navigation
                   paths. Where consent is required we will ask before setting these cookies.
                 </p>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm border-collapse">
+                <p data-scroll-hint className="sm:hidden text-xs text-brand-muted mb-2">
+                  Swipe sideways to see all four columns, including Duration.
+                </p>
+                <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Cookie table, scrolls sideways">
+                  <table className="w-full min-w-[30rem] text-sm border-collapse">
                     <thead>
                       <tr className="bg-brand-sand">
                         <th className="text-left px-4 py-3 text-brand-ink font-medium border border-brand-border">Cookie Name</th>
