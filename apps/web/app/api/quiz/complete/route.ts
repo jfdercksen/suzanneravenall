@@ -20,15 +20,18 @@ const CompleteSchema = z.object({
     }),
 })
 
-// 20 requests per IP per 10-minute window (an office shares one address) — a real user completes a quiz once,
-// and every successful call here writes to the DB and sends Suzanne a
-// notification email (KI028; shared limiter, in-memory, single-container
-// deployment).
-const limiter = createRateLimiter({ limit: 20, windowMs: 600_000 })
+// Every successful call writes to the DB and sends Suzanne a notification
+// email (KI028), so it is limited PER DIAGNOSTIC LINK: 10 per token per 10
+// minutes, where a real visitor completes once. The per-IP limit is only a
+// flood guard: offices and mobile networks put many visitors behind one
+// address, so a tight IP limit turned real people away (client QA 5 Oct).
+// In-memory, single-container deployment.
+const ipGuard = createRateLimiter({ limit: 120, windowMs: 600_000 })
+const tokenLimiter = createRateLimiter({ limit: 10, windowMs: 600_000 })
 
 export async function POST(request: NextRequest) {
-  const { limited, retryAfterSeconds } = limiter.check(getClientIp(request.headers))
-  if (limited) return rateLimitResponse(retryAfterSeconds)
+  const ipCheck = ipGuard.check(getClientIp(request.headers))
+  if (ipCheck.limited) return rateLimitResponse(ipCheck.retryAfterSeconds)
 
   let body: unknown
   try {
@@ -43,6 +46,9 @@ export async function POST(request: NextRequest) {
   }
 
   const { quizSlug, accessToken, answers } = parsed.data
+
+  const tokenCheck = tokenLimiter.check(accessToken)
+  if (tokenCheck.limited) return rateLimitResponse(tokenCheck.retryAfterSeconds)
 
   const quiz = quizBySlug(quizSlug)
   if (!quiz) {

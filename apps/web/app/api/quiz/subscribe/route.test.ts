@@ -50,11 +50,16 @@ function makeRequest(body: unknown, ip = nextIp()): NextRequestLike {
 
 type NextRequestLike = Request
 
-const validBody = {
-  quizSlug: 'emotional-nervous-system-mastery',
-  firstName: 'Alice',
-  lastName: 'Smith',
-  email: 'alice@example.com',
+// Each call gets its own address: the route also limits invites per
+// recipient, which would otherwise leak between unrelated test cases.
+let emailCounter = 0
+function validBody(email = `alice+${++emailCounter}@example.com`) {
+  return {
+    quizSlug: 'emotional-nervous-system-mastery',
+    firstName: 'Alice',
+    lastName: 'Smith',
+    email,
+  }
 }
 
 describe('POST /api/quiz/subscribe', () => {
@@ -77,39 +82,39 @@ describe('POST /api/quiz/subscribe', () => {
   })
 
   it('returns 422 when email is invalid', async () => {
-    const res = await POST(makeRequest({ ...validBody, email: 'not-an-email' }) as never)
+    const res = await POST(makeRequest({ ...validBody(), email: 'not-an-email' }) as never)
     expect(res.status).toBe(422)
   })
 
   it('returns 422 when firstName is missing', async () => {
-    const res = await POST(makeRequest({ ...validBody, firstName: '' }) as never)
+    const res = await POST(makeRequest({ ...validBody(), firstName: '' }) as never)
     expect(res.status).toBe(422)
   })
 
   it('returns 404 when the quiz is not registered', async () => {
     mockQuizBySlug.mockReturnValue(undefined)
-    const res = await POST(makeRequest(validBody) as never)
+    const res = await POST(makeRequest(validBody()) as never)
     expect(res.status).toBe(404)
   })
 
   it('returns 500 when Supabase env is not configured', async () => {
     mockGetServiceRoleClient.mockReturnValue(null)
-    const res = await POST(makeRequest(validBody) as never)
+    const res = await POST(makeRequest(validBody()) as never)
     expect(res.status).toBe(500)
     expect(await res.json()).toMatchObject({ error: 'Server configuration error' })
   })
 
   it('returns 200 and sends the invite email on success', async () => {
-    const res = await POST(makeRequest(validBody) as never)
+    const res = await POST(makeRequest(validBody()) as never)
     expect(res.status).toBe(200)
     expect(mockSendQuizInviteEmail).toHaveBeenCalledWith(
-      expect.objectContaining({ email: 'alice@example.com', firstName: 'Alice', quizTitle: QUIZ.title }),
+      expect.objectContaining({ email: expect.stringMatching(/^alice\+\d+@example\.com$/), firstName: 'Alice', quizTitle: QUIZ.title }),
     )
     expect(mockMarkEmailSent).toHaveBeenCalledWith(expect.anything(), 'sub-1')
   })
 
   it('includes the access token in the emailed link', async () => {
-    await POST(makeRequest(validBody) as never)
+    await POST(makeRequest(validBody()) as never)
     const call = mockSendQuizInviteEmail.mock.calls[0][0] as { link: string }
     expect(call.link).toContain('token=' + 'a'.repeat(32))
     expect(call.link).toContain('/explore/emotional-nervous-system-mastery/quiz')
@@ -117,43 +122,49 @@ describe('POST /api/quiz/subscribe', () => {
 
   it('returns 500 when upsertSubscriber throws', async () => {
     mockUpsertSubscriber.mockRejectedValue(new Error('db error'))
-    const res = await POST(makeRequest(validBody) as never)
+    const res = await POST(makeRequest(validBody()) as never)
     expect(res.status).toBe(500)
     expect(mockCaptureException).toHaveBeenCalled()
   })
 
   it('returns 500 when the invite email fails to send', async () => {
     mockSendQuizInviteEmail.mockRejectedValue(new Error('resend down'))
-    const res = await POST(makeRequest(validBody) as never)
+    const res = await POST(makeRequest(validBody()) as never)
     expect(res.status).toBe(500)
     expect(await res.json()).toMatchObject({ error: "We couldn't send your link — please try again." })
   })
 
-  it('rate-limits after 20 requests from the same IP within the window, with a Retry-After header', async () => {
-    const ip = '198.51.100.9'
-    for (let i = 0; i < 20; i++) {
-      const res = await POST(makeRequest(validBody, ip) as never)
-      expect(res.status).toBe(200)
+  it('limits one address to 5 invites per diagnostic per 10 minutes, with a Retry-After header', async () => {
+    const email = 'repeat@example.com'
+    for (let i = 0; i < 5; i++) {
+      expect((await POST(makeRequest(validBody(email)) as never)).status).toBe(200)
     }
-    const limited = await POST(makeRequest(validBody, ip) as never)
+    const limited = await POST(makeRequest(validBody(email)) as never)
     expect(limited.status).toBe(429)
     const retryAfter = Number(limited.headers.get('Retry-After'))
     expect(retryAfter).toBeGreaterThanOrEqual(1)
     expect(retryAfter).toBeLessThanOrEqual(600)
   })
 
-  it('allows requests again after the 10-minute window resets', async () => {
+  it('lets many different visitors behind one shared address through (office, mobile network)', async () => {
+    const ip = '198.51.100.9'
+    for (let i = 0; i < 60; i++) {
+      expect((await POST(makeRequest(validBody(), ip) as never)).status).toBe(200)
+    }
+    expect((await POST(makeRequest(validBody(), ip) as never)).status).toBe(429)
+  })
+
+  it('allows the same address again after the 10-minute window resets', async () => {
     vi.useFakeTimers()
     try {
-      const ip = '198.51.100.10'
-      for (let i = 0; i < 20; i++) {
-        const res = await POST(makeRequest(validBody, ip) as never)
-        expect(res.status).toBe(200)
+      const email = 'window@example.com'
+      for (let i = 0; i < 5; i++) {
+        expect((await POST(makeRequest(validBody(email)) as never)).status).toBe(200)
       }
-      expect((await POST(makeRequest(validBody, ip) as never)).status).toBe(429)
+      expect((await POST(makeRequest(validBody(email)) as never)).status).toBe(429)
 
       vi.advanceTimersByTime(600_001)
-      expect((await POST(makeRequest(validBody, ip) as never)).status).toBe(200)
+      expect((await POST(makeRequest(validBody(email)) as never)).status).toBe(200)
     } finally {
       vi.useRealTimers()
     }

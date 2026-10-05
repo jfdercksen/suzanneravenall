@@ -94,6 +94,37 @@ describe('upsertSubscriber', () => {
     expect(result.accessToken.length).toBeGreaterThan(20)
   })
 
+  it('keeps the existing access token while it is within its TTL, so earlier emailed links still work', async () => {
+    const existing = 'k'.repeat(43)
+    const supabase = makeSupabaseMock({
+      data: { id: 'sub-7', access_token: existing, email_sent_at: new Date().toISOString() },
+      error: null,
+    })
+    const result = await upsertSubscriber(supabase, {
+      quizSlug: 'emotional-nervous-system-mastery',
+      firstName: 'Alice',
+      lastName: 'Smith',
+      email: 'alice@example.com',
+    })
+    expect(result.accessToken).toBe(existing)
+  })
+
+  it('issues a new token when the existing one has expired', async () => {
+    const existing = 'k'.repeat(43)
+    const supabase = makeSupabaseMock({
+      data: { id: 'sub-7', access_token: existing, email_sent_at: '2020-01-01T00:00:00.000Z' },
+      error: null,
+    })
+    const result = await upsertSubscriber(supabase, {
+      quizSlug: 'emotional-nervous-system-mastery',
+      firstName: 'Alice',
+      lastName: 'Smith',
+      email: 'alice@example.com',
+    })
+    expect(result.accessToken).not.toBe(existing)
+    expect(result.accessToken.length).toBeGreaterThan(20)
+  })
+
   it('throws when the upsert fails', async () => {
     const supabase = makeSupabaseMock({ data: null, error: { message: 'unique violation' } })
     await expect(

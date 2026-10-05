@@ -50,14 +50,20 @@ function generateAccessToken(): string {
 /**
  * Creates or refreshes a quiz-subscriber row for this email + quiz. A retake
  * resets progress (answers/result/status) to a fresh 'pending' cycle rather
- * than accumulating duplicate rows, and issues a new access token so a stale
- * emailed link can't be reused against reset data.
+ * than accumulating duplicate rows.
+ *
+ * The access token is KEPT while it is still within its TTL, so every link
+ * already emailed to this address keeps working. Rotating it on each request
+ * made earlier emails show "Link Expired" whenever someone asked for the
+ * diagnostic twice (client QA 5 Oct). Only the address owner ever receives
+ * the token, so reusing it exposes nothing new.
  */
 export async function upsertSubscriber(
   supabase: SupabaseClient,
   input: { quizSlug: string; firstName: string; lastName: string; email: string }
 ): Promise<{ id: string; accessToken: string }> {
-  const accessToken = generateAccessToken()
+  const accessToken =
+    (await findReusableToken(supabase, input.quizSlug, input.email)) ?? generateAccessToken()
 
   const { data, error } = await supabase
     .from('quiz_subscribers')
@@ -85,6 +91,30 @@ export async function upsertSubscriber(
   }
 
   return { id: data.id as string, accessToken }
+}
+
+/** The existing token for this email + quiz if it has not expired, else null. */
+async function findReusableToken(
+  supabase: SupabaseClient,
+  quizSlug: string,
+  email: string
+): Promise<string | null> {
+  const { data, error } = await supabase
+    .from('quiz_subscribers')
+    .select('access_token, email_sent_at')
+    .eq('quiz_slug', quizSlug)
+    .eq('email', email)
+    .maybeSingle()
+
+  // A failed lookup only costs link continuity, so fall back to a new token.
+  if (error || !data) return null
+  const row = data as { access_token?: string | null; email_sent_at?: string | null }
+  if (!row.access_token) return null
+  if (row.email_sent_at) {
+    const ageMs = Date.now() - new Date(row.email_sent_at).getTime()
+    if (ageMs > TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000) return null
+  }
+  return row.access_token
 }
 
 export async function markEmailSent(supabase: SupabaseClient, id: string): Promise<void> {

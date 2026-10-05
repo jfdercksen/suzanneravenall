@@ -78,10 +78,15 @@ function makeRequest(body: unknown, ip = nextIp()): Request {
   })
 }
 
-const validBody = {
-  quizSlug: 'emotional-nervous-system-mastery',
-  accessToken: 'a'.repeat(32),
-  answers: { '1': 4, '2': 0 },
+// Each call gets its own diagnostic link: the route limits per token, which
+// would otherwise leak between unrelated test cases.
+let tokenCounter = 0
+function validBody(accessToken = `tok${String(++tokenCounter).padStart(29, '0')}`) {
+  return {
+    quizSlug: 'emotional-nervous-system-mastery',
+    accessToken,
+    answers: { '1': 4, '2': 0 },
+  }
 }
 
 describe('POST /api/quiz/complete', () => {
@@ -101,24 +106,24 @@ describe('POST /api/quiz/complete', () => {
   })
 
   it('returns 422 when accessToken is too short', async () => {
-    const res = await POST(makeRequest({ ...validBody, accessToken: 'short' }) as never)
+    const res = await POST(makeRequest({ ...validBody(), accessToken: 'short' }) as never)
     expect(res.status).toBe(422)
   })
 
   it('returns 422 when an answer value is out of range', async () => {
-    const res = await POST(makeRequest({ ...validBody, answers: { '1': 9 } }) as never)
+    const res = await POST(makeRequest({ ...validBody(), answers: { '1': 9 } }) as never)
     expect(res.status).toBe(422)
   })
 
   it('returns 422 when the answers object has too many keys', async () => {
     const tooMany = Object.fromEntries(Array.from({ length: 61 }, (_, i) => [String(i), 1]))
-    const res = await POST(makeRequest({ ...validBody, answers: tooMany }) as never)
+    const res = await POST(makeRequest({ ...validBody(), answers: tooMany }) as never)
     expect(res.status).toBe(422)
   })
 
   it('filters out answer keys that are not real question IDs before persisting', async () => {
     const res = await POST(
-      makeRequest({ ...validBody, answers: { '1': 4, '2': 0, '999': 3 } }) as never,
+      makeRequest({ ...validBody(), answers: { '1': 4, '2': 0, '999': 3 } }) as never,
     )
     expect(res.status).toBe(200)
     expect(mockMarkCompleted).toHaveBeenCalledWith(
@@ -131,38 +136,38 @@ describe('POST /api/quiz/complete', () => {
 
   it('returns 404 when the quiz is not registered', async () => {
     mockQuizBySlug.mockReturnValue(undefined)
-    const res = await POST(makeRequest(validBody) as never)
+    const res = await POST(makeRequest(validBody()) as never)
     expect(res.status).toBe(404)
   })
 
   it('returns 500 when Supabase env is not configured', async () => {
     mockGetServiceRoleClient.mockReturnValue(null)
-    const res = await POST(makeRequest(validBody) as never)
+    const res = await POST(makeRequest(validBody()) as never)
     expect(res.status).toBe(500)
   })
 
   it('returns 404 when the token does not match any subscriber', async () => {
     mockGetSubscriberByToken.mockResolvedValue(null)
-    const res = await POST(makeRequest(validBody) as never)
+    const res = await POST(makeRequest(validBody()) as never)
     expect(res.status).toBe(404)
     expect(await res.json()).toMatchObject({ error: 'Invalid or expired link.' })
   })
 
   it('re-derives the result server-side rather than trusting a client value', async () => {
     // q1 (fight)=4, q2 (flight)=0 -> fight wins regardless of any client claim
-    const res = await POST(makeRequest(validBody) as never)
+    const res = await POST(makeRequest(validBody()) as never)
     expect(res.status).toBe(200)
     expect(await res.json()).toMatchObject({ resultKey: 'fight' })
     expect(mockMarkCompleted).toHaveBeenCalledWith(
       expect.anything(),
       'sub-1',
-      validBody.answers,
+      validBody().answers,
       'fight',
     )
   })
 
   it('sends the completion notification with mapped answer labels', async () => {
-    await POST(makeRequest(validBody) as never)
+    await POST(makeRequest(validBody()) as never)
     expect(mockSendQuizCompletionNotificationEmail).toHaveBeenCalledWith(
       expect.objectContaining({
         firstName: 'Alice',
@@ -179,13 +184,13 @@ describe('POST /api/quiz/complete', () => {
 
   it('still returns success even if the notification email fails (fire-and-forget)', async () => {
     mockSendQuizCompletionNotificationEmail.mockRejectedValue(new Error('resend down'))
-    const res = await POST(makeRequest(validBody) as never)
+    const res = await POST(makeRequest(validBody()) as never)
     expect(res.status).toBe(200)
   })
 
   it('returns 500 when markCompleted throws', async () => {
     mockMarkCompleted.mockRejectedValue(new Error('db error'))
-    const res = await POST(makeRequest(validBody) as never)
+    const res = await POST(makeRequest(validBody()) as never)
     expect(res.status).toBe(500)
     expect(mockCaptureException).toHaveBeenCalled()
   })
@@ -196,38 +201,44 @@ describe('POST /api/quiz/complete', () => {
       status: 'completed',
       result_key: 'flight',
     })
-    const res = await POST(makeRequest(validBody) as never)
+    const res = await POST(makeRequest(validBody()) as never)
     expect(res.status).toBe(200)
     expect(await res.json()).toMatchObject({ resultKey: 'flight' })
     expect(mockMarkCompleted).not.toHaveBeenCalled()
     expect(mockSendQuizCompletionNotificationEmail).not.toHaveBeenCalled()
   })
 
-  it('rate-limits after 20 requests from the same IP within the window, with a Retry-After header', async () => {
-    const ip = '203.0.113.50'
-    for (let i = 0; i < 20; i++) {
-      const res = await POST(makeRequest(validBody, ip) as never)
-      expect(res.status).toBe(200)
+  it('limits one diagnostic link to 10 completions per 10 minutes, with a Retry-After header', async () => {
+    const token = 'b'.repeat(32)
+    for (let i = 0; i < 10; i++) {
+      expect((await POST(makeRequest(validBody(token)) as never)).status).toBe(200)
     }
-    const limited = await POST(makeRequest(validBody, ip) as never)
+    const limited = await POST(makeRequest(validBody(token)) as never)
     expect(limited.status).toBe(429)
     const retryAfter = Number(limited.headers.get('Retry-After'))
     expect(retryAfter).toBeGreaterThanOrEqual(1)
     expect(retryAfter).toBeLessThanOrEqual(600)
   })
 
-  it('allows requests again after the 10-minute window resets', async () => {
+  it('lets many visitors behind one shared address complete (office, mobile network)', async () => {
+    const ip = '203.0.113.50'
+    for (let i = 0; i < 120; i++) {
+      expect((await POST(makeRequest(validBody(), ip) as never)).status).toBe(200)
+    }
+    expect((await POST(makeRequest(validBody(), ip) as never)).status).toBe(429)
+  })
+
+  it('allows the same link again after the 10-minute window resets', async () => {
     vi.useFakeTimers()
     try {
-      const ip = '203.0.113.51'
-      for (let i = 0; i < 20; i++) {
-        const res = await POST(makeRequest(validBody, ip) as never)
-        expect(res.status).toBe(200)
+      const token = 'c'.repeat(32)
+      for (let i = 0; i < 10; i++) {
+        expect((await POST(makeRequest(validBody(token)) as never)).status).toBe(200)
       }
-      expect((await POST(makeRequest(validBody, ip) as never)).status).toBe(429)
+      expect((await POST(makeRequest(validBody(token)) as never)).status).toBe(429)
 
       vi.advanceTimersByTime(600_001)
-      expect((await POST(makeRequest(validBody, ip) as never)).status).toBe(200)
+      expect((await POST(makeRequest(validBody(token)) as never)).status).toBe(200)
     } finally {
       vi.useRealTimers()
     }

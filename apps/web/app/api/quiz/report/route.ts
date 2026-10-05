@@ -14,8 +14,11 @@ const ReportSchema = z.object({
 
 const SEND_FAILED = 'We could not send your report right now. Please try again in a moment.'
 
-// 20 requests per IP per 10-minute window (an office shares one address): every successful call sends an email.
-const limiter = createRateLimiter({ limit: 20, windowMs: 600_000 })
+// Every successful call sends an email, so it is limited PER DIAGNOSTIC LINK
+// (5 reports per token per 10 minutes). The per-IP limit is only a flood
+// guard: offices and mobile networks share one address (client QA 5 Oct).
+const ipGuard = createRateLimiter({ limit: 120, windowMs: 600_000 })
+const tokenLimiter = createRateLimiter({ limit: 5, windowMs: 600_000 })
 
 /**
  * Emails the subscriber their own full report ("Email Me the Full Report").
@@ -23,8 +26,8 @@ const limiter = createRateLimiter({ limit: 20, windowMs: 600_000 })
  * from the request, so the access token is the only thing a caller controls.
  */
 export async function POST(request: NextRequest) {
-  const { limited, retryAfterSeconds } = limiter.check(getClientIp(request.headers))
-  if (limited) return rateLimitResponse(retryAfterSeconds)
+  const ipCheck = ipGuard.check(getClientIp(request.headers))
+  if (ipCheck.limited) return rateLimitResponse(ipCheck.retryAfterSeconds)
 
   let body: unknown
   try {
@@ -39,6 +42,9 @@ export async function POST(request: NextRequest) {
   }
 
   const { quizSlug, accessToken } = parsed.data
+
+  const tokenCheck = tokenLimiter.check(accessToken)
+  if (tokenCheck.limited) return rateLimitResponse(tokenCheck.retryAfterSeconds)
 
   const quiz = quizBySlug(quizSlug)
   if (!quiz) {

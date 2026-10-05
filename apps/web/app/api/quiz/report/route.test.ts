@@ -76,7 +76,9 @@ function makeRequest(body: unknown, ip = nextIp()): Request {
   })
 }
 
-const VALID = { quizSlug: QUIZ.slug, accessToken: 'a'.repeat(32) }
+// Each call gets its own diagnostic link: the route limits per token.
+let tokenCounter = 0
+const VALID = () => ({ quizSlug: QUIZ.slug, accessToken: `tok${String(++tokenCounter).padStart(29, '0')}` })
 
 describe('POST /api/quiz/report', () => {
   beforeEach(() => {
@@ -90,7 +92,7 @@ describe('POST /api/quiz/report', () => {
   })
 
   it('emails the stored result to the stored address', async () => {
-    const res = await POST(makeRequest(VALID) as never)
+    const res = await POST(makeRequest(VALID()) as never)
 
     expect(res.status).toBe(200)
     expect(mockSendQuizReportEmail).toHaveBeenCalledWith(
@@ -105,7 +107,7 @@ describe('POST /api/quiz/report', () => {
   })
 
   it('ignores an email address supplied in the request', async () => {
-    await POST(makeRequest({ ...VALID, email: 'attacker@example.com' }) as never)
+    await POST(makeRequest({ ...VALID(), email: 'attacker@example.com' }) as never)
 
     expect(mockSendQuizReportEmail).toHaveBeenCalledWith(
       expect.objectContaining({ email: 'alice@example.com' })
@@ -115,7 +117,7 @@ describe('POST /api/quiz/report', () => {
   it('returns 404 for an unknown token and sends nothing', async () => {
     mockGetSubscriberByToken.mockResolvedValue(null)
 
-    const res = await POST(makeRequest(VALID) as never)
+    const res = await POST(makeRequest(VALID()) as never)
 
     expect(res.status).toBe(404)
     expect(mockSendQuizReportEmail).not.toHaveBeenCalled()
@@ -124,7 +126,7 @@ describe('POST /api/quiz/report', () => {
   it('returns 409 when the diagnostic is not completed yet', async () => {
     mockGetSubscriberByToken.mockResolvedValue({ ...SUBSCRIBER, status: 'started', result_key: null })
 
-    const res = await POST(makeRequest(VALID) as never)
+    const res = await POST(makeRequest(VALID()) as never)
 
     expect(res.status).toBe(409)
     expect(mockSendQuizReportEmail).not.toHaveBeenCalled()
@@ -133,7 +135,7 @@ describe('POST /api/quiz/report', () => {
   it('returns 500, not a false success, when the send fails', async () => {
     mockSendQuizReportEmail.mockRejectedValue(new Error('Brevo error: boom'))
 
-    const res = await POST(makeRequest(VALID) as never)
+    const res = await POST(makeRequest(VALID()) as never)
 
     expect(res.status).toBe(500)
     expect(mockCaptureException).toHaveBeenCalled()
@@ -142,7 +144,7 @@ describe('POST /api/quiz/report', () => {
   it('returns 500 when email is not configured', async () => {
     vi.stubEnv('BREVO_API_KEY', '')
 
-    const res = await POST(makeRequest(VALID) as never)
+    const res = await POST(makeRequest(VALID()) as never)
 
     expect(res.status).toBe(500)
     expect(mockSendQuizReportEmail).not.toHaveBeenCalled()

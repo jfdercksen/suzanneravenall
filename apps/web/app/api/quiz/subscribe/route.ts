@@ -15,14 +15,16 @@ const SubscribeSchema = z.object({
   email: z.string().trim().email().max(255),
 })
 
-// 20 requests per IP per 10-minute window (an office shares one address) — stricter than search's 20/60s
-// since every hit here sends an email (KI028; shared limiter, in-memory,
-// single-container deployment).
-const limiter = createRateLimiter({ limit: 20, windowMs: 600_000 })
+// Every hit sends an email (KI028), so one address can be sent at most 5
+// invites per diagnostic per 10 minutes. The per-IP limit (60) only guards
+// against floods: offices and mobile networks put many real visitors behind
+// one address (client QA 5 Oct). In-memory, single-container deployment.
+const ipGuard = createRateLimiter({ limit: 60, windowMs: 600_000 })
+const recipientLimiter = createRateLimiter({ limit: 5, windowMs: 600_000 })
 
 export async function POST(request: NextRequest) {
-  const { limited, retryAfterSeconds } = limiter.check(getClientIp(request.headers))
-  if (limited) return rateLimitResponse(retryAfterSeconds)
+  const ipCheck = ipGuard.check(getClientIp(request.headers))
+  if (ipCheck.limited) return rateLimitResponse(ipCheck.retryAfterSeconds)
 
   let body: unknown
   try {
@@ -40,6 +42,9 @@ export async function POST(request: NextRequest) {
   }
 
   const { quizSlug, firstName, lastName, email } = parsed.data
+
+  const recipientCheck = recipientLimiter.check(`${email.toLowerCase()}|${quizSlug}`)
+  if (recipientCheck.limited) return rateLimitResponse(recipientCheck.retryAfterSeconds)
 
   const quiz = quizBySlug(quizSlug)
   if (!quiz) {
