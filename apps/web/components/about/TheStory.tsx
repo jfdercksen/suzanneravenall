@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 const sectionReveal = {
@@ -102,6 +103,16 @@ export default function TheStory() {
                 The Big Why
               </footer>
             </motion.blockquote>
+
+            <motion.p
+              {...sectionReveal}
+              transition={{ duration: 0.6, delay: 0.6, ease: 'easeOut' as const }}
+              className="mt-10"
+            >
+              <Link href="/about/the-story" className="inline-flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-brand-accent hover:text-brand-accent-700 underline underline-offset-4 transition-colors duration-300">
+                Read the full story <span aria-hidden="true">&rarr;</span>
+              </Link>
+            </motion.p>
           </div>
 
         </div>

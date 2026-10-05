@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 const sectionReveal = {
@@ -63,6 +64,16 @@ export default function TheMethod() {
             </p>
           </motion.div>
         </div>
+
+        <motion.p
+          {...sectionReveal}
+          transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' as const }}
+          className="mt-12"
+        >
+          <Link href="/about/the-science" className="inline-flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-brand-accent hover:text-brand-accent-700 underline underline-offset-4 transition-colors duration-300">
+            Explore the science <span aria-hidden="true">&rarr;</span>
+          </Link>
+        </motion.p>
       </div>
     </section>
   )

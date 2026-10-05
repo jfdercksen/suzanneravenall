@@ -5,6 +5,8 @@ import {
   minimumTierFor,
   TIER_ORDER,
   TIER_ACCESS,
+  UPGRADE_PATH,
+  upgradeHref,
 } from './tiers'
 
 describe('hasAccess', () => {
@@ -158,5 +160,16 @@ describe('TIER_ACCESS structure', () => {
         expect(TIER_ACCESS.practitioner[key]).toBe(true)
       }
     }
+  })
+})
+
+describe('upgradeHref (site check M15)', () => {
+  it('points at the portal upgrade page', () => {
+    expect(UPGRADE_PATH).toBe('/portal/upgrade')
+    expect(upgradeHref()).toBe('/portal/upgrade')
+  })
+
+  it('carries the gated path as an encoded from param', () => {
+    expect(upgradeHref('/portal/videos')).toBe('/portal/upgrade?from=%2Fportal%2Fvideos')
   })
 })

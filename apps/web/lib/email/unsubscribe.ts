@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from 'crypto'
+import { siteUrl } from './site-url'
 
 /**
  * Signed unsubscribe tokens for marketing emails (POPIA opt-out).
@@ -12,7 +13,6 @@ import { createHmac, timingSafeEqual } from 'crypto'
  * the repo convention of failing loudly on missing server config.
  */
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://suzanneravenall.com'
 
 function getSecret(): string {
   const secret = process.env.EMAIL_UNSUBSCRIBE_SECRET
@@ -58,7 +58,7 @@ export function verifyUnsubscribeToken(token: string | null | undefined): string
 
 /** Link for the human-facing confirmation page, embedded in email footers. */
 export function buildUnsubscribeUrl(email: string): string {
-  return `${SITE_URL}/unsubscribe?token=${encodeURIComponent(createUnsubscribeToken(email))}`
+  return `${siteUrl()}/unsubscribe?token=${encodeURIComponent(createUnsubscribeToken(email))}`
 }
 
 /**
@@ -69,7 +69,7 @@ export function buildUnsubscribeUrl(email: string): string {
 export function buildListUnsubscribeHeaders(email: string): Record<string, string> {
   const token = encodeURIComponent(createUnsubscribeToken(email))
   return {
-    'List-Unsubscribe': `<${SITE_URL}/api/email/unsubscribe?token=${token}>`,
+    'List-Unsubscribe': `<${siteUrl()}/api/email/unsubscribe?token=${token}>`,
     'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
   }
 }

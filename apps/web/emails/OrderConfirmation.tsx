@@ -16,6 +16,7 @@ import {
 import type { OrderEmailData, OrderProductType } from '../lib/email/types'
 import { companyPhysicalAddress, companyVatNumber } from '../lib/email/company'
 import { formatAmount } from '../lib/email/utils'
+import { siteUrl } from '../lib/email/site-url'
 
 const NAVY = '#012B43'
 const BLUE = '#1719F4'
@@ -367,7 +368,7 @@ export default function OrderConfirmation({
             </Text>
             <Text style={{ color: DARK_TEXT, fontSize: '14px', margin: 0 }}>
               <Link
-                href="https://suzanneravenall.com/contact"
+                href={`${siteUrl()}/contact`}
                 style={{ color: BLUE, textDecoration: 'none' }}
               >
                 Contact us online →

@@ -37,6 +37,10 @@ export default function AssessmentsContent() {
             <p className="text-lg lg:text-xl text-brand-muted leading-relaxed">
               Self-assessment tools to help you identify your patterns and chart your transformation path.
             </p>
+            <p className="mt-4 text-base text-brand-ink leading-relaxed">
+              These tools are not live yet for anyone, members included. Join the list below to
+              hear when they launch.
+            </p>
           </motion.div>
         </div>
       </section>

@@ -6,6 +6,8 @@ import { motion } from 'framer-motion'
 
 type Programme = {
   name: string
+  /** The programme's page under /programs/<slug> (data/programs.ts). */
+  slug: string
   description: string
 }
 
@@ -27,16 +29,19 @@ const columns: Column[] = [
     programmes: [
       {
         name: 'Resonance Repatterning Basic 5 Series',
+        slug: 'resonance-repatterning-basic-5-series',
         description:
           'Ever wondered why you work so hard at something and it simply doesn’t materialise? A major cause is subconscious beliefs, mostly unknown to the conscious mind, that are active every day, interfering with the life you want and deserve.',
       },
       {
         name: 'Akashic Navigator (Basic & Advanced)',
+        slug: 'akashic-navigator-basic',
         description:
           'Access and rewrite your life’s blueprint through the Akashic Records. Create the past, present and future that you desire, and improve your intuition to receive daily guidance.',
       },
       {
         name: 'Energy Clearing (Basic & Advanced)',
+        slug: 'energy-clearing-basic',
         description:
           'We are physical and energetic beings, with many channels that carry information and energy. This practitioner pathway teaches you to see, clear and realign the energy field, for yourself and for others.',
       },
@@ -52,26 +57,31 @@ const columns: Column[] = [
     programmes: [
       {
         name: 'Trauma to Transcendence',
+        slug: 'trauma-to-transcendence',
         description:
           'Breaking the hold of the childhood brain on your adult self. From early experiences of neglect or unmet needs we form beliefs, helpful and harmful, that limit our potential. This programme rewrites the adaptations we forgot we made.',
       },
       {
         name: 'Love & Relationships',
+        slug: 'love-and-relationships',
         description:
           'We attract people at our common level of woundedness. To attract a healthy, loving partner you need to become that healthy person first. This programme shows how to raise the energetic baseline.',
       },
       {
         name: 'Intuition in My Personal Capacity',
+        slug: 'intuition-in-my-personal-capacity',
         description:
           'Identify and change the limiting beliefs we have internalised since childhood, even the ones we have accepted as true though they are not, and reconnect to the intuition that was always there.',
       },
       {
         name: 'Become an Energy Ninja',
+        slug: 'become-an-energy-ninja',
         description:
           'Mastering energy for an abundant life, Level 1. Everything starts as, and is, energy. Learn how to change your world by using an unseen force, and bring it into every area of your life.',
       },
       {
         name: 'Getting Unstuck',
+        slug: 'getting-unstuck',
         description:
           'Have you ever wanted to change (different career, better health, improved body, better relationship) but it escapes you? If you have tried numerous approaches and keep waking up in the same cycle, this is for you.',
       },
@@ -87,21 +97,25 @@ const columns: Column[] = [
     programmes: [
       {
         name: 'Mindfulness',
+        slug: 'mindfulness',
         description:
           'Mindfulness (the ability to be fully present in the moment) is linked to decreased stress and sadness and increased focus and happiness. This programme teaches you to recognise it, practise it, and integrate it into everyday life.',
       },
       {
         name: 'Meditation',
+        slug: 'meditation',
         description:
           'Meditation isn’t about becoming a different person. It’s training in awareness: a healthy sense of perspective. You’re not trying to turn off your thoughts, you’re learning to observe them without judgment.',
       },
       {
         name: 'Inner Cultivation (RR 06)',
+        slug: 'resonance-repatterning-06-inner-cultivation',
         description:
           'Drawing from the inner tradition of Chinese Acupuncture, the healing process centres on restoring harmony between the heavenly yang and the earthly yin energies within ourselves and our lives.',
       },
       {
         name: 'Principles of Relationship (RR 08)',
+        slug: 'resonance-repatterning-08-principles-of-relationship',
         description:
           'Shift your resonance and embrace loving connections. Through the repatternings in this programme, resonate with new neural connections and memory imprints, and let fresh, transformative ways of relating take root.',
       },
@@ -177,9 +191,12 @@ export default function Programs() {
                   {col.programmes.map((p) => (
                     <li key={p.name} className="flex items-start gap-2">
                       <span aria-hidden="true" className="mt-0.5 text-white/70 text-xs shrink-0">→</span>
-                      <span className="text-sm font-medium text-white/85 leading-snug">
+                      <Link
+                        href={`/programs/${p.slug}`}
+                        className="text-sm font-medium text-white/85 leading-snug underline-offset-4 hover:text-white hover:underline transition-colors duration-300"
+                      >
                         {p.name}
-                      </span>
+                      </Link>
                     </li>
                   ))}
                 </ul>

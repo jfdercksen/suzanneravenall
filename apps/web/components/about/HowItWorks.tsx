@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 const sectionReveal = {
@@ -92,6 +93,16 @@ export default function HowItWorks() {
             </motion.article>
           ))}
         </div>
+
+        <motion.p
+          {...sectionReveal}
+          transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' as const }}
+          className="mt-12"
+        >
+          <Link href="/about/the-system" className="inline-flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-brand-accent hover:text-brand-accent-700 underline underline-offset-4 transition-colors duration-300">
+            See the whole system <span aria-hidden="true">&rarr;</span>
+          </Link>
+        </motion.p>
       </div>
     </section>
   )

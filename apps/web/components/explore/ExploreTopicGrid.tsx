@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { topics, type TopicSlug } from '@/app/explore/topics'
@@ -21,7 +20,6 @@ const TOPIC_IMAGES: Record<TopicSlug, string> = {
 }
 
 export default function ExploreTopicGrid() {
-  const router = useRouter()
   const [activeIndex, setActiveIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -56,13 +54,20 @@ export default function ExploreTopicGrid() {
     [paused, startTimer],
   )
 
+  // Arrow keys move focus between the topic links; focusing a link previews
+  // it, and Enter follows it like any other link.
+  const focusTopic = (i: number) => {
+    document.getElementById(`explore-topic-${i}`)?.focus()
+    selectTopic(i)
+  }
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
       e.preventDefault()
-      selectTopic((activeIndex + 1) % topics.length)
+      focusTopic((activeIndex + 1) % topics.length)
     } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
       e.preventDefault()
-      selectTopic((activeIndex - 1 + topics.length) % topics.length)
+      focusTopic((activeIndex - 1 + topics.length) % topics.length)
     }
   }
 
@@ -100,25 +105,22 @@ export default function ExploreTopicGrid() {
       >
         {/* LEFT PANEL: topic list (40%) */}
         <div
-          tabIndex={0}
           onKeyDown={handleKeyDown}
-          className="w-2/5 flex flex-col justify-center gap-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-sand rounded-card"
+          className="w-2/5 flex flex-col justify-center gap-0.5"
         >
           {topics.map((topic, i) => {
             const active = i === activeIndex
             return (
-              <button
+              // Hover or focus previews the topic on the right; a click opens it.
+              <Link
                 key={topic.slug}
                 id={`explore-topic-${i}`}
-                onClick={() => selectTopic(i)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault()
-                    router.push(`/explore/${topic.slug}`)
-                  }
-                }}
+                href={`/explore/${topic.slug}`}
+                aria-current={active ? 'true' : undefined}
+                onMouseEnter={() => selectTopic(i)}
+                onFocus={() => selectTopic(i)}
                 className={[
-                  'group text-left border-l-2 pl-6 py-3.5 transition-all duration-300',
+                  'group block text-left border-l-2 pl-6 py-3.5 transition-all duration-300',
                   'focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-inset',
                   active
                     ? 'border-brand-accent'
@@ -146,7 +148,7 @@ export default function ExploreTopicGrid() {
                 >
                   {topic.shortDescription}
                 </span>
-              </button>
+              </Link>
             )
           })}
         </div>

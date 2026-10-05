@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { hasAccess, tierLabel, type TierSlug, type ResourceKey } from '@/lib/access/tiers'
+import { hasAccess, tierLabel, upgradeHref, type TierSlug, type ResourceKey } from '@/lib/access/tiers'
 
 interface Resource {
   title: string
@@ -253,8 +253,7 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
             </svg>
             <p className="text-white/70 text-xs">
               Unlock with{' '}
-              {/* TODO: Build /portal/upgrade page */}
-              <Link href="/shop?collection=membership" className="text-brand-accent-400 hover:underline">
+              <Link href={upgradeHref('/portal/resources')} className="text-brand-accent-400 hover:underline">
                 {tierLabel(minTier)}
               </Link>
             </p>
@@ -323,10 +322,9 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
               >
                 <div className="flex items-center gap-3 mb-6">
                   <h2 className="text-xl font-semibold text-white">{category.title}</h2>
-                  {/* TODO: Build /portal/upgrade page */}
                   {!categoryUnlocked && (
                     <Link
-                      href="/shop?collection=membership"
+                      href={upgradeHref('/portal/resources')}
                       className="inline-flex items-center gap-1 px-3 py-1 bg-white/10 text-white text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-white/20 transition-colors"
                     >
                       <svg aria-hidden="true" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -368,9 +366,8 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
                 </p>
               </div>
               <div className="flex-shrink-0">
-                {/* TODO: Build /portal/upgrade page */}
                 <Link
-                  href="/shop?collection=membership"
+                  href={upgradeHref('/portal/resources')}
                   className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold rounded-button transition-colors duration-300"
                 >
                   View Upgrade Options

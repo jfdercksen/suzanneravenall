@@ -28,7 +28,7 @@ function absoluteImageUrl(value: unknown): string | undefined {
   if (typeof value !== 'string' || value.length === 0) return undefined
   if (/^https?:\/\//i.test(value)) return value
   if (!value.startsWith('/')) return undefined
-  const site = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://suzanneravenall.com').replace(/\/$/, '')
+  const site = (process.env.NEXT_PUBLIC_SITE_URL || 'https://suzanneravenall.com').replace(/\/$/, '')
   return `${site}${value}`
 }
 

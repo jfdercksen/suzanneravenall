@@ -2,38 +2,22 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, Newspaper, Star } from 'lucide-react'
+import { ArrowRight, ExternalLink, Newspaper, Star } from 'lucide-react'
+import { MEDIA_ARTICLES, type MediaArticle } from '@/data/mediaArticles'
 
-const featuredMedia = [
-  {
-    outlet: 'CEO Magazine',
-    type: 'Cover Story',
-    title: 'Fast and Furious: Leading at Speed',
-    description:
-      'Dr. Suzanne Ravenall graces the cover of CEO Magazine, sharing her proven framework for leaders who must drive transformation at pace without burning out their teams.',
-  },
-  {
-    outlet: 'Leadership Magazine',
-    type: 'Feature Article',
-    title: 'The Science of Human Transformation',
-    description:
-      'An in-depth feature exploring how Dr. Ravenall applies neuroscience and pattern-recognition to deliver lasting change in individuals and organisations.',
-  },
-  {
-    outlet: 'Business Excellence Awards',
-    type: 'Press Release',
-    title: 'Ravenall Institute Recognised for Business Excellence',
-    description:
-      'The Ravenall Institute featured in the official Business Excellence Awards press release, celebrating outstanding contribution to coaching and human development.',
-  },
-  {
-    outlet: 'CEO Magazine',
-    type: 'Article',
-    title: 'Execution Excellence: Turning Strategy into Results',
-    description:
-      'Dr. Ravenall on the gap between strategic intention and actual execution, and the mindset shifts that close it.',
-  },
+// C20: the hub shows a subset of the shared press dataset rather than its own
+// copy, so titles match /resources/media and /resources/articles, and a card
+// becomes a link to the source the moment its entry gets an `href`.
+const FEATURED_TITLES = [
+  'Fast and Furious: Leading at Speed',
+  'Leadership Magazine Feature',
+  'Ravenall Institute: Business Excellence Award',
+  'Execution Excellence',
 ]
+
+export const featuredMedia: MediaArticle[] = FEATURED_TITLES.map((title) =>
+  MEDIA_ARTICLES.find((a) => a.title === title),
+).filter((a): a is MediaArticle => Boolean(a))
 
 const containerVariants = {
   hidden: {},
@@ -97,31 +81,50 @@ export default function ResourcesFeaturedMedia() {
           viewport={{ once: true, margin: '0px' }}
           className="grid grid-cols-1 sm:grid-cols-2 gap-6"
         >
-          {featuredMedia.map((item) => (
-            <motion.div
-              key={item.title}
-              variants={cardVariants}
-              className="bg-brand-sand rounded-card p-8 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex items-center justify-center w-10 h-10 rounded-card bg-brand-primary/10 text-brand-primary">
-                  <Newspaper size={18} />
+          {featuredMedia.map((item) => {
+            const inner = (
+              <>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-card bg-brand-primary/10 text-brand-primary">
+                    <Newspaper size={18} />
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wider font-medium text-brand-accent">
+                      {item.type}
+                    </p>
+                    <p className="text-sm font-medium text-brand-ink">{item.outlet}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wider font-medium text-brand-accent">
-                    {item.type}
-                  </p>
-                  <p className="text-sm font-medium text-brand-ink">{item.outlet}</p>
-                </div>
-              </div>
 
-              <h3 className="text-lg font-medium text-brand-ink mb-3 leading-snug">
-                {item.title}
-              </h3>
+                <h3 className="text-lg font-medium text-brand-ink mb-3 leading-snug">
+                  {item.title}
+                </h3>
 
-              <p className="text-sm text-brand-muted font-light leading-relaxed">{item.description}</p>
-            </motion.div>
-          ))}
+                <p className="text-sm text-brand-muted font-light leading-relaxed">{item.description}</p>
+              </>
+            )
+
+            return (
+              <motion.div key={item.title} variants={cardVariants}>
+                {item.href ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block h-full bg-brand-sand rounded-card p-8 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
+                  >
+                    {inner}
+                    <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-brand-accent">
+                      Read the article <ExternalLink size={14} aria-hidden="true" />
+                    </span>
+                  </a>
+                ) : (
+                  // No live source yet (KI025): a static citation, so no hover lift.
+                  <div className="h-full bg-brand-sand rounded-card p-8">{inner}</div>
+                )}
+              </motion.div>
+            )
+          })}
         </motion.div>
 
         <motion.div

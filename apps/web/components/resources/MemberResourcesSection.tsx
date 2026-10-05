@@ -2,13 +2,19 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { hasAccess, tierLabel, minimumTierFor, type TierSlug } from '@/lib/access/tiers'
+import { hasAccess, tierLabel, minimumTierFor, upgradeHref, type TierSlug } from '@/lib/access/tiers'
 
 interface GatedItem {
   title: string
   description: string
   href: string
   resource: 'resources_assessments' | 'resources_media' | 'group_sessions_recorded'
+  /**
+   * The tools are not built yet: /resources/assessments is a "coming soon"
+   * notice with a launch list. Members who already have access are told that
+   * plainly instead of being sent through an "Access now" link to a teaser.
+   */
+  comingSoon?: boolean
 }
 
 const GATED_ITEMS: GatedItem[] = [
@@ -17,6 +23,7 @@ const GATED_ITEMS: GatedItem[] = [
     description: 'Pattern recognition, emotional mastery profile, life design assessment, and energy audit workbook.',
     href: '/resources/assessments',
     resource: 'resources_assessments',
+    comingSoon: true,
   },
   {
     // These live in the portal Resource Library ("Tools & Templates"), not on
@@ -110,9 +117,15 @@ export default function MemberResourcesSection({ tier }: MemberResourcesSectionP
                     <div>
                       <p className="text-brand-primary font-medium mb-2">{item.title}</p>
                       <p className="text-brand-muted text-sm leading-relaxed">{item.description}</p>
+                      {item.comingSoon && (
+                        <p className="text-brand-ink text-sm leading-relaxed mt-3">
+                          Included in your membership, but not released yet. Join the
+                          launch list to hear when they go live.
+                        </p>
+                      )}
                     </div>
                     <span className="inline-flex items-center gap-1 text-brand-accent text-sm font-medium mt-auto">
-                      Access now
+                      {item.comingSoon ? 'Coming soon: join the list' : 'Access now'}
                       <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                       </svg>
@@ -134,9 +147,8 @@ export default function MemberResourcesSection({ tier }: MemberResourcesSectionP
                     </div>
                     <div className="mt-auto">
                       {tier ? (
-                        /* TODO: Build /portal/upgrade page */
                         <Link
-                          href="/shop?collection=membership"
+                          href={upgradeHref(item.href)}
                           className="inline-flex items-center gap-1 text-brand-accent text-sm font-medium hover:underline"
                         >
                           Unlock with {tierLabel(minTier)}

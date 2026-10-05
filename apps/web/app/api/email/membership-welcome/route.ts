@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
   }
 
   const { email, firstName, tier } = parsed.data
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://suzanneravenall.com'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://suzanneravenall.com'
 
   try {
     const emailId = await sendMembershipWelcomeEmail({

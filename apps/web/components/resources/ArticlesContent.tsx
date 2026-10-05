@@ -197,7 +197,7 @@ export default function ArticlesContent() {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <Link
-              href="/resources/newsletter"
+              href="/resources#newsletter"
               className="inline-flex items-center gap-2 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm px-8 py-4 rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
             >
               Subscribe to the newsletter <ArrowRight size={16} />

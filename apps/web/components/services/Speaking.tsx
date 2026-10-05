@@ -93,14 +93,14 @@ export default function Speaking() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative overflow-hidden min-h-[280px] bg-brand-primary-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl"
+              className="relative overflow-hidden min-h-[280px] bg-brand-primary-900 border border-white/5 rounded-card"
             >
               <Image
                 src={topic.image}
                 alt=""
                 fill
                 sizes="(max-width: 640px) 100vw, 50vw"
-                className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-500"
+                className="object-cover opacity-20"
               />
               <div
                 aria-hidden="true"
@@ -118,12 +118,18 @@ export default function Speaking() {
           ))}
         </div>
 
-        <div className="mt-16 flex justify-center">
+        <div className="mt-16 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/contact"
             className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
           >
             Book Suzanne to Speak
+          </Link>
+          <Link
+            href="/speaking"
+            className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary-300 hover:border-brand-primary text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
+          >
+            More on Speaking
           </Link>
         </div>
       </div>

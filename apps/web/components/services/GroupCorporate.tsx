@@ -4,9 +4,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
-const groupOfferings = [
+// `slug` is the group series' page under /programs/<slug>. Love &
+// Relationships has no group-series page (only the self-study programme), so
+// its card stays unlinked until Suzanne confirms where it should go.
+export const groupOfferings: { name: string; slug?: string; image: string; description: string }[] = [
   {
     name: 'Money Mastery',
+    slug: 'money-mastery',
     image: '/images/focus/business.jpg',
     description:
       'Given the opportunity, everyone would love to accumulate more wealth and live a more abundant life. Many people have a poor relationship with money and as a result struggle to manifest the financial success they desire. Change that at the root.',
@@ -19,42 +23,49 @@ const groupOfferings = [
   },
   {
     name: 'Career Progression',
+    slug: 'career-progression',
     image: '/images/focus/business.jpg',
     description:
       'To activate the Law of Attraction in your career, you must identify and change the limiting beliefs that have been internalised since childhood, and accepted as true even when they are not.',
   },
   {
     name: 'Shedding Excess Weight',
+    slug: 'shedding-excess-weight',
     image: '/images/generated/group-coaching-real.webp',
     description:
       'We hold onto excess weight because our earlier childhood needs were not met. We build survival strategies, bury them, and carry them quietly into adulthood. This series brings them into the light so the body can let go.',
   },
   {
     name: 'Overcoming the Need to Fix Others',
+    slug: 'overcoming-the-need-to-fix-others',
     image: '/images/generated/session-coaching.webp',
     description:
       'We respond to a lack of unconditional love by wanting to make everything okay, learning as small children it is safe to fix others’ problems. A 4-week repatterning series: part coaching, part class, full release.',
   },
   {
     name: 'Being a Great Boundary Setter',
+    slug: 'being-a-great-boundary-setter',
     image: '/images/generated/session-coaching.webp',
     description:
       'Setting boundaries is one of the most challenging aspects of being human, and something 99% of us were never taught. A 4-week series to understand what a boundary is, when it has been transgressed, and how to hold one in place.',
   },
   {
     name: 'Nice or Not Nice Communication',
+    slug: 'nice-or-not-nice-communication',
     image: '/images/generated/group-coaching-real.webp',
     description:
       'We learn in early childhood to receive love and acceptance only by being nice or agreeable, a pattern with a flipside of cutting anger when it becomes too much. A 4-week series to move into a new way of being.',
   },
   {
     name: 'Attraction Frequency',
+    slug: 'attraction-frequency',
     image: '/images/generated/group-coaching-real.webp',
     description:
       'A vibration is a state of being: the energetic quality of a person, place, thought, or thing. In this Group Repatterning class, resonate with the attraction frequency and manifest your own positivity, light, and love.',
   },
   {
     name: 'Develop Super Confidence',
+    slug: 'develop-super-confidence',
     image: '/images/focus/business.jpg',
     description:
       'Confidence within oneself is a complete game changer. As Henry Ford said: “Whether you think you can, or you think you can’t, you’re right.” This series builds the belief that underwrites every game-changing choice.',
@@ -93,36 +104,55 @@ export default function GroupCorporate() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {groupOfferings.map((offering, idx) => (
-            <motion.article
-              key={offering.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '0px' }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative overflow-hidden min-h-[220px] bg-brand-primary-900 border border-white/5 rounded-card transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl"
-            >
-              <Image
-                src={offering.image}
-                alt=""
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-500"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-br from-black/85 via-black/40 to-transparent"
-              />
-              <div className="relative z-10 p-8">
-                <h3 className="text-xl font-medium text-white mb-4">
-                  {offering.name}
-                </h3>
-                <p className="text-sm text-white/70 font-light leading-relaxed">
-                  {offering.description}
-                </p>
-              </div>
-            </motion.article>
-          ))}
+          {groupOfferings.map((offering, idx) => {
+            const body = (
+              <>
+                <Image
+                  src={offering.image}
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className={`object-cover opacity-20 transition-opacity duration-500${
+                    offering.slug ? ' group-hover:opacity-40' : ''
+                  }`}
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-gradient-to-br from-black/85 via-black/40 to-transparent"
+                />
+                <div className="relative z-10 p-8">
+                  <h3 className="text-xl font-medium text-white mb-4">
+                    {offering.name}
+                  </h3>
+                  <p className="text-sm text-white/70 font-light leading-relaxed">
+                    {offering.description}
+                  </p>
+                </div>
+              </>
+            )
+            const cardBase =
+              'relative block h-full overflow-hidden min-h-[220px] bg-brand-primary-900 border border-white/5 rounded-card'
+            return (
+              <motion.article
+                key={offering.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '0px' }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+              >
+                {offering.slug ? (
+                  <Link
+                    href={`/programs/${offering.slug}`}
+                    className={`group ${cardBase} transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl`}
+                  >
+                    {body}
+                  </Link>
+                ) : (
+                  <div className={cardBase}>{body}</div>
+                )}
+              </motion.article>
+            )
+          })}
         </div>
 
         <div className="mt-16 rounded-card bg-white border border-brand-border shadow-sm p-10 lg:p-14">

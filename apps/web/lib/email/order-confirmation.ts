@@ -4,6 +4,7 @@ import OrderConfirmation from '../../emails/OrderConfirmation'
 import type { OrderEmailData } from './types'
 import { companyVatNumber } from './company'
 import { formatAmount } from './utils'
+import { siteUrl } from './site-url'
 
 export type { OrderEmailData }
 
@@ -93,7 +94,7 @@ function buildPlainText(order: OrderEmailData, invoiceUrl: string | null): strin
     'QUESTIONS?',
     '==========',
     'Email: sravenall@suzanneravenall.com',
-    'Website: https://suzanneravenall.com/contact',
+    `Website: ${siteUrl()}/contact`,
     '',
     '---',
     'Dr Suzanne Ravenall · Ravenall Institute',

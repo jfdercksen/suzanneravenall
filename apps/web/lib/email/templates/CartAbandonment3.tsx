@@ -14,6 +14,7 @@ import {
   Text,
 } from '@react-email/components'
 import type { CartEmailProps } from '../types'
+import { siteUrl } from '../site-url'
 import { companyPhysicalAddress } from '../company'
 import { formatAmount } from '../utils'
 import { emailTestimonial } from '@/data/testimonials'
@@ -147,7 +148,7 @@ export default function CartAbandonment3({
                 Not sure? I&apos;d love to answer your questions.
               </Text>
               <Link
-                href="https://suzanneravenall.com/contact"
+                href={`${siteUrl()}/contact`}
                 style={{ color: BLUE, fontSize: '14px', fontWeight: '600', textDecoration: 'underline' }}
               >
                 Book a free 15-minute call →

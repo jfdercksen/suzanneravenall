@@ -24,30 +24,36 @@ const frameworks: {
   title: string
   description: string
   inDevelopment?: boolean
+  /** Where the framework can be used today. Cards without one are not links. */
+  href?: string
 }[] = [
   {
     label: 'The Assessment',
     title: 'Pattern Discovery Instrument™',
     description:
       'Where everyone starts. The assessment that identifies the unconscious pattern running beneath your behaviour, available now as the free Pattern Scan.',
+    href: '/discover-your-pattern',
   },
   {
     label: 'The Consulting Methodology',
     title: 'Pattern Mapping Process™',
     description:
       'The structured methodology behind the Transformation Pathways and private sessions: mapping the pattern, then repatterning it at the level where it was formed.',
+    href: '/transformation-pathways',
   },
   {
     label: 'The Practitioner Certification',
     title: 'Pattern Intelligence Coach™',
     description:
       'The certification track for practitioners: professional training programmes that teach the repatterning methodology so the work can be carried further than one person ever could.',
+    href: '/programs#practitioner',
   },
   {
     label: 'The Digital Platform',
     title: 'Pattern Intelligence AI™',
     description:
       'The digital arm of the system: the Pattern Coach, bringing pattern-level guidance to you between sessions, whenever you need it.',
+    href: '/pattern-coach',
   },
   {
     label: 'For CEOs & Leadership Teams',
@@ -153,35 +159,59 @@ export default function TheSystemContent() {
           </motion.h2>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {frameworks.map((framework, i) => (
-              <motion.div
-                key={framework.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
-                transition={{
-                  duration: 0.6,
-                  delay: i * 0.1,
-                  ease: 'easeOut' as const,
-                }}
-                className="group relative h-full rounded-card border border-brand-border bg-white p-8 transition-all duration-500 hover:border-brand-primary-300 hover:shadow-2xl hover:-translate-y-1"
-              >
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-5">
-                  {framework.label}
-                </p>
-                <h3 className="text-2xl font-light text-brand-primary mb-4">
-                  {framework.title}
-                </h3>
-                <p className="text-brand-muted font-light leading-relaxed">
-                  {framework.description}
-                </p>
-                {framework.inDevelopment && (
-                  <p className="mt-6 inline-flex items-center text-xs uppercase tracking-widest font-medium text-brand-muted border border-brand-primary-300 rounded-button px-3 py-1">
-                    In development
+            {frameworks.map((framework, i) => {
+              const body = (
+                <>
+                  <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-5">
+                    {framework.label}
                   </p>
-                )}
-              </motion.div>
-            ))}
+                  <h3 className="text-2xl font-light text-brand-primary mb-4">
+                    {framework.title}
+                  </h3>
+                  <p className="text-brand-muted font-light leading-relaxed">
+                    {framework.description}
+                  </p>
+                  {framework.inDevelopment && (
+                    <p className="mt-6 inline-flex items-center text-xs uppercase tracking-widest font-medium text-brand-muted border border-brand-primary-300 rounded-button px-3 py-1">
+                      In development
+                    </p>
+                  )}
+                  {framework.href && (
+                    <span className="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-widest font-medium text-brand-accent">
+                      Explore <span aria-hidden="true">&rarr;</span>
+                    </span>
+                  )}
+                </>
+              )
+              return (
+                <motion.div
+                  key={framework.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-100px' }}
+                  transition={{
+                    duration: 0.6,
+                    delay: i * 0.1,
+                    ease: 'easeOut' as const,
+                  }}
+                  className="h-full"
+                >
+                  {framework.href ? (
+                    <Link
+                      href={framework.href}
+                      className="group relative flex flex-col h-full rounded-card border border-brand-border bg-white p-8 transition-all duration-500 hover:border-brand-primary-300 hover:shadow-2xl hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+                    >
+                      {body}
+                    </Link>
+                  ) : (
+                    // Not available yet: a plain card, no hover lift.
+                    <div className="relative h-full rounded-card border border-brand-border bg-white p-8">
+                      {body}
+                    </div>
+                  )}
+                </motion.div>
+              )
+            })}
           </div>
         </div>
       </section>

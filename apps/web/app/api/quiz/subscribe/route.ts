@@ -6,7 +6,7 @@ import { getServiceRoleClient, markEmailSent, upsertSubscriber } from '@/lib/qui
 import { sendQuizInviteEmail } from '@/lib/email/quiz-invite'
 import { createRateLimiter, getClientIp, rateLimitResponse } from '@/lib/rate-limit'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://suzanneravenall.com'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://suzanneravenall.com'
 
 const SubscribeSchema = z.object({
   quizSlug: z.string().trim().min(1).max(200),

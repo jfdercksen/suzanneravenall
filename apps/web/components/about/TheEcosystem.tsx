@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 
 const sectionReveal = {
   initial: { opacity: 0, y: 20 },
@@ -69,7 +69,11 @@ export default function TheEcosystem() {
         </motion.h2>
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-10">
-          {cards.map((card, i) => (
+          {cards.map((card, i) => {
+            const external = card.href.startsWith('http')
+            // The diagonal "leaves the site" arrow only for the external card.
+            const Arrow = external ? ArrowUpRight : ArrowRight
+            return (
             <motion.div
               key={card.title}
               initial={{ opacity: 0, y: 30 }}
@@ -83,7 +87,7 @@ export default function TheEcosystem() {
             >
               <Link
                 href={card.href}
-                {...(card.href.startsWith('http')
+                {...(external
                   ? { target: '_blank', rel: 'noopener noreferrer' }
                   : {})}
                 aria-label={card.title}
@@ -112,15 +116,18 @@ export default function TheEcosystem() {
                   </p>
                   <span className="inline-flex items-center gap-2 text-white font-medium text-sm uppercase tracking-widest">
                     Explore
-                    <ArrowUpRight
-                      className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1"
+                    <Arrow
+                      className={`w-4 h-4 transition-transform duration-500 group-hover:translate-x-1${
+                        external ? ' group-hover:-translate-y-1' : ''
+                      }`}
                       aria-hidden="true"
                     />
                   </span>
                 </div>
               </Link>
             </motion.div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>
