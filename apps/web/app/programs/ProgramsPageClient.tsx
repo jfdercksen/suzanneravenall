@@ -132,6 +132,9 @@ function DarkProgramCard({ program }: { program: Program }) {
   )
 }
 
+/** A 1%-tall band 35% down the viewport: the section crossing it is active. */
+const SCROLL_SPY_ROOT_MARGIN = '-35% 0px -64% 0px'
+
 function ChevronIcon({ open }: { open: boolean }) {
   return (
     <svg
@@ -152,6 +155,8 @@ export default function ProgramsPageClient() {
   const [activeCategory, setActiveCategory] = useState<string>('practitioner')
   const [rrOpen, setRrOpen] = useState(false)
   const sectionRefs = useRef<Partial<Record<'practitioner' | 'self-paced' | 'live' | 'group', HTMLElement | null>>>({})
+  const chipBarRef = useRef<HTMLDivElement>(null)
+  const [chipsOverflowRight, setChipsOverflowRight] = useState(false)
 
   const rrPrograms = getProgramsBySeries('resonance-repatterning')
   const energyClearingPrograms = getProgramsBySeries('energy-clearing')
@@ -160,24 +165,63 @@ export default function ProgramsPageClient() {
   const livePrograms = getProgramsByCategory('live')
   const groupPrograms = getProgramsByCategory('group')
 
+  // Scroll-spy: the sections are 3000-4600px tall on a phone, so a visibility
+  // threshold can never be met. Instead watch a thin band 35% down the viewport
+  // (below the sticky header and chip bar): whichever section crosses it is the
+  // one on screen. The sections are contiguous, so only one at a time.
   useEffect(() => {
-    const observers: IntersectionObserver[] = []
     const ids = ['practitioner', 'self-paced', 'live', 'group'] as const
-
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          const id = ids.find((key) => sectionRefs.current[key] === entry.target)
+          if (id) setActiveCategory(id)
+        })
+      },
+      { rootMargin: SCROLL_SPY_ROOT_MARGIN, threshold: 0 },
+    )
     ids.forEach((id) => {
       const el = sectionRefs.current[id]
-      if (!el) return
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry?.isIntersecting) setActiveCategory(id)
-        },
-        { threshold: 0.3 },
-      )
-      observer.observe(el)
-      observers.push(observer)
+      if (el) observer.observe(el)
     })
+    return () => observer.disconnect()
+  }, [])
 
-    return () => observers.forEach((o) => o.disconnect())
+  // Keep the active chip visible inside the horizontally scrolling chip bar.
+  // scrollTo on the bar itself, not scrollIntoView, so the page never jumps.
+  useEffect(() => {
+    const bar = chipBarRef.current
+    const chip = bar?.querySelector<HTMLElement>(`[data-category="${activeCategory}"]`)
+    if (!bar || !chip) return
+    const barRect = bar.getBoundingClientRect()
+    const chipRect = chip.getBoundingClientRect()
+    const pad = 16
+    let left: number | null = null
+    if (chipRect.left < barRect.left) {
+      left = bar.scrollLeft + chipRect.left - barRect.left - pad
+    } else if (chipRect.right > barRect.right) {
+      left = bar.scrollLeft + chipRect.right - barRect.right + pad
+    }
+    if (left !== null && typeof bar.scrollTo === 'function') {
+      bar.scrollTo({ left: Math.max(0, left), behavior: 'smooth' })
+    }
+  }, [activeCategory])
+
+  // Fade the right edge of the chip bar while more chips sit off screen, so
+  // phone users can tell the bar scrolls.
+  useEffect(() => {
+    const bar = chipBarRef.current
+    if (!bar) return
+    const update = () =>
+      setChipsOverflowRight(bar.scrollLeft + bar.clientWidth < bar.scrollWidth - 4)
+    update()
+    bar.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      bar.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
   }, [])
 
   return (
@@ -217,22 +261,32 @@ export default function ProgramsPageClient() {
           <p className="flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent">
             Browse by category
           </p>
-          <div className="flex gap-3 overflow-x-auto pb-1">
-            {CATEGORIES.map((cat) => (
-              <a
-                key={cat.id}
-                href={`#${cat.id}`}
-                aria-current={activeCategory === cat.id ? 'true' : undefined}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`flex-shrink-0 px-6 py-3 rounded-full text-base font-medium transition-colors duration-200 ${
-                  activeCategory === cat.id
-                    ? 'bg-brand-accent-600 text-white shadow-lg'
-                    : 'border border-brand-primary-300 text-brand-muted hover:border-brand-accent hover:text-brand-primary'
-                }`}
-              >
-                {cat.label}
-              </a>
-            ))}
+          <div className="relative min-w-0">
+            <div ref={chipBarRef} className="flex gap-3 overflow-x-auto pb-1">
+              {CATEGORIES.map((cat) => (
+                <a
+                  key={cat.id}
+                  data-category={cat.id}
+                  href={`#${cat.id}`}
+                  aria-current={activeCategory === cat.id ? 'true' : undefined}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`flex-shrink-0 px-6 py-3 rounded-full text-base font-medium transition-colors duration-200 ${
+                    activeCategory === cat.id
+                      ? 'bg-brand-accent-600 text-white shadow-lg'
+                      : 'border border-brand-primary-300 text-brand-muted hover:border-brand-accent hover:text-brand-primary'
+                  }`}
+                >
+                  {cat.label}
+                </a>
+              ))}
+            </div>
+            {chipsOverflowRight && (
+              <div
+                aria-hidden="true"
+                data-testid="chip-scroll-hint"
+                className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-brand-sand to-transparent"
+              />
+            )}
           </div>
         </div>
       </nav>

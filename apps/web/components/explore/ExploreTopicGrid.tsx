@@ -243,7 +243,7 @@ export default function ExploreTopicGrid() {
               />
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/40 to-black/10"
+                className="absolute inset-0 bg-gradient-to-t from-black/[0.88] via-black/40 to-black/10"
               />
               <div className="relative z-10 p-6">
                 <span className="block text-[10px] uppercase tracking-[0.3em] font-medium text-white/80 mb-2">

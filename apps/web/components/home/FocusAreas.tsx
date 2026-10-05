@@ -52,7 +52,11 @@ const areas = [
 
 export default function FocusAreas() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
+  // Hover and focus pause independently, so moving the mouse away does not
+  // resume the rotation while keyboard focus is still inside the panel
+  const [isHovered, setIsHovered] = useState(false)
+  const [hasFocus, setHasFocus] = useState(false)
+  const isPaused = isHovered || hasFocus
 
   const areasLength = areas.length
 
@@ -70,12 +74,14 @@ export default function FocusAreas() {
     <section
       aria-label="Areas of Focus"
       className="bg-brand-cream py-14 lg:py-24"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       // Keyboard parity with the mouse pause (WCAG 2.2.2): React's onFocus/onBlur
       // use focusin/focusout, so focus anywhere inside pauses the auto-advance
-      onFocus={() => setIsPaused(true)}
-      onBlur={() => setIsPaused(false)}
+      onFocus={() => setHasFocus(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setHasFocus(false)
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -158,16 +164,18 @@ export default function FocusAreas() {
                   className="object-cover"
                   priority={activeIndex === 0}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-primary-900/80 via-brand-primary-900/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-b from-brand-primary-900/80 via-brand-primary-900/20 to-transparent" />
               </motion.div>
             </AnimatePresence>
 
-            {/* Pane content — the giant word on the left is the title, so the
-                pane carries only number, outcome and the explore link */}
+            {/* Pane content: the giant word on the left is the title, so the
+                pane carries only number, outcome and the explore link. Anchored
+                to the top of the pane so the Explore link is on screen as soon as
+                the pane is (at the bottom it sat below the fold on laptops). */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={`content-${activeIndex}`}
-                className="absolute bottom-0 left-0 right-0 p-8 xl:p-10"
+                className="absolute top-0 left-0 right-0 p-8 xl:p-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
