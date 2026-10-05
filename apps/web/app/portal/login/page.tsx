@@ -5,8 +5,15 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { ensureMembership } from '@/lib/access/ensure-membership'
+import { emailError, hasErrors, useFieldErrors } from '@/lib/forms/validation'
 
 type LoginMode = 'password' | 'magic-link'
+type Field = 'email' | 'password'
+
+const VALIDATORS: Record<Field, (value: string) => string | undefined> = {
+  email: emailError,
+  password: (v) => (v ? undefined : 'Please enter your password.'),
+}
 
 const ERROR_MESSAGES: Record<string, string> = {
   'auth-callback-failed': 'The sign-in link has expired or is invalid. Please request a new one.',
@@ -23,6 +30,10 @@ export default function LoginPage() {
       ? rawRedirect
       : '/portal/dashboard'
   const callbackError = searchParams.get('error')
+  // Carried on to Sign up and Forgot password so the member still lands where
+  // they were heading (site check M6). Only a real, safe redirect is passed on.
+  const redirectQuery =
+    redirect !== '/portal/dashboard' ? `?redirect=${encodeURIComponent(redirect)}` : ''
 
   const [mode, setMode] = useState<LoginMode>('password')
   const [email, setEmail] = useState('')
@@ -32,9 +43,31 @@ export default function LoginPage() {
   )
   const [loading, setLoading] = useState(false)
   const [magicLinkSent, setMagicLinkSent] = useState(false)
+  // Site check M5: field messages on blur, before anything is sent.
+  const { errors, setError: setFieldError, setErrors: setFieldErrors } = useFieldErrors<Field>()
+
+  const fieldProps = (field: Field) => ({
+    onBlur: (e: React.FocusEvent<HTMLInputElement>) => setFieldError(field, VALIDATORS[field](e.target.value)),
+    'aria-invalid': !!errors[field],
+    'aria-describedby': errors[field] ? `login-${field}-error` : undefined,
+  })
+  const recheck = (field: Field, value: string) => {
+    if (errors[field]) setFieldError(field, VALIDATORS[field](value))
+  }
+  const fieldMessage = (field: Field) =>
+    errors[field] ? (
+      <p id={`login-${field}-error`} className="mt-1.5 text-xs text-red-400">
+        {errors[field]}
+      </p>
+    ) : null
 
   async function handlePasswordLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    const fieldErrors = { email: VALIDATORS.email(email), password: VALIDATORS.password(password) }
+    if (hasErrors(fieldErrors)) {
+      setFieldErrors(fieldErrors)
+      return
+    }
     setError(null)
     setLoading(true)
 
@@ -61,6 +94,11 @@ export default function LoginPage() {
 
   async function handleMagicLink(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    const emailMessage = VALIDATORS.email(email)
+    if (emailMessage) {
+      setFieldErrors({ email: emailMessage })
+      return
+    }
     setError(null)
     setLoading(true)
 
@@ -68,7 +106,8 @@ export default function LoginPage() {
     const { error: authError } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/portal/callback?next=${redirect}`,
+        // Encoded: a redirect with its own ?query or &param must survive the round trip.
+        emailRedirectTo: `${window.location.origin}/portal/callback?next=${encodeURIComponent(redirect)}`,
       },
     })
 
@@ -126,7 +165,7 @@ export default function LoginPage() {
           <div className="flex rounded-xl bg-brand-primary-700 p-1 mb-8">
             <button
               type="button"
-              onClick={() => { setMode('password'); setError(null) }}
+              onClick={() => { setMode('password'); setError(null); setFieldErrors({}) }}
               className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
                 mode === 'password'
                   ? 'bg-white text-brand-primary shadow'
@@ -137,7 +176,7 @@ export default function LoginPage() {
             </button>
             <button
               type="button"
-              onClick={() => { setMode('magic-link'); setError(null) }}
+              onClick={() => { setMode('magic-link'); setError(null); setFieldErrors({}) }}
               className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
                 mode === 'magic-link'
                   ? 'bg-white text-brand-primary shadow'
@@ -164,10 +203,12 @@ export default function LoginPage() {
                     required
                     autoComplete="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => { setEmail(e.target.value); recheck('email', e.target.value) }}
+                    {...fieldProps('email')}
                     className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                     placeholder="you@example.com"
                   />
+                  {fieldMessage('email')}
                 </div>
 
                 <div>
@@ -176,7 +217,7 @@ export default function LoginPage() {
                       Password
                     </label>
                     <Link
-                      href="/portal/forgot-password"
+                      href={`/portal/forgot-password${redirectQuery}`}
                       className="text-xs text-brand-accent-400 hover:underline"
                     >
                       Forgot password?
@@ -188,10 +229,12 @@ export default function LoginPage() {
                     required
                     autoComplete="current-password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => { setPassword(e.target.value); recheck('password', e.target.value) }}
+                    {...fieldProps('password')}
                     className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                     placeholder="••••••••"
                   />
+                  {fieldMessage('password')}
                 </div>
 
                 {error && <p className="text-red-400 text-sm">{error}</p>}
@@ -207,7 +250,8 @@ export default function LoginPage() {
             </>
           ) : (
             <>
-              <h1 className="text-2xl font-medium tracking-tight text-white mb-1">Sign In</h1>
+              {/* Same action as the password tab, so the same name (site check M6). */}
+              <h1 className="text-2xl font-medium tracking-tight text-white mb-1">Log In</h1>
               <p className="text-white/50 text-sm mb-8">
                 We&apos;ll email you a one-click sign-in link. No password needed.
               </p>
@@ -223,10 +267,12 @@ export default function LoginPage() {
                     required
                     autoComplete="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => { setEmail(e.target.value); recheck('email', e.target.value) }}
+                    {...fieldProps('email')}
                     className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                     placeholder="you@example.com"
                   />
+                  {fieldMessage('email')}
                 </div>
 
                 {error && <p className="text-red-400 text-sm">{error}</p>}
@@ -244,7 +290,7 @@ export default function LoginPage() {
 
           <p className="mt-6 text-center text-white/70 text-sm">
             Don&apos;t have an account?{' '}
-            <Link href="/portal/signup" className="text-brand-accent-400 hover:underline">
+            <Link href={`/portal/signup${redirectQuery}`} className="text-brand-accent-400 hover:underline">
               Sign up →
             </Link>
           </p>

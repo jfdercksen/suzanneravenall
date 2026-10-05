@@ -1,9 +1,27 @@
 'use client'
 
 import { useState } from 'react'
+import {
+  PHONE_PATTERN,
+  emailError,
+  hasErrors,
+  phoneError,
+  requiredError,
+  sanitisePhone,
+  useFieldErrors,
+} from '@/lib/forms/validation'
 import { ENQUIRY_OPTIONS, type EnquiryOption } from './enquiry'
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error'
+type Field = 'name' | 'email' | 'phone' | 'message'
+
+// Site check M5: checked on blur and on submit, not only by the API.
+const VALIDATORS: Record<Field, (value: string) => string | undefined> = {
+  name: (v) => requiredError(v, 'Please enter your name.'),
+  email: emailError,
+  phone: phoneError,
+  message: (v) => requiredError(v, 'Please enter a message.'),
+}
 
 interface ContactFormProps {
   light?: boolean
@@ -16,13 +34,44 @@ interface ContactFormProps {
 export default function ContactForm({ light = false, enquiry, topic }: ContactFormProps) {
   const [formState, setFormState] = useState<FormState>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const { errors, setError, setErrors } = useFieldErrors<Field>()
+
+  const fieldProps = (field: Field) => ({
+    onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setError(field, VALIDATORS[field](e.target.value)),
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      // Phone: letters are stripped as typed.
+      if (field === 'phone') e.target.value = sanitisePhone(e.target.value)
+      if (errors[field]) setError(field, VALIDATORS[field](e.target.value))
+    },
+    'aria-invalid': !!errors[field],
+    'aria-describedby': errors[field] ? `contact-${field}-error` : undefined,
+  })
+
+  const fieldMessage = (field: Field) =>
+    errors[field] ? (
+      <p id={`contact-${field}-error`} className={`mt-1 text-xs ${light ? 'text-red-600' : 'text-red-400'}`}>
+        {errors[field]}
+      </p>
+    ) : null
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    const form = e.currentTarget
+    const fieldErrors = Object.fromEntries(
+      (Object.keys(VALIDATORS) as Field[]).map((field) => [
+        field,
+        VALIDATORS[field]((form.elements.namedItem(field) as HTMLInputElement).value),
+      ]),
+    ) as Record<Field, string | undefined>
+    if (hasErrors(fieldErrors)) {
+      setErrors(fieldErrors)
+      return
+    }
+
     setFormState('submitting')
     setErrorMessage('')
 
-    const form = e.currentTarget
     const data = {
       name: (form.elements.namedItem('name') as HTMLInputElement).value.trim(),
       email: (form.elements.namedItem('email') as HTMLInputElement).value.trim(),
@@ -84,9 +133,11 @@ export default function ContactForm({ light = false, enquiry, topic }: ContactFo
           required
           disabled={isSubmitting}
           autoComplete="name"
+          {...fieldProps('name')}
           className={inputClass}
           placeholder="Your full name"
         />
+        {fieldMessage('name')}
       </div>
 
       <div>
@@ -100,9 +151,11 @@ export default function ContactForm({ light = false, enquiry, topic }: ContactFo
           required
           disabled={isSubmitting}
           autoComplete="email"
+          {...fieldProps('email')}
           className={inputClass}
           placeholder="you@example.com"
         />
+        {fieldMessage('email')}
       </div>
 
       <div>
@@ -115,9 +168,13 @@ export default function ContactForm({ light = false, enquiry, topic }: ContactFo
           type="tel"
           disabled={isSubmitting}
           autoComplete="tel"
+          inputMode="tel"
+          pattern={PHONE_PATTERN}
+          {...fieldProps('phone')}
           className={inputClass}
           placeholder="+27 000 000 0000"
         />
+        {fieldMessage('phone')}
       </div>
 
       <div>
@@ -151,9 +208,11 @@ export default function ContactForm({ light = false, enquiry, topic }: ContactFo
           rows={4}
           defaultValue={topic ? `Regarding: ${topic}\n\n` : undefined}
           disabled={isSubmitting}
+          {...fieldProps('message')}
           className={`${inputClass} resize-none`}
           placeholder="Tell Suzanne a little about what you're looking for..."
         />
+        {fieldMessage('message')}
       </div>
 
       {formState === 'error' && (

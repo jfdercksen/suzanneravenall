@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { emailError } from '@/lib/forms/validation'
 
 // TODO: Wire to real PDF delivery once Suzanne provides the chapter PDF.
 // Currently captures email only — no asset is sent on submit.
@@ -13,9 +14,16 @@ export default function LeadMagnet() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState('')
+  // Shown when the field loses focus or on submit, not only after a round trip (site check M5).
+  const [fieldError, setFieldError] = useState<string | undefined>()
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    const invalid = emailError(email)
+    if (invalid) {
+      setFieldError(invalid)
+      return
+    }
     setStatus('loading')
     setError('')
 
@@ -83,7 +91,7 @@ export default function LeadMagnet() {
               <p className="mt-2 text-white/70">We have your details and will be in touch about Chapter 1.</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <form onSubmit={handleSubmit} noValidate className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <label htmlFor="lead-magnet-email" className="sr-only">
                 Email address
               </label>
@@ -92,12 +100,19 @@ export default function LeadMagnet() {
                 type="email"
                 name="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                  if (fieldError) setFieldError(emailError(e.target.value))
+                }}
+                onBlur={(e) => setFieldError(emailError(e.target.value))}
                 placeholder="Your email address"
                 required
+                autoComplete="email"
                 disabled={status === 'loading'}
-                aria-invalid={status === 'error'}
-                aria-describedby={status === 'error' ? 'lead-magnet-error' : undefined}
+                aria-invalid={status === 'error' || !!fieldError}
+                aria-describedby={
+                  fieldError ? 'lead-magnet-field-error' : status === 'error' ? 'lead-magnet-error' : undefined
+                }
                 className="flex-1 px-5 py-3.5 rounded-button bg-brand-cream/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent disabled:opacity-50 text-sm"
               />
               <button
@@ -108,6 +123,12 @@ export default function LeadMagnet() {
                 {status === 'loading' ? 'Sending…' : 'Request Chapter 1'}
               </button>
             </form>
+          )}
+
+          {fieldError && status !== 'success' && (
+            <p id="lead-magnet-field-error" className="mt-3 text-red-400 text-sm">
+              {fieldError}
+            </p>
           )}
 
           {status === 'error' && (

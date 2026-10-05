@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 const replace = vi.fn()
 let cartState: { cart: unknown; isLoading: boolean } = { cart: null, isLoading: false }
@@ -46,5 +47,41 @@ describe('CheckoutContent with nothing to check out', () => {
 
     expect(replace).not.toHaveBeenCalled()
     expect(screen.getByText('Loading your cart...')).toBeInTheDocument()
+  })
+})
+
+// Site check M5: contact fields are checked on blur, and phone takes no letters.
+describe('CheckoutContent contact step', () => {
+  beforeEach(() => {
+    cartState = {
+      cart: {
+        id: 'cart_1',
+        items: [{ id: 'i1', title: 'Session', thumbnail: null, quantity: 1, subtotal: 100000 }],
+        promotions: [],
+        currency_code: 'zar',
+        subtotal: 100000,
+        discount_total: 0,
+        tax_total: 0,
+        total: 100000,
+      },
+      isLoading: false,
+    }
+  })
+
+  it('shows the email message when the field loses focus', async () => {
+    const user = userEvent.setup()
+    render(<CheckoutContent />)
+    await user.type(screen.getByLabelText(/Email address/), 'ann@')
+    await user.tab()
+    expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument()
+  })
+
+  it('strips letters from the phone number and marks it as a tel input', async () => {
+    const user = userEvent.setup()
+    render(<CheckoutContent />)
+    const phone = screen.getByLabelText('Phone number')
+    await user.type(phone, '082abc5551234')
+    expect(phone).toHaveValue('0825551234')
+    expect(phone).toHaveAttribute('inputmode', 'tel')
   })
 })

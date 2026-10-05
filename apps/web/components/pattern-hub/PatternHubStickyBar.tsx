@@ -6,8 +6,36 @@ import { masterPatternQuizUrl } from '@/data/patternQuizzes'
 
 const BAR_OFFSET = '2.5rem' // 40px — drives both the bar's own height and Header's push-down offset
 
+// Site check M9: a dismissal is remembered across reloads. The pre-hydration
+// script on /discover-your-pattern reads the same key, so keep them in step.
+export const DISMISS_STORAGE_KEY = 'pattern-hub-bar-dismissed'
+
+function readDismissed(): boolean {
+  try {
+    return window.localStorage.getItem(DISMISS_STORAGE_KEY) === '1'
+  } catch {
+    // Storage blocked (private mode, cookies off): just show the bar.
+    return false
+  }
+}
+
+function rememberDismissed() {
+  try {
+    window.localStorage.setItem(DISMISS_STORAGE_KEY, '1')
+  } catch {
+    // Not remembered, but still dismissed for this page view.
+  }
+}
+
 export default function PatternHubStickyBar() {
   const [dismissed, setDismissed] = useState(false)
+
+  // Read after mount rather than in the initial state so the server and the
+  // first client render agree. The pre-hydration script hides the bar until
+  // then, so a remembered dismissal never flashes.
+  useEffect(() => {
+    if (readDismissed()) setDismissed(true)
+  }, [])
   // MobileNav renders a full-screen focus-trapped modal at z-50. This bar sits
   // above it (z-60) and is outside that modal's DOM subtree, so without this
   // it would stay focusable/visible on top of the "trapped" overlay — hide it
@@ -29,7 +57,9 @@ export default function PatternHubStickyBar() {
   const hidden = dismissed || mobileNavOpen
 
   useEffect(() => {
-    if (hidden) {
+    // readDismissed(): on the first effect pass `dismissed` is still false for
+    // a remembered dismissal, and the offset must not flash in for one frame.
+    if (hidden || readDismissed()) {
       document.documentElement.style.removeProperty('--pattern-bar-offset')
       document.body.style.paddingTop = ''
       return
@@ -48,7 +78,8 @@ export default function PatternHubStickyBar() {
 
   return (
     <div
-      className="fixed top-0 inset-x-0 z-[60] bg-brand-sand border-b border-brand-border"
+      // Hidden before hydration when the pre-hydration script found a remembered dismissal.
+      className="fixed top-0 inset-x-0 z-[60] bg-brand-sand border-b border-brand-border [[data-pattern-bar-dismissed]_&]:hidden"
       style={{ height: BAR_OFFSET }}
     >
       <div className="relative flex h-full items-center justify-center gap-2 sm:gap-3 px-10">
@@ -65,7 +96,10 @@ export default function PatternHubStickyBar() {
         <button
           type="button"
           aria-label="Dismiss announcement bar"
-          onClick={() => setDismissed(true)}
+          onClick={() => {
+            rememberDismissed()
+            setDismissed(true)
+          }}
           className="absolute right-2 flex items-center justify-center w-6 h-6 text-brand-muted hover:text-brand-ink transition-colors duration-150"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">

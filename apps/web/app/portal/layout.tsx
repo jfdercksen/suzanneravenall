@@ -2,6 +2,7 @@ import { cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import type { TierSlug } from '@/lib/access/tiers'
 import PortalNav from '@/components/portal/PortalNav'
+import AuthOverlay from '@/components/portal/AuthOverlay'
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies()
@@ -20,9 +21,11 @@ export default async function PortalLayout({ children }: { children: React.React
     return (
       <>
         <style>{`html, body { overflow: hidden !important; }`}</style>
-        <div className="fixed inset-0 z-[100] bg-brand-primary overflow-auto">
+        {/* AuthOverlay also makes the covered site chrome inert, so Tab
+            cannot reach it (site check M6). */}
+        <AuthOverlay className="fixed inset-0 z-[100] bg-brand-primary overflow-auto">
           {children}
-        </div>
+        </AuthOverlay>
       </>
     )
   }

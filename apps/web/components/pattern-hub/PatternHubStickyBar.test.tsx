@@ -1,7 +1,7 @@
-import { describe, it, expect, afterEach } from 'vitest'
+import { describe, it, expect, afterEach, vi } from 'vitest'
 import { render, screen, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import PatternHubStickyBar from './PatternHubStickyBar'
+import PatternHubStickyBar, { DISMISS_STORAGE_KEY } from './PatternHubStickyBar'
 
 const QUIZ_URL = '/explore/emotional-nervous-system-mastery/quiz'
 const BAR_OFFSET = '2.5rem'
@@ -11,6 +11,7 @@ afterEach(() => {
   // Reset any DOM mutations the component made so tests stay isolated
   document.documentElement.style.removeProperty('--pattern-bar-offset')
   document.body.style.paddingTop = ''
+  window.localStorage.clear()
 })
 
 describe('PatternHubStickyBar', () => {
@@ -72,5 +73,35 @@ describe('PatternHubStickyBar', () => {
 
     expect(document.documentElement.style.getPropertyValue('--pattern-bar-offset')).toBe('')
     expect(document.body.style.paddingTop).toBe('')
+  })
+
+  // Site check M9: dismissing is remembered on reload.
+  it('remembers a dismissal so the bar stays hidden on the next visit', async () => {
+    const user = userEvent.setup()
+    const first = render(<PatternHubStickyBar />)
+    await user.click(screen.getByRole('button', { name: 'Dismiss announcement bar' }))
+    expect(window.localStorage.getItem(DISMISS_STORAGE_KEY)).toBe('1')
+    first.unmount()
+
+    render(<PatternHubStickyBar />)
+    expect(screen.queryByText('Not sure where to start?')).not.toBeInTheDocument()
+    expect(document.documentElement.style.getPropertyValue('--pattern-bar-offset')).toBe('')
+    expect(document.body.style.paddingTop).toBe('')
+  })
+
+  it('still shows and dismisses the bar when storage is blocked', async () => {
+    const getItem = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('blocked')
+    })
+    const setItem = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('blocked')
+    })
+    const user = userEvent.setup()
+    render(<PatternHubStickyBar />)
+    expect(screen.getByText('Not sure where to start?')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Dismiss announcement bar' }))
+    expect(screen.queryByText('Not sure where to start?')).not.toBeInTheDocument()
+    getItem.mockRestore()
+    setItem.mockRestore()
   })
 })

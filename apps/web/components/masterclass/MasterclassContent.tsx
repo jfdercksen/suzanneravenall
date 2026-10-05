@@ -125,8 +125,9 @@ export default function MasterclassContent() {
       {/* A form is more than a CTA row, so the header rule moves it out of
           the picture. Same form as before. */}
       <section
+        id="register"
         aria-label="Masterclass sign-up"
-        className="w-full bg-brand-primary-900 border-t border-white/10 py-8"
+        className="w-full bg-brand-primary-900 border-t border-white/10 py-8 scroll-mt-24 lg:scroll-mt-28"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -295,7 +296,15 @@ export default function MasterclassContent() {
             <p className="text-brand-muted text-lg mb-10">
               Join thousands of people who have already taken the first step.
             </p>
-            <EmailCaptureForm variant="light" />
+            {/* Site check M5: the page used to render the form a second time
+                here, with the same ids. One form, so this CTA takes the
+                visitor back up to it. */}
+            <a
+              href="#register"
+              className="inline-flex items-center justify-center rounded-button bg-brand-accent-600 hover:bg-brand-accent-700 text-white px-6 py-3 font-medium text-sm transition-all duration-300"
+            >
+              Register My Interest &rarr;
+            </a>
             <p className="mt-4 text-brand-muted text-xs">
               Free. Takes 2 minutes. You can unsubscribe anytime.
             </p>
