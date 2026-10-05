@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from 'vitest'
 
 // ---------------------------------------------------------------------------
-// Hoisted mock factories — must be declared before vi.mock() factories run
+// Hoisted mock factories - must be declared before vi.mock() factories run
 // ---------------------------------------------------------------------------
 const { mockCaptureException } = vi.hoisted(() => ({
   mockCaptureException: vi.fn(),
@@ -14,6 +14,9 @@ vi.mock('@sentry/nextjs', () => ({
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+const N8N_URL = 'http://n8n.test:5678/webhook/lead-magnet-submission'
+const VIBE_URL = 'https://vibe.example.com/webhook'
 
 function makeRequest(body: unknown): Request {
   return new Request('http://localhost/api/lead-magnet', {
@@ -31,312 +34,254 @@ function makeRawRequest(rawBody: string): Request {
   })
 }
 
-// ---------------------------------------------------------------------------
-// NOTE on VIBE_WEBHOOK_URL module-level constant
-// ---------------------------------------------------------------------------
-// The route captures VIBE_MARKETING_WEBHOOK_URL at module load time into a
-// module-level constant.  To test both branches (set vs. unset) we must force
-// the module to re-evaluate for each group using vi.resetModules() + a fresh
-// dynamic import inside beforeEach (not a static top-level import).
-// ---------------------------------------------------------------------------
+function okResponse(): Response {
+  return new Response(JSON.stringify({ ok: true }), { status: 200 })
+}
+
+type FetchCall = [string, RequestInit]
+
+function callsTo(spy: MockInstance<typeof fetch>, url: string): FetchCall[] {
+  return (spy.mock.calls as unknown as FetchCall[]).filter(([calledUrl]) => calledUrl === url)
+}
+
+/** The single call made to `url`; fails the test if there is not exactly one. */
+function onlyCallTo(spy: MockInstance<typeof fetch>, url: string): FetchCall {
+  const calls = callsTo(spy, url)
+  expect(calls).toHaveLength(1)
+  return calls[0] as FetchCall
+}
+
+function sentBody(call: FetchCall): Record<string, unknown> {
+  return JSON.parse(call[1].body as string) as Record<string, unknown>
+}
+
+// The route reads N8N_BASE_URL and VIBE_MARKETING_WEBHOOK_URL into module-level
+// constants at load time, so each group re-imports the module after setting env.
+async function loadRoute(): Promise<(req: Request) => Promise<Response>> {
+  vi.resetModules()
+  const mod = await import('./route')
+  return mod.POST
+}
 
 // ---------------------------------------------------------------------------
-// Group A — VIBE_MARKETING_WEBHOOK_URL is NOT set (graceful degradation)
+// Group A - n8n (the lead store), VIBE_MARKETING_WEBHOOK_URL unset
 // ---------------------------------------------------------------------------
-describe('POST /api/lead-magnet — VIBE_MARKETING_WEBHOOK_URL unset', () => {
+describe('POST /api/lead-magnet - n8n lead store', () => {
   let POST: (req: Request) => Promise<Response>
-  let fetchSpy: ReturnType<typeof vi.spyOn>
+  let fetchSpy: MockInstance<typeof fetch>
+  let consoleSpy: MockInstance<typeof console.error>
 
   beforeEach(async () => {
     vi.clearAllMocks()
     delete process.env.VIBE_MARKETING_WEBHOOK_URL
-
-    vi.resetModules()
-    const mod = await import('./route')
-    POST = mod.POST
-
-    fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-      new Response(JSON.stringify({ ok: true }), { status: 200 }),
-    )
+    process.env.N8N_BASE_URL = 'http://n8n.test:5678/'
+    POST = await loadRoute()
+    fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(okResponse())
+    consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
   })
 
   afterEach(() => {
     fetchSpy.mockRestore()
+    consoleSpy.mockRestore()
+    delete process.env.N8N_BASE_URL
   })
-
-  // -------------------------------------------------------------------------
-  // Happy path — valid email only
-  // -------------------------------------------------------------------------
 
   describe('happy path', () => {
-    it('returns 202 when only a valid email is provided', async () => {
+    it('returns 200 with success:true once n8n accepts the lead', async () => {
       const res = await POST(makeRequest({ email: 'user@example.com' }))
 
-      expect(res.status).toBe(202)
+      expect(res.status).toBe(200)
+      expect((await res.json()).success).toBe(true)
     })
 
-    it('returns success:true in response body', async () => {
-      const res = await POST(makeRequest({ email: 'user@example.com' }))
-      const json = await res.json()
+    it('posts the lead to the n8n webhook (trailing slash stripped) and waits for it', async () => {
+      await POST(makeRequest({ email: 'user@example.com', firstName: 'Alice', source: 'newsletter' }))
 
-      expect(json.success).toBe(true)
+      const call = onlyCallTo(fetchSpy, N8N_URL)
+      expect(call[1].method).toBe('POST')
+      const body = sentBody(call)
+      expect(body.email).toBe('user@example.com')
+      expect(body.firstName).toBe('Alice')
+      expect(body.source).toBe('newsletter')
+      expect(body.quizResult).toBeNull()
+      expect(typeof body.timestamp).toBe('string')
     })
 
-    it('does NOT call fetch when VIBE_MARKETING_WEBHOOK_URL is not set', async () => {
+    it('falls back to the email local-part for firstName and "homepage" for source', async () => {
+      await POST(makeRequest({ email: 'jane.doe@example.com' }))
+
+      const body = sentBody(onlyCallTo(fetchSpy, N8N_URL))
+      expect(body.firstName).toBe('jane.doe')
+      expect(body.source).toBe('homepage')
+    })
+
+    it('forwards quizResult when provided', async () => {
+      await POST(makeRequest({ email: 'user@example.com', quizResult: 'freeze' }))
+
+      expect(sentBody(onlyCallTo(fetchSpy, N8N_URL)).quizResult).toBe('freeze')
+    })
+
+    it('does NOT call the Vibe webhook when VIBE_MARKETING_WEBHOOK_URL is not set', async () => {
       await POST(makeRequest({ email: 'user@example.com' }))
 
-      expect(fetchSpy).not.toHaveBeenCalled()
-    })
-
-    it('does NOT call fetch even when firstName and source are provided', async () => {
-      await POST(
-        makeRequest({ email: 'user@example.com', firstName: 'Alice', source: 'homepage' }),
-      )
-
-      expect(fetchSpy).not.toHaveBeenCalled()
+      expect(fetchSpy).toHaveBeenCalledTimes(1)
     })
   })
 
-  // -------------------------------------------------------------------------
-  // Invalid email
-  // -------------------------------------------------------------------------
+  describe('n8n failure (B13: the lead must not be reported as saved)', () => {
+    it('returns 502 with an error message when n8n responds non-2xx', async () => {
+      fetchSpy.mockResolvedValue(new Response('not found', { status: 404 }))
+
+      const res = await POST(makeRequest({ email: 'user@example.com' }))
+      const json = await res.json()
+
+      expect(res.status).toBe(502)
+      expect(json.success).toBeUndefined()
+      expect(typeof json.error).toBe('string')
+    })
+
+    it('returns 502 when the n8n request throws (network error or timeout)', async () => {
+      fetchSpy.mockRejectedValue(new Error('ECONNREFUSED'))
+
+      const res = await POST(makeRequest({ email: 'user@example.com' }))
+
+      expect(res.status).toBe(502)
+    })
+
+    it('reports the failure to Sentry without the email address (POPIA)', async () => {
+      const networkError = new Error('ECONNREFUSED')
+      fetchSpy.mockRejectedValue(networkError)
+
+      await POST(makeRequest({ email: 'user@example.com', source: 'footer' }))
+
+      expect(mockCaptureException).toHaveBeenCalledWith(networkError, { extra: { source: 'footer' } })
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('[lead-magnet] n8n webhook failed: ECONNREFUSED'),
+      )
+    })
+
+    it('handles a non-Error rejection value', async () => {
+      fetchSpy.mockRejectedValue('string error')
+
+      const res = await POST(makeRequest({ email: 'user@example.com' }))
+
+      expect(res.status).toBe(502)
+    })
+  })
 
   describe('email validation', () => {
-    it('returns 422 when email is missing from body', async () => {
-      const res = await POST(makeRequest({ firstName: 'Alice' }))
+    it.each([
+      ['missing', { firstName: 'Alice' }],
+      ['without @', { email: 'notanemail' }],
+      ['without a domain', { email: 'user@' }],
+      ['without a local part', { email: '@example.com' }],
+      ['with spaces', { email: 'user @example.com' }],
+      ['a number', { email: 42 }],
+      ['null', { email: null }],
+      ['an empty body', {}],
+    ])('returns 422 when the email is %s', async (_label, body) => {
+      const res = await POST(makeRequest(body))
 
       expect(res.status).toBe(422)
+      expect((await res.json()).error).toBe('Please enter a valid email address.')
+      expect(fetchSpy).not.toHaveBeenCalled()
     })
 
-    it('returns 422 with validation error message when email is missing', async () => {
-      const res = await POST(makeRequest({ firstName: 'Alice' }))
-      const json = await res.json()
-
-      expect(json.error).toBe('Please enter a valid email address.')
-    })
-
-    it('returns 422 when email has no @ symbol', async () => {
-      const res = await POST(makeRequest({ email: 'notanemail' }))
-
-      expect(res.status).toBe(422)
-    })
-
-    it('returns 422 when email has no domain part', async () => {
-      const res = await POST(makeRequest({ email: 'user@' }))
-
-      expect(res.status).toBe(422)
-    })
-
-    it('returns 422 when email has no local part', async () => {
-      const res = await POST(makeRequest({ email: '@example.com' }))
-
-      expect(res.status).toBe(422)
-    })
-
-    it('returns 422 when email contains spaces', async () => {
-      const res = await POST(makeRequest({ email: 'user @example.com' }))
-
-      expect(res.status).toBe(422)
-    })
-
-    it('returns 422 when email is a number instead of string', async () => {
-      const res = await POST(makeRequest({ email: 42 }))
-
-      expect(res.status).toBe(422)
-    })
-
-    it('returns 422 when email is null', async () => {
-      const res = await POST(makeRequest({ email: null }))
-
-      expect(res.status).toBe(422)
-    })
-
-    it('returns 422 when body is an empty object', async () => {
-      const res = await POST(makeRequest({}))
-
-      expect(res.status).toBe(422)
-    })
-
-    it('returns 202 for a valid email with subdomains and plus addressing', async () => {
+    it('accepts subdomains and plus addressing', async () => {
       const res = await POST(makeRequest({ email: 'user+tag@mail.example.co.za' }))
 
-      expect(res.status).toBe(202)
+      expect(res.status).toBe(200)
     })
   })
 
-  // -------------------------------------------------------------------------
-  // Invalid JSON body
-  // -------------------------------------------------------------------------
-
   describe('malformed request body', () => {
-    it('returns 400 when body is not valid JSON', async () => {
-      const res = await POST(makeRawRequest('{not valid json'))
+    it.each([
+      ['invalid JSON', '{not valid json'],
+      ['plain text', 'hello world'],
+      ['empty', ''],
+    ])('returns 400 when the body is %s', async (_label, raw) => {
+      const res = await POST(makeRawRequest(raw))
 
       expect(res.status).toBe(400)
-    })
-
-    it('returns 400 with error message when body is not valid JSON', async () => {
-      const res = await POST(makeRawRequest('{not valid json'))
-      const json = await res.json()
-
-      expect(json.error).toBe('Invalid request body.')
-    })
-
-    it('returns 400 when body is plain text', async () => {
-      const res = await POST(makeRawRequest('hello world'))
-
-      expect(res.status).toBe(400)
-    })
-
-    it('returns 400 when body is empty string', async () => {
-      const res = await POST(makeRawRequest(''))
-
-      expect(res.status).toBe(400)
+      expect((await res.json()).error).toBe('Invalid request body.')
+      expect(fetchSpy).not.toHaveBeenCalled()
     })
   })
 })
 
 // ---------------------------------------------------------------------------
-// Group B — VIBE_MARKETING_WEBHOOK_URL is set
+// Group B - VIBE_MARKETING_WEBHOOK_URL set (secondary, fire-and-forget copy)
 // ---------------------------------------------------------------------------
-describe('POST /api/lead-magnet — VIBE_MARKETING_WEBHOOK_URL set', () => {
+describe('POST /api/lead-magnet - Vibe Marketing forwarding', () => {
   let POST: (req: Request) => Promise<Response>
-  let fetchSpy: ReturnType<typeof vi.spyOn>
-
-  const VIBE_URL = 'https://vibe.example.com/webhook'
+  let fetchSpy: MockInstance<typeof fetch>
+  let consoleSpy: MockInstance<typeof console.error>
 
   beforeEach(async () => {
     vi.clearAllMocks()
-    process.env.VIBE_MARKETING_WEBHOOK_URL = VIBE_URL
-
-    vi.resetModules()
-    const mod = await import('./route')
-    POST = mod.POST
-
-    fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-      new Response(JSON.stringify({ ok: true }), { status: 200 }),
-    )
+    process.env.N8N_BASE_URL = 'http://n8n.test:5678'
+    process.env.VIBE_MARKETING_WEBHOOK_URL = `${VIBE_URL}/`
+    POST = await loadRoute()
+    fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(okResponse())
+    consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
   })
 
   afterEach(() => {
     fetchSpy.mockRestore()
+    consoleSpy.mockRestore()
+    delete process.env.N8N_BASE_URL
     delete process.env.VIBE_MARKETING_WEBHOOK_URL
   })
 
-  // -------------------------------------------------------------------------
-  // Vibe webhook is fired
-  // -------------------------------------------------------------------------
+  it('sends the lead to Vibe (trailing slash stripped) with the expected payload', async () => {
+    const res = await POST(
+      makeRequest({ email: 'user@example.com', firstName: 'Alice', source: 'homepage' }),
+    )
 
-  describe('Vibe Marketing webhook forwarding', () => {
-    it('returns 202 when a valid email, firstName, and source are provided', async () => {
-      const res = await POST(
-        makeRequest({ email: 'user@example.com', firstName: 'Alice', source: 'homepage' }),
-      )
+    expect(res.status).toBe(200)
+    await vi.waitFor(() => expect(callsTo(fetchSpy, VIBE_URL)).toHaveLength(1))
+    const call = onlyCallTo(fetchSpy, VIBE_URL)
+    expect(call[1].method).toBe('POST')
+    expect(call[1].headers).toMatchObject({ 'Content-Type': 'application/json' })
+    const body = sentBody(call)
+    expect(body.email).toBe('user@example.com')
+    expect(body.firstName).toBe('Alice')
+    expect(body.source).toBe('homepage')
+    expect(body.platform).toBe('suzanneravenall')
+    expect(typeof body.timestamp).toBe('string')
+  })
 
-      expect(res.status).toBe(202)
-    })
+  it('sends null firstName and source to Vibe when they are not provided', async () => {
+    await POST(makeRequest({ email: 'user@example.com' }))
 
-    it('calls fetch with the Vibe webhook URL', async () => {
-      await POST(makeRequest({ email: 'user@example.com', firstName: 'Alice', source: 'homepage' }))
-      await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+    await vi.waitFor(() => expect(callsTo(fetchSpy, VIBE_URL)).toHaveLength(1))
+    const body = sentBody(onlyCallTo(fetchSpy, VIBE_URL))
+    expect(body.firstName).toBeNull()
+    expect(body.source).toBeNull()
+  })
 
-      const [calledUrl] = fetchSpy.mock.calls[0] as [string, ...unknown[]]
-      expect(calledUrl).toBe(VIBE_URL)
-    })
+  it('still returns 200 when only the Vibe call fails, and reports it to Sentry', async () => {
+    const vibeError = new Error('timeout')
+    fetchSpy.mockImplementation(async (url) =>
+      String(url) === VIBE_URL ? Promise.reject(vibeError) : okResponse(),
+    )
 
-    it('sends a POST request to Vibe with the correct payload shape', async () => {
-      await POST(makeRequest({ email: 'user@example.com', firstName: 'Alice', source: 'homepage' }))
-      await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+    const res = await POST(makeRequest({ email: 'user@example.com', source: 'footer' }))
 
-      const [, options] = fetchSpy.mock.calls[0] as [string, RequestInit]
-      expect(options.method).toBe('POST')
-      expect(options.headers).toMatchObject({ 'Content-Type': 'application/json' })
+    expect(res.status).toBe(200)
+    await vi.waitFor(() => expect(mockCaptureException).toHaveBeenCalledTimes(1))
+    expect(mockCaptureException).toHaveBeenCalledWith(vibeError, { extra: { source: 'footer' } })
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining('[lead-magnet] Vibe Marketing webhook failed: timeout'),
+    )
+  })
 
-      const sentBody = JSON.parse(options.body as string) as Record<string, unknown>
-      expect(sentBody.email).toBe('user@example.com')
-      expect(sentBody.firstName).toBe('Alice')
-      expect(sentBody.source).toBe('homepage')
-      expect(sentBody.platform).toBe('suzanneravenall')
-      expect(typeof sentBody.timestamp).toBe('string')
-    })
+  it('does not call Vibe when n8n fails', async () => {
+    fetchSpy.mockResolvedValue(new Response('error', { status: 500 }))
 
-    it('nullifies firstName and source when they are not provided', async () => {
-      await POST(makeRequest({ email: 'user@example.com' }))
-      await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+    const res = await POST(makeRequest({ email: 'user@example.com' }))
 
-      const [, options] = fetchSpy.mock.calls[0] as [string, RequestInit]
-      const sentBody = JSON.parse(options.body as string) as Record<string, unknown>
-      expect(sentBody.firstName).toBeNull()
-      expect(sentBody.source).toBeNull()
-    })
-
-    it('strips trailing slash from VIBE_MARKETING_WEBHOOK_URL before calling fetch', async () => {
-      // Re-load module with a trailing-slash URL to verify the .replace() logic
-      fetchSpy.mockRestore()
-      delete process.env.VIBE_MARKETING_WEBHOOK_URL
-      process.env.VIBE_MARKETING_WEBHOOK_URL = 'https://vibe.example.com/webhook/'
-
-      vi.resetModules()
-      const mod2 = await import('./route')
-      const POST2 = mod2.POST
-
-      fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-        new Response(JSON.stringify({ ok: true }), { status: 200 }),
-      )
-
-      await POST2(makeRequest({ email: 'user@example.com' }))
-      await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
-
-      const [calledUrl] = fetchSpy.mock.calls[0] as [string, ...unknown[]]
-      expect(calledUrl).toBe('https://vibe.example.com/webhook')
-    })
-
-    it('still returns 202 when Vibe fetch throws a network error', async () => {
-      fetchSpy.mockRejectedValue(new Error('ECONNREFUSED'))
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      const res = await POST(makeRequest({ email: 'user@example.com' }))
-
-      expect(res.status).toBe(202)
-      consoleSpy.mockRestore()
-    })
-
-    it('calls Sentry.captureException when Vibe fetch throws', async () => {
-      const networkError = new Error('ECONNREFUSED')
-      fetchSpy.mockRejectedValue(networkError)
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      await POST(makeRequest({ email: 'user@example.com', source: 'footer' }))
-      await vi.waitFor(() => expect(mockCaptureException).toHaveBeenCalledTimes(1))
-
-      expect(mockCaptureException).toHaveBeenCalledWith(
-        networkError,
-        expect.objectContaining({ extra: { source: 'footer' } }),
-      )
-      consoleSpy.mockRestore()
-    })
-
-    it('logs the error message to console.error when Vibe fetch throws', async () => {
-      fetchSpy.mockRejectedValue(new Error('timeout'))
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      await POST(makeRequest({ email: 'user@example.com' }))
-      await vi.waitFor(() => expect(consoleSpy).toHaveBeenCalledTimes(1))
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[lead-magnet] Vibe Marketing webhook failed: timeout'),
-      )
-      consoleSpy.mockRestore()
-    })
-
-    it('still returns 202 when Vibe fetch throws a non-Error value', async () => {
-      fetchSpy.mockRejectedValue('string error')
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      const res = await POST(makeRequest({ email: 'user@example.com' }))
-
-      expect(res.status).toBe(202)
-      consoleSpy.mockRestore()
-    })
+    expect(res.status).toBe(502)
+    expect(callsTo(fetchSpy, VIBE_URL)).toHaveLength(0)
   })
 })

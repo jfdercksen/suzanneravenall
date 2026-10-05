@@ -4,6 +4,7 @@ import Cal from '@calcom/embed-react'
 import { motion } from 'framer-motion'
 import { Mail, MapPin } from 'lucide-react'
 import ContactForm from './ContactForm'
+import type { EnquiryOption } from './enquiry'
 
 const CAL_URL = process.env.NEXT_PUBLIC_CAL_URL ?? 'https://cal.suzanneravenall.com'
 
@@ -23,7 +24,12 @@ function cardReveal(delay: number) {
   }
 }
 
-export default function ContactOptions() {
+interface ContactOptionsProps {
+  enquiry?: EnquiryOption
+  topic?: string
+}
+
+export default function ContactOptions({ enquiry, topic }: ContactOptionsProps = {}) {
   return (
     <section
       aria-labelledby="contact-options-heading"
@@ -67,13 +73,14 @@ export default function ContactOptions() {
             </div>
           </motion.div>
 
-          {/* Card 2: Send a Message */}
+          {/* Card 2: Send a Message. id="message" is the target of contactHref() links. */}
           <motion.div
+            id="message"
             {...cardReveal(0.25)}
-            className="rounded-card bg-brand-sand border border-brand-border p-8 flex flex-col hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
+            className="scroll-mt-28 rounded-card bg-brand-sand border border-brand-border p-8 flex flex-col hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
           >
             <h3 className="text-lg font-medium text-brand-primary mb-2">Send a Message</h3>
-            <ContactForm light />
+            <ContactForm light enquiry={enquiry} topic={topic} />
           </motion.div>
 
           {/* Card 3: Other Ways to Connect */}

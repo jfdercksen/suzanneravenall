@@ -2,6 +2,7 @@ import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import PathwaysGroupSection from './PathwaysGroupSection'
+import { groupPathways } from '@/data/pathways'
 
 // ---------------------------------------------------------------------------
 // Mock next/link — render as plain <a> so href is inspectable in tests
@@ -127,13 +128,17 @@ describe('PathwaysGroupSection', () => {
   })
 
   describe('register-interest CTAs', () => {
-    it('renders a "Register Your Interest" link per card, each pointing to /contact', () => {
+    it('renders a "Register Your Interest" link per card, preselecting the events enquiry and naming the immersion', () => {
       render(<PathwaysGroupSection />)
       const links = screen.getAllByRole('link', { name: /Register Your Interest/i })
       expect(links).toHaveLength(4)
-      for (const link of links) {
-        expect(link).toHaveAttribute('href', '/contact')
-      }
+      links.forEach((link, i) => {
+        const url = new URL(link.getAttribute('href') ?? '', 'http://localhost')
+        expect(url.pathname).toBe('/contact')
+        expect(url.searchParams.get('enquiry')).toBe('events')
+        expect(url.searchParams.get('topic')).toBe(groupPathways[i]?.title)
+        expect(url.hash).toBe('#message')
+      })
     })
   })
 

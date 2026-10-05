@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { HEADER_UNDERLINE, PageHeader } from '@/components/shared/PageHeader'
+import { contactHref } from '@/app/contact/enquiry'
 
 // Suzanne's real, established signature keynote topics — same four talks
 // used in components/services/Speaking.tsx. Taglines are drawn directly
@@ -125,7 +126,7 @@ export default function SpeakingContent() {
         }
       >
         <Link
-          href="/contact"
+          href={contactHref('speaking')}
           className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
         >
           Book Suzanne to Speak
@@ -457,7 +458,7 @@ export default function SpeakingContent() {
                 className="flex flex-col sm:flex-row gap-4"
               >
                 <Link
-                  href="/contact"
+                  href={contactHref('speaking')}
                   className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 animate-[pulse-glow_3s_ease-in-out_infinite]"
                 >
                   Start the Conversation
