@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useCart } from '@/lib/cart'
+import { maxQuantity } from '@/components/cart/cartRules'
 import { getSpotsInfo } from '@/lib/inventory/spots'
 import { isCapacityLimitedHandle } from '@/lib/inventory/group-sessions'
 import type { MedusaVariant } from '@/types/medusa'
@@ -84,6 +85,14 @@ export function VariantSelector({
     if (!selectedVariant) return
     setButtonState('loading')
     setAddToCartError(null)
+    // One-per-order items (sessions, seats, courses) are already in the cart:
+    // a second add would make Medusa raise the line to 2 (site check C19).
+    const existing = cart?.items?.find((item) => item.variant_id === selectedVariant.id)
+    if (existing && maxQuantity(existing) === 1) {
+      setButtonState('added')
+      setTimeout(() => setButtonState('idle'), 2500)
+      return
+    }
     try {
       await addItem(selectedVariant.id, 1)
       setButtonState('added')

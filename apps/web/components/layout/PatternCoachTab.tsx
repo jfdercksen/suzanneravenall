@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
-import { CONSENT_STORAGE_KEY, CONSENT_CHOSEN_EVENT } from './CookieConsent'
+import { CONSENT_STORAGE_KEY, CONSENT_CHOSEN_EVENT, CONSENT_OPEN_EVENT } from './CookieConsent'
 
 const STORAGE_KEY = 'pattern-coach-tab-dismissed'
 const PRODUCT_PAGE_PATH = '/pattern-coach'
@@ -173,12 +173,16 @@ export default function PatternCoachTab() {
     const updateConsent = () =>
       setConsentChosen(window.localStorage.getItem(CONSENT_STORAGE_KEY) !== null)
     updateConsent()
+    // "Cookie settings" reopens the banner: hide the mobile pill again until a choice is made (KI027).
+    const consentReopened = () => setConsentChosen(false)
 
     window.addEventListener('resize', updateMobile)
     window.addEventListener(CONSENT_CHOSEN_EVENT, updateConsent)
+    window.addEventListener(CONSENT_OPEN_EVENT, consentReopened)
     return () => {
       window.removeEventListener('resize', updateMobile)
       window.removeEventListener(CONSENT_CHOSEN_EVENT, updateConsent)
+      window.removeEventListener(CONSENT_OPEN_EVENT, consentReopened)
     }
   }, [])
 
