@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { topics, type TopicSlug } from '@/app/explore/topics'
+import { topics, topicPanelSubline, type TopicSlug } from '@/app/explore/topics'
 
 const ADVANCE_MS = 4000
 
@@ -208,7 +208,7 @@ export default function ExploreTopicGrid() {
                 {activeTopic.heroHeadline}
               </h3>
               <p className="text-white/80 text-sm lg:text-base font-light leading-relaxed mb-2 max-w-lg">
-                {activeTopic.shortDescription}
+                {activeTopic && topicPanelSubline(activeTopic)}
               </p>
               <p className="italic text-white/80 text-xs mb-8 max-w-md">
                 &ldquo;{activeTopic.corePrinciple}&rdquo;

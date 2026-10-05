@@ -17,7 +17,8 @@ interface Opportunity {
   description: string
   cta: string
   href: string
-  badge: string
+  /** Omitted rather than invented when there is no real status to show. */
+  badge?: string
   price?: string
 }
 
@@ -34,6 +35,13 @@ interface UpcomingEventsProps {
   cohort: FeaturedCohort | null
 }
 
+/** Same ZAR format as the cohort card on UpcomingPrograms, so the page shows
+ *  one price style. Undefined when the product has no ZAR price. */
+function formatCohortPrice(cohort: FeaturedCohort): string | undefined {
+  if (cohort.priceZar === null) return undefined
+  return `R${cohort.priceZar.toLocaleString('en-ZA', { maximumFractionDigits: 0 })}`
+}
+
 function buildGroupOpportunity(cohort: FeaturedCohort | null): Opportunity {
   if (cohort && cohort.spotsRemaining > 0) {
     return {
@@ -45,6 +53,7 @@ function buildGroupOpportunity(cohort: FeaturedCohort | null): Opportunity {
       cta: 'Reserve Your Spot',
       href: `/shop/${cohort.productHandle}`,
       badge: `${cohort.spotsRemaining} spot${cohort.spotsRemaining === 1 ? '' : 's'} left`,
+      price: formatCohortPrice(cohort),
     }
   }
 
@@ -58,6 +67,7 @@ function buildGroupOpportunity(cohort: FeaturedCohort | null): Opportunity {
       cta: 'Join Waitlist',
       href: `/shop/${cohort.productHandle}`,
       badge: 'Fully booked',
+      price: formatCohortPrice(cohort),
     }
   }
 
@@ -83,7 +93,6 @@ export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
         '30-minute complimentary call to map your patterns and find the right programme for you.',
       cta: 'Book Now',
       href: '/contact#book',
-      badge: 'Available this week',
     },
     buildGroupOpportunity(cohort),
     {
@@ -95,7 +104,8 @@ export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
       price: 'R165',
       cta: 'Pre-Order Now',
       href: '/shop/the-latest-book-by-suzanne',
-      badge: 'Available now',
+      // Matches the Pre-Order CTA and the /book page
+      badge: 'Pre-order',
     },
   ]
 
@@ -140,17 +150,23 @@ export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
                   >
                     {type}
                   </span>
-                  <span className="text-brand-muted text-xs text-right max-w-[120px]">{badge}</span>
+                  {badge && (
+                    <span className="text-brand-muted text-xs text-right max-w-[120px]">{badge}</span>
+                  )}
                 </div>
 
                 <h3 className="text-xl font-semibold text-brand-primary mb-3">{title}</h3>
                 <p className="text-brand-ink text-sm leading-relaxed flex-1">{description}</p>
 
                 <div className="mt-6 flex items-center justify-between">
+                  {/* Only the free card is complimentary: a paid product with no
+                      ZAR price shows no price rather than a wrong one */}
                   {price ? (
                     <span className="text-brand-primary font-semibold">{price}</span>
-                  ) : (
+                  ) : type === 'FREE' ? (
                     <span className="text-brand-ink text-sm font-medium">Complimentary</span>
+                  ) : (
+                    <span />
                   )}
                   <Link
                     href={href}

@@ -220,16 +220,16 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
           className="pointer-events-none absolute inset-0 bg-gradient-to-b from-brand-primary/90 via-brand-primary/75 to-brand-primary/90"
         />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-center">
-          {detail?.ctaSectionHeadline && (
-            <motion.h2
-              id="pathway-cta-heading"
-              {...fadeUpInView(0)}
-              className="text-3xl lg:text-5xl font-medium tracking-tight text-white leading-tight mb-6"
-            >
-              {detail.ctaSectionHeadline}
-            </motion.h2>
-          )}
-          {detail?.ctaSectionBody && (
+          {/* The section is aria-labelledby this h2, so it always renders. Youth
+              pathways have no headline; their one-line CTA body is the heading. */}
+          <motion.h2
+            id="pathway-cta-heading"
+            {...fadeUpInView(0)}
+            className="text-3xl lg:text-5xl font-medium tracking-tight text-white leading-tight mb-6"
+          >
+            {detail?.ctaSectionHeadline ?? detail?.ctaSectionBody ?? pathway.title}
+          </motion.h2>
+          {detail?.ctaSectionHeadline && detail.ctaSectionBody && (
             <motion.p
               {...fadeUpInView(0.05)}
               className="text-lg text-white/80 font-light leading-relaxed mb-10"
@@ -238,14 +238,17 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
             </motion.p>
           )}
 
-          <motion.p
-            {...fadeUpInView(0.1)}
-            className="text-base text-white/80 font-light leading-relaxed mb-8 max-w-xl mx-auto"
-          >
-            You do not have to keep living the old pattern. There is another
-            way, and it begins with understanding what is really driving your
-            experience.
-          </motion.p>
+          {/* Written to the adult reader; youth pages speak to the parent */}
+          {pathway.category !== 'youth' && (
+            <motion.p
+              {...fadeUpInView(0.1)}
+              className="text-base text-white/80 font-light leading-relaxed mb-8 max-w-xl mx-auto"
+            >
+              You do not have to keep living the old pattern. There is another
+              way, and it begins with understanding what is really driving your
+              experience.
+            </motion.p>
+          )}
 
           <motion.div
             {...fadeUpInView(0.15)}

@@ -121,14 +121,12 @@ export default function MembershipExpired({
               </Button>
             </Section>
 
-            {/* Grace period note */}
-            <Section style={{ backgroundColor: '#FEF9EC', borderRadius: '4px', padding: '20px 24px', marginBottom: '32px', border: '1px solid #FDE68A' }}>
-              <Text style={{ color: '#92400E', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>
-                <strong>Good news:</strong> Your account and all your progress data are kept for 30 days.{' '}
-                {/* TODO for Suzanne: confirm the grace period before go-live */}
-                If you rejoin within that window, everything is exactly as you left it.
-              </Text>
-            </Section>
+            {/* Grace period note removed (site check C22): it promised a 30-day
+                data-retention window that Suzanne has not confirmed and nothing
+                in the app enforces. Restore it here once the period is agreed:
+                "Good news: Your account and all your progress data are kept for
+                N days. If you rejoin within that window, everything is exactly
+                as you left it." */}
 
             {/* Member testimonial — sourced from data/testimonials.ts (single
                 source of truth). Omitted entirely until Suzanne signs off a

@@ -10,7 +10,7 @@ const logos = [
   { src: '/logos/media/entrepreneur.png',                        alt: 'Entrepreneur Magazine' },
   { src: '/logos/media/sabc.png',                                alt: 'SABC' },
   { src: '/logos/media/sunday-times.png',                        alt: 'Sunday Times' },
-  { src: '/logos/media/the-start.png',                           alt: 'The Start' },
+  { src: '/logos/media/the-start.png',                           alt: 'The Star' },
   { src: '/logos/media/engineering-news-mining-weekly.png',      alt: 'Engineering News & Mining Weekly' },
   { src: '/logos/media/global-100-2020.png',                     alt: 'Global 100' },
   { src: '/logos/media/herald-international-tribune.png',        alt: 'Herald International Tribune' },

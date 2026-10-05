@@ -26,7 +26,7 @@ const columns: Column[] = [
       'Considering changing your life and becoming a practitioner in the healing arts or energy psychology? Join these expansive practitioner programmes: not only will your own life be transformed, you will help others transform theirs.',
     programmes: [
       {
-        name: 'Resonance Repatterning Basic 5 Series',
+        name: 'Resonance Repatterning: The Basic Five',
         description:
           'Ever wondered why you work so hard at something and it simply doesn’t materialise? A major cause is subconscious beliefs, mostly unknown to the conscious mind, that are active every day, interfering with the life you want and deserve.',
       },
@@ -94,16 +94,6 @@ const columns: Column[] = [
         name: 'Meditation',
         description:
           'Meditation isn’t about becoming a different person. It’s training in awareness: a healthy sense of perspective. You’re not trying to turn off your thoughts, you’re learning to observe them without judgment.',
-      },
-      {
-        name: 'Inner Cultivation (RR 06)',
-        description:
-          'Drawing from the inner tradition of Chinese Acupuncture, the healing process centres on restoring harmony between the heavenly yang and the earthly yin energies within ourselves and our lives.',
-      },
-      {
-        name: 'Principles of Relationship (RR 08)',
-        description:
-          'Shift your resonance and embrace loving connections. Through the repatternings in this programme, resonate with new neural connections and memory imprints, and let fresh, transformative ways of relating take root.',
       },
     ],
     ctaLabel: 'See Live Dates',

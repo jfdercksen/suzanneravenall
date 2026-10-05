@@ -80,7 +80,7 @@ vi.mock('framer-motion', () => ({
 // ---------------------------------------------------------------------------
 const PROGRAMME_NAMES = [
   // Practitioner column
-  'Resonance Repatterning Basic 5 Series',
+  'Resonance Repatterning: The Basic Five',
   'Akashic Navigator (Basic & Advanced)',
   'Energy Clearing (Basic & Advanced)',
   // Self-Paced column
@@ -92,9 +92,11 @@ const PROGRAMME_NAMES = [
   // Live column
   'Mindfulness',
   'Meditation',
-  'Inner Cultivation (RR 06)',
-  'Principles of Relationship (RR 08)',
 ] as const
+
+// Resonance Repatterning programmes are self-study only (data/programs.ts),
+// so the Live column must not list them (site check C6).
+const NOT_LIVE_PROGRAMMES = ['Inner Cultivation (RR 06)', 'Principles of Relationship (RR 08)'] as const
 
 const PROGRAMME_DESCRIPTIONS_NOT_RENDERED = [
   // Resonance Repatterning description
@@ -130,6 +132,15 @@ describe('Programs', () => {
       it(`renders "${name}"`, () => {
         render(<Programs />)
         expect(screen.getByText(name)).toBeInTheDocument()
+      })
+    }
+  })
+
+  describe('self-study programmes are not listed as live', () => {
+    for (const name of NOT_LIVE_PROGRAMMES) {
+      it(`does not render "${name}"`, () => {
+        render(<Programs />)
+        expect(screen.queryByText(name)).not.toBeInTheDocument()
       })
     }
   })
