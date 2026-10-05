@@ -90,4 +90,22 @@ describe('CookieConsent', () => {
     expect(dialog.className).toContain('z-[70]')
     expect(dialog.className).toContain('env(safe-area-inset-bottom)')
   })
+
+  // Site check B8: the banner must not cover the "Book a Discovery Call" button in the mobile menu
+  it('steps aside while the mobile menu is open and returns when it closes', async () => {
+    await act(async () => {
+      render(<CookieConsent />)
+    })
+    await screen.findByRole('dialog', { name: 'Cookie consent' })
+
+    await act(async () => {
+      window.dispatchEvent(new CustomEvent('pattern-hub:mobile-nav-toggle', { detail: { open: true } }))
+    })
+    expect(screen.queryByRole('dialog', { name: 'Cookie consent' })).not.toBeInTheDocument()
+
+    await act(async () => {
+      window.dispatchEvent(new CustomEvent('pattern-hub:mobile-nav-toggle', { detail: { open: false } }))
+    })
+    expect(screen.getByRole('dialog', { name: 'Cookie consent' })).toBeInTheDocument()
+  })
 })

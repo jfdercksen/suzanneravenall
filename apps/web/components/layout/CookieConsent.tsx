@@ -41,6 +41,17 @@ interface CookieConsentProps {
 export default function CookieConsent({ clarityId }: CookieConsentProps) {
   const [consent, setConsent] = useState<ConsentState>(null)
   const [visible, setVisible] = useState(false)
+  // Site check B8: the banner (z-[70]) covered the "Book a Discovery Call" button inside the
+  // full-screen mobile menu (z-50). Step aside while the menu is open; it returns on close.
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
+
+  useEffect(() => {
+    const handleToggle = (e: Event) => {
+      setMobileNavOpen(Boolean((e as CustomEvent<{ open: boolean }>).detail?.open))
+    }
+    window.addEventListener('pattern-hub:mobile-nav-toggle', handleToggle)
+    return () => window.removeEventListener('pattern-hub:mobile-nav-toggle', handleToggle)
+  }, [])
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY) as ConsentState
@@ -72,7 +83,7 @@ export default function CookieConsent({ clarityId }: CookieConsentProps) {
     window.dispatchEvent(new Event(CONSENT_CHOSEN_EVENT))
   }
 
-  if (!visible || consent !== null) return null
+  if (!visible || consent !== null || mobileNavOpen) return null
 
   return (
     // z-[70]: deliberately above the Pattern Coach pill (z-[60]) and sticky header (z-50) —
