@@ -5,22 +5,22 @@ const footerLinks = {
   services: {
     label: 'Services',
     links: [
-      { label: 'Private Sessions', href: '/services' },
-      { label: 'Group Coaching', href: '/services' },
-      { label: 'Executive Coaching', href: '/services' },
-      { label: 'Corporate Programs', href: '/services' },
+      { label: 'Private Sessions', href: '/services#private' },
+      { label: 'Group Coaching', href: '/services#group' },
+      { label: 'Executive Coaching', href: '/services/private-sessions/executive-coaching' },
+      { label: 'Corporate Programs', href: '/services#group' },
       { label: 'Speaking', href: '/speaking' },
     ],
   },
   programs: {
     label: 'Programs',
     links: [
-      { label: 'Practitioner Programmes', href: '/programs' },
-      { label: 'Self-Study Courses', href: '/programs' },
+      { label: 'Practitioner Programmes', href: '/programs#practitioner' },
+      { label: 'Self-Study Courses', href: '/programs#self-paced' },
       { label: 'Masterclass', href: '/masterclass' },
       { label: 'Shop', href: '/shop' },
       { label: 'The Book', href: '/book' },
-      { label: 'Workshops', href: '/programs' },
+      { label: 'Workshops', href: '/programs#live' },
     ],
   },
   company: {

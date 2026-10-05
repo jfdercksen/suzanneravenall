@@ -33,7 +33,7 @@ export default function HeroSection() {
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4">
             <Link
-              href="/contact"
+              href="/contact#book"
               className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-colors duration-150 text-center"
             >
               Book Discovery Call

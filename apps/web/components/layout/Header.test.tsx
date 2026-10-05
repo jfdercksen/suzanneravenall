@@ -72,11 +72,11 @@ describe('Header', () => {
     expect(desktopNav).toHaveAttribute('data-item-count', '8')
   })
 
-  it('renders "Book a Discovery Call" CTA link pointing to /contact', () => {
+  it('renders "Book a Discovery Call" CTA link pointing to the booking card on /contact', () => {
     render(<Header />)
     const cta = screen.getByRole('link', { name: 'Book a Discovery Call' })
     expect(cta).toBeInTheDocument()
-    expect(cta).toHaveAttribute('href', '/contact')
+    expect(cta).toHaveAttribute('href', '/contact#book')
   })
 
   it('"Book a Discovery Call" CTA is hidden below the xl breakpoint', () => {

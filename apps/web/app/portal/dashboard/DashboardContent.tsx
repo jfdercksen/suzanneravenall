@@ -271,7 +271,7 @@ export default function DashboardContent({
               Book a one-on-one session with Dr. Suzanne Ravenall or register for an upcoming group intensive.
             </p>
             <Link
-              href="/contact#booking"
+              href="/contact#book"
               className="inline-flex items-center gap-2 text-brand-accent-400 text-sm font-medium hover:underline"
             >
               View available sessions

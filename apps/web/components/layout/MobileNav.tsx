@@ -207,7 +207,7 @@ export default function MobileNav({ links }: MobileNavProps) {
               Discover Your Pattern
             </Link>
             <Link
-              href="/contact"
+              href="/contact#book"
               onClick={close}
               className="flex items-center justify-center w-full px-6 py-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold text-lg rounded-button transition-colors duration-150"
             >

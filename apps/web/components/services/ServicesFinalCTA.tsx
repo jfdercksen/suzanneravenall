@@ -69,7 +69,7 @@ export default function ServicesFinalCTA() {
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <Link
-            href="/contact"
+            href="/contact#book"
             className="inline-flex items-center justify-center px-10 py-5 bg-white hover:bg-brand-sand text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
           >
             Book a Free Discovery Call

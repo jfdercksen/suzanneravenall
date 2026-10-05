@@ -26,6 +26,10 @@ export default function VideoTestimonials({ showViewAllLink = true, tone = 'crea
   const ringOffset = tone === 'sand' ? 'ring-offset-brand-sand' : 'ring-offset-white'
   const [activeIndex, setActiveIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
+  // YouTube only has a maxresdefault still when the upload was HD, so some
+  // clients' videos 404 on it. Fall back to hqdefault (always present) for
+  // any video whose large still fails to load.
+  const [noMaxRes, setNoMaxRes] = useState<ReadonlySet<string>>(() => new Set())
   const activeVideo = videos[activeIndex]!
 
   function selectVideo(index: number) {
@@ -97,12 +101,17 @@ export default function VideoTestimonials({ showViewAllLink = true, tone = 'crea
                 transition={{ duration: 0.3 }}
               >
                 <Image
-                  src={`https://img.youtube.com/vi/${activeVideo.id}/maxresdefault.jpg`}
+                  src={`https://img.youtube.com/vi/${activeVideo.id}/${noMaxRes.has(activeVideo.id) ? 'hqdefault' : 'maxresdefault'}.jpg`}
                   alt={activeVideo.name}
                   fill
                   sizes="(max-width: 1024px) 100vw, 896px"
                   className="object-cover"
                   priority={activeIndex === 0}
+                  onError={() => {
+                    if (!noMaxRes.has(activeVideo.id)) {
+                      setNoMaxRes((prev) => new Set(prev).add(activeVideo.id))
+                    }
+                  }}
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-300" />
 

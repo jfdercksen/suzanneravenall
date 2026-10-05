@@ -1,6 +1,7 @@
 'use client'
 
 import Cal from '@calcom/embed-react'
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, MapPin } from 'lucide-react'
 import ContactForm from './ContactForm'
@@ -24,6 +25,18 @@ function cardReveal(delay: number) {
 }
 
 export default function ContactOptions() {
+  // Every "Book a Discovery Call" button on the site links to /contact#book.
+  // The browser and the App Router both try to scroll to the hash, but the
+  // Cal embed and the reveal animations can land the card off target, so
+  // settle on the booking card once the page has mounted.
+  useEffect(() => {
+    if (window.location.hash !== '#book') return
+    const frame = requestAnimationFrame(() => {
+      document.getElementById('book')?.scrollIntoView({ block: 'start' })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [])
+
   return (
     <section
       aria-labelledby="contact-options-heading"
@@ -49,8 +62,9 @@ export default function ContactOptions() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
           {/* Card 1: Book Discovery Call (primary) */}
           <motion.div
+            id="book"
             {...cardReveal(0.15)}
-            className="rounded-card bg-brand-sand border border-brand-primary p-8 flex flex-col hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
+            className="scroll-mt-24 lg:scroll-mt-28 rounded-card bg-brand-sand border border-brand-primary p-8 flex flex-col hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
           >
             <h3 className="text-lg font-medium text-brand-primary mb-2">Book a Discovery Call</h3>
             <p className="text-brand-muted text-sm leading-relaxed mb-6">

@@ -63,7 +63,7 @@ export default function AboutFinalCTA() {
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <Link
-            href="/contact"
+            href="/contact#book"
             className="inline-flex items-center justify-center px-10 py-4 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
           >
             Book Discovery Call

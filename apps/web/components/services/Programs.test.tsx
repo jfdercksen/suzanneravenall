@@ -158,11 +158,11 @@ describe('Programs', () => {
       expect(cta).toHaveAttribute('href', '/programs#self-paced')
     })
 
-    it('renders "See Live Dates" link pointing to /events', () => {
+    it('renders "See Live Dates" link pointing to the live programmes on /programs', () => {
       render(<Programs />)
       const cta = screen.getByRole('link', { name: 'See Live Dates' })
       expect(cta).toBeInTheDocument()
-      expect(cta).toHaveAttribute('href', '/events')
+      expect(cta).toHaveAttribute('href', '/programs#live')
     })
   })
 

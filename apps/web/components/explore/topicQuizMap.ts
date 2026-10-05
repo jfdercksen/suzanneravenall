@@ -42,3 +42,10 @@ export function getTopicQuiz(slug: TopicSlug): PatternQuiz | undefined {
 export function getTopicQuizLabel(slug: TopicSlug): string {
   return quizCtaLabels[slug] ?? 'Take the Free Pattern Scan'
 }
+
+/** The explore topic a quiz belongs to, so a quiz can link to its quiz page. */
+export function getQuizTopicSlug(quizSlug: string): TopicSlug | undefined {
+  return (Object.keys(topicToQuizSlug) as TopicSlug[]).find(
+    (topic) => topicToQuizSlug[topic] === quizSlug,
+  )
+}

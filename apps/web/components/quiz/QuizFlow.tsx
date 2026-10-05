@@ -336,7 +336,7 @@ export default function QuizFlow({
               {/* CTAs */}
               <div className="mt-12 flex flex-col gap-4">
                 <Link
-                  href="/contact"
+                  href="/contact#book"
                   className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700 hover:shadow-2xl"
                 >
                   {result.cta}

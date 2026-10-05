@@ -189,7 +189,7 @@ describe('MobileNav', () => {
       render(<MobileNav links={sampleLinks} />)
       const cta = screen.getByRole('link', { name: 'Book a Discovery Call' })
       expect(cta).toBeInTheDocument()
-      expect(cta).toHaveAttribute('href', '/contact')
+      expect(cta).toHaveAttribute('href', '/contact#book')
     })
 
     it('renders "Discover Your Pattern" CTA inside overlay', () => {

@@ -462,15 +462,16 @@ export default function SpeakingContent() {
                 >
                   Start the Conversation
                 </Link>
-                {/* TODO: Create speaking kit PDF and replace this button with: <a href="/speaking-kit.pdf" download> */}
-                <button
-                  type="button"
-                  disabled
-                  className="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white/50 font-medium text-sm uppercase tracking-widest rounded-button cursor-not-allowed"
-                  title="Speaking kit coming soon"
+                {/* TODO: once the speaking kit PDF exists, link straight to it:
+                    <a href="/speaking-kit.pdf" download>Download Speaking Kit</a>.
+                    Until then organisers request it through the contact form,
+                    with "Speaking Enquiry" preselected. */}
+                <Link
+                  href="/contact?enquiry=Speaking%20Enquiry"
+                  className="inline-flex items-center justify-center px-8 py-4 border border-white/50 hover:border-white text-white hover:bg-white/10 font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
                 >
-                  Download Speaking Kit
-                </button>
+                  Request the Speaking Kit
+                </Link>
               </motion.div>
             </div>
 

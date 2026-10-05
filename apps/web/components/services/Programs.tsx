@@ -107,7 +107,7 @@ const columns: Column[] = [
       },
     ],
     ctaLabel: 'See Live Dates',
-    ctaHref: '/events',
+    ctaHref: '/programs#live',
   },
 ]
 

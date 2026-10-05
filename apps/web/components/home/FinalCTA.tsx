@@ -46,7 +46,7 @@ export default function FinalCTA() {
           transition={{ duration: 0.6, delay: 0.35, ease: 'easeOut' }}
         >
           <Link
-            href="/contact"
+            href="/contact#book"
             className="mt-10 inline-flex items-center justify-center px-10 py-5 bg-white hover:bg-brand-sand text-brand-primary font-semibold text-lg rounded-button transition-all duration-300"
           >
             Book Discovery Call

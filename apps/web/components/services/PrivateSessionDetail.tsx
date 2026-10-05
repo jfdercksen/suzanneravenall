@@ -200,7 +200,7 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
               Have questions? Get in touch
             </Link>
             <Link
-              href="/services"
+              href="/services#private"
               className="text-xs uppercase tracking-[0.2em] text-white/80 hover:text-white transition-colors duration-300"
             >
               ← All Services

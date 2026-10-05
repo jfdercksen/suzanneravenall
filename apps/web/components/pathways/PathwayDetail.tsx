@@ -54,7 +54,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
           </Link>
         )}
         <Link
-          href="/contact"
+          href="/contact#book"
           className={
             detail?.heroCtaPrimaryLabel
               ? 'inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300'
@@ -252,7 +252,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link
-              href="/contact"
+              href="/contact#book"
               className="group inline-flex items-center justify-center gap-3 rounded-button bg-white px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-brand-primary transition-all duration-300 hover:bg-brand-sand hover:shadow-2xl"
             >
               Book a Discovery Session

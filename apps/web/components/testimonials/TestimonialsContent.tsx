@@ -511,7 +511,7 @@ export default function TestimonialsContent() {
               Take the Free Pattern Scan &rarr;
             </Link>
             <Link
-              href="/contact"
+              href="/contact#book"
               className="border border-white/50 hover:border-white text-white hover:bg-white/10 px-8 py-4 rounded-button text-sm uppercase tracking-widest font-medium transition-all duration-300 text-center"
             >
               Book a Discovery Call

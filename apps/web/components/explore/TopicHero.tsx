@@ -41,7 +41,7 @@ export default function TopicHero({ topic }: { topic: Topic }) {
           </Link>
         )}
         <Link
-          href="/contact"
+          href="/contact#book"
           className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
         >
           Book a Discovery Call

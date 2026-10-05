@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { patternQuizzes } from '@/data/patternQuizzes'
+import { getQuizTopicSlug } from './topicQuizMap'
 
 const fadeUpInView = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -63,20 +64,29 @@ export default function ExploreDiagnosticCTA() {
             {...fadeUpInView(0.1)}
             className="hidden lg:flex flex-col gap-3 mt-8 lg:mt-0"
           >
-            {teaserQuizzes.map((quiz, i) => (
-              <div
-                key={quiz.slug}
-                className="bg-brand-sand border border-brand-border rounded-card px-5 py-3 flex items-center gap-3"
-              >
-                <span className="text-brand-accent font-medium text-sm shrink-0">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <span className="text-brand-muted text-sm leading-snug">{quiz.question}</span>
-              </div>
-            ))}
-            <p className="text-brand-muted text-xs text-right mt-1">
+            {teaserQuizzes.map((quiz, i) => {
+              const topicSlug = getQuizTopicSlug(quiz.slug)
+              return (
+                <Link
+                  key={quiz.slug}
+                  href={topicSlug ? `/explore/${topicSlug}/quiz` : '/discover-your-pattern#assessments'}
+                  className="group bg-brand-sand border border-brand-border hover:border-brand-accent rounded-card px-5 py-3 flex items-center gap-3 transition-colors duration-200"
+                >
+                  <span className="text-brand-accent font-medium text-sm shrink-0">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="text-brand-muted group-hover:text-brand-primary text-sm leading-snug transition-colors duration-200">
+                    {quiz.question}
+                  </span>
+                </Link>
+              )
+            })}
+            <Link
+              href="/discover-your-pattern#assessments"
+              className="text-brand-muted hover:text-brand-accent text-xs text-right mt-1 underline-offset-4 hover:underline transition-colors duration-200"
+            >
               + {remainingCount} more diagnostics available
-            </p>
+            </Link>
           </motion.div>
         </div>
       </div>

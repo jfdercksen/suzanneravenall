@@ -441,7 +441,7 @@ export default function TheScienceContent() {
               Take the Free Pattern Scan
             </Link>
             <Link
-              href="/contact"
+              href="/contact#book"
               className="inline-flex items-center justify-center px-10 py-4 border border-white/50 hover:border-white text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
             >
               Book a Discovery Call

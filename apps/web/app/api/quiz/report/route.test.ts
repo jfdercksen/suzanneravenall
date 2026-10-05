@@ -101,7 +101,7 @@ describe('POST /api/quiz/report', () => {
         firstName: 'Alice',
         resultTitle: 'The Hyper-Alert Achiever',
         mirror: 'mirror text',
-        ctaLink: 'https://suzanneravenall.com/contact',
+        ctaLink: 'https://suzanneravenall.com/contact#book',
       })
     )
   })

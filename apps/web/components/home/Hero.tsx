@@ -168,7 +168,7 @@ export default function Hero() {
                   Explore Pattern Intelligence
                 </Link>
                 <Link
-                  href="/contact"
+                  href="/contact#book"
                   aria-label="Book a free discovery call with Dr. Suzanne Ravenall"
                   className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10"
                 >
