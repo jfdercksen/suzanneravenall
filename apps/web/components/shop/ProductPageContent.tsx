@@ -9,6 +9,21 @@ import { Sparkles, Heart, Zap, Check } from 'lucide-react'
 import Link from 'next/link'
 import type { MedusaProduct } from '@/types/medusa'
 import { productTestimonials } from '@/data/testimonials'
+import { contactHref } from '@/app/contact/enquiry'
+import {
+  defaultVariantId,
+  descriptionParagraphs,
+  detailsEyebrow,
+  getDeliveryBadge,
+  getProductKind,
+  hasThinkificCourse,
+  metadataFaq,
+  metadataList,
+  paymentPlanEnquiry,
+  productNoun,
+  variantChooserLabel,
+  type FaqItem,
+} from './productKind'
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -42,60 +57,15 @@ const OUTCOME_CARDS = [
 // Entries require Dr. Suzanne Ravenall's verified sign-off; while the list is
 // empty the testimonials section below renders nothing.
 
-const FAQ_ITEMS = [
-  {
-    question: 'How does a session work?',
-    answer:
-      'Each session is a structured deep-dive using Neuro-Repatterning® techniques. You will meet with Dr. Ravenall via Zoom or in person, moving through a facilitated process that identifies and permanently resolves the root pattern driving your presenting challenge. Sessions are typically 90 minutes.',
-  },
-  {
-    question: 'What results can I expect?',
-    answer:
-      'Most clients report a noticeable shift in their first session, a reduction in the emotional charge around a specific pattern or belief. Lasting transformation builds across the programme as multiple root causes are addressed. Results vary by individual, but permanent pattern release is the goal of every session.',
-  },
-  {
-    question: 'Is this right for me?',
-    answer:
-      'Book a free discovery call to find out: link below. If you are tired of coping strategies that only manage symptoms, and ready to resolve the root cause, this work is likely a strong fit.',
-  },
-]
-
-const SESSION_CATEGORY_HANDLES = new Set([
-  'private-sessions',
-  'rapid-repatterning',
-  'resonance-repatterning-sessions',
-  'transformation-coaching',
-  'executive-coaching',
-  'akashic-coaching',
-  'family-coaching',
-  'exploring-the-alpha-mind',
-  'rapid-transformation-therapy',
-  'energetic-clearing',
-])
-
-function getDeliveryBadge(handle: string, title: string = ''): { label: string; className: string } {
-  const text = `${handle} ${title}`.toLowerCase()
-  if (/live(-via-zoom)?/.test(text) || text.includes(' live'))
-    return {
-      label: 'Live',
-      className: 'bg-brand-accent/10 text-brand-accent border border-brand-accent/30',
-    }
-  if (/self-study|self-paced/.test(text))
-    return {
-      label: 'Self Paced',
-      className: 'bg-brand-sand text-brand-ink border border-brand-border',
-    }
-  if (/in-person/.test(text))
-    return {
-      label: 'In-Person',
-      className: 'bg-brand-primary-900 text-white border border-brand-primary-900',
-    }
-  if (/recorded/.test(text))
-    return {
-      label: 'Recorded',
-      className: 'bg-white text-brand-ink border border-brand-primary-300',
-    }
-  return { label: 'Session', className: 'bg-brand-sand text-brand-muted' }
+// Site check C1: every product used to get the same session FAQ ("Sessions
+// are typically 90 minutes, via Zoom or in person"), wrong for the book,
+// self-study courses and support packages. A product's own FAQ comes from
+// metadata.faq ({ question, answer }[]); without one, only this general
+// question is shown, and only on coaching products.
+const DISCOVERY_FAQ: FaqItem = {
+  question: 'Is this right for me?',
+  answer:
+    'Book a free discovery call to find out: link below. If you are tired of coping strategies that only manage symptoms, and ready to resolve the root cause, this work is likely a strong fit.',
 }
 
 interface ProductPageContentProps {
@@ -103,42 +73,34 @@ interface ProductPageContentProps {
 }
 
 export default function ProductPageContent({ product }: ProductPageContentProps) {
-  const [selectedVariantId, setSelectedVariantId] = useState<string>(
-    product.variants[0]?.id ?? ''
+  // A "Live Retaker" seat is never preselected (site check C1).
+  const [selectedVariantId, setSelectedVariantId] = useState<string>(() =>
+    defaultVariantId(product.variants)
   )
 
-  // thinkific_course_id is seeded as a number (e.g. 1284792) — check for any truthy non-zero value.
-  const isThinkificCourse =
-    product.metadata?.thinkific_course_id != null &&
-    product.metadata.thinkific_course_id !== 0 &&
-    product.metadata.thinkific_course_id !== ''
+  // thinkific_course_id is seeded as a number (e.g. 1284792). It means the
+  // order enrols the buyer on the Ravenall Institute; it does not mean the
+  // course is self-paced, so the badge comes from the variants instead.
+  const isThinkificCourse = hasThinkificCourse(product)
 
-  const badge = isThinkificCourse
-    ? { label: 'Self-Paced', className: 'bg-brand-sand text-brand-ink border border-brand-border' }
-    : getDeliveryBadge(product.handle, product.title)
+  // What is being sold (book, session, programme...), read from the product's
+  // category, variants and metadata (productKind.ts). Generic blocks that do
+  // not fit are hidden rather than shown with the wrong wording.
+  const kind = getProductKind(product)
+  const badge = getDeliveryBadge(product)
+  const noun = productNoun(kind)
+  const isCoaching = kind === 'session' || kind === 'group' || kind === 'programme'
 
-  // Private sessions sit in their own shop categories; they are booked, not studied.
-  const isSession = product.categories.some((c) => SESSION_CATEGORY_HANDLES.has(c.handle))
+  // Product-specific content Suzanne supplies in Medusa metadata. Each block
+  // is hidden until it has content.
+  const includedItems = metadataList(product.metadata?.included)
+  const prerequisites =
+    typeof product.metadata?.prerequisites === 'string' ? product.metadata.prerequisites.trim() : ''
+  const productFaq = metadataFaq(product.metadata?.faq)
+  const faqItems = productFaq.length > 0 ? productFaq : isCoaching ? [DISCOVERY_FAQ] : []
+  const aboutParagraphs = descriptionParagraphs(product.description)
 
-  const includedItems = isThinkificCourse
-    ? [
-        'Self-paced online course',
-        'Lifetime access via the Ravenall Institute',
-        'Course materials and resources',
-        'Study at your own pace, anywhere',
-      ]
-    : isSession
-      ? [
-          'Private session via Zoom, unless booked as in-person',
-          'Session recordings',
-          'Email support between sessions',
-        ]
-      : [
-          'Live sessions via Zoom',
-          'Session recordings',
-          'Course materials',
-          'Email support between sessions',
-        ]
+  const paymentPlanHref = contactHref(paymentPlanEnquiry(kind), `Payment plan: ${product.title}`)
 
   const primaryCategory = product.categories[0]
 
@@ -161,6 +123,8 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               selectedVariantId={selectedVariantId}
               onSelect={setSelectedVariantId}
               productHandle={product.handle}
+              chooseLabel={variantChooserLabel(kind)}
+              paymentPlanHref={paymentPlanHref}
             />
 
             {isThinkificCourse && (
@@ -184,7 +148,9 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         </div>
       </section>
 
-      {/* 3: Transformation Promise (sand) */}
+      {/* 3: Transformation Promise (sand): coaching products only, not the
+          book, downloads or support add-ons */}
+      {isCoaching && (
       <section className="w-full bg-brand-sand py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="text-center mb-16">
@@ -219,37 +185,54 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
           </div>
         </div>
       </section>
+      )}
 
-      {/* 4: Programme Details (cream) */}
-      <section className="w-full bg-brand-cream py-20 lg:py-32 overflow-hidden">
+      {/* 4: Details (cream) */}
+      {/* Sand when section 3 is hidden, so two cream sections never meet. */}
+      <section className={`w-full ${isCoaching ? 'bg-brand-cream' : 'bg-brand-sand'} py-20 lg:py-32 overflow-hidden`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="mb-12">
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
-              {isSession ? 'Session Details' : 'Programme Details'}
+              {detailsEyebrow(kind)}
             </p>
             <h2 className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary">
               Everything You Need to Know
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+          {/* The full store description (the hero shows only its first sentence). */}
+          {aboutParagraphs.length > 0 && (
+            <motion.div {...fadeUp} className="max-w-3xl mb-12 space-y-4">
+              {aboutParagraphs.map((paragraph, i) => (
+                <p key={i} className="text-brand-ink leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
+            </motion.div>
+          )}
+
+          {/* Both columns rise in on y: the old x: 30 slide-in pushed the page
+              to 389px wide on a 375px phone (site check V2). */}
+          <div className={`grid grid-cols-1 gap-12 ${includedItems.length > 0 ? 'sm:grid-cols-2' : ''}`}>
             {/* Left: detail list */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6 }}
               className="space-y-6"
             >
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0">
-                  <span
-                    className={`text-xs font-medium px-3 py-1 rounded-full ${badge.className}`}
-                  >
-                    {badge.label}
-                  </span>
+              {badge && (
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">
+                    <span
+                      className={`text-xs font-medium px-3 py-1 rounded-full ${badge.className}`}
+                    >
+                      {badge.label}
+                    </span>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {primaryCategory && (
                 <div>
@@ -278,18 +261,21 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 </div>
               )}
 
-              <div>
-                <dt className="text-xs uppercase tracking-[0.2em] font-medium text-brand-muted mb-1">
-                  Prerequisites
-                </dt>
-                <dd className="text-brand-ink font-medium">None required</dd>
-              </div>
+              {prerequisites && (
+                <div>
+                  <dt className="text-xs uppercase tracking-[0.2em] font-medium text-brand-muted mb-1">
+                    Prerequisites
+                  </dt>
+                  <dd className="text-brand-ink font-medium">{prerequisites}</dd>
+                </div>
+              )}
             </motion.div>
 
-            {/* Right: what's included */}
+            {/* Right: what's included, from metadata.included */}
+            {includedItems.length > 0 && (
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{ duration: 0.6 }}
             >
@@ -307,6 +293,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 ))}
               </ul>
             </motion.div>
+            )}
           </div>
         </div>
       </section>
@@ -361,6 +348,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       )}
 
       {/* 6: FAQ Accordion (sand, to alternate with the cream details section) */}
+      {faqItems.length > 0 && (
       <section className="w-full bg-brand-sand py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeUp} className="mb-12">
@@ -379,10 +367,11 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             transition={{ duration: 0.6, delay: 0.2 }}
             className="max-w-3xl"
           >
-            <FAQAccordion items={FAQ_ITEMS} />
+            <FAQAccordion items={faqItems} />
           </motion.div>
         </div>
       </section>
+      )}
 
       {/* 7: Final CTA (cream) */}
       <section className="w-full bg-brand-cream py-20 lg:py-32">
@@ -395,7 +384,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               Ready to Transform?
             </h2>
             <p className="text-brand-muted text-lg max-w-xl mx-auto">
-              Choose your {isSession ? 'session' : 'programme'} below and take the first step toward permanent change.
+              Choose your {noun} below and take the first step toward permanent change.
             </p>
           </motion.div>
 
@@ -411,6 +400,8 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               selectedVariantId={selectedVariantId}
               onSelect={setSelectedVariantId}
               productHandle={product.handle}
+              chooseLabel={variantChooserLabel(kind)}
+              paymentPlanHref={paymentPlanHref}
             />
           </motion.div>
 
@@ -422,7 +413,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             className="text-center mt-12 space-y-3"
           >
             <p className="text-brand-muted text-sm">
-              Not sure which programme is right for you?{' '}
+              Not sure which {noun} is right for you?{' '}
               <Link
                 href="/contact#book"
                 className="text-brand-accent hover:text-brand-primary underline underline-offset-4 transition-colors duration-200"
@@ -436,7 +427,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 href="/shop"
                 className="text-brand-muted hover:text-brand-primary text-sm transition-colors duration-200"
               >
-                &larr; Back to all programmes
+                &larr; Back to the shop
               </Link>
             </p>
           </motion.div>

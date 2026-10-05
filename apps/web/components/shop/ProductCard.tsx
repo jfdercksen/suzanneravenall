@@ -7,7 +7,8 @@ import { useCart } from '@/lib/cart'
 import { getSpotsInfo, isLiveVariantTitle } from '@/lib/inventory/spots'
 import { isCapacityLimitedHandle } from '@/lib/inventory/group-sessions'
 import { getHighlightBadge } from '@/data/shopHighlights'
-import { getDisplayPrice } from './shopCatalogue'
+import { getDisplayPrice, shopCategoryLabel } from './shopCatalogue'
+import { getDeliveryBadge } from './productKind'
 import type { MedusaProduct, ProductVariant } from '@/types/medusa'
 
 const CATEGORY_IMAGE_MAP: Record<string, string> = {
@@ -78,25 +79,6 @@ function getRealSpotsBadge(handle: string, variants: ProductVariant[]): Delivery
   }
 }
 
-function getDeliveryBadge(handle: string, title: string): DeliveryBadge {
-  const text = `${handle} ${title}`.toLowerCase()
-
-  if (text.includes('live-via-zoom') || text.includes(' live')) {
-    return { label: 'Live', className: 'bg-brand-accent/10 text-brand-accent border border-brand-accent/30' }
-  }
-  if (text.includes('self-study') || text.includes('self-paced')) {
-    return { label: 'Self Paced', className: 'bg-brand-sand text-brand-ink border border-brand-border' }
-  }
-  if (text.includes('in-person')) {
-    return { label: 'In-Person', className: 'bg-brand-primary-900 text-white border border-brand-primary-900' }
-  }
-  if (text.includes('recorded')) {
-    return { label: 'Recorded', className: 'bg-white text-brand-ink border border-brand-primary-300' }
-  }
-
-  return { label: 'Session', className: 'bg-brand-sand text-brand-muted' }
-}
-
 /**
  * Walks the category tree to return the root (top-level) category for the
  * first directly-assigned category on the product.
@@ -162,9 +144,9 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
   const { cart } = useCart()
   const currency = cart?.currency_code ?? defaultCurrency
 
-  const badge =
-    getRealSpotsBadge(product.handle, product.variants) ??
-    getDeliveryBadge(product.handle, product.title)
+  // Read from the product's category and variants (productKind.ts); null when
+  // the data does not say, so no card claims a format it does not have.
+  const badge = getRealSpotsBadge(product.handle, product.variants) ?? getDeliveryBadge(product)
   // Decision-guidance badge (launch audit item 15) — data-driven, renders
   // nothing unless the product is explicitly flagged (see data/shopHighlights.ts).
   const highlight = getHighlightBadge(product)
@@ -210,7 +192,7 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
             {/* Change 2: Show root category name (e.g. "Private Sessions"), not the leaf sub-category */}
             {rootCategory && (
               <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent">
-                {rootCategory.name}
+                {shopCategoryLabel(rootCategory)}
               </p>
             )}
 
@@ -220,9 +202,11 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
 
             <div className="flex items-center justify-between gap-3 mt-1">
               <PriceDisplay variants={product.variants} currency={currency} />
-              <span className={`text-xs font-medium px-3 py-1 rounded-full whitespace-nowrap ${badge.className}`}>
-                {badge.label}
-              </span>
+              {badge && (
+                <span className={`text-xs font-medium px-3 py-1 rounded-full whitespace-nowrap ${badge.className}`}>
+                  {badge.label}
+                </span>
+              )}
             </div>
 
             {/* Change 6: Stronger, action-oriented CTA */}

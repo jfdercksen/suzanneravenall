@@ -152,3 +152,50 @@ describe('ProductCard — decision-guidance highlight badge', () => {
     expect(screen.getByRole('link')).toHaveAttribute('href', '/shop/test-programme')
   })
 })
+
+describe('ProductCard - format badge and category (site check C3)', () => {
+  const books = { id: 'cat-books', handle: 'books', name: 'Books', parent_category_id: 'cat-tools' }
+  const tools = { id: 'cat-tools', handle: 'products-tools', name: 'Products & Tools', parent_category_id: null }
+
+  it('labels a book as a Book, not a Session', () => {
+    render(
+      <ProductCard
+        product={makeProduct({ handle: 'the-latest-book-by-suzanne', title: 'The Book', categories: [books] })}
+        index={0}
+        allCategories={[tools, books]}
+      />
+    )
+    expect(screen.getByText('Book')).toBeInTheDocument()
+    expect(screen.queryByText('Session')).not.toBeInTheDocument()
+  })
+
+  it('labels a product sold live and as self-study with both formats', () => {
+    render(
+      <ProductCard
+        product={makeProduct({
+          variants: [
+            { id: 'v1', title: 'Live via Zoom', prices: [{ currency_code: 'zar', amount: 100 }] },
+            { id: 'v2', title: 'Self Study', prices: [{ currency_code: 'zar', amount: 50 }] },
+          ],
+        })}
+        index={0}
+      />
+    )
+    expect(screen.getByText('Live or Self-Paced')).toBeInTheDocument()
+  })
+
+  it('shows no format badge when the data does not say', () => {
+    render(<ProductCard product={makeProduct({ handle: 'email-support', title: 'Email Support' })} index={0} />)
+    for (const label of ['Session', 'Live', 'Self-Paced', 'Recorded', 'In-Person']) {
+      expect(screen.queryByText(label)).not.toBeInTheDocument()
+    }
+  })
+
+  it('names the top-level category the way the filter pill does', () => {
+    const guided = { id: 'g', handle: 'guided-programmes', name: 'Guided Programmes', parent_category_id: null }
+    const rpLive = { id: 'r', handle: 'rp-live', name: 'Live', parent_category_id: 'g' }
+    render(<ProductCard product={makeProduct({ categories: [rpLive] })} index={0} allCategories={[guided, rpLive]} />)
+    expect(screen.getByText('Practitioner Programmes')).toBeInTheDocument()
+    expect(screen.queryByText('Guided Programmes')).not.toBeInTheDocument()
+  })
+})

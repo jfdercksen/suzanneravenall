@@ -37,6 +37,10 @@ interface VariantSelectorProps {
    * badge. See isCapacityLimitedHandle's doc comment.
    */
   productHandle?: string
+  /** Heading over the variant buttons, matched to what is sold (productKind.ts). */
+  chooseLabel?: string
+  /** Contact link for the "Payment plans available" note. */
+  paymentPlanHref?: string
 }
 
 export function VariantSelector({
@@ -45,6 +49,8 @@ export function VariantSelector({
   onSelect,
   dark = false,
   productHandle,
+  chooseLabel = 'Choose an Option',
+  paymentPlanHref = '/contact?enquiry=other&topic=Payment+plan#message',
 }: VariantSelectorProps) {
   const [buttonState, setButtonState] = useState<'idle' | 'loading' | 'added' | 'error'>('idle')
   const [addToCartError, setAddToCartError] = useState<string | null>(null)
@@ -106,7 +112,7 @@ export function VariantSelector({
       {hasMultipleVariants && (
         <div>
           <p className={`text-xs uppercase tracking-[0.3em] font-medium ${dark ? 'text-brand-accent-400' : 'text-brand-accent'} mb-4`}>
-            Choose Your Programme
+            {chooseLabel}
           </p>
           <div className="flex flex-wrap gap-3">
             {variants.map((variant) => {
@@ -206,7 +212,15 @@ export function VariantSelector({
               </Link>
             </p>
           ) : (
-            <p className={`text-sm ${noteClass}`}>Payment plans available: contact us</p>
+            <p className={`text-sm ${noteClass}`}>
+              Payment plans available:{' '}
+              <Link
+                href={paymentPlanHref}
+                className={`underline underline-offset-4 transition-colors duration-200 ${dark ? 'hover:text-white' : 'hover:text-brand-primary'}`}
+              >
+                contact us
+              </Link>
+            </p>
           )}
         </div>
       ) : (

@@ -13,6 +13,42 @@ const SORT_OPTIONS: readonly SortOption[] = ['featured', 'price_asc', 'price_des
 /** The only collection the filter bar exposes (the "Self-Study" pill). */
 export const SELF_STUDY_COLLECTION = 'programmes'
 
+/**
+ * Display names for the top-level shop categories where the shop's wording
+ * differs from the store's category name. The filter pills and the card
+ * eyebrows both use this, so a card under "Practitioner Programmes" does not
+ * say "Guided Programmes" (site check C3).
+ */
+const CATEGORY_LABELS: Record<string, string> = {
+  'private-sessions': 'Private Sessions',
+  'guided-programmes': 'Practitioner Programmes',
+  'group-sessions': 'Group Sessions',
+  'products-tools': 'Products & Tools',
+}
+
+export function shopCategoryLabel(category: { handle: string; name: string }): string {
+  return CATEGORY_LABELS[category.handle] ?? category.name
+}
+
+/**
+ * The noun in the "<n> sessions" count, matched to what is listed: the active
+ * top-level category, the Self-Study filter, or the whole mixed catalogue.
+ */
+export function catalogueCountNoun(rootCategoryHandle: string | undefined, collectionHandle: string): string {
+  if (collectionHandle === SELF_STUDY_COLLECTION) return 'course'
+  switch (rootCategoryHandle) {
+    case 'private-sessions':
+    case 'group-sessions':
+      return 'session'
+    case 'guided-programmes':
+      return 'programme'
+    case 'products-tools':
+      return 'product'
+    default:
+      return 'item'
+  }
+}
+
 /** Shop state as it lives in the URL. `page` is 0-based here, 1-based in the URL. */
 export interface ShopUrlState {
   categoryHandle: string
