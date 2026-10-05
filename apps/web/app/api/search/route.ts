@@ -73,7 +73,7 @@ function productToResult(hit: ProductSearchHit): SearchResultItem {
     type: 'products',
     id: hit.id,
     title: sanitizeHighlight(hit._formatted?.title ?? hit.title),
-    subtitle: hit.collection_title ?? hit.category_names[0] ?? 'Programme',
+    subtitle: sanitizeHighlight(hit.collection_title ?? hit.category_names[0] ?? 'Programme'),
     url: `/shop/${hit.handle}`,
     thumbnail: hit.thumbnail,
     price_zar: hit.price_zar,
@@ -110,7 +110,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid index' }, { status: 400 })
   }
   const indexParam = rawIndex as SearchIndex | 'all'
-  const limit = Math.min(Math.max(parseInt(searchParams.get('limit') ?? '10', 10), 1), 50)
+  // Up to 100 so the shop can reach every product match (the catalogue is ~100 products).
+  const limit = Math.min(Math.max(parseInt(searchParams.get('limit') ?? '10', 10) || 10, 1), 100)
 
   if (!q) {
     return NextResponse.json({ results: [], query: '' })
@@ -122,27 +123,32 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const results: SearchResultItem[] = []
+    const wantProducts = indexParam === 'all' || indexParam === 'products'
+    const wantTopics = indexParam === 'all' || indexParam === 'explore_topics'
 
-    if (indexParam === 'all' || indexParam === 'products') {
-      const productHits = await searchIndex<ProductSearchHit>(
-        'products',
-        q,
-        indexParam === 'all' ? Math.ceil(limit / 2) : limit,
-        ['title', 'description']
-      )
-      results.push(...productHits.map(productToResult))
+    // Each index is asked for the full limit. For index=all the two lists are
+    // then trimmed to share the limit, so slots one index cannot fill go to the
+    // other (a query with no topic matches still returns `limit` products).
+    const [productHits, topicHits] = await Promise.all([
+      wantProducts
+        ? searchIndex<ProductSearchHit>('products', q, limit, ['title', 'description'])
+        : Promise.resolve([] as ProductSearchHit[]),
+      wantTopics
+        ? searchIndex<TopicSearchHit>('explore_topics', q, limit, ['title', 'shortDescription'])
+        : Promise.resolve([] as TopicSearchHit[]),
+    ])
+
+    let productCount = productHits.length
+    let topicCount = topicHits.length
+    if (productCount + topicCount > limit) {
+      topicCount = Math.min(topicCount, Math.max(Math.floor(limit / 2), limit - productCount))
+      productCount = Math.min(productCount, limit - topicCount)
     }
 
-    if (indexParam === 'all' || indexParam === 'explore_topics') {
-      const topicHits = await searchIndex<TopicSearchHit>(
-        'explore_topics',
-        q,
-        indexParam === 'all' ? Math.floor(limit / 2) : limit,
-        ['title', 'shortDescription']
-      )
-      results.push(...topicHits.map(topicToResult))
-    }
+    const results: SearchResultItem[] = [
+      ...productHits.slice(0, productCount).map(productToResult),
+      ...topicHits.slice(0, topicCount).map(topicToResult),
+    ]
 
     return NextResponse.json({ results, query: q })
   } catch (err) {

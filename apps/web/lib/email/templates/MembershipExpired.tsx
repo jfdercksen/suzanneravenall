@@ -101,10 +101,11 @@ export default function MembershipExpired({
               ))}
             </Section>
 
-            {/* Primary CTA */}
+            {/* Primary CTA. Plain /shop: the shop has no membership products or
+                category yet, so a filtered link would show an empty or unfiltered list. */}
             <Section style={{ textAlign: 'center', marginBottom: '24px' }}>
               <Button
-                href={`${siteUrl}/shop?filter=memberships`}
+                href={`${siteUrl}/shop`}
                 style={{
                   backgroundColor: BLUE,
                   color: '#ffffff',

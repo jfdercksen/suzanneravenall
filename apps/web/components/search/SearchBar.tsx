@@ -227,9 +227,12 @@ export function SearchBar() {
                         className="text-sm font-medium text-white truncate [&_mark]:bg-brand-accent/30 [&_mark]:text-white [&_mark]:rounded-sm"
                         dangerouslySetInnerHTML={{ __html: item.title }}
                       />
-                      <p className="text-xs text-gray-400 truncate mt-0.5 line-clamp-1">
-                        {item.subtitle}
-                      </p>
+                      {/* Subtitle carries sanitised <mark> highlights from /api/search (topic matches). */}
+                      <p
+                        className="text-xs text-gray-400 truncate mt-0.5 line-clamp-1 [&_mark]:bg-brand-accent/30 [&_mark]:text-white [&_mark]:rounded-sm"
+                        dangerouslySetInnerHTML={{ __html: item.subtitle }}
+                      />
+
                     </div>
 
                     {/* Price or badge */}
