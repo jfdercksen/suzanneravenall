@@ -69,16 +69,27 @@ describe('VideoTestimonials featured poster', () => {
     )
   })
 
-  it('falls back to hqdefault when a video has no maxresdefault still', () => {
+  it('requests hqdefault straight away for videos without a maxresdefault still', () => {
     render(<VideoTestimonials />)
-    fireEvent.click(screen.getByRole('radio', { name: 'Watch Matheo' }))
+    for (const [name, id] of [
+      ['Matheo', 'wPTh5Z8iwwU'],
+      ['Amelia', 'iHe9dZq1YdY'],
+      ['Jayne', 'nLrXITVsXz8'],
+      ['Ivana', 'Gz3NUPWdxAI'],
+    ] as const) {
+      fireEvent.click(screen.getByRole('radio', { name: `Watch ${name}` }))
+      expect(featuredPoster(name).getAttribute('src')).toBe(
+        `https://img.youtube.com/vi/${id}/hqdefault.jpg`,
+      )
+    }
+  })
 
-    const poster = featuredPoster('Matheo')
-    expect(poster.getAttribute('src')).toMatch(/\/maxresdefault\.jpg$/)
-
+  it('falls back to hqdefault if the high-resolution still fails to load', () => {
+    render(<VideoTestimonials />)
+    const poster = featuredPoster('Transformation Highlights')
     fireEvent.error(poster)
-    expect(featuredPoster('Matheo').getAttribute('src')).toBe(
-      'https://img.youtube.com/vi/wPTh5Z8iwwU/hqdefault.jpg',
+    expect(featuredPoster('Transformation Highlights').getAttribute('src')).toBe(
+      'https://img.youtube.com/vi/8Yw_n8NribA/hqdefault.jpg',
     )
   })
 })

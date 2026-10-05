@@ -5,8 +5,12 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const videos = [
-  { id: '8Yw_n8NribA', name: 'Transformation Highlights' },
+// `maxRes` marks the uploads that have a maxresdefault still on YouTube (HD
+// uploads only). The others would 404 on it, so their poster goes straight to
+// hqdefault, which every video has. Check with
+// https://img.youtube.com/vi/<id>/maxresdefault.jpg before adding the flag.
+const videos: ReadonlyArray<{ id: string; name: string; maxRes?: boolean }> = [
+  { id: '8Yw_n8NribA', name: 'Transformation Highlights', maxRes: true },
   { id: 'wPTh5Z8iwwU', name: 'Matheo' },
   { id: 'iHe9dZq1YdY', name: 'Amelia' },
   { id: 'nLrXITVsXz8', name: 'Jayne' },
@@ -26,9 +30,8 @@ export default function VideoTestimonials({ showViewAllLink = true, tone = 'crea
   const ringOffset = tone === 'sand' ? 'ring-offset-brand-sand' : 'ring-offset-white'
   const [activeIndex, setActiveIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
-  // YouTube only has a maxresdefault still when the upload was HD, so some
-  // clients' videos 404 on it. Fall back to hqdefault (always present) for
-  // any video whose large still fails to load.
+  // Safety net: if a video flagged `maxRes` ever loses its large still, fall
+  // back to hqdefault for it instead of showing a broken poster.
   const [noMaxRes, setNoMaxRes] = useState<ReadonlySet<string>>(() => new Set())
   const activeVideo = videos[activeIndex]!
 
@@ -101,7 +104,7 @@ export default function VideoTestimonials({ showViewAllLink = true, tone = 'crea
                 transition={{ duration: 0.3 }}
               >
                 <Image
-                  src={`https://img.youtube.com/vi/${activeVideo.id}/${noMaxRes.has(activeVideo.id) ? 'hqdefault' : 'maxresdefault'}.jpg`}
+                  src={`https://img.youtube.com/vi/${activeVideo.id}/${activeVideo.maxRes && !noMaxRes.has(activeVideo.id) ? 'maxresdefault' : 'hqdefault'}.jpg`}
                   alt={activeVideo.name}
                   fill
                   sizes="(max-width: 1024px) 100vw, 896px"
