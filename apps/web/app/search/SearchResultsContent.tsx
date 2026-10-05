@@ -1,11 +1,12 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Search } from 'lucide-react'
 import { motion } from 'framer-motion'
 import type { SearchResultItem, SearchIndex } from '@/lib/search/types'
+import { resultBadge } from '@/lib/search/utils'
 
 type TabFilter = 'all' | SearchIndex
 
@@ -13,6 +14,7 @@ const TABS: { id: TabFilter; label: string }[] = [
   { id: 'all', label: 'All' },
   { id: 'products', label: 'Programmes' },
   { id: 'explore_topics', label: 'Topics' },
+  { id: 'pages', label: 'Pages' },
 ]
 
 const PAGE_SIZE = 20
@@ -29,17 +31,48 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
   const [activeTab, setActiveTab] = useState<TabFilter>('all')
   const [results, setResults] = useState<SearchResultItem[]>([])
   const [loading, setLoading] = useState(false)
+  // The page has its own search box (site check M16): `input` is what is typed,
+  // `query` is what the results show, updated after a short pause or on submit.
+  const [input, setInput] = useState(initialQuery)
+  const [query, setQuery] = useState(initialQuery)
+  // Ignores a slow response that lands after a newer search has started.
+  const requestId = useRef(0)
+
+  // A new ?q= (e.g. a search from the header while already on /search) resets both.
+  useEffect(() => {
+    setInput(initialQuery)
+    setQuery(initialQuery)
+  }, [initialQuery])
+
+  useEffect(() => {
+    if (input.trim() === query.trim()) return
+    const id = setTimeout(() => setQuery(input), 400)
+    return () => clearTimeout(id)
+  }, [input, query])
+
+  // Keep the address bar in step so the results can be shared or reloaded.
+  // history.replaceState (synced by the Next router) avoids a server round trip.
+  useEffect(() => {
+    const q = query.trim()
+    const url = q ? `/search?q=${encodeURIComponent(q)}` : '/search'
+    if (window.location.pathname + window.location.search !== url) {
+      window.history.replaceState(window.history.state, '', url)
+    }
+  }, [query])
 
   const fetchResults = useCallback(async () => {
-    if (!initialQuery.trim()) {
+    if (!query.trim()) {
+      requestId.current++
       setResults([])
+      setLoading(false)
       return
     }
 
+    const id = ++requestId.current
     setLoading(true)
     try {
       const params = new URLSearchParams({
-        q: initialQuery,
+        q: query.trim(),
         limit: String(PAGE_SIZE),
         ...(activeTab !== 'all' ? { index: activeTab } : {}),
       })
@@ -47,13 +80,13 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
       const res = await fetch(`/api/search?${params.toString()}`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = (await res.json()) as { results: SearchResultItem[] }
-      setResults(data.results)
+      if (id === requestId.current) setResults(data.results)
     } catch {
-      setResults([])
+      if (id === requestId.current) setResults([])
     } finally {
-      setLoading(false)
+      if (id === requestId.current) setLoading(false)
     }
-  }, [initialQuery, activeTab])
+  }, [query, activeTab])
 
   useEffect(() => {
     void fetchResults()
@@ -74,18 +107,51 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
             Search Results
           </p>
           <h1 className="text-3xl lg:text-4xl font-medium tracking-tight text-brand-primary">
-            {initialQuery ? (
-              <>Results for &ldquo;<span className="text-brand-accent">{initialQuery}</span>&rdquo;</>
+            {query.trim() ? (
+              <>Results for &ldquo;<span className="text-brand-accent">{query.trim()}</span>&rdquo;</>
             ) : (
               'What are you looking for?'
             )}
           </h1>
-          {!loading && initialQuery && results.length > 0 && (
+          {!loading && query.trim() && results.length > 0 && (
             <p className="text-brand-muted mt-2 text-sm">
               {results.length} result{results.length !== 1 ? 's' : ''} found
             </p>
           )}
         </motion.div>
+
+        {/* Search box */}
+        <form
+          role="search"
+          onSubmit={(e) => {
+            e.preventDefault()
+            setQuery(input)
+          }}
+          className="mb-6"
+        >
+          <label htmlFor="search-page-input" className="sr-only">
+            Search the site
+          </label>
+          <div className="flex items-center gap-3 px-4 py-3 rounded-card bg-white border border-brand-border focus-within:border-brand-accent">
+            <Search aria-hidden="true" className="w-5 h-5 text-brand-muted flex-shrink-0" />
+            <input
+              id="search-page-input"
+              type="search"
+              placeholder="Search programmes, topics, pages…"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="flex-1 bg-transparent text-brand-ink placeholder-brand-muted outline-none"
+              autoComplete="off"
+              spellCheck={false}
+            />
+            <button
+              type="submit"
+              className="text-sm font-medium text-brand-accent hover:underline underline-offset-4"
+            >
+              Search
+            </button>
+          </div>
+        </form>
 
         {/* Tabs */}
         <motion.div
@@ -125,15 +191,15 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
         )}
 
         {/* Empty — no query */}
-        {!loading && !initialQuery && (
+        {!loading && !query.trim() && (
           <div className="text-center py-20">
             <Search aria-hidden="true" className="w-12 h-12 text-brand-primary-300 mx-auto mb-4" />
-            <p className="text-brand-muted">Enter a search term to find programmes and topics.</p>
+            <p className="text-brand-muted">Enter a search term to find programmes, topics and pages.</p>
           </div>
         )}
 
         {/* Empty — no results */}
-        {!loading && initialQuery && results.length === 0 && (
+        {!loading && query.trim() && results.length === 0 && (
           <div className="text-center py-20">
             <Search aria-hidden="true" className="w-12 h-12 text-brand-primary-300 mx-auto mb-4" />
             <p className="text-brand-ink text-lg mb-2">No results found</p>
@@ -205,7 +271,7 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
                           </span>
                         ) : (
                           <span className="text-xs px-2 py-1 bg-brand-sand text-brand-ink border border-brand-border rounded-full">
-                            Topic
+                            {resultBadge(item)}
                           </span>
                         )}
                       </div>

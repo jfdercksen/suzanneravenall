@@ -345,3 +345,56 @@ describe('SearchBar — results display', () => {
     expect(screen.queryByText(/<mark>/)).not.toBeInTheDocument()
   })
 })
+
+describe('SearchBar - layering and closing (site check V1)', () => {
+  it('renders the modal into document.body, outside the header', async () => {
+    const user = userEvent.setup()
+    const { container } = render(
+      <header>
+        <SearchBar />
+      </header>
+    )
+    await user.click(screen.getByRole('button', { name: /open search/i }))
+    const dialog = screen.getByRole('dialog')
+    expect(container.contains(dialog)).toBe(false)
+    expect(dialog.parentElement).toBe(document.body)
+  })
+
+  it('closes from the close button, which is there on every screen size', async () => {
+    const user = userEvent.setup()
+    render(<SearchBar />)
+    await user.click(screen.getByRole('button', { name: /open search/i }))
+    const close = screen.getByRole('button', { name: /close search/i })
+    expect(close.className).not.toMatch(/hidden/)
+    await user.click(close)
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('closes when the backdrop is clicked', async () => {
+    const user = userEvent.setup()
+    render(<SearchBar />)
+    await user.click(screen.getByRole('button', { name: /open search/i }))
+    const backdrop = screen.getByRole('dialog').previousElementSibling as HTMLElement
+    await user.click(backdrop)
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('shows the Ctrl K shortcut hint outside Apple devices', () => {
+    render(<SearchBar />)
+    expect(screen.getByText('Ctrl K')).toBeInTheDocument()
+    expect(screen.queryByText('⌘K')).not.toBeInTheDocument()
+  })
+
+  it('labels page results from their label instead of "Topic"', async () => {
+    vi.stubGlobal(
+      'fetch',
+      mockFetchWith(makeResults([{ type: 'pages', title: 'A post', price_zar: null, label: 'Article' }]))
+    )
+    const user = userEvent.setup()
+    render(<SearchBar />)
+    await user.click(screen.getByRole('button', { name: /open search/i }))
+    await user.type(screen.getByPlaceholderText(/search programmes/i), 'post')
+    await waitFor(() => expect(screen.getByText('Article')).toBeInTheDocument(), { timeout: 2000 })
+    vi.unstubAllGlobals()
+  })
+})

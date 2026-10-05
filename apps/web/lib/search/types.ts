@@ -20,7 +20,8 @@ export interface TopicSearchHit {
   _formatted?: Partial<TopicSearchHit>
 }
 
-export type SearchIndex = 'products' | 'explore_topics'
+// 'pages' is searched in the app (lib/search/siteSearch.ts), not in MeiliSearch.
+export type SearchIndex = 'products' | 'explore_topics' | 'pages'
 
 export interface SearchResultItem {
   type: SearchIndex
@@ -30,6 +31,8 @@ export interface SearchResultItem {
   url: string
   thumbnail: string | null
   price_zar: number | null
+  /** Badge text for results without a price, e.g. "Page" or "Article". */
+  label?: string
 }
 
 export interface MeiliSearchHitsResponse<T> {

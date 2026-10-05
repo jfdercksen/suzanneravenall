@@ -210,7 +210,8 @@ describe('GET /api/search — index=all returns merged results', () => {
     vi.stubGlobal('fetch', mockFetch)
 
     const { GET } = await import('./route')
-    const res = await GET(makeRequest({ q: 'clarity', index: 'all' }))
+    // A query no site page or topic copy contains, so only the mocked Meili hits come back.
+    const res = await GET(makeRequest({ q: 'zzqxmerged', index: 'all' }))
 
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -298,6 +299,8 @@ describe('GET /api/search — MeiliSearch error returns 503', () => {
 })
 
 describe('GET /api/search - index=all shares the limit between indexes', () => {
+  // These queries use made-up words so the in-app page and topic search
+  // (lib/search/siteSearch.ts) adds nothing and only the Meili split is tested.
   beforeEach(() => {
     vi.resetModules()
     vi.stubEnv('MEILISEARCH_ADMIN_KEY', 'test-key')
@@ -327,7 +330,7 @@ describe('GET /api/search - index=all shares the limit between indexes', () => {
   it('fills the whole limit with products when no topics match', async () => {
     mockIndexes(products(30), [])
     const { GET } = await import('./route')
-    const res = await GET(makeRequest({ q: 'session', index: 'all', limit: '20' }))
+    const res = await GET(makeRequest({ q: 'zzqxsession', index: 'all', limit: '20' }))
     const body = await res.json()
     expect(body.results).toHaveLength(20)
     expect(body.results.every((r: { type: string }) => r.type === 'products')).toBe(true)
@@ -336,7 +339,7 @@ describe('GET /api/search - index=all shares the limit between indexes', () => {
   it('splits the limit evenly when both indexes have plenty of matches', async () => {
     mockIndexes(products(30), topics(30))
     const { GET } = await import('./route')
-    const res = await GET(makeRequest({ q: 'clarity', index: 'all', limit: '10' }))
+    const res = await GET(makeRequest({ q: 'zzqxclarity', index: 'all', limit: '10' }))
     const body = await res.json()
     expect(body.results).toHaveLength(10)
     expect(body.results.filter((r: { type: string }) => r.type === 'products')).toHaveLength(5)
@@ -346,7 +349,7 @@ describe('GET /api/search - index=all shares the limit between indexes', () => {
   it('gives unused product slots to topics', async () => {
     mockIndexes(products(2), topics(30))
     const { GET } = await import('./route')
-    const res = await GET(makeRequest({ q: 'purpose', index: 'all', limit: '10' }))
+    const res = await GET(makeRequest({ q: 'zzqxpurpose', index: 'all', limit: '10' }))
     const body = await res.json()
     expect(body.results).toHaveLength(10)
     expect(body.results.filter((r: { type: string }) => r.type === 'explore_topics')).toHaveLength(8)
@@ -368,5 +371,84 @@ describe('GET /api/search - index=all shares the limit between indexes', () => {
     const res = await GET(makeRequest({ q: 'clarity', index: 'products' }))
     const body = await res.json()
     expect(body.results[0].subtitle).toBe('Deep Dive')
+  })
+})
+
+describe('GET /api/search - in-app topic body and page search (site check C21)', () => {
+  beforeEach(() => {
+    vi.resetModules()
+    vi.stubEnv('MEILISEARCH_ADMIN_KEY', 'test-key')
+    vi.stubEnv('MEILISEARCH_HOST', 'http://meilisearch:7700')
+  })
+
+  afterEach(() => {
+    vi.unstubAllEnvs()
+    vi.unstubAllGlobals()
+  })
+
+  // Meili finds nothing and Payload has no posts.
+  function emptySources() {
+    const mockFetch = vi.fn().mockImplementation(async (url: string) => ({
+      ok: true,
+      json: async () => (url.includes('payload') ? { docs: [] } : makeMeiliResponse([])),
+    }))
+    vi.stubGlobal('fetch', mockFetch)
+    return mockFetch
+  }
+
+  it('finds a topic by its page body copy, including word variants', async () => {
+    emptySources()
+    const { GET } = await import('./route')
+    for (const q of ['anxiety', 'anxious']) {
+      const body = await (await GET(makeRequest({ q, index: 'explore_topics' }))).json()
+      expect(body.results.map((r: { url: string }) => r.url)).toContain(
+        '/explore/emotional-nervous-system-mastery'
+      )
+    }
+  })
+
+  it('does not repeat a topic Meili already returned', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () =>
+          makeMeiliResponse([
+            { ...topicHit, id: 'emotional-nervous-system-mastery', url: '/explore/emotional-nervous-system-mastery' },
+          ]),
+      })
+    )
+    const { GET } = await import('./route')
+    const body = await (await GET(makeRequest({ q: 'anxiety', index: 'explore_topics' }))).json()
+    const urls = body.results.map((r: { url: string }) => r.url)
+    expect(urls.filter((u: string) => u === '/explore/emotional-nervous-system-mastery')).toHaveLength(1)
+    expect(urls[0]).toBe('/explore/emotional-nervous-system-mastery')
+  })
+
+  it('returns services, about and blog pages for index=pages without calling Meili', async () => {
+    const mockFetch = emptySources()
+    const { GET } = await import('./route')
+    for (const [q, url] of [['services', '/services'], ['about', '/about'], ['blog', '/blog']]) {
+      const body = await (await GET(makeRequest({ q: q!, index: 'pages' }))).json()
+      expect(body.results.map((r: { url: string }) => r.url)).toContain(url)
+      expect(body.results.every((r: { type: string }) => r.type === 'pages')).toBe(true)
+    }
+    expect(mockFetch.mock.calls.some(([u]) => String(u).includes('/indexes/'))).toBe(false)
+  })
+
+  it('includes published blog posts from Payload', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockImplementation(async (url: string) => ({
+        ok: true,
+        json: async () =>
+          url.includes('payload')
+            ? { docs: [{ id: '1', slug: 'calm', title: 'Finding calm', isPublished: true, content: null }] }
+            : makeMeiliResponse([]),
+      }))
+    )
+    const { GET } = await import('./route')
+    const body = await (await GET(makeRequest({ q: 'finding calm', index: 'all' }))).json()
+    expect(body.results).toContainEqual(expect.objectContaining({ url: '/blog/calm', label: 'Article' }))
   })
 })
