@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { X } from 'lucide-react'
 
 interface MedusaCategory {
   id: string
@@ -61,6 +62,14 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
     return current?.id ?? filters.categoryId
   })()
 
+  // A deep link to a sub-category (e.g. ?category=akashic-coaching) only lights
+  // up the parent pill, so name the sub-category and offer a way back to the
+  // whole parent category.
+  const activeSubCategory =
+    filters.categoryId !== '' && activeRootId !== filters.categoryId
+      ? categories.find((c) => c.id === filters.categoryId) ?? null
+      : null
+
   // Category and collection filters are mutually exclusive — selecting one clears the other.
   const setCategoryId = (id: string) =>
     onFiltersChange({ categoryId: id, collectionHandle: '' })
@@ -103,6 +112,23 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
             onClick={() => setCollectionHandle(isOnlineCourses ? '' : 'programmes')}
           />
         </div>
+
+        {activeSubCategory && (
+          <div className="mt-3 flex items-center gap-2 text-sm text-brand-muted">
+            <span>Showing</span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-accent/40 bg-brand-accent/10 pl-3 pr-1.5 py-1 font-medium text-brand-ink">
+              {activeSubCategory.name}
+              <button
+                type="button"
+                onClick={() => setCategoryId(activeRootId)}
+                aria-label={`Clear ${activeSubCategory.name} filter`}
+                className="rounded-full p-0.5 text-brand-muted hover:text-brand-accent transition-colors"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </span>
+          </div>
+        )}
 
         <AnimatePresence>
           {isOnlineCourses && (

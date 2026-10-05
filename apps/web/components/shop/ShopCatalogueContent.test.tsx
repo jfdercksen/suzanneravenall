@@ -23,6 +23,11 @@ vi.mock('framer-motion', () => {
   }
 })
 
+let mockCartCurrency: string | null = null
+vi.mock('@/lib/cart', () => ({
+  useCart: () => ({ cart: mockCartCurrency ? { currency_code: mockCartCurrency } : null }),
+}))
+
 vi.mock('./ShopHeroBanner', () => ({ ShopHeroBanner: () => null }))
 vi.mock('./ShopFinalCTA', () => ({ ShopFinalCTA: () => null }))
 vi.mock('./ProductCard', () => ({
@@ -96,6 +101,7 @@ function installFetch() {
 
 beforeEach(() => {
   mockSearch = ''
+  mockCartCurrency = null
   searchHits = []
   window.history.replaceState(null, '', '/shop')
   vi.stubGlobal(
@@ -131,6 +137,29 @@ describe('ShopCatalogueContent', () => {
     await waitFor(() => expect(cards()).toHaveLength(2))
     expect(screen.getByRole('button', { name: 'Products & Tools' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute('aria-pressed', 'false')
+  })
+
+  it('a sub-category link names the sub-category, counts sessions, and can be cleared to the parent', async () => {
+    mockSearch = 'category=rapid-repatterning'
+    const user = userEvent.setup()
+    render(<ShopCatalogueContent initialCategories={categories} />)
+    await waitFor(() => expect(cards()).toHaveLength(12))
+    const main = within(screen.getByRole('main'))
+    expect(main.getByText('Rapid Repatterning')).toBeInTheDocument()
+    expect(main.getByText('14 sessions')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Clear Rapid Repatterning filter' }))
+    await waitFor(() => expect(window.location.search).toBe('?category=private-sessions'))
+    expect(screen.queryByRole('button', { name: /Clear Rapid Repatterning/ })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Private Sessions' })).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('a top-level category link shows no sub-category chip', async () => {
+    mockSearch = 'category=products-tools'
+    render(<ShopCatalogueContent initialCategories={categories} />)
+    await waitFor(() => expect(cards()).toHaveLength(2))
+    expect(screen.queryByRole('button', { name: /^Clear .* filter$/ })).not.toBeInTheDocument()
+    expect(within(screen.getByRole('main')).getByText('2 programmes')).toBeInTheDocument()
   })
 
   it('sorts the whole catalogue by price, not just the current page', async () => {
