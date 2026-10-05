@@ -132,7 +132,7 @@ export default function PatternCoachContent() {
                 Start Your 30-Day Free Trial
               </a>
               <Link
-                href="/contact"
+                href="/contact#book"
                 className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary-300 hover:border-brand-primary text-brand-muted hover:text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
               >
                 Book a Discovery Call

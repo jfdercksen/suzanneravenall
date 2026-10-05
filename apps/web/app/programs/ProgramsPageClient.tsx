@@ -203,7 +203,7 @@ export default function ProgramsPageClient() {
           Explore Programmes
         </a>
         <Link
-          href="/contact"
+          href="/contact#book"
           className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
         >
           Not sure? Book a Call
@@ -589,7 +589,7 @@ export default function ProgramsPageClient() {
               where you want to go.
             </p>
             <Link
-              href="/contact"
+              href="/contact#book"
               className="inline-flex items-center justify-center py-4 px-10 bg-white hover:bg-brand-sand text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
             >
               Book Discovery Call

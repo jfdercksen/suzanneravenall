@@ -125,7 +125,7 @@ export default function Header() {
                 ("Take the Free Pattern Scan") replaces the old header
                 "Discover Your Pattern" button entirely. */}
             <Link
-              href="/contact"
+              href="/contact#book"
               className="hidden xl:inline-flex items-center px-3 py-2.5 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm rounded-button transition-colors duration-150 whitespace-nowrap"
             >
               Book a Discovery Call

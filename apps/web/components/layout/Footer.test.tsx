@@ -164,6 +164,22 @@ describe('Footer', () => {
       expect(screen.getByRole('link', { name: 'Contact' })).toBeInTheDocument()
     })
 
+    it('points Services and Programs links at the section they name', () => {
+      render(<Footer />)
+      const expected: Array<[string, string]> = [
+        ['Private Sessions', '/services#private'],
+        ['Group Coaching', '/services#group'],
+        ['Executive Coaching', '/services/private-sessions/executive-coaching'],
+        ['Corporate Programs', '/services#group'],
+        ['Practitioner Programmes', '/programs#practitioner'],
+        ['Self-Study Courses', '/programs#self-paced'],
+        ['Workshops', '/programs#live'],
+      ]
+      for (const [label, href] of expected) {
+        expect(screen.getByRole('link', { name: label })).toHaveAttribute('href', href)
+      }
+    })
+
     it('renders Legal column links', () => {
       render(<Footer />)
       expect(screen.getByRole('link', { name: 'Privacy Policy' })).toBeInTheDocument()

@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
       impact: result.impact,
       shift: result.shift,
       ctaLabel: result.cta,
-      ctaLink: `${siteUrl}/contact`,
+      ctaLink: `${siteUrl}/contact#book`,
     })
   } catch (err) {
     console.error('[quiz/report] report email failed:', err instanceof Error ? err.message : err)

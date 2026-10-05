@@ -55,7 +55,7 @@ export default function TransformationQuote() {
 
         <motion.div {...fadeUp(0.6)} className="mt-10">
           <Link
-            href="/about"
+            href="/about/the-system"
             className="inline-flex items-center justify-center border border-white/40 hover:border-white text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-brand-cream/10 transition-all duration-300 rounded-button"
           >
             Discover The Method

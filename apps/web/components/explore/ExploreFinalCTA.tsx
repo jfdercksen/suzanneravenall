@@ -59,7 +59,7 @@ export default function ExploreFinalCTA() {
             </span>
           </Link>
           <Link
-            href="/contact"
+            href="/contact#book"
             className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary/30 hover:border-brand-primary/60 text-brand-primary font-medium text-sm uppercase tracking-[0.2em] rounded-button transition-all duration-300 hover:bg-brand-primary/5"
           >
             Book a Discovery Call

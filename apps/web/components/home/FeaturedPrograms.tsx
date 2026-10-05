@@ -21,7 +21,7 @@ const programs: {
     tagline: 'One-on-one with Suzanne. Nine session types.',
     price: null,
     image: '/images/generated/session-coaching.webp',
-    href: '/services',
+    href: '/services#private',
   },
   {
     title: 'Recorded Group Repatterning',

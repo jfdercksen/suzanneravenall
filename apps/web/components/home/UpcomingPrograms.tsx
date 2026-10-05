@@ -15,7 +15,7 @@ const oneOnOne = {
   subtitle: "Suzanne's full attention. Your breakthrough.",
   availability: 'Limited availability',
   nextAvailable: 'By discovery call',
-  href: '/contact',
+  href: '/contact#book',
   cta: 'Book Discovery Call',
 }
 

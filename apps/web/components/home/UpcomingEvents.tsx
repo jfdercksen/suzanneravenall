@@ -82,7 +82,7 @@ export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
       description:
         '30-minute complimentary call to map your patterns and find the right programme for you.',
       cta: 'Book Now',
-      href: '/contact',
+      href: '/contact#book',
       badge: 'Available this week',
     },
     buildGroupOpportunity(cohort),

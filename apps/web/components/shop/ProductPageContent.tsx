@@ -424,7 +424,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             <p className="text-brand-muted text-sm">
               Not sure which programme is right for you?{' '}
               <Link
-                href="/contact"
+                href="/contact#book"
                 className="text-brand-accent hover:text-brand-primary underline underline-offset-4 transition-colors duration-200"
               >
                 Book a free discovery call

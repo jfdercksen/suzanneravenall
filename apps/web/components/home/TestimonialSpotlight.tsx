@@ -96,7 +96,7 @@ export default function TestimonialSpotlight() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  href="/contact"
+                  href="/contact#book"
                   className="bg-brand-accent hover:bg-brand-accent-700 text-white px-8 py-4 rounded-button text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:shadow-lg text-center"
                 >
                   Book Discovery Call &rarr;

@@ -97,7 +97,7 @@ export default function PrivateSessions() {
 
         <div className="mt-16 flex justify-center">
           <Link
-            href="/contact"
+            href="/contact#book"
             className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
           >
             Book Discovery Call

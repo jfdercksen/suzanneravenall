@@ -35,7 +35,7 @@ const confirmedOpportunities: ConfirmedOpportunity[] = [
     description:
       '30-minute complimentary call to map your patterns and find the right programme for you.',
     cta: 'Book Now',
-    href: '/contact',
+    href: '/contact#book',
     badge: 'Available this week',
   },
   {
@@ -439,7 +439,7 @@ export default function EventsContent() {
               where you want to go.
             </p>
             <Link
-              href="/contact"
+              href="/contact#book"
               className="inline-flex items-center justify-center py-4 px-10 bg-white hover:bg-brand-sand text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
             >
               Book a Discovery Call

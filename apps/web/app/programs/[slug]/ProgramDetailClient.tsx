@@ -585,7 +585,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               {cta.label}
             </Link>
             <Link
-              href="/contact"
+              href="/contact#book"
               className="inline-flex items-center justify-center px-10 py-5 border border-brand-primary-300 hover:border-brand-primary text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-brand-sand"
             >
               Have Questions? Book a Discovery Call
