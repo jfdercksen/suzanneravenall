@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { MedusaProduct } from '@/types/medusa'
+import { firstSentence } from './productKind'
 
 interface ProductHeroProps {
   product: MedusaProduct
@@ -17,10 +18,9 @@ interface ProductHeroProps {
 export function ProductHero({ product }: ProductHeroProps) {
   const primaryCategory = product.categories[0]
 
-  // Extract first sentence from description as transformation promise.
-  // Guard against empty-string description — "".concat('.') would render a lone ".".
-  const rawSentence = product.description?.split('. ')[0]?.trim().replace(/[.!?]$/, '') ?? ''
-  const transformationPromise = rawSentence ? `${rawSentence}.` : 'Transform how you experience life.'
+  // First sentence of the description's first paragraph as the promise line;
+  // the full description is shown further down the page.
+  const transformationPromise = firstSentence(product.description) ?? 'Transform how you experience life.'
 
   return (
     <section className="relative flex flex-col justify-end w-full bg-brand-primary-900 sm:min-h-[560px] lg:min-h-[640px] overflow-hidden">
@@ -84,7 +84,9 @@ export function ProductHero({ product }: ProductHeroProps) {
                 <li aria-hidden="true" className="text-white/50">
                   /
                 </li>
-                <li className="text-white/80 truncate max-w-[200px]" aria-current="page">
+                {/* Truncates at the row width, not a fixed 200px; the title
+                    attribute keeps the full name on hover (site check M11). */}
+                <li className="min-w-0 max-w-full truncate text-white/80" aria-current="page" title={product.title}>
                   {product.title}
                 </li>
               </ol>

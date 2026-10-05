@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
+  catalogueCountNoun,
+  shopCategoryLabel,
   displayPriceSortKey,
   getDisplayPrice,
   INDICATIVE_ZAR_PER_USD,
@@ -149,5 +151,23 @@ describe('orderBySearchHits', () => {
   it('keeps relevance order and drops hits outside the loaded (filtered) products', () => {
     const list = [product('a', []), product('b', []), product('c', [])]
     expect(orderBySearchHits(list, ['c', 'zz-other-category', 'a', 'c']).map((p) => p.id)).toEqual(['c', 'a'])
+  })
+})
+
+describe('shopCategoryLabel (site check C3)', () => {
+  it('uses the same name on the card as on the filter pill', () => {
+    expect(shopCategoryLabel({ handle: 'guided-programmes', name: 'Guided Programmes' })).toBe('Practitioner Programmes')
+    expect(shopCategoryLabel({ handle: 'books', name: 'Books' })).toBe('Books')
+  })
+})
+
+describe('catalogueCountNoun', () => {
+  it('names what is listed', () => {
+    expect(catalogueCountNoun('private-sessions', '')).toBe('session')
+    expect(catalogueCountNoun('group-sessions', '')).toBe('session')
+    expect(catalogueCountNoun('guided-programmes', '')).toBe('programme')
+    expect(catalogueCountNoun('products-tools', '')).toBe('product')
+    expect(catalogueCountNoun(undefined, 'programmes')).toBe('course')
+    expect(catalogueCountNoun(undefined, '')).toBe('item')
   })
 })

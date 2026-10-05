@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
+import { shopCategoryLabel } from './shopCatalogue'
 
 interface MedusaCategory {
   id: string
@@ -20,13 +21,6 @@ interface CategoryFilterBarProps {
   categories: MedusaCategory[]
   filters: FilterState
   onFiltersChange: (filters: FilterState) => void
-}
-
-const CATEGORY_LABELS: Record<string, string> = {
-  'private-sessions': 'Private Sessions',
-  'guided-programmes': 'Practitioner Programmes',
-  'group-sessions': 'Group Sessions',
-  'products-tools': 'Products & Tools',
 }
 
 export function CategoryFilterBar({ categories, filters, onFiltersChange }: CategoryFilterBarProps) {
@@ -87,12 +81,15 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
         isSticky ? 'shadow-lg shadow-black/5' : ''
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 lg:py-6 flex flex-col lg:flex-row lg:items-start gap-3 lg:gap-8">
-        <p className="flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent lg:pt-3.5">
+      {/* Site check V5: below lg the pills sit on one row that scrolls sideways
+          (it used to wrap to four rows, 305px of sticky bar on a phone), and
+          the smaller pills keep "Self-Study" on the first row on desktop. */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 lg:py-5 flex flex-col lg:flex-row lg:items-start gap-3 lg:gap-8">
+        <p className="hidden lg:block flex-shrink-0 text-xs uppercase tracking-[0.3em] font-medium text-brand-accent lg:pt-3">
           Browse by category
         </p>
-        <div className="flex-1">
-        <div className="flex flex-wrap gap-3">
+        <div className="flex-1 min-w-0">
+        <div className="flex flex-nowrap lg:flex-wrap gap-2 overflow-x-auto lg:overflow-visible -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 py-1 lg:py-0">
           <FilterPill
             label="All"
             active={filters.categoryId === '' && filters.collectionHandle === ''}
@@ -101,7 +98,7 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
           {topLevelCategories.map((cat) => (
             <FilterPill
               key={cat.id}
-              label={CATEGORY_LABELS[cat.handle] ?? cat.name}
+              label={shopCategoryLabel(cat)}
               active={filters.categoryId !== '' && activeRootId === cat.id}
               onClick={() => setCategoryId(cat.id)}
             />
@@ -161,7 +158,7 @@ function FilterPill({ label, active, onClick }: FilterPillProps) {
     <button
       onClick={onClick}
       aria-pressed={active}
-      className={`px-6 py-3 rounded-full text-base font-medium transition-all duration-200 whitespace-nowrap ${
+      className={`flex-shrink-0 px-4 py-2 lg:px-5 lg:py-2.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
         active
           ? 'bg-brand-accent text-white shadow-lg shadow-brand-accent/25'
           : 'border border-brand-primary-300 text-brand-muted hover:border-brand-accent hover:text-brand-primary hover:bg-brand-sand'

@@ -11,12 +11,15 @@ import { ShopHeroBanner } from './ShopHeroBanner'
 import { ShopPagination } from './ShopPagination'
 import { ShopFinalCTA } from './ShopFinalCTA'
 import {
+  catalogueCountNoun,
   orderBySearchHits,
   parseShopParams,
   shopStateToQuery,
+  SELF_STUDY_COLLECTION,
   sortProducts,
   type SortOption,
 } from './shopCatalogue'
+import { isSelfStudyProduct } from './productKind'
 import { useCart } from '@/lib/cart'
 import type { MedusaProduct } from '@/types/medusa'
 import type { SearchResultItem } from '@/lib/search/types'
@@ -92,8 +95,6 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
   const [page, setPage] = useState(initial.page)
   const [sort, setSort] = useState<SortOption>(initial.sort)
   const [filters, setFilters] = useState<FilterState>(initial.filters)
-  const [collectionIdMap, setCollectionIdMap] = useState<Record<string, string>>({})
-  const [collectionsLoaded, setCollectionsLoaded] = useState(false)
 
   const handleFiltersChange = (newFilters: FilterState) => {
     setFilters(newFilters)
@@ -122,7 +123,8 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
 
   // Private sessions are sessions, not programmes. The count label must match
   // the active category (Suzanne feedback, 27 Jul 2026), including its
-  // sub-categories such as ?category=akashic-coaching.
+  // sub-categories such as ?category=akashic-coaching, and must not call a
+  // book a programme (site check C3).
   const activeCategoryHandle = filters.categoryId
     ? initialCategories.find((c) => c.id === filters.categoryId)?.handle
     : undefined
@@ -136,7 +138,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
     }
     return current?.handle
   })()
-  const countNoun = activeRootHandle === 'private-sessions' ? 'session' : 'programme'
+  const countNoun = catalogueCountNoun(activeRootHandle, filters.collectionHandle)
 
   // Write state to the URL without adding history entries or a server round trip.
   useEffect(() => {
@@ -153,23 +155,8 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
     }
   }, [activeCategoryHandle, filters.collectionHandle, page, sort, searchQuery])
 
-  useEffect(() => {
-    fetch(`${MEDUSA_URL}/store/collections?limit=20`, { headers: medusaHeaders })
-      .then((r) => (r.ok ? r.json() : { collections: [] }))
-      .then((data: { collections?: Array<{ id: string; handle: string }> }) => {
-        const map: Record<string, string> = {}
-        ;(data.collections ?? []).forEach((c) => { map[c.handle] = c.id })
-        setCollectionIdMap(map)
-      })
-      .catch(() => {})
-      .finally(() => setCollectionsLoaded(true))
-  }, [])
-
   const fetchSeq = useRef(0)
   const fetchProducts = useCallback(async () => {
-    // A collection filter needs the collection id; wait for the map.
-    if (filters.collectionHandle && !collectionsLoaded) return
-
     const seq = ++fetchSeq.current
     setLoading(true)
     setError(false)
@@ -184,11 +171,6 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
       if (filters.categoryId) {
         const ids = getCategoryAndDescendantIds(filters.categoryId, initialCategories)
         ids.forEach((id) => baseParams.append('category_id[]', id))
-      }
-
-      const collectionId = filters.collectionHandle ? collectionIdMap[filters.collectionHandle] : undefined
-      if (collectionId) {
-        baseParams.append('collection_id[]', collectionId)
       }
 
       const all: MedusaProduct[] = []
@@ -209,13 +191,18 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
       }
 
       if (seq !== fetchSeq.current) return
-      setProducts(all)
+      // The Self-Study pill used to list the "programmes" collection, which
+      // also holds about 20 live courses. It now lists what is actually sold
+      // as self-study, from any collection (site check C3, productKind.ts).
+      setProducts(
+        filters.collectionHandle === SELF_STUDY_COLLECTION ? all.filter(isSelfStudyProduct) : all
+      )
     } catch {
       if (seq === fetchSeq.current) setError(true)
     } finally {
       if (seq === fetchSeq.current) setLoading(false)
     }
-  }, [filters, collectionIdMap, collectionsLoaded, initialCategories])
+  }, [filters, initialCategories])
 
   useEffect(() => {
     void fetchProducts()

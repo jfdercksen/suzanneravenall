@@ -4,8 +4,9 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Minus, Plus, Trash2, ShoppingBag, Lock, ShieldCheck, RefreshCw } from 'lucide-react'
+import { Minus, Plus, Trash2, ShoppingBag, Lock, ShieldCheck, RefreshCw, Tag, X } from 'lucide-react'
 import { useCart, formatPrice } from '@/lib/cart'
+import { isSubscriptionLine, maxQuantity } from './cartRules'
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -15,15 +16,23 @@ const fadeUp = {
 
 function QuantityControl({
   quantity,
+  max,
   onIncrease,
   onDecrease,
   isUpdating,
 }: {
   quantity: number
+  /** Seats, sessions, courses and downloads are one per order (site check C19). */
+  max: number
   onIncrease: () => void
   onDecrease: () => void
   isUpdating: boolean
 }) {
+  // A one-per-order item already at one has nothing to adjust.
+  if (max <= 1 && quantity <= 1) {
+    return <span className="text-xs text-brand-muted">Qty 1</span>
+  }
+
   return (
     <div className="flex items-center gap-1 border border-brand-border rounded-lg overflow-hidden">
       <button
@@ -39,7 +48,7 @@ function QuantityControl({
       </span>
       <button
         onClick={onIncrease}
-        disabled={isUpdating}
+        disabled={isUpdating || quantity >= max}
         aria-label="Increase quantity"
         className="w-8 h-8 flex items-center justify-center text-brand-muted hover:bg-brand-sand disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150"
       >
@@ -222,6 +231,7 @@ function CartItemRow({
         <div className="flex items-center gap-4 mt-3">
           <QuantityControl
             quantity={item.quantity}
+            max={maxQuantity(item)}
             onIncrease={() => wrap(onIncrease)}
             onDecrease={() => wrap(onDecrease)}
             isUpdating={isUpdating}
@@ -246,7 +256,105 @@ function CartItemRow({
   )
 }
 
+function VoucherField() {
+  const { cart, applyPromoCode, removePromoCode } = useCart()
+  const [code, setCode] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const applied = cart?.promotions.find((p) => p.code)?.code ?? null
+
+  async function handleApply(e: React.FormEvent) {
+    e.preventDefault()
+    const trimmed = code.trim()
+    if (!trimmed) return
+    setBusy(true)
+    setError(null)
+    try {
+      await applyPromoCode(trimmed)
+      setCode('')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'That voucher code is not valid')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function handleRemove() {
+    if (!applied) return
+    setBusy(true)
+    setError(null)
+    try {
+      await removePromoCode(applied)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not remove the voucher')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div>
+      {applied ? (
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-brand-border bg-brand-cream px-3 py-2 text-sm">
+          <span className="inline-flex items-center gap-2 text-brand-ink">
+            <Tag className="w-4 h-4" aria-hidden="true" />
+            Voucher <span className="font-mono font-medium">{applied}</span> applied
+          </span>
+          <button
+            type="button"
+            onClick={handleRemove}
+            disabled={busy}
+            aria-label={`Remove voucher ${applied}`}
+            className="inline-flex items-center gap-1 text-xs text-brand-muted hover:text-brand-ink underline underline-offset-4 disabled:opacity-60 transition-colors duration-200"
+          >
+            <X className="w-3 h-3" aria-hidden="true" />
+            Remove
+          </button>
+        </div>
+      ) : (
+        <form onSubmit={handleApply} noValidate className="flex gap-2">
+          <label htmlFor="cart-voucher" className="sr-only">
+            Voucher code
+          </label>
+          <input
+            id="cart-voucher"
+            type="text"
+            value={code}
+            onChange={(e) => {
+              setCode(e.target.value)
+              if (error) setError(null)
+            }}
+            placeholder="Voucher code"
+            autoComplete="off"
+            autoCapitalize="characters"
+            aria-invalid={!!error}
+            aria-describedby={error ? 'cart-voucher-error' : undefined}
+            className={`min-w-0 flex-1 px-3 py-2 rounded-xl border text-brand-ink placeholder-brand-muted text-sm uppercase transition-colors duration-200 outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent ${
+              error ? 'border-red-600 bg-red-50' : 'border-brand-primary-300 bg-white'
+            }`}
+          />
+          <button
+            type="submit"
+            disabled={busy || !code.trim()}
+            className="px-4 py-2 rounded-xl text-sm font-medium border border-brand-primary-300 text-brand-ink hover:bg-brand-cream disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300"
+          >
+            {busy ? 'Applying...' : 'Apply'}
+          </button>
+        </form>
+      )}
+      {error && (
+        <p id="cart-voucher-error" className="mt-1 text-xs text-red-600" role="alert">
+          {error}
+        </p>
+      )}
+    </div>
+  )
+}
+
 function OrderSummary({ cart }: { cart: import('@/lib/cart').Cart }) {
+  const voucherCode = cart.promotions.find((p) => p.code)?.code ?? null
+  const hasSubscription = cart.items.some(isSubscriptionLine)
+
   return (
     <div className="bg-brand-sand rounded-2xl p-6 space-y-4 sticky top-8">
       <h2 className="text-lg font-medium text-brand-ink">Order Summary</h2>
@@ -258,10 +366,24 @@ function OrderSummary({ cart }: { cart: import('@/lib/cart').Cart }) {
             {formatPrice(cart.subtotal, cart.currency_code)}
           </span>
         </div>
-        <div className="flex justify-between">
-          <span className="text-brand-muted">Shipping</span>
-          <span className="font-medium text-brand-ink">Free</span>
-        </div>
+        {cart.discount_total > 0 && (
+          <div className="flex justify-between">
+            <span className="text-brand-muted">Voucher{voucherCode ? ` (${voucherCode})` : ''}</span>
+            <span className="font-medium text-brand-ink tabular-nums">
+              -{formatPrice(cart.discount_total, cart.currency_code)}
+            </span>
+          </div>
+        )}
+        {/* Only shown when something is charged for delivery: sessions,
+            courses and downloads have no shipping (site check C19). */}
+        {cart.shipping_total > 0 && (
+          <div className="flex justify-between">
+            <span className="text-brand-muted">Shipping</span>
+            <span className="font-medium text-brand-ink tabular-nums">
+              {formatPrice(cart.shipping_total, cart.currency_code)}
+            </span>
+          </div>
+        )}
         {cart.tax_total > 0 && (
           <div className="flex justify-between">
             <span className="text-brand-muted">Tax</span>
@@ -279,6 +401,9 @@ function OrderSummary({ cart }: { cart: import('@/lib/cart').Cart }) {
         </span>
       </div>
 
+      {/* The voucher used to appear only after the contact details step. */}
+      <VoucherField />
+
       <Link
         href="/checkout"
         className="w-full block text-center py-4 px-6 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
@@ -290,8 +415,11 @@ function OrderSummary({ cart }: { cart: import('@/lib/cart').Cart }) {
       <div className="pt-2 space-y-2">
         {[
           { icon: Lock, label: 'Secure checkout' },
-          { icon: ShieldCheck, label: 'PayFast payment gateway' },
-          { icon: RefreshCw, label: 'Cancel anytime' },
+          // Checkout sends South African billing to PayFast and international
+          // billing to PayPal (components/checkout/CheckoutContent.tsx).
+          { icon: ShieldCheck, label: 'PayFast (South Africa) or PayPal (international)' },
+          // Only true of a subscription; one-off sessions and courses cannot be cancelled this way.
+          ...(hasSubscription ? [{ icon: RefreshCw, label: 'Cancel anytime' }] : []),
         ].map(({ icon: Icon, label }) => (
           <div key={label} className="flex items-center gap-2 text-xs text-brand-muted">
             <Icon className="w-3.5 h-3.5 flex-shrink-0" />

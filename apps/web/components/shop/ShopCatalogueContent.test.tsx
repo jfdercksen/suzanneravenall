@@ -159,7 +159,7 @@ describe('ShopCatalogueContent', () => {
     render(<ShopCatalogueContent initialCategories={categories} />)
     await waitFor(() => expect(cards()).toHaveLength(2))
     expect(screen.queryByRole('button', { name: /^Clear .* filter$/ })).not.toBeInTheDocument()
-    expect(within(screen.getByRole('main')).getByText('2 programmes')).toBeInTheDocument()
+    expect(within(screen.getByRole('main')).getByText('2 products')).toBeInTheDocument()
   })
 
   it('sorts the whole catalogue by price, not just the current page', async () => {
@@ -200,6 +200,37 @@ describe('ShopCatalogueContent', () => {
     expect(screen.getByRole('combobox', { name: /sort/i })).toBeInTheDocument()
     expect(within(screen.getByRole('main')).getByText('2 results')).toBeInTheDocument()
     expect(window.location.search).toBe('?category=private-sessions&q=rapid')
+  })
+
+  it('the Self-Study pill lists what is sold as self-study, not live courses in the same collection', async () => {
+    const course = (id: string, title: string, variants: string[], thinkific: boolean): MedusaProduct => ({
+      id,
+      handle: `${id}-handle`,
+      title,
+      description: null,
+      thumbnail: null,
+      metadata: thinkific ? { thinkific_course_id: 1 } : null,
+      variants: variants.map((t, i) => ({ id: `${id}-${i}`, title: t, prices: [{ currency_code: 'zar', amount: 1000 }] })),
+      categories: [],
+      collection: null,
+    })
+    const catalogue = [
+      course('live', 'Mindfulness (Live via Zoom)', ['Standard'], true),
+      course('self', 'Mindfulness (Self Study)', ['Standard'], true),
+      course('both', 'Program 1', ['Live via Zoom', 'Self Study'], false),
+      course('fee', 'Observation Fee', ['Once-off'], false),
+    ]
+    const fetchMock = vi.fn(async (input: string) => {
+      const url = new URL(input, 'http://localhost')
+      // No collection filter is sent: the list is filtered in the browser.
+      expect(url.searchParams.getAll('collection_id[]')).toEqual([])
+      return { ok: true, json: async () => ({ products: catalogue, count: catalogue.length }) }
+    })
+    vi.stubGlobal('fetch', fetchMock)
+    mockSearch = 'collection=programmes'
+    render(<ShopCatalogueContent initialCategories={categories} />)
+    await waitFor(() => expect(cards()).toEqual(['/shop/self-handle', '/shop/both-handle']))
+    expect(within(screen.getByRole('main')).getByText('2 courses')).toBeInTheDocument()
   })
 
   it('pages through search results beyond the first page', async () => {
