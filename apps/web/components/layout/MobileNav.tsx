@@ -5,22 +5,38 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ExternalLink } from 'lucide-react'
-import type { NavLink } from './Header'
+import type { NavItem, NavGroup, NavLink, NavGroupChild } from './Header'
+import { isActivePath } from './navActive'
 
 interface MobileNavProps {
-  links: NavLink[]
+  items: NavItem[]
 }
 
-// Root path only matches itself; every other href also matches its own sub-routes
-// so e.g. /resources stays highlighted on /resources/articles.
-function isActivePath(pathname: string, href: string): boolean {
-  if (href === '/') return pathname === '/'
-  return pathname === href || pathname.startsWith(`${href}/`)
+function isNavGroup(item: NavItem): item is NavGroup {
+  return 'children' in item
 }
 
-export default function MobileNav({ links }: MobileNavProps) {
+function groupLinks(group: NavGroup): NavLink[] {
+  return group.children.filter((c: NavGroupChild): c is NavLink => !('divider' in c))
+}
+
+function activeGroupLabel(items: NavItem[], pathname: string): string | null {
+  const group = items.find(
+    (item): item is NavGroup =>
+      isNavGroup(item) && groupLinks(item).some((link) => isActivePath(pathname, link.href))
+  )
+  return group?.label ?? null
+}
+
+export default function MobileNav({ items }: MobileNavProps) {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
+  // Site check V11: the menu groups match the desktop nav as an accordion, one
+  // group open at a time. Opening the menu expands the current page's group.
+  const [openGroup, setOpenGroup] = useState<string | null>(null)
+  useEffect(() => {
+    if (isOpen) setOpenGroup(activeGroupLabel(items, pathname))
+  }, [isOpen, items, pathname])
   const menuRef = useRef<HTMLDivElement>(null)
   const openButtonRef = useRef<HTMLButtonElement>(null)
   // Dedicated ref for the close button — focus lands here on open, not the logo
@@ -163,9 +179,63 @@ export default function MobileNav({ links }: MobileNavProps) {
 
           {/* Nav links */}
           <nav aria-label="Mobile navigation" className="flex-1 overflow-y-auto flex flex-col justify-start py-6 px-8 gap-2">
-            {links.map((link) => {
+            {items.map((item) => {
+              if (isNavGroup(item)) {
+                const links = groupLinks(item)
+                const expanded = openGroup === item.label
+                const groupActive = links.some((link) => isActivePath(pathname, link.href))
+                const panelId = `mobile-nav-panel-${item.label.toLowerCase().replace(/\s+/g, '-')}`
+                return (
+                  <div key={item.label} className={`border-b ${groupActive ? 'border-white' : 'border-white/10'}`}>
+                    <button
+                      type="button"
+                      aria-expanded={expanded}
+                      aria-controls={panelId}
+                      onClick={() => setOpenGroup(expanded ? null : item.label)}
+                      className={`flex w-full items-center justify-between gap-3 font-semibold text-2xl py-3 text-left transition-colors duration-150 ${
+                        groupActive ? 'text-white' : 'text-white/75 hover:text-white'
+                      }`}
+                    >
+                      {item.label}
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        aria-hidden="true"
+                        className={`shrink-0 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+                      >
+                        <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      </svg>
+                    </button>
+                    {expanded && (
+                      <ul id={panelId} className="pb-3 pl-4 flex flex-col">
+                        {links.map((link) => {
+                          const isActive = isActivePath(pathname, link.href)
+                          return (
+                            <li key={link.label}>
+                              <Link
+                                href={link.href}
+                                onClick={close}
+                                aria-current={isActive ? 'page' : undefined}
+                                className={`block py-2.5 text-lg transition-colors duration-150 ${
+                                  isActive ? 'text-white font-semibold' : 'text-white/75 hover:text-white'
+                                }`}
+                              >
+                                {link.label}
+                              </Link>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    )}
+                  </div>
+                )
+              }
+
+              const link = item
               const isActive = isActivePath(pathname, link.href)
-              const linkClassName = `flex items-center gap-3 font-semibold text-3xl py-3 border-b transition-colors duration-150 ${
+              const linkClassName = `flex items-center gap-3 font-semibold text-2xl py-3 border-b transition-colors duration-150 ${
                 isActive
                   ? 'text-white border-white'
                   : 'text-white/75 border-white/10 hover:text-white'

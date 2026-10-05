@@ -4,7 +4,8 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ExternalLink } from 'lucide-react'
-import type { NavItem, NavGroup, NavLink, NavGroupChild, NavDivider } from './Header'
+import type { NavItem, NavGroup, NavGroupChild, NavDivider } from './Header'
+import { isActivePath } from './navActive'
 
 function isNavGroup(item: NavItem): item is NavGroup {
   return 'children' in item
@@ -12,13 +13,6 @@ function isNavGroup(item: NavItem): item is NavGroup {
 
 function isNavDivider(child: NavGroupChild): child is NavDivider {
   return 'divider' in child
-}
-
-// Root path only matches itself; every other href also matches its own sub-routes
-// so e.g. /resources stays highlighted on /resources/articles.
-function isActivePath(pathname: string, href: string): boolean {
-  if (href === '/') return pathname === '/'
-  return pathname === href || pathname.startsWith(`${href}/`)
 }
 
 interface DesktopNavProps {
