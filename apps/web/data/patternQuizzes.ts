@@ -88,7 +88,7 @@ export const patternQuizzes: PatternQuiz[] = [
     slug: 'intuition',
     topicSlug: 'intuition-as-patterned-intelligence',
     title: 'Intuition',
-    question: 'Is Your Intuition Clear or Distorted?',
+    question: 'Is Your Intuition Helping You or Holding You Back?',
     description: 'Learn how you make decisions internally',
     category: 'intuition',
     icon: '✨',

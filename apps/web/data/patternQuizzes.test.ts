@@ -5,6 +5,7 @@ import {
   categoryLabel,
   type PatternQuizCategory,
 } from './patternQuizzes'
+import { quizBySlug } from '@/app/explore/quizzes'
 
 describe('patternQuizzes', () => {
   it('has exactly 8 entries', () => {
@@ -143,5 +144,14 @@ describe('categoryLabel', () => {
 
   it('returns "Vitality & Longevity" for "vitality"', () => {
     expect(categoryLabel('vitality')).toBe('Vitality & Longevity')
+  })
+
+  // Site check C9: the card promised one quiz title and opened another
+  it('every card question matches the title of the quiz it opens', () => {
+    for (const q of patternQuizzes) {
+      const quiz = quizBySlug(q.topicSlug)
+      expect(quiz, q.topicSlug).toBeDefined()
+      expect(q.question).toBe(quiz?.title)
+    }
   })
 })

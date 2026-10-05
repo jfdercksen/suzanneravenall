@@ -21,8 +21,8 @@ const covers = [
   },
   {
     src: '/images/media/magazine-feature.jpg',
-    alt: 'Dr. Suzanne Ravenall magazine cover feature',
-    publication: 'Cover Feature',
+    alt: 'Dr. Suzanne Ravenall on the cover of The African Millionaire',
+    publication: 'The African Millionaire',
   },
 ]
 

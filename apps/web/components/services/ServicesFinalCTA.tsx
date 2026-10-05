@@ -57,7 +57,7 @@ export default function ServicesFinalCTA() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="text-lg lg:text-xl text-white/80 font-light max-w-2xl mx-auto mb-12 leading-relaxed"
         >
-          Spend twenty minutes with Suzanne. Describe what you’re stuck on. Leave
+          Spend thirty minutes with Suzanne. Describe what you’re stuck on. Leave
           with a clear, honest sense of which session, programme or keynote fits
           where you actually are.
         </motion.p>

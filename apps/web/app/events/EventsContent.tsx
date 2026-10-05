@@ -24,7 +24,8 @@ interface ConfirmedOpportunity {
   description: string
   cta: string
   href: string
-  badge: string
+  /** Omitted rather than invented when there is no real status to show. */
+  badge?: string
 }
 
 const confirmedOpportunities: ConfirmedOpportunity[] = [
@@ -36,7 +37,6 @@ const confirmedOpportunities: ConfirmedOpportunity[] = [
       '30-minute complimentary call to map your patterns and find the right programme for you.',
     cta: 'Book Now',
     href: '/contact#book',
-    badge: 'Available this week',
   },
   {
     type: 'GROUP',
@@ -57,9 +57,9 @@ const variantStyles: Record<BadgeVariant, string> = {
   group: 'bg-brand-sand text-brand-ink border border-brand-border',
 }
 
-// Live-via-Zoom trainings that run as recurring cohorts (from data/programs.ts)
+// Live-via-Zoom trainings that run as recurring cohorts (from data/programs.ts).
+// The Basic Five is left out: data/programs.ts lists it as self-study only.
 const LIVE_EVENT_SLUGS = [
-  'resonance-repatterning-basic-5-series',
   'energy-clearing-basic',
   'energy-clearing-advanced',
   'akashic-navigator-basic',
@@ -81,6 +81,12 @@ const staggerChildren = {
 const childVariants = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+}
+
+/** These cards say "New dates coming soon", so the "Recorded series:" prefix
+ *  from data/programs.ts contradicts them; keep only the session format. */
+export function awaitingDateDuration(duration: string): string {
+  return duration.replace(/^Recorded series:\s*/i, '')
 }
 
 function AwaitingDateCard({ program }: { program: Program }) {
@@ -105,7 +111,7 @@ function AwaitingDateCard({ program }: { program: Program }) {
           {program.shortDescription}
         </p>
         {program.duration && (
-          <p className="text-xs text-brand-muted mb-6">{program.duration}</p>
+          <p className="text-xs text-brand-muted mb-6">{awaitingDateDuration(program.duration)}</p>
         )}
       </div>
       <div className="flex items-center justify-between gap-4">
@@ -243,9 +249,11 @@ export default function EventsContent() {
                     >
                       {type}
                     </span>
-                    <span className="text-brand-muted text-xs text-right">
-                      {badge}
-                    </span>
+                    {badge && (
+                      <span className="text-brand-muted text-xs text-right">
+                        {badge}
+                      </span>
+                    )}
                   </div>
                   <h3 className="text-xl font-medium text-brand-primary mb-3">
                     {title}
@@ -254,9 +262,14 @@ export default function EventsContent() {
                     {description}
                   </p>
                   <div className="mt-6 flex items-center justify-between">
-                    <span className="text-brand-ink text-sm font-medium">
-                      Complimentary
-                    </span>
+                    {/* Only the discovery call is free; the group session is paid */}
+                    {type === 'FREE' ? (
+                      <span className="text-brand-ink text-sm font-medium">
+                        Complimentary
+                      </span>
+                    ) : (
+                      <span />
+                    )}
                     <Link
                       href={href}
                       className="inline-flex items-center justify-center px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm font-medium rounded-button transition-colors duration-300"

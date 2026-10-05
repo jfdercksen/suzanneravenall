@@ -24,7 +24,7 @@ const steps = [
     number: '03',
     title: 'Continue Monthly',
     description:
-      'Loved your first month? Keep going, then a simple monthly subscription, cancel anytime.',
+      'Loved your first month? Keep going on a simple monthly subscription, cancel anytime.',
   },
 ]
 

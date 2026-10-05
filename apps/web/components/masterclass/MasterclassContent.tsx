@@ -306,7 +306,7 @@ export default function MasterclassContent() {
               Register My Interest &rarr;
             </a>
             <p className="mt-4 text-brand-muted text-xs">
-              Free. Takes 2 minutes. You can unsubscribe anytime.
+              You can unsubscribe anytime.
             </p>
           </motion.div>
         </div>

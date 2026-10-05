@@ -705,3 +705,22 @@ export const relatedTopics = (slug: string): Topic[] => {
     .map((relSlug) => topics.find((t) => t.slug === relSlug))
     .filter((t): t is Topic => t !== undefined)
 }
+
+/** Lower-cases and strips punctuation, and expands "n't" so "Isn't" and
+ *  "Is Not" compare equal. */
+const normaliseLine = (line: string): string =>
+  line
+    .toLowerCase()
+    .replace(/n[’']t\b/g, ' not')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+
+/**
+ * Line shown under `heroHeadline` on the /explore hub panel. Several topics
+ * use the same sentence for `shortDescription` and `heroHeadline`, which made
+ * the panel repeat itself, so those fall back to the topic's opening question.
+ */
+export const topicPanelSubline = (topic: Topic): string =>
+  normaliseLine(topic.shortDescription) === normaliseLine(topic.heroHeadline)
+    ? topic.openingQuestion
+    : topic.shortDescription

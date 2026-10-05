@@ -56,9 +56,11 @@ export default function PathwaysIntro() {
               {...fadeUp(0.15)}
               className="relative flex flex-col justify-center overflow-hidden rounded-card bg-brand-primary-900 p-8 lg:p-12"
             >
-              {/* Background photo + neutral scrim: dark cards carry imagery, never flat colour */}
+              {/* Background photo + neutral scrim: dark cards carry imagery, never flat colour.
+                  A plain photo: hero-masterclass.webp has "Transformation Masterclass"
+                  baked into it, which mislabelled this card. */}
               <Image
-                src="/images/generated/hero-masterclass.webp"
+                src="/images/generated/explore-purpose.webp"
                 alt=""
                 aria-hidden="true"
                 fill
