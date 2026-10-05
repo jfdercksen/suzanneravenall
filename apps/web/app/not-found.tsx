@@ -1,4 +1,10 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: { absolute: 'Page not found | Dr. Suzanne Ravenall' },
+  robots: { index: false },
+}
 
 export default function NotFound() {
   return (

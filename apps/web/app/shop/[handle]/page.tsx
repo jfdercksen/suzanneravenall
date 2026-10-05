@@ -48,12 +48,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { handle } = await params
   const product = await getProduct(handle)
+  if (!product) notFound()
   return {
-    title: product
-      ? `${product.title}`
-      : 'Programme',
+    title: product.title,
     description:
-      product?.description?.slice(0, 155) ??
+      product.description?.slice(0, 155) ??
       'Transform your life with Dr. Suzanne Ravenall.',
   }
 }

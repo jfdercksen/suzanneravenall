@@ -22,9 +22,7 @@ export function generateStaticParams(): Array<{ slug: string }> {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const topic = topicBySlug(slug)
-  if (!topic) {
-    return { title: 'Explore' }
-  }
+  if (!topic) notFound()
   return {
     title: topic.metaTitle,
     description: topic.metaDescription,

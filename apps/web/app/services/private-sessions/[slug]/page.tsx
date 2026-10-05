@@ -15,9 +15,7 @@ export function generateStaticParams(): Array<{ slug: string }> {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const session = privateSessionBySlug(slug)
-  if (!session) {
-    return { title: 'Private Sessions' }
-  }
+  if (!session) notFound()
   return {
     title: `${session.title} | Private Sessions`,
     description: session.shortDescription,
