@@ -17,6 +17,7 @@ import {
   sortProducts,
   type SortOption,
 } from './shopCatalogue'
+import { useCart } from '@/lib/cart'
 import type { MedusaProduct } from '@/types/medusa'
 import type { SearchResultItem } from '@/lib/search/types'
 
@@ -64,6 +65,10 @@ interface ShopCatalogueContentProps {
 
 export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar' }: ShopCatalogueContentProps) {
   const searchParams = useSearchParams()
+  const { cart } = useCart()
+  // The currency the cards render prices in (ProductCard resolves it the same
+  // way), so a price sort follows the amounts the visitor actually sees.
+  const displayCurrency = cart?.currency_code ?? defaultCurrency
 
   // Shop state is kept in the URL (category, page, sort, search) so Back
   // returns to the same view and links such as /shop?category=books open
@@ -116,11 +121,22 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
   }
 
   // Private sessions are sessions, not programmes. The count label must match
-  // the active category (Suzanne feedback, 27 Jul 2026).
+  // the active category (Suzanne feedback, 27 Jul 2026), including its
+  // sub-categories such as ?category=akashic-coaching.
   const activeCategoryHandle = filters.categoryId
     ? initialCategories.find((c) => c.id === filters.categoryId)?.handle
     : undefined
-  const countNoun = activeCategoryHandle === 'private-sessions' ? 'session' : 'programme'
+  const activeRootHandle = (() => {
+    let current = initialCategories.find((c) => c.id === filters.categoryId)
+    const seen = new Set<string>()
+    while (current?.parent_category_id && !seen.has(current.id)) {
+      seen.add(current.id)
+      const parentId: string = current.parent_category_id
+      current = initialCategories.find((c) => c.id === parentId)
+    }
+    return current?.handle
+  })()
+  const countNoun = activeRootHandle === 'private-sessions' ? 'session' : 'programme'
 
   // Write state to the URL without adding history entries or a server round trip.
   useEffect(() => {
@@ -242,10 +258,10 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
   const visibleProducts = useMemo(() => {
     if (isSearching) {
       const matched = orderBySearchHits(products, searchIds ?? [])
-      return sort === 'featured' ? matched : sortProducts(matched, sort, defaultCurrency)
+      return sort === 'featured' ? matched : sortProducts(matched, sort, displayCurrency)
     }
-    return sortProducts(products, sort, defaultCurrency)
-  }, [isSearching, products, searchIds, sort, defaultCurrency])
+    return sortProducts(products, sort, displayCurrency)
+  }, [isSearching, products, searchIds, sort, displayCurrency])
 
   const totalCount = visibleProducts.length
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)

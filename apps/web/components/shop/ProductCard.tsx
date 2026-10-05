@@ -7,6 +7,7 @@ import { useCart } from '@/lib/cart'
 import { getSpotsInfo, isLiveVariantTitle } from '@/lib/inventory/spots'
 import { isCapacityLimitedHandle } from '@/lib/inventory/group-sessions'
 import { getHighlightBadge } from '@/data/shopHighlights'
+import { getDisplayPrice } from './shopCatalogue'
 import type { MedusaProduct, ProductVariant } from '@/types/medusa'
 
 const CATEGORY_IMAGE_MAP: Record<string, string> = {
@@ -123,30 +124,9 @@ function getRootCategory(
   return productCategories[0] ?? null
 }
 
-interface LowestPrice {
-  amount: number
-  currency_code: string
-}
-
-function getLowestPriceForCurrency(variants: ProductVariant[], currency: string): LowestPrice | null {
-  const allPrices = variants.flatMap((v) => v.prices)
-
-  // Try the visitor's currency first; fall back to ZAR.
-  const inCurrency = allPrices.filter((p) => p.currency_code === currency)
-  if (inCurrency.length > 0) {
-    return { amount: Math.min(...inCurrency.map((p) => p.amount)), currency_code: currency }
-  }
-
-  const inZar = allPrices.filter((p) => p.currency_code === 'zar')
-  if (inZar.length > 0) {
-    return { amount: Math.min(...inZar.map((p) => p.amount)), currency_code: 'zar' }
-  }
-
-  return null
-}
-
 function PriceDisplay({ variants, currency }: { variants: ProductVariant[]; currency: string }) {
-  const lowest = getLowestPriceForCurrency(variants, currency)
+  // Same resolution the shop price sort uses (visitor currency, else ZAR).
+  const lowest = getDisplayPrice(variants, currency)
 
   if (!lowest) {
     return <span className="text-2xl font-light text-brand-muted">Contact us</span>
