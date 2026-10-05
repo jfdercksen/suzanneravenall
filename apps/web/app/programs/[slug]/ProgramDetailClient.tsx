@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { PageHeader } from '@/components/shared/PageHeader'
-import { isResonanceRepatterning, type Program } from '@/data/programs'
+import { getProgramCta, isResonanceRepatterning, type Program } from '@/data/programs'
 
 type Props = {
   program: Program
@@ -41,14 +41,6 @@ function formatPriceUsd(program: Program): string | null {
 function formatPriceZar(program: Program): string | null {
   if (program.priceZar == null) return null
   return `R${program.priceZar.toLocaleString('en-US')}`
-}
-
-function getCtaProps(program: Program): { label: string; href: string } {
-  if (program.shopHandle) return { label: 'Add to Cart', href: `/shop/${program.shopHandle}` }
-  if (program.category === 'live' || program.category === 'group') {
-    return { label: 'Book Now', href: '/contact' }
-  }
-  return { label: 'Enquire', href: '/contact' }
 }
 
 // -- motion variants --
@@ -174,7 +166,7 @@ function RelatedProgramCard({ program }: { program: Program }) {
 // -- main component --
 
 export default function ProgramDetailClient({ program, relatedPrograms }: Props) {
-  const cta = getCtaProps(program)
+  const cta = getProgramCta(program)
   const deliveryMethod = getDeliveryMethod(program)
   const categoryLabel = CATEGORY_LABELS[program.category]
   const priceUsd = formatPriceUsd(program)

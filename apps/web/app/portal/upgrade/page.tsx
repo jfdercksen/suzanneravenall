@@ -10,6 +10,7 @@ export const metadata = {
 
 const FROM_LABELS: Record<string, string> = {
   '/resources/media': 'the Media Library',
+  '/resources/articles': 'Articles & Publications',
   '/resources/assessments': 'Assessments',
   '/portal/resources': 'the Resource Library',
   '/portal/videos': 'the Video Library',
