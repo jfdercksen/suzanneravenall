@@ -19,6 +19,9 @@ export const CAL_INLINE_NAMESPACE = 'discovery-inline'
 /** Show the fallback if the booking calendar has not loaded by then. */
 export const CAL_INLINE_TIMEOUT_MS = 8_000
 
+/** Space held for the calendar while it loads; it then grows to its own height. */
+export const CAL_INLINE_MIN_HEIGHT = '600px'
+
 type Status = 'loading' | 'ready' | 'failed'
 
 type CalApi = Awaited<ReturnType<typeof getCalApi>>
@@ -98,7 +101,10 @@ export default function CalInlineBooking() {
           calLink={CAL_LINK}
           embedJsUrl={EMBED_JS_URL}
           config={{ theme: 'light', layout: 'month_view' }}
-          style={{ width: '100%', height: '600px', overflow: 'auto' }}
+          // Site check V10: no fixed height. Cal sizes its iframe to the calendar's own height,
+          // and a 600px box around it made a scroll inside the page scroll. minHeight only
+          // holds the space while the calendar loads.
+          style={{ width: '100%', minHeight: CAL_INLINE_MIN_HEIGHT }}
         />
       </div>
     </>

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import Footer from './Footer'
 
 // Mock next/link as a passthrough <a>
@@ -235,5 +235,15 @@ describe('Footer', () => {
       expect(screen.getByText('ISO 9001 Certified')).toBeInTheDocument()
       expect(screen.getByText('B.Msc. M.Msc. Msc.D.')).toBeInTheDocument()
     })
+  })
+
+  // Site check M10: a way to change cookie consent once given
+  it('has a Cookie settings button that asks the consent banner to reopen', () => {
+    const onOpen = vi.fn()
+    window.addEventListener('sr:cookie-consent-open', onOpen)
+    render(<Footer />)
+    fireEvent.click(screen.getByRole('button', { name: 'Cookie settings' }))
+    expect(onOpen).toHaveBeenCalledTimes(1)
+    window.removeEventListener('sr:cookie-consent-open', onOpen)
   })
 })

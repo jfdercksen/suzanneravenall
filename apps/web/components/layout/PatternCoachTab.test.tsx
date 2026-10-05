@@ -2,7 +2,7 @@ import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import PatternCoachTab, { isTabObstructingContent } from './PatternCoachTab'
+import PatternCoachTab, { isTabObstructingContent, isFormUnderMobilePill } from './PatternCoachTab'
 
 let mockPathname = '/'
 vi.mock('next/navigation', () => ({
@@ -240,6 +240,35 @@ describe('PatternCoachTab', () => {
         expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
       } finally {
         footer.remove()
+      }
+    })
+
+    // Site check V10: the pill sat over the "Send a Message" fields on /contact
+    it('hides the mobile pill while a form sits in the band at the bottom of the screen', async () => {
+      setViewportWidth(375)
+      Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 800 })
+      localStorage.setItem(CONSENT_STORAGE_KEY, 'accepted')
+      const form = document.createElement('form')
+      form.getBoundingClientRect = () => ({ top: 500, bottom: 1200, height: 700 }) as DOMRect
+      document.body.appendChild(form)
+
+      try {
+        await act(async () => {
+          render(<PatternCoachTab />)
+        })
+        expect(isFormUnderMobilePill()).toBe(true)
+        expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
+
+        // Scrolled so the form ends above the pill's band: the pill may come back
+        form.getBoundingClientRect = () => ({ top: 100, bottom: 400, height: 300 }) as DOMRect
+        expect(isFormUnderMobilePill()).toBe(false)
+        await act(async () => {
+          window.dispatchEvent(new Event('scroll'))
+          await new Promise((r) => requestAnimationFrame(() => r(null)))
+        })
+        expect(screen.getByRole('complementary', { name: 'Pattern Coach App' })).toBeInTheDocument()
+      } finally {
+        form.remove()
       }
     })
 
