@@ -62,17 +62,40 @@ function scrollToY(y: number) {
   window.scrollTo({ top: y, left: 0, behavior: 'instant' as ScrollBehavior })
 }
 
+// Back/forward and reload restore the visitor's own scroll position, so the
+// hash must not override it. A popstate marks the next route change as a
+// history traversal; the first mount checks how the document was loaded.
+let historyTraversal = false
+if (typeof window !== 'undefined') {
+  window.addEventListener('popstate', () => {
+    historyTraversal = true
+  })
+}
+
+function loadedFromHistoryOrReload(): boolean {
+  const nav = performance.getEntriesByType?.('navigation')?.[0] as PerformanceNavigationTiming | undefined
+  return nav?.type === 'back_forward' || nav?.type === 'reload'
+}
+
+let firstRun = true
+
 export default function HashScroll() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const search = searchParams?.toString() ?? ''
 
   useEffect(() => {
+    const traversal = historyTraversal || (firstRun && loadedFromHistoryOrReload())
+    historyTraversal = false
+    firstRun = false
+    if (traversal) return
+
     const hash = window.location.hash
     if (!hash || hash === '#') return
 
     const startedAt = Date.now()
     let scrolledAt = 0
+    let lastY: number | null = null
     let cancelled = false
     let timer: ReturnType<typeof setTimeout> | undefined
 
@@ -92,8 +115,12 @@ export default function HashScroll() {
         if (now - startedAt < HASH_WAIT_MS) timer = setTimeout(tick, POLL_MS)
         return
       }
+      // A scrollbar drag fires no wheel/touch/key event: if the page moved away
+      // from where we put it, the visitor has taken over.
+      if (lastY !== null && Math.abs(window.scrollY - lastY) > 4) return stop()
       const y = hashScrollTarget(el)
       if (Math.abs(window.scrollY - y) > 2) scrollToY(y)
+      lastY = window.scrollY
       if (!scrolledAt) scrolledAt = now
       if (now - scrolledAt < HASH_SETTLE_MS) timer = setTimeout(tick, POLL_MS)
     }

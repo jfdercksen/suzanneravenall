@@ -144,4 +144,17 @@ describe('HashScroll', () => {
     inner.style.transform = 'translateY(20px)'
     expect(layoutTop(inner)).toBe(340)
   })
+
+  it('leaves the restored position alone on back/forward (popstate)', async () => {
+    addHeader(80)
+    addTarget('live', 4800)
+    window.history.replaceState(null, '', '/programs#live')
+    mockPathname = '/programs'
+    window.dispatchEvent(new PopStateEvent('popstate'))
+    render(<HashScroll />)
+    await act(async () => {
+      vi.advanceTimersByTime(500)
+    })
+    expect(scrollTo).not.toHaveBeenCalled()
+  })
 })

@@ -84,8 +84,6 @@
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
-    /* Anchor jumps land below the sticky header (h-16 / lg:h-20) rather than under it. */
-    scroll-padding-top: 6rem;
   }
 
   body {
