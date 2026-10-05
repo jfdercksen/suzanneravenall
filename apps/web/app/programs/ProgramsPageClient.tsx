@@ -243,7 +243,7 @@ export default function ProgramsPageClient() {
         ref={(el) => {
           sectionRefs.current['practitioner'] = el
         }}
-        className="w-full bg-brand-cream py-20 lg:py-32 scroll-mt-48 lg:scroll-mt-44"
+        className="w-full bg-brand-cream py-20 lg:py-32 scroll-mt-48"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -397,7 +397,7 @@ export default function ProgramsPageClient() {
         ref={(el) => {
           sectionRefs.current['self-paced'] = el
         }}
-        className="w-full bg-brand-sand py-20 lg:py-32 scroll-mt-48 lg:scroll-mt-44"
+        className="w-full bg-brand-sand py-20 lg:py-32 scroll-mt-48"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -437,7 +437,7 @@ export default function ProgramsPageClient() {
         ref={(el) => {
           sectionRefs.current['live'] = el
         }}
-        className="w-full bg-brand-cream py-20 lg:py-32 scroll-mt-48 lg:scroll-mt-44"
+        className="w-full bg-brand-cream py-20 lg:py-32 scroll-mt-48"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -513,7 +513,7 @@ export default function ProgramsPageClient() {
         ref={(el) => {
           sectionRefs.current['group'] = el
         }}
-        className="w-full bg-brand-sand py-20 lg:py-32 scroll-mt-48 lg:scroll-mt-44"
+        className="w-full bg-brand-sand py-20 lg:py-32 scroll-mt-48"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div

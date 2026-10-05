@@ -95,7 +95,6 @@ export default function HashScroll() {
 
     const startedAt = Date.now()
     let scrolledAt = 0
-    let lastY: number | null = null
     let cancelled = false
     let timer: ReturnType<typeof setTimeout> | undefined
 
@@ -115,12 +114,8 @@ export default function HashScroll() {
         if (now - startedAt < HASH_WAIT_MS) timer = setTimeout(tick, POLL_MS)
         return
       }
-      // A scrollbar drag fires no wheel/touch/key event: if the page moved away
-      // from where we put it, the visitor has taken over.
-      if (lastY !== null && Math.abs(window.scrollY - lastY) > 4) return stop()
       const y = hashScrollTarget(el)
       if (Math.abs(window.scrollY - y) > 2) scrollToY(y)
-      lastY = window.scrollY
       if (!scrolledAt) scrolledAt = now
       if (now - scrolledAt < HASH_SETTLE_MS) timer = setTimeout(tick, POLL_MS)
     }
