@@ -4,15 +4,48 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { CheckCircle, Mail, Calendar, ArrowRight } from 'lucide-react'
+import { CheckCircle, Mail, Calendar, ArrowRight, Clock, Loader2, ShoppingBag } from 'lucide-react'
 import { useCart } from '@/lib/cart'
+
+// confirmed: Medusa says the cart is now an order (or PayPal captured it).
+// pending:   a real cart, but no order yet (PayFast ITN still on its way, or
+//            the payment did not go through). The cart is left alone.
+// none:      nothing in the URL that identifies an order.
+type OrderState = 'checking' | 'confirmed' | 'pending' | 'none'
+type SettledState = Exclude<OrderState, 'checking'>
+
+const POLL_INTERVAL_MS = 2000
+
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+// Asks /api/checkout/status whether the cart has become an order, retrying
+// while it is still pending (the PayFast ITN can land after the buyer returns).
+async function checkOrderStatus(cartId: string, attempts: number): Promise<SettledState> {
+  for (let i = 0; i < attempts; i++) {
+    if (i > 0) await wait(POLL_INTERVAL_MS)
+    try {
+      const res = await fetch(`/api/checkout/status?cartId=${encodeURIComponent(cartId)}`, {
+        cache: 'no-store',
+      })
+      if (res.status === 404) return 'none'
+      if (res.ok) {
+        const data = (await res.json()) as { status?: string }
+        if (data.status === 'completed') return 'confirmed'
+      }
+    } catch {
+      // Network blip: try again on the next round.
+    }
+  }
+  return 'pending'
+}
 
 export default function ConfirmationContent() {
   const { clearCart } = useCart()
   const searchParams = useSearchParams()
   const [medusaOrderId, setMedusaOrderId] = useState<string | null>(null)
+  const [orderState, setOrderState] = useState<OrderState>('checking')
 
-  // PayFast return params
+  // PayFast return params: gateway=payfast&m_payment_id=<cartId> (set in our return_url)
   const paymentId = searchParams.get('pf_payment_id') ?? null
   const payFastCartId = searchParams.get('m_payment_id') ?? null
 
@@ -20,13 +53,14 @@ export default function ConfirmationContent() {
   const gateway = searchParams.get('gateway') ?? null
   const isPayPal = gateway === 'paypal'
   const payPalOrderId = searchParams.get('token') ?? null
-  const payPalCartId = searchParams.get('cartId') ?? null
+  const payPalCartId = isPayPal ? (searchParams.get('cartId') ?? null) : null
 
-  // Free (voucher) orders arrive already completed: free=1&order=<display id>
+  // Free (voucher) orders arrive already completed: free=1&order=<display id>&cartId=<id>
   const isFreeOrder = searchParams.get('free') === '1'
   const freeOrderNumber = searchParams.get('order') ?? null
+  const freeCartId = isFreeOrder ? (searchParams.get('cartId') ?? null) : null
 
-  const cartId = isPayPal ? payPalCartId : payFastCartId
+  const cartId = isPayPal ? payPalCartId : isFreeOrder ? freeCartId : payFastCartId
 
   // Guard against React Strict Mode double-invocation and page refreshes
   const finalisedRef = useRef(false)
@@ -36,9 +70,12 @@ export default function ConfirmationContent() {
     finalisedRef.current = true
 
     async function finalise() {
-      if (isFreeOrder) {
-        // Completed server-side by /api/checkout/free before the redirect here.
-        // The order number in the URL is display only; nothing here trusts it.
+      let state: SettledState = 'none'
+
+      if (isFreeOrder && freeCartId) {
+        // Completed server-side by /api/checkout/free before the redirect here;
+        // confirm it with Medusa rather than trust the order number in the URL.
+        state = await checkOrderStatus(freeCartId, 2)
       } else if (isPayPal && payPalOrderId && payPalCartId) {
         try {
           const res = await fetch('/api/checkout/paypal/capture', {
@@ -47,13 +84,20 @@ export default function ConfirmationContent() {
             body: JSON.stringify({ orderId: payPalOrderId, cartId: payPalCartId }),
           })
           if (res.ok) {
+            // The capture route only answers 200 once PayPal has captured the
+            // payment for this cart.
             const data = (await res.json()) as { medusaOrderId?: string | null }
             if (data.medusaOrderId) {
               setMedusaOrderId(data.medusaOrderId)
             }
+            state = 'confirmed'
           }
         } catch {
-          // Capture fails gracefully: payment was already received by PayPal
+          // Fall through to the status check below
+        }
+        if (state !== 'confirmed') {
+          // Captured on an earlier visit (refresh) or completed by the PayPal webhook.
+          state = await checkOrderStatus(payPalCartId, 2)
         }
       } else if (payFastCartId) {
         try {
@@ -69,13 +113,23 @@ export default function ConfirmationContent() {
             }
           }
         } catch {
-          // Cart completion fails gracefully: payment was already received by PayFast
+          // The PayFast ITN completes the cart server-side; the status check decides.
         }
+        state = await checkOrderStatus(payFastCartId, 6)
       }
-      clearCart()
+
+      setOrderState(state)
+      // Only a confirmed order empties the cart, and only the cart it was for.
+      if (state === 'confirmed' && cartId) {
+        clearCart(cartId)
+      }
     }
     void finalise()
-  }, [isFreeOrder, isPayPal, payPalOrderId, payPalCartId, payFastCartId, clearCart])
+  }, [isFreeOrder, freeCartId, isPayPal, payPalOrderId, payPalCartId, payFastCartId, cartId, clearCart])
+
+  if (orderState !== 'confirmed') {
+    return <OrderStatusMessage state={orderState} />
+  }
 
   return (
     <div className="min-h-screen bg-brand-cream">
@@ -197,6 +251,65 @@ export default function ConfirmationContent() {
               Contact Dr. Ravenall
             </Link>
           </motion.div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+function OrderStatusMessage({ state }: { state: Exclude<OrderState, 'confirmed'> }) {
+  const content = {
+    checking: {
+      Icon: Loader2,
+      eyebrow: 'One Moment',
+      heading: 'Confirming your order',
+      body: 'We are checking your order with our payment system. This usually takes a few seconds.',
+    },
+    pending: {
+      Icon: Clock,
+      eyebrow: 'Not Confirmed Yet',
+      heading: 'We are still waiting for your payment',
+      body: 'We have not received confirmation of this payment yet. If you completed the payment, your confirmation email will arrive shortly. If not, your cart is still saved and you can try again.',
+    },
+    none: {
+      Icon: ShoppingBag,
+      eyebrow: 'No Order Found',
+      heading: 'There is no order to show',
+      body: 'We could not find an order for this page. If you have just paid, please check your email for your confirmation.',
+    },
+  }[state]
+  const { Icon } = content
+
+  return (
+    <div className="min-h-screen bg-brand-cream">
+      <section className="w-full bg-brand-sand border-b border-brand-border py-20 lg:py-28">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center" role="status">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-brand-accent/10 mb-6">
+            <Icon className={`w-10 h-10 text-brand-accent${state === 'checking' ? ' animate-spin' : ''}`} />
+          </div>
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            {content.eyebrow}
+          </p>
+          <h1 className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary mb-4">
+            {content.heading}
+          </h1>
+          <p className="text-brand-muted text-lg max-w-md mx-auto">{content.body}</p>
+          {state !== 'checking' && (
+            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/cart"
+                className="inline-block text-center py-4 px-8 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300"
+              >
+                View Your Cart
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-block text-center py-4 px-8 rounded-button text-base font-medium border-2 border-brand-primary-300 text-brand-ink hover:border-brand-accent hover:text-brand-accent transition-all duration-300"
+              >
+                Contact Us
+              </Link>
+            </div>
+          )}
         </div>
       </section>
     </div>
