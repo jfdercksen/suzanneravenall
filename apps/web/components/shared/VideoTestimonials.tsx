@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 const videos = [
   { id: '8Yw_n8NribA', name: 'Transformation Highlights' },
   { id: 'wPTh5Z8iwwU', name: 'Matheo' },
-  { id: 'E4x3YETXHSA', name: 'International Client' },
   { id: 'iHe9dZq1YdY', name: 'Amelia' },
   { id: 'nLrXITVsXz8', name: 'Jayne' },
   { id: 'Gz3NUPWdxAI', name: 'Ivana' },
@@ -135,7 +134,7 @@ export default function VideoTestimonials({ showViewAllLink = true, tone = 'crea
         <motion.div
           role="radiogroup"
           aria-label="Video testimonials"
-          className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:grid lg:grid-cols-6 lg:gap-4"
+          className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:grid lg:grid-cols-5 lg:gap-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
