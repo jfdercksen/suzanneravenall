@@ -38,10 +38,11 @@ export default function TopicRecognition({ topic }: { topic: Topic }) {
               {...fadeUp(0.15 + index * 0.05)}
               className="flex items-start gap-4"
             >
-              <span
-                aria-hidden="true"
-                className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent"
-              />
+              {/* Holder is one text line tall (text-lg x leading-relaxed), so the
+                  dot centres on the first line instead of sitting above it */}
+              <span aria-hidden="true" className="flex h-[1.625em] shrink-0 items-center text-lg">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-accent" />
+              </span>
               <span className="text-lg text-brand-muted font-light leading-relaxed">
                 {item}
               </span>

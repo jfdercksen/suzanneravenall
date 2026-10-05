@@ -21,7 +21,9 @@ function buildPlainText({ firstName, quizTitle, link }: QuizInviteEmailData): st
   return [
     `${firstName}, your diagnostic is ready`,
     '',
-    `You're about to take the ${quizTitle} diagnostic - a short, focused assessment that reveals the pattern quietly shaping this part of your life, and what to do about it.`,
+    `Your diagnostic: ${quizTitle}`,
+    '',
+    'This short, focused assessment reveals the pattern quietly shaping this part of your life, and what to do about it.',
     '',
     `Start the diagnostic: ${link}`,
     '',

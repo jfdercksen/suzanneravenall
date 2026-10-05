@@ -11,7 +11,7 @@ export async function sendQuizReportEmail(data: QuizReportEmailData): Promise<st
   return sendEmail({
     to: [data.email],
     replyTo: REPLY_TO,
-    subject: `Your ${data.quizTitle} report: ${data.resultTitle}`,
+    subject: `Your diagnostic report: ${data.resultTitle}`,
     react: createElement(QuizReport, data),
     text: buildPlainText(data),
   })

@@ -22,7 +22,7 @@ export default function QuizInvite({ firstName, quizTitle, link }: QuizInviteEma
   return (
     <Html lang="en">
       <Head />
-      <Preview>{`Your ${quizTitle} diagnostic is ready, ${firstName}`}</Preview>
+      <Preview>{`${firstName}, your diagnostic is ready: ${quizTitle}`}</Preview>
       <Body style={{ backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif', margin: 0, padding: 0 }}>
         <Container style={{ maxWidth: '600px', margin: '0 auto' }}>
 
@@ -42,9 +42,18 @@ export default function QuizInvite({ firstName, quizTitle, link }: QuizInviteEma
             >
               {firstName}, your diagnostic is ready
             </Heading>
+            {/* The quiz title is a question, so it stands on its own line rather
+                than inside a sentence (client QA 5 Oct). */}
+            <Section style={{ borderLeft: `3px solid ${BLUE}`, padding: '4px 0 4px 16px', margin: '0 0 24px' }}>
+              <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', letterSpacing: '2px', textTransform: 'uppercase', margin: '0 0 6px' }}>
+                Your diagnostic
+              </Text>
+              <Text style={{ color: NAVY, fontSize: '20px', fontWeight: '700', lineHeight: '1.4', margin: 0 }}>
+                {quizTitle}
+              </Text>
+            </Section>
             <Text style={{ color: '#334155', fontSize: '16px', lineHeight: '1.7', margin: '0 0 24px' }}>
-              You&apos;re about to take the <strong>{quizTitle}</strong> diagnostic — a
-              short, focused assessment that reveals the pattern quietly shaping this
+              This short, focused assessment reveals the pattern quietly shaping this
               part of your life, and what to do about it.
             </Text>
 
@@ -67,7 +76,7 @@ export default function QuizInvite({ firstName, quizTitle, link }: QuizInviteEma
             </Section>
 
             <Text style={{ color: MEDIUM_GRAY, fontSize: '13px', lineHeight: '1.6', margin: '0 0 24px' }}>
-              Takes about 2 minutes. Your result — and what it means — is shown to you
+              Takes about 2 minutes. Your result, and what it means, is shown to you
               immediately after your last answer.
             </Text>
 
