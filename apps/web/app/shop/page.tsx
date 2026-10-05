@@ -41,10 +41,22 @@ async function fetchCategories(): Promise<MedusaCategory[]> {
   }
 }
 
-export default async function ShopPage() {
-  const [categories, reqHeaders] = await Promise.all([fetchCategories(), headers()])
+interface ShopPageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}
+
+export default async function ShopPage({ searchParams }: ShopPageProps) {
+  const [categories, reqHeaders, params] = await Promise.all([fetchCategories(), headers(), searchParams])
   const country = reqHeaders.get('CF-IPCountry') ?? ''
   const defaultCurrency = country === 'ZA' ? 'zar' : 'usd'
 
-  return <ShopCatalogueContent initialCategories={categories} defaultCurrency={defaultCurrency} />
+  // The catalogue reads its state from the URL on mount; keying on the query
+  // remounts it when a link opens /shop with different params.
+  const queryKey = new URLSearchParams(
+    Object.entries(params).flatMap(([k, v]) =>
+      v === undefined ? [] : (Array.isArray(v) ? v : [v]).map((item): [string, string] => [k, item])
+    )
+  ).toString()
+
+  return <ShopCatalogueContent key={queryKey} initialCategories={categories} defaultCurrency={defaultCurrency} />
 }

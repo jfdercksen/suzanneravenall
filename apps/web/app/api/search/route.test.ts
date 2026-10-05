@@ -296,3 +296,77 @@ describe('GET /api/search — MeiliSearch error returns 503', () => {
     expect(res.status).toBe(503)
   })
 })
+
+describe('GET /api/search - index=all shares the limit between indexes', () => {
+  beforeEach(() => {
+    vi.resetModules()
+    vi.stubEnv('MEILISEARCH_ADMIN_KEY', 'test-key')
+    vi.stubEnv('MEILISEARCH_HOST', 'http://meilisearch:7700')
+  })
+
+  afterEach(() => {
+    vi.unstubAllEnvs()
+    vi.unstubAllGlobals()
+  })
+
+  const products = (n: number) =>
+    Array.from({ length: n }, (_, i) => ({ ...productHit, id: `prod-${i}`, handle: `p-${i}` }))
+  const topics = (n: number) =>
+    Array.from({ length: n }, (_, i) => ({ ...topicHit, id: `topic-${i}` }))
+
+  function mockIndexes(productHits: unknown[], topicHits: unknown[]) {
+    const mockFetch = vi.fn().mockImplementation(async (url: string, init: RequestInit) => {
+      const { limit } = JSON.parse(init.body as string) as { limit: number }
+      const hits = url.includes('/indexes/products/') ? productHits : topicHits
+      return { ok: true, json: async () => makeMeiliResponse(hits.slice(0, limit)) }
+    })
+    vi.stubGlobal('fetch', mockFetch)
+    return mockFetch
+  }
+
+  it('fills the whole limit with products when no topics match', async () => {
+    mockIndexes(products(30), [])
+    const { GET } = await import('./route')
+    const res = await GET(makeRequest({ q: 'session', index: 'all', limit: '20' }))
+    const body = await res.json()
+    expect(body.results).toHaveLength(20)
+    expect(body.results.every((r: { type: string }) => r.type === 'products')).toBe(true)
+  })
+
+  it('splits the limit evenly when both indexes have plenty of matches', async () => {
+    mockIndexes(products(30), topics(30))
+    const { GET } = await import('./route')
+    const res = await GET(makeRequest({ q: 'clarity', index: 'all', limit: '10' }))
+    const body = await res.json()
+    expect(body.results).toHaveLength(10)
+    expect(body.results.filter((r: { type: string }) => r.type === 'products')).toHaveLength(5)
+    expect(body.results.filter((r: { type: string }) => r.type === 'explore_topics')).toHaveLength(5)
+  })
+
+  it('gives unused product slots to topics', async () => {
+    mockIndexes(products(2), topics(30))
+    const { GET } = await import('./route')
+    const res = await GET(makeRequest({ q: 'purpose', index: 'all', limit: '10' }))
+    const body = await res.json()
+    expect(body.results).toHaveLength(10)
+    expect(body.results.filter((r: { type: string }) => r.type === 'explore_topics')).toHaveLength(8)
+  })
+
+  it('allows up to 100 results for a single index', async () => {
+    const mockFetch = mockIndexes(products(150), [])
+    const { GET } = await import('./route')
+    const res = await GET(makeRequest({ q: 'a', index: 'products', limit: '500' }))
+    const body = await res.json()
+    expect(body.results).toHaveLength(100)
+    const init = (mockFetch.mock.calls[0] as [string, RequestInit])[1]
+    expect(JSON.parse(init.body as string).limit).toBe(100)
+  })
+
+  it('strips markup other than <mark> from product subtitles', async () => {
+    mockIndexes([{ ...productHit, collection_title: 'Deep <img src=x onerror=alert(1)>Dive' }], [])
+    const { GET } = await import('./route')
+    const res = await GET(makeRequest({ q: 'clarity', index: 'products' }))
+    const body = await res.json()
+    expect(body.results[0].subtitle).toBe('Deep Dive')
+  })
+})

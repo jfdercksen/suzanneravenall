@@ -318,4 +318,30 @@ describe('SearchBar — results display', () => {
       { timeout: 2000 }
     )
   })
+
+  it('renders <mark> highlights in the subtitle instead of showing the raw tags', async () => {
+    const results = makeResults([
+      {
+        type: 'explore_topics',
+        title: 'Finding Purpose',
+        subtitle: 'Discover your <mark>purpose</mark> today',
+        price_zar: null,
+      },
+    ])
+    vi.stubGlobal('fetch', mockFetchWith(results))
+
+    const user = userEvent.setup()
+    render(<SearchBar />)
+    await user.click(screen.getByRole('button', { name: /open search/i }))
+    await user.type(screen.getByPlaceholderText(/search programmes/i), 'purpose')
+
+    await waitFor(
+      () => {
+        const mark = screen.getByText('purpose', { selector: 'mark' })
+        expect(mark.parentElement?.textContent).toBe('Discover your purpose today')
+      },
+      { timeout: 2000 }
+    )
+    expect(screen.queryByText(/<mark>/)).not.toBeInTheDocument()
+  })
 })

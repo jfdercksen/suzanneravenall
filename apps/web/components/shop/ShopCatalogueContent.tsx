@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Search, X } from 'lucide-react'
 import { CategoryFilterBar } from './CategoryFilterBar'
@@ -9,9 +10,15 @@ import { ProductGridSkeleton } from './ProductGridSkeleton'
 import { ShopHeroBanner } from './ShopHeroBanner'
 import { ShopPagination } from './ShopPagination'
 import { ShopFinalCTA } from './ShopFinalCTA'
-import { getHighlightBadge } from '@/data/shopHighlights'
+import {
+  orderBySearchHits,
+  parseShopParams,
+  shopStateToQuery,
+  sortProducts,
+  type SortOption,
+} from './shopCatalogue'
 import type { MedusaProduct } from '@/types/medusa'
-import type { ProductSearchHit } from '@/lib/search/types'
+import type { SearchResultItem } from '@/lib/search/types'
 
 interface MedusaCategory {
   id: string
@@ -25,8 +32,6 @@ interface ProductsResponse {
   count: number
 }
 
-type SortOption = 'featured' | 'price_asc' | 'price_desc'
-
 interface FilterState {
   categoryId: string
   collectionHandle: string
@@ -35,31 +40,14 @@ interface FilterState {
 const MEDUSA_URL = process.env.NEXT_PUBLIC_MEDUSA_URL ?? ''
 const MEDUSA_PUB_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? ''
 const PAGE_SIZE = 12
+// The catalogue is small (about 100 products), so the whole filtered list is
+// loaded and then sorted and paged in the browser. Medusa's store API cannot
+// order by price, and sorting one page at a time gave the wrong order.
+const FETCH_BATCH = 100
+// Upper bound the search API allows for a single index.
+const SEARCH_LIMIT = 100
 
 const medusaHeaders = { 'x-publishable-api-key': MEDUSA_PUB_KEY }
-
-function getLowestPriceForSort(product: MedusaProduct, currency: string): number {
-  const allPrices = product.variants.flatMap((v) => v.prices)
-  const inCurrency = allPrices.filter((p) => p.currency_code === currency).map((p) => p.amount)
-  if (inCurrency.length > 0) return Math.min(...inCurrency)
-  const inZar = allPrices.filter((p) => p.currency_code === 'zar').map((p) => p.amount)
-  return inZar.length > 0 ? Math.min(...inZar) : Infinity
-}
-
-function sortProducts(products: MedusaProduct[], sort: SortOption, currency: string): MedusaProduct[] {
-  if (sort === 'price_asc') {
-    return [...products].sort((a, b) => getLowestPriceForSort(a, currency) - getLowestPriceForSort(b, currency))
-  }
-  if (sort === 'price_desc') {
-    return [...products].sort((a, b) => getLowestPriceForSort(b, currency) - getLowestPriceForSort(a, currency))
-  }
-  // Featured (default): highlighted products first, otherwise preserve the
-  // store's own order (Array.prototype.sort is stable). No-op when nothing
-  // is flagged — see data/shopHighlights.ts.
-  return [...products].sort(
-    (a, b) => (getHighlightBadge(a) === null ? 1 : 0) - (getHighlightBadge(b) === null ? 1 : 0)
-  )
-}
 
 function getCategoryAndDescendantIds(
   categoryId: string,
@@ -69,55 +57,85 @@ function getCategoryAndDescendantIds(
   return [categoryId, ...children.flatMap((c) => getCategoryAndDescendantIds(c.id, allCategories))]
 }
 
-function searchHitToProduct(hit: ProductSearchHit): MedusaProduct {
-  return {
-    id: hit.id,
-    handle: hit.handle,
-    title: hit.title,
-    description: hit.description,
-    thumbnail: hit.thumbnail,
-    variants:
-      hit.price_zar !== null
-        ? [{ id: `${hit.id}-default`, title: 'Default', prices: [{ currency_code: 'zar', amount: hit.price_zar }] }]
-        : [],
-    categories: [],
-    collection: hit.collection_handle
-      ? { id: '', handle: hit.collection_handle, title: hit.collection_title ?? '' }
-      : null,
-  }
-}
-
 interface ShopCatalogueContentProps {
   initialCategories: MedusaCategory[]
   defaultCurrency?: string
 }
 
 export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar' }: ShopCatalogueContentProps) {
+  const searchParams = useSearchParams()
+
+  // Shop state is kept in the URL (category, page, sort, search) so Back
+  // returns to the same view and links such as /shop?category=books open
+  // filtered. The URL is read once on mount; app/shop/page.tsx keys this
+  // component on the query string so a navigation to new params remounts it.
+  const [initial] = useState(() => {
+    const parsed = parseShopParams(searchParams ?? new URLSearchParams())
+    const category = parsed.categoryHandle
+      ? initialCategories.find((c) => c.handle === parsed.categoryHandle)
+      : undefined
+    return {
+      filters: { categoryId: category?.id ?? '', collectionHandle: parsed.collectionHandle },
+      page: parsed.page,
+      sort: parsed.sort,
+      q: parsed.q,
+    }
+  })
   const [products, setProducts] = useState<MedusaProduct[]>([])
-  const [totalCount, setTotalCount] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const [page, setPage] = useState(0)
-  const [sort, setSort] = useState<SortOption>('featured')
-  const [filters, setFilters] = useState<FilterState>({ categoryId: '', collectionHandle: '' })
+  const [page, setPage] = useState(initial.page)
+  const [sort, setSort] = useState<SortOption>(initial.sort)
+  const [filters, setFilters] = useState<FilterState>(initial.filters)
   const [collectionIdMap, setCollectionIdMap] = useState<Record<string, string>>({})
+  const [collectionsLoaded, setCollectionsLoaded] = useState(false)
 
   const handleFiltersChange = (newFilters: FilterState) => {
     setFilters(newFilters)
     setPage(0)
   }
 
-  const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<MedusaProduct[] | null>(null)
-  const [searchLoading, setSearchLoading] = useState(false)
-  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const handleSortChange = (newSort: SortOption) => {
+    setSort(newSort)
+    setPage(0)
+  }
 
-  // Private sessions are sessions, not programmes — the count label must match
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+    document.getElementById('programmes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const [searchQuery, setSearchQuery] = useState(initial.q)
+  // Product ids matched by the search, in relevance order. null = not searching.
+  const [searchIds, setSearchIds] = useState<string[] | null>(null)
+  const [searchLoading, setSearchLoading] = useState(false)
+
+  const handleSearchChange = (q: string) => {
+    setSearchQuery(q)
+    setPage(0)
+  }
+
+  // Private sessions are sessions, not programmes. The count label must match
   // the active category (Suzanne feedback, 27 Jul 2026).
   const activeCategoryHandle = filters.categoryId
     ? initialCategories.find((c) => c.id === filters.categoryId)?.handle
     : undefined
   const countNoun = activeCategoryHandle === 'private-sessions' ? 'session' : 'programme'
+
+  // Write state to the URL without adding history entries or a server round trip.
+  useEffect(() => {
+    const query = shopStateToQuery({
+      categoryHandle: activeCategoryHandle ?? '',
+      collectionHandle: filters.collectionHandle,
+      page,
+      sort,
+      q: searchQuery,
+    })
+    const current = window.location.search.replace(/^\?/, '')
+    if (current !== query) {
+      window.history.replaceState(null, '',`${window.location.pathname}${query ? `?${query}` : ''}`)
+    }
+  }, [activeCategoryHandle, filters.collectionHandle, page, sort, searchQuery])
 
   useEffect(() => {
     fetch(`${MEDUSA_URL}/store/collections?limit=20`, { headers: medusaHeaders })
@@ -128,79 +146,112 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
         setCollectionIdMap(map)
       })
       .catch(() => {})
+      .finally(() => setCollectionsLoaded(true))
   }, [])
 
+  const fetchSeq = useRef(0)
   const fetchProducts = useCallback(async () => {
+    // A collection filter needs the collection id; wait for the map.
+    if (filters.collectionHandle && !collectionsLoaded) return
+
+    const seq = ++fetchSeq.current
     setLoading(true)
     setError(false)
 
     try {
-      const params = new URLSearchParams({
-        limit: String(PAGE_SIZE),
-        offset: String(page * PAGE_SIZE),
+      const baseParams = new URLSearchParams({
+        limit: String(FETCH_BATCH),
         fields:
           'id,handle,title,description,thumbnail,metadata,*variants,*variants.prices,+variants.inventory_quantity,*categories,*collection',
       })
 
       if (filters.categoryId) {
         const ids = getCategoryAndDescendantIds(filters.categoryId, initialCategories)
-        ids.forEach((id) => params.append('category_id[]', id))
+        ids.forEach((id) => baseParams.append('category_id[]', id))
       }
 
       const collectionId = filters.collectionHandle ? collectionIdMap[filters.collectionHandle] : undefined
       if (collectionId) {
-        params.append('collection_id[]', collectionId)
+        baseParams.append('collection_id[]', collectionId)
       }
 
-      const res = await fetch(`${MEDUSA_URL}/store/products?${params.toString()}`, {
-        headers: medusaHeaders,
-      })
+      const all: MedusaProduct[] = []
+      let total = Infinity
+      while (all.length < total) {
+        const params = new URLSearchParams(baseParams)
+        params.set('offset', String(all.length))
+        const res = await fetch(`${MEDUSA_URL}/store/products?${params.toString()}`, {
+          headers: medusaHeaders,
+        })
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
-      const data = (await res.json()) as ProductsResponse
-      setProducts(data.products)
-      setTotalCount(data.count)
+        const data = (await res.json()) as ProductsResponse
+        all.push(...data.products)
+        total = data.count
+        if (data.products.length === 0) break
+      }
+
+      if (seq !== fetchSeq.current) return
+      setProducts(all)
     } catch {
-      setError(true)
+      if (seq === fetchSeq.current) setError(true)
     } finally {
-      setLoading(false)
+      if (seq === fetchSeq.current) setLoading(false)
     }
-  }, [page, filters, collectionIdMap, initialCategories])
+  }, [filters, collectionIdMap, collectionsLoaded, initialCategories])
 
   useEffect(() => {
     void fetchProducts()
   }, [fetchProducts])
 
   useEffect(() => {
-    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current)
-
-    if (!searchQuery.trim()) {
-      setSearchResults(null)
+    const q = searchQuery.trim()
+    if (!q) {
+      setSearchIds(null)
+      setSearchLoading(false)
       return
     }
 
-    searchDebounceRef.current = setTimeout(() => {
-      setSearchLoading(true)
-      fetch(`/api/search?q=${encodeURIComponent(searchQuery)}&index=products&limit=24`)
+    let cancelled = false
+    setSearchLoading(true)
+    const timer = setTimeout(() => {
+      fetch(`/api/search?q=${encodeURIComponent(q)}&index=products&limit=${SEARCH_LIMIT}`)
         .then((r) => (r.ok ? r.json() : { results: [] }))
-        .then((data: { results?: ProductSearchHit[] }) => {
-          setSearchResults((data.results ?? []).map(searchHitToProduct))
-          setSearchLoading(false)
+        .then((data: { results?: SearchResultItem[] }) => {
+          if (!cancelled) setSearchIds((data.results ?? []).map((r) => r.id))
         })
-        .catch(() => setSearchLoading(false))
+        .catch(() => {
+          if (!cancelled) setSearchIds([])
+        })
+        .finally(() => {
+          if (!cancelled) setSearchLoading(false)
+        })
     }, 300)
 
     return () => {
-      if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current)
+      cancelled = true
+      clearTimeout(timer)
     }
   }, [searchQuery])
 
+  const isSearching = searchQuery.trim() !== ''
+
+  // Search results are limited to the products in the active filter, and keep
+  // relevance order unless a price sort is chosen.
+  const visibleProducts = useMemo(() => {
+    if (isSearching) {
+      const matched = orderBySearchHits(products, searchIds ?? [])
+      return sort === 'featured' ? matched : sortProducts(matched, sort, defaultCurrency)
+    }
+    return sortProducts(products, sort, defaultCurrency)
+  }, [isSearching, products, searchIds, sort, defaultCurrency])
+
+  const totalCount = visibleProducts.length
   const totalPages = Math.ceil(totalCount / PAGE_SIZE)
-  const sortedProducts = useMemo(
-    () => sortProducts(products, sort, defaultCurrency),
-    [products, sort, defaultCurrency],
-  )
+  const currentPage = Math.min(page, Math.max(totalPages - 1, 0))
+  const pageProducts = visibleProducts.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE)
+  const busy = loading || (isSearching && (searchLoading || searchIds === null))
 
   return (
     <main className="min-h-screen">
@@ -224,12 +275,12 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
               type="text"
               placeholder="Search programmes…"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="w-full bg-brand-cream border border-brand-border text-brand-ink text-sm rounded-lg pl-9 pr-8 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200 placeholder-brand-muted"
             />
             {searchQuery && (
               <button
-                onClick={() => setSearchQuery('')}
+                onClick={() => handleSearchChange('')}
                 className="absolute right-2 top-1/2 -translate-y-1/2 text-brand-muted hover:text-brand-ink transition-colors"
                 aria-label="Clear search"
               >
@@ -240,92 +291,71 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
 
           <div className="flex items-center gap-3">
             <p className="text-sm text-brand-muted whitespace-nowrap">
-              {searchLoading
+              {isSearching && searchLoading
                 ? 'Searching…'
-                : searchResults !== null
-                ? `${searchResults.length} result${searchResults.length !== 1 ? 's' : ''}`
-                : loading
+                : busy
                 ? 'Loading…'
+                : isSearching
+                ? `${totalCount} result${totalCount !== 1 ? 's' : ''}`
                 : `${totalCount} ${countNoun}${totalCount !== 1 ? 's' : ''}`}
             </p>
-            {searchResults === null && (
-              <select
-                value={sort}
-                onChange={(e) => setSort(e.target.value as SortOption)}
-                className="bg-brand-cream border border-brand-border text-brand-ink text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200"
-              >
-                <option value="featured">Featured</option>
-                <option value="price_asc">Price: Low to High</option>
-                <option value="price_desc">Price: High to Low</option>
-              </select>
-            )}
+            <select
+              value={sort}
+              onChange={(e) => handleSortChange(e.target.value as SortOption)}
+              aria-label="Sort programmes"
+              className="bg-brand-cream border border-brand-border text-brand-ink text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-brand-accent transition-colors duration-200"
+            >
+              <option value="featured">{isSearching ? 'Best match' : 'Featured'}</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
+            </select>
           </div>
         </div>
 
         {/* Grid area */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-          {/* Search results mode */}
-          {searchResults !== null && (
-            <>
-              {searchLoading && (
-                <div role="status" aria-label="Searching"><ProductGridSkeleton /></div>
-              )}
-              {!searchLoading && searchResults.length === 0 && (
-                <EmptyState
-                  message={`No programmes match "${searchQuery}".`}
-                  action={{ label: 'Clear search', onClick: () => setSearchQuery('') }}
-                />
-              )}
-              {!searchLoading && searchResults.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {searchResults.map((product, index) => (
-                    <ProductCard key={product.id} product={product} index={index} allCategories={initialCategories} defaultCurrency={defaultCurrency} />
-                  ))}
-                </div>
-              )}
-            </>
+          {busy && (
+            <div role="status" aria-label={isSearching ? 'Searching' : 'Loading programmes'}>
+              <ProductGridSkeleton />
+            </div>
           )}
 
-          {/* Normal browse mode */}
-          {searchResults === null && (
-            <>
-              {loading && (
-                <div role="status" aria-label="Loading programmes">
-                  <ProductGridSkeleton />
-                </div>
-              )}
+          {!busy && error && (
+            <div className="flex flex-col items-center gap-6 py-24 text-center">
+              <p className="text-brand-muted text-lg">Unable to load programmes. Please try again.</p>
+              <button
+                onClick={() => void fetchProducts()}
+                className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium rounded-button transition-colors duration-200"
+              >
+                Retry
+              </button>
+            </div>
+          )}
 
-              {!loading && error && (
-                <div className="flex flex-col items-center gap-6 py-24 text-center">
-                  <p className="text-brand-muted text-lg">Unable to load programmes. Please try again.</p>
-                  <button
-                    onClick={() => void fetchProducts()}
-                    className="px-6 py-3 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium rounded-button transition-colors duration-200"
-                  >
-                    Retry
-                  </button>
-                </div>
-              )}
+          {!busy && !error && pageProducts.length === 0 && (
+            isSearching ? (
+              <EmptyState
+                message={`No programmes match "${searchQuery}".`}
+                action={{ label: 'Clear search', onClick: () => handleSearchChange('') }}
+              />
+            ) : (
+              <EmptyState
+                message="No programmes match your selection."
+                action={{ label: 'Clear filters', onClick: () => handleFiltersChange({ categoryId: '', collectionHandle: '' }) }}
+              />
+            )
+          )}
 
-              {!loading && !error && sortedProducts.length === 0 && (
-                <EmptyState
-                  message="No programmes match your selection."
-                  action={{ label: 'Clear filters', onClick: () => handleFiltersChange({ categoryId: '', collectionHandle: '' }) }}
-                />
-              )}
+          {!busy && !error && pageProducts.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {pageProducts.map((product, index) => (
+                <ProductCard key={product.id} product={product} index={index} allCategories={initialCategories} defaultCurrency={defaultCurrency} />
+              ))}
+            </div>
+          )}
 
-              {!loading && !error && sortedProducts.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {sortedProducts.map((product, index) => (
-                    <ProductCard key={product.id} product={product} index={index} allCategories={initialCategories} defaultCurrency={defaultCurrency} />
-                  ))}
-                </div>
-              )}
-
-              {!loading && !error && totalPages > 1 && (
-                <ShopPagination page={page} totalPages={totalPages} onPageChange={setPage} />
-              )}
-            </>
+          {!busy && !error && totalPages > 1 && (
+            <ShopPagination page={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
           )}
         </div>
       </section>

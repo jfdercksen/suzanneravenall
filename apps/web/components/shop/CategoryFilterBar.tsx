@@ -48,6 +48,19 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
 
   const topLevelCategories = categories.filter((c) => c.parent_category_id === null)
 
+  // A link such as /shop?category=books selects a sub-category; highlight the
+  // top-level pill it belongs to.
+  const activeRootId = (() => {
+    let current = categories.find((c) => c.id === filters.categoryId)
+    const seen = new Set<string>()
+    while (current?.parent_category_id && !seen.has(current.id)) {
+      seen.add(current.id)
+      const parentId: string = current.parent_category_id
+      current = categories.find((c) => c.id === parentId)
+    }
+    return current?.id ?? filters.categoryId
+  })()
+
   // Category and collection filters are mutually exclusive — selecting one clears the other.
   const setCategoryId = (id: string) =>
     onFiltersChange({ categoryId: id, collectionHandle: '' })
@@ -80,7 +93,7 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
             <FilterPill
               key={cat.id}
               label={CATEGORY_LABELS[cat.handle] ?? cat.name}
-              active={filters.categoryId === cat.id}
+              active={filters.categoryId !== '' && activeRootId === cat.id}
               onClick={() => setCategoryId(cat.id)}
             />
           ))}
