@@ -56,7 +56,8 @@ export default async function QuizPage({ params, searchParams }: PageProps) {
 
   const quiz = quizBySlug(slug)
   if (quiz) {
-    if (!token) return <QuizGate quiz={quiz} initialMode="gate" />
+    const topicTitle = topic.title
+    if (!token) return <QuizGate quiz={quiz} initialMode="gate" topicTitle={topicTitle} />
 
     // A server component can't return a real 429 status (only notFound() /
     // redirect() are available), so over-limit requests get a graceful
@@ -64,7 +65,7 @@ export default async function QuizPage({ params, searchParams }: PageProps) {
     // skipped. The quiz API routes return true 429s with Retry-After.
     const requestHeaders = await headers()
     if (tokenLookupLimiter.check(getClientIp(requestHeaders)).limited) {
-      return <QuizGate quiz={quiz} initialMode="rateLimited" />
+      return <QuizGate quiz={quiz} initialMode="rateLimited" topicTitle={topicTitle} />
     }
 
     const supabase = getServiceRoleClient()
@@ -80,7 +81,7 @@ export default async function QuizPage({ params, searchParams }: PageProps) {
       }
     }
 
-    if (!subscriber) return <QuizGate quiz={quiz} initialMode="invalid" />
+    if (!subscriber) return <QuizGate quiz={quiz} initialMode="invalid" topicTitle={topicTitle} />
 
     if (subscriber.status === 'completed') {
       const total = quiz.questions.length

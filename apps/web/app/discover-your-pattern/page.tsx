@@ -23,9 +23,11 @@ export default function DiscoverYourPatternPage() {
     <>
       {/* Runs before hydration so Header is already pushed down on first paint —
           without this the fixed sticky bar covers the header logo/nav until
-          PatternHubStickyBar's effect fires. Offset must match BAR_OFFSET there. */}
+          PatternHubStickyBar's effect fires. Offset must match BAR_OFFSET there.
+          A remembered dismissal (site check M9, key DISMISS_STORAGE_KEY there)
+          skips the offset and hides the bar before it can flash. */}
       <Script id="pattern-bar-offset-init" strategy="beforeInteractive">
-        {`document.documentElement.style.setProperty('--pattern-bar-offset','2.5rem');document.body.style.paddingTop='2.5rem';`}
+        {`(function(){var d=document.documentElement,x=false;try{x=localStorage.getItem('pattern-hub-bar-dismissed')==='1'}catch(e){}if(x){d.setAttribute('data-pattern-bar-dismissed','')}else{d.style.setProperty('--pattern-bar-offset','2.5rem');document.body.style.paddingTop='2.5rem'}})();`}
       </Script>
       <PatternHubStickyBar />
       <main>

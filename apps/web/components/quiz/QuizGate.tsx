@@ -1,8 +1,20 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import Link from 'next/link'
 import type { Quiz } from '@/app/explore/quizzes/types'
+import { emailError, hasErrors, requiredError, useFieldErrors } from '@/lib/forms/validation'
 import QuizFlow from './QuizFlow'
+
+type Field = 'firstName' | 'lastName' | 'email'
+
+const FIRST_NAME_REQUIRED = 'Please enter your first name.'
+const LAST_NAME_REQUIRED = 'Please enter your last name.'
+
+function fieldError(field: Field, value: string): string | undefined {
+  if (field === 'email') return emailError(value)
+  return requiredError(value, field === 'firstName' ? FIRST_NAME_REQUIRED : LAST_NAME_REQUIRED)
+}
 
 type GateMode = 'gate' | 'checkEmail' | 'invalid' | 'rateLimited' | 'quiz'
 
@@ -18,11 +30,13 @@ interface QuizGateProps {
   quiz: Quiz
   initialMode: 'gate' | 'invalid' | 'rateLimited' | 'quiz'
   subscriber?: QuizSubscriberSeed
+  /** The topic this diagnostic belongs to, for the link back (site check M9). */
+  topicTitle?: string
 }
 
 type SubmitStatus = 'idle' | 'submitting' | 'error'
 
-export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProps) {
+export default function QuizGate({ quiz, initialMode, subscriber, topicTitle }: QuizGateProps) {
   const [mode, setMode] = useState<GateMode>(initialMode)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -30,6 +44,54 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
   const [status, setStatus] = useState<SubmitStatus>('idle')
   const [errorMessage, setErrorMessage] = useState('')
   const [sentTo, setSentTo] = useState('')
+  const { errors, setError, setErrors } = useFieldErrors<Field>()
+  const values: Record<Field, string> = { firstName, lastName, email }
+  const setters: Record<Field, (v: string) => void> = {
+    firstName: setFirstName,
+    lastName: setLastName,
+    email: setEmail,
+  }
+
+  // Blur shows a message; typing re-checks a field that is already in error.
+  const fieldProps = (field: Field) => ({
+    value: values[field],
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+      setters[field](e.target.value)
+      if (errors[field]) setError(field, fieldError(field, e.target.value))
+    },
+    onBlur: (e: React.FocusEvent<HTMLInputElement>) => setError(field, fieldError(field, e.target.value)),
+    'aria-invalid': !!errors[field],
+    'aria-describedby': errors[field] ? `quiz-gate-${field}-error` : undefined,
+  })
+
+  const fieldMessage = (field: Field) =>
+    errors[field] ? (
+      <p id={`quiz-gate-${field}-error`} className="mt-1 text-xs text-red-600">
+        {errors[field]}
+      </p>
+    ) : null
+
+  const topicLink = (
+    <p className="mt-6 text-center">
+      <Link
+        href={`/explore/${quiz.slug}`}
+        className="text-sm text-brand-muted hover:text-brand-primary underline underline-offset-4 transition-colors duration-200"
+      >
+        &larr; Back to {topicTitle ?? 'the topic'}
+      </Link>
+    </p>
+  )
+
+  // "Get a New Link" from an expired link: drop the dead ?token= so a refresh
+  // or a shared URL does not land on the expired screen again (site check M9).
+  const requestNewLink = () => {
+    const url = new URL(window.location.href)
+    if (url.searchParams.has('token')) {
+      url.searchParams.delete('token')
+      window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`)
+    }
+    setMode('gate')
+  }
 
   // Guards against a double-submit firing two upserts before React re-renders
   // the disabled submit button — a second upsert rotates the access token,
@@ -39,6 +101,15 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (isSubmitting.current) return
+    const fieldErrors = {
+      firstName: fieldError('firstName', firstName),
+      lastName: fieldError('lastName', lastName),
+      email: fieldError('email', email),
+    }
+    if (hasErrors(fieldErrors)) {
+      setErrors(fieldErrors)
+      return
+    }
     isSubmitting.current = true
     setStatus('submitting')
     setErrorMessage('')
@@ -103,7 +174,7 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
               moment you finish.
             </p>
 
-            <form onSubmit={submit} className="text-left space-y-3">
+            <form onSubmit={submit} noValidate className="text-left space-y-3">
               <div>
                 <label htmlFor="quiz-gate-first-name" className="block text-sm text-brand-muted mb-2">
                   First name
@@ -112,10 +183,11 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
                   id="quiz-gate-first-name"
                   type="text"
                   required
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  autoComplete="given-name"
+                  {...fieldProps('firstName')}
                   className="w-full min-h-[52px] rounded-button bg-white border border-brand-primary-300 px-5 text-brand-ink placeholder-brand-muted focus:border-brand-accent focus:outline-none"
                 />
+                {fieldMessage('firstName')}
               </div>
               <div>
                 <label htmlFor="quiz-gate-last-name" className="block text-sm text-brand-muted mb-2">
@@ -125,10 +197,11 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
                   id="quiz-gate-last-name"
                   type="text"
                   required
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  autoComplete="family-name"
+                  {...fieldProps('lastName')}
                   className="w-full min-h-[52px] rounded-button bg-white border border-brand-primary-300 px-5 text-brand-ink placeholder-brand-muted focus:border-brand-accent focus:outline-none"
                 />
+                {fieldMessage('lastName')}
               </div>
               <div>
                 <label htmlFor="quiz-gate-email" className="block text-sm text-brand-muted mb-2">
@@ -138,11 +211,12 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
                   id="quiz-gate-email"
                   type="email"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  {...fieldProps('email')}
                   placeholder="you@example.com"
                   className="w-full min-h-[52px] rounded-button bg-white border border-brand-primary-300 px-5 text-brand-ink placeholder-brand-muted focus:border-brand-accent focus:outline-none"
                 />
+                {fieldMessage('email')}
               </div>
 
               {status === 'error' && (
@@ -212,13 +286,15 @@ export default function QuizGate({ quiz, initialMode, subscriber }: QuizGateProp
             </p>
             <button
               type="button"
-              onClick={() => setMode('gate')}
+              onClick={requestNewLink}
               className="inline-flex items-center justify-center gap-3 rounded-button bg-brand-accent px-10 py-4 text-sm font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-brand-accent-700"
             >
               Get a New Link
             </button>
           </div>
         )}
+
+        {topicLink}
       </div>
     </section>
   )

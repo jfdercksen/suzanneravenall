@@ -1,6 +1,7 @@
 import React from 'react'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, afterEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import ContactForm from './ContactForm'
 
 describe('ContactForm preselection (site check W4)', () => {
@@ -28,5 +29,37 @@ describe('ContactForm preselection (site check W4)', () => {
     render(<ContactForm light enquiry="Events & Immersions" topic="3-Day Immersion" />)
 
     expect(screen.getByLabelText(/Message/i)).toHaveValue('Regarding: 3-Day Immersion\n\n')
+  })
+})
+
+describe('ContactForm field checks (site check M5)', () => {
+  afterEach(() => vi.unstubAllGlobals())
+
+  it('shows a message when a required field loses focus empty', async () => {
+    const user = userEvent.setup()
+    render(<ContactForm light />)
+    await user.click(screen.getByLabelText(/Name/))
+    await user.tab()
+    expect(screen.getByText('Please enter your name.')).toBeInTheDocument()
+  })
+
+  it('keeps letters out of the phone number', async () => {
+    const user = userEvent.setup()
+    render(<ContactForm light />)
+    const phone = screen.getByLabelText(/Phone/)
+    await user.type(phone, '+27 82 abc 555 1234')
+    expect(phone).toHaveValue('+27 82  555 1234')
+    expect(phone).toHaveAttribute('inputmode', 'tel')
+  })
+
+  it('does not send while fields are invalid', async () => {
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+    const user = userEvent.setup()
+    render(<ContactForm light />)
+    await user.click(screen.getByRole('button', { name: 'Send Message' }))
+    expect(fetchMock).not.toHaveBeenCalled()
+    expect(screen.getByText('Please enter your email address.')).toBeInTheDocument()
+    expect(screen.getByText('Please enter a message.')).toBeInTheDocument()
   })
 })

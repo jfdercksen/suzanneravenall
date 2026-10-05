@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { PHONE_PATTERN, phoneError, sanitisePhone } from '@/lib/forms/validation'
 
 interface ProfileFormProps {
   email: string
@@ -23,11 +24,17 @@ export default function ProfileForm({
   const [profileSaving, setProfileSaving] = useState(false)
   const [profileSuccess, setProfileSuccess] = useState(false)
   const [profileError, setProfileError] = useState<string | null>(null)
+  const [phoneMessage, setPhoneMessage] = useState<string | undefined>()
 
   const profileSuccessTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   async function handleProfileSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    const invalidPhone = phoneError(phone)
+    if (invalidPhone) {
+      setPhoneMessage(invalidPhone)
+      return
+    }
     setProfileSaving(true)
     setProfileError(null)
     setProfileSuccess(false)
@@ -64,7 +71,7 @@ export default function ProfileForm({
       aria-labelledby="profile-heading"
     >
       <h2 id="profile-heading" className="text-lg font-semibold text-white mb-6">Profile</h2>
-      <form onSubmit={handleProfileSave} className="space-y-5">
+      <form onSubmit={handleProfileSave} noValidate className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
             <label htmlFor="firstName" className="block text-xs font-medium text-white/70 uppercase tracking-widest mb-2">
@@ -118,11 +125,27 @@ export default function ProfileForm({
           <input
             id="phone"
             type="tel"
+            inputMode="tel"
+            pattern={PHONE_PATTERN}
+            autoComplete="tel"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => {
+              // Letters are stripped as typed (site check M5).
+              const next = sanitisePhone(e.target.value)
+              setPhone(next)
+              if (phoneMessage) setPhoneMessage(phoneError(next))
+            }}
+            onBlur={(e) => setPhoneMessage(phoneError(e.target.value))}
+            aria-invalid={!!phoneMessage}
+            aria-describedby={phoneMessage ? 'phone-error' : undefined}
             className="w-full px-4 py-3 bg-brand-primary-700 border border-white/35 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors"
             placeholder="+27 82 000 0000"
           />
+          {phoneMessage && (
+            <p id="phone-error" className="mt-1.5 text-xs text-red-400">
+              {phoneMessage}
+            </p>
+          )}
         </div>
 
         {profileError && (

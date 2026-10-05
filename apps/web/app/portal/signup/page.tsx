@@ -2,12 +2,24 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { ensureMembership } from '@/lib/access/ensure-membership'
+import { emailError, hasErrors, requiredError, useFieldErrors } from '@/lib/forms/validation'
+
+type Field = 'name' | 'email' | 'password' | 'confirmPassword'
+
+const MIN_PASSWORD = 8
 
 export default function SignupPage() {
   const router = useRouter()
+  // Site check M6: keep the login page's ?redirect= so a new member still
+  // lands where they were heading. Same relative-only rule as the login page.
+  const rawRedirect = useSearchParams().get('redirect') ?? ''
+  const redirect =
+    rawRedirect.startsWith('/') && !rawRedirect.startsWith('//') ? rawRedirect : '/portal/dashboard'
+  const redirectQuery =
+    redirect !== '/portal/dashboard' ? `?redirect=${encodeURIComponent(redirect)}` : ''
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,13 +27,53 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  // Site check M5: field messages on blur, before anything is sent.
+  const { errors, setError: setFieldError, setErrors: setFieldErrors } = useFieldErrors<Field>()
+
+  const validate = (field: Field, value: string): string | undefined => {
+    switch (field) {
+      case 'name':
+        return requiredError(value, 'Please enter your full name.')
+      case 'email':
+        return emailError(value)
+      case 'password':
+        if (!value) return 'Please choose a password.'
+        return value.length < MIN_PASSWORD ? `Your password needs at least ${MIN_PASSWORD} characters.` : undefined
+      case 'confirmPassword':
+        if (!value) return 'Please confirm your password.'
+        return value === password ? undefined : 'Passwords do not match.'
+    }
+  }
+
+  const fieldProps = (field: Field, setValue: (v: string) => void) => ({
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(e.target.value)
+      if (errors[field]) setFieldError(field, validate(field, e.target.value))
+    },
+    onBlur: (e: React.FocusEvent<HTMLInputElement>) => setFieldError(field, validate(field, e.target.value)),
+    'aria-invalid': !!errors[field],
+    'aria-describedby': errors[field] ? `signup-${field}-error` : undefined,
+  })
+
+  const fieldMessage = (field: Field) =>
+    errors[field] ? (
+      <p id={`signup-${field}-error`} className="mt-1.5 text-xs text-red-400">
+        {errors[field]}
+      </p>
+    ) : null
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setError(null)
 
-    if (password !== confirmPassword) {
-      setError('Passwords do not match.')
+    const fieldErrors = {
+      name: validate('name', name),
+      email: validate('email', email),
+      password: validate('password', password),
+      confirmPassword: validate('confirmPassword', confirmPassword),
+    }
+    if (hasErrors(fieldErrors)) {
+      setFieldErrors(fieldErrors)
       return
     }
 
@@ -33,7 +85,9 @@ export default function SignupPage() {
       password,
       options: {
         data: { full_name: name },
-        emailRedirectTo: `${window.location.origin}/portal/callback`,
+        emailRedirectTo: `${window.location.origin}/portal/callback${
+          redirectQuery ? `?next=${encodeURIComponent(redirect)}` : ''
+        }`,
       },
     })
 
@@ -76,7 +130,7 @@ export default function SignupPage() {
       console.error('[signup] session returned with no user; membership not created')
     }
 
-    router.push('/portal/dashboard')
+    router.push(redirect)
     router.refresh()
   }
 
@@ -99,7 +153,7 @@ export default function SignupPage() {
             log in.
           </p>
           <Link
-            href="/portal/login"
+            href={`/portal/login${redirectQuery}`}
             className="inline-flex items-center justify-center w-full px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold rounded-xl transition-colors duration-300"
           >
             Return to Login
@@ -139,10 +193,11 @@ export default function SignupPage() {
                 required
                 autoComplete="name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                {...fieldProps('name', setName)}
                 className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                 placeholder="Jane Smith"
               />
+              {fieldMessage('name')}
             </div>
 
             <div>
@@ -155,10 +210,11 @@ export default function SignupPage() {
                 required
                 autoComplete="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                {...fieldProps('email', setEmail)}
                 className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                 placeholder="you@example.com"
               />
+              {fieldMessage('email')}
             </div>
 
             <div>
@@ -173,10 +229,11 @@ export default function SignupPage() {
                 minLength={8}
                 autoComplete="new-password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...fieldProps('password', setPassword)}
                 className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                 placeholder="••••••••"
               />
+              {fieldMessage('password')}
             </div>
 
             <div>
@@ -190,10 +247,11 @@ export default function SignupPage() {
                 minLength={8}
                 autoComplete="new-password"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                {...fieldProps('confirmPassword', setConfirmPassword)}
                 className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
                 placeholder="••••••••"
               />
+              {fieldMessage('confirmPassword')}
             </div>
 
             {error && <p className="text-red-400 text-sm">{error}</p>}
@@ -209,7 +267,7 @@ export default function SignupPage() {
 
           <p className="mt-6 text-center text-white/70 text-sm">
             Already have an account?{' '}
-            <Link href="/portal/login" className="text-brand-accent-400 hover:underline">
+            <Link href={`/portal/login${redirectQuery}`} className="text-brand-accent-400 hover:underline">
               Log in →
             </Link>
           </p>

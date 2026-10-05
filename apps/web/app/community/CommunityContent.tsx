@@ -70,7 +70,7 @@ export default function CommunityContent() {
       const res = await fetch('/api/lead-magnet', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, source: 'community' }),
       })
 
       if (res.ok || res.status === 202) {

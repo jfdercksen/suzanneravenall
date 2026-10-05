@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShoppingBag, ChevronRight, Lock, Tag, X } from 'lucide-react'
 import { useCart, formatPrice } from '@/lib/cart'
+import { PHONE_PATTERN, phoneError, sanitisePhone } from '@/lib/forms/validation'
 
 type Step = 1 | 2 | 3
 
@@ -22,11 +23,14 @@ interface FormErrors {
   firstName?: string
   lastName?: string
   email?: string
+  phone?: string
   country?: string
 }
 
 function validateContact(form: ContactForm): FormErrors {
   const errors: FormErrors = {}
+  const phone = phoneError(form.phone)
+  if (phone) errors.phone = phone
   if (!form.firstName.trim()) errors.firstName = 'First name is required'
   if (!form.lastName.trim()) errors.lastName = 'Last name is required'
   if (!form.email.trim()) {
@@ -169,6 +173,7 @@ function InputField({
   error,
   required,
   autoComplete,
+  onBlur,
 }: {
   label: string
   id: string
@@ -178,7 +183,9 @@ function InputField({
   error?: string
   required?: boolean
   autoComplete?: string
+  onBlur?: () => void
 }) {
+  const isTel = type === 'tel'
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-brand-ink mb-1.5">
@@ -189,7 +196,11 @@ function InputField({
         id={id}
         type={type}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        // Phone: letters are stripped as typed (site check M5).
+        onChange={(e) => onChange(isTel ? sanitisePhone(e.target.value) : e.target.value)}
+        onBlur={onBlur}
+        inputMode={isTel ? 'tel' : undefined}
+        pattern={isTel ? PHONE_PATTERN : undefined}
         autoComplete={autoComplete}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
@@ -287,6 +298,11 @@ export default function CheckoutContent() {
     if (errors[field as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }))
     }
+  }
+
+  // Site check M5: check a field as soon as it loses focus, not only on submit.
+  function blurField(field: keyof FormErrors) {
+    setErrors((prev) => ({ ...prev, [field]: validateContact(contact)[field] }))
   }
 
   async function handleContactSubmit(e: React.FormEvent) {
@@ -512,6 +528,7 @@ export default function CheckoutContent() {
                           id="firstName"
                           value={contact.firstName}
                           onChange={(v) => updateContact('firstName', v)}
+                          onBlur={() => blurField('firstName')}
                           error={errors.firstName}
                           required
                           autoComplete="given-name"
@@ -521,6 +538,7 @@ export default function CheckoutContent() {
                           id="lastName"
                           value={contact.lastName}
                           onChange={(v) => updateContact('lastName', v)}
+                          onBlur={() => blurField('lastName')}
                           error={errors.lastName}
                           required
                           autoComplete="family-name"
@@ -532,6 +550,7 @@ export default function CheckoutContent() {
                         type="email"
                         value={contact.email}
                         onChange={(v) => updateContact('email', v)}
+                        onBlur={() => blurField('email')}
                         error={errors.email}
                         required
                         autoComplete="email"
@@ -542,6 +561,8 @@ export default function CheckoutContent() {
                         type="tel"
                         value={contact.phone}
                         onChange={(v) => updateContact('phone', v)}
+                        onBlur={() => blurField('phone')}
+                        error={errors.phone}
                         autoComplete="tel"
                       />
 
