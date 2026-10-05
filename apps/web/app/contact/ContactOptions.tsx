@@ -47,10 +47,11 @@ export default function ContactOptions() {
         </motion.h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-          {/* Card 1: Book Discovery Call (primary) */}
+          {/* Card 1: Book Discovery Call (primary). id="book" is the fallback target for the /services Cal button */}
           <motion.div
+            id="book"
             {...cardReveal(0.15)}
-            className="rounded-card bg-brand-sand border border-brand-primary p-8 flex flex-col hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
+            className="scroll-mt-24 rounded-card bg-brand-sand border border-brand-primary p-8 flex flex-col hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
           >
             <h3 className="text-lg font-medium text-brand-primary mb-2">Book a Discovery Call</h3>
             <p className="text-brand-muted text-sm leading-relaxed mb-6">

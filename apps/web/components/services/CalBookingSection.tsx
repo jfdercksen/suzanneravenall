@@ -1,10 +1,28 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import { getCalApi } from '@calcom/embed-react'
 import { motion } from 'framer-motion'
 
 const CAL_URL = process.env.NEXT_PUBLIC_CAL_URL ?? 'https://cal.suzanneravenall.com'
+// Shown until the Cal embed is ready, and for good if it never loads (blocked
+// script, mixed content, DNS failure), so the call to action always works.
+export const BOOKING_FALLBACK_HREF = '/contact#book'
+
+const BUTTON_CLASSES =
+  'inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300'
+
+// getCalApi resolves straight away with the snippet's call queue, even when
+// embed.js never loads. Cal.instance is only set once embed.js has actually
+// run, so that is the real readiness signal.
+const CAL_READY_POLL_MS = 200
+const CAL_READY_TIMEOUT_MS = 10_000
+
+function calEmbedLoaded(): boolean {
+  const cal = (window as unknown as { Cal?: { instance?: unknown } }).Cal
+  return Boolean(cal?.instance)
+}
 
 export default function CalBookingSection() {
   const initialised = useRef(false)
@@ -13,14 +31,30 @@ export default function CalBookingSection() {
   useEffect(() => {
     if (initialised.current) return
     initialised.current = true
+    let poll: ReturnType<typeof setInterval> | undefined
     getCalApi({ embedJsUrl: `${CAL_URL}/embed/embed.js` }).then((cal) => {
       cal('ui', {
         theme: 'dark',
         styles: { branding: { brandColor: '#171717' } },
         hideEventTypeDetails: false,
       })
-      setCalReady(true)
+      const startedAt = Date.now()
+      const check = () => {
+        if (calEmbedLoaded()) {
+          clearInterval(poll)
+          setCalReady(true)
+        } else if (Date.now() - startedAt > CAL_READY_TIMEOUT_MS) {
+          // Embed never loaded (blocked script, mixed content, DNS failure):
+          // keep the fallback link.
+          clearInterval(poll)
+        }
+      }
+      poll = setInterval(check, CAL_READY_POLL_MS)
+      check()
+    }).catch(() => {
+      // Embed failed to initialise: keep the fallback link.
     })
+    return () => clearInterval(poll)
   }, [])
 
   function openModal() {
@@ -77,13 +111,19 @@ export default function CalBookingSection() {
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <button
-            onClick={openModal}
-            disabled={!calReady}
-            className="inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Book a Discovery Call
-          </button>
+          {calReady ? (
+            <button
+              type="button"
+              onClick={openModal}
+              className={BUTTON_CLASSES}
+            >
+              Book a Discovery Call
+            </button>
+          ) : (
+            <Link href={BOOKING_FALLBACK_HREF} className={BUTTON_CLASSES}>
+              Book a Discovery Call
+            </Link>
+          )}
         </motion.div>
       </div>
     </motion.section>

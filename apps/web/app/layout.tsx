@@ -6,6 +6,7 @@ import Footer from '../components/layout/Footer'
 import { Providers } from '../components/layout/Providers'
 import CookieConsent from '../components/layout/CookieConsent'
 import PatternCoachTab from '../components/layout/PatternCoachTab'
+import { buildGaInitScript, isUsableGaId } from '../lib/analytics'
 import './globals.css'
 
 const poppins = Poppins({
@@ -49,15 +50,15 @@ export const metadata: Metadata = {
 }
 
 // Validate analytics IDs to prevent injection if env vars are ever compromised.
-// GA4 IDs must be G- followed by alphanumeric characters.
+// GA4 IDs are checked by isUsableGaId (format plus placeholder rejection, so a
+// G-XXXXXXXXXX left in the env sends no hits at all).
 // Clarity IDs must be lowercase alphanumeric.
-const GA_ID_PATTERN = /^G-[A-Z0-9]+$/
 const CLARITY_ID_PATTERN = /^[a-z0-9]+$/
 
 const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? ''
 const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID ?? ''
 
-const safeGaId = GA_ID_PATTERN.test(gaId) ? gaId : ''
+const safeGaId = isUsableGaId(gaId) ? gaId : ''
 const safeClarityId = CLARITY_ID_PATTERN.test(clarityId) ? clarityId : ''
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -107,13 +108,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {safeGaId && (
           <>
             <script async src={`https://www.googletagmanager.com/gtag/js?id=${safeGaId}`} />
+            {/* Init strips the query string (private quiz ?token=) from page_location */}
             <Script id="ga4-init" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${safeGaId}');
-              `}
+              {buildGaInitScript(safeGaId)}
             </Script>
           </>
         )}

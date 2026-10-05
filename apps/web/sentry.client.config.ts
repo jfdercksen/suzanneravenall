@@ -1,8 +1,10 @@
 import * as Sentry from "@sentry/nextjs";
 import { scrubSentryEvent } from "./lib/sentry-scrub";
+import { resolveSentryDsn } from "./lib/sentry-dsn";
 
 Sentry.init({
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  // Placeholder or malformed DSN -> disabled client, no "Invalid Sentry Dsn" log
+  dsn: resolveSentryDsn(process.env.NEXT_PUBLIC_SENTRY_DSN),
   environment: process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT ?? "development",
 
   // Capture 10% of transactions in production, 100% in development
