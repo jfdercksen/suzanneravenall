@@ -81,15 +81,6 @@ const navItems: NavItem[] = [
   // },
 ]
 
-function getMobileLinks(items: NavItem[]): NavLink[] {
-  return items.flatMap((item) => {
-    if ('children' in item) {
-      return item.children.filter((c): c is NavLink => !('divider' in c))
-    }
-    return [item]
-  })
-}
-
 export default function Header() {
   return (
     <header
@@ -100,14 +91,18 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
 
-          {/* Logo — shrink-0 so the flex row never crushes it to make room for nav/CTAs */}
-          <Link href="/" aria-label="Dr. Suzanne Ravenall, return to homepage" className="shrink-0 mr-6">
+          {/* Logo — shrink-0 so the flex row never crushes it to make room for nav/CTAs.
+              Narrower below sm (site check V7): at 320px the 160px logo plus
+              search, cart and hamburger came to 336px and pushed the hamburger
+              off screen. */}
+          <Link href="/" aria-label="Dr. Suzanne Ravenall, return to homepage" className="shrink-0 mr-3 sm:mr-6">
             <Image
                 src="/logos/suzanne-white-logo.png"
                 alt="Dr. Suzanne Ravenall"
                 width={160}
                 height={49}
                 priority
+                className="w-[132px] sm:w-40 h-auto"
               />
           </Link>
 
@@ -131,7 +126,7 @@ export default function Header() {
               Book a Discovery Call
             </Link>
             {/* MobileNav renders hamburger on mobile and the full-screen overlay */}
-            <MobileNav links={getMobileLinks(navItems)} />
+            <MobileNav items={navItems} />
           </div>
 
         </div>

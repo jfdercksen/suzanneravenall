@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import MobileNav from './MobileNav'
-import type { NavLink } from './Header'
+import type { NavItem } from './Header'
 
 // Mock next/navigation
 vi.mock('next/navigation', () => ({
@@ -27,7 +27,7 @@ vi.mock('@suzanne/ui', () => ({
   Logo: () => <img alt="Dr. Suzanne Ravenall" />,
 }))
 
-const sampleLinks: NavLink[] = [
+const sampleLinks: NavItem[] = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'Services', href: '/services' },
@@ -35,6 +35,25 @@ const sampleLinks: NavLink[] = [
   { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '/contact' },
   { label: 'Member Portal', href: '/portal' },
+]
+
+const groupedItems: NavItem[] = [
+  {
+    label: 'About',
+    children: [
+      { label: 'About Suzanne', href: '/about' },
+      { divider: true },
+      { label: 'Testimonials', href: '/testimonials' },
+    ],
+  },
+  {
+    label: 'Work With Me',
+    children: [
+      { label: 'Precision Sessions', href: '/services#private' },
+      { label: 'Corporate & Retreats', href: '/services#group' },
+    ],
+  },
+  { label: 'Home', href: '/' },
 ]
 
 describe('MobileNav', () => {
@@ -45,19 +64,19 @@ describe('MobileNav', () => {
 
   describe('hamburger button', () => {
     it('renders with aria-label "Open navigation menu"', () => {
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       const hamburger = screen.getByRole('button', { name: 'Open navigation menu' })
       expect(hamburger).toBeInTheDocument()
     })
 
     it('has aria-expanded="false" initially', () => {
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       const hamburger = screen.getByRole('button', { name: 'Open navigation menu' })
       expect(hamburger).toHaveAttribute('aria-expanded', 'false')
     })
 
     it('has aria-controls="mobile-nav-overlay"', () => {
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       const hamburger = screen.getByRole('button', { name: 'Open navigation menu' })
       expect(hamburger).toHaveAttribute('aria-controls', 'mobile-nav-overlay')
     })
@@ -66,7 +85,7 @@ describe('MobileNav', () => {
   describe('opening the overlay', () => {
     it('sets aria-expanded to true when hamburger is clicked', async () => {
       const user = userEvent.setup()
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       const hamburger = screen.getByRole('button', { name: 'Open navigation menu' })
       await user.click(hamburger)
       expect(hamburger).toHaveAttribute('aria-expanded', 'true')
@@ -74,7 +93,7 @@ describe('MobileNav', () => {
 
     it('removes the -translate-x-full class after opening', async () => {
       const user = userEvent.setup()
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       const hamburger = screen.getByRole('button', { name: 'Open navigation menu' })
 
       const overlay = document.getElementById('mobile-nav-overlay')
@@ -86,7 +105,7 @@ describe('MobileNav', () => {
 
     it('sets body overflow to "hidden" when open', async () => {
       const user = userEvent.setup()
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       const hamburger = screen.getByRole('button', { name: 'Open navigation menu' })
       await user.click(hamburger)
       expect(document.body.style.overflow).toBe('hidden')
@@ -96,28 +115,28 @@ describe('MobileNav', () => {
   describe('overlay structure', () => {
     it('overlay has role="dialog" when open', async () => {
       const user = userEvent.setup()
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
       const dialog = screen.getByRole('dialog')
       expect(dialog).toBeInTheDocument()
     })
 
     it('overlay does NOT have role="dialog" when closed — prevents SR from hiding rest of page', () => {
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       // When closed, role is undefined — no dialog role should be in the accessibility tree
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     })
 
     it('overlay has aria-modal="true" when open', async () => {
       const user = userEvent.setup()
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
       const dialog = screen.getByRole('dialog')
       expect(dialog).toHaveAttribute('aria-modal', 'true')
     })
 
     it('overlay has id="mobile-nav-overlay"', () => {
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       const overlay = document.getElementById('mobile-nav-overlay')
       expect(overlay).toBeInTheDocument()
     })
@@ -125,14 +144,14 @@ describe('MobileNav', () => {
 
   describe('close button', () => {
     it('renders with aria-label "Close navigation menu"', () => {
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       const closeBtn = screen.getByRole('button', { name: 'Close navigation menu' })
       expect(closeBtn).toBeInTheDocument()
     })
 
     it('closes the overlay when clicked', async () => {
       const user = userEvent.setup()
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
 
       // Open first
       await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
@@ -145,7 +164,7 @@ describe('MobileNav', () => {
 
     it('restores body overflow to "" when closed', async () => {
       const user = userEvent.setup()
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
       await user.click(screen.getByRole('button', { name: 'Close navigation menu' }))
       expect(document.body.style.overflow).toBe('')
@@ -155,7 +174,7 @@ describe('MobileNav', () => {
   describe('keyboard: Escape key', () => {
     it('closes the overlay when Escape is pressed while open', async () => {
       const user = userEvent.setup()
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
 
       await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
       expect(screen.getByRole('button', { name: 'Open navigation menu' })).toHaveAttribute('aria-expanded', 'true')
@@ -165,7 +184,7 @@ describe('MobileNav', () => {
     })
 
     it('does not close when Escape is pressed while overlay is already closed', async () => {
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       // Overlay not open — pressing Escape should not cause errors
       fireEvent.keyDown(document, { key: 'Escape' })
       expect(screen.getByRole('button', { name: 'Open navigation menu' })).toHaveAttribute('aria-expanded', 'false')
@@ -175,7 +194,7 @@ describe('MobileNav', () => {
   describe('nav links inside overlay', () => {
     it('renders all provided nav links', async () => {
       const user = userEvent.setup()
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
 
       for (const link of sampleLinks) {
@@ -186,21 +205,21 @@ describe('MobileNav', () => {
     })
 
     it('renders "Book a Discovery Call" CTA inside overlay', () => {
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       const cta = screen.getByRole('link', { name: 'Book a Discovery Call' })
       expect(cta).toBeInTheDocument()
       expect(cta).toHaveAttribute('href', '/contact#book')
     })
 
     it('renders "Discover Your Pattern" CTA inside overlay', () => {
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       const cta = screen.getByRole('link', { name: 'Discover Your Pattern' })
       expect(cta).toBeInTheDocument()
       expect(cta).toHaveAttribute('href', '/discover-your-pattern')
     })
 
     it('renders both bottom CTAs together, "Discover Your Pattern" before "Book a Discovery Call"', () => {
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
       const ctaLinks = [
         screen.getByRole('link', { name: 'Discover Your Pattern' }),
         screen.getByRole('link', { name: 'Book a Discovery Call' }),
@@ -215,7 +234,7 @@ describe('MobileNav', () => {
 
     it('closes the overlay when "Discover Your Pattern" CTA is clicked', async () => {
       const user = userEvent.setup()
-      render(<MobileNav links={sampleLinks} />)
+      render(<MobileNav items={sampleLinks} />)
 
       await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
       expect(screen.getByRole('button', { name: 'Open navigation menu' })).toHaveAttribute('aria-expanded', 'true')
@@ -227,7 +246,7 @@ describe('MobileNav', () => {
 
   describe('route change', () => {
     it('closes the overlay when the pathname changes', async () => {
-      const { rerender } = render(<MobileNav links={sampleLinks} />)
+      const { rerender } = render(<MobileNav items={sampleLinks} />)
       const user = userEvent.setup()
 
       await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
@@ -242,7 +261,56 @@ describe('MobileNav', () => {
       }
       expect(screen.getByRole('button', { name: 'Open navigation menu' })).toHaveAttribute('aria-expanded', 'false')
 
-      rerender(<MobileNav links={sampleLinks} />)
+      rerender(<MobileNav items={sampleLinks} />)
+    })
+  })
+
+  describe('accordion groups (site check V11)', () => {
+    it('renders each nav group as a collapsed heading button', async () => {
+      const user = userEvent.setup()
+      render(<MobileNav items={groupedItems} />)
+      await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
+
+      const about = screen.getByRole('button', { name: 'About' })
+      const work = screen.getByRole('button', { name: 'Work With Me' })
+      expect(about).toHaveAttribute('aria-expanded', 'false')
+      expect(work).toHaveAttribute('aria-expanded', 'false')
+      expect(screen.queryByRole('link', { name: 'Testimonials' })).not.toBeInTheDocument()
+      // Standalone links still render directly
+      expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument()
+    })
+
+    it('expands a group to show its links, without the divider', async () => {
+      const user = userEvent.setup()
+      render(<MobileNav items={groupedItems} />)
+      await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
+      await user.click(screen.getByRole('button', { name: 'About' }))
+
+      expect(screen.getByRole('button', { name: 'About' })).toHaveAttribute('aria-expanded', 'true')
+      expect(screen.getByRole('link', { name: 'About Suzanne' })).toHaveAttribute('href', '/about')
+      expect(screen.getByRole('link', { name: 'Testimonials' })).toHaveAttribute('href', '/testimonials')
+    })
+
+    it('keeps only one group open at a time', async () => {
+      const user = userEvent.setup()
+      render(<MobileNav items={groupedItems} />)
+      await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
+      await user.click(screen.getByRole('button', { name: 'About' }))
+      await user.click(screen.getByRole('button', { name: 'Work With Me' }))
+
+      expect(screen.getByRole('button', { name: 'About' })).toHaveAttribute('aria-expanded', 'false')
+      expect(screen.queryByRole('link', { name: 'Testimonials' })).not.toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Precision Sessions' })).toHaveAttribute('href', '/services#private')
+    })
+
+    it('collapses an open group when its heading is tapped again', async () => {
+      const user = userEvent.setup()
+      render(<MobileNav items={groupedItems} />)
+      await user.click(screen.getByRole('button', { name: 'Open navigation menu' }))
+      await user.click(screen.getByRole('button', { name: 'About' }))
+      await user.click(screen.getByRole('button', { name: 'About' }))
+
+      expect(screen.getByRole('button', { name: 'About' })).toHaveAttribute('aria-expanded', 'false')
     })
   })
 })

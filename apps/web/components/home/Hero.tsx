@@ -79,11 +79,13 @@ export default function Hero() {
       ))}
 
       {/* Video toggle — on the picture: its bottom edge below sm, the
-          section's bottom-right from sm */}
+          section's bottom-right from sm. Each button is a 24px tap target
+          around the 10px dot (site check M8); the offsets are 7px tighter
+          than before so the dots themselves sit where they always did. */}
       <div
         role="group"
         aria-label="Choose hero background video"
-        className="absolute top-72 sm:top-auto sm:bottom-8 right-4 sm:right-6 lg:right-8 z-20 flex items-center gap-2"
+        className="absolute top-[281px] sm:top-auto sm:bottom-[25px] right-[9px] sm:right-[17px] lg:right-[25px] z-20 flex items-center"
       >
         {heroVideos.map((video, i) => (
           <button
@@ -92,12 +94,17 @@ export default function Hero() {
             onClick={() => setActiveVideo(i)}
             aria-label={video.label}
             aria-pressed={activeVideo === i}
-            className={`w-2.5 h-2.5 rounded-full border transition-all duration-300 ${
-              activeVideo === i
-                ? 'bg-white border-white scale-110'
-                : 'bg-transparent border-white/60 hover:border-white'
-            }`}
-          />
+            className="group flex items-center justify-center w-6 h-6 rounded-full"
+          >
+            <span
+              aria-hidden="true"
+              className={`block w-2.5 h-2.5 rounded-full border transition-all duration-300 ${
+                activeVideo === i
+                  ? 'bg-white border-white scale-110'
+                  : 'bg-transparent border-white/60 group-hover:border-white'
+              }`}
+            />
+          </button>
         ))}
       </div>
 

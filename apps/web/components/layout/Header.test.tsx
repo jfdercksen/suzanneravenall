@@ -18,8 +18,8 @@ vi.mock('@suzanne/ui', () => ({
 
 // Mock MobileNav — it is a client component tested separately
 vi.mock('./MobileNav', () => ({
-  default: ({ links }: { links: unknown[] }) => (
-    <div data-testid="mobile-nav" data-link-count={links.length} />
+  default: ({ items }: { items: unknown[] }) => (
+    <div data-testid="mobile-nav" data-item-count={items.length} />
   ),
 }))
 
@@ -101,12 +101,12 @@ describe('Header', () => {
     expect(mobileNav).toBeInTheDocument()
   })
 
-  it('passes all nav links to MobileNav (23 leaf links)', () => {
+  it('passes the same 8 grouped nav items to MobileNav as the desktop nav', () => {
     render(<Header />)
     const mobileNav = screen.getByTestId('mobile-nav')
-    // About(5) + Explore topics+All Topics(7) + WorkWithMe(5) + Events(1)
-    // + Masterclass(1) + Resources(2) + Shop(1) + Contact(1) = 23
-    expect(mobileNav).toHaveAttribute('data-link-count', '23')
+    // Site check V11: the mobile menu keeps the desktop groups as an accordion
+    // instead of flattening them into 23 links.
+    expect(mobileNav).toHaveAttribute('data-item-count', '8')
   })
 
   it('renders a <nav> with aria-label "Main navigation"', () => {

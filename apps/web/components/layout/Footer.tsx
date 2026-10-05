@@ -126,12 +126,12 @@ export default function Footer() {
               <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
                 {col.label}
               </h3>
-              <ul className="space-y-2.5">
+              <ul className="space-y-0.5">
                 {col.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm text-white/70 hover:text-white transition-colors duration-150"
+                      className="inline-block py-1.5 text-sm text-white/70 hover:text-white transition-colors duration-150"
                     >
                       {link.label}
                     </Link>
@@ -146,14 +146,14 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
               Group Sites
             </h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-0.5">
               {groupSites.map((site) => (
                 <li key={site.label}>
                   <a
                     href={site.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-white/70 hover:text-white transition-colors duration-150"
+                    className="inline-block py-1.5 text-sm text-white/70 hover:text-white transition-colors duration-150"
                   >
                     {site.label}
                   </a>
@@ -206,7 +206,7 @@ function SocialLink({ href, label, children }: SocialLinkProps) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="text-white/60 hover:text-white transition-colors duration-150"
+      className="inline-flex p-2 -m-2 text-white/60 hover:text-white transition-colors duration-150"
     >
       {children}
     </a>
