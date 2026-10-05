@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
 type ConsentState = 'accepted' | 'rejected' | null
@@ -11,6 +11,18 @@ const STORAGE_KEY = 'cookie_consent'
 export const CONSENT_STORAGE_KEY = STORAGE_KEY
 /** Fired on window when the user accepts or rejects, so other overlays can react without polling. */
 export const CONSENT_CHOSEN_EVENT = 'sr:cookie-consent-chosen'
+/** Fired by "Cookie settings" links (footer, cookie policy) to show the banner again (site check M10). */
+export const CONSENT_OPEN_EVENT = 'sr:cookie-consent-open'
+/**
+ * Set on <html> while the banner shows, so layouts can keep content clear of it (site check V6).
+ * The body also gets the same bottom padding, so the end of every page can scroll clear.
+ */
+export const CONSENT_BANNER_HEIGHT_VAR = '--cookie-banner-h'
+
+/** Reopens the consent banner so a visitor can change an earlier choice. */
+export function openCookieSettings() {
+  window.dispatchEvent(new Event(CONSENT_OPEN_EVENT))
+}
 
 declare global {
   interface Window {
@@ -44,6 +56,7 @@ export default function CookieConsent({ clarityId }: CookieConsentProps) {
   // Site check B8: the banner (z-[70]) covered the "Book a Discovery Call" button inside the
   // full-screen mobile menu (z-50). Step aside while the menu is open; it returns on close.
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const bannerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleToggle = (e: Event) => {
@@ -66,6 +79,42 @@ export default function CookieConsent({ clarityId }: CookieConsentProps) {
     setConsent(stored)
   }, [clarityId])
 
+  // M10: "Cookie settings" links reopen the banner so an earlier choice can be changed.
+  useEffect(() => {
+    const handleOpen = () => {
+      setConsent(null)
+      setVisible(true)
+    }
+    window.addEventListener(CONSENT_OPEN_EVENT, handleOpen)
+    return () => window.removeEventListener(CONSENT_OPEN_EVENT, handleOpen)
+  }, [])
+
+  const shown = visible && consent === null && !mobileNavOpen
+
+  // V6: while the banner shows, reserve its height at the bottom of the page so it never
+  // hides the footer, a final CTA row or the last button on a short page.
+  useEffect(() => {
+    const banner = bannerRef.current
+    if (!shown || !banner) return
+    const root = document.documentElement
+    const body = document.body
+    const apply = () => {
+      const height = `${Math.ceil(banner.getBoundingClientRect().height)}px`
+      root.style.setProperty(CONSENT_BANNER_HEIGHT_VAR, height)
+      body.style.paddingBottom = height
+    }
+    apply()
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(apply)
+    observer?.observe(banner)
+    window.addEventListener('resize', apply)
+    return () => {
+      observer?.disconnect()
+      window.removeEventListener('resize', apply)
+      root.style.removeProperty(CONSENT_BANNER_HEIGHT_VAR)
+      body.style.paddingBottom = ''
+    }
+  }, [shown])
+
   function handleAccept() {
     localStorage.setItem(STORAGE_KEY, 'accepted')
     setConsent('accepted')
@@ -83,13 +132,14 @@ export default function CookieConsent({ clarityId }: CookieConsentProps) {
     window.dispatchEvent(new Event(CONSENT_CHOSEN_EVENT))
   }
 
-  if (!visible || consent !== null || mobileNavOpen) return null
+  if (!shown) return null
 
   return (
     // z-[70]: deliberately above the Pattern Coach pill (z-[60]) and sticky header (z-50) —
     // the consent dialog always wins the stacking order (KI027).
     // pb uses env(safe-area-inset-bottom) so the buttons clear the iOS home indicator.
     <div
+      ref={bannerRef}
       role="dialog"
       aria-label="Cookie consent"
       aria-live="polite"

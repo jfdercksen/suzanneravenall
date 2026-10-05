@@ -5,6 +5,7 @@ import CalInlineBooking, {
   CAL_BOOKING_PAGE_URL,
   CAL_INLINE_NAMESPACE,
   CAL_INLINE_TIMEOUT_MS,
+  CAL_INLINE_MIN_HEIGHT,
 } from './CalInlineBooking'
 
 type Handler = () => void
@@ -51,6 +52,15 @@ describe('CalInlineBooking', () => {
     expect(inlineProps).toHaveBeenCalledWith(expect.objectContaining({ namespace: CAL_INLINE_NAMESPACE }))
     expect(CAL_INLINE_NAMESPACE).not.toBe('')
     expect(screen.queryByRole('link', { name: 'Open the booking page' })).not.toBeInTheDocument()
+  })
+
+  // Site check V10: a fixed-height box around the auto-sized iframe made a scroll inside a scroll
+  it('lets the calendar grow to its own height instead of scrolling inside a fixed box', async () => {
+    await renderBooking()
+    const style = inlineProps.mock.calls[0]?.[0].style as Record<string, string>
+    expect(style.height).toBeUndefined()
+    expect(style.overflow).toBeUndefined()
+    expect(style.minHeight).toBe(CAL_INLINE_MIN_HEIGHT)
   })
 
   it('shows a fallback with a direct booking link when the embed never loads', async () => {

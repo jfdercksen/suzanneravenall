@@ -2,7 +2,14 @@ import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, act, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import CookieConsent, { CONSENT_STORAGE_KEY, CONSENT_CHOSEN_EVENT } from './CookieConsent'
+import CookieConsent, {
+  CONSENT_STORAGE_KEY,
+  CONSENT_CHOSEN_EVENT,
+  CONSENT_OPEN_EVENT,
+  CONSENT_BANNER_HEIGHT_VAR,
+  openCookieSettings,
+} from './CookieConsent'
+import CookieSettingsButton from './CookieSettingsButton'
 
 // Mock next/link as a passthrough <a>
 vi.mock('next/link', () => ({
@@ -107,5 +114,61 @@ describe('CookieConsent', () => {
       window.dispatchEvent(new CustomEvent('pattern-hub:mobile-nav-toggle', { detail: { open: false } }))
     })
     expect(screen.getByRole('dialog', { name: 'Cookie consent' })).toBeInTheDocument()
+  })
+
+  // Site check V6: the banner must not hide the end of the page before a choice is made
+  it('reserves its height at the bottom of the page while it shows and releases it after a choice', async () => {
+    const user = userEvent.setup()
+    const rectSpy = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockReturnValue({ height: 64 } as DOMRect)
+
+    try {
+      await act(async () => {
+        render(<CookieConsent />)
+      })
+      await screen.findByRole('dialog', { name: 'Cookie consent' })
+
+      expect(document.body.style.paddingBottom).toBe('64px')
+      expect(document.documentElement.style.getPropertyValue(CONSENT_BANNER_HEIGHT_VAR)).toBe('64px')
+
+      await user.click(screen.getByRole('button', { name: 'Accept' }))
+
+      expect(document.body.style.paddingBottom).toBe('')
+      expect(document.documentElement.style.getPropertyValue(CONSENT_BANNER_HEIGHT_VAR)).toBe('')
+    } finally {
+      rectSpy.mockRestore()
+    }
+  })
+
+  // Site check M10: consent can be changed after it was given
+  it('reopens after a stored choice when Cookie settings is used', async () => {
+    const user = userEvent.setup()
+    localStorage.setItem(CONSENT_STORAGE_KEY, 'accepted')
+
+    await act(async () => {
+      render(
+        <>
+          <CookieConsent />
+          <CookieSettingsButton />
+        </>
+      )
+    })
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Cookie settings' }))
+    expect(screen.getByRole('dialog', { name: 'Cookie consent' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Reject' }))
+    expect(localStorage.getItem(CONSENT_STORAGE_KEY)).toBe('rejected')
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('openCookieSettings fires the open event other code can listen for', () => {
+    const onOpen = vi.fn()
+    window.addEventListener(CONSENT_OPEN_EVENT, onOpen)
+    openCookieSettings()
+    expect(onOpen).toHaveBeenCalledTimes(1)
+    window.removeEventListener(CONSENT_OPEN_EVENT, onOpen)
   })
 })

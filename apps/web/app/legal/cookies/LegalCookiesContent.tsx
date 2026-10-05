@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import CookieSettingsButton from '../../../components/layout/CookieSettingsButton'
 
 const LAST_UPDATED = '12 May 2026'
 
@@ -177,7 +178,6 @@ export default function LegalCookiesContent() {
               <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 4. How to Control Cookies
               </h2>
-              {/* TODO: Implement a cookie consent banner (e.g. using a POPIA-compliant CMP) before go-live on production: required for analytics cookies */}
               <p className="text-brand-ink leading-relaxed mb-3">
                 You have several options for controlling cookies:
               </p>
@@ -194,8 +194,16 @@ export default function LegalCookiesContent() {
                   </a>
                 </li>
                 <li>
-                  <strong>Microsoft Clarity opt-out:</strong> You can opt out via the Microsoft
-                  Privacy dashboard or by adjusting your browser&rsquo;s Do Not Track settings.
+                  <strong>Microsoft Clarity opt-out:</strong> You can opt out via the{' '}
+                  <a href="https://account.microsoft.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-accent underline hover:no-underline">
+                    Microsoft Privacy dashboard
+                  </a>{' '}
+                  or by adjusting your browser&rsquo;s Do Not Track settings.
+                </li>
+                <li>
+                  <strong>Change your choice on this site:</strong> Open{' '}
+                  <CookieSettingsButton className="text-brand-accent underline hover:no-underline" />{' '}
+                  to accept or reject analytics cookies again at any time.
                 </li>
               </ul>
               <p className="text-brand-ink leading-relaxed mt-4">

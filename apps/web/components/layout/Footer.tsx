@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import CookieSettingsButton from './CookieSettingsButton'
 
 const footerLinks = {
   services: {
@@ -137,6 +138,12 @@ export default function Footer() {
                     </Link>
                   </li>
                 ))}
+                {/* M10: consent can be changed after it is given */}
+                {col === footerLinks.legal && (
+                  <li>
+                    <CookieSettingsButton className="text-sm text-white/70 hover:text-white transition-colors duration-150" />
+                  </li>
+                )}
               </ul>
             </div>
           ))}

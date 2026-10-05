@@ -56,6 +56,21 @@ function isFooterInView(): boolean {
   return footer !== null && footer.getBoundingClientRect().top < window.innerHeight
 }
 
+/** Height of the band at the bottom of the screen the mobile pill occupies, with a little room. */
+const MOBILE_PILL_ZONE_PX = 112
+
+/**
+ * Site check V10: on mobile the pill sat over the "Send a Message" fields on /contact. It steps
+ * aside while any form crosses the bottom band of the screen where the pill sits.
+ */
+export function isFormUnderMobilePill(): boolean {
+  const zoneTop = window.innerHeight - MOBILE_PILL_ZONE_PX
+  return Array.from(document.querySelectorAll('form')).some((form) => {
+    const rect = form.getBoundingClientRect()
+    return rect.height > 0 && rect.top < window.innerHeight && rect.bottom > zoneTop
+  })
+}
+
 function BrainIcon({ size = 52 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -120,7 +135,13 @@ export default function PatternCoachTab() {
     const check = () => {
       frame = 0
       const tab = desktopTabRef.current
-      setIsObstructing(isMobile ? isFooterInView() : tab ? isTabObstructingContent(tab) : false)
+      setIsObstructing(
+        isMobile
+          ? isFooterInView() || isFormUnderMobilePill()
+          : tab
+            ? isTabObstructingContent(tab)
+            : false
+      )
     }
     const schedule = () => {
       if (frame === 0) frame = window.requestAnimationFrame(check)
@@ -226,7 +247,8 @@ export default function PatternCoachTab() {
       {/* Mobile pill: gated on consentChosen (KI027) so it never stacks on the cookie banner;
           z-[60] sits above the sticky header (z-50) but below the consent banner (z-[70]);
           bottom offset includes the iOS safe-area inset. Hidden while the mobile menu is open
-          (B8) and once the footer scrolls into view so footer links stay reachable (B7). */}
+          (B8), once the footer scrolls into view so footer links stay reachable (B7), and while
+          a form is under it so its fields stay usable (V10). */}
       {showTab && isMobile && consentChosen && !isObstructing && (
         <motion.aside
           key="pc-mobile"

@@ -51,10 +51,12 @@ export default function Hero() {
   // the picture takes the top 320px and the text sits on black beneath it,
   // joined by a fade. From sm up the text overlays the picture.
   // min-h (never a fixed height) so the stack can grow on short viewports.
+  // --cookie-banner-h is set by CookieConsent only while the banner shows, so
+  // the toggle dots and scroll chevron stay above it on first visit (site check V6).
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative flex flex-col justify-end bg-brand-primary-900 sm:min-h-[700px] lg:min-h-[calc(100vh-5rem)] overflow-hidden"
+      className="relative flex flex-col justify-end bg-brand-primary-900 sm:min-h-[700px] lg:min-h-[calc(100vh-5rem-var(--cookie-banner-h,0px))] overflow-hidden"
     >
       {/* Layer 1 — Background videos (crossfade on toggle) */}
       {heroVideos.map((video, i) => (
