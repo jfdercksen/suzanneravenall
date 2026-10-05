@@ -1,13 +1,10 @@
 'use client'
 
-import Cal from '@calcom/embed-react'
-import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, MapPin } from 'lucide-react'
 import ContactForm from './ContactForm'
+import CalInlineBooking from './CalInlineBooking'
 import type { EnquiryOption } from './enquiry'
-
-const CAL_URL = process.env.NEXT_PUBLIC_CAL_URL ?? 'https://cal.suzanneravenall.com'
 
 const sectionReveal = {
   initial: { opacity: 0, y: 20 },
@@ -32,17 +29,8 @@ interface ContactOptionsProps {
 
 export default function ContactOptions({ enquiry, topic }: ContactOptionsProps = {}) {
   // Every "Book a Discovery Call" button on the site links to /contact#book.
-  // The browser and the App Router both try to scroll to the hash, but the
-  // Cal embed and the reveal animations can land the card off target, so
-  // settle on the booking card once the page has mounted.
-  useEffect(() => {
-    if (window.location.hash !== '#book') return
-    const frame = requestAnimationFrame(() => {
-      document.getElementById('book')?.scrollIntoView({ block: 'start' })
-    })
-    return () => cancelAnimationFrame(frame)
-  }, [])
-
+  // Landing on #book (and #message) after in-app navigation is handled site
+  // wide by components/layout/HashScroll in the root layout.
   return (
     <section
       aria-labelledby="contact-options-heading"
@@ -77,14 +65,7 @@ export default function ContactOptions({ enquiry, topic }: ContactOptionsProps =
               30 minutes. No obligation. Find out if we&rsquo;re a fit.
             </p>
 
-            <div className="rounded-lg overflow-hidden -mx-2">
-              <Cal
-                calLink="suzanneravenall/discovery-call"
-                embedJsUrl={`${CAL_URL}/embed/embed.js`}
-                config={{ theme: 'light', layout: 'month_view' }}
-                style={{ width: '100%', height: '600px', overflow: 'auto' }}
-              />
-            </div>
+            <CalInlineBooking />
           </motion.div>
 
           {/* Card 2: Send a Message. id="message" is the target of contactHref() links. */}

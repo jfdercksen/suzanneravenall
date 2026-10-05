@@ -13,15 +13,24 @@ export const BOOKING_FALLBACK_HREF = '/contact#book'
 const BUTTON_CLASSES =
   'inline-flex items-center justify-center px-10 py-5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300'
 
+const EMBED_JS_URL = `${CAL_URL}/embed/embed.js`
+// Own namespace, so the modal never shares a Cal instance with the /contact
+// inline embed. Sharing the default instance made in-app navigation from
+// /services to /contact throw "iframe doesn't exist. createIframe must be
+// called before doInIframe" from embed.js (site check A2).
+export const CAL_MODAL_NAMESPACE = 'discovery-modal'
+
 // getCalApi resolves straight away with the snippet's call queue, even when
-// embed.js never loads. Cal.instance is only set once embed.js has actually
-// run, so that is the real readiness signal.
+// embed.js never loads. Cal.ns[namespace].instance is only set once embed.js
+// has actually run, so that is the real readiness signal.
 const CAL_READY_POLL_MS = 200
 const CAL_READY_TIMEOUT_MS = 10_000
 
+type CalGlobal = { Cal?: { ns?: Record<string, { instance?: unknown } | undefined> } }
+
 function calEmbedLoaded(): boolean {
-  const cal = (window as unknown as { Cal?: { instance?: unknown } }).Cal
-  return Boolean(cal?.instance)
+  const cal = (window as unknown as CalGlobal).Cal
+  return Boolean(cal?.ns?.[CAL_MODAL_NAMESPACE]?.instance)
 }
 
 export default function CalBookingSection() {
@@ -32,7 +41,7 @@ export default function CalBookingSection() {
     if (initialised.current) return
     initialised.current = true
     let poll: ReturnType<typeof setInterval> | undefined
-    getCalApi({ embedJsUrl: `${CAL_URL}/embed/embed.js` }).then((cal) => {
+    getCalApi({ namespace: CAL_MODAL_NAMESPACE, embedJsUrl: EMBED_JS_URL }).then((cal) => {
       cal('ui', {
         theme: 'dark',
         styles: { branding: { brandColor: '#171717' } },
@@ -59,7 +68,7 @@ export default function CalBookingSection() {
 
   function openModal() {
     if (!calReady) return
-    getCalApi({ embedJsUrl: `${CAL_URL}/embed/embed.js` }).then((cal) => {
+    getCalApi({ namespace: CAL_MODAL_NAMESPACE, embedJsUrl: EMBED_JS_URL }).then((cal) => {
       cal('modal', { calLink: 'suzanneravenall/discovery-call', config: { theme: 'dark' } })
     })
   }
