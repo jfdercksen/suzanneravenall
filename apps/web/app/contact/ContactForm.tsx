@@ -1,18 +1,19 @@
 'use client'
 
 import { useState } from 'react'
+import { ENQUIRY_OPTIONS, type EnquiryOption } from './enquiry'
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error'
 
-const ENQUIRY_OPTIONS = [
-  '1-on-1 Coaching',
-  'Group Program',
-  'Speaking Enquiry',
-  'Practitioner Program',
-  'Other',
-] as const
+interface ContactFormProps {
+  light?: boolean
+  /** Preselected enquiry type, from /contact?enquiry= */
+  enquiry?: EnquiryOption
+  /** What the visitor clicked on (an event, an immersion), from /contact?topic= */
+  topic?: string
+}
 
-export default function ContactForm({ light = false }: { light?: boolean }) {
+export default function ContactForm({ light = false, enquiry, topic }: ContactFormProps) {
   const [formState, setFormState] = useState<FormState>('idle')
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -126,6 +127,7 @@ export default function ContactForm({ light = false }: { light?: boolean }) {
         <select
           id="contact-enquiry"
           name="enquiry"
+          defaultValue={enquiry ?? ''}
           disabled={isSubmitting}
           className={`${inputClass} appearance-none`}
         >
@@ -147,6 +149,7 @@ export default function ContactForm({ light = false }: { light?: boolean }) {
           name="message"
           required
           rows={4}
+          defaultValue={topic ? `Regarding: ${topic}\n\n` : undefined}
           disabled={isSubmitting}
           className={`${inputClass} resize-none`}
           placeholder="Tell Suzanne a little about what you're looking for..."

@@ -49,8 +49,10 @@ export function ComingSoonSection() {
           </>
         }
       >
+        {/* The copy promises a subscription, so this goes to the real newsletter
+            sign-up (ResourcesNewsletterCTA, section id="newsletter" on /resources). */}
         <Link
-          href="/contact"
+          href="/resources#newsletter"
           className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
         >
           Stay Updated

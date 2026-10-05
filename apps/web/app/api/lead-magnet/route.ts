@@ -4,6 +4,9 @@ import * as Sentry from '@sentry/nextjs'
 
 const VIBE_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
 const N8N_BASE_URL = (process.env.N8N_BASE_URL ?? 'http://n8n:5678').replace(/\/$/, '')
+const N8N_TIMEOUT_MS = 10_000
+const DELIVERY_FAILED =
+  'We could not save your details right now. Please try again in a moment.'
 
 const LeadMagnetSchema = z.object({
   email: z.string().email(),
@@ -35,25 +38,37 @@ export async function POST(request: Request) {
   // validation always passes even when the form doesn't collect a name.
   const resolvedFirstName = firstName ?? email.split('@')[0]
 
-  // Fire-and-forget: POST to n8n lead-magnet-to-vtiger workflow.
+  // B13: the n8n lead-magnet-to-vtiger workflow is where the lead is actually
+  // stored, so wait for it. It used to be fire-and-forget behind an
+  // unconditional 200, which told the visitor "we have your details" even
+  // when the lead was lost. Now a failure returns a 502 the forms can show.
   // Path must match the webhook trigger node: path = "lead-magnet-submission"
-  void fetch(`${N8N_BASE_URL}/webhook/lead-magnet-submission`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      email,
-      firstName: resolvedFirstName,
-      source: source ?? 'homepage',
-      quizResult: quizResult ?? null,
-      timestamp,
-    }),
-  }).catch((err: unknown) => {
+  try {
+    const n8nRes = await fetch(`${N8N_BASE_URL}/webhook/lead-magnet-submission`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        firstName: resolvedFirstName,
+        source: source ?? 'homepage',
+        quizResult: quizResult ?? null,
+        timestamp,
+      }),
+      signal: AbortSignal.timeout(N8N_TIMEOUT_MS),
+    })
+    if (!n8nRes.ok) {
+      throw new Error(`n8n responded ${n8nRes.status}`)
+    }
+  } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err)
     console.error(`[lead-magnet] n8n webhook failed: ${message}`)
+    // Email is PII (POPIA) - never include in error context
     Sentry.captureException(err, { extra: { source } })
-  })
+    return NextResponse.json({ error: DELIVERY_FAILED }, { status: 502 })
+  }
 
-  // Forward to Vibe Marketing — fire-and-forget, never blocks the response.
+  // Forward to Vibe Marketing - fire-and-forget, never blocks the response.
+  // Secondary copy only: the lead is already stored by n8n above.
   // Only fires when VIBE_MARKETING_WEBHOOK_URL is configured (graceful degradation).
   if (VIBE_WEBHOOK_URL) {
     void fetch(VIBE_WEBHOOK_URL, {

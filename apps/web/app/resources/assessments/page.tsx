@@ -1,19 +1,17 @@
-import { cookies } from 'next/headers'
 import type { Metadata } from 'next'
-import { createClient } from '@/utils/supabase/server'
-import { requireAccess } from '@/lib/access/check-access'
 import AssessmentsContent from './AssessmentsContent'
 
 export const metadata: Metadata = {
   title: 'Assessments',
-  description: 'Self-assessment tools for transformation. Silver membership required.',
+  description:
+    'Self-assessment tools for transformation are coming soon. Join the list to be told when they launch.',
 }
 
-export default async function AssessmentsPage() {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
-
-  await requireAccess(supabase, 'resources_assessments', '/resources/assessments')
-
+// Public on purpose: the assessments are not built yet, so this page is only a
+// "coming soon" notice plus a notify-me form. Anyone must be able to join the
+// waitlist. When real assessment tools ship, gate THOSE (e.g. a member-only
+// section using requireAccess / hasAccess with 'resources_assessments') and
+// keep the notify form public.
+export default function AssessmentsPage() {
   return <AssessmentsContent />
 }

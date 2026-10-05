@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { groupPathways } from '@/data/pathways'
+import { contactHref } from '@/app/contact/enquiry'
 
 const containerVariants = {
   hidden: {},
@@ -67,7 +68,7 @@ export default function PathwaysGroupSection() {
                     {immersion.description}
                   </p>
                   <Link
-                    href="/contact"
+                    href={contactHref('events', immersion.title)}
                     className="mt-auto inline-flex w-fit items-center gap-2 rounded-button border border-brand-primary/30 px-5 py-2.5 text-xs uppercase tracking-[0.2em] font-medium text-brand-primary transition-all duration-300 hover:border-brand-accent hover:bg-brand-accent hover:text-white hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   >
                     Register Your Interest

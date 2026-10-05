@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { getProgramsByCategory, PROGRAMS, type Program } from '@/data/programs'
+import { contactHref } from '@/app/contact/enquiry'
 
 // Event data sources:
 // - infra/scripts/scraped-content/dates-repository.md (old-site "Event Dates" tab —
@@ -44,7 +45,7 @@ const confirmedOpportunities: ConfirmedOpportunity[] = [
     description:
       'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
     cta: 'Join Waitlist',
-    href: '/contact',
+    href: contactHref('group', 'Group Transformation Session waitlist'),
     badge: 'Next intake opening soon',
   },
 ]
@@ -115,7 +116,7 @@ function AwaitingDateCard({ program }: { program: Program }) {
           View programme
         </Link>
         <Link
-          href="/contact"
+          href={contactHref('events', program.name)}
           className="inline-flex items-center justify-center px-5 py-2.5 bg-brand-accent hover:bg-brand-accent-700 text-white text-sm font-medium rounded-button transition-colors duration-300"
         >
           Register Your Interest
@@ -187,7 +188,7 @@ export default function EventsContent() {
         <a href="#upcoming" className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300">
           See Upcoming Events
         </a>
-        <Link href="/contact" className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10">
+        <Link href={contactHref('events')} className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10">
           Register Your Interest
         </Link>
       </PageHeader>
@@ -388,7 +389,7 @@ export default function EventsContent() {
                 will let you know the moment new live dates are announced.
               </p>
               <Link
-                href="/contact"
+                href={contactHref('events', 'New live dates')}
                 className="text-sm font-medium text-brand-accent hover:text-brand-accent-700 transition-colors duration-300"
               >
                 Register your interest
