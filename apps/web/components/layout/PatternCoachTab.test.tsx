@@ -2,7 +2,12 @@ import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import PatternCoachTab from './PatternCoachTab'
+import PatternCoachTab, { isTabObstructingContent } from './PatternCoachTab'
+
+let mockPathname = '/'
+vi.mock('next/navigation', () => ({
+  usePathname: () => mockPathname,
+}))
 
 // Mock framer-motion — replace motion.aside with a native <aside> and AnimatePresence as a fragment
 vi.mock('framer-motion', () => ({
@@ -47,6 +52,7 @@ beforeEach(() => {
 
   // Start each test with a clean localStorage
   localStorage.clear()
+  mockPathname = '/'
 })
 
 afterEach(() => {
@@ -184,6 +190,121 @@ describe('PatternCoachTab', () => {
         expect(
           screen.getByRole('complementary', { name: 'Pattern Coach App' })
         ).toBeInTheDocument()
+      })
+    })
+  })
+
+  // Site check B7 / B8
+  describe('never covers content, the mobile menu or its own page (site check B7, B8)', () => {
+    it('does not render on the /pattern-coach product page itself', async () => {
+      mockPathname = PRODUCT_PAGE_PATH
+
+      await act(async () => {
+        render(<PatternCoachTab />)
+      })
+
+      expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
+    })
+
+    it('hides the mobile pill while the mobile menu is open and brings it back on close', async () => {
+      setViewportWidth(375)
+      localStorage.setItem(CONSENT_STORAGE_KEY, 'accepted')
+
+      await act(async () => {
+        render(<PatternCoachTab />)
+      })
+      await screen.findByRole('complementary', { name: 'Pattern Coach App' })
+
+      await act(async () => {
+        window.dispatchEvent(new CustomEvent('pattern-hub:mobile-nav-toggle', { detail: { open: true } }))
+      })
+      expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
+
+      await act(async () => {
+        window.dispatchEvent(new CustomEvent('pattern-hub:mobile-nav-toggle', { detail: { open: false } }))
+      })
+      expect(screen.getByRole('complementary', { name: 'Pattern Coach App' })).toBeInTheDocument()
+    })
+
+    it('hides the mobile pill once the footer is in view so footer links stay tappable', async () => {
+      setViewportWidth(375)
+      localStorage.setItem(CONSENT_STORAGE_KEY, 'accepted')
+      const footer = document.createElement('footer')
+      footer.getBoundingClientRect = () => ({ top: 100 }) as DOMRect
+      document.body.appendChild(footer)
+
+      try {
+        await act(async () => {
+          render(<PatternCoachTab />)
+        })
+        expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
+      } finally {
+        footer.remove()
+      }
+    })
+
+    it('desktop tab is a slim edge tab with its label on one line (no clipped text)', async () => {
+      await act(async () => {
+        render(<PatternCoachTab />)
+      })
+
+      const tab = await screen.findByRole('complementary', { name: 'Pattern Coach App' })
+      expect(tab.className).toContain('w-7')
+      expect(tab.className).not.toContain('w-[120px]')
+      expect(tab).toHaveTextContent('Brilliant Coach')
+      expect(tab.querySelector('.whitespace-nowrap')).not.toBeNull()
+    })
+
+    describe('isTabObstructingContent', () => {
+      const original = document.elementsFromPoint
+
+      function makeTab() {
+        const tab = document.createElement('aside')
+        Object.defineProperty(tab, 'offsetWidth', { configurable: true, value: 28 })
+        Object.defineProperty(tab, 'offsetHeight', { configurable: true, value: 200 })
+        document.body.appendChild(tab)
+        return tab
+      }
+
+      afterEach(() => {
+        document.elementsFromPoint = original
+        document.body.innerHTML = ''
+      })
+
+      it('is true when a link sits underneath the tab', () => {
+        const tab = makeTab()
+        const link = document.createElement('a')
+        link.href = '/programs'
+        document.body.appendChild(link)
+        document.elementsFromPoint = vi.fn(() => [tab, link])
+
+        expect(isTabObstructingContent(tab)).toBe(true)
+      })
+
+      it('is true when text or the footer sits underneath the tab', () => {
+        const tab = makeTab()
+        const p = document.createElement('p')
+        p.textContent = 'The Basic Five'
+        document.body.appendChild(p)
+        document.elementsFromPoint = vi.fn(() => [tab, p])
+        expect(isTabObstructingContent(tab)).toBe(true)
+
+        const footer = document.createElement('footer')
+        const inner = document.createElement('div')
+        footer.appendChild(inner)
+        document.body.appendChild(footer)
+        document.elementsFromPoint = vi.fn(() => [tab, inner])
+        expect(isTabObstructingContent(tab)).toBe(true)
+      })
+
+      it('is false over an empty gutter or section background', () => {
+        const tab = makeTab()
+        const section = document.createElement('section')
+        section.appendChild(document.createTextNode('   '))
+        document.body.appendChild(section)
+        document.elementsFromPoint = vi.fn(() => [tab, section, document.body])
+
+        expect(isTabObstructingContent(tab)).toBe(false)
       })
     })
   })
