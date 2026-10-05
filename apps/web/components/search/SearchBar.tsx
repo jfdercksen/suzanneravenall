@@ -1,11 +1,13 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Search, X, ArrowRight } from 'lucide-react'
 import type { SearchResultItem } from '@/lib/search/types'
+import { resultBadge } from '@/lib/search/utils'
 
 function formatPrice(cents: number): string {
   return `R${new Intl.NumberFormat('en-ZA').format(cents / 100)}`
@@ -27,6 +29,12 @@ export function SearchBar() {
   const [results, setResults] = useState<SearchResultItem[]>([])
   const [loading, setLoading] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
+  // Shortcut hint: Ctrl K by default, the Mac symbol only on Apple devices (site check V1).
+  const [isMac, setIsMac] = useState(false)
+
+  useEffect(() => {
+    setIsMac(/Mac|iPhone|iPad|iPod/i.test(navigator.platform || navigator.userAgent))
+  }, [])
 
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
@@ -129,18 +137,21 @@ export function SearchBar() {
     return (
       <button
         onClick={openModal}
-        aria-label="Open search (Ctrl+K)"
+        aria-label={`Open search (${isMac ? 'Cmd' : 'Ctrl'}+K)`}
         className="flex items-center gap-1.5 px-3 py-2 text-white/70 hover:text-white rounded-md transition-colors duration-150"
       >
         <Search className="w-4 h-4" />
         <kbd className="hidden xl:inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-medium bg-white/10 rounded border border-white/20">
-          ⌘K
+          {isMac ? '⌘K' : 'Ctrl K'}
         </kbd>
       </button>
     )
   }
 
-  return (
+  // Portalled to <body> so the modal is not trapped in the sticky header's
+  // stacking context (z-50): it now sits above the cookie bar (z-[70]) and the
+  // Pattern Coach tab (z-[60]), and a click anywhere on the backdrop closes it.
+  return createPortal(
     <>
       {/* Backdrop */}
       <div
@@ -162,7 +173,7 @@ export function SearchBar() {
           <input
             ref={inputRef}
             type="text"
-            placeholder="Search programmes, topics…"
+            placeholder="Search programmes, topics, pages…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -174,11 +185,18 @@ export function SearchBar() {
             <button
               onClick={() => { setQuery(''); setResults([]); inputRef.current?.focus() }}
               aria-label="Clear search"
-              className="text-gray-500 hover:text-white transition-colors"
+              className="text-xs text-gray-500 hover:text-white transition-colors"
             >
-              <X className="w-4 h-4" />
+              Clear
             </button>
           )}
+          <button
+            onClick={closeModal}
+            aria-label="Close search"
+            className="-mr-1 p-1 text-gray-400 hover:text-white transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Results */}
@@ -243,7 +261,7 @@ export function SearchBar() {
                         </span>
                       ) : (
                         <span className="text-xs px-2 py-0.5 bg-brand-accent/20 text-brand-accent-400 rounded-full">
-                          Topic
+                          {resultBadge(item)}
                         </span>
                       )}
                     </div>
@@ -266,15 +284,16 @@ export function SearchBar() {
           </>
         )}
 
-        {/* Footer hint */}
+        {/* Footer hint: keyboard only, so hidden on touch-sized screens */}
         {!query && (
-          <div className="px-4 py-3 text-xs text-gray-600 flex items-center gap-4">
+          <div className="hidden sm:flex px-4 py-3 text-xs text-gray-600 items-center gap-4">
             <span>↑↓ navigate</span>
             <span>↵ select</span>
             <span>esc close</span>
           </div>
         )}
       </div>
-    </>
+    </>,
+    document.body
   )
 }

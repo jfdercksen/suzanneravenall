@@ -7,7 +7,13 @@ import type {
   SearchIndex,
 } from '@/lib/search/types'
 import { logError } from '@/lib/log'
-import { sanitizeHighlight } from '@/lib/search/utils'
+import { sanitizeHighlight, shareLimit } from '@/lib/search/utils'
+import {
+  PAGE_DOCUMENTS,
+  TOPIC_DOCUMENTS,
+  fetchBlogDocuments,
+  searchDocuments,
+} from '@/lib/search/siteSearch'
 
 const MEILI_HOST = process.env.MEILISEARCH_HOST ?? 'http://meilisearch:7700'
 const MEILI_KEY = process.env.MEILISEARCH_ADMIN_KEY ?? ''
@@ -105,7 +111,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const q = (searchParams.get('q') ?? '').trim()
   const rawIndex = searchParams.get('index') ?? 'all'
-  const VALID_INDEXES = new Set<string>(['all', 'products', 'explore_topics'])
+  const VALID_INDEXES = new Set<string>(['all', 'products', 'explore_topics', 'pages'])
   if (!VALID_INDEXES.has(rawIndex)) {
     return NextResponse.json({ error: 'Invalid index' }, { status: 400 })
   }
@@ -125,30 +131,36 @@ export async function GET(req: NextRequest) {
   try {
     const wantProducts = indexParam === 'all' || indexParam === 'products'
     const wantTopics = indexParam === 'all' || indexParam === 'explore_topics'
+    const wantPages = indexParam === 'all' || indexParam === 'pages'
 
-    // Each index is asked for the full limit. For index=all the two lists are
-    // then trimmed to share the limit, so slots one index cannot fill go to the
-    // other (a query with no topic matches still returns `limit` products).
-    const [productHits, topicHits] = await Promise.all([
+    // Each source is asked for the full limit; shareLimit then trims the groups
+    // so slots one group cannot fill go to the others.
+    const [productHits, topicHits, blogDocs] = await Promise.all([
       wantProducts
         ? searchIndex<ProductSearchHit>('products', q, limit, ['title', 'description'])
         : Promise.resolve([] as ProductSearchHit[]),
       wantTopics
         ? searchIndex<TopicSearchHit>('explore_topics', q, limit, ['title', 'shortDescription'])
         : Promise.resolve([] as TopicSearchHit[]),
+      wantPages ? fetchBlogDocuments() : Promise.resolve([]),
     ])
 
-    let productCount = productHits.length
-    let topicCount = topicHits.length
-    if (productCount + topicCount > limit) {
-      topicCount = Math.min(topicCount, Math.max(Math.floor(limit / 2), limit - productCount))
-      productCount = Math.min(productCount, limit - topicCount)
+    // MeiliSearch only holds each topic's title and one-liner, so the full topic
+    // page copy is searched in the app as well (site check C21). Meili hits keep
+    // their place; body-copy matches it missed are appended.
+    const topicResults = topicHits.map(topicToResult)
+    if (wantTopics) {
+      const seen = new Set(topicResults.map((r) => r.url))
+      for (const r of searchDocuments(TOPIC_DOCUMENTS, q, limit)) {
+        if (!seen.has(r.url)) topicResults.push(r)
+      }
     }
+    const pageResults = wantPages ? searchDocuments([...PAGE_DOCUMENTS, ...blogDocs], q, limit) : []
 
-    const results: SearchResultItem[] = [
-      ...productHits.slice(0, productCount).map(productToResult),
-      ...topicHits.slice(0, topicCount).map(topicToResult),
-    ]
+    const results: SearchResultItem[] = shareLimit(
+      [productHits.map(productToResult), topicResults.slice(0, limit), pageResults],
+      limit
+    ).flat()
 
     return NextResponse.json({ results, query: q })
   } catch (err) {
