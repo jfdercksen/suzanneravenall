@@ -3,6 +3,10 @@ import { ContainerRegistrationKeys } from '@medusajs/framework/utils'
 import { createClient } from '@supabase/supabase-js'
 import { MEMBERSHIPS_MODULE } from '../modules/memberships'
 import type MembershipsModuleService from '../modules/memberships/service'
+import { orderVtigerMode, thinkificMode } from '../automations/config'
+import { dispatchOrderAutomations } from '../automations/dispatch'
+import { buildOrderSnapshot, ORDER_GRAPH_FIELDS } from '../automations/order-snapshot'
+import { createDryRunQueue, getAutomationQueue } from '../automations/runtime'
 
 const N8N_BASE_URL = (process.env.N8N_WEBHOOK_URL ?? 'http://n8n:5678').replace(/\/$/, '')
 const N8N_WEBHOOK_SECRET = process.env.N8N_WEBHOOK_SECRET ?? ''
@@ -439,8 +443,9 @@ async function handlePortalAccessGrant(order: RetrievedOrder): Promise<void> {
 
 // Side effects on order placement (all fire-and-forget, never block order completion):
 // 1. n8n webhook → Sage invoice creation
-// 1b. n8n webhook → Vtiger CRM
-// 1c. n8n webhook → Thinkific enrollment (course products only, keyed by product.metadata.thinkific_course_id)
+// 1b. Vtiger CRM: n8n webhook, or our own code (AUTOMATION_ORDER_VTIGER)
+// 1c. Thinkific enrollment (course products only, keyed by product.metadata.thinkific_course_id):
+//     n8n webhook, or our own code (AUTOMATION_THINKIFIC); see src/automations/
 // 2. Invoice generation → order confirmation email (chained; email includes productType + calBookingUrl)
 // 3. Membership activation (Medusa module + Supabase mirror) for membership products
 // 4. Portal access grant for programme purchases (Supabase access_level upgrade)
@@ -466,22 +471,7 @@ export default async function orderPlacedHandler({
     const query = container.resolve(ContainerRegistrationKeys.QUERY)
     const { data: orders } = await query.graph({
       entity: 'order',
-      fields: [
-        'id',
-        'display_id',
-        'customer_id',
-        'email',
-        'currency_code',
-        'total',
-        'metadata',
-        'items.*',
-        'items.variant.*',
-        'items.variant.product.*',
-        'items.variant.product.categories.*',
-        'customer.*',
-        'billing_address.*',
-        'shipping_address.*',
-      ],
+      fields: ORDER_GRAPH_FIELDS,
       filters: { id: orderId },
     })
     const order = orders[0] as unknown as (RetrievedOrder & { email?: string | null }) | undefined
@@ -516,18 +506,22 @@ export default async function orderPlacedHandler({
       console.error(`[order-placed] n8n webhook failed for order ${orderId}: ${message}`)
     })
 
-    // 1b. n8n → Vtiger: fire-and-forget
-    void fetch(`${N8N_BASE_URL}/webhook/medusa-order-vtiger`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(order),
-    }).catch((err: unknown) => {
-      const message = err instanceof Error ? err.message : String(err)
-      console.error(`[order-placed] vtiger webhook failed for order ${orderId}: ${message}`)
-    })
+    // 1b. n8n → Vtiger: fire-and-forget. Only in n8n mode (AUTOMATION_ORDER_VTIGER,
+    // default n8n); in code mode the durable queue below does it instead.
+    if (orderVtigerMode() === 'n8n') {
+      void fetch(`${N8N_BASE_URL}/webhook/medusa-order-vtiger`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(order),
+      }).catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : String(err)
+        console.error(`[order-placed] vtiger webhook failed for order ${orderId}: ${message}`)
+      })
+    }
 
-    // 1c. n8n → Thinkific enrollment: fire-and-forget (only when URL is configured)
-    if (N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL) {
+    // 1c. n8n → Thinkific enrollment: fire-and-forget (only when URL is configured).
+    // Only in n8n mode (AUTOMATION_THINKIFIC, default n8n).
+    if (thinkificMode() === 'n8n' && N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL) {
       void fetch(N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL, {
         method: 'POST',
         headers,
@@ -537,6 +531,17 @@ export default async function orderPlacedHandler({
         console.error(`[order-placed] thinkific enrollment webhook failed for order ${orderId}: ${message}`)
       })
     }
+
+    // 1d. Code automations (Thinkific, Vtiger) for flags set to "code": durable,
+    // idempotent jobs in Medusa's Postgres, run at once and retried with backoff.
+    // With every flag on "n8n" and no AUTOMATION_DRY_RUN this does nothing.
+    void dispatchOrderAutomations(buildOrderSnapshot(order), {
+      queue: () => getAutomationQueue(container),
+      dryRunQueue: createDryRunQueue,
+    }).catch((err: unknown) => {
+      const message = err instanceof Error ? err.message : String(err)
+      console.error(`[order-placed] automation enqueue failed for order ${orderId} (the runner's sweep retries it): ${message}`)
+    })
 
     // 2. Invoice generation → order confirmation email (chained sequentially)
     void (async () => {

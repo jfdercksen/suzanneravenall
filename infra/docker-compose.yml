@@ -117,6 +117,17 @@ services:
       VTIGER_ACCESS_KEY: ${VTIGER_ACCESS_KEY:-}
       VIBE_MARKETING_WEBHOOK_URL: ${VIBE_MARKETING_WEBHOOK_URL:-}
       N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL: ${N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL:-}
+      # n8n migration steps 1 and 2 (packages/integrations/README.md). Default
+      # n8n = unchanged behaviour; code = our own durable queue; off = nobody.
+      AUTOMATION_THINKIFIC: ${AUTOMATION_THINKIFIC:-n8n}
+      AUTOMATION_ORDER_VTIGER: ${AUTOMATION_ORDER_VTIGER:-n8n}
+      AUTOMATION_ALERT_EMAIL: ${AUTOMATION_ALERT_EMAIL:-}
+      # Medusa's own dry-run switch, separate from the web app's
+      # AUTOMATION_DRY_RUN so a shadow run here never pauses live lead sync.
+      AUTOMATION_DRY_RUN: ${MEDUSA_AUTOMATION_DRY_RUN:-false}
+      INTERNAL_WEBHOOK_SECRET: ${INTERNAL_WEBHOOK_SECRET:-}
+      THINKIFIC_API_KEY: ${THINKIFIC_API_KEY:-}
+      BREVO_API_KEY: ${BREVO_API_KEY:-}
     networks:
       - suzanne_network
     healthcheck:
