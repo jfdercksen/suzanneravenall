@@ -27,6 +27,15 @@ export type SendEmailInput = {
   html?: string
   text?: string
   headers?: Record<string, string>
+  /** Files sent with the email, e.g. the invoice PDF on an order confirmation. */
+  attachments?: EmailAttachment[]
+}
+
+export type EmailAttachment = {
+  /** File name the recipient sees, e.g. "invoice-42.pdf". */
+  filename: string
+  /** Raw bytes; base64-encoded here for Brevo. */
+  content: Buffer | Uint8Array
 }
 
 export type MailAddress = { email: string; name?: string }
@@ -71,6 +80,13 @@ export async function sendEmail(input: SendEmailInput): Promise<string> {
   if (input.text) payload.textContent = input.text
   if (input.replyTo) payload.replyTo = parseAddress(input.replyTo)
   if (input.headers && Object.keys(input.headers).length > 0) payload.headers = input.headers
+  if (input.attachments && input.attachments.length > 0) {
+    // Brevo takes inline attachments as { name, content: base64 }.
+    payload.attachment = input.attachments.map((file) => ({
+      name: file.filename,
+      content: Buffer.from(file.content).toString('base64'),
+    }))
+  }
 
   const res = await fetch(BREVO_ENDPOINT, {
     method: 'POST',

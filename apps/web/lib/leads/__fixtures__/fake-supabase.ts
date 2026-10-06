@@ -7,7 +7,9 @@ type PgError = { code?: string; message: string }
 
 export type FakeLeadRow = Record<string, unknown> & { id: string }
 
-export function makeFakeSupabase(opts: { insertError?: PgError; updateError?: PgError; rows?: FakeLeadRow[] } = {}) {
+export function makeFakeSupabase(
+  opts: { insertError?: PgError; updateError?: PgError; selectError?: PgError; rows?: FakeLeadRow[] } = {},
+) {
   const rows: FakeLeadRow[] = [...(opts.rows ?? [])]
   const inserts: Array<Record<string, unknown>> = []
   const updates: Array<{ id: string; values: Record<string, unknown> }> = []
@@ -43,11 +45,21 @@ export function makeFakeSupabase(opts: { insertError?: PgError; updateError?: Pg
           }
         },
         select(_cols: string) {
-          let statuses: string[] = []
+          let statuses: string[] | null = null
+          const equals: Array<[string, unknown]> = []
+          const atLeast: Array<[string, string]> = []
           let limit = Infinity
           const builder = {
             in(_col: string, values: string[]) {
               statuses = values
+              return builder
+            },
+            eq(col: string, value: unknown) {
+              equals.push([col, value])
+              return builder
+            },
+            gte(col: string, value: string) {
+              atLeast.push([col, value])
               return builder
             },
             order() {
@@ -57,8 +69,17 @@ export function makeFakeSupabase(opts: { insertError?: PgError; updateError?: Pg
               limit = l
               return builder
             },
-            then(resolve: (v: { data: FakeLeadRow[]; error: null }) => void) {
-              resolve({ data: rows.filter((r) => statuses.includes(String(r.vtiger_status))).slice(0, limit), error: null })
+            then(resolve: (v: { data: FakeLeadRow[] | null; error: PgError | null }) => void) {
+              if (opts.selectError) {
+                resolve({ data: null, error: opts.selectError })
+                return
+              }
+              const matched = rows
+                .filter((r) => statuses === null || statuses.includes(String(r.vtiger_status)))
+                .filter((r) => equals.every(([col, value]) => r[col] === value))
+                .filter((r) => atLeast.every(([col, value]) => String(r[col]) >= value))
+                .sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)))
+              resolve({ data: matched.slice(0, limit), error: null })
             },
           }
           return builder

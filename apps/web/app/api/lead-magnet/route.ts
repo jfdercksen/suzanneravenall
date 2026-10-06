@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
 import { captureLead } from '@/lib/leads/capture'
+import { sendLeadWelcomeIfDue } from '@/lib/leads/welcome'
 
 const VIBE_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
 const DELIVERY_FAILED =
@@ -38,18 +39,30 @@ export async function POST(request: Request) {
   // stored somewhere. captureLead saves our own copy in Supabase first, then
   // sends it to Vtiger (or to n8n, per LEADS_AUTOMATION). A CRM failure after
   // a successful save is staff's problem (alert + retry), not the visitor's.
+  const storedSource = source ?? 'homepage'
   const outcome = await captureLead({
     email,
     // Fall back to the local-part of the email: the CRM needs a first name
     // even when the form does not collect one.
     firstName: firstName ?? email.split('@')[0] ?? email,
-    source: source ?? 'homepage',
+    source: storedSource,
     quizResult: quizResult ?? null,
   })
 
   if (!outcome.stored) {
     return NextResponse.json({ error: DELIVERY_FAILED }, { status: 502 })
   }
+
+  // Welcome email for the form they used - fire-and-forget, never blocks the
+  // response. sendLeadWelcomeIfDue never throws: it skips sources without
+  // welcome copy, unsubscribed addresses and repeats within 24h, and logs
+  // its own failures.
+  void sendLeadWelcomeIfDue({
+    email,
+    firstName: firstName ?? null,
+    source: storedSource,
+    leadId: outcome.leadId,
+  })
 
   // Forward to Vibe Marketing - fire-and-forget, never blocks the response.
   // Secondary copy only: the lead is already stored above.

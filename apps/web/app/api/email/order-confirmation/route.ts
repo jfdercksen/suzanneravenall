@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { timingSafeEqual, createHash } from 'crypto'
 import { sendOrderConfirmationEmail } from '@/lib/email/order-confirmation'
 import type { OrderEmailData, OrderProductType } from '@/lib/email/types'
-import { logError } from '@/lib/log'
+import { logError, logWarn } from '@/lib/log'
+import { downloadInvoicePdf } from '@/lib/invoices/storage'
 import { medusaAdminAuthHeader } from '@/lib/medusa/admin-auth'
 
 interface MedusaOrderItem {
@@ -154,8 +155,24 @@ export async function POST(req: NextRequest) {
     calBookingUrl,
   }
 
+  // Attach the stored invoice PDF. The Medusa subscriber generates it just
+  // before calling this route; if it is not readable yet, fall back to the
+  // 7-day link (or the reply-for-a-copy line) and log it.
+  const invoice = await downloadInvoicePdf(order.id)
+  if (!invoice.pdf) {
+    logWarn(
+      `[email/order-confirmation] invoice PDF not attached for ${orderId}: ${invoice.reason}; ${invoiceUrl ? 'sending the download link instead' : 'no invoice link either'}`,
+      undefined,
+      { orderId, hasInvoiceUrl: Boolean(invoiceUrl) }
+    )
+  }
+
   try {
-    const emailId = await sendOrderConfirmationEmail({ order: emailOrder, invoiceUrl })
+    const emailId = await sendOrderConfirmationEmail({
+      order: emailOrder,
+      invoiceUrl,
+      invoicePdf: invoice.pdf,
+    })
     return NextResponse.json({ emailId })
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)

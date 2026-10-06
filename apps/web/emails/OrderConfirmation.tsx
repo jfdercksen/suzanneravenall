@@ -25,7 +25,10 @@ const MEDIUM_GRAY = '#64748B'
 const DARK_TEXT = '#334155'
 
 interface OrderConfirmationProps extends OrderEmailData {
+  /** Fallback download link (expires after 7 days); null when the PDF is attached. */
   invoiceUrl: string | null
+  /** File name of the attached invoice PDF, or null when nothing is attached. */
+  invoiceAttachmentName?: string | null
 }
 
 interface NextStep {
@@ -79,6 +82,7 @@ export default function OrderConfirmation({
   taxTotal,
   total,
   invoiceUrl,
+  invoiceAttachmentName = null,
   productType,
   calBookingUrl,
 }: OrderConfirmationProps) {
@@ -315,7 +319,19 @@ export default function OrderConfirmation({
             <Text style={{ color: MEDIUM_GRAY, fontSize: '11px', fontWeight: '700', letterSpacing: '0.15em', textTransform: 'uppercase', margin: '0 0 12px' }}>
               {vatRegistered ? 'Your Tax Invoice' : 'Your Invoice'}
             </Text>
-            {invoiceUrl ? (
+            {invoiceAttachmentName ? (
+              <>
+                <Text style={{ color: DARK_TEXT, fontSize: '14px', lineHeight: '1.6', margin: '0 0 8px' }}>
+                  Your {vatRegistered ? 'tax invoice' : 'invoice'} is attached to this email as a PDF
+                  ({invoiceAttachmentName}).
+                </Text>
+                <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', lineHeight: '1.5', margin: 0 }}>
+                  {vatRegistered
+                    ? 'It is VAT compliant for South African tax purposes. Keep it for your records.'
+                    : 'Keep it for your records.'}
+                </Text>
+              </>
+            ) : invoiceUrl ? (
               <>
                 <Text style={{ color: DARK_TEXT, fontSize: '14px', lineHeight: '1.6', margin: '0 0 20px' }}>
                   Your invoice is ready. Use the button below to download it.
@@ -338,16 +354,13 @@ export default function OrderConfirmation({
                   </Button>
                 </Section>
                 <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', lineHeight: '1.5', margin: 0 }}>
-                  {vatRegistered
-                    ? 'This invoice is VAT compliant for South African tax purposes.'
-                    : 'Keep this invoice for your records.'}
+                  This download link works for 7 days. Save a copy of the PDF for your records.
+                  {vatRegistered ? ' This invoice is VAT compliant for South African tax purposes.' : ''}
                 </Text>
               </>
             ) : (
               <Text style={{ color: DARK_TEXT, fontSize: '14px', lineHeight: '1.6', margin: 0 }}>
-                {vatRegistered
-                  ? 'Your VAT-compliant tax invoice is being generated and will be sent to you in a separate email shortly.'
-                  : 'Your invoice is being generated and will be sent to you in a separate email shortly.'}
+                If you need a copy of your invoice, reply to this email and we will send it to you.
               </Text>
             )}
           </Section>
