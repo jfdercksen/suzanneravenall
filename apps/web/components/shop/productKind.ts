@@ -263,20 +263,6 @@ export function metadataFaq(value: unknown): FaqItem[] {
   )
 }
 
-/** Contact form enquiry key (app/contact/enquiry.ts) for a payment-plan question. */
-export function paymentPlanEnquiry(kind: ProductKind): 'coaching' | 'group' | 'practitioner' | 'other' {
-  switch (kind) {
-    case 'session':
-      return 'coaching'
-    case 'group':
-      return 'group'
-    case 'programme':
-      return 'practitioner'
-    default:
-      return 'other'
-  }
-}
-
 /** Splits a plain-text store description into paragraphs, tidying stray indents. */
 export function descriptionParagraphs(description: string | null | undefined): string[] {
   return (description ?? '')

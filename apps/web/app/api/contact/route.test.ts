@@ -101,7 +101,7 @@ describe('POST /api/contact', () => {
 
     expect(res.status).toBe(500)
     const json = await res.json()
-    expect(json.error).toMatch(/email hello@suzanneravenall.com directly/)
+    expect(json.error).toMatch(/email sravenall@suzanneravenall.com directly/)
     expect(mockSendEmail).not.toHaveBeenCalled()
   })
 

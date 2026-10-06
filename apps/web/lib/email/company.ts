@@ -2,7 +2,9 @@
  * Company identity values shown in email footers and on the PDF invoice.
  *
  * Confirmed real values (public company identity, safe as hardcoded defaults):
- *   - Physical address: 8 Oxmoor Street, Kyalami Estates, Gauteng, South Africa
+ *   - Physical address: Oxmoor Street, Kyalami Estates, Johannesburg, 1684, South Africa
+ *     (https://suzanneravenall.com/terms-and-conditions/ ; no street number is
+ *     published, so none is shown: Johan's decision 10, 6 Oct 2026)
  *   - Company registration number: 2012/180720/07
  *
  * Env vars (VPS: infra/.env, local: .env.local) may override the defaults:
@@ -24,7 +26,7 @@ export const COMPANY_NAME = 'Ravenall Institute'
 export function companyPhysicalAddress(): string {
   return (
     process.env.COMPANY_PHYSICAL_ADDRESS?.trim() ||
-    '8 Oxmoor Street, Kyalami Estates, Gauteng, South Africa'
+    'Oxmoor Street, Kyalami Estates, Johannesburg, 1684, South Africa'
   )
 }
 

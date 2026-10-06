@@ -20,13 +20,17 @@ const FAQ_ITEMS = [
   {
     id: 'faq-2',
     question: 'Where are sessions held?',
+    // Programmes run on Zoom (https://suzanneravenall.com/guided-programmes/); in-person Rapid Repatterning and
+    // Resonance Repatterning sessions are sold on the live product pages. Decision 9 (6 Oct): Zoom plus in person in Kyalami.
     answer:
-      'All sessions are online via Zoom. In-person sessions in Johannesburg are available for local clients.', // TODO: Suzanne to review and personalise
+      'Programmes run online via Zoom. Private sessions are available via Zoom or in person in Kyalami, Johannesburg, where the session type offers both. Energetic clearings are done remotely.',
   },
   {
     id: 'faq-3',
     question: 'Do you work with international clients?',
-    answer: 'Yes. Clients come from over 30 countries across 6 continents.', // TODO: Suzanne to review and personalise
+    // "30+ countries" removed (decision 2, 6 Oct): no source. Testimonials on https://suzanneravenall.com/about/
+    // come from clients in several countries; Zoom sessions make that possible.
+    answer: 'Yes. Sessions and programmes run via Zoom, so you can work with Suzanne from anywhere in the world.',
   },
   {
     id: 'faq-4',
@@ -35,14 +39,9 @@ const FAQ_ITEMS = [
       'The best starting point is a free discovery call. In 30 minutes we can identify exactly where you are, what is holding you back, and which programme or session type will get you moving fastest.', // TODO: Suzanne to review and personalise
   },
   {
-    id: 'faq-5',
-    question: 'Do you offer payment plans?',
-    answer:
-      'Yes, flexible payment plans are available for most programmes. Please reach out via the contact form or book a discovery call and we will find an arrangement that works for you.', // TODO: Suzanne to review and personalise
-  },
-  {
     id: 'faq-6',
     question: 'What results can I expect, and how quickly?',
+    // "Somewhere between 1 and 5 sessions can help shift a core issue": https://suzanneravenall.com/resonance-repatterning-session/
     answer:
       'Results vary depending on the depth of the pattern and your commitment to the process. Many clients notice a meaningful shift within the first few sessions. Lasting transformation (the kind that does not slip back) typically takes consistent engagement over weeks to months.', // TODO: Suzanne to review and personalise
   },

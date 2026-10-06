@@ -40,9 +40,9 @@ describe('Footer', () => {
   })
 
   describe('copyright text', () => {
-    it('contains copyright text with "Dr. Suzanne Ravenall"', () => {
+    it('contains copyright text with "The Ravenall Institute Pty Ltd"', () => {
       render(<Footer />)
-      expect(screen.getByText(/Dr\. Suzanne Ravenall\. All rights reserved\./i)).toBeInTheDocument()
+      expect(screen.getByText(/The Ravenall Institute Pty Ltd\. All rights reserved\./i)).toBeInTheDocument()
     })
 
     it('includes the current year in the copyright text', () => {
@@ -214,9 +214,15 @@ describe('Footer', () => {
       expect(email).toHaveAttribute('href', 'mailto:sravenall@suzanneravenall.com')
     })
 
+    it('renders the phone number as a tel link', () => {
+      render(<Footer />)
+      const phone = screen.getByRole('link', { name: '+27 10 597 0841' })
+      expect(phone).toHaveAttribute('href', 'tel:+27105970841')
+    })
+
     it('renders the postal address', () => {
       render(<Footer />)
-      expect(screen.getByText(/PO Box 910, Kyalami/)).toBeInTheDocument()
+      expect(screen.getByText(/PO Box 910, Kyalami, 1684/)).toBeInTheDocument()
       expect(screen.getByText(/Johannesburg, South Africa/)).toBeInTheDocument()
     })
   })

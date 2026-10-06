@@ -87,7 +87,8 @@ export default function Footer() {
               for good.
             </p>
 
-            {/* Contact */}
+            {/* Contact (approved by Johan 6 Oct). Email and PO Box: https://suzanneravenall.com/contact/ ;
+                phone: https://effectivenesscompany.com/contact-us/ */}
             <address className="mt-5 text-sm text-white/70 not-italic leading-relaxed">
               <a
                 href="mailto:sravenall@suzanneravenall.com"
@@ -96,7 +97,14 @@ export default function Footer() {
                 sravenall@suzanneravenall.com
               </a>
               <br />
-              PO Box 910, Kyalami,
+              <a
+                href="tel:+27105970841"
+                className="hover:text-white transition-colors duration-150"
+              >
+                +27 10 597 0841
+              </a>
+              <br />
+              PO Box 910, Kyalami, 1684,
               <br />
               Johannesburg, South Africa
             </address>
@@ -176,7 +184,8 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <p className="text-xs text-white/70">
-            &copy; {year} Dr. Suzanne Ravenall. All rights reserved.
+            {/* Rights holder: https://suzanneravenall.com/terms-and-conditions/ */}
+            &copy; {year} The Ravenall Institute Pty Ltd. All rights reserved.
           </p>
           <p className="text-xs text-white/70">
             Built by{' '}

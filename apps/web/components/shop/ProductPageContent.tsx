@@ -9,7 +9,6 @@ import { Sparkles, Heart, Zap, Check } from 'lucide-react'
 import Link from 'next/link'
 import type { MedusaProduct } from '@/types/medusa'
 import { productTestimonials } from '@/data/testimonials'
-import { contactHref } from '@/app/contact/enquiry'
 import {
   defaultVariantId,
   descriptionParagraphs,
@@ -19,7 +18,6 @@ import {
   hasThinkificCourse,
   metadataFaq,
   metadataList,
-  paymentPlanEnquiry,
   productNoun,
   variantChooserLabel,
   type FaqItem,
@@ -100,8 +98,6 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
   const faqItems = productFaq.length > 0 ? productFaq : isCoaching ? [DISCOVERY_FAQ] : []
   const aboutParagraphs = descriptionParagraphs(product.description)
 
-  const paymentPlanHref = contactHref(paymentPlanEnquiry(kind), `Payment plan: ${product.title}`)
-
   const primaryCategory = product.categories[0]
 
   return (
@@ -124,7 +120,6 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               onSelect={setSelectedVariantId}
               productHandle={product.handle}
               chooseLabel={variantChooserLabel(kind)}
-              paymentPlanHref={paymentPlanHref}
             />
 
             {isThinkificCourse && (
@@ -401,7 +396,6 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               onSelect={setSelectedVariantId}
               productHandle={product.handle}
               chooseLabel={variantChooserLabel(kind)}
-              paymentPlanHref={paymentPlanHref}
             />
           </motion.div>
 
