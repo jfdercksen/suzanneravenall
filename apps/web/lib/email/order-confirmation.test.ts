@@ -142,4 +142,49 @@ describe('sendOrderConfirmationEmail', () => {
     const callArg = mockSend.mock.calls[0]![0] as Record<string, unknown>
     expect(callArg.text as string).toContain('Dear valued customer,')
   })
+
+  it('attaches the invoice PDF and says so instead of linking', async () => {
+    mockSend.mockResolvedValue('email_id_009')
+    const pdf = Buffer.from('%PDF-1.4')
+
+    await sendOrderConfirmationEmail({
+      order: baseOrder,
+      invoiceUrl: 'https://db.example.test/sign/order_42.pdf?token=x',
+      invoicePdf: pdf,
+    })
+
+    const callArg = mockSend.mock.calls[0]![0] as {
+      text: string
+      attachments: Array<{ filename: string; content: Buffer }>
+      react: { props: Record<string, unknown> }
+    }
+    expect(callArg.attachments).toEqual([{ filename: 'invoice-42.pdf', content: pdf }])
+    expect(callArg.text).toContain('Your invoice is attached to this email as a PDF (invoice-42.pdf).')
+    expect(callArg.text).toContain('Keep it for your records.')
+    // The signed link expires after 7 days, so it is not offered next to the attachment.
+    expect(callArg.text).not.toContain('Download:')
+    expect(callArg.react.props.invoiceUrl).toBeNull()
+    expect(callArg.react.props.invoiceAttachmentName).toBe('invoice-42.pdf')
+  })
+
+  it('says how long the fallback link lasts when the PDF is not attached', async () => {
+    mockSend.mockResolvedValue('email_id_010')
+
+    await sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl: 'https://x.test/i.pdf', invoicePdf: null })
+
+    const callArg = mockSend.mock.calls[0]![0] as { text: string; attachments?: unknown }
+    expect(callArg.attachments).toBeUndefined()
+    expect(callArg.text).toContain('This download link works for 7 days. Save a copy of the PDF for your records.')
+    expect(callArg.text).not.toContain('Keep this invoice for your records.')
+  })
+
+  it('offers a copy on request when there is neither a PDF nor a link', async () => {
+    mockSend.mockResolvedValue('email_id_011')
+
+    await sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl: null })
+
+    const callArg = mockSend.mock.calls[0]![0] as { text: string }
+    expect(callArg.text).toContain('If you need a copy of your invoice, reply to this email and we will send it to you.')
+    expect(callArg.text).not.toMatch(/\u2014/)
+  })
 })

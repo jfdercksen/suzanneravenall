@@ -1,8 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-const { mockSendEmail, mockIsConfigured } = vi.hoisted(() => ({
+const { mockSendEmail, mockIsConfigured, mockSendAck, mockLogError } = vi.hoisted(() => ({
   mockSendEmail: vi.fn(),
   mockIsConfigured: vi.fn(),
+  mockSendAck: vi.fn(),
+  mockLogError: vi.fn(),
 }))
 
 vi.mock('@/lib/email/send', () => ({
@@ -10,7 +12,13 @@ vi.mock('@/lib/email/send', () => ({
   isEmailConfigured: mockIsConfigured,
 }))
 
-vi.mock('@/lib/log', () => ({ logError: vi.fn() }))
+vi.mock('@/lib/log', () => ({ logError: mockLogError }))
+
+// The real helpers (first name, enquiry label), only the send is replaced.
+vi.mock('@/lib/email/contact-acknowledgement', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/email/contact-acknowledgement')>()),
+  sendContactAcknowledgementEmail: mockSendAck,
+}))
 
 import { POST } from './route'
 
@@ -35,6 +43,7 @@ describe('POST /api/contact', () => {
     vi.clearAllMocks()
     mockIsConfigured.mockReturnValue(true)
     mockSendEmail.mockResolvedValue('msg-1')
+    mockSendAck.mockResolvedValue('ack-1')
   })
 
   afterEach(() => vi.unstubAllEnvs())
@@ -114,5 +123,64 @@ describe('POST /api/contact', () => {
     const json = await res.json()
     expect(json.success).toBeUndefined()
     expect(json.error).toMatch(/could not send your message/)
+  })
+
+  describe('visitor acknowledgement', () => {
+    it('sends the visitor an acknowledgement after the staff notification', async () => {
+      const res = await POST(
+        makeRequest({ ...validBody, name: '  Alice van der Berg ', message: '  Hello & welcome  ' }) as never
+      )
+
+      expect(res.status).toBe(200)
+      expect(mockSendAck).toHaveBeenCalledTimes(1)
+      expect(mockSendAck).toHaveBeenCalledWith({
+        email: 'alice@example.com',
+        firstName: 'Alice',
+        // "Private sessions" is not one of the form's options, so it is not echoed back.
+        enquiry: null,
+        message: 'Hello & welcome',
+      })
+    })
+
+    it('passes a real enquiry option through and drops "Other"', async () => {
+      await POST(makeRequest({ ...validBody, enquiry: 'Speaking Enquiry' }) as never)
+      expect(mockSendAck.mock.calls[0]![0].enquiry).toBe('Speaking Enquiry')
+
+      await POST(makeRequest({ ...validBody, enquiry: 'Other' }) as never)
+      expect(mockSendAck.mock.calls[1]![0].enquiry).toBeNull()
+    })
+
+    it('still answers 200 and logs when the acknowledgement fails', async () => {
+      mockSendAck.mockRejectedValue(new Error('Brevo error: invalid recipient'))
+
+      const res = await POST(makeRequest(validBody) as never)
+
+      expect(res.status).toBe(200)
+      expect(await res.json()).toEqual({ success: true })
+      await vi.waitFor(() =>
+        expect(mockLogError).toHaveBeenCalledWith(
+          '[contact] acknowledgement email to the visitor failed',
+          expect.any(Error),
+          { enquiry: 'Private sessions' }
+        )
+      )
+    })
+
+    it('does not wait for the acknowledgement before answering', async () => {
+      mockSendAck.mockReturnValue(new Promise(() => {}))
+
+      const res = await POST(makeRequest(validBody) as never)
+
+      expect(res.status).toBe(200)
+    })
+
+    it('sends no acknowledgement when the staff notification failed', async () => {
+      mockSendEmail.mockRejectedValue(new Error('Brevo error: unauthorized'))
+
+      const res = await POST(makeRequest(validBody) as never)
+
+      expect(res.status).toBe(500)
+      expect(mockSendAck).not.toHaveBeenCalled()
+    })
   })
 })

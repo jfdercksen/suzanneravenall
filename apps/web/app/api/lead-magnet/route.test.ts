@@ -11,6 +11,7 @@ const h = vi.hoisted(() => ({
   mockCaptureException: vi.fn(),
   mockCaptureMessage: vi.fn(),
   sendEmail: vi.fn(),
+  welcome: vi.fn(),
   supabase: null as unknown,
   vtiger: null as unknown,
   vtigerThrows: null as Error | null,
@@ -28,6 +29,9 @@ vi.mock('@/lib/integrations/vtiger', () => ({
   },
 }))
 vi.mock('@/lib/email/send', () => ({ sendEmail: h.sendEmail }))
+// The welcome email has its own tests (lib/leads/welcome.test.ts); here only
+// the hand-off is checked, so h.sendEmail keeps counting staff alerts alone.
+vi.mock('@/lib/leads/welcome', () => ({ sendLeadWelcomeIfDue: h.welcome }))
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -128,6 +132,7 @@ beforeEach(() => {
   process.env.AUTOMATION_ALERT_EMAIL = ALERT_TO
   h.vtigerThrows = null
   h.sendEmail.mockResolvedValue('msg-1')
+  h.welcome.mockResolvedValue('sent')
   setup()
   fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(okResponse())
   errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
@@ -527,5 +532,52 @@ describe('POST /api/lead-magnet - Vibe Marketing forwarding', () => {
     const res = await POST(makeRequest({ email: 'user@example.com' }))
     expect(res.status).toBe(502)
     expect(callsTo(fetchSpy, VIBE_URL)).toHaveLength(0)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Group F - welcome email hand-off
+// ---------------------------------------------------------------------------
+describe('POST /api/lead-magnet - welcome email', () => {
+  let POST: (req: Request) => Promise<Response>
+  beforeEach(async () => {
+    POST = await loadRoute()
+  })
+
+  it('hands the stored lead to the welcome email once, with the row id', async () => {
+    const res = await POST(makeRequest({ email: 'user@example.com', firstName: 'Alice', source: 'masterclass' }))
+
+    expect(res.status).toBe(200)
+    expect(h.welcome).toHaveBeenCalledTimes(1)
+    expect(h.welcome).toHaveBeenCalledWith({
+      email: 'user@example.com',
+      firstName: 'Alice',
+      source: 'masterclass',
+      leadId: 'lead-1',
+    })
+  })
+
+  it('passes "homepage" and no first name for the homepage form (not the CRM local-part fallback)', async () => {
+    await POST(makeRequest({ email: 'jane.doe@example.com' }))
+    expect(h.welcome).toHaveBeenCalledWith({ email: 'jane.doe@example.com', firstName: null, source: 'homepage', leadId: 'lead-1' })
+  })
+
+  it('does not wait for the welcome email before answering', async () => {
+    h.welcome.mockReturnValue(new Promise(() => {}))
+    const res = await POST(makeRequest({ email: 'user@example.com', source: 'newsletter' }))
+    expect(res.status).toBe(200)
+  })
+
+  it('sends no welcome when the lead could not be stored anywhere', async () => {
+    setup({ supabase: makeFakeSupabase({ insertError: MISSING_TABLE_ERROR }), crm: downVtiger() })
+    const res = await POST(makeRequest({ email: 'user@example.com', source: 'community' }))
+    expect(res.status).toBe(502)
+    expect(h.welcome).not.toHaveBeenCalled()
+  })
+
+  it('passes a null lead id when only Vtiger holds the lead', async () => {
+    setup({ supabase: null })
+    await POST(makeRequest({ email: 'user@example.com', source: 'community' }))
+    expect(h.welcome).toHaveBeenCalledWith(expect.objectContaining({ leadId: null, source: 'community' }))
   })
 })

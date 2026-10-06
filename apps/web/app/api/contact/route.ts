@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isEmailConfigured, sendEmail } from '@/lib/email/send'
 import { logError } from '@/lib/log'
+import {
+  enquiryLabel,
+  firstNameOf,
+  sendContactAcknowledgementEmail,
+} from '@/lib/email/contact-acknowledgement'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 // Public contact address: https://suzanneravenall.com/contact/ (Johan's decision 10, 6 Oct).
@@ -92,6 +97,18 @@ export async function POST(request: NextRequest) {
     logError('[contact] delivery error:', err)
     return NextResponse.json({ error: DELIVERY_FAILED }, { status: 500 })
   }
+
+  // Acknowledge the visitor only once staff really have the message. Not
+  // awaited: a failure here is logged and never changes the response.
+  void sendContactAcknowledgementEmail({
+    email: email.trim(),
+    firstName: firstNameOf(name),
+    enquiry: enquiryLabel(enquiry),
+    message: message.trim(),
+  }).catch((err: unknown) => {
+    // No address in the log context (POPIA).
+    logError('[contact] acknowledgement email to the visitor failed', err, { enquiry: enquiry ?? null })
+  })
 
   return NextResponse.json({ success: true }, { status: 200 })
 }

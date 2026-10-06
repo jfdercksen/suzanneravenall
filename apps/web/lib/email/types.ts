@@ -105,3 +105,26 @@ export interface QuizCompletionEmailData {
   resultSubtitle: string
   questions: QuizAnsweredQuestion[]
 }
+
+/** Auto-reply to a /contact form submission. */
+export interface ContactAcknowledgementEmailData {
+  email: string
+  firstName: string
+  /** One of the form's enquiry options, or null when none (or "Other") was picked. */
+  enquiry: string | null
+  message: string
+}
+
+export type LeadWelcomeSource = 'masterclass' | 'community' | 'newsletter' | 'assessments-notify' | 'homepage'
+
+/** Welcome email after a lead form sign-up (POST /api/lead-magnet). */
+export interface LeadWelcomeEmailData {
+  email: string
+  /** Only when the form collected one; the greeting falls back to "Hi there,". */
+  firstName: string | null
+  source: LeadWelcomeSource
+}
+
+export interface LeadWelcomeEmailProps extends LeadWelcomeEmailData {
+  unsubscribeUrl: string
+}

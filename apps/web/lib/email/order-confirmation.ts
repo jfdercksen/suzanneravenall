@@ -10,26 +10,57 @@ export type { OrderEmailData }
 
 const REPLY_TO = 'sravenall@suzanneravenall.com'
 
+/** File name the buyer sees on the attached invoice. */
+export function invoiceFilename(displayId: number): string {
+  return `invoice-${displayId}.pdf`
+}
+
+/**
+ * The invoice goes out as a PDF attachment when the stored file is available.
+ * The signed download link from /api/invoices/generate expires after 7 days
+ * and there is no portal page that lists invoices, so the link is only used
+ * as a fallback when the PDF could not be read, and the copy then says how
+ * long it lasts.
+ */
 export async function sendOrderConfirmationEmail({
   order,
   invoiceUrl,
+  invoicePdf = null,
 }: {
   order: OrderEmailData
   invoiceUrl: string | null
+  invoicePdf?: Buffer | null
 }): Promise<string> {
   const subject = `Your transformation begins - Order #${order.displayId}`
-  const text = buildPlainText(order, invoiceUrl)
+  const invoice: InvoiceDelivery = invoicePdf
+    ? { kind: 'attached', filename: invoiceFilename(order.displayId) }
+    : invoiceUrl
+      ? { kind: 'link', url: invoiceUrl }
+      : { kind: 'none' }
+  const text = buildPlainText(order, invoice)
 
   return sendEmail({
     replyTo: REPLY_TO,
     to: [order.email],
     subject,
-    react: createElement(OrderConfirmation, { ...order, invoiceUrl }),
+    react: createElement(OrderConfirmation, {
+      ...order,
+      invoiceUrl: invoice.kind === 'link' ? invoice.url : null,
+      invoiceAttachmentName: invoice.kind === 'attached' ? invoice.filename : null,
+    }),
     text,
+    ...(invoicePdf
+      ? { attachments: [{ filename: invoiceFilename(order.displayId), content: invoicePdf }] }
+      : {}),
   })
 }
 
-function buildPlainText(order: OrderEmailData, invoiceUrl: string | null): string {
+type InvoiceDelivery =
+  | { kind: 'attached'; filename: string }
+  | { kind: 'link'; url: string }
+  | { kind: 'none' }
+
+function buildPlainText(order: OrderEmailData, invoice: InvoiceDelivery): string {
   const formattedDate = new Date(order.createdAt).toLocaleDateString('en-ZA', {
     day: 'numeric',
     month: 'long',
@@ -72,16 +103,23 @@ function buildPlainText(order: OrderEmailData, invoiceUrl: string | null): strin
   }
   lines.push(`Total: ${formatAmount(order.total, order.currency)}`, '')
 
-  if (invoiceUrl) {
+  lines.push(vatRegistered ? 'YOUR TAX INVOICE' : 'YOUR INVOICE', '================')
+  if (invoice.kind === 'attached') {
     lines.push(
-      vatRegistered ? 'YOUR TAX INVOICE' : 'YOUR INVOICE',
-      '================',
-      `Download: ${invoiceUrl}`,
-      vatRegistered
-        ? 'This invoice is VAT compliant for South African tax purposes.'
-        : 'Keep this invoice for your records.',
+      `Your ${vatRegistered ? 'tax invoice' : 'invoice'} is attached to this email as a PDF (${invoice.filename}).`,
+      ...(vatRegistered ? ['It is VAT compliant for South African tax purposes.'] : []),
+      'Keep it for your records.',
       ''
     )
+  } else if (invoice.kind === 'link') {
+    lines.push(
+      `Download: ${invoice.url}`,
+      'This download link works for 7 days. Save a copy of the PDF for your records.',
+      ...(vatRegistered ? ['This invoice is VAT compliant for South African tax purposes.'] : []),
+      ''
+    )
+  } else {
+    lines.push('If you need a copy of your invoice, reply to this email and we will send it to you.', '')
   }
 
   lines.push(

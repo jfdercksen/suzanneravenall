@@ -8,8 +8,11 @@ import MembershipWelcome from './MembershipWelcome'
 import MembershipRenewalReminder from './MembershipRenewalReminder'
 import MembershipExpired from './MembershipExpired'
 import QuizInvite from './QuizInvite'
+import ContactAcknowledgement from './ContactAcknowledgement'
+import LeadWelcome from './LeadWelcome'
+import { LEAD_WELCOME_CONTENT } from '../lead-welcome-content'
 import OrderConfirmation from '../../../emails/OrderConfirmation'
-import type { CartEmailProps, MembershipEmailProps } from '../types'
+import type { CartEmailProps, LeadWelcomeSource, MembershipEmailProps } from '../types'
 
 /**
  * Render smoke tests for the POPIA footer requirements:
@@ -118,6 +121,66 @@ describe('email template rendering (POPIA footer)', () => {
     expect(html).toContain('VAT (15%)')
     expect(html).toContain('Your Tax Invoice')
     expect(html).toContain('VAT compliant')
+  })
+
+  it('OrderConfirmation says the invoice is attached, with no download button, when the PDF is attached', () => {
+    const html = renderToStaticMarkup(
+      createElement(OrderConfirmation, { ...orderProps, invoiceUrl: null, invoiceAttachmentName: 'invoice-42.pdf' })
+    )
+    expect(html).toContain('attached to this email as a PDF')
+    expect(html).toContain('invoice-42.pdf')
+    expect(html).not.toContain('Download Invoice')
+    expect(html).not.toContain('separate email')
+  })
+
+  it('OrderConfirmation says the fallback link lasts 7 days', () => {
+    const html = renderToStaticMarkup(createElement(OrderConfirmation, orderProps))
+    expect(html).toContain('Download Invoice (PDF)')
+    expect(html).toContain('works for 7 days')
+    expect(html).not.toContain('Keep this invoice for your records')
+  })
+
+  it('OrderConfirmation promises no separate invoice email when there is no invoice', () => {
+    const html = renderToStaticMarkup(createElement(OrderConfirmation, { ...orderProps, invoiceUrl: null }))
+    expect(html).not.toContain('separate email')
+    expect(html).toContain('reply to this email and we will send it to you')
+  })
+
+  it.each(Object.keys(LEAD_WELCOME_CONTENT) as LeadWelcomeSource[])(
+    'LeadWelcome (%s, marketing) renders its copy, site link, unsubscribe link and address',
+    (source) => {
+      vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'https://suzanneravenall.com')
+      const content = LEAD_WELCOME_CONTENT[source]
+      const html = renderToStaticMarkup(
+        createElement(LeadWelcome, { email: 'lead@example.com', firstName: 'Alice', source, unsubscribeUrl: UNSUB_URL })
+      )
+      expect(html).toContain(UNSUB_URL)
+      expect(html).toContain(ADDRESS)
+      expect(html).toContain('Hi Alice,')
+      expect(html).toContain(`href="https://suzanneravenall.com${content.link.path}"`)
+      expect(html).not.toContain('href="#"')
+      expect(html).not.toMatch(/\u2014/)
+    }
+  )
+
+  it('ContactAcknowledgement (transactional) renders the enquiry, the escaped message and contact details', () => {
+    const html = renderToStaticMarkup(
+      createElement(ContactAcknowledgement, {
+        email: 'alice@example.com',
+        firstName: 'Alice',
+        enquiry: 'Group Program',
+        message: 'Hello <b>there</b> & welcome',
+      })
+    )
+    expect(html).toContain('Thank you, Alice')
+    expect(html).toContain('We received your message about Group Program.')
+    expect(html).toContain('within 2 business days')
+    expect(html).toContain('Hello &lt;b&gt;there&lt;/b&gt; &amp; welcome')
+    expect(html).toContain('mailto:sravenall@suzanneravenall.com')
+    expect(html).toContain('tel:+27105970841')
+    expect(html).toContain(ADDRESS)
+    expect(html).not.toContain('href="#"')
+    expect(html).not.toMatch(/\u2014/)
   })
 
   it('falls back to the real company address when the env var is unset', () => {

@@ -130,6 +130,32 @@ export async function listUnsyncedLeads(supabase: SupabaseClient, limit: number)
   return (data as LeadRow[] | null) ?? []
 }
 
+/**
+ * Id of the earliest row for this email + source created at or after
+ * `sinceIso`, or null when there is none. Used to send the welcome email once
+ * per address and form in a 24h window: only the submission that owns the
+ * earliest row sends, so two quick submissions cannot both send.
+ * Throws on a query error; the caller decides what that means.
+ */
+export async function earliestRecentLeadId(
+  supabase: SupabaseClient,
+  email: string,
+  source: string,
+  sinceIso: string,
+): Promise<string | null> {
+  const { data, error } = await supabase
+    .from(LEADS_TABLE)
+    .select('id')
+    .eq('email', email.toLowerCase().trim())
+    .eq('source', source)
+    .gte('created_at', sinceIso)
+    .order('created_at', { ascending: true })
+    .limit(1)
+  if (error) throw new Error(`[leads] recent lead lookup failed: ${error.message}`)
+  const rows = (data as Array<{ id: string }> | null) ?? []
+  return rows[0]?.id ?? null
+}
+
 async function updateRow(supabase: SupabaseClient, id: string, values: Record<string, unknown>): Promise<boolean> {
   try {
     const { error } = await supabase.from(LEADS_TABLE).update(values).eq('id', id)

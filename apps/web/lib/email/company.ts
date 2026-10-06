@@ -23,6 +23,15 @@
 
 export const COMPANY_NAME = 'Ravenall Institute'
 
+/**
+ * Public contact details, the same values the site shows on /contact
+ * (app/contact/ContactOptions.tsx) and in the footer
+ * (components/layout/Footer.tsx). The email address is also the reply-to on
+ * customer emails.
+ */
+export const COMPANY_CONTACT_EMAIL = 'sravenall@suzanneravenall.com'
+export const COMPANY_PHONE = '+27 10 597 0841'
+
 export function companyPhysicalAddress(): string {
   return (
     process.env.COMPANY_PHYSICAL_ADDRESS?.trim() ||

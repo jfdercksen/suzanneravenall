@@ -111,6 +111,31 @@ describe('sendEmail', () => {
     expect(body.headers).toBeUndefined()
   })
 
+  it('sends attachments as base64 in the Brevo attachment field', async () => {
+    fetchMock.mockResolvedValue(okResponse({ messageId: 'id-att' }))
+
+    await sendEmail({
+      to: ['a@b.c'],
+      subject: 'S',
+      html: 'x',
+      attachments: [{ filename: 'invoice-42.pdf', content: Buffer.from('%PDF-1.4 test') }],
+    })
+
+    const body = JSON.parse((fetchMock.mock.calls[0] as [string, RequestInit])[1].body as string)
+    expect(body.attachment).toEqual([
+      { name: 'invoice-42.pdf', content: Buffer.from('%PDF-1.4 test').toString('base64') },
+    ])
+  })
+
+  it('leaves the attachment field out when there are no attachments', async () => {
+    fetchMock.mockResolvedValue(okResponse({ messageId: 'id-noatt' }))
+
+    await sendEmail({ to: ['a@b.c'], subject: 'S', html: 'x', attachments: [] })
+
+    const body = JSON.parse((fetchMock.mock.calls[0] as [string, RequestInit])[1].body as string)
+    expect(body.attachment).toBeUndefined()
+  })
+
   it('throws before calling the network when the key is missing', async () => {
     vi.stubEnv('BREVO_API_KEY', '')
 
