@@ -2,14 +2,14 @@
  * Company identity values shown in email footers and on the PDF invoice.
  *
  * Confirmed real values (public company identity, safe as hardcoded defaults):
- *   - Physical address: Oxmoor Street, Kyalami Estates, Johannesburg, 1684, South Africa
- *     (https://suzanneravenall.com/terms-and-conditions/ ; no street number is
- *     published, so none is shown: Johan's decision 10, 6 Oct 2026)
+ *   - Address shown in emails and on the invoice: the postal address, the same
+ *     one as the site footer (Johan, 6 Oct 2026). The street address (Oxmoor
+ *     Street, Kyalami Estates) stays on /contact and the legal pages.
  *   - Company registration number: 2012/180720/07
  *
  * Env vars (VPS: infra/.env, local: .env.local) may override the defaults:
- *   COMPANY_PHYSICAL_ADDRESS - full physical business address (POPIA requires
- *     it in every marketing email footer; also shown on the invoice)
+ *   COMPANY_PHYSICAL_ADDRESS - business address for every email footer and the
+ *     invoice (leave unset to use the postal address default)
  *   COMPANY_REGISTRATION_NUMBER - CIPC company registration number, shown on
  *     the invoice
  *   COMPANY_VAT_NUMBER - SARS VAT registration number. Ravenall Institute is
@@ -35,7 +35,7 @@ export const COMPANY_PHONE = '+27 10 597 0841'
 export function companyPhysicalAddress(): string {
   return (
     process.env.COMPANY_PHYSICAL_ADDRESS?.trim() ||
-    'Oxmoor Street, Kyalami Estates, Johannesburg, 1684, South Africa'
+    'PO Box 910, Kyalami, 1684, Johannesburg, South Africa'
   )
 }
 
