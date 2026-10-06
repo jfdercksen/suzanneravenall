@@ -57,6 +57,32 @@ describe('PathwayDetail closing CTA (site check C14)', () => {
     expect(screen.queryByText(ADULT_LINE)).not.toBeInTheDocument()
   })
 
+  // Decision 14 (6 Oct): youth pathways are "register interest" only.
+  for (const youth of pathways.filter((p) => p.category === 'youth')) {
+    it(`${youth.slug}: offers Register Interest instead of booking a discovery session`, () => {
+      render(<PathwayDetail pathway={youth} />)
+      expect(screen.queryByText('Book a Discovery Session')).not.toBeInTheDocument()
+      const links = screen.getAllByRole('link', { name: /Register Interest/ })
+      expect(links.length).toBeGreaterThanOrEqual(2)
+      for (const link of links) {
+        const url = new URL(link.getAttribute('href') ?? '', 'http://localhost')
+        expect(url.pathname).toBe('/contact')
+        expect(url.searchParams.get('enquiry')).toBe('other')
+        expect(url.searchParams.get('topic')).toBe(`Register interest: ${youth.title}`)
+      }
+      expect(
+        screen.getByText('Full details of this transformation pathway will be available soon.'),
+      ).toBeInTheDocument()
+    })
+  }
+
+  it('adult pathways keep the discovery session CTA and no register-interest notice', () => {
+    const adult = pathways.find((p) => p.slug === 'break-the-loop')!
+    render(<PathwayDetail pathway={adult} />)
+    expect(screen.getAllByRole('link', { name: /Book a Discovery Session/ }).length).toBeGreaterThan(0)
+    expect(screen.queryByRole('link', { name: /Register Interest/ })).not.toBeInTheDocument()
+  })
+
   it('adult pathways keep their headline and the old-pattern line', () => {
     const adult = pathways.find((p) => p.slug === 'break-the-loop')!
     render(<PathwayDetail pathway={adult} />)

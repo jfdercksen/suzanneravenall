@@ -42,6 +42,9 @@ export const allPrivateSessions: PrivateSession[] = [
       "Where traditional coaching is largely results-oriented, transformational coaching works at the level of being rather than doing. It is an ontological, whole-person approach that draws on your cognitive, emotional, somatic and relational patterns to expand what feels possible. The pivotal question isn't only 'what do I want?' but 'who do I need to become for that to be real?'",
       'What to expect: whatever your goals, we uncover what is genuinely standing in the way, then map a path toward where (and who) you want to be. The work is fully customised to you and your situation, and held in a safe space for honest self-exploration. Think of the coaching as the vehicle and Suzanne as your guide: you stay in the driver’s seat throughout.',
       'Executive Coaching: for leaders and professionals, the same depth is applied to leadership, performance and decision-making. This is available as a separate executive coaching engagement alongside the transformational coaching track. Book whichever fits where you are.',
+      // Sourced 6 Oct: live product pages, e.g. https://suzanneravenall.com/product/transformation-coaching-60-mins/
+      // (all listed in https://suzanneravenall.com/wp-sitemap-posts-product-1.xml)
+      'Sessions are 60 or 90 minutes, and can be booked individually or as a package of 4, 8, 12 or 16 sessions.',
     ].join('\n\n'),
   },
   {
@@ -69,7 +72,11 @@ export const allPrivateSessions: PrivateSession[] = [
     bodyContent: [
       'Frustrated that you keep meeting the same patterns over and over? Rapid Repatterning, using the Ravenall Institute Method, is a combination approach designed to interrupt that loop at its root and create rapid, lasting change.',
       'We think 60,000–70,000 thoughts a day, and around 90% are the same as yesterday, driven by memorised beliefs and programmes. The same thoughts lead to the same choices, the same behaviours and experiences, and the same emotions, and then the cycle begins again. When those patterns are helpful they serve us; when they are harmful, life can feel like groundhog day. Neuroscience puts it simply: nerve cells that fire together wire together, so repeating the same responses keeps the brain firing the same way.',
-      'What to expect: the process blends repatterning, hypnotherapy and coaching. You will complete a questionnaire on your history and current challenges, and together we build a plan that may include assessments and hypnosis to cement a new way of being. Using biofeedback and applied kinesiology we locate the unconscious programme beneath the issue, repattern the belief, and shift the resonance, with coaching throughout. Sessions are held over Zoom.',
+      'What to expect: the process blends repatterning, hypnotherapy and coaching. You will complete a questionnaire on your history and current challenges, and together we build a plan that may include assessments and hypnosis to cement a new way of being. Using biofeedback and applied kinesiology we locate the unconscious programme beneath the issue, repattern the belief, and shift the resonance, with coaching throughout.',
+      // Decision 9 (6 Oct): Zoom and in person in Kyalami. The live shop sells online and
+      // in-person 60 and 90 min sessions and packs of 4/8/12/16:
+      // https://suzanneravenall.com/rapid-repatterning-2/ and its product pages.
+      'Sessions are 60 or 90 minutes, held via Zoom or in person in Kyalami, Johannesburg, and can be booked individually or as a package of 4, 8, 12 or 16 sessions.',
       'Most core issues shift in one to five sessions, and the work is offered as personal, executive, performance and group repatterning.',
     ].join('\n\n'),
   },
@@ -84,6 +91,8 @@ export const allPrivateSessions: PrivateSession[] = [
       "Access and rewrite your life's blueprint. Akashic Intuitive Mastery is a guided way of working with the Akashic Records, described as the energetic record of every soul's experience, to clear the blocks and constrictions sitting beneath the issues you are facing now.",
       'Imagine being able to shift your relationship with success and strengthen your intuition to the point where you receive clear daily guidance. The Records are used as a resource to see beyond the surface, clear disruption in your path, and move through life, work and relationships with greater ease, including the ancestral patterns that can quietly shape a life without our noticing.',
       'In a session the Records can be read (to receive insight and information) and cleared, releasing constrictions and inherited patterns affecting this lifetime. Common focus areas include money and abundance, work and purpose, romantic relationships, your relationship with yourself, family and friendships, and spiritual growth.',
+      // Sourced 6 Oct: live product pages (https://suzanneravenall.com/wp-sitemap-posts-product-1.xml)
+      'Sessions are 60 or 90 minutes, and can be booked individually or as a package of 4, 8 or 12 sessions.',
     ].join('\n\n'),
   },
   {
@@ -97,6 +106,8 @@ export const allPrivateSessions: PrivateSession[] = [
       "Some family challenges are hard to resolve without outside support. When we understand how our earliest perceptions and beliefs shape who we are, we can see how each person's make-up shows up in the family dynamic, sometimes helpfully, sometimes not. Group Family Coaching creates a space for everyone to see those dynamics differently and build something richer together.",
       'You might come to this as a parent seeking support with the family environment, because you are struggling with certain dynamics, or to prepare for a transition that lies ahead. Through new understanding and practical tools, willing family members discover fresh possibilities and, over time, forge deeper connections.',
       'How it differs from counselling: counselling tends to focus on pathology and unresolved problems from the past. Family coaching starts in the present, with understanding why we are each made up as we are, and from there works to ease deep stressors, improve decision-making and help the family become a genuine environment of mutual love and support.',
+      // Sourced 6 Oct: live product pages (https://suzanneravenall.com/wp-sitemap-posts-product-1.xml)
+      'Sessions are 60 minutes, and can be booked individually or as a package of 4 or 8 sessions.',
     ].join('\n\n'),
   },
   {
@@ -109,6 +120,8 @@ export const allPrivateSessions: PrivateSession[] = [
     bodyContent: [
       "Entering a flow state is a kind of magic: time falls away and you move into a calm, creative state of focus where learning accelerates, performance lifts, and insight you didn't think was available becomes accessible. The difficulty is reaching that state on demand in an ordinary working day.",
       'Meditation and mindfulness are excellent routes into relaxation, and from that quieter state a different kind of awareness (and new information) opens up. Exploring the Alpha Mind teaches tools and techniques to reach this alpha brainwave state quickly and deliberately, so that clearer ideas, better choices and a steady sense of guidance can become a normal way of moving through life rather than a rare, accidental occurrence.',
+      // Sourced 6 Oct: live product pages (https://suzanneravenall.com/wp-sitemap-posts-product-1.xml)
+      'Sessions are 45 minutes, and can be booked individually or as a package of 5 or 8 sessions.',
     ].join('\n\n'),
   },
   {
@@ -132,7 +145,17 @@ export const allPrivateSessions: PrivateSession[] = [
     shortDescription:
       'Executive-level coaching focused on leadership, performance, and transformational growth.',
     thinContent: false,
-    bodyContent: null,
+    // DRAFT copy for Suzanne's approval, 6 Oct.
+    // Built only from sourced material (decision 8): her transformational coaching copy
+    // (https://suzanneravenall.com/transformational-behavioural-coaching/, the page that carries
+    // the "Book executive coaching session" button) and the session and package structure in her
+    // public scheduler (https://app.acuityscheduling.com/schedule.php?owner=18094639).
+    bodyContent: [
+      'Executive Coaching brings the depth of transformational and behavioural coaching to the work of leading. For leaders and professionals, the focus is leadership, performance and decision-making, worked on at the level of the beliefs, interpretations and patterns that sit underneath how you lead.',
+      'Where traditional coaching is largely results-oriented, this work asks not only what you want to achieve but who you need to become to achieve it, so that the change shows up in how you think, decide and act.',
+      'What to expect: whatever your goals, we uncover what is genuinely standing in the way, then map a path toward where you want to be. The coaching is fully customised to you and your situation, held in a safe space for honest reflection, and you stay in the driver’s seat throughout.',
+      'Sessions are 30, 60 or 90 minutes. For ongoing work there are packages of 4, 8, 12 or 16 sessions of 60 minutes; a 4-month package of two 90-minute sessions a month; 6- and 12-month packages of two or four 90-minute sessions a month; and a 4-month Intensive of four 60-minute sessions a month.',
+    ].join('\n\n'),
   },
   // Resonance Repatterning deliberately last — Suzanne wants it findable but
   // never front-and-centre (feedback, 27 Jul 2026).
@@ -147,7 +170,11 @@ export const allPrivateSessions: PrivateSession[] = [
       "Recommended by Bruce Lipton, author of The Biology of Belief.",
       "Much of what holds us back lives below conscious awareness. The subconscious mind runs an estimated 95% of daily life, quietly replaying beliefs and programmes formed early on, often before we were old enough to choose them. When those patterns are out of sync, we keep meeting the same struggles in work, relationships and health, no matter how hard we try consciously.",
       'Resonance Repatterning works with the principle that everything (our thoughts, feelings and even the body) carries an energetic frequency, and that the patterns we resonate with shape the life we experience. A session brings these hidden patterns into conscious awareness so they can be understood, cleared, and shifted toward greater coherence and alignment with what you actually want.',
-      'What to expect: you bring your lived experience and a genuine willingness to change. Using biofeedback and applied kinesiology, we locate the unconscious programme beneath the issue at hand, repattern the belief driving it, and shift the resonance using one of more than a hundred modalities, with coaching throughout so you understand the pattern and can act on the change. Sessions are held over Zoom in the comfort of your own space; you simply show up and participate.',
+      'What to expect: you bring your lived experience and a genuine willingness to change. Using biofeedback and applied kinesiology, we locate the unconscious programme beneath the issue at hand, repattern the belief driving it, and shift the resonance using one of more than a hundred modalities, with coaching throughout so you understand the pattern and can act on the change. You simply show up and participate.',
+      // Decision 9 (6 Oct): Zoom and in person in Kyalami. The live shop sells an in-person
+      // 90 min session alongside the Zoom ones:
+      // https://suzanneravenall.com/resonance-repatterning-session/ and its product pages.
+      'Sessions are held via Zoom in the comfort of your own space, or in person in Kyalami, Johannesburg.',
       'Most core issues begin to shift somewhere between one and five sessions. For some people a single session creates a quantum leap; for others, blended core issues take a little longer. Sessions are offered as personal, executive, performance and group repatterning, and can be booked individually or as multi-session packages.',
     ].join('\n\n'),
   },

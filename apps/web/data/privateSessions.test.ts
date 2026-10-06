@@ -113,9 +113,29 @@ describe('dualProduct field', () => {
 })
 
 describe('bodyContent and thinContent specifics', () => {
-  it('executive-coaching has bodyContent === null', () => {
+  // Decision 8 (6 Oct): draft copy from sourced coaching material and the Acuity
+  // session/package structure, awaiting Suzanne's approval.
+  it('executive-coaching has draft bodyContent with the sourced session structure', () => {
     const session = privateSessionBySlug('executive-coaching')
-    expect(session?.bodyContent).toBeNull()
+    expect(typeof session?.bodyContent).toBe('string')
+    expect(session?.bodyContent).toContain('Sessions are 30, 60 or 90 minutes')
+    expect(session?.bodyContent).toContain('4-month Intensive')
+  })
+
+  // Decision 9 (6 Oct): the shop sells both Zoom and in-person sessions for these.
+  it.each(['rapid-repatterning', 'resonance-repatterning'])(
+    '%s says sessions are via Zoom or in person in Kyalami',
+    (slug) => {
+      const body = privateSessionBySlug(slug)?.bodyContent ?? ''
+      expect(body).toContain('in person in Kyalami, Johannesburg')
+      expect(body).not.toContain('Sessions are held over Zoom')
+    },
+  )
+
+  it('no session copy contains an em dash', () => {
+    for (const session of allPrivateSessions) {
+      expect(`${session.shortDescription}${session.bodyContent ?? ''}`).not.toContain(String.fromCharCode(0x2014))
+    }
   })
 
   it('akashic-intuitive-mastery has thinContent === true', () => {
