@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logError } from '@/lib/log'
+import { compareCapture, loadCart, medusaBase, medusaHeaders } from '@/lib/paypal'
 
 interface CaptureRequest {
   orderId: string
@@ -25,15 +26,9 @@ async function getAccessToken(base: string, clientId: string, clientSecret: stri
 }
 
 async function completeMedusaCart(cartId: string): Promise<{ type?: string; order?: { id: string } }> {
-  const medusaBase = process.env.MEDUSA_BACKEND_URL ?? 'http://medusa:9000'
-  const pubKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? ''
-
-  const res = await fetch(`${medusaBase}/store/carts/${cartId}/complete`, {
+  const res = await fetch(`${medusaBase()}/store/carts/${encodeURIComponent(cartId)}/complete`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-publishable-api-key': pubKey,
-    },
+    headers: medusaHeaders(),
   })
 
   if (!res.ok) {
@@ -100,7 +95,13 @@ export async function POST(req: NextRequest) {
       status: string
       purchase_units?: Array<{
         custom_id?: string
-        payments?: { captures?: Array<{ id: string; status: string }> }
+        payments?: {
+          captures?: Array<{
+            id: string
+            status: string
+            amount?: { value?: string; currency_code?: string }
+          }>
+        }
       }>
     }
 
@@ -115,6 +116,36 @@ export async function POST(req: NextRequest) {
         orderId,
       })
       return NextResponse.json({ error: 'Order mismatch' }, { status: 400 })
+    }
+
+    // Only complete when PayPal collected exactly what the cart costs, in the
+    // cart currency. The order amount comes from the cart, but the cart can
+    // change after the order was created, and this is the last point where an
+    // underpayment can be stopped before an order exists.
+    const capture = captureData.purchase_units?.[0]?.payments?.captures?.[0]
+    const cart = await loadCart(cartId)
+    if (!cart) {
+      logError('[PayPal] Cart could not be loaded after capture, not completing', undefined, {
+        cartId,
+        orderId,
+        captureId: capture?.id,
+        received: capture?.amount?.value ?? null,
+        currency: capture?.amount?.currency_code ?? null,
+      })
+      return NextResponse.json({ error: 'Could not verify the payment against the cart' }, { status: 502 })
+    }
+    const check = compareCapture(cart, capture?.amount)
+    if (!check.ok) {
+      logError('[PayPal] Amount mismatch, not completing cart', undefined, {
+        cartId,
+        orderId,
+        captureId: capture?.id,
+        expected: check.expected,
+        received: Number.isFinite(check.received) ? check.received : null,
+        expectedCurrency: check.expectedCurrency,
+        receivedCurrency: check.receivedCurrency,
+      })
+      return NextResponse.json({ error: 'Payment amount does not match the cart' }, { status: 409 })
     }
 
     console.info('[PayPal] Capture success', {
