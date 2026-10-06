@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isEmailConfigured, sendEmail } from '@/lib/email/send'
 import { logError } from '@/lib/log'
+import { createRateLimiter, getClientIp, rateLimitResponse } from '@/lib/rate-limit'
 import {
   enquiryLabel,
   firstNameOf,
@@ -41,7 +42,14 @@ function escapeHtml(str: string): string {
     .replace(/"/g, '&quot;')
 }
 
+// The visitor acknowledgement echoes the message to the address typed in the
+// form, so cap how often one IP, and one recipient, can trigger it.
+const ipGuard = createRateLimiter({ limit: 5, windowMs: 600_000 })
+const recipientLimiter = createRateLimiter({ limit: 3, windowMs: 3_600_000 })
+
 export async function POST(request: NextRequest) {
+  const ipCheck = ipGuard.check(getClientIp(request.headers))
+  if (ipCheck.limited) return rateLimitResponse(ipCheck.retryAfterSeconds)
   let body: unknown
 
   try {
@@ -58,6 +66,9 @@ export async function POST(request: NextRequest) {
   }
 
   const { name, email, phone, enquiry, message } = body
+
+  const recipientCheck = recipientLimiter.check(email.toLowerCase().trim())
+  if (recipientCheck.limited) return rateLimitResponse(recipientCheck.retryAfterSeconds)
 
   // KI035: a send failure used to be swallowed behind {"success":true}. Fail loudly
   // instead, so the visitor knows to email directly and nothing is silently lost.

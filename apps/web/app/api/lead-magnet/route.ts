@@ -3,6 +3,7 @@ import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
 import { captureLead } from '@/lib/leads/capture'
 import { sendLeadWelcomeIfDue } from '@/lib/leads/welcome'
+import { createRateLimiter, getClientIp, rateLimitResponse } from '@/lib/rate-limit'
 
 const VIBE_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
 const DELIVERY_FAILED =
@@ -18,7 +19,12 @@ const LeadMagnetSchema = z.object({
   quizResult: z.string().max(100).optional(),
 })
 
+// Each submission can send a welcome email to the typed address.
+const ipGuard = createRateLimiter({ limit: 20, windowMs: 600_000 })
+
 export async function POST(request: Request) {
+  const ipCheck = ipGuard.check(getClientIp(request.headers))
+  if (ipCheck.limited) return rateLimitResponse(ipCheck.retryAfterSeconds)
   let body: unknown
 
   try {

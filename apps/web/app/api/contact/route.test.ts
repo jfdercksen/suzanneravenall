@@ -20,6 +20,20 @@ vi.mock('@/lib/email/contact-acknowledgement', async (importOriginal) => ({
   sendContactAcknowledgementEmail: mockSendAck,
 }))
 
+// The route's limiters are module-level; this suite sends many requests from
+// one address, so it counts on its own limiter and only the dedicated test
+// below turns limiting on.
+const rateLimitState = vi.hoisted(() => ({ limited: false }))
+vi.mock('@/lib/rate-limit', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/rate-limit')>()
+  return {
+    ...actual,
+    createRateLimiter: () => ({
+      check: () => ({ limited: rateLimitState.limited, retryAfterSeconds: 60 }),
+    }),
+  }
+})
+
 import { POST } from './route'
 
 function makeRequest(body: unknown) {
@@ -182,5 +196,17 @@ describe('POST /api/contact', () => {
       expect(res.status).toBe(500)
       expect(mockSendAck).not.toHaveBeenCalled()
     })
+  })
+})
+
+describe('POST /api/contact rate limit', () => {
+  it('answers 429 and sends nothing when the limit is hit', async () => {
+    rateLimitState.limited = true
+    try {
+      const res = await POST(makeRequest(validBody) as never)
+      expect(res.status).toBe(429)
+    } finally {
+      rateLimitState.limited = false
+    }
   })
 })
