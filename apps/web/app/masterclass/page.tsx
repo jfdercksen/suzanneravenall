@@ -6,7 +6,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title:
       'Unlock Your Most Extraordinary Self | Free Masterclass with Dr. Suzanne Ravenall',
     description:
-      'Discover the pattern, decode and disrupt it, then rewire your mind and nervous system for radical inner and outer transformation. Free masterclass with Dr. Suzanne Ravenall.',
+      'Breaking the hold of the child brain on adult adversity. A free, one-hour, pre-recorded masterclass with Dr. Suzanne Ravenall that you watch on demand.',
   }
 }
 

@@ -11,10 +11,48 @@ import {
 
 describe('programme catalogue data', () => {
   it('has a price for every published programme (no "Contact for pricing")', () => {
+    // Energy Ninja Level 2 has no sourced ZAR price (sourcing report 6 Oct, section 7)
+    const NO_SOURCED_ZAR = ['become-an-energy-ninja-level-2']
     const missing = PROGRAMS.filter(
-      (p) => p.isPublished && (p.priceUsd == null || p.priceZar == null),
+      (p) =>
+        p.isPublished &&
+        (p.priceUsd == null || (p.priceZar == null && !NO_SOURCED_ZAR.includes(p.slug))),
     ).map((p) => p.slug)
     expect(missing).toEqual([])
+  })
+
+  it('uses the live-shop self-study prices (sourcing report 6 Oct, decision 4)', () => {
+    const zar = (slug: string) => getProgramBySlug(slug)?.priceZar
+    expect(zar('energy-clearing-basic')).toBe(4650)
+    expect(zar('energy-clearing-advanced')).toBe(4650)
+    expect(zar('resonance-repatterning-08-principles-of-relationship')).toBe(4205)
+    expect(zar('resonance-repatterning-09-energetics-of-relationship')).toBe(4205)
+    expect(zar('trauma-to-transcendence')).toBe(3500)
+    expect(getProgramBySlug('trauma-to-transcendence')?.priceUsd).toBe(399)
+    expect(zar('love-and-relationships')).toBe(995)
+    expect(zar('intuition-in-my-personal-capacity')).toBe(995)
+    expect(zar('intuition-in-business')).toBe(995)
+    expect(zar('become-an-energy-ninja')).toBe(3320)
+    expect(zar('become-an-energy-ninja-level-2')).toBeUndefined()
+  })
+
+  it('carries no live dates, "coming soon" or "6 x 2 hours" durations', () => {
+    for (const p of PROGRAMS) {
+      expect(p.duration ?? '', p.slug).not.toMatch(/coming soon|to be announced|2 hours each/i)
+    }
+  })
+
+  it('gives the group series their sourced 4 x 90 minute format', () => {
+    for (const slug of ['money-mastery', 'career-progression', 'shedding-excess-weight', 'love-and-relationships']) {
+      expect(getProgramBySlug(slug)?.duration, slug).toMatch(/4 sessions of 90 minutes/)
+    }
+  })
+
+  it('links every prerequisite to a published programme', () => {
+    for (const p of PROGRAMS) {
+      if (!p.prerequisite?.slug) continue
+      expect(getProgramBySlug(p.prerequisite.slug)?.isPublished, p.slug).toBe(true)
+    }
   })
 
   it('has unique slugs', () => {
@@ -91,6 +129,19 @@ describe('getProgramCta', () => {
     expect(url.pathname).toBe('/contact')
     expect(url.searchParams.get('enquiry')).toBe('Group Program')
     expect(url.searchParams.get('topic')).toBe('Overcoming the Need to Fix Others')
+  })
+
+  it('sends live Zoom programmes without dates to a register-interest enquiry', () => {
+    for (const slug of ['mindfulness', 'meditation', 'akashic-navigator-basic', 'akashic-navigator-advanced']) {
+      const p = getProgramBySlug(slug)
+      expect(p?.registerInterest, slug).toBe(true)
+      if (!p) continue
+      const cta = getProgramCta(p)
+      expect(cta.label).toBe('Register Interest')
+      const url = new URL(cta.href, 'https://example.com')
+      expect(url.pathname).toBe('/contact')
+      expect(url.searchParams.get('topic')).toBe(`${p.name} (live via Zoom)`)
+    }
   })
 
   it('never labels a programme button "Add to Cart" or "Book Now"', () => {

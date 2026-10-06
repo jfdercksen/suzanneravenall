@@ -51,10 +51,10 @@ interface DeliveryBadge {
 }
 
 /**
- * Real, inventory-backed "spots left" badge for the product's Live variant,
+ * Real, inventory-backed "Sold Out" badge for the product's Live variant,
  * when one exists and the store API returned tracked inventory for it.
- * Takes priority over the generic delivery-format badge — a real seat count
- * is more useful (and more honest) than "Live" on its own.
+ * Takes priority over the generic delivery-format badge when the cohort is
+ * full; otherwise null, so the delivery-format badge shows.
  *
  * Gated on isCapacityLimitedHandle — many unrelated self-paced products also
  * have variants titled "Live via Zoom" and must never show a fabricated
@@ -73,10 +73,9 @@ function getRealSpotsBadge(handle: string, variants: ProductVariant[]): Delivery
     return { label: 'Sold Out', className: 'bg-brand-sand text-brand-muted border border-brand-border' }
   }
 
-  return {
-    label: `${spots.spotsRemaining} spot${spots.spotsRemaining === 1 ? '' : 's'} left`,
-    className: 'bg-brand-accent/10 text-brand-accent border border-brand-accent/30',
-  }
+  // No "N spots left" count until Suzanne gives dates (sourcing report 6 Oct,
+  // decision 6): fall through to the delivery-format badge.
+  return null
 }
 
 /**

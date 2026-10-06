@@ -58,6 +58,14 @@ describe('UpcomingEvents (site check C5)', () => {
     expect(screen.getByText('Pre-Order Now')).toBeInTheDocument()
   })
 
+  it('shows no "spots left" or "Next intake" claims (sourcing report 6 Oct, decision 6)', () => {
+    const { unmount } = render(<UpcomingEvents cohort={cohort} />)
+    expect(screen.queryByText(/spots? left/i)).not.toBeInTheDocument()
+    unmount()
+    render(<UpcomingEvents cohort={null} />)
+    expect(screen.queryByText(/Next intake/i)).not.toBeInTheDocument()
+  })
+
   it('does not claim the discovery call is "Available this week"', () => {
     render(<UpcomingEvents cohort={cohort} />)
     expect(screen.queryByText('Available this week')).not.toBeInTheDocument()

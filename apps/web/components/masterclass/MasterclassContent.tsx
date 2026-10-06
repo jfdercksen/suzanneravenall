@@ -6,36 +6,32 @@ import { Target, Users, Zap } from 'lucide-react'
 import { HEADER_UNDERLINE, PageHeader } from '@/components/shared/PageHeader'
 import EmailCaptureForm from './EmailCaptureForm'
 
+// Masterclass facts, sourced 6 Oct 2026 (content-sourcing-2026-10-06.md,
+// section 9, decision 13): free, one hour, pre-recorded, watched on demand, a
+// taster for Trauma to Transcendence. Sources:
+// https://suzanneravenall.com/masterclass-register/ and
+// https://suzanneravenall.com/services/masterclass/
+// The live page's 25%-off offer is deliberately NOT shown (decision 13).
+export const MASTERCLASS_TITLE =
+  'Breaking the hold of the child brain on adult adversity. A quest to find an upgraded version of you.'
+export const MASTERCLASS_FORMAT = 'Free · One hour · Pre-recorded · Watch on demand'
+
+// The three key takeaways from https://suzanneravenall.com/services/masterclass/
 const outcomes = [
   {
     number: '01',
-    headline: 'Identify What Is Holding You Back',
-    description:
-      'Review your life from a different perspective, pinpoint the patterns that are tripping you up, and learn exactly how to fix them.',
+    headline: 'How Your Brain Was Shaped',
+    description: 'How the brain is impacted by early brain development.',
   },
   {
     number: '02',
-    headline: 'Release the Past and Rewrite Your Story',
-    description:
-      'Let go of what no longer serves you and gain an abundance of tools to navigate your life with clarity and intention.',
+    headline: 'When Early Development Is Interrupted',
+    description: 'What happens when development is interrupted during early childhood.',
   },
   {
     number: '03',
-    headline: 'Understand How Your Experiences Shape You',
-    description:
-      'Develop a deep understanding of how early experiences have shaped your current actions, and how to consciously change them.',
-  },
-  {
-    number: '04',
-    headline: 'Reprogramme Your Mind and Nervous System',
-    description:
-      'Learn how your thoughts create your reality and acquire proven methods to rewire your mind for lasting transformation.',
-  },
-  {
-    number: '05',
-    headline: 'Understand Why You Are Here',
-    description:
-      'Reconnect with your sense of purpose and replan what you actually want from your life, rather than what you inherited or defaulted into.',
+    headline: 'Shift an Early Belief',
+    description: 'A taster of identifying an early belief and starting to shift it.',
   },
 ]
 
@@ -113,10 +109,10 @@ export default function MasterclassContent() {
         }
         description={
           <>
-            Discover the pattern, decode and disrupt it, then rewire your mind and
-            nervous system to create radical inner and outer transformation. This
-            free masterclass is designed as a taster: your first experience of
-            working at the pattern level before going deeper.
+            {MASTERCLASS_TITLE} A free, one-hour, pre-recorded masterclass that you
+            watch on demand, whenever suits you. It is a taster of the Trauma to
+            Transcendence programme: your first experience of working at the
+            pattern level before going deeper.
           </>
         }
       />
@@ -136,6 +132,9 @@ export default function MasterclassContent() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="max-w-2xl"
           >
+            <p className="text-xs uppercase tracking-[0.25em] text-white/80 mb-4">
+              {MASTERCLASS_FORMAT}
+            </p>
             <EmailCaptureForm />
           </motion.div>
         </div>
@@ -151,6 +150,9 @@ export default function MasterclassContent() {
             <h2 className="text-3xl lg:text-5xl font-medium tracking-tight text-brand-primary">
               Inside This Free Masterclass
             </h2>
+            <p className="mt-4 text-brand-muted text-lg max-w-3xl mx-auto">
+              {MASTERCLASS_TITLE}
+            </p>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -294,7 +296,7 @@ export default function MasterclassContent() {
               Your Transformation Starts Here
             </h2>
             <p className="text-brand-muted text-lg mb-10">
-              Join thousands of people who have already taken the first step.
+              One hour, pre-recorded and free. Watch it on demand, whenever suits you.
             </p>
             {/* Site check M5: the page used to render the form a second time
                 here, with the same ids. One form, so this CTA takes the

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { PageHeader } from '@/components/shared/PageHeader'
-import { getProgramCta, isResonanceRepatterning, type Program } from '@/data/programs'
+import { getProgramBySlug, getProgramCta, isResonanceRepatterning, type Program } from '@/data/programs'
 
 type Props = {
   program: Program
@@ -30,6 +30,9 @@ const DELIVERY_METHODS: Record<Program['category'], string> = {
 function getDeliveryMethod(program: Program): string {
   // All Resonance Repatterning programmes are currently offered self-study
   if (isResonanceRepatterning(program)) return 'Self-Study Online: Start Anytime'
+  // Energy Clearing links to the self-study product; live runs are register
+  // interest only (sourcing report 6 Oct, decision 5)
+  if (program.series === 'energy-clearing') return 'Self-Study Online: Start Anytime'
   return DELIVERY_METHODS[program.category]
 }
 
@@ -96,7 +99,7 @@ function CheckIcon() {
   )
 }
 
-// -- outcome cards (placeholder: TODO: Suzanne to provide programme-specific outcomes) --
+// -- outcome cards: generic fallback, used only when a programme has no sourced keyTakeaways --
 
 const OUTCOMES = [
   {
@@ -115,6 +118,8 @@ const OUTCOMES = [
     body: 'Leave with practical tools, renewed energy, and the clarity and confidence to navigate your life in a fundamentally new way.',
   },
 ]
+
+const OUTCOME_ICONS = [SparklesIcon, BoltIcon, ArrowUpIcon]
 
 // -- credential items --
 
@@ -171,6 +176,9 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
   const categoryLabel = CATEGORY_LABELS[program.category]
   const priceUsd = formatPriceUsd(program)
   const priceZar = formatPriceZar(program)
+  const prerequisiteProgram = program.prerequisite?.slug
+    ? getProgramBySlug(program.prerequisite.slug)
+    : undefined
 
   return (
     <>
@@ -256,7 +264,8 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
       </section>
 
       {/* ── 2. WHAT YOU'LL EXPERIENCE: cream ───────────────────────── */}
-      {/* TODO: Suzanne to provide programme-specific outcome statements for each programme */}
+      {/* Sourced key takeaways where Thinkific publishes them (sourcing report
+          6 Oct, section 8); the generic cards otherwise. */}
       <motion.section
         aria-labelledby="outcomes-heading"
         variants={sectionVariants}
@@ -286,7 +295,14 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
             variants={staggerVariants}
             className="grid gap-8 sm:grid-cols-3"
           >
-            {OUTCOMES.map(({ Icon, title, body }) => (
+            {(program.keyTakeaways
+              ? program.keyTakeaways.map((title, i) => ({
+                  Icon: OUTCOME_ICONS[i % OUTCOME_ICONS.length] ?? SparklesIcon,
+                  title,
+                  body: null as string | null,
+                }))
+              : OUTCOMES
+            ).map(({ Icon, title, body }) => (
               <motion.div
                 key={title}
                 variants={childVariants}
@@ -296,7 +312,9 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                   <Icon />
                 </div>
                 <h3 className="text-xl font-medium text-brand-primary mb-4">{title}</h3>
-                <p className="text-brand-muted font-light leading-relaxed text-sm flex-1">{body}</p>
+                {body && (
+                  <p className="text-brand-muted font-light leading-relaxed text-sm flex-1">{body}</p>
+                )}
               </motion.div>
             ))}
           </motion.div>
@@ -346,15 +364,34 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                     <p className="text-brand-muted text-sm font-light">{program.duration}</p>
                   </div>
                 )}
+                {program.prerequisite && (
+                  <div className="col-span-2">
+                    <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-2">Prerequisite</p>
+                    <p className="text-brand-muted text-sm font-light">
+                      {program.prerequisite.text}
+                      {prerequisiteProgram && (
+                        <>
+                          {' '}
+                          <Link
+                            href={`/programs/${prerequisiteProgram.slug}`}
+                            className="text-brand-accent hover:text-brand-accent-700 underline underline-offset-2"
+                          >
+                            View {prerequisiteProgram.name}
+                          </Link>
+                        </>
+                      )}
+                    </p>
+                  </div>
+                )}
               </div>
 
-              {/* TODO: Suzanne to provide: "Who this is for" paragraph for each programme */}
+              {/* Sourced "who this is for" where Suzanne's pages state it (sourcing
+                  report 6 Oct, section 8); generic copy otherwise. */}
               <div className="border-l-2 border-brand-accent/40 pl-6">
                 <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-3">Who This Is For</p>
                 <p className="text-brand-muted font-light leading-relaxed text-sm">
-                  This programme is for you if you are ready to move beyond surface-level change and
-                  commit to a deeper journey of inner transformation. Whether you are facing a specific
-                  challenge or simply know that there is more available to you, this is your next step.
+                  {program.whoFor ??
+                    'This programme is for you if you are ready to move beyond surface-level change and commit to a deeper journey of inner transformation. Whether you are facing a specific challenge or simply know that there is more available to you, this is your next step.'}
                 </p>
               </div>
             </div>
@@ -560,8 +597,9 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-lg text-brand-muted font-light max-w-xl mx-auto mb-12 leading-relaxed"
           >
-            Take the first step. Secure your place in {program.name} and begin the work
-            that changes everything.
+            {program.registerInterest
+              ? `No live dates are scheduled yet. Register your interest in ${program.name} and Suzanne's team will let you know when new live dates are set.`
+              : `Take the first step. Secure your place in ${program.name} and begin the work that changes everything.`}
           </motion.p>
 
           <motion.div
