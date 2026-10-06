@@ -74,12 +74,47 @@ async function validateWithPayFast(
   }
 }
 
+function medusaBase(): string {
+  return (
+    process.env.MEDUSA_BACKEND_URL ??
+    process.env.NEXT_PUBLIC_MEDUSA_URL ??
+    'http://medusa:9000'
+  ).replace(/\/$/, '')
+}
+
+interface StoreCart {
+  id: string
+  total: number
+  currency_code?: string | null
+}
+
+// Loads the cart so the ITN amount can be compared with what Medusa says the
+// buyer owes. Returns null on any failure; the caller then refuses to complete.
+async function loadCart(cartId: string): Promise<StoreCart | null> {
+  try {
+    const res = await fetch(`${medusaBase()}/store/carts/${encodeURIComponent(cartId)}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? '',
+      },
+    })
+    if (!res.ok) {
+      logError('[PayFast ITN] Cart load returned non-OK', undefined, { cartId, status: res.status })
+      return null
+    }
+    const data = (await res.json()) as { cart?: StoreCart }
+    return data.cart ?? null
+  } catch (err) {
+    logError('[PayFast ITN] Cart load network error', err, { cartId })
+    return null
+  }
+}
+
 async function completeCart(cartId: string): Promise<boolean> {
-  const medusaBase = process.env.MEDUSA_BACKEND_URL ?? 'http://medusa:9000'
   const pubKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? ''
 
   try {
-    const res = await fetch(`${medusaBase}/store/carts/${cartId}/complete`, {
+    const res = await fetch(`${medusaBase()}/store/carts/${cartId}/complete`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -184,7 +219,33 @@ export async function POST(req: NextRequest) {
   // 6. Process payment status
   if (paymentStatus === 'COMPLETE') {
     console.info('[PayFast ITN] Payment COMPLETE', { cartId, pfPaymentId, amountGross })
-    await completeCart(cartId)
+    // Only complete when PayFast collected exactly what the cart costs. The
+    // form amount is signed server side, but a cart can change after the form
+    // was built, and the ITN is the last point where an underpayment can be
+    // stopped before an order exists.
+    const cart = cartId ? await loadCart(cartId) : null
+    const receivedCents = Math.round(parseFloat(amountGross) * 100)
+    if (!cart) {
+      logError('[PayFast ITN] Cart could not be loaded, not completing', undefined, {
+        cartId,
+        expected: null,
+        received: receivedCents,
+        pfPaymentId,
+      })
+    } else if (
+      receivedCents !== Number(cart.total) ||
+      (cart.currency_code != null && cart.currency_code.toLowerCase() !== 'zar')
+    ) {
+      logError('[PayFast ITN] Amount mismatch, not completing cart', undefined, {
+        cartId,
+        expected: Number(cart.total),
+        received: receivedCents,
+        currency: cart.currency_code ?? null,
+        pfPaymentId,
+      })
+    } else {
+      await completeCart(cartId)
+    }
   } else if (paymentStatus === 'FAILED' || paymentStatus === 'CANCELLED') {
     // Reaches Sentry once the DSN is set (KI001) — a failed payment is a lost sale.
     logWarn('[PayFast ITN] Payment not completed', undefined, {
