@@ -13,12 +13,14 @@ const MEDUSA_BASE = 'http://medusa-test:9000'
 const PASSPHRASE = 'test-passphrase'
 
 // Same helper as the route, so the test ITN passes the signature check.
-const sign = (params: Record<string, string>) => payfastSignature(params, PASSPHRASE)
+const sign = (params: Record<string, string>) => payfastSignature(params, PASSPHRASE, { includeEmpty: true })
 
 function makeItn(amountGross: string, status = 'COMPLETE'): Request {
   const params: Record<string, string> = {
     m_payment_id: 'cart_1',
     pf_payment_id: '123456',
+    // PayFast posts empty fields too and signs them; keep one in the fixture.
+    custom_str1: '',
     payment_status: status,
     amount_gross: amountGross,
   }

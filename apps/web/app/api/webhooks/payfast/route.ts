@@ -186,8 +186,11 @@ export async function POST(req: NextRequest) {
   const { signature, ...itnWithoutSig } = itn
 
   // 3. MD5 signature verification
-  const expectedSignature = payfastSignature(itnWithoutSig, passphrase)
-  if (signature !== expectedSignature) {
+  // PayFast's ITN sample signs every posted field, empty ones included; the
+  // form rule skips them. Accept either, both are full signature checks.
+  const expectedSignature = payfastSignature(itnWithoutSig, passphrase, { includeEmpty: true })
+  const expectedSkipEmpty = payfastSignature(itnWithoutSig, passphrase)
+  if (signature !== expectedSignature && signature !== expectedSkipEmpty) {
     logError('[PayFast ITN] Signature mismatch', undefined, {
       received: signature,
       expected: expectedSignature,

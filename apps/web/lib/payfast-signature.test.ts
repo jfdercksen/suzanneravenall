@@ -20,4 +20,8 @@ describe('payfastSignature', () => {
     expect(pfEncode("it's (a) test!*~")).toBe('it%27s+%28a%29+test%21%2A%7E')
     expect(pfEncode('a+b@c.com')).toBe('a%2Bb%40c.com')
   })
+
+  it('includes empty fields when asked, as the ITN signature does', () => {
+    expect(payfastSignature({ a: '1', b: '', c: 'x' }, 'p', { includeEmpty: true })).toBe(md5('a=1&b=&c=x&passphrase=p'))
+  })
 })
