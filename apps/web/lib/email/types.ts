@@ -72,6 +72,8 @@ export interface QuizInviteEmailData {
   firstName: string
   quizTitle: string
   link: string
+  /** When this copy was requested, shown in the email so repeat sends of the same link are not identical (Gmail hides identical repeats as "..."). */
+  requestedAt?: string
 }
 
 /** The subscriber's own full report, the same content the results screen shows. */

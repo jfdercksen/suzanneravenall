@@ -70,3 +70,21 @@ describe('sendQuizInviteEmail', () => {
     await expect(sendQuizInviteEmail(baseData)).rejects.toThrow('BREVO_API_KEY is not configured')
   })
 })
+
+describe('sendQuizInviteEmail repeat sends (client QA 5 Oct)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    vi.stubEnv('BREVO_API_KEY', 'test_brevo_key')
+  })
+
+  it('stamps the request time in the text and sets a unique ref header per send', async () => {
+    mockSend.mockResolvedValue('id')
+    await sendQuizInviteEmail(baseData, new Date('2026-10-05T14:24:00Z'))
+    await sendQuizInviteEmail(baseData, new Date('2026-10-05T14:26:00Z'))
+    const [a, b] = mockSend.mock.calls.map((c) => c[0])
+    expect(a.text).toContain('Requested 5 Oct 2026')
+    expect(a.text).toContain('16:24')
+    expect(a.text).not.toBe(b.text)
+    expect(a.headers['X-Entity-Ref-ID']).not.toBe(b.headers['X-Entity-Ref-ID'])
+  })
+})

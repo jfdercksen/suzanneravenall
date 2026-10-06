@@ -18,7 +18,7 @@ const BLUE = '#1719F4'
 const LIGHT_GRAY = '#F5F7FA'
 const MEDIUM_GRAY = '#64748B'
 
-export default function QuizInvite({ firstName, quizTitle, link }: QuizInviteEmailData) {
+export default function QuizInvite({ firstName, quizTitle, link, requestedAt }: QuizInviteEmailData) {
   return (
     <Html lang="en">
       <Head />
@@ -79,6 +79,12 @@ export default function QuizInvite({ firstName, quizTitle, link }: QuizInviteEma
               Takes about 2 minutes. Your result, and what it means, is shown to you
               immediately after your last answer.
             </Text>
+
+            {requestedAt && (
+              <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', lineHeight: '1.6', margin: '0 0 24px' }}>
+                Requested {requestedAt}. If you asked more than once, every copy of this link works.
+              </Text>
+            )}
 
             <Hr style={{ borderColor: '#e2e8f0', margin: '24px 0' }} />
 

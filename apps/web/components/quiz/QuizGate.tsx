@@ -282,7 +282,7 @@ export default function QuizGate({ quiz, initialMode, subscriber, topicTitle }: 
               This link isn&apos;t valid
             </h1>
             <p className="text-base text-brand-muted font-light leading-relaxed mb-6">
-              It may have expired or already been used. Request a new one below.
+              It may have expired, or a newer link may have replaced it. Request your link again below and we will email it to you.
             </p>
             <button
               type="button"
