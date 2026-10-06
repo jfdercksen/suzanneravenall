@@ -1,3 +1,4 @@
+import { createHmac } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { logError, logWarn } from '@/lib/log'
 import { payfastSignature } from '@/lib/payfast-signature'
@@ -109,6 +110,82 @@ async function loadCart(cartId: string): Promise<StoreCart | null> {
   } catch (err) {
     logError('[PayFast ITN] Cart load network error', err, { cartId })
     return null
+  }
+}
+
+// Medusa will not turn a cart into an order until a payment session on it is
+// authorised. The ITN has been verified above (IP, signature, server-side
+// validation, amount), so open the PayFast session now and hand the provider a
+// proof only this server can make: an HMAC of cart, PayFast payment id and
+// amount, keyed with the PayFast passphrase. The provider in
+// apps/medusa/src/modules/payment-payfast authorises the session only when the
+// proof checks out, so the public store API cannot mark a cart as paid.
+const PAYFAST_PROVIDER_ID = 'pp_payfast_payfast'
+
+function itnProof(cartId: string, pfPaymentId: string, amountCents: number, passphrase: string): string {
+  return createHmac('sha256', passphrase).update(`${cartId}:${pfPaymentId}:${amountCents}`).digest('hex')
+}
+
+async function authorizePayFastSession(
+  cartId: string,
+  pfPaymentId: string,
+  amountCents: number,
+  passphrase: string
+): Promise<boolean> {
+  const headers = {
+    'Content-Type': 'application/json',
+    'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? '',
+  }
+  try {
+    const cartRes = await fetch(
+      `${medusaBase()}/store/carts/${encodeURIComponent(cartId)}?fields=id,*payment_collection`,
+      { headers }
+    )
+    const cartData = cartRes.ok
+      ? ((await cartRes.json()) as { cart?: { payment_collection?: { id?: string } | null } })
+      : null
+    let collectionId = cartData?.cart?.payment_collection?.id
+    if (!collectionId) {
+      const pcRes = await fetch(`${medusaBase()}/store/payment-collections`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ cart_id: cartId }),
+      })
+      const pc = (await pcRes.json().catch(() => ({}))) as { payment_collection?: { id?: string } }
+      collectionId = pc.payment_collection?.id
+      if (!pcRes.ok || !collectionId) {
+        logError('[PayFast ITN] Could not create payment collection', undefined, { cartId, status: pcRes.status })
+        return false
+      }
+    }
+    const sessRes = await fetch(
+      `${medusaBase()}/store/payment-collections/${encodeURIComponent(collectionId)}/payment-sessions`,
+      {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          provider_id: PAYFAST_PROVIDER_ID,
+          data: {
+            cart_id: cartId,
+            pf_payment_id: pfPaymentId,
+            amount_cents: amountCents,
+            itn_proof: itnProof(cartId, pfPaymentId, amountCents, passphrase),
+          },
+        }),
+      }
+    )
+    if (!sessRes.ok) {
+      logError('[PayFast ITN] Could not open the PayFast payment session', undefined, {
+        cartId,
+        status: sessRes.status,
+        body: (await sessRes.text().catch(() => '')).slice(0, 200),
+      })
+      return false
+    }
+    return true
+  } catch (err) {
+    logError('[PayFast ITN] Payment session network error', err, { cartId })
+    return false
   }
 }
 
@@ -251,7 +328,9 @@ export async function POST(req: NextRequest) {
         pfPaymentId,
       })
     } else {
-      await completeCart(cartId)
+      if (await authorizePayFastSession(cartId, pfPaymentId, receivedCents, passphrase)) {
+        await completeCart(cartId)
+      }
     }
   } else if (paymentStatus === 'FAILED' || paymentStatus === 'CANCELLED') {
     // Reaches Sentry once the DSN is set (KI001) — a failed payment is a lost sale.

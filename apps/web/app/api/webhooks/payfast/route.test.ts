@@ -43,9 +43,15 @@ interface FakeResponse {
   text?: () => Promise<string>
 }
 
-function makeFetchMock({ cartTotal = 199500, cartOk = true } = {}) {
-  return vi.fn(async (url: string | URL): Promise<FakeResponse> => {
+function makeFetchMock({ cartTotal = 199500, cartOk = true, sessionOk = true } = {}) {
+  return vi.fn(async (url: string | URL, _init?: RequestInit): Promise<FakeResponse> => {
     const href = url.toString()
+    if (href.endsWith('/payment-sessions')) {
+      return { ok: sessionOk, status: sessionOk ? 200 : 400, json: async () => ({}), text: async () => 'no' }
+    }
+    if (href.endsWith('/store/payment-collections')) {
+      return { ok: true, status: 200, json: async () => ({ payment_collection: { id: 'paycol_1' } }) }
+    }
     if (href.includes('payfast.co.za')) {
       return { ok: true, status: 200, text: async () => 'VALID' }
     }
@@ -89,6 +95,20 @@ describe('POST /api/webhooks/payfast', () => {
     expect(res.status).toBe(200)
     expect(completeCalls(fetchMock)).toHaveLength(1)
     expect(completeCalls(fetchMock)[0]?.[0]).toBe(`${MEDUSA_BASE}/store/carts/cart_1/complete`)
+    const session = fetchMock.mock.calls.find(([u]) => u.toString().endsWith('/payment-sessions'))
+    expect(session?.[0]).toBe(`${MEDUSA_BASE}/store/payment-collections/paycol_1/payment-sessions`)
+    const body = JSON.parse(String(session?.[1]?.body))
+    expect(body.provider_id).toBe('pp_payfast_payfast')
+    expect(body.data).toMatchObject({ cart_id: 'cart_1', pf_payment_id: '123456', amount_cents: 199500 })
+    expect(body.data.itn_proof).toMatch(/^[a-f0-9]{64}$/)
+  })
+
+  it('does not complete the cart when the payment session cannot be opened', async () => {
+    const fetchMock = makeFetchMock({ sessionOk: false })
+    vi.stubGlobal('fetch', fetchMock)
+    const res = await POST(makeItn('1995.00') as never)
+    expect(res.status).toBe(200)
+    expect(completeCalls(fetchMock)).toHaveLength(0)
   })
 
   it('does not complete the cart when amount_gross is less than the cart total', async () => {

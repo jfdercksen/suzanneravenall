@@ -1,4 +1,4 @@
-import { createHash } from 'crypto'
+import { createHash, createHmac, timingSafeEqual } from 'crypto'
 import { AbstractPaymentProvider } from '@medusajs/framework/utils'
 import type {
   InitiatePaymentInput,
@@ -39,6 +39,30 @@ function buildSignature(params: Record<string, string>, passphrase: string): str
   return createHash('md5').update(withPassphrase).digest('hex')
 }
 
+// The web app's ITN handler (apps/web/app/api/webhooks/payfast/route.ts)
+// verifies PayFast's payment notification, then opens this session with
+// data { cart_id, pf_payment_id, amount_cents, itn_proof }. itn_proof is an
+// HMAC of those values keyed with the PayFast passphrase, which only our
+// servers hold, so a session is authorised only for a payment we verified
+// and only for the amount the cart costs.
+function itnProofValid(data: Record<string, unknown> | undefined, amount: unknown, passphrase: string): boolean {
+  if (!data || !passphrase) return false
+  const cartId = typeof data['cart_id'] === 'string' ? data['cart_id'] : ''
+  const pfPaymentId = typeof data['pf_payment_id'] === 'string' ? data['pf_payment_id'] : ''
+  const amountCents = Number(data['amount_cents'])
+  const proof = typeof data['itn_proof'] === 'string' ? data['itn_proof'] : ''
+  if (!cartId || !pfPaymentId || !Number.isFinite(amountCents) || !proof) return false
+  const amountNum =
+    amount && typeof amount === 'object' && 'numeric' in (amount as Record<string, unknown>)
+      ? Number((amount as { numeric: unknown }).numeric)
+      : Number(amount)
+  if (!Number.isFinite(amountNum) || Math.round(amountNum) !== Math.round(amountCents)) return false
+  const expected = createHmac('sha256', passphrase).update(`${cartId}:${pfPaymentId}:${amountCents}`).digest('hex')
+  const a = Buffer.from(proof)
+  const b = Buffer.from(expected)
+  return a.length === b.length && timingSafeEqual(a, b)
+}
+
 function verifyITNSignature(itn: Record<string, string>, passphrase: string): boolean {
   const { signature, ...params } = itn
   const expected = buildSignature(params, passphrase)
@@ -67,7 +91,10 @@ class PayFastPaymentProvider extends AbstractPaymentProvider<PayFastOptions> {
     // context is typed as PaymentProviderContext which may not have cart_id/item_name
     // at the type level, but they are passed at runtime — use index access
     const ctx = context as Record<string, unknown> | undefined
-    const cartId = (ctx?.['cart_id'] as string | undefined) ?? ''
+    const inputData = (input as { data?: Record<string, unknown> }).data
+    const cartId =
+      (ctx?.['cart_id'] as string | undefined) ??
+      (typeof inputData?.['cart_id'] === 'string' ? (inputData['cart_id'] as string) : '')
     if (!cartId) {
       throw new Error('cart_id is required in payment context')
     }
@@ -98,7 +125,7 @@ class PayFastPaymentProvider extends AbstractPaymentProvider<PayFastOptions> {
       endpoint: this.options_.sandboxMode
         ? 'https://sandbox.payfast.co.za/eng/process'
         : 'https://www.payfast.co.za/eng/process',
-      status: 'pending',
+      status: itnProofValid(inputData, amount, this.options_.passphrase) ? 'authorized' : 'pending',
     }
 
     return {
