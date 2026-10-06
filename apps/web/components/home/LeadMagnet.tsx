@@ -69,13 +69,13 @@ export default function LeadMagnet() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <p className="text-white/80 text-xs font-medium uppercase tracking-[0.3em] mb-4">
-            Free Chapter
+            The Breakthrough Trilogy
           </p>
           <h2 id="leadmagnet-heading" className="text-4xl lg:text-6xl font-medium tracking-tight text-white">
-            Get the first chapter free
+            Be the first to read it
           </h2>
           <p className="mt-4 text-white/70 text-lg leading-relaxed">
-            Request Chapter 1 of The Breakthrough Trilogy and discover the hidden patterns holding you back.
+            The Breakthrough Trilogy is on pre-order. Leave your email and we will let you know the moment it is released.
           </p>
         </motion.div>
 
@@ -88,7 +88,7 @@ export default function LeadMagnet() {
           {status === 'success' ? (
             <div className="mt-8 rounded-card bg-white/10 border border-white/30 px-8 py-6">
               <p className="text-white font-semibold text-lg">Thank you, your request is in.</p>
-              <p className="mt-2 text-white/70">We have your details and will be in touch about Chapter 1.</p>
+              <p className="mt-2 text-white/70">We will email you as soon as The Breakthrough Trilogy is released.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} noValidate className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
@@ -120,7 +120,7 @@ export default function LeadMagnet() {
                 disabled={status === 'loading'}
                 className="px-7 py-3.5 bg-white hover:bg-brand-sand text-brand-primary font-semibold rounded-button transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap text-sm"
               >
-                {status === 'loading' ? 'Sending…' : 'Request Chapter 1'}
+                {status === 'loading' ? 'Sending…' : 'Notify Me'}
               </button>
             </form>
           )}

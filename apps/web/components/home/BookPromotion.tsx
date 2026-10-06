@@ -125,12 +125,12 @@ export default function BookPromotion() {
               >
                 Pre-order: R165
               </Link>
-              {/* TODO: Replace href with dedicated chapter download page once PDF asset is provided */}
+              {/* No chapter PDF exists yet (Johan, 6 Oct): this asks for release news instead. */}
               <Link
                 href="#lead-magnet"
                 className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary/30 hover:border-brand-primary text-brand-primary font-semibold rounded-button transition-all duration-300 hover:bg-brand-primary/5"
               >
-                Read Chapter 1 Free
+                Get Release Updates
               </Link>
             </motion.div>
 
