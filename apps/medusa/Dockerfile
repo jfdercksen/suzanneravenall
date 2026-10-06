@@ -15,6 +15,14 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Shared server-side clients (n8n migration). package.json depends on it as
+# "file:../../packages/integrations", which from /app is /packages/integrations;
+# npm links it into node_modules. It ships as TypeScript source and is loaded
+# through the same ts-node runtime as src/ (the link resolves outside
+# node_modules, so ts-node compiles it). Copied before npm install so the
+# file: dependency resolves.
+COPY packages/integrations /packages/integrations
+
 # Copy manifests first for layer-caching
 COPY apps/medusa/package.json apps/medusa/package-lock.json* ./
 

@@ -50,6 +50,11 @@ module.exports = defineConfig({
       resolve: "./src/modules/vtiger",
     },
     {
+      // Durable queue for the automations moving out of n8n (automation_job table).
+      key: "automationsModule",
+      resolve: "./src/modules/automations",
+    },
+    {
       key: "sageModule",
       resolve: "./src/modules/sage",
       options: {
