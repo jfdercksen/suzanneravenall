@@ -1,0 +1,11 @@
+{
+  "name": "@suzanne/integrations",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared clients for the systems the n8n workflows used to call (Vtiger first). Plain TypeScript, no Next or Medusa imports, server-side only.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

@@ -8,6 +8,7 @@ COPY package.json package-lock.json turbo.json ./
 COPY apps/web/package.json ./apps/web/
 COPY packages/ui/package.json ./packages/ui/
 COPY packages/config/package.json ./packages/config/
+COPY packages/integrations/package.json ./packages/integrations/
 RUN npm ci
 
 # Build

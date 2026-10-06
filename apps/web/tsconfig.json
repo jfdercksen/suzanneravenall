@@ -17,7 +17,8 @@
     "paths": {
       "@/*": ["./*"],
       "@suzanne/ui": ["../../packages/ui/src/index.ts"],
-      "@suzanne/ui/*": ["../../packages/ui/src/*"]
+      "@suzanne/ui/*": ["../../packages/ui/src/*"],
+      "@suzanne/integrations": ["../../packages/integrations/src/index.ts"]
     },
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
