@@ -2,6 +2,18 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
+function accessTokenAmr(accessToken: string): string[] {
+  try {
+    const payload = accessToken.split('.')[1] ?? ''
+    const json = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')) as {
+      amr?: Array<{ method?: string } | string>
+    }
+    return (json.amr ?? []).map((e) => (typeof e === 'string' ? e : e.method ?? ''))
+  } catch {
+    return []
+  }
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   // Use the configured site URL rather than deriving from request.url.
@@ -50,13 +62,14 @@ export async function GET(request: NextRequest) {
 
   const { session } = exchangeData
 
-  // Detect password-reset flow via AMR (Authentication Method Reference).
-  // Using session.user.amr is safer than the user-supplied `type` query param
-  // because AMR is part of the signed JWT — it cannot be forged by an attacker.
-  const amr = session.user.app_metadata?.provider === 'email'
-    ? (session.amr as Array<{ method: string }> | undefined)
-    : undefined
-  const isRecovery = amr?.some((entry) => entry.method === 'recovery') ?? false
+  // Detect the password-reset flow via the AMR (Authentication Method
+  // Reference) claim. AMR lives in the access token, not on the Session
+  // object: reading session.amr was always undefined, so every reset link
+  // logged the member in and skipped the new-password step (6 Oct live test).
+  // The token comes straight from GoTrue's code exchange above, server to
+  // server, so its payload is trusted here; the user-supplied `type` query
+  // param is still ignored.
+  const isRecovery = accessTokenAmr(session.access_token).includes('recovery')
 
   // On first email confirmation, ensure the user has a free-tier subscription.
   // We do this here (server-side, after verified session exchange) rather than
