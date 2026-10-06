@@ -1,5 +1,5 @@
 import { IntegrationError } from './http'
-import { orderBuyer, type OrderSnapshot } from './orders'
+import { orderBuyer, type OrderItemSnapshot, type OrderSnapshot } from './orders'
 import { ThinkificError, type ThinkificClient } from './thinkific'
 
 /**
@@ -27,10 +27,11 @@ export function parseOrderForThinkific(order: OrderSnapshot) {
 
   const courseItems: CourseItem[] = []
   for (const item of order.items ?? []) {
-    const meta = item?.variant?.product?.metadata
-    const courseId = meta?.thinkific_course_id
-    if (courseId != null && String(courseId).trim() !== '') {
-      const title = item?.variant?.product?.title ?? item?.title ?? 'Course'
+    const courseId = itemCourseId(item)
+    if (courseId != null) {
+      const productTitle = item?.variant?.product?.title ?? item?.title ?? 'Course'
+      const format = item?.variant?.title
+      const title = format && format !== 'Standard' && format !== 'Default' ? `${productTitle} (${format})` : productTitle
       courseItems.push({ thinkific_course_id: Number(courseId), title })
     }
   }
@@ -47,12 +48,22 @@ export function parseOrderForThinkific(order: OrderSnapshot) {
 
 export type ParsedThinkificOrder = ReturnType<typeof parseOrderForThinkific>
 
+/**
+ * The Thinkific course for one line item. A programme sold in several formats
+ * (Live via Zoom, Live Retaker, Self Study) is one product whose formats are
+ * separate Thinkific courses, so the variant's own id wins; the product id is
+ * the fallback for single-format products.
+ */
+export function itemCourseId(item: OrderItemSnapshot | null | undefined): string | null {
+  for (const id of [item?.variant?.metadata?.thinkific_course_id, item?.variant?.product?.metadata?.thinkific_course_id]) {
+    if (id != null && String(id).trim() !== '') return String(id).trim()
+  }
+  return null
+}
+
 /** True when the order has at least one line item with a Thinkific course id. */
 export function orderHasCourses(order: OrderSnapshot): boolean {
-  return (order.items ?? []).some((item) => {
-    const id = item?.variant?.product?.metadata?.thinkific_course_id
-    return id != null && String(id).trim() !== ''
-  })
+  return (order.items ?? []).some((item) => itemCourseId(item) != null)
 }
 
 export type CourseStatus =

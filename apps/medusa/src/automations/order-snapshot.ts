@@ -57,6 +57,7 @@ export function buildOrderSnapshot(order: unknown, receivedAt: Date = new Date()
       variant: item?.variant
         ? {
             title: item.variant.title ?? null,
+            metadata: item.variant.metadata ?? null,
             product: item.variant.product
               ? {
                   title: item.variant.product.title ?? null,

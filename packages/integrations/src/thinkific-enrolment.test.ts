@@ -67,6 +67,11 @@ describe('parity with medusa-thinkific-enrollment.json', () => {
       { title: 'Line title', variant: { product: { metadata: { thinkific_course_id: '5' } } } },
       { variant: { product: { metadata: { thinkific_course_id: '6' } } } },
     ] })],
+    ['per-format course on the variant wins over the product', order({ items: [
+      { title: 'P2', variant: { title: 'Self Study', metadata: { thinkific_course_id: '2165208' }, product: { title: 'Program 2', metadata: { thinkific_course_id: '1383462' } } } },
+      { title: 'P2', variant: { title: 'Live via Zoom', metadata: { thinkific_course_id: '1383462' }, product: { title: 'Program 2', metadata: {} } } },
+      { title: 'P3', variant: { title: 'Live Retaker', metadata: {}, product: { title: 'Program 3', metadata: { thinkific_course_id: '1402405' } } } },
+    ] })],
   ])('parses the order like the n8n Parse node (%s)', (_label, o) => {
     const n8n = n8nParse(o)
     const ours = parseOrderForThinkific(o)
@@ -79,6 +84,17 @@ describe('parity with medusa-thinkific-enrollment.json', () => {
       hasCourseItems: n8n.hasCourseItems,
     })
     expect(orderHasCourses(o)).toBe(n8n.hasCourseItems)
+  })
+
+  it('enrols each format into its own course (Order #69: Program 2 Self Study)', () => {
+    const o = order({ items: [
+      { title: 'P2', variant: { title: 'Self Study', metadata: { thinkific_course_id: '2165208' }, product: { title: 'Program 2', metadata: {} } } },
+      { title: 'P1', variant: { title: 'Self Study', metadata: { thinkific_course_id: 2165207 }, product: { title: 'Program 1', metadata: { thinkific_course_id: '1349879' } } } },
+    ] })
+    expect(parseOrderForThinkific(o).courseItems).toEqual([
+      { thinkific_course_id: 2165208, title: 'Program 2 (Self Study)' },
+      { thinkific_course_id: 2165207, title: 'Program 1 (Self Study)' },
+    ])
   })
 
   it('rejects an order without an email, like n8n', () => {
@@ -137,7 +153,7 @@ describe('parity with medusa-thinkific-enrollment.json', () => {
     expect(n8nRequests.every((r) => r.url === 'https://api.thinkific.com/api/public/v1/enrollments' && r.method === 'POST')).toBe(true)
     expect(fake.calls.every((c) => c.auth === 'Bearer TOKEN')).toBe(true)
     expect(fake.calls[0]).toMatchObject({ method: 'GET', path: '/users', query: { 'query[email]': 'qa.buyer@example.com' } })
-    expect(enrolled.enrollmentSuccessTitles).toEqual(['Program 1 Self Study', 'Program 2'])
+    expect(enrolled.enrollmentSuccessTitles).toEqual(['Program 1 Self Study', 'Program 2 (Live)'])
   })
 
   it('builds the same mail subject as the n8n Prepare: Confirmation Email node', () => {

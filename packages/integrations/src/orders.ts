@@ -11,6 +11,7 @@ export type OrderItemSnapshot = {
   title?: string | null
   variant?: {
     title?: string | null
+    metadata?: Record<string, unknown> | null
     product?: {
       title?: string | null
       metadata?: Record<string, unknown> | null

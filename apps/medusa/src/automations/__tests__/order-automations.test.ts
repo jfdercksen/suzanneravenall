@@ -393,7 +393,7 @@ describe('buildOrderSnapshot', () => {
       items: [
         {
           title: 'Program 1 Self Study',
-          variant: { title: 'Default', product: { title: 'Program 1 Self Study', metadata: { thinkific_course_id: '1284792' } } },
+          variant: { title: 'Default', metadata: null, product: { title: 'Program 1 Self Study', metadata: { thinkific_course_id: '1284792' } } },
         },
       ],
     })
