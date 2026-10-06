@@ -34,6 +34,10 @@ const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   reactStrictMode: true,
 
+  // Shared server-side clients (n8n migration). Shipped as TypeScript source,
+  // so Next must compile it; this also lets webpack follow the workspace link.
+  transpilePackages: ['@suzanne/integrations'],
+
   // Inlined at build time: the sitemap uses it as the lastmod of the pages
   // that only change on a deploy (site check M4).
   env: {
