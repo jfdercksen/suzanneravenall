@@ -5,6 +5,17 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { categoryLabel, type Pathway } from '@/data/pathways'
+import { contactHref } from '@/app/contact/enquiry'
+
+/**
+ * Youth pathways are "register interest" only (decision 14, 6 Oct): no age
+ * range, format, length or price is published anywhere, and the live pages say
+ * full details will be available soon
+ * (https://suzanneravenall.com/children-young-people-foundations-for-life/).
+ * The link opens the contact form with the pathway named in the message.
+ */
+export const registerInterestHref = (pathway: Pathway): string =>
+  contactHref('other', `Register interest: ${pathway.title}`)
 
 const fadeUpInView = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -31,6 +42,9 @@ function BulletList({ items }: { items: string[] }) {
 
 export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
   const detail = pathway.hasDetailContent ? pathway.detail : undefined
+  const isYouth = pathway.category === 'youth'
+  const solidButton =
+    'inline-flex items-center justify-center gap-3 px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300'
 
   return (
     <main>
@@ -53,17 +67,24 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
             <span aria-hidden="true">→</span>
           </Link>
         )}
-        <Link
-          href="/contact#book"
-          className={
-            detail?.heroCtaPrimaryLabel
-              ? 'inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300'
-              : 'inline-flex items-center justify-center gap-3 px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300'
-          }
-        >
-          Book a Discovery Session
-          {!detail?.heroCtaPrimaryLabel && <span aria-hidden="true">→</span>}
-        </Link>
+        {isYouth ? (
+          <Link href={registerInterestHref(pathway)} className={solidButton}>
+            Register Interest
+            <span aria-hidden="true">→</span>
+          </Link>
+        ) : (
+          <Link
+            href="/contact#book"
+            className={
+              detail?.heroCtaPrimaryLabel
+                ? 'inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300'
+                : solidButton
+            }
+          >
+            Book a Discovery Session
+            {!detail?.heroCtaPrimaryLabel && <span aria-hidden="true">→</span>}
+          </Link>
+        )}
       </PageHeader>
 
       {detail ? (
@@ -86,6 +107,31 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
                   ))}
                 </div>
               </motion.div>
+
+              {/* Youth: details not published yet (decision 14, 6 Oct) */}
+              {isYouth && (
+                <motion.div
+                  {...fadeUpInView(0.1)}
+                  className="mt-12 rounded-card border border-dashed border-brand-primary-300 bg-white p-8 lg:p-10 text-center"
+                >
+                  <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                    Register Interest
+                  </p>
+                  <p className="text-lg lg:text-xl font-light text-brand-primary leading-relaxed">
+                    Full details of this transformation pathway will be available soon.
+                  </p>
+                  <p className="mt-3 text-sm text-brand-muted font-light">
+                    Register your interest and we will be in touch when they are.
+                  </p>
+                  <Link
+                    href={registerInterestHref(pathway)}
+                    className="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-medium text-brand-accent hover:text-brand-primary transition-colors duration-300"
+                  >
+                    Register Interest
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                </motion.div>
+              )}
             </div>
           </section>
 
@@ -255,10 +301,10 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link
-              href="/contact#book"
+              href={isYouth ? registerInterestHref(pathway) : '/contact#book'}
               className="group inline-flex items-center justify-center gap-3 rounded-button bg-white px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-brand-primary transition-all duration-300 hover:bg-brand-sand hover:shadow-2xl"
             >
-              Book a Discovery Session
+              {isYouth ? 'Register Interest' : 'Book a Discovery Session'}
               <span
                 aria-hidden="true"
                 className="inline-block transition-transform duration-300 group-hover:translate-x-1"

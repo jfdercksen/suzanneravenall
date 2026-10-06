@@ -31,8 +31,8 @@ export interface PathwayDetail {
   heroSubhead: string
   /**
    * Primary hero CTA label (adult pathways only, e.g. "Find My Pattern").
-   * Omit for youth pathways — the hero then shows a single "Book a Discovery
-   * Session" button instead of two.
+   * Omit for youth pathways: they show a single "Register Interest" enquiry
+   * button instead (decision 14, 6 Oct; see components/pathways/PathwayDetail.tsx).
    */
   heroCtaPrimaryLabel?: string
   /** Where the primary hero CTA links. Defaults to /contact when omitted. */
@@ -401,6 +401,11 @@ export const pathways: Pathway[] = [
   },
 
   // ── Youth pathways ──────────────────────────────────────────────────────
+  // Decision 14 (6 Oct): "register interest" only. Age range, format, session
+  // count, price and who delivers them are not published anywhere; the live
+  // pages end "Full details of this transformation pathway will be available
+  // soon." (https://suzanneravenall.com/children-young-people-foundations-for-life/).
+  // Do not add those details until Suzanne supplies them.
   {
     slug: 'children-young-people-foundations-for-life',
     title: 'Children & Young People Foundations for Life',
