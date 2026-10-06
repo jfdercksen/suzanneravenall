@@ -39,7 +39,9 @@ function MediaCard({ item }: { item: MediaArticle }) {
         {item.title}
       </h3>
 
-      <p className="text-sm text-brand-muted font-light leading-relaxed">{item.description}</p>
+      {item.description && (
+        <p className="text-sm text-brand-muted font-light leading-relaxed">{item.description}</p>
+      )}
     </>
   )
 

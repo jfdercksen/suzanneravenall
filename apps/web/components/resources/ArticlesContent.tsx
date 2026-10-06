@@ -31,7 +31,9 @@ function ArticleCard({ article }: { article: MediaArticle }) {
           <span className="text-xs font-medium text-brand-accent uppercase tracking-wider">
             {article.outlet}
           </span>
-          <span className="text-xs text-brand-muted">{article.date}</span>
+          {article.date && (
+            <span className="text-xs text-brand-muted">{article.date}</span>
+          )}
         </div>
       </div>
 
@@ -39,9 +41,11 @@ function ArticleCard({ article }: { article: MediaArticle }) {
         {article.title}
       </h3>
 
-      <p className="text-sm text-brand-muted font-light leading-relaxed flex-1">
-        {article.description}
-      </p>
+      {article.description && (
+        <p className="text-sm text-brand-muted font-light leading-relaxed flex-1">
+          {article.description}
+        </p>
+      )}
     </>
   )
 

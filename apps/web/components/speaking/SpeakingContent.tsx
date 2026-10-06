@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { HEADER_UNDERLINE, PageHeader } from '@/components/shared/PageHeader'
 import { contactHref } from '@/app/contact/enquiry'
+import { speakingTestimonials } from '@/data/testimonials'
 
 /** "Request the Speaking Kit": the contact form, speaking enquiry preselected. */
 export const SPEAKING_KIT_HREF = contactHref('speaking', 'Speaking Kit')
@@ -65,6 +66,30 @@ const outcomes = [
     heading: 'Lasting Change',
     body: 'Not just inspiration: actual neural pathway restructuring that sticks long after the event.',
   },
+]
+
+/**
+ * Keynote footage. None exists on any of Suzanne's live sites (content
+ * sourcing, 6 Oct 2026, decision 11), so the reel block and the header's
+ * "Watch a Preview" link are hidden while this is null. Set it to real
+ * keynote footage from Suzanne to bring both back.
+ */
+const KEYNOTE_REEL = null as { src: string; poster: string } | null
+
+/**
+ * Events Suzanne has spoken at, from the conference posts on
+ * ravenallinstitute.com (decision 11 replaces the logo strip with this list).
+ * Source: https://ravenallinstitute.com/conference-sr-speaks-at-hr-afica/
+ * and sibling conference posts listed at https://ravenallinstitute.com/articles/
+ */
+export const SPEAKING_EVENTS = [
+  'Women in Management',
+  'Women in Leadership',
+  'Leadership Summit',
+  'HR Africa',
+  'Effective Leadership Strategies',
+  'African Women in Leadership',
+  "Representing South Africa at the Prince of Wales Trust, St James's Palace",
 ]
 
 const corporateAudiences = [
@@ -134,12 +159,14 @@ export default function SpeakingContent() {
         >
           Book Suzanne to Speak
         </Link>
-        <a
-          href="#reel"
-          className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
-        >
-          Watch a Preview &darr;
-        </a>
+        {KEYNOTE_REEL && (
+          <a
+            href="#reel"
+            className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
+          >
+            Watch a Preview &darr;
+          </a>
+        )}
       </PageHeader>
 
       {/* ─── 2. Speaking Topics: light, bg-brand-cream ──────────────────── */}
@@ -232,7 +259,10 @@ export default function SpeakingContent() {
         </div>
       </section>
 
-      {/* ─── 4. Reel / Evidence: light, bg-brand-sand ───────────────────── */}
+      {/* ─── 4. Where Suzanne has spoken: light, bg-brand-sand ──────────── */}
+      {/* Decision 11 (6 Oct): the placeholder logo strip is replaced by the
+          list of events she has spoken at; the keynote reel stays hidden until
+          Suzanne sends real footage (see KEYNOTE_REEL). */}
       <section
         id="reel"
         aria-labelledby="reel-heading"
@@ -247,85 +277,86 @@ export default function SpeakingContent() {
               id="reel-heading"
               className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight"
             >
-              See the transformation in real time
+              Where Suzanne has spoken
             </h2>
           </motion.div>
 
-          {/* Video player */}
-          <motion.div {...scrollFadeUp(0.1)} className="relative w-full rounded-card overflow-hidden bg-brand-primary-900 shadow-2xl">
-            {/* 16:9 aspect */}
-            <div className="relative aspect-video w-full">
-              <video
-                ref={reelRef}
-                onPlay={() => setReelPlaying(true)}
-                onPause={() => setReelPlaying(false)}
-                onEnded={() => setReelPlaying(false)}
-                playsInline
-                className="w-full h-full object-cover"
-                poster="/images/hero-bg-suzanne-ravenall.jpg"
-              >
-                {/* TODO: Add real conference video reel — hero-stage-video.mp4 is a placeholder preview */}
-                <source src="/videos/generated/hero-stage-video.mp4" type="video/mp4" />
-              </video>
-
-              {/* Play button overlay */}
-              {!reelPlaying && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                  <button
-                    type="button"
-                    onClick={handleReelPlay}
-                    aria-label="Play keynote preview"
-                    className="group flex items-center justify-center w-20 h-20 bg-white hover:bg-brand-sand rounded-full shadow-2xl transition-all duration-300 hover:scale-110"
+          {KEYNOTE_REEL && (
+            <div className="mb-12">
+              {/* Video player */}
+              <motion.div {...scrollFadeUp(0.1)} className="relative w-full rounded-card overflow-hidden bg-brand-primary-900 shadow-2xl">
+                {/* 16:9 aspect */}
+                <div className="relative aspect-video w-full">
+                  <video
+                    ref={reelRef}
+                    onPlay={() => setReelPlaying(true)}
+                    onPause={() => setReelPlaying(false)}
+                    onEnded={() => setReelPlaying(false)}
+                    playsInline
+                    className="w-full h-full object-cover"
+                    poster={KEYNOTE_REEL.poster}
                   >
-                    <svg className="w-8 h-8 text-brand-primary ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </button>
+                    <source src={KEYNOTE_REEL.src} type="video/mp4" />
+                  </video>
+
+                  {/* Play button overlay */}
+                  {!reelPlaying && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <button
+                        type="button"
+                        onClick={handleReelPlay}
+                        aria-label="Play keynote preview"
+                        className="group flex items-center justify-center w-20 h-20 bg-white hover:bg-brand-sand rounded-full shadow-2xl transition-all duration-300 hover:scale-110"
+                      >
+                        <svg className="w-8 h-8 text-brand-primary ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Pause button when playing */}
+                  {reelPlaying && (
+                    <button
+                      type="button"
+                      onClick={handleReelPlay}
+                      aria-label="Pause keynote preview"
+                      className="absolute bottom-4 right-4 flex items-center justify-center w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full transition-colors duration-200"
+                    >
+                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                      </svg>
+                    </button>
+                  )}
                 </div>
-              )}
 
-              {/* Pause button when playing */}
-              {reelPlaying && (
-                <button
-                  type="button"
-                  onClick={handleReelPlay}
-                  aria-label="Pause keynote preview"
-                  className="absolute bottom-4 right-4 flex items-center justify-center w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full transition-colors duration-200"
-                >
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                  </svg>
-                </button>
-              )}
+                {/* Caption */}
+                <div className="px-6 py-4 bg-brand-primary-900">
+                  <p className="text-sm text-white/50 italic">
+                    Keynote preview
+                  </p>
+                </div>
+              </motion.div>
             </div>
+          )}
 
-            {/* Caption */}
-            <div className="px-6 py-4 bg-brand-primary-900">
-              <p className="text-sm text-white/50 italic">
-                Keynote preview
-              </p>
-            </div>
-          </motion.div>
-
-          {/* TODO: Add real conference logos below the video */}
-          <motion.div {...scrollFadeUp(0.2)} className="mt-12">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-muted mb-8 text-center">
-              Trusted by
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-16">
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="w-32 h-12 bg-brand-border rounded-card animate-pulse"
-                  aria-hidden="true"
-                />
-              ))}
-            </div>
-            <p className="text-center text-xs text-brand-muted mt-6 italic">
-              {/* TODO: Replace placeholder logo tiles with real conference/corporate logos */}
-              Conference and corporate client logos, to be provided by Suzanne
-            </p>
-          </motion.div>
+          <motion.ul
+            {...scrollFadeUp(0.1)}
+            aria-label="Events Suzanne has spoken at"
+            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {SPEAKING_EVENTS.map((event) => (
+              <li
+                key={event}
+                className="flex items-start gap-3 p-6 bg-white border border-brand-border rounded-card text-brand-ink text-sm leading-relaxed"
+              >
+                <svg className="w-4 h-4 text-brand-accent shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                {event}
+              </li>
+            ))}
+          </motion.ul>
         </div>
       </section>
 
@@ -396,37 +427,47 @@ export default function SpeakingContent() {
       </section>
 
       {/* ─── 6. Testimonials: light, bg-brand-cream ─────────────────────── */}
-      <section
-        aria-labelledby="testimonials-heading"
-        className="w-full bg-brand-cream py-20 lg:py-32"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div {...scrollFadeUp(0)} className="max-w-3xl mb-16">
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
-              From the Room
-            </p>
-            <h2
-              id="testimonials-heading"
-              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight"
-            >
-              What audiences say
-            </h2>
-          </motion.div>
+      {/* Hidden entirely until data/testimonials.ts holds verified,
+          Suzanne-approved keynote quotes (decision 11, 6 Oct). Do not
+          fabricate quotes or attributions. */}
+      {speakingTestimonials.length > 0 && (
+        <section
+          aria-labelledby="testimonials-heading"
+          className="w-full bg-brand-cream py-20 lg:py-32"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div {...scrollFadeUp(0)} className="max-w-3xl mb-16">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+                From the Room
+              </p>
+              <h2
+                id="testimonials-heading"
+                className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight"
+              >
+                What audiences say
+              </h2>
+            </motion.div>
 
-          {/* Honest pending state — no speaking-specific testimonials exist on the
-              old site yet. Do not fabricate quotes or attributions; Suzanne to
-              provide real event organiser / attendee quotes. */}
-          <motion.div
-            {...scrollFadeUp(0.1)}
-            className="max-w-2xl mx-auto text-center p-12 bg-brand-sand border border-brand-border rounded-card"
-          >
-            <p className="text-lg text-brand-muted font-light leading-relaxed">
-              Speaker testimonials from event organisers and attendees are coming
-              soon.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {speakingTestimonials.map((t, i) => (
+                <motion.figure
+                  key={`${t.name}-${i}`}
+                  {...scrollFadeUp(i * 0.1)}
+                  className="p-8 bg-brand-sand border border-brand-border rounded-card"
+                >
+                  <blockquote className="text-brand-muted leading-relaxed mb-6 italic">
+                    &ldquo;{t.quote}&rdquo;
+                  </blockquote>
+                  <figcaption>
+                    <p className="font-medium text-brand-primary text-sm">{t.name}</p>
+                    {t.title && <p className="text-brand-muted text-xs mt-0.5">{t.title}</p>}
+                  </figcaption>
+                </motion.figure>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ─── 7. Booking CTA: dark, bg-brand-primary-900 ─────────────────── */}
       <section

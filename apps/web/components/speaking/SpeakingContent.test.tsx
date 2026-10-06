@@ -1,7 +1,7 @@
 import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import SpeakingContent, { SPEAKING_KIT_HREF } from './SpeakingContent'
+import SpeakingContent, { SPEAKING_EVENTS, SPEAKING_KIT_HREF } from './SpeakingContent'
 
 vi.mock('next/link', () => ({
   default: ({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) => (
@@ -48,5 +48,24 @@ describe('SpeakingContent', () => {
     expect(SPEAKING_KIT_HREF).toBe('/contact?enquiry=speaking&topic=Speaking+Kit#message')
     render(<SpeakingContent />)
     expect(screen.getByRole('link', { name: 'Request the Speaking Kit' })).toHaveAttribute('href', SPEAKING_KIT_HREF)
+  })
+
+  // Decision 11 (content sourcing, 6 Oct): events list replaces the logo
+  // strip; testimonials and the keynote reel stay hidden until Suzanne
+  // sends real material.
+  it('lists the events Suzanne has spoken at instead of placeholder logos', () => {
+    render(<SpeakingContent />)
+    const list = screen.getByRole('list', { name: 'Events Suzanne has spoken at' })
+    for (const event of SPEAKING_EVENTS) expect(list).toHaveTextContent(event)
+    expect(screen.queryByText(/to be provided by Suzanne/)).not.toBeInTheDocument()
+    expect(screen.queryByText('Trusted by')).not.toBeInTheDocument()
+  })
+
+  it('hides the speaker testimonials and keynote reel until real material exists', () => {
+    render(<SpeakingContent />)
+    expect(screen.queryByText('What audiences say')).not.toBeInTheDocument()
+    expect(screen.queryByText(/coming\s+soon/i)).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Play keynote preview' })).not.toBeInTheDocument()
+    expect(screen.queryByText(/Watch a Preview/)).not.toBeInTheDocument()
   })
 })

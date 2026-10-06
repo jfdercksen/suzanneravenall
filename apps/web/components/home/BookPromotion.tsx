@@ -23,7 +23,8 @@ export default function BookPromotion() {
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-white/5 blur-[120px] pointer-events-none"
           />
 
-          {/* Available Now badge */}
+          {/* Pre-order badge. The live product is a pre-order (sourced 6 Oct:
+              https://suzanneravenall.com/product/the-latest-book-by-suzanne/) */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -32,7 +33,7 @@ export default function BookPromotion() {
             className="relative mb-8 z-10"
           >
             <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white text-brand-primary text-xs font-semibold uppercase tracking-wider">
-              Available Now
+              Pre-order
             </span>
           </motion.div>
 
@@ -91,7 +92,7 @@ export default function BookPromotion() {
                 Consciousness is a meaning field. Your brain adapted to the worldview imposed on it in childhood, and unless that operating system is updated, life becomes a series of repeating patterns.
               </p>
               <p>
-                The Breakthrough Trilogy is the intellectual foundation of everything Suzanne teaches. Three books. One complete system for decoding and upgrading the patterns running your life.
+                The Breakthrough Trilogy is the intellectual foundation of everything Suzanne teaches. Breakthrough is not a moment. It is a pattern shift.
               </p>
             </motion.div>
 
@@ -122,7 +123,7 @@ export default function BookPromotion() {
                 href="/shop/the-latest-book-by-suzanne"
                 className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-all duration-300 hover:shadow-lg"
               >
-                Order Now: R165
+                Pre-order: R165
               </Link>
               {/* TODO: Replace href with dedicated chapter download page once PDF asset is provided */}
               <Link
