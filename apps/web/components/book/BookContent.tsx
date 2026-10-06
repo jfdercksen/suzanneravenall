@@ -31,7 +31,7 @@ const themes = [
       </svg>
     ),
     heading: 'Decode the Pattern',
-    body: 'Understanding the hidden programs running your life, installed before age seven and operating below conscious awareness.',
+    body: 'Understanding the hidden programs running your life, operating below conscious awareness.',
   },
   {
     icon: (
@@ -251,7 +251,7 @@ export default function BookContent() {
               <motion.p {...scrollFadeUp(0.2)} className="text-brand-muted leading-relaxed mb-5">
                 This trilogy is not written from theory. It is written from the trenches of real
                 transformation, both Suzanne&apos;s own journey and her clients&apos; breakthroughs
-                over 30+ years.
+                over 30 years.
               </motion.p>
               <motion.p {...scrollFadeUp(0.3)} className="text-brand-muted leading-relaxed mb-5">
                 Dr. Suzanne Ravenall climbed Mount Elbrus, founded a successful international
