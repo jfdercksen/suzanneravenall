@@ -25,7 +25,7 @@ export default function StatementBand() {
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
         >
-          Programs, coaching and live events built on two decades of pattern-level work. Designed for change that lasts.
+          Programs, coaching and live events built on over 30 years of experience. Designed for change that lasts.
         </motion.p>
         <motion.span
           aria-hidden="true"

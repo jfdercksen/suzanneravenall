@@ -14,10 +14,10 @@ interface Stat {
 // invert: the artwork is white on transparent, invisible on a light ground
 // until flipped to dark. Both were blank on the live site before 15 Sep.
 const accreditations = [
-  { src: '/logos/accreditations/icf-member.png',             alt: 'International Coaching Federation — Member',            w: 110 },
+  { src: '/logos/accreditations/icf-member.png',             alt: 'International Coaching Federation Member',             w: 110 },
   { src: '/logos/accreditations/aadp.png',                   alt: 'American Association of Drugless Practitioners',        w: 190, invert: true },
   { src: '/logos/accreditations/ctaa.png',                   alt: 'Complementary Therapists Accredited Association',       w: 295 },
-  { src: '/logos/accreditations/ctss.png',                   alt: 'Certified Clinical Trauma Specialist',                  w: 110 },
+  { src: '/logos/accreditations/ctss.png',                   alt: 'Certified Trauma Support',                              w: 110 }, // caption on https://suzanneravenall.com/ "Our Accreditations"
   { src: '/logos/accreditations/royal-society-medicine.png', alt: 'The Royal Society of Medicine',                         w: 111, invert: true },
   { src: '/logos/accreditations/iqnet.png',                  alt: 'IQNet Certified',                                       w: 196 },
   { src: '/logos/accreditations/iso-9001.jpg',               alt: 'ISO 9001 Certified',                                    w: 250 },
@@ -25,9 +25,13 @@ const accreditations = [
 ]
 
 const stats: Stat[] = [
-  { value: '20+',   label: 'Years Experience',        numeric: 20,   suffix: '+' },
-  { value: '2,000+', label: 'Lives Transformed',      numeric: 2000, suffix: '+' },
-  { value: '30+',   label: 'Countries',               numeric: 30,   suffix: '+' },
+  // Sourced 6 Oct from the About page counters (https://suzanneravenall.com/about/):
+  // 30+ Years Experience, 30+ Awards, 20+ Qualifications. The old "2,000+ Lives
+  // Transformed" and "30+ Countries" appear on none of her sites, so they are gone.
+  { value: '30+',   label: 'Years Experience',        numeric: 30,   suffix: '+' },
+  { value: '30+',   label: 'Awards',                  numeric: 30,   suffix: '+' },
+  // https://suzanneravenall.com/qualifications/ (24 named certifications)
+  { value: '20+',   label: 'Qualifications',          numeric: 20,   suffix: '+' },
   { value: 'Dr.',   label: 'B.Msc · M.Msc · Msc.D.', numeric: null, suffix: '' },
 ]
 

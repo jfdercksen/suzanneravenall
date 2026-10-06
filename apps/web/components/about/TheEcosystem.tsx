@@ -12,17 +12,14 @@ const sectionReveal = {
   transition: { duration: 0.6, ease: 'easeOut' as const },
 }
 
-// Note: the scraped about.md references Rapid Repatterning\u00ae and
-// Neuro-repatterning\u00ae as Suzanne's named method, but does NOT contain
-// a distinct "Human Performance Replicator" brand or description.
-// Descriptions below are drawn from the about.md methodology language.
-// The Human Performance Replicator copy is flagged [CONFIRM] for the client.
+// Card copy: Rapid Repatterning from her methodology language; Human Performance
+// Replicator sourced 6 Oct from HPR's own homepage (https://humanperformancereplicator.com/)
+// and the HPR blurb on Suzanne's homepage (https://suzanneravenall.com/).
 const cards: {
   label: string
   title: string
   description: string
   href: string
-  confirm?: boolean
 }[] = [
   {
     label: 'Methodology',
@@ -34,14 +31,10 @@ const cards: {
   {
     label: 'Scalable transformation',
     title: 'Human Performance Replicator',
-    // [CONFIRM] — scraped about.md names this concept but has no client-supplied
-    // description for Human Performance Replicator. Copy below is from her methodology
-    // language. Needs client review before shipping.
     description:
-      'Suzanne\u2019s moonshot: making deep human transformation a replicable science that can be taught, scaled and licensed globally, so people, teams and entire systems can repattern their way to coherence, health optimisation and joy.',
+      'World-class behavioural modelling for the boardroom. HPR replicates the performance, skills, behaviours and attributes of the top ten percent into the average 80%, with lasting change in a matter of weeks, through a proprietary methodology and a licensed practice.',
     // HPR is a separate brand with its own site, as linked from the old homepage.
     href: 'https://humanperformancereplicator.com/',
-    confirm: true,
   },
 ]
 

@@ -224,9 +224,8 @@ export default function MasterclassContent() {
             </h2>
             <p className="text-brand-ink text-lg leading-relaxed mb-4">
               Dr. Suzanne Ravenall (B.Msc. M.Msc. Msc.D.) is a multiple award-winning
-              transformation and performance coach, speaker, and entrepreneur with decades
-              of experience working with individuals, executives, and corporations across
-              four continents.
+              transformation and performance coach, speaker, and entrepreneur with over 30
+              years of experience working with individuals, executives, and corporations.
             </p>
             <p className="text-brand-ink text-lg leading-relaxed mb-4">
               Her expertise spans neuroscience-informed coaching, Resonance Repatterning,
@@ -294,7 +293,7 @@ export default function MasterclassContent() {
               Your Transformation Starts Here
             </h2>
             <p className="text-brand-muted text-lg mb-10">
-              Join thousands of people who have already taken the first step.
+              Take the first step with a free one-hour masterclass.
             </p>
             {/* Site check M5: the page used to render the form a second time
                 here, with the same ids. One form, so this CTA takes the
