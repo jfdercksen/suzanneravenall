@@ -1,42 +1,44 @@
-import { createHash } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { logError, logWarn } from '@/lib/log'
+import { payfastSignature } from '@/lib/payfast-signature'
 
-// PayFast sandbox IP ranges (update with production IPs at DNS cutover)
-// Ref: https://developers.payfast.co.za/docs#step_4_confirm_payment
-const PAYFAST_SANDBOX_IPS = new Set([
-  '197.242.141.6',
-  '197.242.141.0',
-  '197.242.141.8',
-  '199.255.6.6',
-])
-const PAYFAST_PRODUCTION_IPS = new Set([
-  '197.242.141.6',
-  '197.242.141.0',
-  '41.74.179.194',
-])
+// PayFast's published ITN source ranges (developers.payfast.co.za, "Confirm
+// payment", step 2: valid hosts / IP ranges). Sandbox ITNs come from the same
+// ranges. The old hand-picked list missed most of them, so real ITNs would
+// have been dropped. Signature, server-side validation and the amount check
+// still apply after this.
+const PAYFAST_CIDRS = [
+  '197.97.145.144/28',
+  '41.74.179.192/27',
+  '102.216.36.0/28',
+  '102.216.36.128/28',
+  '144.126.193.139/32',
+]
 
-function getAllowedIPs(): Set<string> {
-  return process.env.NODE_ENV === 'production'
-    ? PAYFAST_PRODUCTION_IPS
-    : new Set([...PAYFAST_SANDBOX_IPS, ...PAYFAST_PRODUCTION_IPS, '127.0.0.1', '::1', '::ffff:127.0.0.1'])
+function ipv4ToInt(ip: string): number | null {
+  const m = ip.replace(/^::ffff:/, '').match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/)
+  if (!m) return null
+  const parts = m.slice(1).map(Number)
+  if (parts.some((n) => n > 255)) return null
+  return ((parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8) | parts[3]) >>> 0
 }
 
-// MD5 signature — same algorithm as /api/checkout/payfast
-// Passphrase is required: if PAYFAST_PASSPHRASE is unset, we fail loudly
-// rather than silently accepting passphrase-less signatures.
-function buildSignature(params: Record<string, string>, passphrase: string): string {
-  const queryString = Object.entries(params)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .filter(([, v]) => v !== '' && v != null)
-    .map(([k, v]) => `${k}=${encodeURIComponent(v).replace(/%20/g, '+')}`)
-    .join('&')
+function isPayFastIP(ip: string): boolean {
+  const n = ipv4ToInt(ip)
+  if (n === null) return false
+  return PAYFAST_CIDRS.some((cidr) => {
+    const [base, bits] = cidr.split('/')
+    const b = ipv4ToInt(base)
+    if (b === null) return false
+    const mask = Number(bits) === 0 ? 0 : (~0 << (32 - Number(bits))) >>> 0
+    return (n & mask) === (b & mask)
+  })
+}
 
-  const withPassphrase = passphrase
-    ? `${queryString}&passphrase=${encodeURIComponent(passphrase).replace(/%20/g, '+')}`
-    : queryString
-
-  return createHash('md5').update(withPassphrase).digest('hex')
+function isAllowedIP(ip: string): boolean {
+  if (isPayFastIP(ip)) return true
+  // Local calls only outside production builds (unit tests, dev).
+  return process.env.NODE_ENV !== 'production' && ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(ip)
 }
 
 function getClientIP(req: NextRequest): string {
@@ -158,11 +160,13 @@ export async function POST(req: NextRequest) {
     return new NextResponse('OK', { status: 200 })
   }
 
-  const isSandbox = process.env.NODE_ENV !== 'production'
+  // Same switch as /api/checkout/payfast, so a sandbox payment is validated
+  // against the sandbox and a live one against live.
+  const isSandbox = process.env.PAYFAST_SANDBOX === 'true'
 
   // 1. IP allowlist check
   const clientIP = getClientIP(req)
-  if (!getAllowedIPs().has(clientIP)) {
+  if (!isAllowedIP(clientIP)) {
     console.warn('[PayFast ITN] Rejected request from untrusted IP', { clientIP })
     // Still return 200 — we don't want PayFast to retry a forged request
     return new NextResponse('OK', { status: 200 })
@@ -182,7 +186,7 @@ export async function POST(req: NextRequest) {
   const { signature, ...itnWithoutSig } = itn
 
   // 3. MD5 signature verification
-  const expectedSignature = buildSignature(itnWithoutSig, passphrase)
+  const expectedSignature = payfastSignature(itnWithoutSig, passphrase)
   if (signature !== expectedSignature) {
     logError('[PayFast ITN] Signature mismatch', undefined, {
       received: signature,

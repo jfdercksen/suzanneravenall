@@ -1,6 +1,6 @@
-import { createHash } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { payfastSignature } from '@/lib/payfast-signature'
 
 // Builds the signed PayFast form for a cart. Guest checkout, like
 // /api/checkout/free: the buyer does not need a portal account. The amount and
@@ -34,21 +34,6 @@ function medusaBase(): string {
     process.env.NEXT_PUBLIC_MEDUSA_URL ??
     'http://medusa:9000'
   ).replace(/\/$/, '')
-}
-
-// PayFast signature: MD5 of URL-encoded, alpha-sorted key=value pairs + passphrase
-function buildSignature(params: Record<string, string>, passphrase: string): string {
-  const queryString = Object.entries(params)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .filter(([, v]) => v !== '' && v !== undefined)
-    .map(([k, v]) => `${k}=${encodeURIComponent(v).replace(/%20/g, '+')}`)
-    .join('&')
-
-  const stringToHash = passphrase
-    ? `${queryString}&passphrase=${encodeURIComponent(passphrase).replace(/%20/g, '+')}`
-    : queryString
-
-  return createHash('md5').update(stringToHash).digest('hex')
 }
 
 export async function POST(req: NextRequest) {
@@ -137,7 +122,7 @@ export async function POST(req: NextRequest) {
     item_name: parsed.itemName,
   }
 
-  const signature = buildSignature(params, passphrase)
+  const signature = payfastSignature(params, passphrase)
   const isSandbox = process.env.PAYFAST_SANDBOX === 'true'
 
   return NextResponse.json({

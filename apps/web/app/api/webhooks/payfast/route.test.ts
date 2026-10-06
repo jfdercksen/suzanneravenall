@@ -1,4 +1,3 @@
-import { createHash } from 'crypto'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 vi.mock('@/lib/log', () => ({
@@ -8,21 +7,13 @@ vi.mock('@/lib/log', () => ({
 
 import { logError } from '@/lib/log'
 import { POST } from './route'
+import { payfastSignature } from '@/lib/payfast-signature'
 
 const MEDUSA_BASE = 'http://medusa-test:9000'
 const PASSPHRASE = 'test-passphrase'
 
-// Same algorithm as the route, so the test ITN passes the signature check.
-function sign(params: Record<string, string>): string {
-  const qs = Object.entries(params)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .filter(([, v]) => v !== '')
-    .map(([k, v]) => `${k}=${encodeURIComponent(v).replace(/%20/g, '+')}`)
-    .join('&')
-  return createHash('md5')
-    .update(`${qs}&passphrase=${encodeURIComponent(PASSPHRASE).replace(/%20/g, '+')}`)
-    .digest('hex')
-}
+// Same helper as the route, so the test ITN passes the signature check.
+const sign = (params: Record<string, string>) => payfastSignature(params, PASSPHRASE)
 
 function makeItn(amountGross: string, status = 'COMPLETE'): Request {
   const params: Record<string, string> = {
@@ -135,6 +126,18 @@ describe('POST /api/webhooks/payfast', () => {
       headers: { 'x-forwarded-for': '127.0.0.1' },
       body: 'm_payment_id=cart_1&payment_status=COMPLETE&amount_gross=1995.00&signature=bad',
     })
+    const res = await POST(req as never)
+    expect(res.status).toBe(200)
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+})
+
+describe('PayFast ITN source IP', () => {
+  it('drops an ITN from an address outside the PayFast ranges', async () => {
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+    const req = makeItn('1995.00')
+    req.headers.set('x-forwarded-for', '8.8.8.8')
     const res = await POST(req as never)
     expect(res.status).toBe(200)
     expect(fetchMock).not.toHaveBeenCalled()
