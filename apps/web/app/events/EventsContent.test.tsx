@@ -49,6 +49,14 @@ describe('EventsContent (site check C12)', () => {
     expect(screen.queryByText('The Basic Five (Programs 1–5)')).not.toBeInTheDocument()
   })
 
+  it('makes no intake or new-date promises (sourcing report 6 Oct, decision 6)', () => {
+    render(<EventsContent />)
+    expect(screen.queryByText(/Next intake/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/New dates coming soon/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/finalising/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/throughout the\s+year/i)).not.toBeInTheDocument()
+  })
+
   it('does not call a session awaiting new dates a recorded series', () => {
     render(<EventsContent />)
     expect(screen.queryByText(/Recorded series/)).not.toBeInTheDocument()

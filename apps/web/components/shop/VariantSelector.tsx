@@ -153,12 +153,8 @@ export function VariantSelector({
             Contact us to discuss pricing
           </p>
         )}
-        {spots !== null && !spots.soldOut && (
-          <p className={`mt-2 text-sm font-medium ${dark ? 'text-brand-accent-400' : 'text-brand-accent'}`}>
-            Only {spots.spotsRemaining} spot{spots.spotsRemaining === 1 ? '' : 's'} left for this
-            cohort
-          </p>
-        )}
+        {/* No "Only N spots left" count until Suzanne gives dates (sourcing
+            report 6 Oct, decision 6). Sold-out handling below stays. */}
       </div>
 
       {/* CTA */}

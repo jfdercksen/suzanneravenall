@@ -7,6 +7,15 @@
 // NUMBERING NOTE: the site numbers the Resonance Repatterning relationship programmes
 // 06 / 08 / 09 (Suzanne's numbering). Thinkific labels "Principles of Relationships" as
 // "Program 7" — it is the SAME course; keep the site numbering here.
+//
+// SOURCED 6 Oct 2026 (docs/testing/results/content-sourcing-2026-10-06.md,
+// sections 7-9, decisions 4-6 approved by Johan):
+// - ZAR prices are the live-shop SELF-STUDY prices where the programme links to
+//   a self-study product (https://suzanneravenall.com product pages).
+// - Live via Zoom programmes have no published dates (none since 2022), so they
+//   are "register interest" only and carry no dates.
+// - Lesson counts and video hours come from each Thinkific course page
+//   (https://ravenallinstitute-9629.thinkific.com/courses/<slug>).
 
 export type ProgramSeries =
   | 'resonance-repatterning'
@@ -30,6 +39,17 @@ export type Program = {
   shopHandle?: string
   duration?: string
   features: string[]
+  /**
+   * Live via Zoom with no published dates: the CTA is a register-interest
+   * enquiry instead of a shop link (decision 5, 6 Oct).
+   */
+  registerInterest?: boolean
+  /** Sourced key takeaways (Thinkific "Key takeaways"); replaces the generic outcome cards. */
+  keyTakeaways?: string[]
+  /** Sourced "who this is for" text; the page falls back to generic copy without it. */
+  whoFor?: string
+  /** Sourced prerequisite; omitted when none is stated. */
+  prerequisite?: { text: string; slug?: string }
   isPublished: boolean
   isFeatured: boolean
 }
@@ -58,6 +78,10 @@ export const PROGRAMS: Program[] = [
       'Internationally certified through the Resonance Repatterning Institute',
       'Study online from anywhere in the world',
     ],
+    // Source: https://suzanneravenall.com/resonance-repatterning/
+    whoFor:
+      'For people who want a career facilitating the healing of others. The path: the Fundamentals series, certification as a practitioner, the global community, six months of monthly community sessions, then advanced training.',
+    prerequisite: { text: 'How to Muscle Check (one 3-hour session) comes before the Fundamentals.' },
     isPublished: true,
     isFeatured: true,
   },
@@ -83,6 +107,13 @@ export const PROGRAMS: Program[] = [
       'Practical repatterning sessions and demos included',
       'Certification pathway for practitioners',
     ],
+    // Source: https://ravenallinstitute-9629.thinkific.com/courses/resonance-repatterning-inner-cultivation-self-study
+    keyTakeaways: ['Restoring harmony', 'The five essences', 'Realigning your resonance'],
+    // Source: https://suzanneravenall.com/resonance-repatterning/ (start with the Basic series)
+    prerequisite: {
+      text: 'Start with The Basic Five (Programs 1–5).',
+      slug: 'resonance-repatterning-basic-5-series',
+    },
     isPublished: true,
     isFeatured: false,
   },
@@ -97,7 +128,8 @@ export const PROGRAMS: Program[] = [
     description:
       'In the realm of self-healing within our relationships, two vital elements come into play: shifting our resonance and embracing loving connections. By applying the powerful repatternings found in the Principles of Relationship programme, we get to resonate with new neural connections and memory imprints, paving the way for fresh and transformative ways of relating to take root.',
     priceUsd: 550,
-    priceZar: 5315,
+    // Live-shop self-study price; R5,315 is the live price (sourcing report 6 Oct, section 7)
+    priceZar: 4205,
     shopHandle: 'resonance-repatterning-program-7-principle-of-relationships-self-study',
     duration: 'Self-study: start anytime',
     features: [
@@ -108,6 +140,13 @@ export const PROGRAMS: Program[] = [
       'Practical repatterning sessions and demos included',
       'Certification pathway for practitioners',
     ],
+    // Source: Thinkific "Program 7 Principles of Relationships" key takeaways
+    keyTakeaways: ['New neural connections', 'A guiding light', 'Human connection'],
+    // Source: https://suzanneravenall.com/resonance-repatterning/ (start with the Basic series)
+    prerequisite: {
+      text: 'Start with The Basic Five (Programs 1–5).',
+      slug: 'resonance-repatterning-basic-5-series',
+    },
     isPublished: true,
     isFeatured: false,
   },
@@ -122,7 +161,8 @@ export const PROGRAMS: Program[] = [
     description:
       'In the captivating journey of Energetics of Relationship, our connections with others are likened to the flow of electricity. It delves into the mysteries of attraction and why some people ignite a spark within us while others don\'t, even shedding light on why close relationships may lose their spark. This programme explores how quarrels, conflicts, childhood traumas, and intimacy issues can be tied to dysfunction in our "electric circuit" of relationships.',
     priceUsd: 550,
-    priceZar: 5315,
+    // Live-shop self-study price; R5,315 is the live price (sourcing report 6 Oct, section 7)
+    priceZar: 4205,
     shopHandle: 'resonance-repatterning-program-9-energetics-of-relationships-self-study',
     duration: 'Self-study: start anytime',
     features: [
@@ -133,6 +173,13 @@ export const PROGRAMS: Program[] = [
       'Intimacy and conflict resolution repatterning',
       'Certification pathway for practitioners',
     ],
+    // Source: Thinkific "Program 9 Energetics of Relationships" key takeaways
+    keyTakeaways: ['The mysteries of attraction', 'Your electrical system', 'The dance of energies'],
+    // Source: https://suzanneravenall.com/resonance-repatterning/ (start with the Basic series)
+    prerequisite: {
+      text: 'Start with The Basic Five (Programs 1–5).',
+      slug: 'resonance-repatterning-basic-5-series',
+    },
     isPublished: true,
     isFeatured: false,
   },
@@ -149,10 +196,13 @@ export const PROGRAMS: Program[] = [
     description:
       'We are physical and energetic beings. From a physical perspective we have many systems that carry information or fluid through our body: our circulatory system, lymph system, nervous system. Our energy system is the same: we have many channels that carry information and energy, but for most of us, we don\'t see this through the physical eye. There are countless scientific studies that support this. We mostly neglect our energy field in favour of our physical, and when we do clear our physical, it often neglects the countless underlying causes that prevent our forward movement.',
     priceUsd: 350,
-    priceZar: 7860,
+    // Live-shop self-study price; R7,860 is the Live via Zoom price (sourcing report 6 Oct, section 7)
+    priceZar: 4650,
     shopHandle: 'art-of-deep-clearing-level-1-self-study',
-    duration: 'Live via Zoom: new date coming soon; self-study available now',
+    duration: 'Self-study: start anytime. Live via Zoom: register your interest',
     features: [
+      // Source: Thinkific Deep Energy Clearing Level 1 Self Study, "About this course"
+      '100 lessons, 10 hours of video',
       'Understand your personal energy field and its systems',
       'Identify and clear energetic blocks',
       'Self-clearing techniques you can use daily',
@@ -160,6 +210,8 @@ export const PROGRAMS: Program[] = [
       'Practical tools for ongoing energetic hygiene',
       'Foundation for the Advanced level',
     ],
+    // Source: Thinkific Deep Energy Clearing Level 1 key takeaways
+    keyTakeaways: ['Clear yourself', 'Live more freely', 'Energise your system'],
     isPublished: true,
     isFeatured: false,
   },
@@ -174,10 +226,13 @@ export const PROGRAMS: Program[] = [
     description:
       'Building on the Basic level, this advanced programme trains you to work with other people\'s energy fields. We are physical and energetic beings, and our energy system has many channels that carry information and energy. Once you have mastered self-clearing, you are ready to extend this gift to others, facilitating their healing and clearing the blocks that have prevented their growth.',
     priceUsd: 350,
-    priceZar: 7860,
+    // Live-shop self-study price; R7,860 is the Live via Zoom price (sourcing report 6 Oct, section 7)
+    priceZar: 4650,
     shopHandle: 'art-of-deep-clearing-level-2-self-study',
-    duration: 'Live via Zoom: new date coming soon; self-study available now',
+    duration: 'Self-study: start anytime. Live via Zoom: register your interest',
     features: [
+      // Source: Thinkific Deep Energy Clearing Level 2 Self Study, "About this course"
+      '39 lessons, 4.5 hours of video',
       'Advanced energy field assessment and clearing',
       'Techniques for clearing others safely and effectively',
       'Working with group and collective energy',
@@ -185,6 +240,10 @@ export const PROGRAMS: Program[] = [
       'Integration with other healing modalities',
       'Practitioner certification pathway',
     ],
+    // Source: Thinkific Deep Energy Clearing Level 2 key takeaways
+    keyTakeaways: ['Clear others', 'Tap into your energetic self', 'Revitalise'],
+    // Source: builds on Level 1, as stated in the programme names and copy (report section 8)
+    prerequisite: { text: 'Energy Clearing Level 1 (Basic).', slug: 'energy-clearing-basic' },
     isPublished: true,
     isFeatured: false,
   },
@@ -203,7 +262,9 @@ export const PROGRAMS: Program[] = [
     priceUsd: 500,
     priceZar: 10295,
     shopHandle: 'akashic-navigator-and-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom',
-    duration: 'Live via Zoom: dates to be announced; self-study available now',
+    // No live dates published since 2022 (report section 9): register interest only.
+    duration: 'Live via Zoom: register your interest; self-study also available',
+    registerInterest: true,
     features: [
       'Learn to access and read your own Akashic Record',
       'Clear blocks, constrictions and ancestral patterns affecting this lifetime',
@@ -228,7 +289,9 @@ export const PROGRAMS: Program[] = [
     priceUsd: 500,
     priceZar: 10295,
     shopHandle: 'akashic-navigator-and-intuitive-coaching-clearing-others-level-2-advanced-live-via-zoom',
-    duration: 'Live via Zoom: dates to be announced; self-study available now',
+    // No live dates published since 2022 (report section 9): register interest only.
+    duration: 'Live via Zoom: register your interest; self-study also available',
+    registerInterest: true,
     features: [
       'Learn to read the Akashic Records for others',
       'Discover why clients are here, their past, and answers to critical questions',
@@ -237,6 +300,8 @@ export const PROGRAMS: Program[] = [
       'Help others navigate life, business, career and relationships with greater ease',
       'Akashic Navigator & Intuitive Coach certification pathway',
     ],
+    // Source: builds on Level 1, as stated in the programme names and copy (report section 8)
+    prerequisite: { text: 'Akashic Navigator: Basic (Level 1).', slug: 'akashic-navigator-basic' },
     isPublished: true,
     isFeatured: false,
   },
@@ -251,11 +316,14 @@ export const PROGRAMS: Program[] = [
       'Break the hold of your childhood brain on your adult self and create a life of true freedom.',
     description:
       'Brain development is much more than a story about biology. From our earliest years, relationships with others play a key role in shaping how our brain grows and develops. From early experiences of neglect, lack of love or just not having our needs met, we generate beliefs: helpful and harmful. These early experiences trip us up in early childhood and impact our brain development in such a significant way. Fast forward to adult life: having forgotten about the decisions made, the adult finds potential is reduced and far too limiting and self-defeating. 95% of people experience some kind of trauma. Most don\'t even recognise it. This programme changes that.',
-    priceUsd: 220,
-    priceZar: 3320,
+    // Self-study price on the live shop and both Thinkific pages (sourcing report 6 Oct, section 7)
+    priceUsd: 399,
+    priceZar: 3500,
     shopHandle: 'new-trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-self-study-online',
     duration: 'Self-study online: access for as long as you need',
     features: [
+      // Source: Thinkific Trauma to Transcendence (self-study), "About this course"
+      '120 lessons, 21 hours of video',
       'Review your life from a different perspective and learn how to fix what is tripping you up',
       'Let go of the past with an abundance of tools to navigate your life differently',
       'Deep understanding of how your experiences have shaped your current actions',
@@ -264,6 +332,10 @@ export const PROGRAMS: Program[] = [
       'Understand why you are here and replan what you want from your life',
       'Lifetime access to all recordings and materials',
     ],
+    // Source: https://suzanneravenall.com/trauma-to-transcendence/
+    whoFor:
+      'A two-fold programme: for practitioners, who will gain a better understanding of the trauma patient, and for those who are not practitioners. It is not for those who are not willing to put in the effort to make the change.',
+    prerequisite: { text: 'Ideally, learn muscle checking first.', slug: 'coherence-muscle-testing' },
     isPublished: true,
     isFeatured: true,
   },
@@ -275,11 +347,13 @@ export const PROGRAMS: Program[] = [
     shortDescription:
       'Attract a healthy, loving partner by first becoming your healthiest, most whole self.',
     description:
-      'We attract people at our common level of woundedness or our common level of emotional health. This means that if you want to attract a healthy, loving partner, you need to become that healthy person first. This does not mean attaining some imagined level of perfection. It means the kind of energy you project has everything to do with the kind of person you attract. Through 6 repatterning sessions we explore how to shift from insecure to secure energy, from seeking to giving, from longing to loving.',
+      'We attract people at our common level of woundedness or our common level of emotional health. This means that if you want to attract a healthy, loving partner, you need to become that healthy person first. This does not mean attaining some imagined level of perfection. It means the kind of energy you project has everything to do with the kind of person you attract. Through 4 repatterning sessions we explore how to shift from insecure to secure energy, from seeking to giving, from longing to loving.',
     priceUsd: 220,
-    priceZar: 1610,
+    // Live-shop self-study price; R1,610 is the Live via Zoom price (sourcing report 6 Oct, section 7)
+    priceZar: 995,
     shopHandle: 'love-relationships-self-study',
-    duration: '6 sessions of 2 hours each: study at your own pace',
+    // 4 x 90 min: https://suzanneravenall.com/love-relationships-session/ ("6 x 2 h" had no source)
+    duration: '4 sessions of 90 minutes: study at your own pace',
     features: [
       'Learn to accept, value and love yourself and define your own worth',
       'Connect with your inner resource of love, wisdom and strength',
@@ -301,7 +375,8 @@ export const PROGRAMS: Program[] = [
     description:
       'To activate the Law of Attraction in your life, you must identify and change your limiting beliefs, particularly those about what is possible for you. Throughout our lives, since childhood, we\'ve created limiting beliefs that have been internalised over time and accepted as truth, even when they are not. This programme helps you develop and trust your intuition as a practical, daily guidance system for your personal life, relationships, health, and wellbeing.',
     priceUsd: 220,
-    priceZar: 1610,
+    // Live-shop self-study price; R1,610 is the Live via Zoom price (sourcing report 6 Oct, section 7)
+    priceZar: 995,
     shopHandle: 'intuition-in-my-personal-capacity-1-self-study',
     duration: 'Self-study online: start anytime',
     features: [
@@ -325,7 +400,8 @@ export const PROGRAMS: Program[] = [
     description:
       'Given the opportunity, pretty much everyone would love to accumulate more wealth, make more money, and live a more abundant life. However, many people have a poor relationship with money and as a result have trouble manifesting wealth. Financial success starts in the mind, and the number one thing holding people back is their belief system concerning wealth and money. This programme integrates intuitive intelligence with practical business application.',
     priceUsd: 220,
-    priceZar: 1610,
+    // Live-shop self-study price; R1,610 is the Live via Zoom price (sourcing report 6 Oct, section 7)
+    priceZar: 995,
     shopHandle: 'intuition-in-my-business-capacity-self-study',
     duration: 'Self-study online: start anytime',
     features: [
@@ -349,7 +425,8 @@ export const PROGRAMS: Program[] = [
     description:
       'Everything starts as energy, and everything is energy. Our body represents our personal reality, our very own "here and now," and if we are not present in it, the impact in the world is weak, even if our mind and ideas are very strong. In this programme, learn how to change your world by using an unseen force. Bring this force into every area of your life, change your world and become an unstoppable force. Mastering energy for an abundant life: Level 1.',
     priceUsd: 220,
-    priceZar: 4980,
+    // Live-shop self-study price; R4,980 is the Live via Zoom price (sourcing report 6 Oct, section 7)
+    priceZar: 3320,
     shopHandle: 'be-an-energy-ninja-level-1-self-study',
     duration: 'Self-study online: start anytime',
     features: [
@@ -373,7 +450,8 @@ export const PROGRAMS: Program[] = [
     description:
       'Level 2 of Mastering Energy for an Abundant Life: energy practices for repatterning your life. Building directly on Level 1, this programme takes the foundational truth that everything starts as energy, and everything is energy, and turns it into daily practice. Deepen the energy work begun in Level 1, strengthen your energetic presence, and apply this unseen force deliberately to repattern every area of your life.',
     priceUsd: 220,
-    priceZar: 4980,
+    // No ZAR price: the live shop has no self-study Level 2 and R4,980 has no source
+    // (sourcing report 6 Oct, section 7). The shop page shows the Medusa price.
     shopHandle: 'be-an-energy-ninja-mastering-energy-for-an-abundant-life-level-2-energy-practices-for-repatterning-your-life-self-study',
     duration: 'Self-study online: start anytime',
     features: [
@@ -401,6 +479,8 @@ export const PROGRAMS: Program[] = [
     shopHandle: 'getting-unstuck',
     duration: 'Self-study online: start anytime',
     features: [
+      // Source: https://ravenallinstitute-9629.thinkific.com/courses/getting-unstuck ("About this course")
+      '21 lessons, 1 hour of video',
       'Identify the hidden patterns keeping you in the same cycle',
       'Practical tools to break through stuckness immediately',
       'Understand why previous attempts haven\'t worked',
@@ -449,6 +529,8 @@ export const PROGRAMS: Program[] = [
     shopHandle: 'coherence-muscle-testing-self-study-online',
     duration: 'Self-study online: start anytime',
     features: [
+      // Source: https://ravenallinstitute-9629.thinkific.com/courses/coherence-muscle-testing ("About this course")
+      '24 lessons, 1 hour of video',
       'Learn accurate coherence muscle checking step by step',
       'Identify what is life-enhancing and life-depleting for your body-mind system',
       'Uncover disrupting patterns in seconds, right to their core',
@@ -473,6 +555,8 @@ export const PROGRAMS: Program[] = [
     shopHandle: 'rapid-repatterning-session-introduction',
     duration: 'Self-study online: start anytime',
     features: [
+      // Source: https://ravenallinstitute-9629.thinkific.com/courses/rapid-repatterning-introduction ("About this course")
+      '9 lessons, 30 minutes of video',
       'Understand what sits underneath the stuckness you feel',
       'Identify the patterns that hold you back',
       'Learn where these patterns come from',
@@ -497,6 +581,8 @@ export const PROGRAMS: Program[] = [
     shopHandle: 'post-traumatic-growth',
     duration: 'Self-study online: recorded presentation',
     features: [
+      // Source: https://ravenallinstitute-9629.thinkific.com/courses/post-traumatic-growth ("About this course")
+      '21 lessons, 30 minutes of video',
       'Understand how trauma and stress reshape our goals and dreams',
       'Recognise the opportunity for change inside adversity',
       'Practical tips and techniques to get moving again',
@@ -520,7 +606,9 @@ export const PROGRAMS: Program[] = [
     priceUsd: 440,
     priceZar: 2770,
     shopHandle: 'mindfulness-live-via-zoom',
-    duration: 'Live via Zoom: new dates to be announced',
+    // No live dates published since 2022 (report section 9): register interest only.
+    duration: 'Live via Zoom: register your interest',
+    registerInterest: true,
     features: [
       'Practical mindfulness meditation techniques',
       'How to be fully present in daily life',
@@ -544,7 +632,9 @@ export const PROGRAMS: Program[] = [
     priceUsd: 440,
     priceZar: 2770,
     shopHandle: 'meditation-live-via-zoom',
-    duration: 'Live via Zoom: new dates to be announced',
+    // No live dates published since 2022 (report section 9): register interest only.
+    duration: 'Live via Zoom: register your interest',
+    registerInterest: true,
     features: [
       'Learn to observe thoughts and feelings without judgement',
       'Establish a consistent and nourishing meditation practice',
@@ -566,12 +656,15 @@ export const PROGRAMS: Program[] = [
     shortDescription:
       'Dissolve your subconscious money blocks and build a coherent, abundant relationship with wealth.',
     description:
-      'Given the opportunity, pretty much everyone would love to accumulate more wealth, make more money, and live a more abundant life. However, many people have a poor relationship with money and as a result have trouble manifesting wealth into their lives. Financial success starts in the mind, and the number one thing holding many people back is their belief system concerning wealth and money. Over 6 repatterning sessions we cover the beliefs, blocks, and new patterns needed to shift your relationship with money permanently.',
+      'Given the opportunity, pretty much everyone would love to accumulate more wealth, make more money, and live a more abundant life. However, many people have a poor relationship with money and as a result have trouble manifesting wealth into their lives. Financial success starts in the mind, and the number one thing holding many people back is their belief system concerning wealth and money. Over 4 repatterning sessions we cover the beliefs, blocks, and new patterns needed to shift your relationship with money permanently.',
     priceUsd: 90,
     priceZar: 1500,
     shopHandle: 'money-mastery-group-session',
-    duration: 'Recorded series: 6 sessions of 2 hours each',
+    // 4 x 90 min over 4 weeks: https://suzanneravenall.com/money-mastery/ ("6 x 2 h" had no source)
+    duration: 'Recorded series: 4 sessions of 90 minutes',
     features: [
+      // Source: Thinkific recording, "About this course"
+      '12 lessons, 5.5 hours of video',
       'Discover and dissolve your limiting beliefs about money',
       'Identify where these limiting beliefs come from and clear them',
       'Decide on your new relationship with money and how you want it manifested',
@@ -590,12 +683,15 @@ export const PROGRAMS: Program[] = [
     shortDescription:
       'Align your career with your authentic potential and remove the blocks holding you back from your next level.',
     description:
-      'To activate the Law of Attraction in your life, you must identify and change your limiting beliefs, particularly those about what you can achieve professionally. Throughout our lives, since childhood, we\'ve created limiting beliefs about our worth, capability, and potential that have been internalised over time and accepted as true, even when they are not. Over 6 repatterning sessions we move you towards being coherently aligned with the career that you desire.',
+      'To activate the Law of Attraction in your life, you must identify and change your limiting beliefs, particularly those about what you can achieve professionally. Throughout our lives, since childhood, we\'ve created limiting beliefs about our worth, capability, and potential that have been internalised over time and accepted as true, even when they are not. Over 4 repatterning sessions we move you towards being coherently aligned with the career that you desire.',
     priceUsd: 90,
     priceZar: 1500,
     shopHandle: 'career-progression-group-session',
-    duration: 'Recorded series: 6 sessions of 2 hours each',
+    // 4 x 90 min over 4 weeks: https://suzanneravenall.com/career-progression/ ("6 x 2 h" had no source)
+    duration: 'Recorded series: 4 sessions of 90 minutes',
     features: [
+      // Source: Thinkific recording, "About this course"
+      '14 lessons, 5.5 hours of video',
       'Discover the blocks preventing your career advancement',
       'Get clear about what career success truly means for you',
       'Remove limiting beliefs about your professional worth',
@@ -666,8 +762,11 @@ export const PROGRAMS: Program[] = [
     priceUsd: 90,
     priceZar: 1500,
     shopHandle: 'resonance-repatterning-group-session-shedding-excess-weight',
-    duration: 'Recorded series: 6 group repatterning sessions over 4 weeks',
+    // 4 x 90 min over 4 weeks: https://suzanneravenall.com/shedding-excess-weight/
+    duration: 'Recorded series: 4 sessions of 90 minutes over 4 weeks',
     features: [
+      // Source: Thinkific recording, "About this course"
+      '13 lessons, 7 hours of video',
       'Identify the childhood strategies creating weight retention',
       'Clear the emotional root causes of comfort eating and self-sabotage',
       'Reprogram your body image at the subconscious level',
@@ -692,6 +791,8 @@ export const PROGRAMS: Program[] = [
     shopHandle: 'resonance-repatterning-group-session-boundary-setting',
     duration: 'Recorded series: 4 sessions',
     features: [
+      // Source: Thinkific Boundary Setter recording, "About this course"
+      '13 lessons, 6.5 hours of video',
       'Understand what a boundary truly is and why it matters',
       'Identify when boundaries have been crossed and why you allow it',
       'Clear the childhood roots of boundary difficulties',
@@ -716,6 +817,8 @@ export const PROGRAMS: Program[] = [
     shopHandle: 'resonance-repatterning-group-session-communication',
     duration: 'Recorded group session series',
     features: [
+      // Source: Thinkific Nice or Not Nice recording, "About this course"
+      '13 lessons, 6 hours of video',
       'Release the fear behind communication',
       'Know when to be tough, and when not to be',
       'Practise staying neutral when challenged',
@@ -784,9 +887,18 @@ const CONTACT_ENQUIRY: Record<Program['category'], string> = {
  * With a Medusa product the button opens its shop page, where the visitor
  * picks a variant and adds it to the cart, so it says "View in Shop" rather
  * than "Add to Cart". Without a product there is nothing to buy online yet,
- * so it opens a /contact enquiry naming the programme.
+ * so it opens a /contact enquiry naming the programme. A live programme with
+ * no published dates (registerInterest) opens a register-interest enquiry even
+ * when a live product exists, so nobody buys a live run that has no date.
  */
 export function getProgramCta(program: Program): { label: string; href: string } {
+  if (program.registerInterest) {
+    const params = new URLSearchParams({
+      enquiry: CONTACT_ENQUIRY[program.category],
+      topic: `${program.name} (live via Zoom)`,
+    })
+    return { label: 'Register Interest', href: `/contact?${params.toString()}` }
+  }
   if (program.shopHandle) {
     return { label: 'View in Shop', href: `/shop/${program.shopHandle}` }
   }

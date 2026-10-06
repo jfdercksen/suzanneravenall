@@ -14,6 +14,9 @@ import { contactHref } from '@/app/contact/enquiry'
 // - data/programs.ts (live-via-Zoom programmes and group sessions)
 // TODO: Replace with dynamic event dates from Payload CMS once Suzanne confirms
 // the new live schedule.
+// Sourcing report 6 Oct (section 9, decision 6): no live or group dates have
+// been published since 2022 (https://suzanneravenall.com/datesrepo/meditation/),
+// so no "Next intake", "spots left" or "new dates coming soon" claims.
 
 type BadgeVariant = 'free' | 'group'
 
@@ -46,7 +49,6 @@ const confirmedOpportunities: ConfirmedOpportunity[] = [
       'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
     cta: 'Join Waitlist',
     href: contactHref('group', 'Group Transformation Session waitlist'),
-    badge: 'Next intake opening soon',
   },
 ]
 
@@ -83,8 +85,8 @@ const childVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 }
 
-/** These cards say "New dates coming soon", so the "Recorded series:" prefix
- *  from data/programs.ts contradicts them; keep only the session format. */
+/** These cards ask for interest in a live run, so the "Recorded series:"
+ *  prefix from data/programs.ts contradicts them; keep only the session format. */
 export function awaitingDateDuration(duration: string): string {
   return duration.replace(/^Recorded series:\s*/i, '')
 }
@@ -101,7 +103,7 @@ function AwaitingDateCard({ program }: { program: Program }) {
             Group
           </span>
           <span className="text-brand-muted text-xs text-right">
-            New dates coming soon
+            Register interest
           </span>
         </div>
         <h3 className="text-xl font-medium text-brand-primary mb-3 leading-snug">
@@ -189,7 +191,7 @@ export default function EventsContent() {
         eyebrow="Events"
         image="/images/generated/session-coaching.webp"
         title={<>Live Events &amp; Training Dates</>}
-        description="Group sessions, live-via-Zoom trainings and events with Dr. Suzanne Ravenall, join from anywhere in the world."
+        description="Group sessions, live-via-Zoom trainings and events with Dr. Suzanne Ravenall. Register your interest and join from anywhere in the world."
       >
         <a href="#upcoming" className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300">
           See Upcoming Events
@@ -222,9 +224,9 @@ export default function EventsContent() {
               Your Next Opportunity to Join Live
             </h2>
             <p className="text-lg text-brand-muted font-light mb-12 max-w-2xl leading-relaxed">
-              Suzanne is finalising the new live calendar. Book what is open
-              now, and register your interest for the sessions awaiting new
-              dates. You will be the first to know when dates are confirmed.
+              No new live dates have been published yet. Book what is open
+              now, and register your interest in the live sessions. You will
+              be the first to know if new dates are set.
             </p>
           </motion.div>
 
@@ -290,12 +292,12 @@ export default function EventsContent() {
             viewport={{ once: true, margin: '-100px' }}
           >
             <h3 className="text-2xl lg:text-3xl font-medium tracking-tight text-brand-primary mb-3">
-              Group Sessions: New Dates Coming Soon
+              Group Sessions: Register Your Interest
             </h3>
             <p className="text-brand-muted font-light mb-10 max-w-2xl leading-relaxed">
-              These live group repatterning series are between cohorts. Register
-              your interest and Suzanne&apos;s team will contact you as soon as
-              the next dates are announced.
+              No live dates are scheduled for these group repatterning series.
+              Register your interest and Suzanne&apos;s team will contact you if
+              new dates are set.
             </p>
           </motion.div>
           <motion.div
@@ -331,12 +333,12 @@ export default function EventsContent() {
               id="live-programmes-heading"
               className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary mb-4 max-w-2xl"
             >
-              Trainings Run Live via Zoom
+              Live via Zoom: Register Your Interest
             </h2>
             <p className="text-lg text-brand-muted font-light mb-12 max-w-2xl leading-relaxed">
-              These programmes run as live cohorts with Suzanne throughout the
-              year: practitioner certification series, energy clearing levels
-              and guided practice sessions. Attend from anywhere in the world.
+              These programmes have run live with Suzanne via Zoom. No new live
+              dates are scheduled yet, so register your interest on each
+              programme page. Attend from anywhere in the world.
             </p>
           </motion.div>
           <motion.div

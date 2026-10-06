@@ -47,3 +47,43 @@ describe('ProgramDetailClient facilitator credentials', () => {
     expect(grid.className).not.toMatch(/grid-cols-4/)
   })
 })
+
+describe('ProgramDetailClient sourced content (sourcing report 6 Oct)', () => {
+  it('shows the sourced key takeaways instead of the generic outcome cards', () => {
+    const program = getProgramBySlug('energy-clearing-basic')!
+    render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
+    expect(screen.getByRole('heading', { name: 'Clear yourself' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Shift Your Perspective' })).not.toBeInTheDocument()
+  })
+
+  it('keeps the generic outcome cards when no takeaways are sourced', () => {
+    const program = getProgramBySlug('getting-unstuck')!
+    render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
+    expect(screen.getByRole('heading', { name: 'Shift Your Perspective' })).toBeInTheDocument()
+  })
+
+  it('shows the sourced who-it-is-for text and prerequisite link', () => {
+    const program = getProgramBySlug('trauma-to-transcendence')!
+    render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
+    expect(screen.getByText(/A two-fold programme/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'View Coherence Muscle Testing' })).toHaveAttribute(
+      'href',
+      '/programs/coherence-muscle-testing',
+    )
+  })
+
+  it('labels Energy Clearing as self-study, not live training', () => {
+    const program = getProgramBySlug('energy-clearing-advanced')!
+    render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
+    expect(screen.getAllByText('Self-Study Online: Start Anytime').length).toBeGreaterThan(0)
+    expect(screen.queryByText('Live Training via Zoom')).not.toBeInTheDocument()
+  })
+
+  it('asks for interest, not a booking, on a live programme with no dates', () => {
+    const program = getProgramBySlug('mindfulness')!
+    render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
+    expect(screen.getAllByText('Register Interest').length).toBeGreaterThan(0)
+    expect(screen.queryByText('View in Shop')).not.toBeInTheDocument()
+    expect(screen.getByText(/No live dates are scheduled yet/)).toBeInTheDocument()
+  })
+})

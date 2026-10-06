@@ -78,22 +78,18 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
               {cohort ? (
                 <>
                   <div>
-                    {/* Top row — label + real spots badge */}
+                    {/* Top row: label, plus "Waitlist only" when the cohort is full.
+                        No "Next intake" or "spots left" until Suzanne gives dates
+                        (sourcing report 6 Oct, decision 6). */}
                     <div className="flex items-start justify-between mb-8">
                       <p className="text-xs tracking-[0.3em] text-white/80 uppercase font-medium">
-                        GROUP PROGRAM · NEXT INTAKE
+                        GROUP PROGRAM
                       </p>
-                      <span
-                        className={`text-xs px-3 py-1 uppercase tracking-wider ${
-                          cohort.spotsRemaining > 0
-                            ? 'bg-brand-primary-900/70 border border-white/40 text-white'
-                            : 'bg-brand-primary-700 border border-brand-primary-600 text-brand-primary-100'
-                        }`}
-                      >
-                        {cohort.spotsRemaining > 0
-                          ? `${cohort.spotsRemaining} spot${cohort.spotsRemaining === 1 ? '' : 's'} left`
-                          : 'Waitlist only'}
-                      </span>
+                      {cohort.spotsRemaining <= 0 && (
+                        <span className="text-xs px-3 py-1 uppercase tracking-wider bg-brand-primary-700 border border-brand-primary-600 text-brand-primary-100">
+                          Waitlist only
+                        </span>
+                      )}
                     </div>
 
                     <h3 className="text-4xl lg:text-5xl font-medium tracking-tight text-white leading-tight mb-3">
@@ -129,7 +125,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                       href={`/shop/${cohort.productHandle}`}
                       className="bg-white hover:bg-brand-sand text-brand-primary px-8 py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300"
                     >
-                      {cohort.spotsRemaining > 0 ? 'Reserve Your Spot' : 'Join the Waitlist'} &rarr;
+                      {cohort.spotsRemaining > 0 ? 'View Details' : 'Join the Waitlist'} &rarr;
                     </Link>
                   </div>
                 </>
@@ -143,11 +139,11 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                       GROUP PROGRAMS
                     </p>
                     <h3 className="text-4xl lg:text-5xl font-medium tracking-tight text-white leading-tight mb-3">
-                      New Cohorts Forming
+                      Live Group Sessions
                     </h3>
                     <p className="text-white/80 text-lg font-light mb-8 max-w-md">
-                      Suzanne is finalising the next round of live group sessions. Register your
-                      interest and be the first to know when a spot opens.
+                      No live group dates are scheduled yet. Register your interest and be
+                      the first to know if new dates are set.
                     </p>
                   </div>
                   <div>

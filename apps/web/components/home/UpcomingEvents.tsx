@@ -8,6 +8,10 @@ import type { FeaturedCohort } from '@/lib/inventory/group-sessions'
 // below — replace with dynamic data from Payload CMS when the real programme
 // schedule is confirmed. The GROUP card is real (see cohort prop).
 
+// Sourcing report 6 Oct (section 9, decision 6): no live or group dates have
+// been published since 2022 (https://suzanneravenall.com/datesrepo/meditation/),
+// so no "Next intake", "spots left" or "new dates coming soon" claims.
+
 type BadgeVariant = 'free' | 'group' | 'book'
 
 interface Opportunity {
@@ -50,9 +54,8 @@ function buildGroupOpportunity(cohort: FeaturedCohort | null): Opportunity {
       title: cohort.productTitle,
       description:
         'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
-      cta: 'Reserve Your Spot',
+      cta: 'View Details',
       href: `/shop/${cohort.productHandle}`,
-      badge: `${cohort.spotsRemaining} spot${cohort.spotsRemaining === 1 ? '' : 's'} left`,
       price: formatCohortPrice(cohort),
     }
   }
@@ -79,7 +82,6 @@ function buildGroupOpportunity(cohort: FeaturedCohort | null): Opportunity {
       'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
     cta: 'Register Interest',
     href: '/events',
-    badge: 'Next intake opening soon',
   }
 }
 
