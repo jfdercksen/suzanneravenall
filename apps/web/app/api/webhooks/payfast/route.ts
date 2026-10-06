@@ -20,14 +20,14 @@ function ipv4ToInt(ip: string): number | null {
   if (!m) return null
   const parts = m.slice(1).map(Number)
   if (parts.some((n) => n > 255)) return null
-  return ((parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8) | parts[3]) >>> 0
+  return parts.reduce((acc, n) => acc * 256 + n, 0)
 }
 
 function isPayFastIP(ip: string): boolean {
   const n = ipv4ToInt(ip)
   if (n === null) return false
   return PAYFAST_CIDRS.some((cidr) => {
-    const [base, bits] = cidr.split('/')
+    const [base = '', bits = '32'] = cidr.split('/')
     const b = ipv4ToInt(base)
     if (b === null) return false
     const mask = Number(bits) === 0 ? 0 : (~0 << (32 - Number(bits))) >>> 0
