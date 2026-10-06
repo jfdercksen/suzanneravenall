@@ -221,3 +221,17 @@ describe('syncLeadToVtiger', () => {
     expect(res.eventId).toMatch(/^dryrun-Events-/)
   })
 })
+
+describe('normaliseLead name split (6 Oct live test)', () => {
+  it('splits a full name typed into the first-name field', () => {
+    const n = normaliseLead({ email: 'A@B.com', firstName: 'Johan Test' })
+    expect(n.firstName).toBe('Johan')
+    expect(n.lastName).toBe('Test')
+  })
+  it('keeps a single word and an explicit last name as they are', () => {
+    expect(normaliseLead({ email: 'a@b.com', firstName: 'Johan' }).lastName).toBe('')
+    const n = normaliseLead({ email: 'a@b.com', firstName: 'Mary Ann', lastName: 'Smith' })
+    expect(n.firstName).toBe('Mary Ann')
+    expect(n.lastName).toBe('Smith')
+  })
+})

@@ -31,8 +31,15 @@ export const NEW_LEAD_STAGE = 'New Lead'
 /** Values normalised exactly as the n8n "Prepare: Extract Submission Data" node did. */
 export function normaliseLead(lead: LeadInput) {
   const email = lead.email.toLowerCase().trim()
-  const firstName = lead.firstName || email.split('@')[0] || email
-  const lastName = lead.lastName ?? ''
+  let firstName = (lead.firstName || email.split('@')[0] || email).trim()
+  let lastName = (lead.lastName ?? '').trim()
+  // A full name typed into a single name field ("Jane Smith") is split so
+  // Vtiger gets a real surname instead of the full name twice (6 Oct test).
+  if (!lastName && /\s/.test(firstName)) {
+    const i = firstName.lastIndexOf(' ')
+    lastName = firstName.slice(i + 1).trim()
+    firstName = firstName.slice(0, i).trim()
+  }
   const source = lead.source || LEAD_SOURCE
   return { email, firstName, lastName, source, quizResult: lead.quizResult ?? null }
 }
