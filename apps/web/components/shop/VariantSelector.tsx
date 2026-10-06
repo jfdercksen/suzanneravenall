@@ -40,8 +40,6 @@ interface VariantSelectorProps {
   productHandle?: string
   /** Heading over the variant buttons, matched to what is sold (productKind.ts). */
   chooseLabel?: string
-  /** Contact link for the "Payment plans available" note. */
-  paymentPlanHref?: string
 }
 
 export function VariantSelector({
@@ -51,7 +49,6 @@ export function VariantSelector({
   dark = false,
   productHandle,
   chooseLabel = 'Choose an Option',
-  paymentPlanHref = '/contact?enquiry=other&topic=Payment+plan#message',
 }: VariantSelectorProps) {
   const [buttonState, setButtonState] = useState<'idle' | 'loading' | 'added' | 'error'>('idle')
   const [addToCartError, setAddToCartError] = useState<string | null>(null)
@@ -79,7 +76,6 @@ export function VariantSelector({
 
   const headingClass = dark ? 'text-white' : 'text-brand-ink'
   const priceClass = dark ? 'text-white' : 'text-brand-ink'
-  const noteClass = dark ? 'text-white/70' : 'text-brand-muted'
 
   async function handleAddToCart() {
     if (!selectedVariant) return
@@ -220,17 +216,9 @@ export function VariantSelector({
                 Join waitlist
               </Link>
             </p>
-          ) : (
-            <p className={`text-sm ${noteClass}`}>
-              Payment plans available:{' '}
-              <Link
-                href={paymentPlanHref}
-                className={`underline underline-offset-4 transition-colors duration-200 ${dark ? 'hover:text-white' : 'hover:text-brand-primary'}`}
-              >
-                contact us
-              </Link>
-            </p>
-          )}
+          ) : null}
+          {/* No payment-plan note: payment plans are not offered on any of Suzanne's live sites
+              (content-sourcing 6 Oct, section 10; Johan's decision 15). */}
         </div>
       ) : (
         <Link

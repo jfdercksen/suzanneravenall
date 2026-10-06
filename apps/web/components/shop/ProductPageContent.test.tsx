@@ -144,7 +144,7 @@ describe('ProductPageContent per product type (site check C1)', () => {
     expect(screen.queryByText('Is this right for me?')).not.toBeInTheDocument()
   })
 
-  it('preselects a variant other than the retaker seat and links payment plans to the contact form', () => {
+  it('preselects a variant other than the retaker seat and passes no payment-plan link', () => {
     selectorProps.length = 0
     render(
       <ProductPageContent
@@ -161,8 +161,6 @@ describe('ProductPageContent per product type (site check C1)', () => {
     )
     expect(selectorProps[0]?.selectedVariantId).toBe('self')
     expect(selectorProps[0]?.chooseLabel).toBe('Choose Your Format')
-    expect(selectorProps[0]?.paymentPlanHref).toBe(
-      '/contact?enquiry=practitioner&topic=Payment+plan%3A+Program+1#message'
-    )
+    expect(selectorProps[0]?.paymentPlanHref).toBeUndefined()
   })
 })

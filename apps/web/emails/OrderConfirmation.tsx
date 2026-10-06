@@ -45,7 +45,7 @@ function getNextSteps(productType: OrderProductType | undefined): NextStep[] {
       return [
         { step: '01', text: 'Create your member portal account at suzanneravenall.com/portal. Your programme content will be waiting.' },
         { step: '02', text: 'Work through the materials at your own pace: no deadlines, no pressure.' },
-        { step: '03', text: 'Reach out to support@ravenallinstitute.com any time you need guidance.' },
+        { step: '03', text: 'Reach out to sravenall@suzanneravenall.com any time you need guidance.' },
       ]
     case 'live':
       return [
@@ -63,7 +63,7 @@ function getNextSteps(productType: OrderProductType | undefined): NextStep[] {
       return [
         { step: '01', text: 'You will receive access details and confirmation within 24 hours.' },
         { step: '02', text: 'Check your email for further details and instructions.' },
-        { step: '03', text: 'Reach out to support@ravenallinstitute.com with any questions.' },
+        { step: '03', text: 'Reach out to sravenall@suzanneravenall.com with any questions.' },
       ]
   }
 }
@@ -352,7 +352,8 @@ export default function OrderConfirmation({
             )}
           </Section>
 
-          {/* Support Section */}
+          {/* Support Section. Public contact address: https://suzanneravenall.com/contact/ (Johan's decision 10, 6 Oct);
+              support@ravenallinstitute.com is not a monitored public address. */}
           <Section style={{ padding: '32px 40px', borderTop: '1px solid #e2e8f0' }}>
             <Text style={{ color: NAVY, fontSize: '16px', fontWeight: '600', margin: '0 0 12px' }}>
               Questions? We&apos;re here to help.
@@ -360,10 +361,10 @@ export default function OrderConfirmation({
             <Text style={{ color: DARK_TEXT, fontSize: '14px', lineHeight: '1.6', margin: '0 0 8px' }}>
               Email:{' '}
               <Link
-                href="mailto:support@ravenallinstitute.com"
+                href="mailto:sravenall@suzanneravenall.com"
                 style={{ color: BLUE, textDecoration: 'none' }}
               >
-                support@ravenallinstitute.com
+                sravenall@suzanneravenall.com
               </Link>
             </Text>
             <Text style={{ color: DARK_TEXT, fontSize: '14px', margin: 0 }}>

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 
-const LAST_UPDATED = '12 May 2026'
+const LAST_UPDATED = '6 October 2026'
 
 export default function LegalTermsContent() {
   return (
@@ -47,15 +47,17 @@ export default function LegalTermsContent() {
                 1. Acceptance of Terms
               </h2>
               {/* TODO (legal review): Confirm whether click-wrap acceptance (checkbox at checkout) is required in addition to browse-wrap: South African ECT Act Section 22 governs contract formation */}
+              {/* Legal entity: https://suzanneravenall.com/terms-and-conditions/ (opening paragraph and clause 16) */}
               <p className="text-brand-ink leading-relaxed">
-                By accessing or using the website at <strong>suzanneravenall.com</strong> (&ldquo;the Site&rdquo;)
-                or purchasing any service offered by Dr. Suzanne Ravenall (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;),
-                you agree to be bound by these Terms of Service (&ldquo;Terms&rdquo;). If you do not agree, you
-                must not use the Site or purchase any services.
+                The website at <strong>suzanneravenall.com</strong> (&ldquo;the Site&rdquo;) is a brand of The
+                Ravenall Institute Pty Ltd, registration number 2012/180720/07 (&ldquo;we&rdquo;, &ldquo;us&rdquo;,
+                &ldquo;our&rdquo;). By accessing or using the Site or purchasing any service offered by
+                Dr. Suzanne Ravenall through it, you agree to be bound by these Terms of Service
+                (&ldquo;Terms&rdquo;). If you do not agree, you must not use the Site or purchase any services.
               </p>
               <p className="text-brand-ink leading-relaxed mt-3">
-                These Terms constitute a binding agreement between you and Dr. Suzanne Ravenall in
-                accordance with the Electronic Communications and Transactions Act 25 of 2002 (&ldquo;ECT Act&rdquo;).
+                These Terms constitute a binding agreement between you and The Ravenall Institute Pty Ltd
+                in accordance with the Electronic Communications and Transactions Act 25 of 2002 (&ldquo;ECT Act&rdquo;).
               </p>
             </div>
 
@@ -117,11 +119,16 @@ export default function LegalTermsContent() {
                 Payment is processed via PayFast (South Africa) or PayPal (international). We do not
                 store your payment card details.
               </p>
+              {/* Refund rule and delivery times from the live Terms: https://suzanneravenall.com/terms-and-conditions/
+                  Johan's decision 6 Oct: the Terms rule applies; there is no 7-day satisfaction refund. */}
+              <p className="text-brand-ink leading-relaxed mb-3">
+                Online services are processed and confirmed within 24 hours of payment. Physical goods
+                are delivered by the courier you choose at checkout.
+              </p>
               <p className="text-brand-ink leading-relaxed">
-                Refund requests must be submitted within the period specified at the point of purchase.
-                Digital programmes and downloadable content are generally non-refundable once accessed.
-                Coaching session cancellations are subject to our cancellation policy communicated at
-                the time of booking. We reserve the right to assess refund requests on a case-by-case basis.
+                If a service you have paid for is unavailable, we will refund you in full within 30 days.
+                If you cancel after purchase, a 3% administration fee applies, plus courier costs where
+                goods have already been dispatched. Apart from these cases, payments are not refundable.
               </p>
             </div>
 
@@ -133,7 +140,7 @@ export default function LegalTermsContent() {
               {/* TODO (legal review): Confirm IP ownership: distinguish between owned content and licensed third-party content (e.g. Resonance Repatterning) */}
               <p className="text-brand-ink leading-relaxed">
                 All content on this Site, including text, graphics, logos, images, audio, video,
-                programme materials, and software, is the property of Dr. Suzanne Ravenall or her
+                programme materials, and software, is the property of The Ravenall Institute Pty Ltd or its
                 licensors and is protected by South African copyright law and international treaties.
                 You may not reproduce, distribute, modify, or create derivative works from any content
                 without our express written consent. Purchase of a programme grants a limited,
@@ -182,7 +189,7 @@ export default function LegalTermsContent() {
               </h2>
               {/* TODO (legal review): Under the Consumer Protection Act, liability cannot be excluded for death or personal injury caused by negligence: ensure this carve-out is included */}
               <p className="text-brand-ink leading-relaxed">
-                To the fullest extent permitted by applicable law, Dr. Suzanne Ravenall shall not be
+                To the fullest extent permitted by applicable law, we shall not be
                 liable for any indirect, incidental, special, consequential, or punitive damages arising
                 from your use of, or inability to use, the Site or services. Our total liability to you
                 in connection with any claim arising under these Terms shall not exceed the amount you
@@ -197,7 +204,8 @@ export default function LegalTermsContent() {
               </h2>
               {/* TODO (legal review): Review enforceability of indemnification clauses under South African law */}
               <p className="text-brand-ink leading-relaxed">
-                You agree to indemnify and hold harmless Dr. Suzanne Ravenall and her affiliates,
+                You agree to indemnify and hold harmless The Ravenall Institute Pty Ltd, Dr. Suzanne
+                Ravenall and their affiliates,
                 employees, and contractors from any claim, loss, liability, or expense (including legal
                 fees) arising from your breach of these Terms or misuse of the Site or services.
               </p>
@@ -242,15 +250,27 @@ export default function LegalTermsContent() {
               <p className="text-brand-ink leading-relaxed">
                 For questions about these Terms, contact us at:
               </p>
-              <div className="mt-4 bg-brand-sand rounded-xl p-6 border border-brand-border">
-                <p className="text-brand-ink font-medium">Dr. Suzanne Ravenall</p>
+              {/* Contact details approved by Johan 6 Oct. Sources: https://suzanneravenall.com/terms-and-conditions/
+                  (entity, director, addresses), https://suzanneravenall.com/privacy-policy/ (admin@ mailbox),
+                  https://effectivenesscompany.com/contact-us/ (full phone number). No street number is published. */}
+              <div className="mt-4 bg-brand-sand rounded-xl p-6 border border-brand-border space-y-1">
+                <p className="text-brand-ink font-medium">The Ravenall Institute Pty Ltd</p>
+                <p className="text-brand-ink">Registration number: 2012/180720/07</p>
+                <p className="text-brand-ink">Director: Dr. Suzanne Ravenall</p>
                 <p className="text-brand-ink">
                   Email:{' '}
-                  <a href="mailto:hello@suzanneravenall.com" className="text-brand-accent underline hover:no-underline">
-                    hello@suzanneravenall.com
+                  <a href="mailto:admin@ravenallinstitute.com" className="text-brand-accent underline hover:no-underline">
+                    admin@ravenallinstitute.com
                   </a>
                 </p>
-                {/* TODO: Add physical address: required under ECT Act Section 43(1)(a) */}
+                <p className="text-brand-ink">
+                  Phone:{' '}
+                  <a href="tel:+27105970841" className="text-brand-accent underline hover:no-underline">
+                    +27 10 597 0841
+                  </a>
+                </p>
+                <p className="text-brand-ink">Physical address: Oxmoor Street, Kyalami Estates, Johannesburg, 1684</p>
+                <p className="text-brand-ink">Postal address: PO Box 910, Kyalami, 1684</p>
               </div>
             </div>
 

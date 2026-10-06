@@ -123,6 +123,7 @@ describe('email template rendering (POPIA footer)', () => {
   it('falls back to the real company address when the env var is unset', () => {
     vi.stubEnv('COMPANY_PHYSICAL_ADDRESS', '')
     const html = renderToStaticMarkup(createElement(CartAbandonment1, cartProps))
-    expect(html).toContain('8 Oxmoor Street, Kyalami Estates, Gauteng, South Africa')
+    expect(html).toContain('Oxmoor Street, Kyalami Estates, Johannesburg, 1684, South Africa')
+    expect(html).not.toContain('8 Oxmoor Street')
   })
 })

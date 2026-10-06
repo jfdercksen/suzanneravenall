@@ -21,19 +21,9 @@ const variants = [
 ]
 
 describe('VariantSelector (site check M11, C1)', () => {
-  it('links "Payment plans available" to the contact form', () => {
-    render(
-      <VariantSelector
-        variants={variants}
-        selectedVariantId="a"
-        onSelect={() => {}}
-        paymentPlanHref="/contact?enquiry=practitioner&topic=Payment+plan#message"
-      />
-    )
-    expect(screen.getByRole('link', { name: 'contact us' })).toHaveAttribute(
-      'href',
-      '/contact?enquiry=practitioner&topic=Payment+plan#message'
-    )
+  it('does not promise payment plans (decision 15, 6 Oct)', () => {
+    render(<VariantSelector variants={variants} selectedVariantId="a" onSelect={() => {}} />)
+    expect(screen.queryByText(/payment plan/i)).not.toBeInTheDocument()
   })
 
   it('uses the chooser label it is given instead of "Choose Your Programme"', () => {

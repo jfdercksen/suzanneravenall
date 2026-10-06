@@ -8,7 +8,6 @@ import {
   isSelfStudyProduct,
   metadataFaq,
   metadataList,
-  paymentPlanEnquiry,
 } from './productKind'
 import type { MedusaProduct } from '@/types/medusa'
 
@@ -157,11 +156,3 @@ describe('metadata readers', () => {
   })
 })
 
-describe('paymentPlanEnquiry', () => {
-  it('maps the product kind to a contact form enquiry key', () => {
-    expect(paymentPlanEnquiry('session')).toBe('coaching')
-    expect(paymentPlanEnquiry('group')).toBe('group')
-    expect(paymentPlanEnquiry('programme')).toBe('practitioner')
-    expect(paymentPlanEnquiry('book')).toBe('other')
-  })
-})

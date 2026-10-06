@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Mail, MapPin } from 'lucide-react'
+import { Mail, MapPin, Phone } from 'lucide-react'
 import ContactForm from './ContactForm'
 import CalInlineBooking from './CalInlineBooking'
 import type { EnquiryOption } from './enquiry'
@@ -99,11 +99,29 @@ export default function ContactOptions({ enquiry, topic }: ContactOptionsProps =
                 </div>
               </li>
 
+              {/* Phone: https://effectivenesscompany.com/contact-us/ (approved by Johan 6 Oct) */}
+              <li className="flex items-start gap-3">
+                <Phone className="w-5 h-5 text-brand-accent mt-0.5 shrink-0" aria-hidden="true" />
+                <div>
+                  <p className="text-xs uppercase tracking-wider text-brand-muted mb-0.5">Phone</p>
+                  <a
+                    href="tel:+27105970841"
+                    className="text-brand-ink hover:text-brand-accent text-sm transition-colors"
+                  >
+                    +27 10 597 0841
+                  </a>
+                </div>
+              </li>
+
+              {/* Addresses: https://suzanneravenall.com/terms-and-conditions/ (no street number is published) */}
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-brand-accent mt-0.5 shrink-0" aria-hidden="true" />
                 <div>
                   <p className="text-xs uppercase tracking-wider text-brand-muted mb-0.5">Location</p>
-                  <span className="text-brand-ink text-sm">PO Box 910, Kyalami, Johannesburg, South Africa</span>
+                  <span className="text-brand-ink text-sm block">
+                    Oxmoor Street, Kyalami Estates, Johannesburg, 1684
+                  </span>
+                  <span className="text-brand-muted text-sm block mt-1">Postal: PO Box 910, Kyalami, 1684</span>
                 </div>
               </li>
             </ul>

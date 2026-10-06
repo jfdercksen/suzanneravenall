@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
-const LAST_UPDATED = '12 May 2026'
+const LAST_UPDATED = '6 October 2026'
 
 export default function LegalPrivacyContent() {
   return (
@@ -47,11 +47,12 @@ export default function LegalPrivacyContent() {
               <h2 className="text-2xl font-medium text-brand-primary mb-4">
                 1. Introduction &amp; Identity of the Responsible Party
               </h2>
-              {/* TODO (legal review): Confirm full legal name of the responsible party, registered address, and registration number if applicable */}
+              {/* Legal entity and registration number: https://suzanneravenall.com/terms-and-conditions/ (opening paragraph and clause 16) */}
               <p className="text-brand-ink leading-relaxed mb-3">
-                Dr. Suzanne Ravenall (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;) operates the website at{' '}
-                <strong>suzanneravenall.com</strong> and is the Responsible Party as defined under the
-                Protection of Personal Information Act 4 of 2013 (&ldquo;POPIA&rdquo;).
+                The Ravenall Institute Pty Ltd (registration number 2012/180720/07) (&ldquo;we&rdquo;,
+                &ldquo;us&rdquo;, or &ldquo;our&rdquo;) operates the website at{' '}
+                <strong>suzanneravenall.com</strong>, one of its brands, and is the Responsible Party as
+                defined under the Protection of Personal Information Act 4 of 2013 (&ldquo;POPIA&rdquo;).
               </p>
               <p className="text-brand-ink leading-relaxed">
                 This Privacy Policy explains how we collect, use, share, and protect personal information
@@ -175,9 +176,9 @@ export default function LegalPrivacyContent() {
               </ul>
               <p className="text-brand-ink leading-relaxed mt-4">
                 To exercise any of these rights, contact us at{' '}
-                {/* TODO: Confirm official privacy contact email before go-live */}
-                <a href="mailto:privacy@suzanneravenall.com" className="text-brand-accent underline hover:no-underline">
-                  privacy@suzanneravenall.com
+                {/* Legal and privacy mailbox, as on https://suzanneravenall.com/privacy-policy/ (approved by Johan 6 Oct) */}
+                <a href="mailto:admin@ravenallinstitute.com" className="text-brand-accent underline hover:no-underline">
+                  admin@ravenallinstitute.com
                 </a>
                 . We will respond within 30 days.
               </p>
@@ -240,15 +241,20 @@ export default function LegalPrivacyContent() {
               </p>
               <div className="mt-4 bg-brand-sand rounded-xl p-6 border border-brand-border">
                 <p className="text-brand-ink font-medium">Information Officer</p>
-                {/* TODO: Insert full name of designated Information Officer */}
-                <p className="text-brand-ink mt-1">Dr. Suzanne Ravenall</p>
+                {/* No Information Officer is published on the live sites. Suzanne Ravenall is the Director
+                    (https://suzanneravenall.com/terms-and-conditions/) and so the default Information Officer
+                    under POPIA. TODO: confirm with Suzanne whether someone else is designated. */}
+                <p className="text-brand-ink mt-1">Dr. Suzanne Ravenall, Director</p>
+                <p className="text-brand-ink">The Ravenall Institute Pty Ltd</p>
                 <p className="text-brand-ink">
                   Email:{' '}
-                  <a href="mailto:privacy@suzanneravenall.com" className="text-brand-accent underline hover:no-underline">
-                    privacy@suzanneravenall.com
+                  <a href="mailto:admin@ravenallinstitute.com" className="text-brand-accent underline hover:no-underline">
+                    admin@ravenallinstitute.com
                   </a>
                 </p>
-                {/* TODO: Add physical address if required by POPIA */}
+                {/* Addresses: https://suzanneravenall.com/terms-and-conditions/ (no street number is published) */}
+                <p className="text-brand-ink">Physical address: Oxmoor Street, Kyalami Estates, Johannesburg, 1684</p>
+                <p className="text-brand-ink">Postal address: PO Box 910, Kyalami, 1684</p>
               </div>
             </div>
 

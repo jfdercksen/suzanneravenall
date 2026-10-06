@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 
-const LAST_UPDATED = '29 July 2026'
+const LAST_UPDATED = '6 October 2026'
 
 interface Section {
   title: string
@@ -13,7 +13,8 @@ const sections: Section[] = [
   {
     title: '1. Overview',
     paragraphs: [
-      'Welcome to suzanneravenall.com (the "Website"). Please read this Disclaimer before purchasing, accessing, enrolling in or using any sessions, practices, online programmes or content (collectively, the "Services"). The term "You" refers to the user, client or viewer of the Website. The Website and its content are owned by the Ravenall Institute (offices of which reside in South Africa).',
+      // Entity and registration number: https://suzanneravenall.com/terms-and-conditions/
+      'Welcome to suzanneravenall.com (the "Website"). Please read this Disclaimer before purchasing, accessing, enrolling in or using any sessions, practices, online programmes or content (collectively, the "Services"). The term "You" refers to the user, client or viewer of the Website. The Website and its content are owned by The Ravenall Institute Pty Ltd, registration number 2012/180720/07 (offices of which reside in South Africa).',
       'By viewing this Website or anything made available on or through this Website (including but not limited to programmes, products, services, opt-in gifts, e-books, videos, webinars, blog posts, newsletters, emails, social media and/or other communication), You are agreeing to accept all parts of this Disclaimer. If You do not agree with the Disclaimer below, You should leave the Website now.',
     ],
   },
@@ -26,6 +27,8 @@ const sections: Section[] = [
   {
     title: '3. No Substitute for Medical Advice',
     paragraphs: [
+      // Doctorate: https://suzanneravenall.com/qualifications/
+      "Dr. Suzanne Ravenall's title comes from a Doctorate of Philosophy in Metaphysics. It is not a medical qualification.",
       'We are not medical doctors, psychologists or medical professionals, nor do we hold ourselves out to be. The information contained in this Website is not intended to be a substitute for medical or mental health treatment, and should not be perceived as or relied upon in any way as medical or mental health advice. The information provided through the Website and Services is not intended to be a substitute for professional medical advice, diagnosis or treatment that can be provided by your own medical doctor, psychologist and/or therapist.',
       'Do not disregard or discontinue professional medical advice, or delay seeking professional advice, because of information You have read on the Website or the Services, or received from us. Do not stop taking any medications without speaking to your health care professional. If You have, or suspect that You have, a medical or mental health issue, contact your own health care provider promptly.',
       'We do not provide health care, medical or nutrition therapy services, and we do not attempt to diagnose, treat, prevent or cure in any manner whatsoever any physical ailment, or any mental or emotional issue, disease or condition. We are not giving medical, psychological or religious advice whatsoever. Although care has been taken in preparing the information provided to You, to the fullest extent permitted by law we cannot be held responsible for any errors or omissions, and we accept no liability whatsoever for any kind of loss or damage You may incur. Always seek medical and/or psychological counsel relating to your specific circumstances for any and all questions and concerns You now have, or may have in the future. You agree that the information on our Website is not medical or psychological advice.',
@@ -81,7 +84,9 @@ const sections: Section[] = [
     paragraphs: [
       'By using this Website and Services, You agree to absolve us of any liability or loss that You, or any other person, may incur from use of the information, products or materials that You request or receive through or on the Website. You agree that we will not be liable to You, or to any other individual, company or entity, for any type of damages (including direct, indirect, special, incidental, equitable or consequential loss or damages) for use of or reliance on the Website.',
       'You agree that we do not assume liability for accidents, delays, injuries, harm, loss, damage, death, lost profits, personal, professional or business interruptions, misapplication of information, physical or mental disease, condition or issue, or any other type of loss or damage due to any act or default by us or anyone acting as our agent, consultant, affiliate, joint venture partner, employee, shareholder, director, staff, team member, or anyone otherwise affiliated with our business, who is engaged in delivering content on or through this Website or Services.',
-      'In any event, our entire liability to You is equal to the value of the goods and/or services paid by You to us during the duration of our contract. Should You not be satisfied with the provided Service, we will refund your money within 7 days, in line with our satisfaction guarantee policy.',
+      // Johan's decision 6 Oct: the live Terms refund rule applies (https://suzanneravenall.com/terms-and-conditions/);
+      // the 7-day satisfaction refund on the live Disclaimer is not carried over.
+      'In any event, our entire liability to You is equal to the value of the goods and/or services paid by You to us during the duration of our contract. Refunds are handled under our Terms of Service: a full refund if a service You have paid for is unavailable, and a 3% administration fee if You cancel after purchase.',
     ],
   },
   {
