@@ -357,7 +357,7 @@ export default function BookContent() {
               className="text-brand-muted leading-relaxed mb-10 max-w-2xl mx-auto"
             >
               The Breakthrough Trilogy is not a self-help book. It is a practical operating manual
-              for the human mind, drawing on neuroscience, energy psychology, and over two decades
+              for the human mind, drawing on neuroscience, energy psychology, and over 30 years
               of hands-on client transformation to give you a complete system for lasting change.
             </motion.p>
 
@@ -398,8 +398,8 @@ export default function BookContent() {
               </motion.h2>
               <motion.p {...scrollFadeUp(0.2)} className="text-brand-muted leading-relaxed mb-5">
                 This trilogy is not written from theory. It is written from the trenches of real
-                transformation, both Suzanne&apos;s own journey and thousands of client breakthroughs
-                over 20+ years.
+                transformation, both Suzanne&apos;s own journey and her clients&apos; breakthroughs
+                over 30+ years.
               </motion.p>
               <motion.p {...scrollFadeUp(0.3)} className="text-brand-muted leading-relaxed mb-5">
                 Dr. Suzanne Ravenall climbed Mount Elbrus, founded a successful international

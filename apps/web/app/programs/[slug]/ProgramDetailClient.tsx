@@ -118,9 +118,11 @@ const OUTCOMES = [
 
 // -- credential items --
 
+// Years and awards sourced 6 Oct from https://suzanneravenall.com/about/ counters
+// (30+ Years Experience, 30+ Awards). "1000s Lives Transformed" had no source.
 const CREDENTIALS = [
-  { stat: '20+', label: 'Years of Practice' },
-  { stat: '1000s', label: 'Lives Transformed' },
+  { stat: '30+', label: 'Years of Experience' },
+  { stat: '30+', label: 'Awards' },
   { stat: 'Certified', label: 'RR Practitioner' },
   { stat: 'International', label: 'Keynote Speaker' },
 ]
@@ -446,7 +448,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               </h2>
               {/* TODO: Suzanne to review and approve facilitator bio copy */}
               <p className="text-lg text-brand-muted font-light leading-relaxed mb-6">
-                Dr. Suzanne Ravenall has spent over two decades guiding individuals and organisations
+                Dr. Suzanne Ravenall has spent over 30 years guiding individuals and organisations
                 through profound inner transformation. A trauma survivor herself, having navigated
                 a traumatic brain injury, stroke, and multiple life-altering experiences, Suzanne
                 has turned her lived wisdom into a rigorous methodology for conscious healing.

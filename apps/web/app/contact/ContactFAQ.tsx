@@ -24,11 +24,6 @@ const FAQ_ITEMS = [
       'All sessions are online via Zoom. In-person sessions in Johannesburg are available for local clients.', // TODO: Suzanne to review and personalise
   },
   {
-    id: 'faq-3',
-    question: 'Do you work with international clients?',
-    answer: 'Yes. Clients come from over 30 countries across 6 continents.', // TODO: Suzanne to review and personalise
-  },
-  {
     id: 'faq-4',
     question: 'How do I know which programme is right for me?',
     answer:

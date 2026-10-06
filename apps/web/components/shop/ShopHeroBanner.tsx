@@ -20,7 +20,7 @@ export function ShopHeroBanner() {
             <span className={HEADER_UNDERLINE}>Starts Here</span>
           </>
         }
-        description="48 programmes. One destination. The tools Suzanne has used to transform 2,000+ lives, now available to you."
+        description="48 programmes. One destination. The tools Suzanne has refined over more than 30 years, now available to you."
       >
         <button
           type="button"
@@ -47,10 +47,13 @@ export function ShopHeroBanner() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="flex gap-6 sm:gap-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8"
         >
+          {/* Sourced 6 Oct from the About counters (https://suzanneravenall.com/about/)
+              and https://suzanneravenall.com/qualifications/. Clients and countries
+              were unsourced and are dropped (Johan, 6 Oct). */}
           {[
-            { value: '2,000+', label: 'Lives transformed' },
-            { value: '20+',    label: 'Years experience' },
-            { value: '30+',    label: 'Countries reached' },
+            { value: '30+',    label: 'Years experience' },
+            { value: '30+',    label: 'Awards' },
+            { value: '20+',    label: 'Qualifications' },
           ].map(({ value, label }) => (
             <div key={label}>
               <span className="block text-2xl sm:text-3xl font-semibold tracking-tight text-white">{value}</span>

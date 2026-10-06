@@ -112,14 +112,8 @@ export function ProductHero({ product }: ProductHeroProps) {
               {transformationPromise}
             </motion.p>
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-4 text-sm text-white/70 italic"
-            >
-              Join thousands of clients worldwide
-            </motion.p>
+            {/* "Join thousands of clients worldwide" removed 6 Oct: no source on any of
+                Suzanne's sites (content-sourcing report, section 2). */}
           </div>
         </div>
       </div>
