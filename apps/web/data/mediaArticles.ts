@@ -9,6 +9,14 @@
  * article. The original URL is preserved in `legacyHref` (never
  * rendered) so restoring or repointing is a one-line change per entry.
  *
+ * Sourced 6 Oct 2026 (docs/testing/results/content-sourcing-2026-10-06.md,
+ * section 3): every old article URL 301-redirects to a PDF scan hosted on
+ * ravenallinstitute.com, a separate domain that survives the cutover, so
+ * each entry now links that PDF. Titles are taken from the PDF / article
+ * slugs. The earlier dates (WordPress upload dates, not publication dates)
+ * and descriptions (written by us, not from the articles) were removed:
+ * the scans are images, so any standfirst must be read off them by eye.
+ *
  * Status meanings:
  * - 'external'                the entry has a live `href` on a genuine
  *                             third-party domain that survives cutover
@@ -25,139 +33,128 @@ export interface MediaArticle {
   outlet: string
   type: 'Article' | 'Cover Story' | 'Press Release'
   title: string
-  /** Publication date as shown on the old site, where known. */
+  /**
+   * Publication date, only when read off the source itself. The old site's
+   * dates were WordPress upload dates, so none are set today.
+   */
   date?: string
-  description: string
+  /** Standfirst, only when sourced from the article. None are set today. */
+  description?: string
   /**
    * Live URL rendered as the card's link. Only set when the destination
    * survives DNS cutover (third-party domain or new-platform route).
    * Entries without an href render as unlinked citation cards.
    */
   href?: string
-  /** Original old-WordPress URL. Reference only — never rendered. */
+  /** Original old-WordPress URL. Reference only, never rendered. */
   legacyHref: string
   status: MediaArticleStatus
   /** Shown on /resources/media (the original six-card grid). */
   featured: boolean
 }
 
+// PDF scans of the print articles, hosted on ravenallinstitute.com.
+// Source: https://ravenallinstitute.com/articles/ (each old
+// suzanneravenall.com/article-<slug>/ URL redirects to the PDF below).
+const PDF_BASE = 'https://ravenallinstitute.com/wp-content/uploads/2021/12'
+
 export const MEDIA_ARTICLES: MediaArticle[] = [
   {
     outlet: 'Leadership Magazine',
     type: 'Article',
     title: 'Leadership Magazine Feature',
-    date: 'December 2021',
-    description:
-      'Dr. Suzanne Ravenall featured in Leadership Magazine, sharing insights on transformational leadership and the science of human potential.',
+    href: `${PDF_BASE}/2021-Article-Leadership-Magazine.pdf`,
     legacyHref: 'https://suzanneravenall.com/article-leadership-magazine/',
-    status: 'needs-content-decision',
+    status: 'external',
     featured: true,
   },
   {
     outlet: 'CEO Magazine',
     type: 'Cover Story',
-    title: 'Fast and Furious: Leading at Speed',
-    date: 'November 2021',
-    description:
-      "A CEO Magazine cover story exploring how high-performing leaders drive transformation at pace. Dr. Ravenall's strategies for sustainable execution.",
+    title: 'Fast and Furious',
+    href: `${PDF_BASE}/Article-CEO-Magazine-Cover-story-fast-and-furious.pdf`,
     legacyHref:
       'https://suzanneravenall.com/article-ceo-magazine-cover-story-fast-and-furious/',
-    status: 'needs-content-decision',
+    status: 'external',
     featured: true,
   },
   {
     outlet: 'CEO Magazine',
     type: 'Cover Story',
     title: 'Execution Excellence',
-    date: 'November 2021',
-    description:
-      'The gap between strategic intention and actual execution, and the mindset shifts that close it. A CEO Magazine cover story.',
+    href: `${PDF_BASE}/Article-CEO-Magazine-Cover-Story-Execution-Excellence.pdf`,
     legacyHref:
       'https://suzanneravenall.com/article-ceo-magazine-cover-story-execution-excellence/',
-    status: 'needs-content-decision',
+    status: 'external',
     featured: true,
   },
   {
     outlet: 'CEO Magazine',
     type: 'Cover Story',
-    title: 'The Power of Positivity',
-    date: 'November 2021',
-    description:
-      'Dr. Ravenall on how positivity is not naive optimism but a disciplined neurological practice that reshapes outcomes in business and life.',
-    // NB: "magzaine" typo is faithful to the real old-site slug.
+    title: 'Power of Positivity',
+    // NB: "Magzaine" / "magzaine" typos are faithful to the real file and slug.
+    href: `${PDF_BASE}/Article-CEO-Magzaine-Cover-Story-Power-of-Positivity.pdf`,
     legacyHref:
       'https://suzanneravenall.com/article-ceo-magzaine-cover-story-power-of-positivity/',
-    status: 'needs-content-decision',
+    status: 'external',
     featured: true,
   },
   {
     outlet: 'CEO Magazine',
     type: 'Article',
-    title: 'B2B Outsourcing: A Human Lens',
-    date: 'November 2021',
-    description:
-      'Applying a human-centred lens to B2B outsourcing decisions: how people patterns determine whether partnerships succeed or fail.',
+    title: 'B2B Outsourcing',
+    href: `${PDF_BASE}/Article-CEO-Magazine-B2B-Outsourcing.pdf`,
     legacyHref: 'https://suzanneravenall.com/article-ceo-magazine-b2b-outsourcing/',
-    status: 'needs-content-decision',
+    status: 'external',
     featured: true,
   },
   {
     outlet: 'Business Excellence Awards',
     type: 'Press Release',
-    title: 'Ravenall Institute: Business Excellence Award',
-    date: 'December 2021',
-    description:
-      'Official press release recognising the Ravenall Institute for outstanding contribution to coaching, human development and business excellence.',
+    title: 'Business Excellence Awards Press Release',
+    href: `${PDF_BASE}/2021-Article-Business-Excellence-Awards-Press-Release.pdf`,
     legacyHref:
       'https://suzanneravenall.com/article-business-excellence-awards-press-release/',
-    status: 'needs-content-decision',
+    status: 'external',
     featured: true,
   },
   {
     outlet: 'CEO Magazine',
     type: 'Article',
     title: 'Be Effective or Be at Risk',
-    date: 'November 2021',
-    description:
-      'In a rapidly changing world, effectiveness is no longer optional. Dr. Ravenall on how organisations can develop human effectiveness as a strategic capability rather than an afterthought.',
+    href: `${PDF_BASE}/Article-CEO-Magazine-Be-Effective-or-Be-At-Risk.pdf`,
     legacyHref:
       'https://suzanneravenall.com/article-ceo-magazine-be-effective-or-be-at-risk/',
-    status: 'needs-content-decision',
+    status: 'external',
     featured: false,
   },
   {
     outlet: 'CEO Magazine',
     type: 'Article',
-    title: 'Transformation: What It Really Takes',
-    date: 'November 2021',
-    description:
-      'True transformation is a shift in being, not just behaviour. Dr. Ravenall distinguishes between surface-level change and the deep, lasting metamorphosis that rewires how people operate in the world.',
+    title: 'Transformation',
+    href: `${PDF_BASE}/Article-CEO-Magazine-Transformation.pdf`,
     legacyHref: 'https://suzanneravenall.com/article-ceo-magazine-transformation/',
-    status: 'needs-content-decision',
+    status: 'external',
     featured: false,
   },
   {
     outlet: 'CEO Magazine',
     type: 'Article',
     title: 'Creating the Future',
-    date: 'November 2021',
-    description:
-      'You do not stumble into a great future. You design it from the inside out. Dr. Ravenall on intentional creation, purpose alignment and the role of consciousness in building what comes next.',
+    href: `${PDF_BASE}/Article-CEO-Magazine-Creating-the-future.pdf`,
     legacyHref:
       'https://suzanneravenall.com/article-ceo-magazine-creating-the-future/',
-    status: 'needs-content-decision',
+    status: 'external',
     featured: false,
   },
   {
     outlet: 'CEO Magazine',
     type: 'Article',
     title: 'New Trends in the Labour Market',
-    date: 'November 2021',
-    description:
-      'The labour market is shifting fundamentally. Dr. Ravenall analyses what employees now want, and why organisations that ignore human needs will struggle to attract and retain top talent.',
+    href: `${PDF_BASE}/Article-CEO-Magazine-New-Trend-Labour-market.pdf`,
     legacyHref:
       'https://suzanneravenall.com/article-ceo-magazine-new-trend-labour-market/',
-    status: 'needs-content-decision',
+    status: 'external',
     featured: false,
   },
 ]

@@ -4,9 +4,11 @@ import { FEATURED_MEDIA_ARTICLES, MEDIA_ARTICLES } from './mediaArticles'
 // KI025: the old WordPress site lives at suzanneravenall.com until DNS
 // cutover, after which any link into its URL structure breaks or bounces
 // through the `/article-:slug*` -> /blog catch-all redirect.
+// ravenallinstitute.com is a separate WordPress site that is NOT cut over,
+// so its /wp-content/ PDF scans are safe destinations (sourcing, 6 Oct).
 const OLD_WP_PATTERNS = [
   /suzanneravenall\.com/i,
-  /\/wp-content\//i,
+  /^(?!https:\/\/ravenallinstitute\.com\/).*\/wp-content\//i,
   /\/wp-json\//i,
   /[?&]p=\d+/,
 ]
@@ -46,6 +48,24 @@ describe('media articles data', () => {
     const legacy = MEDIA_ARTICLES.map((a) => a.legacyHref)
     expect(new Set(titles).size).toBe(titles.length)
     expect(new Set(legacy).size).toBe(legacy.length)
+  })
+
+  // Sourced 6 Oct (content-sourcing-2026-10-06.md section 3): every entry
+  // links its PDF scan on ravenallinstitute.com, which survives cutover.
+  it('links every article to its PDF scan on ravenallinstitute.com', () => {
+    for (const a of MEDIA_ARTICLES) {
+      expect(a.status, a.title).toBe('external')
+      expect(a.href, a.title).toMatch(
+        /^https:\/\/ravenallinstitute\.com\/wp-content\/uploads\/2021\/12\/.+\.pdf$/,
+      )
+    }
+  })
+
+  it('carries no unsourced dates or descriptions', () => {
+    for (const a of MEDIA_ARTICLES) {
+      expect(a.date, a.title).toBeUndefined()
+      expect(a.description, a.title).toBeUndefined()
+    }
   })
 
   it('keeps the six original cards featured on /resources/media', () => {

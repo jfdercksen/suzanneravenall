@@ -242,7 +242,7 @@ const STATIC_PAGES: Omit<SiteDocument, 'type' | 'label'>[] = [
     url: '/book',
     title: 'The Breakthrough Trilogy',
     description:
-      'A Quest to Find an Upgraded Version of You. Three books. One journey. The complete roadmap to decoding the patterns that keep you stuck, and upgrading every area of your life.',
+      'Breakthrough Trilogy by Dr. Suzanne Ravenall: Overcoming the Impossible & Living Life Beyond Limitation. A quest to find an upgraded version of you. Available to pre-order.',
     body: ['Book'],
   },
   {

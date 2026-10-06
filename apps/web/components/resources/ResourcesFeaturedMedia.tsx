@@ -9,9 +9,9 @@ import { MEDIA_ARTICLES, type MediaArticle } from '@/data/mediaArticles'
 // copy, so titles match /resources/media and /resources/articles, and a card
 // becomes a link to the source the moment its entry gets an `href`.
 const FEATURED_TITLES = [
-  'Fast and Furious: Leading at Speed',
+  'Fast and Furious',
   'Leadership Magazine Feature',
-  'Ravenall Institute: Business Excellence Award',
+  'Business Excellence Awards Press Release',
   'Execution Excellence',
 ]
 
@@ -100,7 +100,9 @@ export default function ResourcesFeaturedMedia() {
                   {item.title}
                 </h3>
 
-                <p className="text-sm text-brand-muted font-light leading-relaxed">{item.description}</p>
+                {item.description && (
+                  <p className="text-sm text-brand-muted font-light leading-relaxed">{item.description}</p>
+                )}
               </>
             )
 

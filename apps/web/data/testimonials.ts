@@ -17,6 +17,7 @@
  * - components/home/TestimonialsSection.tsx       → `homepageTestimonials`
  * - components/shop/ProductPageContent.tsx        → `productTestimonials`
  * - components/book/BookContent.tsx               → `bookTestimonials`
+ * - components/speaking/SpeakingContent.tsx       → `speakingTestimonials`
  * - lib/email/templates/CartAbandonment3.tsx      → `emailTestimonial`
  * - lib/email/templates/MembershipExpired.tsx     → `memberEmailTestimonial`
  *
@@ -89,6 +90,14 @@ export const productTestimonials: Testimonial[] = []
  * AWAITING verified book-specific reader quotes from Suzanne.
  */
 export const bookTestimonials: Testimonial[] = []
+
+/**
+ * /speaking "What audiences say" section.
+ * AWAITING verified keynote quotes from event organisers or attendees.
+ * None exist on any of Suzanne's live sites (content sourcing, 6 Oct 2026),
+ * so the section is hidden until this list has entries.
+ */
+export const speakingTestimonials: Testimonial[] = []
 
 /**
  * Cart-abandonment email #3 "What Others Are Saying" block.

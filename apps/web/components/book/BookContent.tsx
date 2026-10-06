@@ -6,37 +6,11 @@ import { motion } from 'framer-motion'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { bookTestimonials } from '@/data/testimonials'
 
-// TODO: Suzanne to confirm book titles, descriptions, and release dates for all 3 books in the trilogy
-const books = [
-  {
-    number: '01',
-    title: 'Breakthrough',
-    subtitle: 'Decoding the Pattern',
-    description:
-      'Identify and decode the hidden patterns that have been running your life beneath conscious awareness: the programs installed early in life that shape every decision, relationship, and result you experience today.',
-    tag: 'Pre-Order',
-    // TODO: Confirm with Suzanne: "Available Now" or "Pre-Order"?
-    tagAccent: true,
-  },
-  {
-    number: '02',
-    title: 'Beyond the Pattern',
-    subtitle: 'Upgrading Your Response',
-    description:
-      'Once you can see the pattern, you can change it. Book two guides you through the process of upgrading how you respond to every situation, replacing automatic reactions with conscious, empowered choices.',
-    tag: 'Coming Soon',
-    tagAccent: false,
-  },
-  {
-    number: '03',
-    title: 'Becoming Unstoppable',
-    subtitle: 'Living at Full Potential',
-    description:
-      'The final book in the trilogy brings it all together: a complete operating system for living at your highest potential, navigating life with mastery and creating results that once felt impossible.',
-    tag: 'Coming Soon',
-    tagAccent: false,
-  },
-]
+// Sourced 6 Oct 2026 (content-sourcing-2026-10-06.md section 4): the live
+// product is one pre-order, "Breakthrough Trilogy", R165
+// (https://suzanneravenall.com/product/the-latest-book-by-suzanne/). No
+// individual book titles, release date or excerpt are published anywhere,
+// so the per-book cards and the "excerpt" block were removed.
 
 const themes = [
   {
@@ -139,20 +113,14 @@ export default function BookContent() {
         >
           Pre-Order Now
         </Link>
-        <a
-          href="#excerpt"
-          className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
-        >
-          Read an Excerpt ↓
-        </a>
       </PageHeader>
 
       {/* Slim band under the header, lined up with its text column */}
       <div className="bg-brand-primary-900 border-t border-white/10 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="sm:ml-auto sm:max-w-md lg:max-w-2xl text-sm sm:text-base lg:text-lg text-white/85 leading-relaxed">
-            Three books. One journey. The complete roadmap to decoding the patterns that keep
-            you stuck, and upgrading every area of your life.
+            {/* Source: https://suzanneravenall.com/ (homepage book copy) */}
+            Breakthrough is not a moment. It is a pattern shift.
           </p>
         </div>
       </div>
@@ -253,122 +221,6 @@ export default function BookContent() {
                 </Link>
               </motion.div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── 3. What You'll Discover: light, bg-brand-sand ──────────────── */}
-      <section aria-labelledby="trilogy-heading" className="w-full bg-brand-sand py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <motion.p
-              {...scrollFadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
-            >
-              Inside the Trilogy
-            </motion.p>
-            <motion.h2
-              id="trilogy-heading"
-              {...scrollFadeUp(0.1)}
-              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary"
-            >
-              Three books that work as one system
-            </motion.h2>
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {books.map((book, i) => (
-              <motion.div
-                key={book.title}
-                {...scrollFadeUp(i * 0.1)}
-                className="group relative bg-white border border-brand-border rounded-card overflow-hidden p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative">
-                  <p className="text-7xl font-medium tracking-tight text-brand-accent/15 mb-4 leading-none select-none">
-                    {book.number}
-                  </p>
-                  <span
-                    className={`inline-block px-3 py-1 text-xs font-medium rounded-full mb-4 ${
-                      book.tagAccent
-                        ? 'bg-brand-primary-900 text-white border border-brand-primary-900'
-                        : 'bg-brand-sand text-brand-ink border border-brand-border'
-                    }`}
-                  >
-                    {book.tag}
-                  </span>
-                  <h3 className="text-xl font-medium text-brand-primary mb-1">{book.title}</h3>
-                  <p className="text-sm text-brand-accent mb-4">{book.subtitle}</p>
-                  <p className="text-brand-muted text-sm leading-relaxed">{book.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── 4. Excerpt: light, bg-brand-cream ─────────────────────────────── */}
-      {/* TODO: Replace pull quote and paragraph below with real book excerpt when available */}
-      <section
-        id="excerpt"
-        aria-labelledby="excerpt-heading"
-        className="w-full bg-brand-cream py-20 lg:py-32"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.p
-              {...scrollFadeUp(0)}
-              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
-            >
-              From the Pages
-            </motion.p>
-            <motion.h2
-              id="excerpt-heading"
-              {...scrollFadeUp(0.1)}
-              className="text-3xl lg:text-5xl font-medium tracking-tight text-brand-primary mb-16"
-            >
-              A taste of the journey
-            </motion.h2>
-
-            {/* Pull quote */}
-            <motion.blockquote
-              {...scrollFadeUp(0.2)}
-              className="mb-12"
-              aria-label="Book excerpt from Breakthrough Trilogy"
-            >
-              <div
-                className="text-brand-accent/40 text-8xl font-serif leading-none mb-2 select-none"
-                aria-hidden="true"
-              >
-                &ldquo;
-              </div>
-              <p className="text-2xl lg:text-3xl font-light text-brand-ink leading-relaxed italic mb-8">
-                Consciousness is a meaning field. The mind adapts to the worldview imposed on it.
-                When this system is interrogated, it reveals a series of challenges: depression,
-                illness, addiction, broken relationships.
-              </p>
-              <footer className="text-sm font-medium text-brand-muted uppercase tracking-widest">
-                Dr. Suzanne Ravenall, Breakthrough Trilogy
-              </footer>
-            </motion.blockquote>
-
-            <motion.p
-              {...scrollFadeUp(0.3)}
-              className="text-brand-muted leading-relaxed mb-10 max-w-2xl mx-auto"
-            >
-              The Breakthrough Trilogy is not a self-help book. It is a practical operating manual
-              for the human mind, drawing on neuroscience, energy psychology, and over 30 years
-              of hands-on client transformation to give you a complete system for lasting change.
-            </motion.p>
-
-            <motion.div {...scrollFadeUp(0.4)}>
-              <Link
-                href="/shop/the-latest-book-by-suzanne"
-                className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
-              >
-                Get the Full Book
-              </Link>
-            </motion.div>
           </div>
         </div>
       </section>
