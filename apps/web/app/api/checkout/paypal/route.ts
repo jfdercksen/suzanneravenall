@@ -1,12 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { logError } from '@/lib/log'
+import { cartUrl, isPayPalCurrency, medusaHeaders, type StoreCart } from '@/lib/paypal'
 
-interface PayPalCheckoutRequest {
-  amountInCents: number
-  currencyCode: string
-  itemName: string
-  cartId: string
-}
+// Creates the PayPal order for a cart. The amount and currency are read from
+// the Medusa cart on the server, never from the request body, so a tampered
+// client cannot open an order for less than the cart total. The capture route
+// and the PAYMENT.CAPTURE.COMPLETED webhook re-check the captured amount
+// against the cart before completing it.
+
+const bodySchema = z.object({
+  // Accepted for backwards compatibility with the current client and ignored.
+  amountInCents: z.number().optional(),
+  currencyCode: z.string().optional(),
+  itemName: z.string().min(1).max(255),
+  cartId: z.string().min(1).max(100),
+})
 
 interface PayPalOrderResponse {
   id: string
@@ -30,30 +39,12 @@ async function getAccessToken(base: string, clientId: string, clientSecret: stri
 }
 
 export async function POST(req: NextRequest) {
-  let body: PayPalCheckoutRequest
+  let parsed: z.infer<typeof bodySchema>
   try {
-    body = (await req.json()) as PayPalCheckoutRequest
-  } catch {
-    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
-  }
-
-  // Input validation
-  if (
-    typeof body.amountInCents !== 'number' ||
-    !Number.isInteger(body.amountInCents) ||
-    body.amountInCents <= 0 ||
-    body.amountInCents > 10_000_000
-  ) {
-    return NextResponse.json({ error: 'Invalid amount' }, { status: 400 })
-  }
-  if (typeof body.cartId !== 'string' || body.cartId.length < 1 || body.cartId.length > 100) {
-    return NextResponse.json({ error: 'Invalid cartId' }, { status: 400 })
-  }
-  if (typeof body.itemName !== 'string' || body.itemName.length < 1) {
-    return NextResponse.json({ error: 'Invalid itemName' }, { status: 400 })
-  }
-  if (body.currencyCode !== undefined && (typeof body.currencyCode !== 'string' || body.currencyCode.length !== 3)) {
-    return NextResponse.json({ error: 'Invalid currencyCode' }, { status: 400 })
+    parsed = bodySchema.parse(await req.json())
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Invalid request'
+    return NextResponse.json({ error: message }, { status: 400 })
   }
 
   const clientId = process.env.PAYPAL_CLIENT_ID ?? ''
@@ -65,14 +56,58 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Payment configuration missing' }, { status: 500 })
   }
 
+  const { cartId } = parsed
+  let cart: StoreCart
+  try {
+    const cartRes = await fetch(cartUrl(cartId), { headers: medusaHeaders() })
+    if (cartRes.status === 404) {
+      return NextResponse.json({ error: 'Cart not found' }, { status: 404 })
+    }
+    if (!cartRes.ok) {
+      return NextResponse.json({ error: 'Could not load cart' }, { status: 502 })
+    }
+    cart = ((await cartRes.json()) as { cart: StoreCart }).cart
+  } catch (err) {
+    logError('[PayPal] Cart load error', err, { cartId })
+    return NextResponse.json({ error: 'Could not load cart' }, { status: 502 })
+  }
+
+  if (cart.completed_at) {
+    return NextResponse.json(
+      { error: 'This order has already been placed', alreadyPlaced: true },
+      { status: 409 }
+    )
+  }
+  if (!cart.items || cart.items.length === 0) {
+    return NextResponse.json({ error: 'Cart is empty' }, { status: 400 })
+  }
+  if (!cart.email) {
+    return NextResponse.json({ error: 'Add your email address first' }, { status: 400 })
+  }
+  // PayPal cannot take ZAR as a transaction currency, and there is no
+  // conversion here: charging a ZAR total as some other currency would bill
+  // the wrong amount. Refuse instead.
+  if (!isPayPalCurrency(cart.currency_code)) {
+    return NextResponse.json(
+      {
+        error: `PayPal cannot accept payments in ${(cart.currency_code ?? 'this currency').toUpperCase()}. Please pay with PayFast instead.`,
+        unsupportedCurrency: true,
+      },
+      { status: 400 }
+    )
+  }
+  const totalCents = Number(cart.total)
+  if (!Number.isFinite(totalCents) || totalCents <= 0) {
+    return NextResponse.json({ error: 'This cart has nothing to pay' }, { status: 400 })
+  }
+
   const apiBase = isSandbox
     ? 'https://api-m.sandbox.paypal.com'
     : 'https://api-m.paypal.com'
 
-  const amountValue = (body.amountInCents / 100).toFixed(2)
-  const currencyCode = (body.currencyCode ?? 'ZAR').toUpperCase()
-  const itemName = body.itemName.slice(0, 127)
-  const { cartId } = body
+  const amountValue = (totalCents / 100).toFixed(2)
+  const currencyCode = String(cart.currency_code).toUpperCase()
+  const itemName = parsed.itemName.slice(0, 127)
 
   // Embed cartId in the return URL so ConfirmationContent can trigger capture
   const returnUrl = `${siteUrl}/checkout/confirmation?gateway=paypal&cartId=${encodeURIComponent(cartId)}`
@@ -86,7 +121,9 @@ export async function POST(req: NextRequest) {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'PayPal-Request-Id': `sr-${cartId}`,
+        // Keyed on the amount too: a cart whose total changed must get a new
+        // order, not PayPal's replay of the old one at the old amount.
+        'PayPal-Request-Id': `sr-${cartId}-${totalCents}-${currencyCode}`,
       },
       body: JSON.stringify({
         intent: 'CAPTURE',

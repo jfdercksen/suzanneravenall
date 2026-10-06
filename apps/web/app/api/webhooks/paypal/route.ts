@@ -2,7 +2,8 @@
  * PayPal Webhook Handler
  *
  * Events handled:
- *   PAYMENT.CAPTURE.COMPLETED  → complete Medusa cart to create order
+ *   PAYMENT.CAPTURE.COMPLETED  → complete Medusa cart to create order, only when
+ *                                the captured amount and currency equal the cart's
  *   PAYMENT.CAPTURE.DENIED     → log the failure (console + Sentry via lib/log)
  *
  * Sandbox test steps (run once PayPal sandbox credentials are set):
@@ -19,6 +20,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { logError, logWarn } from '@/lib/log'
+import { compareCapture, loadCart, medusaBase, medusaHeaders } from '@/lib/paypal'
 
 interface PayPalWebhookHeaders {
   transmissionId: string
@@ -121,16 +123,10 @@ async function verifyWebhookSignature(
 }
 
 async function completeCart(cartId: string): Promise<boolean> {
-  const medusaBase = process.env.MEDUSA_BACKEND_URL ?? 'http://medusa:9000'
-  const pubKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? ''
-
   try {
-    const res = await fetch(`${medusaBase}/store/carts/${cartId}/complete`, {
+    const res = await fetch(`${medusaBase()}/store/carts/${encodeURIComponent(cartId)}/complete`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-publishable-api-key': pubKey,
-      },
+      headers: medusaHeaders(),
     })
 
     if (res.ok) {
@@ -192,7 +188,14 @@ export async function POST(req: NextRequest) {
     resource?: {
       id?: string
       custom_id?: string
-      purchase_units?: Array<{ custom_id?: string; payments?: { captures?: Array<{ id: string; amount?: { value: string } }> } }>
+      // PAYMENT.CAPTURE.* events carry a capture resource: amount sits here.
+      amount?: { value?: string; currency_code?: string }
+      purchase_units?: Array<{
+        custom_id?: string
+        payments?: {
+          captures?: Array<{ id: string; amount?: { value?: string; currency_code?: string } }>
+        }
+      }>
     }
   }
 
@@ -218,13 +221,43 @@ export async function POST(req: NextRequest) {
       event.resource?.custom_id ??
       ''
 
-    const captureId = event.resource?.purchase_units?.[0]?.payments?.captures?.[0]?.id ?? ''
-    const amount = event.resource?.purchase_units?.[0]?.payments?.captures?.[0]?.amount?.value ?? '0'
+    const nestedCapture = event.resource?.purchase_units?.[0]?.payments?.captures?.[0]
+    const captureId = nestedCapture?.id ?? event.resource?.id ?? ''
+    const captured = event.resource?.amount ?? nestedCapture?.amount
 
-    console.info('[PayPal Webhook] PAYMENT.CAPTURE.COMPLETED', { cartId, captureId, amount })
+    console.info('[PayPal Webhook] PAYMENT.CAPTURE.COMPLETED', {
+      cartId,
+      captureId,
+      amount: captured?.value ?? null,
+      currency: captured?.currency_code ?? null,
+    })
 
     if (cartId) {
-      await completeCart(cartId)
+      // Only complete when PayPal collected exactly the cart total, in the cart
+      // currency. A mismatch or an unloadable cart is logged and left alone.
+      const cart = await loadCart(cartId)
+      if (!cart) {
+        logError('[PayPal Webhook] Cart could not be loaded, not completing', undefined, {
+          cartId,
+          captureId,
+          received: captured?.value ?? null,
+          currency: captured?.currency_code ?? null,
+        })
+      } else {
+        const check = compareCapture(cart, captured)
+        if (!check.ok) {
+          logError('[PayPal Webhook] Amount mismatch, not completing cart', undefined, {
+            cartId,
+            captureId,
+            expected: check.expected,
+            received: Number.isFinite(check.received) ? check.received : null,
+            expectedCurrency: check.expectedCurrency,
+            receivedCurrency: check.receivedCurrency,
+          })
+        } else {
+          await completeCart(cartId)
+        }
+      }
     } else {
       console.warn('[PayPal Webhook] PAYMENT.CAPTURE.COMPLETED — no cartId found in custom_id')
     }
