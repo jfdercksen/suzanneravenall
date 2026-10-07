@@ -8,7 +8,10 @@ vi.mock('./send', () => ({
   sendEmail: mockSend,
 }))
 
-vi.mock('../../emails/OrderConfirmation', () => ({ default: () => null }))
+vi.mock('../../emails/OrderConfirmation', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../../emails/OrderConfirmation')>()),
+  default: () => null,
+}))
 
 import { sendOrderConfirmationEmail } from './order-confirmation'
 import type { OrderEmailData } from './types'
@@ -186,5 +189,14 @@ describe('sendOrderConfirmationEmail', () => {
     const callArg = mockSend.mock.calls[0]![0] as { text: string }
     expect(callArg.text).toContain('If you need a copy of your invoice, reply to this email and we will send it to you.')
     expect(callArg.text).not.toMatch(/\u2014/)
+  })
+
+  it('plain text gives course-access steps, not the portal or a booking, for a course order', async () => {
+    mockSend.mockResolvedValue('email_id_course')
+    await sendOrderConfirmationEmail({ order: { ...baseOrder, productType: 'self-paced' }, invoiceUrl: null })
+    const text = (mockSend.mock.calls.at(-1)![0] as { text: string }).text
+    expect(text).toContain('course access email from Ravenall Institute')
+    expect(text).not.toContain('member portal account')
+    expect(text).not.toContain('BOOK YOUR SESSION')
   })
 })

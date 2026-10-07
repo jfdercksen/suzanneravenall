@@ -1,6 +1,8 @@
 import type { SubscriberArgs, SubscriberConfig } from '@medusajs/framework'
 import { ContainerRegistrationKeys } from '@medusajs/framework/utils'
 import { createClient } from '@supabase/supabase-js'
+import { orderHasCourses } from '@suzanne/integrations'
+import ws from 'ws'
 import { MEMBERSHIPS_MODULE } from '../modules/memberships'
 import type MembershipsModuleService from '../modules/memberships/service'
 import { orderVtigerMode, thinkificMode } from '../automations/config'
@@ -113,6 +115,9 @@ function detectOrderProductType(items: OrderItem[]): ProductType {
   // Last resort: check product handle
   for (const item of items) {
     const handle = item.variant?.product?.handle ?? ''
+    // "group" first: group-session handles contain "session" too, and were sent
+    // the private-session booking email (Shayna, 6 Oct: Shedding Excess Weight).
+    if (handle.includes('group')) return 'group'
     if (handle.includes('session') || handle.includes('coaching')) return 'session'
     if (handle.includes('self-paced') || handle.includes('self-study')) return 'self-paced'
     if (handle.includes('-live')) return 'live'
@@ -149,8 +154,13 @@ function buildSupabaseAdmin(): ReturnType<typeof createClient> | null {
     return null
   }
 
+  // Node 20 has no global WebSocket, and supabase-js builds its realtime
+  // client in createClient, so without a transport it throws and every order's
+  // portal access grant failed ("Node.js 20 detected without native WebSocket
+  // support", 7 Oct). Realtime is never used here; ws only satisfies it.
   return createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false },
+    realtime: { transport: ws as unknown as typeof WebSocket },
   })
 }
 
@@ -492,8 +502,14 @@ export default async function orderPlacedHandler({
 
     // Detect product type for email personalisation and Cal.com link
     const items = order.items ?? []
-    const productType = detectOrderProductType(items)
-    const isSessionOrder = productType === 'session'
+    // What was actually bought decides the wording, as on the current site: a
+    // line with a Thinkific course (a programme format, or a recorded group
+    // series) means course access, whatever the product's category says. Live
+    // group seats have no course and keep the Zoom wording (Shayna, 6 Oct:
+    // Career Progression "Recorded series" was told a Zoom link would follow).
+    const categoryType = detectOrderProductType(items)
+    const productType: ProductType = orderHasCourses(buildOrderSnapshot(order)) ? 'self-paced' : categoryType
+    const isSessionOrder = categoryType === 'session'
     const calBookingUrl = isSessionOrder ? CALCOM_SESSION_BOOKING_URL : null
 
     // 1. n8n → Sage: fire-and-forget

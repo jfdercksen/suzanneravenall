@@ -17,6 +17,7 @@ import type { OrderEmailData, OrderProductType } from '../lib/email/types'
 import { companyPhysicalAddress, companyVatNumber } from '../lib/email/company'
 import { formatAmount } from '../lib/email/utils'
 import { siteUrl } from '../lib/email/site-url'
+import { THINKIFIC_COURSES_URL } from '../lib/email/templates/CourseAccess'
 
 const NAVY = '#012B43'
 const BLUE = '#1719F4'
@@ -36,7 +37,7 @@ interface NextStep {
   text: string
 }
 
-function getNextSteps(productType: OrderProductType | undefined): NextStep[] {
+export function getNextSteps(productType: OrderProductType | undefined): NextStep[] {
   switch (productType) {
     case 'session':
       return [
@@ -46,8 +47,10 @@ function getNextSteps(productType: OrderProductType | undefined): NextStep[] {
       ]
     case 'self-paced':
       return [
-        { step: '01', text: 'Create your member portal account at suzanneravenall.com/portal. Your programme content will be waiting.' },
-        { step: '02', text: 'Work through the materials at your own pace: no deadlines, no pressure.' },
+        // Course access is in Thinkific, as on the current site; the Thinkific
+        // welcome and "course access is ready" mails follow this one.
+        { step: '01', text: 'Watch for your course access email from Ravenall Institute: it has your login for the course platform.' },
+        { step: '02', text: `Sign in at ${THINKIFIC_COURSES_URL} and work through the materials at your own pace.` },
         { step: '03', text: 'Reach out to sravenall@suzanneravenall.com any time you need guidance.' },
       ]
     case 'live':

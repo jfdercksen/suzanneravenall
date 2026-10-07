@@ -15,11 +15,13 @@
     "@medusajs/framework": "^2.0.0",
     "@medusajs/medusa": "^2.0.0",
     "@supabase/supabase-js": "^2.0.0",
-    "@suzanne/integrations": "file:../../packages/integrations"
+    "@suzanne/integrations": "file:../../packages/integrations",
+    "ws": "^8.22.0"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
     "@types/node": "^20.0.0",
-    "ts-node": "^10.9.0"
+    "@types/ws": "^8.18.2",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
   }
 }

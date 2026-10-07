@@ -1,6 +1,6 @@
 import { createElement } from 'react'
 import { sendEmail } from './send'
-import OrderConfirmation from '../../emails/OrderConfirmation'
+import OrderConfirmation, { getNextSteps } from '../../emails/OrderConfirmation'
 import type { OrderEmailData } from './types'
 import { companyVatNumber } from './company'
 import { formatAmount } from './utils'
@@ -125,9 +125,8 @@ function buildPlainText(order: OrderEmailData, invoice: InvoiceDelivery): string
   lines.push(
     'WHAT HAPPENS NEXT',
     '=================',
-    '1. You will receive access details within 24 hours.',
-    '2. Check your email for joining instructions.',
-    "3. Reach out if you need anything - we're here.",
+    // Same steps as the HTML version, per product type.
+    ...getNextSteps(order.productType).map(({ step, text }) => `${Number(step)}. ${text}`),
     '',
     'QUESTIONS?',
     '==========',
