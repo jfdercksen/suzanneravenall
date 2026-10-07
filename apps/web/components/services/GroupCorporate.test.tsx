@@ -41,12 +41,16 @@ vi.mock('framer-motion', () => {
 })
 
 describe('GroupCorporate (site check M13)', () => {
-  it('every group card slug is a published group programme', () => {
+  // Love & Relationships has no group series; its card opens the self-study
+  // programme page instead (Johan, 7 Oct).
+  const NOT_GROUP = new Set(['love-and-relationships'])
+
+  it('every group card slug is a published programme, a group one unless listed', () => {
     for (const offering of groupOfferings) {
       if (!offering.slug) continue
       const program = getProgramBySlug(offering.slug)
       expect(program?.isPublished, offering.slug).toBe(true)
-      expect(program?.category, offering.slug).toBe('group')
+      if (!NOT_GROUP.has(offering.slug)) expect(program?.category, offering.slug).toBe('group')
     }
   })
 

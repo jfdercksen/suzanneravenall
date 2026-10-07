@@ -12,7 +12,7 @@
  * Env vars:
  *   MEDUSA_URL            — base URL (default: http://169.239.180.49/api)
  *   MEDUSA_ADMIN_EMAIL    — default: admin@suzanneravenall.com
- *   MEDUSA_ADMIN_PASSWORD — default: P@ssw0rd.123
+ *   MEDUSA_ADMIN_PASSWORD — required, from Vaultwarden (never committed)
  */
 
 import fs from 'fs'
@@ -25,8 +25,20 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const MEDUSA_URL = process.env.MEDUSA_URL || 'http://169.239.180.49/api'
 const EMAIL = process.env.MEDUSA_ADMIN_EMAIL || 'admin@suzanneravenall.com'
-const PASSWORD = process.env.MEDUSA_ADMIN_PASSWORD || 'P@ssw0rd.123'
+const PASSWORD = process.env.MEDUSA_ADMIN_PASSWORD ?? ''
+if (!PASSWORD) {
+  console.error('Set MEDUSA_ADMIN_PASSWORD (from Vaultwarden) first.')
+  process.exit(1)
+}
 const LOG_PATH = path.join(__dirname, 'product-descriptions-log.json')
+
+// Also applied directly to the live shop by
+// infra/scripts/migrations/2026-10-07-rr-session-description.sql, because this
+// script skips products that already have a description.
+const RESONANCE_REPATTERNING_SESSION_DESCRIPTION =
+  'Ever wondered why you work so hard at something and it simply does not materialise? A major cause is our subconscious beliefs: mostly unknown to the conscious mind, active in our everyday life, and too often interfering with creating the life that we want and deserve.\n\n' +
+  'Much of what holds us back, on a group or an individual level, comes from subconscious patterns, programming or conditioning that took place early in life, beginning in the womb. These patterns create blockages and restrictions, worry, pain and frustration. Because the subconscious mind runs 95% of our life, it can feel like the same patterns on repeat, preventing the happiness, abundance, performance and fulfilment we want in work, relationships and health.\n\n' +
+  'Resonance Repatterning® identifies these patterns and shifts them. All sessions are completed via Zoom. You bring your entire life experience and the willingness to change. Through biofeedback/applied kinesiology we get to the unconscious processes underlying the issue at hand.'
 
 // ── HTTP helper (mirrors update-book-product.mjs) ────────────────────────────
 
@@ -108,11 +120,11 @@ const PRODUCT_DESCRIPTIONS = {
       'Topics covered include: health, weight, infertility, career/job, family, wealth, relationships, business, finances, school challenges, poor performance, dating and relationships, unrealized potential, marriage or divorce, addiction, sports performance.',
   },
 
+  // Source: https://suzanneravenall.com/resonance-repatterning-session/ (the
+  // old text was the Rapid Repatterning copy; Shayna's feedback 6 Oct).
   'resonance-repatterning-session': {
     subtitle: 'Resonance Repatterning® Private Session',
-    description:
-      'Rapid Repatterning® helps bring subconscious patterns into conscious awareness so they are understood and addressed by new awareness, energy and actions. This is the first step in helping to clear these patterns and eliminating interference so that we can easily and naturally move towards a state of greater balance, aliveness, harmony, performance, and alignment with goals.\n\n' +
-      'All sessions are completed via Zoom. You bring your entire life experience and the willingness to change. Through biofeedback/applied kinesiology we get to the unconscious processes underlying the issue at hand.',
+    description: RESONANCE_REPATTERNING_SESSION_DESCRIPTION,
   },
 
   'transformation-coaching-60-mins': {

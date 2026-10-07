@@ -4,9 +4,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
-// `slug` is the group series' page under /programs/<slug>. Love &
-// Relationships has no group-series page (only the self-study programme), so
-// its card stays unlinked until Suzanne confirms where it should go.
+// `slug` is the series' page under /programs/<slug>. Love & Relationships has
+// no group-series page, so it opens the self-study programme page (Johan,
+// 7 Oct, after Shayna found the card did not open).
 export const groupOfferings: { name: string; slug?: string; image: string; description: string }[] = [
   {
     name: 'Money Mastery',
@@ -17,6 +17,7 @@ export const groupOfferings: { name: string; slug?: string; image: string; descr
   },
   {
     name: 'Love & Relationships',
+    slug: 'love-and-relationships',
     image: '/images/generated/group-coaching-real.webp',
     description:
       'We attract people at our common level of woundedness or emotional health. To attract a healthy, loving partner you need to become that healthy person first. The energy you project has everything to do with the person you attract.',
