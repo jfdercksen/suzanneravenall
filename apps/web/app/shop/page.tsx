@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { ShopCatalogueContent } from '@/components/shop/ShopCatalogueContent'
+import { visitorWantsUsd } from '@/lib/visitor-region'
 
 export const metadata: Metadata = {
   title: 'Shop',
@@ -47,8 +48,10 @@ interface ShopPageProps {
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const [categories, reqHeaders, params] = await Promise.all([fetchCategories(), headers(), searchParams])
-  const country = reqHeaders.get('CF-IPCountry') ?? ''
-  const defaultCurrency = country === 'ZA' ? 'zar' : 'usd'
+  // Same rule as the cart (/api/region): ZAR unless the visitor is known to be
+  // abroad and USD is switched on, so a card never shows a currency the
+  // product page and the cart will not use.
+  const defaultCurrency = visitorWantsUsd(reqHeaders) && process.env.NEXT_PUBLIC_MEDUSA_REGION_USD_ID ? 'usd' : 'zar'
 
   // The catalogue reads its state from the URL on mount; keying on the query
   // remounts it when a link opens /shop with different params.
