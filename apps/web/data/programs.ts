@@ -97,7 +97,7 @@ export const PROGRAMS: Program[] = [
       'The Inner Cultivation Programme focuses on exploring the depletion of our life energy due to subconscious negative beliefs and disturbed emotions. These issues often lead to suffering, illness, relationship problems, and a decline in overall mental and emotional wellbeing. Drawing from the inner tradition of Chinese Acupuncture, the healing process centres around restoring harmony between the heavenly yang and the earthly yin energies within ourselves and our lives.',
     priceUsd: 550,
     priceZar: 4205,
-    shopHandle: 'resonance-repatterning-inner-cultivation-self-study',
+    shopHandle: 'resonance-repatterning-program-6-inner-cultivation-practical-demos-live-via-zoom', // merged product; the old standalone copy is unpublished (7 Oct)
     duration: 'Self-study: start anytime',
     features: [
       'Deep exploration of the 12 meridians and life energy',
