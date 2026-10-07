@@ -130,7 +130,7 @@ export const PROGRAMS: Program[] = [
     priceUsd: 550,
     // Live-shop self-study price; R5,315 is the live price (sourcing report 6 Oct, section 7)
     priceZar: 4205,
-    shopHandle: 'resonance-repatterning-program-7-principle-of-relationships-self-study',
+    shopHandle: 'resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study', // merged product; the old standalone copy is unpublished (7 Oct)
     duration: 'Self-study: start anytime',
     features: [
       'Neural connection repatterning for relationships',
@@ -163,7 +163,7 @@ export const PROGRAMS: Program[] = [
     priceUsd: 550,
     // Live-shop self-study price; R5,315 is the live price (sourcing report 6 Oct, section 7)
     priceZar: 4205,
-    shopHandle: 'resonance-repatterning-program-9-energetics-of-relationships-self-study',
+    shopHandle: 'resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study', // merged product; the old standalone copy is unpublished (7 Oct)
     duration: 'Self-study: start anytime',
     features: [
       'Understanding the energetics of human attraction',
@@ -351,7 +351,7 @@ export const PROGRAMS: Program[] = [
     priceUsd: 220,
     // Live-shop self-study price; R1,610 is the Live via Zoom price (sourcing report 6 Oct, section 7)
     priceZar: 995,
-    shopHandle: 'love-relationships-self-study',
+    shopHandle: 'love-relationships-live', // merged product; the old standalone copy is unpublished (7 Oct)
     // 4 x 90 min: https://suzanneravenall.com/love-relationships-session/ ("6 x 2 h" had no source)
     duration: '4 sessions of 90 minutes: study at your own pace',
     features: [
@@ -761,7 +761,7 @@ export const PROGRAMS: Program[] = [
       'We hold onto excess weight because our earlier childhood needs were not met. We come up with incredible strategies to have our needs met in order to survive, our perception as a child, and then we bury them. They are most often not discovered throughout the average person\'s life. In order to shed excess weight on the outside, we need to focus on shedding the excess weight on the inside. This programme goes beyond diet and exercise to address the deep emotional and energetic causes of weight retention.',
     priceUsd: 90,
     priceZar: 1500,
-    shopHandle: 'resonance-repatterning-group-session-shedding-excess-weight',
+    shopHandle: 'group-session-shedding-excess-weight', // merged product; the old standalone copy is unpublished (7 Oct)
     // 4 x 90 min over 4 weeks: https://suzanneravenall.com/shedding-excess-weight/
     duration: 'Recorded series: 4 sessions of 90 minutes over 4 weeks',
     features: [
@@ -788,7 +788,7 @@ export const PROGRAMS: Program[] = [
       'Setting boundaries can be one of the most challenging aspects of being human, something that 99% of all humans were not taught as they were growing up. We may have been taught "no" or had no boundaries ourselves, so it can feel completely alien. What is a boundary? How do I know when one has been transgressed? And how do I put one in place and hold it there? Through this 4-session series, part repatterning class and part coaching, find out what is underneath this behaviour and move into a new way of being.',
     priceUsd: 90,
     priceZar: 1500,
-    shopHandle: 'resonance-repatterning-group-session-boundary-setting',
+    shopHandle: 'group-session-being-a-great-boundary-setter-booked-as-a-series-only', // merged product; the old standalone copy is unpublished (7 Oct)
     duration: 'Recorded series: 4 sessions',
     features: [
       // Source: Thinkific Boundary Setter recording, "About this course"
