@@ -11,7 +11,7 @@
  * Required env vars:
  *   KIE_API_KEY              — Kie.ai API key (already in infra/.env)
  *   MEDUSA_ADMIN_EMAIL       — defaults to admin@suzanneravenall.com
- *   MEDUSA_ADMIN_PASSWORD    — defaults to P@ssw0rd.123
+ *   MEDUSA_ADMIN_PASSWORD    — required, from Vaultwarden (never committed)
  *   MEDUSA_URL               — defaults to http://169.239.180.49/api
  *
  * Resumable: infra/scripts/product-images-log.json tracks completed products.
@@ -35,7 +35,11 @@ const ROOT = path.resolve(__dirname, '../../')
 const KIE_API_KEY = process.env.KIE_API_KEY
 const MEDUSA_URL = process.env.MEDUSA_URL || 'http://169.239.180.49/api'
 const MEDUSA_EMAIL = process.env.MEDUSA_ADMIN_EMAIL || 'admin@suzanneravenall.com'
-const MEDUSA_PASSWORD = process.env.MEDUSA_ADMIN_PASSWORD || 'P@ssw0rd.123'
+const MEDUSA_PASSWORD = process.env.MEDUSA_ADMIN_PASSWORD ?? ''
+if (!MEDUSA_PASSWORD) {
+  console.error('Set MEDUSA_ADMIN_PASSWORD (from Vaultwarden) first.')
+  process.exit(1)
+}
 const FORCE = process.env.FORCE === '1'
 
 if (!KIE_API_KEY) {

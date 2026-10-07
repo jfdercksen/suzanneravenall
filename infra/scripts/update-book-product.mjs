@@ -12,7 +12,7 @@
  *
  * Env vars (all read from infra/.env if not set):
  *   MEDUSA_ADMIN_EMAIL    — defaults to admin@suzanneravenall.com
- *   MEDUSA_ADMIN_PASSWORD — defaults to value in infra/.env
+ *   MEDUSA_ADMIN_PASSWORD — required, from Vaultwarden (never committed)
  *   MEDUSA_URL            — base URL, defaults to http://169.239.180.49/api
  */
 
@@ -27,7 +27,11 @@ const ROOT = path.resolve(__dirname, '../../')
 
 const MEDUSA_URL = process.env.MEDUSA_URL || 'http://169.239.180.49/api'
 const EMAIL = process.env.MEDUSA_ADMIN_EMAIL || 'admin@suzanneravenall.com'
-const PASSWORD = process.env.MEDUSA_ADMIN_PASSWORD || 'P@ssw0rd.123'
+const PASSWORD = process.env.MEDUSA_ADMIN_PASSWORD ?? ''
+if (!PASSWORD) {
+  console.error('Set MEDUSA_ADMIN_PASSWORD (from Vaultwarden) first.')
+  process.exit(1)
+}
 const PRODUCT_HANDLE = 'the-latest-book-by-suzanne'
 
 const BOOK_COVER_PATH = path.join(ROOT, 'apps/web/public/images/book-cover.png')
