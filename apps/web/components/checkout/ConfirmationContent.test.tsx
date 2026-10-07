@@ -90,6 +90,16 @@ describe('ConfirmationContent', () => {
     expect(clearCart).toHaveBeenCalledWith(CART_ID)
   })
 
+  it('shows the order number, not the cart id, once Medusa returns it', async () => {
+    search = `gateway=payfast&m_payment_id=${CART_ID}`
+    stubStatus(200, { status: 'completed', orderNumber: 70 })
+    render(<ConfirmationContent />)
+
+    expect(await screen.findByText(/Order #70 is confirmed/)).toBeInTheDocument()
+    expect(screen.getByText('#70')).toBeInTheDocument()
+    expect(screen.queryByText(CART_ID)).not.toBeInTheDocument()
+  })
+
   it('keeps the cart and says so while a PayFast payment is unconfirmed', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
     try {

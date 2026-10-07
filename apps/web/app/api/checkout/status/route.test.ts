@@ -33,19 +33,39 @@ describe('GET /api/checkout/status', () => {
     delete process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
   })
 
-  it('reports completed when Medusa has turned the cart into an order', async () => {
-    const fetchMock = mockMedusa(200, { cart: { id: CART_ID, completed_at: '2026-10-05T10:00:00Z' } })
+  it('reports completed with the order number when Medusa has turned the cart into an order', async () => {
+    const fetchMock = vi.fn(async (url: string) => ({
+      ok: true,
+      status: 200,
+      json: async () =>
+        url.includes('/store/order-by-cart/')
+          ? { display_id: 70 }
+          : { cart: { id: CART_ID, completed_at: '2026-10-05T10:00:00Z' } },
+    }))
+    vi.stubGlobal('fetch', fetchMock)
     const res = await GET(makeRequest(CART_ID))
     expect(res.status).toBe(200)
-    expect(await res.json()).toEqual({ status: 'completed' })
+    expect(await res.json()).toEqual({ status: 'completed', orderNumber: 70 })
     expect(fetchMock).toHaveBeenCalledWith(`${MEDUSA_BASE}/store/carts/${CART_ID}`, expect.anything())
+    expect(fetchMock).toHaveBeenCalledWith(`${MEDUSA_BASE}/store/order-by-cart/${CART_ID}`, expect.anything())
+  })
+
+  it('still reports completed when the order number cannot be read', async () => {
+    const fetchMock = vi.fn(async (url: string) =>
+      url.includes('/store/order-by-cart/')
+        ? { ok: false, status: 404, json: async () => ({}) }
+        : { ok: true, status: 200, json: async () => ({ cart: { id: CART_ID, completed_at: '2026-10-05T10:00:00Z' } }) },
+    )
+    vi.stubGlobal('fetch', fetchMock)
+    const res = await GET(makeRequest(CART_ID))
+    expect(await res.json()).toEqual({ status: 'completed', orderNumber: null })
   })
 
   it('reports pending for a cart that is not an order yet', async () => {
     mockMedusa(200, { cart: { id: CART_ID, completed_at: null } })
     const res = await GET(makeRequest(CART_ID))
     expect(res.status).toBe(200)
-    expect(await res.json()).toEqual({ status: 'pending' })
+    expect(await res.json()).toEqual({ status: 'pending', orderNumber: null })
   })
 
   it('answers 404 for a cart Medusa does not know', async () => {

@@ -18,31 +18,39 @@ const POLL_INTERVAL_MS = 2000
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
+interface StatusResult {
+  state: SettledState
+  /** The buyer-facing order number (display id), when Medusa returned one. */
+  orderNumber: number | null
+}
+
 // Asks /api/checkout/status whether the cart has become an order, retrying
 // while it is still pending (the PayFast ITN can land after the buyer returns).
-async function checkOrderStatus(cartId: string, attempts: number): Promise<SettledState> {
+async function checkOrderStatus(cartId: string, attempts: number): Promise<StatusResult> {
   for (let i = 0; i < attempts; i++) {
     if (i > 0) await wait(POLL_INTERVAL_MS)
     try {
       const res = await fetch(`/api/checkout/status?cartId=${encodeURIComponent(cartId)}`, {
         cache: 'no-store',
       })
-      if (res.status === 404) return 'none'
+      if (res.status === 404) return { state: 'none', orderNumber: null }
       if (res.ok) {
-        const data = (await res.json()) as { status?: string }
-        if (data.status === 'completed') return 'confirmed'
+        const data = (await res.json()) as { status?: string; orderNumber?: number | null }
+        if (data.status === 'completed') {
+          return { state: 'confirmed', orderNumber: typeof data.orderNumber === 'number' ? data.orderNumber : null }
+        }
       }
     } catch {
       // Network blip: try again on the next round.
     }
   }
-  return 'pending'
+  return { state: 'pending', orderNumber: null }
 }
 
 export default function ConfirmationContent() {
   const { clearCart } = useCart()
   const searchParams = useSearchParams()
-  const [medusaOrderId, setMedusaOrderId] = useState<string | null>(null)
+  const [orderNumber, setOrderNumber] = useState<number | null>(null)
   const [orderState, setOrderState] = useState<OrderState>('checking')
 
   // PayFast return params: gateway=payfast&m_payment_id=<cartId> (set in our return_url)
@@ -71,11 +79,12 @@ export default function ConfirmationContent() {
 
     async function finalise() {
       let state: SettledState = 'none'
+      let number: number | null = null
 
       if (isFreeOrder && freeCartId) {
         // Completed server-side by /api/checkout/free before the redirect here;
         // confirm it with Medusa rather than trust the order number in the URL.
-        state = await checkOrderStatus(freeCartId, 2)
+        ;({ state, orderNumber: number } = await checkOrderStatus(freeCartId, 2))
       } else if (isPayPal && payPalOrderId && payPalCartId) {
         try {
           const res = await fetch('/api/checkout/paypal/capture', {
@@ -86,10 +95,6 @@ export default function ConfirmationContent() {
           if (res.ok) {
             // The capture route only answers 200 once PayPal has captured the
             // payment for this cart.
-            const data = (await res.json()) as { medusaOrderId?: string | null }
-            if (data.medusaOrderId) {
-              setMedusaOrderId(data.medusaOrderId)
-            }
             state = 'confirmed'
           }
         } catch {
@@ -97,27 +102,26 @@ export default function ConfirmationContent() {
         }
         if (state !== 'confirmed') {
           // Captured on an earlier visit (refresh) or completed by the PayPal webhook.
-          state = await checkOrderStatus(payPalCartId, 2)
+          ;({ state, orderNumber: number } = await checkOrderStatus(payPalCartId, 2))
+        } else {
+          // Captured just now: one read for the order number only.
+          number = (await checkOrderStatus(payPalCartId, 1)).orderNumber
         }
       } else if (payFastCartId) {
         try {
-          const res = await fetch('/api/checkout/complete', {
+          // The status check below decides, and reads the order number.
+          await fetch('/api/checkout/complete', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ cartId: payFastCartId }),
           })
-          if (res.ok) {
-            const data = (await res.json()) as { type?: string; order?: { id: string } }
-            if (data.type === 'order' && data.order?.id) {
-              setMedusaOrderId(data.order.id)
-            }
-          }
         } catch {
           // The PayFast ITN completes the cart server-side; the status check decides.
         }
-        state = await checkOrderStatus(payFastCartId, 6)
+        ;({ state, orderNumber: number } = await checkOrderStatus(payFastCartId, 6))
       }
 
+      setOrderNumber(number)
       setOrderState(state)
       // Only a confirmed order empties the cart, and only the cart it was for.
       if (state === 'confirmed' && cartId) {
@@ -130,6 +134,10 @@ export default function ConfirmationContent() {
   if (orderState !== 'confirmed') {
     return <OrderStatusMessage state={orderState} />
   }
+
+  // Medusa's number first; the free-order URL number only once Medusa has
+  // confirmed that cart (the state check above).
+  const shownOrderNumber = orderNumber ?? (isFreeOrder ? freeOrderNumber : null)
 
   return (
     <div className="min-h-screen bg-brand-cream">
@@ -157,8 +165,8 @@ export default function ConfirmationContent() {
               Thank You!
             </h1>
             <p className="text-brand-muted text-lg max-w-md mx-auto">
-              {isFreeOrder && freeOrderNumber
-                ? `Order #${freeOrderNumber} is confirmed. We're excited to support your transformation journey.`
+              {shownOrderNumber
+                ? `Order #${shownOrderNumber} is confirmed. We're excited to support your transformation journey.`
                 : "Your purchase is confirmed. We're excited to support your transformation journey."}
             </p>
           </motion.div>
@@ -203,24 +211,27 @@ export default function ConfirmationContent() {
           </div>
 
           {/* Order reference */}
-          {(paymentId ?? cartId ?? medusaOrderId) && (
+          {(paymentId ?? cartId ?? shownOrderNumber) && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.6 }}
               className="mb-10 p-4 bg-brand-sand rounded-xl border border-brand-border text-sm text-brand-muted space-y-1"
             >
-              {medusaOrderId && (
+              {shownOrderNumber ? (
                 <p>
-                  <span className="font-medium text-brand-ink">Order ID:</span>{' '}
-                  <code className="font-mono">{medusaOrderId}</code>
+                  <span className="font-medium text-brand-ink">Order number:</span>{' '}
+                  <span className="font-mono">#{shownOrderNumber}</span>
                 </p>
-              )}
-              {cartId && !medusaOrderId && (
-                <p>
-                  <span className="font-medium text-brand-ink">Reference:</span>{' '}
-                  <code className="font-mono">{cartId}</code>
-                </p>
+              ) : (
+                cartId && (
+                  // Only when Medusa could not give the number: the cart id still
+                  // lets us find the order if the buyer gets in touch.
+                  <p>
+                    <span className="font-medium text-brand-ink">Reference:</span>{' '}
+                    <code className="font-mono">{cartId}</code>
+                  </p>
+                )
               )}
               {paymentId && (
                 <p>

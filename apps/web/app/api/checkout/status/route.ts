@@ -17,6 +17,30 @@ function medusaBase(): string {
   ).replace(/\/$/, '')
 }
 
+function storeHeaders(): HeadersInit {
+  return {
+    'Content-Type': 'application/json',
+    'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? '',
+  }
+}
+
+// The buyer-facing order number ("Order #70", as in the confirmation email),
+// via our Medusa route over the order-cart link. Null when it cannot be read;
+// the page then simply shows no number.
+async function fetchOrderNumber(cartId: string): Promise<number | null> {
+  try {
+    const res = await fetch(`${medusaBase()}/store/order-by-cart/${cartId}`, {
+      headers: storeHeaders(),
+      cache: 'no-store',
+    })
+    if (!res.ok) return null
+    const { display_id } = (await res.json()) as { display_id?: number }
+    return typeof display_id === 'number' ? display_id : null
+  } catch {
+    return null
+  }
+}
+
 export async function GET(req: NextRequest) {
   const cartId = req.nextUrl.searchParams.get('cartId') ?? ''
   if (!CART_ID_RE.test(cartId)) {
@@ -25,10 +49,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const res = await fetch(`${medusaBase()}/store/carts/${cartId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? '',
-      },
+      headers: storeHeaders(),
       cache: 'no-store',
     })
     if (res.status === 404) {
@@ -41,8 +62,9 @@ export async function GET(req: NextRequest) {
     if (!cart) {
       return NextResponse.json({ status: 'not_found' }, { status: 404 })
     }
+    const orderNumber = cart.completed_at ? await fetchOrderNumber(cartId) : null
     return NextResponse.json(
-      { status: cart.completed_at ? 'completed' : 'pending' },
+      { status: cart.completed_at ? 'completed' : 'pending', orderNumber },
       { headers: { 'Cache-Control': 'no-store' } }
     )
   } catch (err) {
