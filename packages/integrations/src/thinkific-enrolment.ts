@@ -32,7 +32,11 @@ export function parseOrderForThinkific(order: OrderSnapshot) {
       const productTitle = item?.variant?.product?.title ?? item?.title ?? 'Course'
       const format = item?.variant?.title
       const title = format && format !== 'Standard' && format !== 'Default' ? `${productTitle} (${format})` : productTitle
-      courseItems.push({ thinkific_course_id: Number(courseId), title })
+      // "Purchased together" and series products open several courses, as the
+      // Thinkific bundles do: the id is then a comma-separated list.
+      for (const id of courseId.split(',').map((s) => s.trim()).filter(Boolean)) {
+        courseItems.push({ thinkific_course_id: Number(id), title })
+      }
     }
   }
 

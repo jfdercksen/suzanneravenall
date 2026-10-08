@@ -388,8 +388,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Voucher codes. POST adds, DELETE removes; both return the recalculated cart.
   // Medusa answers 200 with the code silently missing from cart.promotions when
   // it is unknown or inactive, so the caller checks the cart, not the status.
+  // Medusa matches codes case-sensitively and every code is stored in capitals,
+  // while both voucher boxes only *display* capitals (CSS), so the typed text
+  // is sent in capitals too (Cassidy, 8 Oct: "ri-team-test-100" was refused).
   const applyPromoCode = useCallback(
-    async (code: string) => {
+    async (typed: string) => {
+      const code = typed.trim().toUpperCase()
       const currentCart = await getOrCreateCart()
       if (!currentCart) throw new Error('Could not create cart')
       const res = await fetch(`${getMedusaBase()}/store/carts/${currentCart.id}/promotions`, {

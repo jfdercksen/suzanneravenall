@@ -97,6 +97,16 @@ describe('parity with medusa-thinkific-enrollment.json', () => {
     ])
   })
 
+  it('a "purchased together" product opens every course in it, like the Thinkific bundle (Cassidy, 8 Oct)', () => {
+    const o = order({ items: [
+      { title: 'AN', variant: { title: 'Live via Zoom', metadata: { thinkific_course_id: '2434137, 2434102' }, product: { title: 'Akashic Navigator Level 1 & 2', metadata: {} } } },
+    ] })
+    expect(parseOrderForThinkific(o).courseItems).toEqual([
+      { thinkific_course_id: 2434137, title: 'Akashic Navigator Level 1 & 2 (Live via Zoom)' },
+      { thinkific_course_id: 2434102, title: 'Akashic Navigator Level 1 & 2 (Live via Zoom)' },
+    ])
+  })
+
   it('rejects an order without an email, like n8n', () => {
     const o = order({ customer: { email: '' } })
     expect(() => n8nParse(o)).toThrow(/missing customer\.email/)

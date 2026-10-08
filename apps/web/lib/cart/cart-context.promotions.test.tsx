@@ -36,14 +36,14 @@ const CART_WITHOUT_PROMO: Cart = {
 // Small harness that exercises applyPromoCode / removePromoCode through the
 // public useCart() surface, the smallest slice that proves the two behaviours
 // without reaching into the provider's internals.
-function TestHarness() {
+function TestHarness({ typed = 'SAVE10' }: { typed?: string }) {
   const { cart, applyPromoCode, removePromoCode } = useCart()
   const [error, setError] = useState<string | null>(null)
 
   const handleApply = async () => {
     setError(null)
     try {
-      await applyPromoCode('SAVE10')
+      await applyPromoCode(typed)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'unknown error')
     }
@@ -152,6 +152,31 @@ describe('cart-context promotions', () => {
     expect(promoCall).toBeDefined()
     const [, init] = promoCall as [string, RequestInit]
     expect(init.method).toBe('POST')
+    expect(JSON.parse(init.body as string)).toEqual({ promo_codes: ['SAVE10'] })
+  })
+
+  // The voucher boxes show capitals via CSS only; Medusa matches case-sensitively.
+  it('sends a code typed in lower case, with spaces, in capitals', async () => {
+    const fetchMock = makeFetchMock({ applyResult: CART_WITH_PROMO })
+    vi.stubGlobal('fetch', fetchMock)
+    const user = userEvent.setup()
+
+    render(
+      <CartProvider>
+        <TestHarness typed="  save10 " />
+      </CartProvider>,
+    )
+
+    await user.click(screen.getByText('apply'))
+    await waitFor(() => {
+      expect(screen.getByTestId('promo-codes').textContent).toBe('SAVE10')
+    })
+    expect(screen.getByTestId('error').textContent).toBe('')
+
+    const promoCall = fetchMock.mock.calls.find(
+      ([url]) => url.toString() === `${MEDUSA_BASE}/store/carts/${NEW_CART.id}/promotions`,
+    )
+    const [, init] = promoCall as [string, RequestInit]
     expect(JSON.parse(init.body as string)).toEqual({ promo_codes: ['SAVE10'] })
   })
 
