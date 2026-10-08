@@ -13,21 +13,22 @@ import {
 import type { LeadWelcomeEmailProps } from '../types'
 import { companyPhysicalAddress } from '../company'
 import { siteUrl } from '../site-url'
-import { LEAD_WELCOME_CONTENT } from '../lead-welcome-content'
+import { LEAD_WELCOME_CONTENT, leadWelcomeNext } from '../lead-welcome-content'
 
 const NAVY = '#012B43'
 const BLUE = '#1719F4'
 const LIGHT_GRAY = '#F5F7FA'
 const MEDIUM_GRAY = '#64748B'
 
-export default function LeadWelcome({ firstName, source, unsubscribeUrl }: LeadWelcomeEmailProps) {
+export default function LeadWelcome({ firstName, source, watchAt, unsubscribeUrl }: LeadWelcomeEmailProps) {
   const content = LEAD_WELCOME_CONTENT[source]
+  const next = leadWelcomeNext(source, watchAt)
   const greeting = firstName ? `Hi ${firstName},` : 'Hi there,'
 
   return (
     <Html lang="en">
       <Head />
-      <Preview>{content.next}</Preview>
+      <Preview>{next}</Preview>
       <Body style={{ backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif', margin: 0, padding: 0 }}>
         <Container style={{ maxWidth: '600px', margin: '0 auto' }}>
 
@@ -61,7 +62,7 @@ export default function LeadWelcome({ firstName, source, unsubscribeUrl }: LeadW
                 What happens next
               </Text>
               <Text style={{ color: NAVY, fontSize: '16px', lineHeight: '1.6', margin: 0 }}>
-                {content.next}
+                {next}
               </Text>
             </Section>
 

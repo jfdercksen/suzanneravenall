@@ -48,13 +48,13 @@ describe('sendLeadWelcomeIfDue', () => {
 
   it('sends the welcome for the first submission', async () => {
     expect(await sendLeadWelcomeIfDue(input, NOW)).toBe('sent')
-    expect(h.send).toHaveBeenCalledWith({ email: 'User@Example.com', firstName: 'Alice', source: 'masterclass' })
+    expect(h.send).toHaveBeenCalledWith({ email: 'User@Example.com', firstName: 'Alice', source: 'masterclass', watchAt: null })
   })
 
   it('maps no source / "homepage" to the homepage welcome', async () => {
     h.supabase = makeFakeSupabase({ rows: [row('new', 0, { source: 'homepage' })] }).client
     expect(await sendLeadWelcomeIfDue({ ...input, source: 'homepage', firstName: null }, NOW)).toBe('sent')
-    expect(h.send).toHaveBeenCalledWith({ email: 'User@Example.com', firstName: null, source: 'homepage' })
+    expect(h.send).toHaveBeenCalledWith({ email: 'User@Example.com', firstName: null, source: 'homepage', watchAt: null })
   })
 
   it.each(['relationship-patterns', 'freeze-quiz', 'footer'])('sends nothing for source "%s"', async (source) => {

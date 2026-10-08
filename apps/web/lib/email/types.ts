@@ -123,6 +123,8 @@ export interface LeadWelcomeEmailData {
   /** Only when the form collected one; the greeting falls back to "Hi there,". */
   firstName: string | null
   source: LeadWelcomeSource
+  /** Masterclass "Watch Later": the date and time the visitor picked, formatted. */
+  watchAt?: string | null
 }
 
 export interface LeadWelcomeEmailProps extends LeadWelcomeEmailData {

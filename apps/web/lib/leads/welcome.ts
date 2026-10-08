@@ -26,6 +26,8 @@ export type LeadWelcomeInput = {
   source: string
   /** Id of the row captureLead just wrote, or null when it could not be saved. */
   leadId: string | null
+  /** Masterclass "Watch Later": the visitor's chosen date and time, formatted. */
+  watchAt?: string | null
 }
 
 export type LeadWelcomeOutcome =
@@ -53,7 +55,12 @@ export async function sendLeadWelcomeIfDue(
 
     if (await sentRecently(input, now)) return 'recently-sent'
 
-    await sendLeadWelcomeEmail({ email: input.email, firstName: input.firstName?.trim() || null, source })
+    await sendLeadWelcomeEmail({
+      email: input.email,
+      firstName: input.firstName?.trim() || null,
+      source,
+      watchAt: input.watchAt ?? null,
+    })
     return 'sent'
   } catch (err) {
     logError('[lead-welcome] welcome email failed', new Error(safeErrorText(err)), { source })

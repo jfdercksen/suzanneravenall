@@ -554,12 +554,28 @@ describe('POST /api/lead-magnet - welcome email', () => {
       firstName: 'Alice',
       source: 'masterclass',
       leadId: 'lead-1',
+      watchAt: null,
     })
+  })
+
+  // Masterclass "Watch Later", as on the current site (Shayna, 7 Oct).
+  it('passes the Watch Later date and time to the welcome email, formatted', async () => {
+    const next = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+    const res = await POST(makeRequest({ email: 'user@example.com', source: 'masterclass', watchDate: next, watchTime: '19:30' }))
+    expect(res.status).toBe(200)
+    const arg = h.welcome.mock.calls[0]![0] as { watchAt: string }
+    expect(arg.watchAt).toMatch(/ at 19:30$/)
+  })
+
+  it('rejects an invalid Watch Later date without storing the lead', async () => {
+    const res = await POST(makeRequest({ email: 'user@example.com', source: 'masterclass', watchDate: '2020-02-31', watchTime: '19:30' }))
+    expect(res.status).toBe(422)
+    expect(h.welcome).not.toHaveBeenCalled()
   })
 
   it('passes "homepage" and no first name for the homepage form (not the CRM local-part fallback)', async () => {
     await POST(makeRequest({ email: 'jane.doe@example.com' }))
-    expect(h.welcome).toHaveBeenCalledWith({ email: 'jane.doe@example.com', firstName: null, source: 'homepage', leadId: 'lead-1' })
+    expect(h.welcome).toHaveBeenCalledWith({ email: 'jane.doe@example.com', firstName: null, source: 'homepage', leadId: 'lead-1', watchAt: null })
   })
 
   it('does not wait for the welcome email before answering', async () => {

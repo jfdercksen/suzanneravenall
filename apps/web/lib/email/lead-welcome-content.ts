@@ -1,4 +1,5 @@
 import type { LeadWelcomeSource } from './types'
+import { MASTERCLASS_WATCH_PATH } from '../masterclass'
 
 /**
  * Words for the lead welcome email, one entry per form. Every sentence comes
@@ -36,8 +37,10 @@ export const LEAD_WELCOME_CONTENT: Record<LeadWelcomeSource, LeadWelcomeContent>
       `You registered your interest in the free masterclass: ${MASTERCLASS_TITLE}`,
       'It is a free, one-hour, pre-recorded masterclass that you watch on demand, whenever suits you. It is a taster of the Trauma to Transcendence programme: your first experience of working at the pattern level before going deeper.',
     ],
-    next: 'We have your details and will be in touch about the masterclass.',
-    link: { label: 'About the masterclass', path: '/masterclass' },
+    // Watch Now / Watch Later, as on the current site (Shayna, 7 Oct). A
+    // "Watch Later" sign-up gets leadWelcomeNext's line with their time.
+    next: 'Watch the masterclass whenever suits you, on the link below. Watch it to the end for your next step.',
+    link: { label: 'Watch the masterclass', path: MASTERCLASS_WATCH_PATH },
     reason: 'you registered your interest in the free masterclass on suzanneravenall.com',
   },
   community: {
@@ -89,6 +92,14 @@ export const LEAD_WELCOME_CONTENT: Record<LeadWelcomeSource, LeadWelcomeContent>
  * the homepage form (the route stores it as "homepage"). Quiz sources get
  * their own report email, and unknown sources get nothing.
  */
+/** The "What happens next" line: the masterclass one names a Watch Later time. */
+export function leadWelcomeNext(source: LeadWelcomeSource, watchAt?: string | null): string {
+  if (source === 'masterclass' && watchAt) {
+    return `You chose to watch on ${watchAt}. Your link is below and works whenever you are ready. Watch it to the end for your next step.`
+  }
+  return LEAD_WELCOME_CONTENT[source].next
+}
+
 export function leadWelcomeSource(source: string | null | undefined): LeadWelcomeSource | null {
   const value = source?.trim() || 'homepage'
   return Object.prototype.hasOwnProperty.call(LEAD_WELCOME_CONTENT, value) ? (value as LeadWelcomeSource) : null

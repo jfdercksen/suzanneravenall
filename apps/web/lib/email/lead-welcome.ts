@@ -2,7 +2,7 @@ import { createElement } from 'react'
 import { sendEmail } from './send'
 import LeadWelcome from './templates/LeadWelcome'
 import { buildListUnsubscribeHeaders, buildUnsubscribeUrl } from './unsubscribe'
-import { LEAD_WELCOME_CONTENT } from './lead-welcome-content'
+import { LEAD_WELCOME_CONTENT, leadWelcomeNext } from './lead-welcome-content'
 import { COMPANY_CONTACT_EMAIL, companyPhysicalAddress } from './company'
 import { siteUrl } from './site-url'
 import type { LeadWelcomeEmailData } from './types'
@@ -30,7 +30,7 @@ export async function sendLeadWelcomeEmail(data: LeadWelcomeEmailData): Promise<
   })
 }
 
-function buildPlainText({ firstName, source }: LeadWelcomeEmailData, unsubscribeUrl: string): string {
+function buildPlainText({ firstName, source, watchAt }: LeadWelcomeEmailData, unsubscribeUrl: string): string {
   const content = LEAD_WELCOME_CONTENT[source]
   return [
     content.heading,
@@ -40,7 +40,7 @@ function buildPlainText({ firstName, source }: LeadWelcomeEmailData, unsubscribe
     ...content.intro.flatMap((paragraph) => [paragraph, '']),
     'WHAT HAPPENS NEXT',
     '=================',
-    content.next,
+    leadWelcomeNext(source, watchAt),
     '',
     `${content.link.label}: ${siteUrl()}${content.link.path}`,
     '',

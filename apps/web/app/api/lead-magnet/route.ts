@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/nextjs'
 import { captureLead } from '@/lib/leads/capture'
 import { sendLeadWelcomeIfDue } from '@/lib/leads/welcome'
 import { createRateLimiter, getClientIp, rateLimitResponse } from '@/lib/rate-limit'
+import { formatWatchAt } from '@/lib/masterclass'
 
 const VIBE_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
 const DELIVERY_FAILED =
@@ -17,6 +18,10 @@ const LeadMagnetSchema = z.object({
   // Each quiz declares its own category keys (see QuizCategory = string in
   // app/explore/quizzes/types.ts), so this can't be a fixed enum.
   quizResult: z.string().max(100).optional(),
+  // Masterclass "Watch Later" (as on the current site): the visitor's date
+  // and time, echoed in the welcome email.
+  watchDate: z.string().max(10).optional(),
+  watchTime: z.string().max(5).optional(),
 })
 
 // Each submission can send a welcome email to the typed address.
@@ -38,7 +43,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 422 })
   }
 
-  const { email, firstName, source, quizResult } = parsed.data
+  const { email, firstName, source, quizResult, watchDate, watchTime } = parsed.data
+  let watchAt: string | null = null
+  if (watchDate || watchTime) {
+    watchAt = formatWatchAt(watchDate ?? '', watchTime ?? '')
+    if (!watchAt) {
+      return NextResponse.json({ error: 'Please choose a valid date and time to watch.' }, { status: 422 })
+    }
+  }
   const timestamp = new Date().toISOString()
 
   // B13: tell the visitor "we have your details" only when the lead is really
@@ -68,6 +80,7 @@ export async function POST(request: Request) {
     firstName: firstName ?? null,
     source: storedSource,
     leadId: outcome.leadId,
+    watchAt,
   })
 
   // Forward to Vibe Marketing - fire-and-forget, never blocks the response.

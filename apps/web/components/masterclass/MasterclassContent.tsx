@@ -304,7 +304,7 @@ export default function MasterclassContent() {
               href="#register"
               className="inline-flex items-center justify-center rounded-button bg-brand-accent-600 hover:bg-brand-accent-700 text-white px-6 py-3 font-medium text-sm transition-all duration-300"
             >
-              Register My Interest &rarr;
+              Register Now &rarr;
             </a>
             <p className="mt-4 text-brand-muted text-xs">
               You can unsubscribe anytime.
