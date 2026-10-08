@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
     }
     orderId = body.orderId
     invoiceUrl = typeof body.invoiceUrl === 'string' ? body.invoiceUrl : null
-    const VALID_PRODUCT_TYPES: OrderProductType[] = ['session', 'self-paced', 'live', 'group', 'other']
+    const VALID_PRODUCT_TYPES: OrderProductType[] = ['session', 'self-paced', 'live', 'group', 'mentorship', 'other']
     productType =
       typeof body.productType === 'string' && VALID_PRODUCT_TYPES.includes(body.productType as OrderProductType)
         ? (body.productType as OrderProductType)

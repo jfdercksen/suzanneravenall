@@ -199,4 +199,13 @@ describe('sendOrderConfirmationEmail', () => {
     expect(text).not.toContain('member portal account')
     expect(text).not.toContain('BOOK YOUR SESSION')
   })
+
+  it('plain text for a mentorship order says there is nothing to book', async () => {
+    mockSend.mockResolvedValue('email_id_mentorship')
+    await sendOrderConfirmationEmail({ order: { ...baseOrder, productType: 'mentorship' }, invoiceUrl: null })
+    const text = (mockSend.mock.calls.at(-1)![0] as { text: string }).text
+    expect(text).toContain('There is nothing to book')
+    expect(text).toContain('last Wednesday of every month')
+    expect(text).not.toContain('BOOK YOUR SESSION')
+  })
 })

@@ -60,7 +60,7 @@ interface RetrievedOrder {
 
 // ── Product type detection ────────────────────────────────────────────────────
 
-type ProductType = 'session' | 'self-paced' | 'live' | 'group' | 'other'
+type ProductType = 'session' | 'self-paced' | 'live' | 'group' | 'mentorship' | 'other'
 
 interface CategoryAccess {
   access_level: number
@@ -95,6 +95,11 @@ function isMembershipOrder(items: OrderItem[]): boolean {
 }
 
 function detectOrderProductType(items: OrderItem[]): ProductType {
+  // Practitioner Mentorship is a monthly group session the team tracks and
+  // confirms by email; nothing to book. Its handle contains "session", so it
+  // was sent the private-session booking email (Shayna, 7 Oct).
+  if (items.some((item) => (item.variant?.product?.handle ?? '').includes('mentorship'))) return 'mentorship'
+
   const categories = items.flatMap((item) => item.variant?.product?.categories ?? [])
 
   // Direct map lookup

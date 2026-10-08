@@ -8,8 +8,11 @@ import { HEADER_UNDERLINE, PageHeader } from '@/components/shared/PageHeader'
 import { contactHref } from '@/app/contact/enquiry'
 import { speakingTestimonials } from '@/data/testimonials'
 
-/** "Request the Speaking Kit": the contact form, speaking enquiry preselected. */
-export const SPEAKING_KIT_HREF = contactHref('speaking', 'Speaking Kit')
+/** "Book a Discussion": Suzanne's Acuity booking type for speaking enquiries,
+ *  the same link as the "Book a discussion" buttons on the current site's
+ *  speaking page (Shayna, 7 Oct: both buttons went to the contact form). */
+export const SPEAKING_DISCUSSION_HREF =
+  'https://app.acuityscheduling.com/schedule.php?owner=18094639&appointmentType=24190547'
 
 // Suzanne's real, established signature keynote topics — same four talks
 // used in components/services/Speaking.tsx. Taglines are drawn directly
@@ -507,17 +510,14 @@ export default function SpeakingContent() {
                 >
                   Start the Conversation
                 </Link>
-                {/* TODO: once the speaking kit PDF exists, link straight to it:
-                    <a href="/speaking-kit.pdf" download>Download Speaking Kit</a>.
-                    Until then organisers request it through the contact form,
-                    with "Speaking Enquiry" preselected and the message
-                    prefilled, landing on the form (#message). */}
-                <Link
-                  href={SPEAKING_KIT_HREF}
+                <a
+                  href={SPEAKING_DISCUSSION_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center justify-center px-8 py-4 border border-white/50 hover:border-white text-white hover:bg-white/10 font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
                 >
-                  Request the Speaking Kit
-                </Link>
+                  Book a Discussion
+                </a>
               </motion.div>
             </div>
 

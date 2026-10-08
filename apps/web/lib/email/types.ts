@@ -48,7 +48,7 @@ export interface MembershipEmailProps extends MembershipEmailData {
   unsubscribeUrl: string
 }
 
-export type OrderProductType = 'session' | 'self-paced' | 'live' | 'group' | 'other'
+export type OrderProductType = 'session' | 'self-paced' | 'live' | 'group' | 'mentorship' | 'other'
 
 export interface OrderEmailData {
   id: string

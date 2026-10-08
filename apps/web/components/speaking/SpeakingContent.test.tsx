@@ -1,7 +1,7 @@
 import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import SpeakingContent, { SPEAKING_EVENTS, SPEAKING_KIT_HREF } from './SpeakingContent'
+import SpeakingContent, { SPEAKING_EVENTS, SPEAKING_DISCUSSION_HREF } from './SpeakingContent'
 
 vi.mock('next/link', () => ({
   default: ({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) => (
@@ -44,10 +44,15 @@ vi.mock('framer-motion', () => {
 })
 
 describe('SpeakingContent', () => {
-  it('"Request the Speaking Kit" lands on the contact form with the speaking enquiry preselected', () => {
-    expect(SPEAKING_KIT_HREF).toBe('/contact?enquiry=speaking&topic=Speaking+Kit#message')
+  // Shayna, 7 Oct: both buttons went to the contact page. The current site
+  // pairs "Get in contact" with "Book a discussion" on Acuity.
+  it('pairs the contact button with "Book a Discussion" on the Acuity scheduler', () => {
     render(<SpeakingContent />)
-    expect(screen.getByRole('link', { name: 'Request the Speaking Kit' })).toHaveAttribute('href', SPEAKING_KIT_HREF)
+    const book = screen.getByRole('link', { name: 'Book a Discussion' })
+    expect(book).toHaveAttribute('href', SPEAKING_DISCUSSION_HREF)
+    expect(SPEAKING_DISCUSSION_HREF).toContain('appointmentType=24190547')
+    expect(book).toHaveAttribute('target', '_blank')
+    expect(screen.queryByRole('link', { name: 'Request the Speaking Kit' })).not.toBeInTheDocument()
   })
 
   // Decision 11 (content sourcing, 6 Oct): events list replaces the logo

@@ -65,6 +65,14 @@ export function getNextSteps(productType: OrderProductType | undefined): NextSte
         { step: '02', text: 'Sessions are recorded. You will receive the recording link after.' },
         { step: '03', text: 'Reach out if you have any questions before the session.' },
       ]
+    case 'mentorship':
+      // Nothing to book: the team keeps track of mentorship orders and emails
+      // each practitioner closer to the time (Shayna, 7 Oct).
+      return [
+        { step: '01', text: 'Mentorship runs on the last Wednesday of every month at 4pm South African time.' },
+        { step: '02', text: 'There is nothing to book. We will email you closer to the time to confirm your attendance and send the joining details.' },
+        { step: '03', text: 'Reach out to sravenall@suzanneravenall.com with any questions before then.' },
+      ]
     default:
       return [
         { step: '01', text: 'You will receive access details and confirmation within 24 hours.' },
