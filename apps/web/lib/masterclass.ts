@@ -21,12 +21,15 @@ export const MASTERCLASS_PROGRAMME = {
 }
 
 /**
- * The offer revealed when the video ends. The current site shows both "25%
- * off" and "$100 off" with code masterclass-t59sw7s; which one applies is with
- * Suzanne's team (8 Oct). Until then no offer is shown, and the code does not
- * exist as a Medusa promotion yet.
+ * The offer revealed when the video ends: 25% off Trauma to Transcendence
+ * (Shayna, 8 Oct), with the current site's code masterclass-t59sw7s. It is a
+ * Medusa promotion on both Trauma to Transcendence products; codes are stored
+ * and shown in capitals, and the voucher box accepts any case.
  */
-export const MASTERCLASS_OFFER: { code: string; text: string } | null = null
+export const MASTERCLASS_OFFER: { code: string; text: string } | null = {
+  code: 'MASTERCLASS-T59SW7S',
+  text: 'As a thank you for watching, take 25% off the Trauma to Transcendence programme with the code',
+}
 
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']

@@ -41,9 +41,10 @@ describe('MasterclassContent (sourcing report 6 Oct, decision 13)', () => {
     expect(screen.getAllByText(new RegExp(MASTERCLASS_TITLE.slice(0, 40))).length).toBeGreaterThan(0)
   })
 
-  it('states the format: free, one hour, pre-recorded, on demand', () => {
-    render(<MasterclassContent />)
-    expect(screen.getByText('Free · One hour · Pre-recorded · Watch on demand')).toBeInTheDocument()
+  it('states the format: free, 17 minutes (the recording is 16:44), pre-recorded, on demand', () => {
+    const { container } = render(<MasterclassContent />)
+    expect(screen.getByText('Free · 17 minutes · Pre-recorded · Watch on demand')).toBeInTheDocument()
+    expect(container.textContent).not.toMatch(/one[- ]hour/i)
   })
 
   it('lists the three sourced key takeaways', () => {

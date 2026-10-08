@@ -41,7 +41,8 @@ describe('masterclass welcome email wording', () => {
     expect(JSON.stringify(LEAD_WELCOME_CONTENT.masterclass) + leadWelcomeNext('masterclass', 'x')).not.toMatch(/\u2014/)
   })
 
-  it('shows no offer until Suzanne\'s team confirms it (8 Oct)', () => {
-    expect(MASTERCLASS_OFFER).toBeNull()
+  it('offers 25% off with the current site\'s code, in capitals (Shayna, 8 Oct)', () => {
+    expect(MASTERCLASS_OFFER?.code).toBe('MASTERCLASS-T59SW7S')
+    expect(MASTERCLASS_OFFER?.text).toMatch(/25% off the Trauma to Transcendence programme/)
   })
 })

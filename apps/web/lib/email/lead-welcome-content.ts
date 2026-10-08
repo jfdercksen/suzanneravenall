@@ -35,7 +35,7 @@ export const LEAD_WELCOME_CONTENT: Record<LeadWelcomeSource, LeadWelcomeContent>
     heading: "Thank you, you're on the list",
     intro: [
       `You registered your interest in the free masterclass: ${MASTERCLASS_TITLE}`,
-      'It is a free, one-hour, pre-recorded masterclass that you watch on demand, whenever suits you. It is a taster of the Trauma to Transcendence programme: your first experience of working at the pattern level before going deeper.',
+      'It is a free, 17-minute, pre-recorded masterclass that you watch on demand, whenever suits you. It is a taster of the Trauma to Transcendence programme: your first experience of working at the pattern level before going deeper.',
     ],
     // Watch Now / Watch Later, as on the current site (Shayna, 7 Oct). A
     // "Watch Later" sign-up gets leadWelcomeNext's line with their time.

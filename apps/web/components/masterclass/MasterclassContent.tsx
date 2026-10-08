@@ -7,14 +7,15 @@ import { HEADER_UNDERLINE, PageHeader } from '@/components/shared/PageHeader'
 import EmailCaptureForm from './EmailCaptureForm'
 
 // Masterclass facts, sourced 6 Oct 2026 (content-sourcing-2026-10-06.md,
-// section 9, decision 13): free, one hour, pre-recorded, watched on demand, a
-// taster for Trauma to Transcendence. Sources:
+// section 9, decision 13): free, pre-recorded, watched on demand, a taster for
+// Trauma to Transcendence. Sources:
 // https://suzanneravenall.com/masterclass-register/ and
 // https://suzanneravenall.com/services/masterclass/
-// The live page's 25%-off offer is deliberately NOT shown (decision 13).
+// Length: the recording is 16:44, not the "one hour" the old copy said (Shayna, 8 Oct).
+// The 25% offer is revealed when the video ends (MasterclassWatch), not here.
 export const MASTERCLASS_TITLE =
   'Breaking the hold of the child brain on adult adversity. A quest to find an upgraded version of you.'
-export const MASTERCLASS_FORMAT = 'Free · One hour · Pre-recorded · Watch on demand'
+export const MASTERCLASS_FORMAT = 'Free · 17 minutes · Pre-recorded · Watch on demand'
 
 // The three key takeaways from https://suzanneravenall.com/services/masterclass/
 const outcomes = [
@@ -109,7 +110,7 @@ export default function MasterclassContent() {
         }
         description={
           <>
-            {MASTERCLASS_TITLE} A free, one-hour, pre-recorded masterclass that you
+            {MASTERCLASS_TITLE} A free, 17-minute, pre-recorded masterclass that you
             watch on demand, whenever suits you. It is a taster of the Trauma to
             Transcendence programme: your first experience of working at the
             pattern level before going deeper.
@@ -295,7 +296,7 @@ export default function MasterclassContent() {
               Your Transformation Starts Here
             </h2>
             <p className="text-brand-muted text-lg mb-10">
-              Take the first step with a free one-hour masterclass.
+              Take the first step with a free 17-minute masterclass.
             </p>
             {/* Site check M5: the page used to render the form a second time
                 here, with the same ids. One form, so this CTA takes the
