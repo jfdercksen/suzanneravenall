@@ -564,7 +564,9 @@ export const PROGRAMS: Program[] = [
       'An accessible introduction to Suzanne\'s Rapid Repatterning method',
       'Watch in your own time, as often as you need',
     ],
-    isPublished: true,
+    // Not for sale (Shayna, 8 Oct): clients are given it after booking certain
+    // sessions. The Medusa product is a draft too.
+    isPublished: false,
     isFeatured: false,
   },
   {
