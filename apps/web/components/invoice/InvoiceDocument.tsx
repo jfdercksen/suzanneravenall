@@ -1,4 +1,4 @@
-import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer'
+import { Document, Font, Page, View, Text, StyleSheet } from '@react-pdf/renderer'
 import {
   companyPhysicalAddress,
   companyRegistrationNumber,
@@ -39,6 +39,10 @@ export interface InvoiceOrder {
   payment_reference?: string
   sage_invoice_number?: string
 }
+
+// react-pdf hyphenates long words by default, so a product title wrapped as
+// "Togeth-" / "er" on the invoice (Shayna, 9 Oct). Wrap at spaces only.
+Font.registerHyphenationCallback((word) => [word])
 
 const NAVY = '#012B43'
 const BLUE = '#1719F4'
@@ -155,8 +159,9 @@ const s = StyleSheet.create({
   },
   tableRowAlt: { backgroundColor: LIGHT_GRAY },
   cell: { fontSize: 9 },
-  colDesc: { flex: 3 },
-  colVariant: { flex: 2 },
+  // Right padding keeps a wrapped description from running into the next column.
+  colDesc: { flex: 3, paddingRight: 8 },
+  colVariant: { flex: 2, paddingRight: 8 },
   colQty: { width: 28, textAlign: 'center' },
   colUnit: { width: 65, textAlign: 'right' },
   colVat: { width: 58, textAlign: 'right' },
