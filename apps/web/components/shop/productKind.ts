@@ -104,9 +104,24 @@ export function hasThinkificCourse(product: Pick<MedusaProduct, 'metadata'>): bo
   return id != null && id !== 0 && id !== ''
 }
 
+/**
+ * A file delivered after purchase (metadata.download_file on the product or
+ * a variant; see lib/downloads/storage.ts). The three guided audios sit in
+ * the energy-clearing-self-paced category, so the category cannot decide.
+ */
+export function hasDownloadFile(product: Pick<MedusaProduct, 'variants' | 'metadata'>): boolean {
+  const own = product.metadata?.download_file
+  if (typeof own === 'string' && own.trim() !== '') return true
+  return product.variants.some((v) => {
+    const file = (v as { metadata?: Record<string, unknown> | null }).metadata?.download_file
+    return typeof file === 'string' && file.trim() !== ''
+  })
+}
+
 export function getProductKind(
   product: Pick<MedusaProduct, 'handle' | 'title' | 'variants' | 'categories' | 'metadata'>
 ): ProductKind {
+  if (hasDownloadFile(product)) return 'download'
   const cats = product.categories.map((c) => c.handle)
   if (cats.includes('books')) return 'book'
   if (cats.includes('digital-downloads')) return 'download'

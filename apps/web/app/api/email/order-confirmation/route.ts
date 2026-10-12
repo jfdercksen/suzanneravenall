@@ -4,12 +4,17 @@ import { sendOrderConfirmationEmail } from '@/lib/email/order-confirmation'
 import type { OrderEmailData, OrderProductType } from '@/lib/email/types'
 import { logError, logWarn } from '@/lib/log'
 import { downloadInvoicePdf } from '@/lib/invoices/storage'
+import { downloadsForOrder, isDownloadOnlyOrder, signDownloadUrls } from '@/lib/downloads/storage'
 import { medusaAdminAuthHeader } from '@/lib/medusa/admin-auth'
 
 interface MedusaOrderItem {
   id: string
   title: string
-  variant?: { title?: string }
+  variant?: {
+    title?: string
+    metadata?: Record<string, unknown> | null
+    product?: { title?: string; metadata?: Record<string, unknown> | null } | null
+  } | null
   quantity: number
   unit_price: number
 }
@@ -79,7 +84,7 @@ export async function POST(req: NextRequest) {
     }
     orderId = body.orderId
     invoiceUrl = typeof body.invoiceUrl === 'string' ? body.invoiceUrl : null
-    const VALID_PRODUCT_TYPES: OrderProductType[] = ['session', 'self-paced', 'live', 'group', 'mentorship', 'other']
+    const VALID_PRODUCT_TYPES: OrderProductType[] = ['session', 'self-paced', 'live', 'group', 'mentorship', 'download', 'other']
     productType =
       typeof body.productType === 'string' && VALID_PRODUCT_TYPES.includes(body.productType as OrderProductType)
         ? (body.productType as OrderProductType)
@@ -94,7 +99,7 @@ export async function POST(req: NextRequest) {
   try {
     // `fields=` REPLACES Medusa's default field list, so the scalars must be
     // named or currency_code, total and created_at arrive undefined (order #3).
-    const fields = ['id', 'display_id', 'status', 'currency_code', 'email', 'customer_id', 'created_at', 'subtotal', 'discount_total', 'tax_total', 'shipping_total', 'total', 'metadata', '*items', '*items.variant', '*items.variant.product', '*customer', '*billing_address'].join(',')
+    const fields = ['id', 'display_id', 'status', 'currency_code', 'email', 'customer_id', 'created_at', 'subtotal', 'discount_total', 'tax_total', 'shipping_total', 'total', 'metadata', '*items', '*items.variant', 'items.variant.metadata', '*items.variant.product', 'items.variant.product.metadata', '*customer', '*billing_address'].join(',')
     const res = await fetch(
       `${medusaBase}/admin/orders/${orderId}?fields=${encodeURIComponent(fields)}`,
       {
@@ -153,6 +158,23 @@ export async function POST(req: NextRequest) {
     total: order.total,
     productType,
     calBookingUrl,
+  }
+
+  // Files bought as a download (metadata.download_file on the product or
+  // variant): one signed link each, listed above the order summary. When the
+  // whole order is downloads, the next steps say so instead of promising a
+  // course access email.
+  const downloadFiles = downloadsForOrder(order.items)
+  if (downloadFiles.length > 0) {
+    emailOrder.downloads = await signDownloadUrls(downloadFiles)
+    if (isDownloadOnlyOrder(order.items)) emailOrder.productType = 'download'
+    if (emailOrder.downloads.length < downloadFiles.length) {
+      logWarn(
+        `[email/order-confirmation] ${downloadFiles.length - emailOrder.downloads.length} of ${downloadFiles.length} download links could not be signed for ${orderId}`,
+        undefined,
+        { orderId }
+      )
+    }
   }
 
   // Attach the stored invoice PDF. The Medusa subscriber generates it just

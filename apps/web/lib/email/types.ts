@@ -48,7 +48,13 @@ export interface MembershipEmailProps extends MembershipEmailData {
   unsubscribeUrl: string
 }
 
-export type OrderProductType = 'session' | 'self-paced' | 'live' | 'group' | 'mentorship' | 'other'
+export type OrderProductType = 'session' | 'self-paced' | 'live' | 'group' | 'mentorship' | 'download' | 'other'
+
+/** A file the order delivers: a signed link the buyer clicks (see lib/downloads/storage.ts). */
+export interface OrderDownload {
+  title: string
+  url: string
+}
 
 export interface OrderEmailData {
   id: string
@@ -65,6 +71,8 @@ export interface OrderEmailData {
   total: number
   productType?: OrderProductType
   calBookingUrl?: string | null
+  /** Signed links for files bought as a download; shown above the order summary. */
+  downloads?: OrderDownload[]
 }
 
 export interface QuizInviteEmailData {

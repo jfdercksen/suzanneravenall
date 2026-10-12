@@ -200,6 +200,24 @@ describe('sendOrderConfirmationEmail', () => {
     expect(text).not.toContain('BOOK YOUR SESSION')
   })
 
+  it('plain text lists the download links and the download steps for a download order', async () => {
+    mockSend.mockResolvedValue('email_id_dl')
+    await sendOrderConfirmationEmail({
+      order: {
+        ...baseOrder,
+        productType: 'download',
+        downloads: [{ title: 'Bringing Your Energy Back', url: 'https://files.example.com/signed/a.mp3' }],
+      },
+      invoiceUrl: null,
+    })
+    const text = (mockSend.mock.calls[0]![0] as Record<string, unknown>).text as string
+    expect(text).toContain('YOUR DOWNLOADS')
+    expect(text).toContain('Bringing Your Energy Back: https://files.example.com/signed/a.mp3')
+    expect(text).toContain('links work for 30 days')
+    expect(text).toContain('Your download links are above')
+    expect(text).not.toContain('course access email')
+  })
+
   it('plain text for a mentorship order says there is nothing to book', async () => {
     mockSend.mockResolvedValue('email_id_mentorship')
     await sendOrderConfirmationEmail({ order: { ...baseOrder, productType: 'mentorship' }, invoiceUrl: null })

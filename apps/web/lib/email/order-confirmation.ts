@@ -5,6 +5,7 @@ import type { OrderEmailData } from './types'
 import { companyVatNumber } from './company'
 import { formatAmount } from './utils'
 import { siteUrl } from './site-url'
+import { DOWNLOAD_LINK_TTL_LABEL } from '../downloads/storage'
 
 export type { OrderEmailData }
 
@@ -76,6 +77,15 @@ function buildPlainText(order: OrderEmailData, invoice: InvoiceDelivery): string
     "We're honoured to be part of your journey.",
     '',
     ...(order.calBookingUrl ? ['BOOK YOUR SESSION', '=================', `Choose a date and time: ${order.calBookingUrl}`, ''] : []),
+    ...(order.downloads && order.downloads.length > 0
+      ? [
+          'YOUR DOWNLOADS',
+          '==============',
+          ...order.downloads.map((file) => `${file.title}: ${file.url}`),
+          `Save the files to your device: the links work for ${DOWNLOAD_LINK_TTL_LABEL}.`,
+          '',
+        ]
+      : []),
     'ORDER SUMMARY',
     '=============',
     `Order: #${order.displayId}`,

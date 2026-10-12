@@ -18,6 +18,7 @@ import { companyPhysicalAddress, companyVatNumber } from '../lib/email/company'
 import { formatAmount } from '../lib/email/utils'
 import { siteUrl } from '../lib/email/site-url'
 import { THINKIFIC_COURSES_URL } from '../lib/email/templates/CourseAccess'
+import { DOWNLOAD_LINK_TTL_LABEL } from '../lib/downloads/storage'
 
 const NAVY = '#012B43'
 const BLUE = '#1719F4'
@@ -65,6 +66,14 @@ export function getNextSteps(productType: OrderProductType | undefined): NextSte
         { step: '02', text: 'Sessions are recorded. You will receive the recording link after.' },
         { step: '03', text: 'Reach out if you have any questions before the session.' },
       ]
+    case 'download':
+      // Audio and other files: the signed links are in the block above the
+      // order summary, nothing else follows.
+      return [
+        { step: '01', text: `Your download links are above. Save the files to your device: the links work for ${DOWNLOAD_LINK_TTL_LABEL}.` },
+        { step: '02', text: 'Listen whenever it suits you. You can return to the audio as often as you like.' },
+        { step: '03', text: 'If a link has expired or a download fails, reply to this email and we will send a fresh link.' },
+      ]
     case 'mentorship':
       // Nothing to book: the team keeps track of mentorship orders and emails
       // each practitioner closer to the time (Shayna, 7 Oct).
@@ -96,6 +105,7 @@ export default function OrderConfirmation({
   invoiceAttachmentName = null,
   productType,
   calBookingUrl,
+  downloads,
 }: OrderConfirmationProps) {
   const greeting = `Dear ${firstName ?? 'valued customer'},`
   const formattedDate = new Date(createdAt).toLocaleDateString('en-ZA', {
@@ -183,6 +193,40 @@ export default function OrderConfirmation({
                   {calBookingUrl}
                 </Link>
               </Text>
+            </Section>
+          )}
+
+          {/* Download links: files bought as a download (audio) */}
+          {downloads && downloads.length > 0 && (
+            <Section style={{ backgroundColor: NAVY, padding: '32px 40px', marginBottom: '0' }}>
+              <Text style={{ color: BLUE, fontSize: '11px', fontWeight: '700', letterSpacing: '0.15em', textTransform: 'uppercase', margin: '0 0 12px' }}>
+                Your Downloads
+              </Text>
+              <Text style={{ color: '#ffffff', fontSize: '16px', fontWeight: '600', margin: '0 0 8px' }}>
+                Your files are ready
+              </Text>
+              <Text style={{ color: '#94a3b8', fontSize: '14px', lineHeight: '1.6', margin: '0 0 24px' }}>
+                Click a file to download it and save it to your device. The links work for {DOWNLOAD_LINK_TTL_LABEL}.
+              </Text>
+              {downloads.map((file) => (
+                <Section key={file.url} style={{ textAlign: 'center', marginBottom: '12px' }}>
+                  <Button
+                    href={file.url}
+                    style={{
+                      backgroundColor: BLUE,
+                      color: '#ffffff',
+                      fontSize: '15px',
+                      fontWeight: '700',
+                      padding: '14px 36px',
+                      borderRadius: '4px',
+                      textDecoration: 'none',
+                      display: 'inline-block',
+                    }}
+                  >
+                    Download: {file.title}
+                  </Button>
+                </Section>
+              ))}
             </Section>
           )}
 

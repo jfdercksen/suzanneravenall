@@ -123,6 +123,24 @@ describe('email template rendering (POPIA footer)', () => {
     expect(html).toContain('VAT compliant')
   })
 
+  it('OrderConfirmation shows a download button per file for a download order', () => {
+    const html = renderToStaticMarkup(
+      createElement(OrderConfirmation, {
+        ...orderProps,
+        productType: 'download',
+        downloads: [
+          { title: 'Bringing Your Energy Back', url: 'https://files.example.com/signed/a.mp3' },
+          { title: 'Relaxation &amp; Energy Reclamation', url: 'https://files.example.com/signed/b.mp3' },
+        ],
+      })
+    )
+    expect(html).toContain('Your Downloads')
+    expect(html).toContain('https://files.example.com/signed/a.mp3')
+    expect(html).toContain('https://files.example.com/signed/b.mp3')
+    expect(html).toContain('Download: Bringing Your Energy Back')
+    expect(html).toContain('links work for 30 days')
+  })
+
   it('OrderConfirmation says the invoice is attached, with no download button, when the PDF is attached', () => {
     const html = renderToStaticMarkup(
       createElement(OrderConfirmation, { ...orderProps, invoiceUrl: null, invoiceAttachmentName: 'invoice-42.pdf' })
