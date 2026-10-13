@@ -83,7 +83,10 @@ export function thinkificEnrolmentHandler(deps: AutomationDeps): AutomationHandl
           mail: {
             email: parsed.email,
             firstName: parsed.firstName,
-            courses: toMail.map((c) => c.title),
+            // A "purchased together" or series product opens several courses
+            // under one product title; the buyer sees the title once (order
+            // #227, 13 Oct: Full Basic Programs 1-5 listed itself five times).
+            courses: [...new Set(toMail.map((c) => c.title))],
             orderId: order.id,
             displayId: order.display_id ?? null,
           } satisfies CourseAccessMail,

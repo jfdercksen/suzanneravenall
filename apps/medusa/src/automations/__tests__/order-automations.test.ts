@@ -182,6 +182,19 @@ describe('code mode: a course order', () => {
     expect(t.store.all()).toHaveLength(3)
   })
 
+  it('a series product (comma-separated course ids) enrols every course and names the product once in the mail', async () => {
+    const t = setup()
+    const order = graphOrder()
+    const item = (order.items as Array<{ variant: { product: { metadata: Record<string, string> } } }>)[0]!
+    item.variant.product.metadata = { thinkific_course_id: '1284792, 1284793, 1284794' }
+    await t.dispatch(order)
+    expect(t.thinkific.enrolments.map((e) => e.course_id)).toEqual([1284792, 1284793, 1284794])
+    expect(t.mails).toEqual([
+      { email: 'qa.buyer@example.com', firstName: 'QA', courses: ['Program 1 Self Study'], orderId: 'order_01QA', displayId: 21 },
+    ])
+    expect(t.alerts).toEqual([])
+  })
+
   it('an order without course products creates no Thinkific job (n8n exited quietly too)', async () => {
     const t = setup()
     const o = graphOrder()
