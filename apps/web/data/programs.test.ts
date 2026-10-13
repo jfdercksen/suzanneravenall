@@ -100,7 +100,7 @@ describe('programme catalogue data', () => {
 describe('getProgramCta', () => {
   it('says "View in Shop" when a product exists, since the button opens the shop page', () => {
     const p = getProgramBySlug('getting-unstuck')
-    expect(p && getProgramCta(p)).toEqual({ label: 'View in Shop', href: '/shop/getting-unstuck' })
+    expect(p && getProgramCta(p)).toEqual({ label: 'View in Shop', href: '/shop/getting-unstuck-self-study' })
   })
 
   it('points the live Meditation programme at the live product, not self-study', () => {

@@ -198,7 +198,7 @@ export const PROGRAMS: Program[] = [
     priceUsd: 350,
     // Live-shop self-study price; R7,860 is the Live via Zoom price (sourcing report 6 Oct, section 7)
     priceZar: 4650,
-    shopHandle: 'art-of-deep-clearing-level-1-self-study',
+    shopHandle: 'deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom',
     duration: 'Self-study: start anytime. Live via Zoom: register your interest',
     features: [
       // Source: Thinkific Deep Energy Clearing Level 1 Self Study, "About this course"
@@ -228,7 +228,7 @@ export const PROGRAMS: Program[] = [
     priceUsd: 350,
     // Live-shop self-study price; R7,860 is the Live via Zoom price (sourcing report 6 Oct, section 7)
     priceZar: 4650,
-    shopHandle: 'art-of-deep-clearing-level-2-self-study',
+    shopHandle: 'deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom',
     duration: 'Self-study: start anytime. Live via Zoom: register your interest',
     features: [
       // Source: Thinkific Deep Energy Clearing Level 2 Self Study, "About this course"
@@ -261,7 +261,7 @@ export const PROGRAMS: Program[] = [
       'For a moment, just one moment, imagine you had the ability to alter your relationship with success and everything happening in your life. Imagine having the ability to improve your intuition to such an extent that you receive daily guidance in the direction you are moving in. This is completely possible. The Akashic Records are the energetic records of all souls\' lives, a compendium of all events, thoughts, words, emotions, and intent ever to have occurred. Each soul has its own Akashic Record, like a series of books with each book representing one lifetime. Your problems are not happening in a haphazard manner, and they are not meaningless roadblocks. Your life is working even when you don\'t think so, and you can move through it with less resistance and more expansion when you understand it. In this Fundamentals programme (Clearing Self, Level 1) you learn to access your own records: reading them to receive information, and clearing the blocks, constrictions and ancestral patterns affecting this lifetime.',
     priceUsd: 500,
     priceZar: 10295,
-    shopHandle: 'akashic-navigator-and-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom',
+    shopHandle: 'akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom',
     // No live dates published since 2022 (report section 9): register interest only.
     duration: 'Live via Zoom: register your interest; self-study also available',
     registerInterest: true,
@@ -288,7 +288,7 @@ export const PROGRAMS: Program[] = [
       'Learn to read the Akashic Records for others: learn why they are here, their past and much more, and learn how to help others navigate life with much more wisdom and ease, with key answers to critical questions. The Akashic Records are an amazing resource to help you see beyond the veil, to clear disruption in a person\'s path and navigate life, business, career and relationships with much greater ease. Many medical studies now show that ancestral patterns carried through our DNA can disrupt our lives unknowingly, all of which can be addressed through the Akashic Records. Building on the Fundamentals level, this Advanced programme (Clearing Others, Level 2) develops the reading and clearing skills to work with clients.',
     priceUsd: 500,
     priceZar: 10295,
-    shopHandle: 'akashic-navigator-and-intuitive-coaching-clearing-others-level-2-advanced-live-via-zoom',
+    shopHandle: 'akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom',
     // No live dates published since 2022 (report section 9): register interest only.
     duration: 'Live via Zoom: register your interest; self-study also available',
     registerInterest: true,
@@ -319,7 +319,7 @@ export const PROGRAMS: Program[] = [
     // Self-study price on the live shop and both Thinkific pages (sourcing report 6 Oct, section 7)
     priceUsd: 399,
     priceZar: 3500,
-    shopHandle: 'new-trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-self-study-online',
+    shopHandle: 'trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live',
     duration: 'Self-study online: access for as long as you need',
     features: [
       // Source: Thinkific Trauma to Transcendence (self-study), "About this course"
@@ -377,7 +377,7 @@ export const PROGRAMS: Program[] = [
     priceUsd: 220,
     // Live-shop self-study price; R1,610 is the Live via Zoom price (sourcing report 6 Oct, section 7)
     priceZar: 995,
-    shopHandle: 'intuition-in-my-personal-capacity-1-self-study',
+    shopHandle: 'intuition-in-my-personal-capacity-live',
     duration: 'Self-study online: start anytime',
     features: [
       'Identify and dissolve limiting beliefs about your potential',
@@ -402,7 +402,7 @@ export const PROGRAMS: Program[] = [
     priceUsd: 220,
     // Live-shop self-study price; R1,610 is the Live via Zoom price (sourcing report 6 Oct, section 7)
     priceZar: 995,
-    shopHandle: 'intuition-in-my-business-capacity-self-study',
+    shopHandle: 'intuition-in-my-personal-capacity-live',
     duration: 'Self-study online: start anytime',
     features: [
       'Break limiting beliefs about money and business success',
@@ -427,7 +427,7 @@ export const PROGRAMS: Program[] = [
     priceUsd: 220,
     // Live-shop self-study price; R4,980 is the Live via Zoom price (sourcing report 6 Oct, section 7)
     priceZar: 3320,
-    shopHandle: 'be-an-energy-ninja-level-1-self-study',
+    shopHandle: 'be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live',
     duration: 'Self-study online: start anytime',
     features: [
       'Understand energy as the foundation of all reality',
@@ -452,7 +452,7 @@ export const PROGRAMS: Program[] = [
     priceUsd: 220,
     // No ZAR price: the live shop has no self-study Level 2 and R4,980 has no source
     // (sourcing report 6 Oct, section 7). The shop page shows the Medusa price.
-    shopHandle: 'be-an-energy-ninja-mastering-energy-for-an-abundant-life-level-2-energy-practices-for-repatterning-your-life-self-study',
+    shopHandle: 'be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live',
     duration: 'Self-study online: start anytime',
     features: [
       'Daily energy practices for repatterning your life',
@@ -476,7 +476,7 @@ export const PROGRAMS: Program[] = [
       'Have you ever wanted to change? A different career, better health, improved body, better relationship, but in some way it escapes you? Can\'t seem to move forward no matter what you try? Have you tried numerous approaches, woken up with the burning inner knowing that you need to change, but you\'re stuck in the same cycle over and over again? If the answer to any of these questions is yes, then this is for you. At a high level, learn how the system functions to produce stuckness or flow, what\'s underneath that stuckness, how to identify the patterns that hold us back, where these patterns come from, and how to start the journey of overcoming stuckness.',
     priceUsd: 110,
     priceZar: 1660,
-    shopHandle: 'getting-unstuck',
+    shopHandle: 'getting-unstuck-self-study',
     duration: 'Self-study online: start anytime',
     features: [
       // Source: https://ravenallinstitute-9629.thinkific.com/courses/getting-unstuck ("About this course")
@@ -502,7 +502,7 @@ export const PROGRAMS: Program[] = [
       'To activate the Law of Attraction in your life, you must identify and change your limiting beliefs, particularly those about what you are meant to be and do. Throughout our lives, since childhood, we\'ve created limiting beliefs about our worth and potential that have been internalised over time and accepted as true even when they are not. This programme guides you through the process of uncovering your authentic purpose.',
     priceUsd: 220,
     priceZar: 995,
-    shopHandle: 'finding-my-life-purpose-self-study',
+    shopHandle: 'finding-my-life-purpose-live',
     duration: 'Self-study online: start anytime',
     features: [
       'Uncover your authentic life purpose through deep inner work',
@@ -526,7 +526,7 @@ export const PROGRAMS: Program[] = [
       'With this simple technique we can dive deeply into the unconscious and figure out disrupting patterns in a second, right to their core, and help others do the same. You can change a mood in a second. Muscle checking helps us check what is life-enhancing and life-depleting for our body-mind system, and what we resonate with that is helpful or harmful. We can discover blockages preventing our movement or life-depleting habits, find out what we need to move in a positive direction, even what is holding us back, or why something in our life doesn\'t seem to want to manifest. When we use our own inner guru as the guiding force in this way, we simply can\'t go wrong. This is an invaluable tool that everyone should have.',
     priceUsd: 110,
     priceZar: 1610,
-    shopHandle: 'coherence-muscle-testing-self-study-online',
+    shopHandle: 'coherence-muscle-testing-self-study-online-2',
     duration: 'Self-study online: start anytime',
     features: [
       // Source: https://ravenallinstitute-9629.thinkific.com/courses/coherence-muscle-testing ("About this course")
@@ -552,7 +552,7 @@ export const PROGRAMS: Program[] = [
       'An introduction to Rapid Repatterning. At a high level: what\'s underneath that stuckness we feel, how to identify the patterns that hold us back, where these patterns come from, and how to start the journey of overcoming stuckness.',
     priceUsd: 99,
     priceZar: 1995,
-    shopHandle: 'rapid-repatterning-session-introduction',
+    // Not for sale (6764d6a, Shayna 8 Oct): given to clients after booking, no shop link.
     duration: 'Self-study online: start anytime',
     features: [
       // Source: https://ravenallinstitute-9629.thinkific.com/courses/rapid-repatterning-introduction ("About this course")
@@ -580,7 +580,7 @@ export const PROGRAMS: Program[] = [
       'Trauma or stress shakes up our world and forces us to take another look at our goals and dreams, and right there is the opportunity to change. Struggling to get moving? Here are some tips and techniques to get moving.',
     priceUsd: 15,
     priceZar: 220,
-    shopHandle: 'post-traumatic-growth',
+    shopHandle: 'post-traumatic-growth-self-study-online',
     duration: 'Self-study online: recorded presentation',
     features: [
       // Source: https://ravenallinstitute-9629.thinkific.com/courses/post-traumatic-growth ("About this course")
@@ -607,7 +607,7 @@ export const PROGRAMS: Program[] = [
       'You may have heard that mindfulness, the ability to be fully present in the moment, can have numerous benefits, everything from decreased stress and sadness to increased levels of focus and happiness. But what exactly is mindfulness? And how can you recognise it and reap its many benefits? Mindfulness meditation practice is one way to truly experience the current moment and integrate that awareness into your everyday life. Suzanne\'s approach blends classical mindfulness with the deeper healing work of repatterning.',
     priceUsd: 440,
     priceZar: 2770,
-    shopHandle: 'mindfulness-live-via-zoom',
+    shopHandle: 'mindfulness-live',
     // No live dates published since 2022 (report section 9): register interest only.
     duration: 'Live via Zoom: register your interest',
     registerInterest: true,
@@ -816,7 +816,7 @@ export const PROGRAMS: Program[] = [
       'Join us for this part coaching, part group repatterning session series to release the fear behind communication: knowing when to be tough or not, and being challenged in being neutral. Learn to say what needs to be said from a place of clarity and neutrality, rather than fear, appeasement, or aggression.',
     priceUsd: 90,
     priceZar: 1500,
-    shopHandle: 'resonance-repatterning-group-session-communication',
+    shopHandle: 'group-session-nice-or-not-nice-in-communication-booked-as-a-series-only',
     duration: 'Recorded group session series',
     features: [
       // Source: Thinkific Nice or Not Nice recording, "About this course"
