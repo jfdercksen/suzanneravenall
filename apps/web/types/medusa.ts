@@ -17,6 +17,12 @@ export interface ProductVariant {
    * real, live remaining stock (see apps/web/lib/inventory/spots.ts).
    */
   inventory_quantity?: number | null
+  /**
+   * Variant metadata from the store API (`*variants` includes it). Used for
+   * per-format facts: download_file (lib/downloads), thinkific_course_id,
+   * coming_soon (components/shop/productKind.ts).
+   */
+  metadata?: Record<string, unknown> | null
 }
 
 /** Alias used by product detail page components */

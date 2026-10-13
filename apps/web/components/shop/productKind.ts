@@ -118,6 +118,23 @@ export function hasDownloadFile(product: Pick<MedusaProduct, 'variants' | 'metad
   })
 }
 
+/**
+ * A format that is listed but not yet for sale (metadata.coming_soon on the
+ * variant). Suzanne, 12 Oct: the recorded series of Develop Super Confidence
+ * and Attraction Frequency exist as courses but are not sold as self study
+ * yet. The variant stays visible so the page can say so; the add-to-cart
+ * button is replaced (VariantSelector.tsx).
+ */
+export function isComingSoonVariant(variant: Pick<MedusaProduct['variants'][number], 'metadata'>): boolean {
+  const flag = variant.metadata?.coming_soon
+  return flag === true || flag === 'true' || flag === 1 || flag === '1'
+}
+
+/** Every format of the product is coming soon, so nothing on it can be bought yet. */
+export function isComingSoonProduct(product: Pick<MedusaProduct, 'variants'>): boolean {
+  return product.variants.length > 0 && product.variants.every(isComingSoonVariant)
+}
+
 export function getProductKind(
   product: Pick<MedusaProduct, 'handle' | 'title' | 'variants' | 'categories' | 'metadata'>
 ): ProductKind {
@@ -146,6 +163,7 @@ const BADGE_NEUTRAL = 'bg-brand-sand text-brand-ink border border-brand-border'
 const BADGE_IN_PERSON = 'bg-brand-primary-900 text-white border border-brand-primary-900'
 const BADGE_RECORDED = 'bg-white text-brand-ink border border-brand-primary-300'
 const BADGE_MUTED = 'bg-brand-sand text-brand-muted'
+const BADGE_COMING_SOON = 'bg-brand-primary-900 text-white border border-brand-primary-900'
 
 /**
  * The format badge for a card or product page, or null when the data does
@@ -154,6 +172,8 @@ const BADGE_MUTED = 'bg-brand-sand text-brand-muted'
 export function getDeliveryBadge(
   product: Pick<MedusaProduct, 'handle' | 'title' | 'variants' | 'categories' | 'metadata'>
 ): Badge | null {
+  // Nothing on the product is for sale yet: say so before the format.
+  if (isComingSoonProduct(product)) return { label: 'Coming Soon', className: BADGE_COMING_SOON }
   const kind = getProductKind(product)
   if (kind === 'book') return { label: 'Book', className: BADGE_MUTED }
   if (kind === 'download') return { label: 'Download', className: BADGE_MUTED }

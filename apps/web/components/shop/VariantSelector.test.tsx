@@ -32,3 +32,25 @@ describe('VariantSelector (site check M11, C1)', () => {
     expect(screen.queryByText('Choose Your Programme')).not.toBeInTheDocument()
   })
 })
+
+describe('VariantSelector coming soon (Suzanne, 12 Oct)', () => {
+  const formats = [
+    { id: 'live', title: 'Live', prices: [{ currency_code: 'zar', amount: 150000 }] },
+    { id: 'rec', title: 'Recorded series', prices: [{ currency_code: 'zar', amount: 150000 }], metadata: { coming_soon: true } },
+  ]
+
+  it('replaces Add to Cart with a disabled Coming Soon button for a coming-soon format', () => {
+    render(<VariantSelector variants={formats} selectedVariantId="rec" onSelect={() => {}} />)
+    expect(screen.queryByRole('button', { name: /add to cart/i })).not.toBeInTheDocument()
+    const button = screen.getByRole('button', { name: /^coming soon$/i })
+    expect(button).toBeDisabled()
+    expect(screen.getByText(/not available to buy yet/i)).toBeInTheDocument()
+    expect(screen.getByText(/let me know when it is available/i).closest('a')).toHaveAttribute('href', '/contact')
+  })
+
+  it('keeps Add to Cart for the live format of the same product and marks the other option', () => {
+    render(<VariantSelector variants={formats} selectedVariantId="live" onSelect={() => {}} />)
+    expect(screen.getByRole('button', { name: /add to cart/i })).toBeInTheDocument()
+    expect(screen.getByText('(coming soon)')).toBeInTheDocument()
+  })
+})

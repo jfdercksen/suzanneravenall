@@ -6,6 +6,7 @@ import { useCart } from '@/lib/cart'
 import { maxQuantity } from '@/components/cart/cartRules'
 import { getSpotsInfo } from '@/lib/inventory/spots'
 import { isCapacityLimitedHandle } from '@/lib/inventory/group-sessions'
+import { isComingSoonVariant } from './productKind'
 import type { MedusaVariant } from '@/types/medusa'
 
 function getPriceForCurrency(variant: MedusaVariant, currencyCode: string): number | null {
@@ -73,6 +74,8 @@ export function VariantSelector({
   const spots =
     selectedVariant && isCapacityLimited ? getSpotsInfo(selectedVariant.inventory_quantity) : null
   const soldOut = spots?.soldOut ?? false
+  // Listed but not for sale yet (metadata.coming_soon on the variant).
+  const comingSoon = selectedVariant ? isComingSoonVariant(selectedVariant) : false
 
   const headingClass = dark ? 'text-white' : 'text-brand-ink'
   const priceClass = dark ? 'text-white' : 'text-brand-ink'
@@ -135,6 +138,7 @@ export function VariantSelector({
                   }`}
                 >
                   {variant.title}
+                  {isComingSoonVariant(variant) ? <span className="ml-2 text-xs opacity-80">(coming soon)</span> : null}
                 </button>
               )
             })}
@@ -158,7 +162,31 @@ export function VariantSelector({
       </div>
 
       {/* CTA */}
-      {soldOut ? (
+      {comingSoon ? (
+        <div className="space-y-3">
+          <p className={`text-sm font-medium ${dark ? 'text-white/70' : 'text-brand-muted'}`}>
+            This format is being prepared and is not available to buy yet.
+          </p>
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+            className={`w-full sm:w-auto sm:min-w-[240px] py-4 px-8 rounded-button text-base font-medium cursor-not-allowed ${
+              dark ? 'bg-white/10 text-white/60 border border-white/20' : 'bg-brand-sand text-brand-muted border border-brand-border'
+            }`}
+          >
+            Coming Soon
+          </button>
+          <p className={`text-sm ${dark ? 'text-white/60' : 'text-brand-muted'}`}>
+            <Link
+              href="/contact"
+              className={`font-medium underline underline-offset-4 transition-colors duration-200 ${dark ? 'text-brand-accent-400 hover:text-white' : 'text-brand-accent hover:text-brand-primary'}`}
+            >
+              Let me know when it is available
+            </Link>
+          </p>
+        </div>
+      ) : soldOut ? (
         <div className="space-y-3">
           <p className={`text-sm font-medium ${dark ? 'text-white/70' : 'text-brand-muted'}`}>
             This cohort is fully booked.

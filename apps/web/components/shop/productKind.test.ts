@@ -5,6 +5,8 @@ import {
   firstSentence,
   getDeliveryBadge,
   getProductKind,
+  isComingSoonProduct,
+  isComingSoonVariant,
   isSelfStudyProduct,
   metadataFaq,
   metadataList,
@@ -156,3 +158,29 @@ describe('metadata readers', () => {
   })
 })
 
+
+describe('coming soon (Suzanne, 12 Oct: recorded series not yet sold as self study)', () => {
+  const live = { id: 'live', title: 'Live', prices: [], metadata: null }
+  const recordedSoon = { id: 'rec', title: 'Recorded series', prices: [], metadata: { coming_soon: true } }
+  const recorded = { id: 'rec2', title: 'Recorded series', prices: [], metadata: { thinkific_course_id: 1776395 } }
+
+  it('reads the flag from variant metadata, as a boolean or a string', () => {
+    expect(isComingSoonVariant(recordedSoon)).toBe(true)
+    expect(isComingSoonVariant({ metadata: { coming_soon: 'true' } })).toBe(true)
+    expect(isComingSoonVariant(recorded)).toBe(false)
+    expect(isComingSoonVariant(live)).toBe(false)
+  })
+
+  it('a product is coming soon only when every format is', () => {
+    const base = product('group-session-attraction-frequency-recorded', 'Group Session: Attraction Frequency', [], ['group-sessions-recorded'])
+    expect(isComingSoonProduct({ ...base, variants: [recordedSoon] })).toBe(true)
+    expect(isComingSoonProduct({ ...base, variants: [live, recordedSoon] })).toBe(false)
+    expect(isComingSoonProduct({ ...base, variants: [] })).toBe(false)
+  })
+
+  it('the badge says Coming Soon for an all-coming-soon product and keeps the format badge otherwise', () => {
+    const base = product('group-session-develop-super-confidence', 'Group Session: Develop Super Confidence', [], ['group-sessions-live'])
+    expect(getDeliveryBadge({ ...base, variants: [recordedSoon] })?.label).toBe('Coming Soon')
+    expect(getDeliveryBadge({ ...base, variants: [live, recordedSoon] })?.label).toBe('Live or Recorded')
+  })
+})
