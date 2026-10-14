@@ -60,7 +60,7 @@ interface RetrievedOrder {
 
 // ── Product type detection ────────────────────────────────────────────────────
 
-type ProductType = 'session' | 'self-paced' | 'live' | 'group' | 'mentorship' | 'other'
+type ProductType = 'session' | 'self-paced' | 'live' | 'live-course' | 'group' | 'mentorship' | 'other'
 
 interface CategoryAccess {
   access_level: number
@@ -124,6 +124,10 @@ function detectOrderProductType(items: OrderItem[]): ProductType {
     // the private-session booking email (Shayna, 6 Oct: Shedding Excess Weight).
     if (handle.includes('group')) return 'group'
     if (handle.includes('session') || handle.includes('coaching')) return 'session'
+    // Bonus Lifetime Access is an add-on the team applies by hand (no course of
+    // its own): its handle says "self-study" but no course-access mail follows
+    // (14 Oct, order #236 promised one).
+    if (handle.includes('lifetime-access')) return 'other'
     if (handle.includes('self-paced') || handle.includes('self-study')) return 'self-paced'
     if (handle.includes('-live')) return 'live'
     if (handle.includes('group')) return 'group'
@@ -512,8 +516,11 @@ export default async function orderPlacedHandler({
     // series) means course access, whatever the product's category says. Live
     // group seats have no course and keep the Zoom wording (Shayna, 6 Oct:
     // Career Progression "Recorded series" was told a Zoom link would follow).
+    // A LIVE programme whose seat also enrols a course keeps its live wording
+    // and adds the course access line (14 Oct, orders #232/#233 read as self study).
     const categoryType = detectOrderProductType(items)
-    const productType: ProductType = orderHasCourses(buildOrderSnapshot(order)) ? 'self-paced' : categoryType
+    const hasCourses = orderHasCourses(buildOrderSnapshot(order))
+    const productType: ProductType = hasCourses ? (categoryType === 'live' ? 'live-course' : 'self-paced') : categoryType
     const isSessionOrder = categoryType === 'session'
     const calBookingUrl = isSessionOrder ? CALCOM_SESSION_BOOKING_URL : null
 

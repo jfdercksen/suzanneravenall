@@ -200,6 +200,16 @@ describe('sendOrderConfirmationEmail', () => {
     expect(text).not.toContain('BOOK YOUR SESSION')
   })
 
+  it('plain text for a live programme with a course gives course access AND Zoom steps', async () => {
+    mockSend.mockResolvedValue('email_id_live_course')
+    await sendOrderConfirmationEmail({ order: { ...baseOrder, productType: 'live-course' }, invoiceUrl: null })
+    const text = (mockSend.mock.calls.at(-1)![0] as { text: string }).text
+    expect(text).toContain('course access email from Ravenall Institute')
+    expect(text).toContain('Zoom details')
+    expect(text).not.toContain('at your own pace')
+    expect(text).not.toContain('BOOK YOUR SESSION')
+  })
+
   it('plain text lists the download links and the download steps for a download order', async () => {
     mockSend.mockResolvedValue('email_id_dl')
     await sendOrderConfirmationEmail({

@@ -48,7 +48,8 @@ export interface MembershipEmailProps extends MembershipEmailData {
   unsubscribeUrl: string
 }
 
-export type OrderProductType = 'session' | 'self-paced' | 'live' | 'group' | 'mentorship' | 'download' | 'other'
+/** 'live-course': a live programme whose seat also enrols a Thinkific course (materials now, Zoom details later). */
+export type OrderProductType = 'session' | 'self-paced' | 'live' | 'live-course' | 'group' | 'mentorship' | 'download' | 'other'
 
 /** A file the order delivers: a signed link the buyer clicks (see lib/downloads/storage.ts). */
 export interface OrderDownload {

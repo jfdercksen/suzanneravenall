@@ -60,6 +60,14 @@ export function getNextSteps(productType: OrderProductType | undefined): NextSte
         { step: '02', text: 'Joining instructions are sent 48 hours before your first session.' },
         { step: '03', text: 'Join the live session. Suzanne will be there to guide you through every step.' },
       ]
+    case 'live-course':
+      // A live programme seat that also enrols the course on Thinkific (as on the
+      // current site, where live buyers log into the LMS for the programme materials).
+      return [
+        { step: '01', text: 'Watch for your course access email from Ravenall Institute: it has your login for the programme materials on the course platform.' },
+        { step: '02', text: 'Joining instructions and Zoom details for the live sessions are sent 48 hours before your first session.' },
+        { step: '03', text: 'Join the live session. Suzanne will be there to guide you through every step.' },
+      ]
     case 'group':
       return [
         { step: '01', text: 'Your Zoom link will be emailed 24 hours before the session.' },
