@@ -1,0 +1,213 @@
+{
+  "section": "E",
+  "target": "http://169.239.180.49",
+  "date": "2026-10-15",
+  "rows": [
+    {
+      "id": "E-01",
+      "item": "Contact form",
+      "steps": "Filled name/email/phone/enquiry Other/message, clicked Send Message",
+      "expected": "Success state",
+      "actual": "Form replaced by 'Message sent! Thank you. Suzanne's team will be in touch within 2 business days.' POST /api/contact 200.",
+      "verdict": "PASS",
+      "evidence": [
+        "docs/testing/results/browser/E-01-success.png"
+      ],
+      "console_errors": [
+        "net::ERR_BLOCKED_BY_CLIENT http://169.239.180.49:3002/embed/embed.js (Cal.com embed, on page load)"
+      ],
+      "failed_requests": [],
+      "records_created": [
+        "contact enquiry from johan@aiautomations.co.za"
+      ],
+      "submitted_at_utc": "2026-10-15T09:06:04Z"
+    },
+    {
+      "id": "E-02",
+      "item": "Homepage lead magnet (Breakthrough Trilogy)",
+      "steps": "Entered johan+e02 in 'Be the first to read it' form, clicked Notify Me",
+      "expected": "Confirmation, POST 2xx",
+      "actual": "'Thank you, your request is in. We will email you as soon as The Breakthrough Trilogy is released.' POST /api/lead-magnet 200. Note section is a pre-order notify form, not a free chapter.",
+      "verdict": "PASS",
+      "evidence": [
+        "docs/testing/results/browser/E-02-success.png"
+      ],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": [
+        "johan+e02@aiautomations.co.za"
+      ],
+      "submitted_at_utc": "2026-10-15T09:07:00Z"
+    },
+    {
+      "id": "E-03",
+      "item": "Masterclass Watch Now",
+      "steps": "First name Johan, johan+e03, Watch Now, Register and Watch",
+      "expected": "Navigates to /masterclass/watch",
+      "actual": "Navigated to http://169.239.180.49/masterclass/watch, tab title 'Watch the Free Masterclass | Dr. Suzanne Ravenall | Dr. Suzanne Ravenall'. POST /api/lead-magnet 200.",
+      "verdict": "PASS",
+      "evidence": [
+        "docs/testing/results/browser/E-03-success.png"
+      ],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": [
+        "johan+e03@aiautomations.co.za"
+      ],
+      "submitted_at_utc": "2026-10-15T09:07:50Z"
+    },
+    {
+      "id": "E-04",
+      "item": "Masterclass Watch Later",
+      "steps": "Johan, johan+e04, Watch Later, 2026-10-16, 10:00, Register",
+      "expected": "Confirmation names date and time",
+      "actual": "'Thank you, you're registered. We have emailed you the link to watch the masterclass at the time you chose.' Date and time are NOT named. POST /api/lead-magnet 200.",
+      "verdict": "FAIL",
+      "severity": "minor",
+      "evidence": [
+        "docs/testing/results/browser/E-04-success.png"
+      ],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": [
+        "johan+e04@aiautomations.co.za"
+      ],
+      "submitted_at_utc": "2026-10-15T09:08:43Z"
+    },
+    {
+      "id": "E-05",
+      "item": "Resources newsletter and assessments notify",
+      "steps": "(a) /resources Subscribe (b) /resources/assessments Notify Me",
+      "expected": "Both confirm, POST 2xx",
+      "actual": "(a) 'You're on the list. Watch your inbox for the next issue.' POST 200. (b) 'You're on the list! We'll let you know as soon as assessments are available.' POST 200. Both forms exist.",
+      "verdict": "PASS",
+      "evidence": [
+        "docs/testing/results/browser/E-05a-success.png",
+        "docs/testing/results/browser/E-05b-success.png"
+      ],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": [
+        "johan+e05a@aiautomations.co.za",
+        "johan+e05b@aiautomations.co.za"
+      ],
+      "submitted_at_utc": "(a) 2026-10-15T09:09:30Z (b) 2026-10-15T09:10:25Z"
+    },
+    {
+      "id": "E-06",
+      "item": "Community form",
+      "steps": "johan+e06, Notify me",
+      "expected": "Confirmation, POST 2xx",
+      "actual": "'You're on the list. We'll let you know as soon as the community launches.' POST /api/lead-magnet 200.",
+      "verdict": "PASS",
+      "evidence": [
+        "docs/testing/results/browser/E-06-success.png"
+      ],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": [
+        "johan+e06@aiautomations.co.za"
+      ],
+      "submitted_at_utc": "2026-10-15T09:11:13Z"
+    },
+    {
+      "id": "E-07",
+      "item": "Quiz gate",
+      "steps": "Johan / QA Test / johan+e07, Send Me the Diagnostic",
+      "expected": "Invite sent text, POST /api/quiz/subscribe 2xx",
+      "actual": "'CHECK YOUR INBOX / Your Is Your Intuition Helping You or Holding You Back? link is on its way / We've sent it to johan+e07@aiautomations.co.za. Check your inbox (and spam folder) to begin.' POST 200. Heading is ungrammatical (see E-NEW-2).",
+      "verdict": "PASS",
+      "evidence": [
+        "docs/testing/results/browser/E-07-success.png"
+      ],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": [
+        "johan+e07@aiautomations.co.za"
+      ],
+      "submitted_at_utc": "2026-10-15T09:12:01Z"
+    },
+    {
+      "id": "E-08",
+      "item": "Unsubscribe",
+      "steps": "open the Unsubscribe link in the E-02 welcome mail (Brevo tracking redirect), click Unsubscribe",
+      "expected": "confirmation page; suppression recorded",
+      "actual": "Landing page 'Unsubscribe from marketing emails' names johan+e02@aiautomations.co.za; after the click: 'You have been unsubscribed'. POST /api/email/unsubscribe 200. Walked by the controller in pass 2.",
+      "verdict": "PASS",
+      "evidence": [
+        "docs/testing/results/browser/E-08-landing.png",
+        "docs/testing/results/browser/E-08-confirmed.png"
+      ],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": [
+        "email_unsubscribes row for johan+e02@aiautomations.co.za"
+      ],
+      "submitted_at_utc": "09:14:32"
+    },
+    {
+      "id": "E-09",
+      "item": "Search box",
+      "steps": "Ctrl+K, typed pattern, Enter; then /search?q=pattern",
+      "expected": "Palette results; /search lists results",
+      "actual": "Palette showed 10 results plus 'View all results for pattern'; Enter opened /search?q=pattern with '20 results found' (20 links). Direct URL also '20 results found'.",
+      "verdict": "PASS",
+      "evidence": [
+        "docs/testing/results/browser/E-09-palette.png",
+        "docs/testing/results/browser/E-09-search-enter.png",
+        "docs/testing/results/browser/E-09-search-direct.png"
+      ],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": [],
+      "submitted_at_utc": ""
+    }
+  ],
+  "findings": [
+    {
+      "id": "E-NEW-1",
+      "item": "Contact page booking calendar",
+      "actual": "Cal.com embed script http://169.239.180.49:3002/embed/embed.js failed (ERR_BLOCKED_BY_CLIENT in this browser); page shows fallback 'The booking calendar did not load here... OPEN THE BOOKING PAGE'. Embed and the 'Book Discovery Call' link use plain http on port 3002. Could be test-browser blocking only; check on a normal browser.",
+      "severity": "minor",
+      "evidence": [
+        "docs/testing/results/browser/E-01-success.png"
+      ]
+    },
+    {
+      "id": "E-NEW-2",
+      "item": "Quiz gate confirmation heading",
+      "actual": "Heading reads 'Your Is Your Intuition Helping You or Holding You Back? link is on its way' (quiz title, a question, inserted into a sentence). Fix: use 'Your quiz link is on its way'.",
+      "severity": "minor",
+      "evidence": [
+        "docs/testing/results/browser/E-07-success.png"
+      ]
+    },
+    {
+      "id": "E-NEW-3",
+      "item": "Homepage lead magnet is not a free chapter",
+      "actual": "Brief expected a free chapter request; the section is 'Be the first to read it' pre-order notify (Notify Me). Informational.",
+      "severity": "minor",
+      "evidence": [
+        "docs/testing/results/browser/E-02-success.png"
+      ]
+    },
+    {
+      "id": "E-NEW-4",
+      "item": "Masterclass Watch Later confirmation claims an email was sent",
+      "actual": "Text says 'We have emailed you the link to watch the masterclass at the time you chose.' Controller should verify the mail arrives for johan+e04 and whether it carries the 16 Oct 10:00 time.",
+      "severity": "minor",
+      "evidence": [
+        "docs/testing/results/browser/E-04-success.png"
+      ]
+    },
+    {
+      "id": "E-NEW-5",
+      "item": "Confirmation wording inconsistency",
+      "actual": "Assessments confirms 'You're on the list!' while newsletter and community use 'You're on the list.' Cosmetic.",
+      "severity": "minor",
+      "evidence": [
+        "docs/testing/results/browser/E-05b-success.png"
+      ]
+    }
+  ]
+}

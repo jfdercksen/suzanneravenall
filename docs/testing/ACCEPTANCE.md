@@ -4,6 +4,24 @@ Target: review box `http://169.239.180.49` (branch `feature/design-standard`, de
 
 Rules: one section at a time; every item gets PASS, FAIL (KI number), N/A or BLOCKED (owner); a section is DONE only when no row is empty; a FAIL is fixed and re-walked before the next section starts. No test delivers mail to the client's mailboxes (PRECONDITIONS.md P1).
 
+## Project profile (read from the code and the box on 15 Oct 2026; the walker brief is built from this)
+
+| Fact | Value | Read from |
+|---|---|---|
+| Stack | Next.js 15 App Router web (`apps/web`), Medusa v2 store (`apps/medusa`), Payload CMS, Supabase auth + tables (self-hosted, suzanne.db.aimate.co.za), Thinkific LMS, Cal.com bookings, automations in code (outbox) after the n8n retirement | package.json, infra/docker-compose.yml, CLAUDE.md, docs/n8n-migration-plan.md |
+| Sections that apply | A B C D E F G H I J K L M N (all); none N/A: the project has forms, quizzes, a store, an LMS, auth, Cal.com and code automations | detection table, SKILL.md Phase 1 |
+| Nav source | `components/layout/DesktopNav.tsx`, `MobileNav.tsx`, `Footer.tsx`; header 23 distinct links, footer 35 anchors (counted live 15 Oct by the D walk) | rendered page |
+| Search | MeiliSearch (`lib/search`), Ctrl+K palette and `/search?q=`; `GET /api/search` | code |
+| Checkout fields | First name, Last name, Email address, Phone number, Billing country (select); voucher field on the same step; no address | `components/checkout/CheckoutContent.tsx` lines 527-580 |
+| Price format | `R4 205,00` (space thousands, comma decimals); currencies ZAR, USD (USD rows await Shayna) | product page and checkout on the box, G-059 walk |
+| Voucher / free path | `QA-SELFTEST-100` (100%), voucher field on the checkout contact step, free orders complete through `POST /api/checkout/free` | code + ~27 orders 13-15 Oct |
+| Gateways | PayFast + PayPal; `PAYFAST_SANDBOX`, `PAYPAL_SANDBOX` unset on the box = live, so paid flows are BLOCKED (P4) | env read-back 15 Oct (Johan) |
+| Mail | Brevo REST through `apps/web/lib/email/send.ts`; sender `hello@suzanneravenall.com` (`EMAIL_FROM_ADDRESS`); notify addresses `CONTACT_NOTIFY_EMAIL`, `QUIZ_NOTIFY_EMAIL`; test inbox johan@aiautomations.co.za read through the session's Outlook connector (email search, then read the message) | code + connector |
+| Forms (section E) | E-01 contact: name, email, phone, enquiry select, message (`POST /api/contact`, notify mail + acknowledgement). E-02 homepage chapter: email (`POST /api/lead-magnet` source homepage, welcome "We will let you know when The Breakthrough Trilogy is released"). E-03/E-04 masterclass: first name, email, now/later radio, date + time when later (source masterclass, "You're on the list for the free masterclass"). E-05 resources newsletter: first name, email (source newsletter, "Welcome to the Monthly Insights Newsletter") and assessments notify: first name, email (source assessments-notify, "You're on the list for the assessments"). E-06 community: email (source community, "You're on the list for the community launch"). E-07 quiz gate: first name, last name, email (`POST /api/quiz/subscribe`, invite mail "<quiz> - your diagnostic is ready"). E-08 unsubscribe: `/unsubscribe?token=` from any welcome mail, `POST /api/email/unsubscribe`. E-09 search box | the components and routes named in the rows |
+| Records a run creates | lead rows in Supabase `leads` (+ Vtiger contact and event per lead, `LEADS_AUTOMATION=code`), `email_unsubscribes` rows, Medusa orders + Thinkific enrolments (G, H), portal accounts (I), Cal.com bookings (J). Read back: Supabase (Johan), `scripts/vtiger.py`, Thinkific API, the inbox | `lib/leads/capture.ts`, `lib/leads/store.ts`, integrations |
+| Pacing | single worker on the box: one WRITE record per 30 s (a 502 at 23 s on 14 Oct); one agent per section; `browser_close` between sections | PRECONDITIONS P11, pilot 15 Oct |
+| Persona | Johan QA Test, johan@aiautomations.co.za, phone +27 82 000 0000, billing country South Africa. Lead forms use a plus-address per form (johan+e02@, johan+e05@ ...) so the 24 h welcome-mail repeat guard and the unsubscribe suppression do not mask a result. No address field anywhere | checkout fields and form fields above |
+
 ## Sections
 
 | # | Section | Type | Items | Status (imported 1-14 Oct) |
@@ -12,7 +30,7 @@ Rules: one section at a time; every item gets PASS, FAIL (KI number), N/A or BLO
 | B | Every link on every page | READ | 135 pages, 1,753 asset and external links | DONE 1 Oct (checklist B); re-crawl after catalogue changes of 12-14 Oct |
 | C | Content | READ | placeholders, titles, media, 6 testimonial videos, product descriptions | DONE 1 Oct (checklist C); 35 products without description = client decision |
 | D | Navigation and search | READ | header 23 links, footer 35, phone menu, Ctrl+K search, /search, 404, index freshness | DONE 15 Oct by the /acceptance pilot walk (8/8 PASS, 2 minor findings KI058 KI059); open follow-up: index freshness after edits moves to K-08 (search sync in code; the n8n meilisearch-content-sync is retired) |
-| E | Forms | MAIL | 9 forms (E-01..E-09) | PART: contact PASS 14 Oct; masterclass PASS 13 Oct; others open |
+| E | Forms | MAIL | 9 forms (E-01..E-09), 10 submissions incl. both E-05 forms | DONE 15 Oct (8 PASS, 1 minor FAIL KI061; findings KI062; every mail read back) |
 | F | Diagnostics | MAIL | 8 quizzes x gate, invite mail, questions, result, report mail, notify | DONE 14 Oct (all 8 completion + notify; 4 of 8 report mails) |
 | G | Shop and checkout | WRITE | listing, cart, voucher, free order for every variant (145 rows), PayFast + PayPal sandbox, confirmation, order mail, invoice | PART: ~25 variants bought 13-14 Oct (#221-#241); gateways BLOCKED (sandbox flags unset) |
 | H | Fulfilment per product type | WRITE | course access mail + Thinkific enrolment; live-course wording; session booking block; generic steps; membership welcome | PART: proven for 8 types 14 Oct; course-id audit H-00 open |
@@ -48,15 +66,15 @@ Imported 15 Oct from `FULL-SITE-CHECKLIST.md` section D (1 Oct run) for the /acc
 
 | Id | Form | Where | Expected | Status | Evidence |
 |---|---|---|---|---|---|
-| E-01 | Contact form | /contact (ContactForm.tsx, POST /api/contact) | thank-you state; notification + acknowledgement mail at the notify address | PASS 14 Oct | checklist 14 Oct 04:39 |
-| E-02 | Homepage chapter request (lead magnet) | / (LeadMagnet.tsx, POST /api/lead-magnet) | confirmation; welcome mail; lead-magnet-to-vtiger run |  |  |
-| E-03 | Masterclass Watch Now | /masterclass (EmailCaptureForm.tsx) | opens /masterclass/watch; registration mail | PASS 13 Oct |  |
-| E-04 | Masterclass Watch Later | /masterclass | date/time confirmation; welcome mail with the chosen date | PASS 13 Oct |  |
-| E-05 | Resources newsletter / assessments notify | /resources/assessments (EmailNotifyForm.tsx) | confirmation; mail |  |  |
-| E-06 | Community form | /community (CommunityContent.tsx) | confirmation; mail |  |  |
-| E-07 | Quiz gate (email capture) | /explore/<slug>/quiz (QuizGate.tsx, POST /api/quiz/subscribe) | invite mail within 1 min | PASS 13 Oct (8 of 8) |  |
-| E-08 | Unsubscribe | link in any marketing mail (POST /api/email/unsubscribe) | confirmation page; no further mail |  |  |
-| E-09 | Search box | Ctrl+K and /search (SearchResultsContent.tsx) | results; Enter opens /search | PASS 1 Oct |  |
+| E-01 | Contact form | /contact (ContactForm.tsx, POST /api/contact) | thank-you state; notification + acknowledgement mail at the notify address | PASS 15 Oct | E-01-success.png; notify mail To johan@aiautomations.co.za 09:06:14Z + acknowledgement 09:06:17Z |
+| E-02 | Homepage Breakthrough Trilogy release notify (lead magnet) | / (LeadMagnet.tsx, POST /api/lead-magnet) | confirmation; welcome mail; lead-magnet-to-vtiger run | PASS 15 Oct | E-02-success.png; welcome mail 09:07:07Z |
+| E-03 | Masterclass Watch Now | /masterclass (EmailCaptureForm.tsx) | opens /masterclass/watch; registration mail | PASS 15 Oct | E-03-success.png; /masterclass/watch; welcome mail 09:07:56Z |
+| E-04 | Masterclass Watch Later | /masterclass | date/time confirmation; welcome mail with the chosen date | FAIL KI061 (minor) | E-04-success.png; page confirmation omits the chosen date/time, the mail names Friday 16 October 2026 at 10:00 (09:08:49Z) |
+| E-05 | Resources newsletter / assessments notify | /resources/assessments (EmailNotifyForm.tsx) | confirmation; mail | PASS 15 Oct | E-05a-success.png, E-05b-success.png; newsletter mail 09:09:38Z, assessments mail 09:10:34Z |
+| E-06 | Community form | /community (CommunityContent.tsx) | confirmation; mail | PASS 15 Oct | E-06-success.png; community mail 09:11:21Z |
+| E-07 | Quiz gate (email capture) | /explore/<slug>/quiz (QuizGate.tsx, POST /api/quiz/subscribe) | invite mail within 1 min | PASS 15 Oct | E-07-success.png; invite mail 09:12:11Z; heading wording KI062 |
+| E-08 | Unsubscribe | link in any marketing mail (POST /api/email/unsubscribe) | confirmation page; no further mail | PASS 15 Oct | E-08-landing.png, E-08-confirmed.png; POST /api/email/unsubscribe 200 for johan+e02 |
+| E-09 | Search box | Ctrl+K and /search (SearchResultsContent.tsx) | results; Enter opens /search | PASS 15 Oct | E-09-palette.png, E-09-search-enter.png, E-09-search-direct.png; 20 results |
 
 ### G - Shop and checkout (WRITE)
 
@@ -282,6 +300,10 @@ One block per section run: date, agent results file, counts, FAIL list, re-walk 
 ### Section D, 15 Oct 2026 (pilot walk, qa-e2e agent with Playwright MCP)
 
 Results: `results/acceptance-D-2026-10-15.json` and `.md`, screenshots in `results/browser/D-*.png`. 8 rows PASS, 0 FAIL on the rows, 2 new minor findings: D-NEW-1 empty tab title on the unknown-product 404 (KI058), D-NEW-2 Program 2 labelled "Deep Dive" in search (KI059). Row counts corrected from the 1 Oct run: header 23 distinct links (not 32), footer 35 anchors (not 32). Unverified remark from the walker: the All tab on /search shows 20 results, the same as Programmes, so All may be capped at 20 and hide the 7 topics. Walker cost: 87k tokens, 78 tool calls, 4 min. No re-walk needed.
+
+### Section E, 15 Oct 2026 (qa-e2e walker for E-01..E-07 and E-09, controller for E-08)
+
+Gate first: P1 read back EMPTY at 11:02 (both notify vars lost when the 14 Oct deploy recreated web from an `infra/.env` without them; a submission would have mailed hello@suzanneravenall.com). Johan added the lines and recreated web at 11:04, read-back = johan@aiautomations.co.za for both; only then was the walk started. Results: `results/acceptance-E-2026-10-15.json` and `.md`, screenshots `results/browser/E-*.png`. 9 rows: 8 PASS, E-04 FAIL minor (KI061: the Watch Later page confirmation does not name the chosen date and time; the mail does). Every POST 200, no failed requests, no console errors of the walk's own. Mail read back through the Outlook connector within 15 s of each submit: contact notification (To johan@aiautomations.co.za) + acknowledgement, 5 lead welcome mails (homepage, masterclass now, masterclass later with "Friday 16 October 2026 at 10:00", newsletter, assessments, community), quiz invite; subject and time per row in the results .md. E-08 walked in a second pass from the E-02 welcome mail's link (Brevo click-tracking 302 to /unsubscribe?token=): confirmation page, POST 200. Findings: E-NEW-1 the Cal.com embed on /contact (http://169.239.180.49:3002/embed/embed.js) was ERR_BLOCKED_BY_CLIENT in the walker's browser and the page showed its "open the booking page" fallback (re-check in section J, not a form defect); E-NEW-2 quiz gate heading "Your Is Your Intuition Helping You or Holding You Back? link is on its way" (KI062); E-NEW-3 the homepage form is a pre-order notify for The Breakthrough Trilogy, not a free chapter (row wording corrected, no defect); E-NEW-5 "You're on the list!" vs "You're on the list." across the three list forms (cosmetic, folded into KI062); E-NEW-6 (controller) the lead welcome mails still carry the pre-15-Sep palette (navy #012B43 header, electric-blue #1719F4 button) while the site is monochrome; Johan to decide whether the mail templates follow. Walker cost: 86k tokens, 100 tool calls, 7.5 min (sonnet). Records created: 9 leads (Supabase + Vtiger) for johan@ and johan+e02..e07, one email_unsubscribes row (johan+e02). Cleanup: leads stay marked as QA by name; nothing to cancel.
 
 ### Section G rows G-043 and G-059, 15 Oct 2026 (pilot walk, one row per agent, 90 s apart)
 

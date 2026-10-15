@@ -4,9 +4,9 @@ Ticked lines carry the evidence. Server changes are applied by Johan; the walker
 
 | # | Precondition | Applies to | Evidence | Done |
 |---|---|---|---|---|
-| P1 | Every notify / alert address on the box = our inbox: `CONTACT_NOTIFY_EMAIL`, `QUIZ_NOTIFY_EMAIL` (web), n8n alert recipients | E F K | Johan set both web vars to johan@aiautomations.co.za on 14 Oct (contact + 8 quiz notifications received). NOT read back today; n8n alert recipients unknown | PART |
+| P1 | Every notify / alert address on the box = our inbox: `CONTACT_NOTIFY_EMAIL`, `QUIZ_NOTIFY_EMAIL` (web); automation alerts move into code (plan 4.4) | E F K | 15 Oct 11:02 read-back (Johan, `docker compose exec -T web printenv`): both EMPTY, falling back to hello@suzanneravenall.com. Cause: the 14 Oct value (the 14 Oct 02:39Z notification was addressed To: johan@aiautomations.co.za) was not in `infra/.env`, and the container recreated by the 14 Oct 14:46 deploy lost it (`${CONTACT_NOTIFY_EMAIL:-}` in compose). Johan added both lines to `infra/.env` and recreated web at 11:04; read-back `CONTACT_NOTIFY_EMAIL=johan@aiautomations.co.za`, `QUIZ_NOTIFY_EMAIL=johan@aiautomations.co.za`. Standing rule: after any change on the box, read these two back before a MAIL section | yes (15 Oct 11:04) |
 | P2 | Mail sender works from the box | E F G H I J | order and quiz mails received 13-14 Oct | yes |
-| P3 | Test inbox readable from the session | all MAIL/WRITE | johan@aiautomations.co.za via the EA's Outlook connector; plus-addresses land in the same inbox | yes |
+| P3 | Test inbox readable from the session | all MAIL/WRITE | johan@aiautomations.co.za via the Outlook connector; 15 Oct: `outlook_email_search` sender suzanneravenall.com returned 25 mails from hello@suzanneravenall.com (orders #229-#243 with attachment flag, course access, contact, quiz notifications) with subject, sender, time and hasAttachments; plus-addresses land in the same inbox | yes |
 | P4 | Payment gateways in sandbox | G | `PAYFAST_SANDBOX`, `PAYPAL_SANDBOX` unset on the box = LIVE. Paid flows stay BLOCKED until Johan sets the flags + sandbox credentials | NO (Johan) |
 | P5 | Free path: voucher QA-SELFTEST-100 (100%), `/api/checkout/free` | G H | ~25 orders 13-14 Oct | yes |
 | P6 | Test persona: Johan QA Test, johan@aiautomations.co.za, phone and address as used on the contact form 14 Oct | all WRITE | | yes |
