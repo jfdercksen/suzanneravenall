@@ -1,0 +1,950 @@
+{
+ "at": "2026-10-15",
+ "buyer": "johan@aiautomations.co.za",
+ "promo": "QA-SELFTEST-100",
+ "note": "acceptance section G cleanup: orders #244-#387 and the 37 Thinkific enrolments created on 15 Oct; the Thinkific user id is left out on purpose so the user is kept",
+ "rows": [
+  {
+   "order_id": "order_01M4ZEEVMVXAKCJTKR5V102VWD",
+   "order_display_id": 244,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZEHRQY0GF3V7KPJVQSZMRH",
+   "order_display_id": 245,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZEMB9AR2H2NDARSR2XA8CA",
+   "order_display_id": 246,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZES1EZY0HED5BPJPRE93R5",
+   "order_display_id": 247,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZEVZ5R7WVQATEE68XN90K8",
+   "order_display_id": 248,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZEYNV8MWSMX15E0SBHJ4JV",
+   "order_display_id": 249,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZFK1VSZTR8E0HZ5PR6S5AG",
+   "order_display_id": 250,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZFN66HBMQDMR356QMV5AWP",
+   "order_display_id": 251,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZFQ92Q48TXHQSKPN9YZ29F",
+   "order_display_id": 252,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZFSCA75WR05A2EBEATBY98",
+   "order_display_id": 253,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZFVBN31HZHQ37MJ6148T3S",
+   "order_display_id": 254,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZFXM491Z7HNTVJD11FMS9G",
+   "order_display_id": 255,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZG1528Y96QNKBSFJ23VWX9",
+   "order_display_id": 256,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZG3J1R1AQ6GZ05ESDY8MAJ",
+   "order_display_id": 257,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZG5T3DHVYCQ9X45SNWG19T",
+   "order_display_id": 258,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZG874AQ7ZHZQRQGMM6HAXK",
+   "order_display_id": 259,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZGAJSDSBG6J4K2ES9WWPM9",
+   "order_display_id": 260,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZGD5MXB0XC6S7PEHPHQWFF",
+   "order_display_id": 261,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZGM5BR2DA7VCWWB26S2HWA",
+   "order_display_id": 262,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZGQ4F6TKADDR1N3K68JV1V",
+   "order_display_id": 263,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZGSD6YGSM1HP9TS6D6ZG8B",
+   "order_display_id": 264,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZGVNN743NXZK36F3M4SWAD",
+   "order_display_id": 265,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZGY5DAH9CFX5HVKM1F32A5",
+   "order_display_id": 266,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZH0FHDCRW3QVWJSTQY78J5",
+   "order_display_id": 267,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZH3KC9AZ0BVJ1VHSMF1K9M",
+   "order_display_id": 268,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZH66VMXKVQV6P7XX740HE7",
+   "order_display_id": 269,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZH8EH00WPCSCKAWJ06HTHY",
+   "order_display_id": 270,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZHB68F9TGS4RKP63FS32QE",
+   "order_display_id": 271,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZHDQMXRJFRGK5241ZKSCC8",
+   "order_display_id": 272,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZHFVNXB7T3Z0JX214GZY3K",
+   "order_display_id": 273,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZHK20Q1WMEWSBPBZ5Y6TJ8",
+   "order_display_id": 274,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZHNE2BW14BD9HBV4RMKSN9",
+   "order_display_id": 275,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZHQH3SCZTT75QN35RQZ9RY",
+   "order_display_id": 276,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZHTB9DP79DP774XVPSHF5C",
+   "order_display_id": 277,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZHWTNZ34QYNR2FP86TYWKB",
+   "order_display_id": 278,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZHZPX5JRAQ469RAN5Z2Q97",
+   "order_display_id": 279,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZJ31VXP21DEE5P7YS0KFND",
+   "order_display_id": 280,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZJ5607GQVC536RX2FGHED6",
+   "order_display_id": 281,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZJ7FAC7VSH57FXKWW93329",
+   "order_display_id": 282,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZJ9VVF9KQ1V5XA67Q8NNCV",
+   "order_display_id": 283,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZJC2Z8SN1BA4FKYR9TPXNK",
+   "order_display_id": 284,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZJF7GB5XRTHDPADCQ8V1NT",
+   "order_display_id": 285,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZJK0AKTSAKJZPTWB0MYX1W",
+   "order_display_id": 286,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZJNP465MBJ7MTGNK634ZV7",
+   "order_display_id": 287,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZJR1A16EBCFSMMF0EHV9BN",
+   "order_display_id": 288,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZJT924H3Y4YJNXAJPJ9J9C",
+   "order_display_id": 289,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZJWT8GJ43FQHBT39F4Q0KK",
+   "order_display_id": 290,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZJZ9NHR8GT8YMRSMK4XB19",
+   "order_display_id": 291,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZK5791J68MQ2DS6E83K7QY",
+   "order_display_id": 292,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZK7WT3VD5TCENEJWHN739R",
+   "order_display_id": 293,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZKAQ3321TZ86BXA1KFME6R",
+   "order_display_id": 294,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZKDMPBMJ19NRVCMCP1B6G1",
+   "order_display_id": 295,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZKGDFP20ENZCTRDCW6TJT5",
+   "order_display_id": 296,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZKMX8APDTWMFV8PBAS4CWT",
+   "order_display_id": 297,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZKTXCWBBZH68ZTDVE9XHPW",
+   "order_display_id": 298,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZKYA3CKY9FH25QE9HT88PV",
+   "order_display_id": 299,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZM24WVCGZP4XMY799YBY9K",
+   "order_display_id": 300,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZM4H6FKA192D0EC2CBYVN8",
+   "order_display_id": 301,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZM7NPJNQ5E1HFRJXNNFS5Z",
+   "order_display_id": 302,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZMAG7AJ17TQC8Z19Y0SQCR",
+   "order_display_id": 303,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZMDT1WEYYBNDGDZGF3ZBNS",
+   "order_display_id": 304,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZMH63WNRJ6WHHFFZARKMQ2",
+   "order_display_id": 305,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZMM0JSZ1PC5E7Y8QETWWPT",
+   "order_display_id": 306,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZMPYVXAA930RTB330D33EY",
+   "order_display_id": 307,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZMSSW6NNRH871JRJACWJPQ",
+   "order_display_id": 308,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZMWYZC5HP3JSPXBJW63JMK",
+   "order_display_id": 309,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZN1XNG9XCXW3W5ADP063HS",
+   "order_display_id": 310,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZN4T5SHAVB4CX6SF1B84VJ",
+   "order_display_id": 311,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZN6XG6DFEZAXKF7HBPE0PX",
+   "order_display_id": 312,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZN91FKPY1GKG4Y8EBMGEHP",
+   "order_display_id": 313,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZNB63XDJQ1ANN1WR0TBV9K",
+   "order_display_id": 314,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZNGJ0PPMNXJ9KFMQ00XQ1S",
+   "order_display_id": 315,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZNM6VACWDZTT17ZQA0CJ6K",
+   "order_display_id": 316,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZNPFJF5K6SGJHJZWN5A863",
+   "order_display_id": 317,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZNV08T1BP00NWAVHXJWQWC",
+   "order_display_id": 318,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZNY9873WAKHQN4MJN1PXSV",
+   "order_display_id": 319,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZP35W5DVEAXXD6BEV7V7PS",
+   "order_display_id": 320,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZP6ANSS1M1ZTQ0SY08KJSB",
+   "order_display_id": 321,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZPBP5EHCYV272H7Z8M38PP",
+   "order_display_id": 322,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZPFWH9V3FBZGZPB49G7R4F",
+   "order_display_id": 323,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZPJTGSHY4VVCTXGWJKY18M",
+   "order_display_id": 324,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZPQ660CC3VG8VWK1MSHTQK",
+   "order_display_id": 325,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZPT6TA3KW7FA9PMD7A53WV",
+   "order_display_id": 326,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZPXS3K1JYW0TNRSEST2YPA",
+   "order_display_id": 327,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZQ1BXB532B0RBFFG0T6V44",
+   "order_display_id": 328,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZQ4C7ANQ3EV547SVX180SR",
+   "order_display_id": 329,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZQ7QDYNHD2Y1DB965F2SDA",
+   "order_display_id": 330,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZQB0X1YZ8NAJ7DB5A1JPKC",
+   "order_display_id": 331,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZQE4JXWPCKBCCWHFA1ZNMX",
+   "order_display_id": 332,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZQGKAFAZG39AH6T4MA0W19",
+   "order_display_id": 333,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZQM87R7VRZXBPX0NA5ZTTZ",
+   "order_display_id": 334,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZQQCDBAGMQF3BFK6AH3M01",
+   "order_display_id": 335,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZQT6AN5F427JGT3QBFEHDS",
+   "order_display_id": 336,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZQWN3276WK8YYWMSX0KRQV",
+   "order_display_id": 337,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZQYW76ATDM29Q2DVPPSXKM",
+   "order_display_id": 338,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZR17MMF5S5K2PXKPM6F51E",
+   "order_display_id": 339,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZR5FVVSH14FY0GGE771N56",
+   "order_display_id": 340,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZR9GFVQEWCAKE165GFCPC7",
+   "order_display_id": 341,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZRDHKDM89V4HPAZ4XW4ZSM",
+   "order_display_id": 342,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZRH0ADEM0J3P2SNBE4NB57",
+   "order_display_id": 343,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZRMGED5B3W0NMBRBKS1N73",
+   "order_display_id": 344,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZRR67YVDW84ST10A5YQ1GB",
+   "order_display_id": 345,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZRXSWTKR31BR9J6454Q4Z4",
+   "order_display_id": 346,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZS0PT7XT3DEV7X53EKEY2R",
+   "order_display_id": 347,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZS3GT55BKEBDJVAVZSYH0N",
+   "order_display_id": 348,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZS6K5SGHP798K3VRHCFYNE",
+   "order_display_id": 349,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZS9QBGPS3WMF6H6ZRQD65W",
+   "order_display_id": 350,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZSDRHTB2C6ZX1AN5W73BMZ",
+   "order_display_id": 351,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZSG6G98E1T19E5B4TPJKB9",
+   "order_display_id": 352,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZSJE8MAZVZGCVC0KF1EMW7",
+   "order_display_id": 353,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZSMKDWR1FFQVPM8PG628SE",
+   "order_display_id": 354,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZSPVEJ28X2ET08E1JFPETM",
+   "order_display_id": 355,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZSS99H6MFN5JAQDKHJQZQQ",
+   "order_display_id": 356,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZSWHW8B03VZKS25479RSSY",
+   "order_display_id": 357,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZSZMT81VYZSNHBBJJ1CPNQ",
+   "order_display_id": 358,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZT221GYPFE38Z104TTSCEZ",
+   "order_display_id": 359,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZT40ZF7ZT47GQ5FVVK9NC4",
+   "order_display_id": 360,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZT62GQBKNW775M6YBFDBX4",
+   "order_display_id": 361,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZZHXGSH10BJRQXZ75JA9MJ",
+   "order_display_id": 362,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZZM5KBEQ2A4E6Y9SWB3GXM",
+   "order_display_id": 363,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZZPN5WE3CPN5HE4YYS6G6H",
+   "order_display_id": 364,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZZS5AC782HRX7MEF1GA6Q8",
+   "order_display_id": 365,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZZVKYE7YN654ZD7JHKNK84",
+   "order_display_id": 366,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M4ZZXV2H7FV4G46FME88AN6G",
+   "order_display_id": 367,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M50014QC4C78QZW7Y6BZRPFZ",
+   "order_display_id": 368,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M5003CQJATZ4N6Y0AENH1F4Y",
+   "order_display_id": 369,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M5005P6P1PC6M52949DCRRPH",
+   "order_display_id": 370,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M5007VHMT9V5R3YKN8H9CMGC",
+   "order_display_id": 371,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M5009YG339WAAS9ES0A1H4DH",
+   "order_display_id": 372,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M500CNP3AJXQWMQ6QCHN8V1D",
+   "order_display_id": 373,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M500G2WJ8J0BEP7F8Y8BMY30",
+   "order_display_id": 374,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M500JT8MDPB6S4J3VFH88AAG",
+   "order_display_id": 375,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M500N2QE57JTYV636KZD3VP5",
+   "order_display_id": 376,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M500Q9NVSZSS03C2V8ARVJA1",
+   "order_display_id": 377,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M500SGTK3358184Q5QRJZ09J",
+   "order_display_id": 378,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M500VJ57B1Q0SXYFVEGQ5YGM",
+   "order_display_id": 379,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M500YGGP30VEK4Q174QQZT6R",
+   "order_display_id": 380,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M5010TGNHVXZPJPRWVEF3AGZ",
+   "order_display_id": 381,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M50131NF66CBA6H5MD0M0A0T",
+   "order_display_id": 382,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M5015DD31AET5QPCMMNQ6NR9",
+   "order_display_id": 383,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M5017GY40K89B28EVT4RVSR5",
+   "order_display_id": 384,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M504GM91Z9XZ3G2S45RH8DVJ",
+   "order_display_id": 385,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M504J3FR45V58CSRHJY545F9",
+   "order_display_id": 386,
+   "status": "pending"
+  },
+  {
+   "order_id": "order_01M504KEH3H3F7PT1SCS1QKHJA",
+   "order_display_id": 387,
+   "status": "pending"
+  },
+  {
+   "enrolment_id": 891324696,
+   "course_id": 2353636,
+   "course_name": "Resonance Repatterning Accelerated Basic 5 Training Series: Review of Programs 1-5 (Live via zoom)",
+   "created_at": "2026-10-15T11:27:15.739Z"
+  },
+  {
+   "enrolment_id": 891325005,
+   "course_id": 2434137,
+   "course_name": "Akashic Navigator & Intuitive Coaching Fundamentals: Clearing Self, Level 1 (Live via Zoom)",
+   "created_at": "2026-10-15T11:29:58.016Z"
+  },
+  {
+   "enrolment_id": 891325630,
+   "course_id": 2833014,
+   "course_name": "New Akashic Navigator & Intuitive Coaching Advanced: Clearing Others, Level 2 (Self Study)",
+   "created_at": "2026-10-15T11:32:19.877Z"
+  },
+  {
+   "enrolment_id": 891325952,
+   "course_id": 2434102,
+   "course_name": "Akashic Navigator & Intuitive Coaching Advanced: Clearing Others, Level 2 (Live via Zoom)",
+   "created_at": "2026-10-15T11:35:14.177Z"
+  },
+  {
+   "enrolment_id": 891327729,
+   "course_id": 1892663,
+   "course_name": "Deep Energy Clearing Fundamentals: Clearing Self, Level 1 (Live via Zoom)",
+   "created_at": "2026-10-15T11:45:27.158Z"
+  },
+  {
+   "enrolment_id": 891329126,
+   "course_id": 1892662,
+   "course_name": "Deep Energy Clearing Advanced: Clearing Others, Level 2 (Live via Zoom)",
+   "created_at": "2026-10-15T11:53:58.000Z"
+  },
+  {
+   "enrolment_id": 891329475,
+   "course_id": 2434133,
+   "course_name": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 1 (Live Zoom)",
+   "created_at": "2026-10-15T11:58:00.378Z"
+  },
+  {
+   "enrolment_id": 891329647,
+   "course_id": 1892677,
+   "course_name": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 1 (Self Study)",
+   "created_at": "2026-10-15T11:59:57.191Z"
+  },
+  {
+   "enrolment_id": 891330428,
+   "course_id": 2331256,
+   "course_name": "Trauma to Transcendence: Breaking the hold of the Childhood brain on your adult self (Live via Zoom)",
+   "created_at": "2026-10-15T12:01:56.058Z"
+  },
+  {
+   "enrolment_id": 891330593,
+   "course_id": 2920523,
+   "course_name": "New: Trauma to Transcendence: Breaking the hold of the Childhood brain on your adult self (Self Study)",
+   "created_at": "2026-10-15T12:03:34.774Z"
+  },
+  {
+   "enrolment_id": 891330855,
+   "course_id": 1892701,
+   "course_name": "Finding My Life Purpose (Self Study)",
+   "created_at": "2026-10-15T12:05:22.301Z"
+  },
+  {
+   "enrolment_id": 891331088,
+   "course_id": 2434115,
+   "course_name": "Finding My Life Purpose (Live via Zoom)",
+   "created_at": "2026-10-15T12:07:10.098Z"
+  },
+  {
+   "enrolment_id": 891331324,
+   "course_id": 2434091,
+   "course_name": "Love & Relationships (Live via Zoom)",
+   "created_at": "2026-10-15T12:08:53.434Z"
+  },
+  {
+   "enrolment_id": 891331901,
+   "course_id": 1892729,
+   "course_name": "Love & Relationships (Self Study)",
+   "created_at": "2026-10-15T12:10:15.688Z"
+  },
+  {
+   "enrolment_id": 891332546,
+   "course_id": 2434092,
+   "course_name": "Intuition in My Business Capacity (Live via Zoom)",
+   "created_at": "2026-10-15T12:12:12.528Z"
+  },
+  {
+   "enrolment_id": 891332731,
+   "course_id": 1895565,
+   "course_name": "Intuition in My Business Capacity (Self Study)",
+   "created_at": "2026-10-15T12:13:56.296Z"
+  },
+  {
+   "enrolment_id": 891332983,
+   "course_id": 1892722,
+   "course_name": "Intuition in My Personal Capacity (Live via Zoom)",
+   "created_at": "2026-10-15T12:15:28.224Z"
+  },
+  {
+   "enrolment_id": 891333245,
+   "course_id": 2434112,
+   "course_name": "Intuition in My Personal Capacity (Self Study)",
+   "created_at": "2026-10-15T12:16:48.320Z"
+  },
+  {
+   "enrolment_id": 891333320,
+   "course_id": 2434094,
+   "course_name": "Meditation (Live via Zoom)",
+   "created_at": "2026-10-15T12:18:01.592Z"
+  },
+  {
+   "enrolment_id": 891333708,
+   "course_id": 1892716,
+   "course_name": "Meditation (Self Study)",
+   "created_at": "2026-10-15T12:19:18.235Z"
+  },
+  {
+   "enrolment_id": 891333967,
+   "course_id": 2434157,
+   "course_name": "Mindfulness (Self Study)",
+   "created_at": "2026-10-15T12:21:37.451Z"
+  },
+  {
+   "enrolment_id": 891334421,
+   "course_id": 1892702,
+   "course_name": "Mindfulness (Live via Zoom)",
+   "created_at": "2026-10-15T12:23:51.736Z"
+  },
+  {
+   "enrolment_id": 891335228,
+   "course_id": 1730348,
+   "course_name": "Group Session Being a Great Boundary Setter (available as a recorded series)",
+   "created_at": "2026-10-15T12:27:55.003Z"
+  },
+  {
+   "enrolment_id": 891336606,
+   "course_id": 1799794,
+   "course_name": "Resonance Repatterning Group session series : Love & Relationships",
+   "created_at": "2026-10-15T12:36:29.734Z"
+  },
+  {
+   "enrolment_id": 891337621,
+   "course_id": 1892070,
+   "course_name": "Resonance Repatterning Recorded Group Session Series : Money Mastery ",
+   "created_at": "2026-10-15T12:39:42.290Z"
+  },
+  {
+   "enrolment_id": 891339308,
+   "course_id": 1696047,
+   "course_name": "Resonance Repatterning Recorded Group Session Series : Shedding Excess Weight",
+   "created_at": "2026-10-15T12:44:57.780Z"
+  },
+  {
+   "enrolment_id": 891339456,
+   "course_id": 3064388,
+   "course_name": "Resonance Repatterning Program 7 Principles of Relationships Practical + Demos (Self Study)",
+   "created_at": "2026-10-15T12:46:10.069Z"
+  },
+  {
+   "enrolment_id": 891339599,
+   "course_id": 2165209,
+   "course_name": "Resonance Repatterning Program 7 Principles of Relationships Practical + Demos (Live via Zoom)",
+   "created_at": "2026-10-15T12:47:20.938Z"
+  },
+  {
+   "enrolment_id": 891339964,
+   "course_id": 2165225,
+   "course_name": "Resonance Repatterning Program 9 Energetics of Relationships Practical + Demos (Live via Zoom)",
+   "created_at": "2026-10-15T12:48:34.703Z"
+  },
+  {
+   "enrolment_id": 891340172,
+   "course_id": 3064390,
+   "course_name": "Resonance Repatterning Program 9 Energetics of Relationships Practical + Demos (Self Study)",
+   "created_at": "2026-10-15T12:49:56.322Z"
+  },
+  {
+   "enrolment_id": 891340320,
+   "course_id": 2434134,
+   "course_name": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 2 (Live Zoom)",
+   "created_at": "2026-10-15T12:51:41.806Z"
+  },
+  {
+   "enrolment_id": 891340813,
+   "course_id": 1776395,
+   "course_name": "Resonance Repatterning Recorded Group Session Series : Nice or Not Nice Communication",
+   "created_at": "2026-10-15T12:54:42.461Z"
+  },
+  {
+   "enrolment_id": 891341145,
+   "course_id": 1324340,
+   "course_name": "Coherence Muscle Testing (Self Study Online)",
+   "created_at": "2026-10-15T12:55:46.859Z"
+  },
+  {
+   "enrolment_id": 891366321,
+   "course_id": 1287690,
+   "course_name": "Post Traumatic Growth Presentation",
+   "created_at": "2026-10-15T14:30:44.831Z"
+  },
+  {
+   "enrolment_id": 891368494,
+   "course_id": 1284792,
+   "course_name": "Getting Unstuck (Self Study)",
+   "created_at": "2026-10-15T14:39:07.532Z"
+  },
+  {
+   "enrolment_id": 891369432,
+   "course_id": 3064382,
+   "course_name": "Resonance Repatterning Program 6 Inner Cultivation Practical + Demos (Self Study)",
+   "created_at": "2026-10-15T14:42:43.195Z"
+  },
+  {
+   "enrolment_id": 891370185,
+   "course_id": 2165217,
+   "course_name": "Resonance Repatterning Program 6 Inner Cultivation Practical + Demos (Live via Zoom)",
+   "created_at": "2026-10-15T14:43:52.794Z"
+  }
+ ]
+}
