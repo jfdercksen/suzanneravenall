@@ -1,0 +1,36 @@
+{
+  "section": "E-rewalk",
+  "target": "http://169.239.180.49",
+  "date": "2026-10-15",
+  "note": "Re-walk of E-04 and E-07 after KI061/KI062 fix (commit ca578f8). Mail read-back by controller.",
+  "rows": [
+    {
+      "id": "E-04",
+      "item": "Masterclass Watch Later",
+      "steps": "First name Johan, johan+e04b@aiautomations.co.za, Watch Later, Date 2026-10-16, Time 10:00, clicked Register",
+      "expected": "Thank you, you're registered. / You chose to watch on Friday 16 October 2026 at 10:00. We have emailed you the link, and it works whenever you are ready.",
+      "actual": "Saw: 'Thank you, you’re registered.' then 'You chose to watch on Friday 16 October 2026 at 10:00. We have emailed you the link, and it works whenever you are ready.' POST /api/lead-magnet 200. Date and time named. Note: the apostrophe in 'you’re' is a typographic (curly) one.",
+      "verdict": "PASS",
+      "severity": "none",
+      "submitted_at_utc": "2026-10-15T09:37:52Z",
+      "evidence": ["docs/testing/results/browser/E-04b-success.png"],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": ["johan+e04b@aiautomations.co.za (lead-magnet, Watch Later 2026-10-16 10:00)"]
+    },
+    {
+      "id": "E-07",
+      "item": "Quiz gate",
+      "steps": "Johan / QA Test / johan+e07b@aiautomations.co.za, clicked Send Me the Diagnostic",
+      "expected": "Eyebrow 'Check Your Inbox'; heading exactly 'Your quiz link is on its way'; body names quiz title and email",
+      "actual": "Eyebrow 'Check Your Inbox'; h1 'Your quiz link is on its way'; body 'Your link to Is Your Intuition Helping You or Holding You Back? is on its way to johan+e07b@aiautomations.co.za. Check your inbox (and spam folder) to begin.' Button 'Didn't get it? Resend' shown. POST /api/quiz/subscribe 200.",
+      "verdict": "PASS",
+      "severity": "none",
+      "submitted_at_utc": "2026-10-15T09:38:37Z",
+      "evidence": ["docs/testing/results/browser/E-07b-success.png"],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": ["johan+e07b@aiautomations.co.za (quiz subscriber, Johan QA Test)"]
+    }
+  ]
+}
