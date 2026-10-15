@@ -12,7 +12,7 @@ vi.mock('next/link', () => ({
 }))
 
 vi.mock('@/lib/cart', () => ({
-  useCart: () => ({ cart: null, addItem: vi.fn() }),
+  useCart: vi.fn(() => ({ cart: null, addItem: vi.fn() })),
 }))
 
 const variants = [
@@ -52,5 +52,70 @@ describe('VariantSelector coming soon (Suzanne, 12 Oct)', () => {
     render(<VariantSelector variants={formats} selectedVariantId="live" onSelect={() => {}} />)
     expect(screen.getByRole('button', { name: /add to cart/i })).toBeInTheDocument()
     expect(screen.getByText('(coming soon)')).toBeInTheDocument()
+  })
+})
+
+describe('VariantSelector before and after hydration (KI066)', () => {
+  it('renders the picker and Add to Cart disabled with a pending label in the server HTML', async () => {
+    const { renderToString } = await import('react-dom/server')
+    const html = renderToString(
+      <VariantSelector variants={variants} selectedVariantId="a" onSelect={() => {}} />
+    )
+    const buttons = html.match(/<button[^>]*>/g) ?? []
+    expect(buttons.length).toBe(3)
+    for (const b of buttons) expect(b).toMatch(/\bdisabled\b/)
+    expect(html).toContain('Loading...')
+    expect(html).not.toContain('>Add to Cart<')
+  })
+
+  it('accepts a variant click once hydrated', async () => {
+    const { fireEvent } = await import('@testing-library/react')
+    const onSelect = vi.fn()
+    render(<VariantSelector variants={variants} selectedVariantId="a" onSelect={onSelect} />)
+    const button = screen.getByRole('button', { name: 'Self Study' })
+    expect(button).not.toBeDisabled()
+    fireEvent.click(button)
+    expect(onSelect).toHaveBeenCalledWith('b')
+    expect(screen.getByRole('button', { name: /add to cart/i })).not.toBeDisabled()
+  })
+})
+
+describe('VariantSelector add-to-cart feedback (KI066)', () => {
+  it('names the variant in a confirmation that stays until another variant is chosen', async () => {
+    const { fireEvent, waitFor } = await import('@testing-library/react')
+    const { rerender } = render(
+      <VariantSelector variants={variants} selectedVariantId="b" onSelect={() => {}} />
+    )
+    fireEvent.click(screen.getByRole('button', { name: /add to cart/i }))
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Self Study is in your cart.'))
+    expect(screen.getByRole('button', { name: /added to cart/i })).toBeDisabled()
+    expect(screen.getByText(/View cart/).closest('a')).toHaveAttribute('href', '/cart')
+
+    // No timed reset: still there after a pause.
+    await new Promise((r) => setTimeout(r, 50))
+    expect(screen.getByRole('status')).toBeInTheDocument()
+
+    // Picking the other variant brings back a live Add to Cart for it.
+    rerender(<VariantSelector variants={variants} selectedVariantId="a" onSelect={() => {}} />)
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^add to cart$/i })).not.toBeDisabled()
+  })
+})
+
+describe('VariantSelector after an add, per quantity rule (review note)', () => {
+  it('offers Add another for the book, which allows more than one per order', async () => {
+    const { fireEvent, waitFor } = await import('@testing-library/react')
+    const book = [{ id: 'book', title: 'Paperback', prices: [{ currency_code: 'zar', amount: 35000 }] }]
+    const cartLib = await import('@/lib/cart')
+    vi.mocked(cartLib.useCart).mockReturnValue({
+      cart: {
+        items: [{ variant_id: 'book', product_handle: 'the-latest-book-by-suzanne', quantity: 1 }],
+      },
+      addItem: vi.fn(),
+    } as unknown as ReturnType<typeof cartLib.useCart>)
+    render(<VariantSelector variants={book} selectedVariantId="book" onSelect={() => {}} />)
+    fireEvent.click(screen.getByRole('button', { name: /add to cart/i }))
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('This item is in your cart.'))
+    expect(screen.getByRole('button', { name: 'Add another' })).not.toBeDisabled()
   })
 })

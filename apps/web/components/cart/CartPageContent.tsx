@@ -84,11 +84,25 @@ function EmptyCart() {
 export default function CartPageContent() {
   const { cart, isLoading, updateItem, removeItem } = useCart()
 
+  // KI064: the first load used to show only grey bars with no title and no
+  // words for as long as the stored cart took to fetch. The page title and a
+  // loading line render first (server-side too), the skeleton under them.
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-brand-cream py-20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="animate-pulse space-y-6">
+      <div className="min-h-screen bg-brand-cream">
+        <section className="w-full bg-brand-sand border-b border-brand-border py-16 lg:py-20">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+              Cart
+            </p>
+            <h1 className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary">Your Cart</h1>
+          </div>
+        </section>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+          <p role="status" aria-live="polite" className="text-brand-muted mb-8">
+            Loading your cart...
+          </p>
+          <div className="animate-pulse space-y-6" aria-hidden="true">
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex gap-6 py-6 border-b border-brand-border">
                 <div className="w-24 h-24 bg-brand-border rounded-xl flex-shrink-0" />

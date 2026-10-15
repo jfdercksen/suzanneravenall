@@ -164,3 +164,34 @@ describe('ProductPageContent per product type (site check C1)', () => {
     expect(selectorProps[0]?.paymentPlanHref).toBeUndefined()
   })
 })
+
+describe('ProductPageContent keeps the chosen variant in the URL (KI066)', () => {
+  const twoVariants = [
+    { id: 'var_live', title: 'Live via Zoom', prices: [{ currency_code: 'zar', amount: 100000 }] },
+    { id: 'var_retaker', title: 'Live Retaker', prices: [{ currency_code: 'zar', amount: 50000 }] },
+  ]
+
+  it('starts on the variant named by ?variant= when it belongs to the product', () => {
+    selectorProps.length = 0
+    render(<ProductPageContent product={makeProduct({ variants: twoVariants })} initialVariantId="var_retaker" />)
+    expect(selectorProps[0]?.selectedVariantId).toBe('var_retaker')
+  })
+
+  it('falls back to the default when ?variant= is not one of the product variants', () => {
+    selectorProps.length = 0
+    render(<ProductPageContent product={makeProduct({ variants: twoVariants })} initialVariantId="var_other" />)
+    expect(selectorProps[0]?.selectedVariantId).toBe('var_live')
+  })
+
+  it('writes the selection to ?variant= without navigating', async () => {
+    const { act } = await import('@testing-library/react')
+    window.history.replaceState({}, '', '/shop/test-product')
+    selectorProps.length = 0
+    render(<ProductPageContent product={makeProduct({ variants: twoVariants })} />)
+    const onSelect = selectorProps[0]?.onSelect as (id: string) => void
+    act(() => onSelect('var_retaker'))
+    expect(window.location.search).toBe('?variant=var_retaker')
+    expect(window.location.pathname).toBe('/shop/test-product')
+    expect(selectorProps[selectorProps.length - 1]?.selectedVariantId).toBe('var_retaker')
+  })
+})

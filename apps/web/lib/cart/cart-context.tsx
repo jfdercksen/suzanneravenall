@@ -198,9 +198,23 @@ function readRecoveryCartId(): string | null {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [cart, setCart] = useState<Cart | null>(null)
+  const [cart, setCartState] = useState<Cart | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const regionIdRef = useRef<string | null>(null)
+  // The cart as of the last commit, readable from inside an async callback
+  // after an await (the `cart` closure value is stale by then).
+  const cartRef = useRef<Cart | null>(null)
+  // Resolves once the stored cart has been checked. Writes wait for it (KI066):
+  // an Add to Cart one second after load used to create a second cart while the
+  // stored one was still being fetched; init then either overwrote the state
+  // with the stored cart (item gone until a reload) or, when the stored cart was
+  // already an order, deleted the new cart's id from localStorage.
+  const initDoneRef = useRef<Promise<void>>(Promise.resolve())
+
+  const setCart = useCallback((next: Cart | null) => {
+    cartRef.current = next
+    setCartState(next)
+  }, [])
 
   useEffect(() => {
     // Usable means: exists, not already an order, and in the region this
@@ -209,8 +223,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     // the catalogue, and keeping it would carry the 500 across the fix for
     // every returning visitor.
     async function loadUsable(cartId: string): Promise<Cart | null> {
-      const existing = await fetchCart(cartId)
-      if (!regionIdRef.current) regionIdRef.current = await fetchRegionId()
+      // Both requests at once: the cart page waited for them in series.
+      const [existing, regionId] = await Promise.all([
+        fetchCart(cartId),
+        regionIdRef.current ? Promise.resolve(regionIdRef.current) : fetchRegionId(),
+      ])
+      if (!regionIdRef.current) regionIdRef.current = regionId
       const resolved = regionIdRef.current
       if (existing && !existing.completed_at && (!resolved || existing.region_id === resolved)) {
         return existing
@@ -228,7 +246,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (recovered) {
           localStorage.setItem(CART_ID_KEY, recovered.id)
           setCart(recovered)
-          setIsLoading(false)
           return
         }
       }
@@ -238,20 +255,23 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         const existing = await loadUsable(cartId)
         if (existing) {
           setCart(existing)
-          setIsLoading(false)
           return
         }
         localStorage.removeItem(CART_ID_KEY)
       } else if (cartId) {
         localStorage.removeItem(CART_ID_KEY)
       }
-      setIsLoading(false)
     }
-    init()
-  }, [])
+    // Never a rejected promise: localStorage can throw (private mode, storage
+    // blocked) and every later write awaits this ref.
+    initDoneRef.current = init()
+      .catch(() => {})
+      .finally(() => setIsLoading(false))
+  }, [setCart])
 
   const getOrCreateCart = useCallback(async (): Promise<Cart | null> => {
-    if (cart) return cart
+    await initDoneRef.current
+    if (cartRef.current) return cartRef.current
 
     let regionId = regionIdRef.current
     if (!regionId) {
@@ -266,7 +286,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setCart(newCart)
     }
     return newCart
-  }, [cart])
+  }, [setCart])
 
   const addItem = useCallback(
     async (variantId: string, quantity = 1) => {
@@ -288,7 +308,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const data = (await res.json()) as { cart: Cart }
       setCart(normaliseCart(data.cart))
     },
-    [getOrCreateCart]
+    [getOrCreateCart, setCart]
   )
 
   const updateItem = useCallback(
@@ -311,7 +331,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         // silently fail
       }
     },
-    [cart]
+    [cart, setCart]
   )
 
   const removeItem = useCallback(
@@ -332,7 +352,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         // silently fail
       }
     },
-    [cart]
+    [cart, setCart]
   )
 
   const setEmail = useCallback(
@@ -354,7 +374,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         return false
       }
     },
-    [getOrCreateCart]
+    [getOrCreateCart, setCart]
   )
 
   const setContact = useCallback(
@@ -382,7 +402,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         return false
       }
     },
-    [getOrCreateCart]
+    [getOrCreateCart, setCart]
   )
 
   // Voucher codes. POST adds, DELETE removes; both return the recalculated cart.
@@ -411,7 +431,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         throw new Error('That voucher code is not valid')
       }
     },
-    [getOrCreateCart]
+    [getOrCreateCart, setCart]
   )
 
   const removePromoCode = useCallback(
@@ -426,18 +446,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const data = (await res.json()) as { cart: Cart }
       setCart(normaliseCart(data.cart))
     },
-    [cart]
+    [cart, setCart]
   )
 
   const clearCart = useCallback((cartId?: string) => {
     if (cartId && localStorage.getItem(CART_ID_KEY) !== cartId) {
       // Not this browser's cart. Still drop it from state if it is the one shown.
-      setCart((current) => (current?.id === cartId ? null : current))
+      if (cartRef.current?.id === cartId) setCart(null)
       return
     }
     localStorage.removeItem(CART_ID_KEY)
     setCart(null)
-  }, [])
+  }, [setCart])
 
   const itemCount = useMemo(
     () => cart?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0,

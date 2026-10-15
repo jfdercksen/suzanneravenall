@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { ProductHero } from './ProductHero'
 import { VariantSelector } from './VariantSelector'
 import { FAQAccordion } from './FAQAccordion'
@@ -68,13 +68,28 @@ const DISCOVERY_FAQ: FaqItem = {
 
 interface ProductPageContentProps {
   product: MedusaProduct
+  /** `?variant=<id>` from the URL, so a reload or a shared link keeps the choice (KI066). */
+  initialVariantId?: string
 }
 
-export default function ProductPageContent({ product }: ProductPageContentProps) {
-  // A "Live Retaker" seat is never preselected (site check C1).
+export default function ProductPageContent({ product, initialVariantId }: ProductPageContentProps) {
+  // A "Live Retaker" seat is never preselected (site check C1), unless the
+  // URL names it: then the buyer chose it before a reload.
   const [selectedVariantId, setSelectedVariantId] = useState<string>(() =>
-    defaultVariantId(product.variants)
+    initialVariantId && product.variants.some((v) => v.id === initialVariantId)
+      ? initialVariantId
+      : defaultVariantId(product.variants)
   )
+
+  // The chosen variant travels in the URL (replaceState, no navigation and no
+  // scroll), so a reload after a slow click does not fall back to the default.
+  const selectVariant = useCallback((id: string) => {
+    setSelectedVariantId(id)
+    if (typeof window === 'undefined') return
+    const url = new URL(window.location.href)
+    url.searchParams.set('variant', id)
+    window.history.replaceState(window.history.state, '', url)
+  }, [])
 
   // thinkific_course_id is seeded as a number (e.g. 1284792). It means the
   // order enrols the buyer on the Ravenall Institute; it does not mean the
@@ -117,7 +132,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             <VariantSelector
               variants={product.variants}
               selectedVariantId={selectedVariantId}
-              onSelect={setSelectedVariantId}
+              onSelect={selectVariant}
               productHandle={product.handle}
               chooseLabel={variantChooserLabel(kind)}
             />
@@ -393,7 +408,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             <VariantSelector
               variants={product.variants}
               selectedVariantId={selectedVariantId}
-              onSelect={setSelectedVariantId}
+              onSelect={selectVariant}
               productHandle={product.handle}
               chooseLabel={variantChooserLabel(kind)}
             />

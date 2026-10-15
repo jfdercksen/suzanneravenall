@@ -59,15 +59,21 @@ export async function generateMetadata({
 
 export default async function ProductDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ handle: string }>
+  searchParams: Promise<{ variant?: string | string[] }>
 }) {
-  const { handle } = await params
+  const [{ handle }, { variant }] = await Promise.all([params, searchParams])
   const product = await getProduct(handle)
 
   if (!product) {
     notFound()
   }
 
-  return <ProductPageContent product={product} />
+  // ?variant=<id> keeps the buyer's choice across a reload (KI066). The
+  // component checks it against the product's variants.
+  const initialVariantId = typeof variant === 'string' ? variant : undefined
+
+  return <ProductPageContent product={product} initialVariantId={initialVariantId} />
 }

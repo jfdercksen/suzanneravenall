@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useCart } from '@/lib/cart'
+import { useHydrated } from '@/lib/useHydrated'
 import { maxQuantity } from '@/components/cart/cartRules'
 import { getSpotsInfo } from '@/lib/inventory/spots'
 import { isCapacityLimitedHandle } from '@/lib/inventory/group-sessions'
@@ -51,9 +52,17 @@ export function VariantSelector({
   productHandle,
   chooseLabel = 'Choose an Option',
 }: VariantSelectorProps) {
-  const [buttonState, setButtonState] = useState<'idle' | 'loading' | 'added' | 'error'>('idle')
+  const [pendingState, setPendingState] = useState<'idle' | 'loading' | 'error'>('idle')
+  // The variant the last successful add put in the cart. The confirmation stays
+  // on screen for that variant (no timed reset, KI066) and clears by itself
+  // when the buyer picks a different one.
+  const [addedVariantId, setAddedVariantId] = useState<string | null>(null)
   const [addToCartError, setAddToCartError] = useState<string | null>(null)
   const { addItem, cart } = useCart()
+  // Until React has taken over the server-rendered page, a click on these
+  // buttons does nothing (KI066). They render disabled with a pending look
+  // so the buyer sees the page is still getting ready instead of a lost click.
+  const ready = useHydrated()
   const cartCurrency = cart?.currency_code ?? 'zar'
   const isCapacityLimited = isCapacityLimitedHandle(productHandle)
 
@@ -79,23 +88,36 @@ export function VariantSelector({
 
   const headingClass = dark ? 'text-white' : 'text-brand-ink'
   const priceClass = dark ? 'text-white' : 'text-brand-ink'
+  const buttonState: 'idle' | 'loading' | 'added' | 'error' =
+    pendingState !== 'idle'
+      ? pendingState
+      : selectedVariant && addedVariantId === selectedVariant.id
+        ? 'added'
+        : 'idle'
+  // After an add, items that allow more than one per order (the book) keep a
+  // live "Add another"; one-per-order items (sessions, seats, courses) stay on
+  // "Added to cart" with the button off.
+  const existingLine = selectedVariant
+    ? cart?.items?.find((item) => item.variant_id === selectedVariant.id)
+    : undefined
+  const canAddAnother = existingLine ? maxQuantity(existingLine) > existingLine.quantity : false
 
   async function handleAddToCart() {
-    if (!selectedVariant) return
-    setButtonState('loading')
+    if (!selectedVariant || !ready) return
+    setPendingState('loading')
     setAddToCartError(null)
     // One-per-order items (sessions, seats, courses) are already in the cart:
     // a second add would make Medusa raise the line to 2 (site check C19).
     const existing = cart?.items?.find((item) => item.variant_id === selectedVariant.id)
     if (existing && maxQuantity(existing) === 1) {
-      setButtonState('added')
-      setTimeout(() => setButtonState('idle'), 2500)
+      setAddedVariantId(selectedVariant.id)
+      setPendingState('idle')
       return
     }
     try {
       await addItem(selectedVariant.id, 1)
-      setButtonState('added')
-      setTimeout(() => setButtonState('idle'), 2500)
+      setAddedVariantId(selectedVariant.id)
+      setPendingState('idle')
     } catch (err) {
       // A cohort can sell out between page load and click (the homepage/shop
       // count can be up to 5 min stale — see getFeaturedCohort's revalidate
@@ -110,8 +132,8 @@ export function VariantSelector({
           ? 'Someone just took the last spot for this cohort. Please join the waitlist instead.'
           : null
       )
-      setButtonState('error')
-      setTimeout(() => setButtonState('idle'), 4000)
+      setPendingState('error')
+      setTimeout(() => setPendingState('idle'), 4000)
     }
   }
 
@@ -128,8 +150,13 @@ export function VariantSelector({
               return (
                 <button
                   key={variant.id}
+                  type="button"
                   onClick={() => onSelect(variant.id)}
+                  disabled={!ready}
+                  aria-pressed={isSelected}
                   className={`px-5 py-2.5 rounded-full text-sm font-medium border transition-all duration-200 ${
+                    ready ? '' : 'opacity-60 cursor-wait'
+                  } ${
                     isSelected
                       ? 'bg-brand-accent-600 text-white border-brand-accent-600'
                       : dark
@@ -201,10 +228,14 @@ export function VariantSelector({
       ) : selectedPrice !== null ? (
         <div className="space-y-3">
           <button
+            type="button"
             onClick={handleAddToCart}
-            disabled={buttonState !== 'idle'}
+            disabled={!ready || (buttonState !== 'idle' && !(buttonState === 'added' && canAddAnother))}
+            aria-busy={!ready || buttonState === 'loading'}
             className={`w-full sm:w-auto sm:min-w-[240px] py-4 px-8 rounded-button text-base font-medium transition-all duration-300 ${
-              buttonState === 'added'
+              !ready
+                ? 'bg-brand-accent-600 text-white/60 cursor-wait'
+                : buttonState === 'added' && !canAddAnother
                 ? 'bg-emerald-700 text-white cursor-default'
                 : buttonState === 'error'
                   ? 'bg-red-600 text-white cursor-default'
@@ -213,10 +244,14 @@ export function VariantSelector({
                     : 'bg-brand-accent-600 hover:bg-brand-accent-700 text-white hover:-translate-y-0.5 hover:shadow-lg'
             }`}
           >
-            {buttonState === 'loading'
+            {!ready
+              ? 'Loading...'
+              : buttonState === 'loading'
               ? 'Adding...'
               : buttonState === 'added'
-                ? 'Added to cart ✓'
+                ? canAddAnother
+                  ? 'Add another'
+                  : 'Added to cart ✓'
                 : buttonState === 'error'
                   ? addToCartError
                     ? 'Spot no longer available'
@@ -224,12 +259,15 @@ export function VariantSelector({
                   : 'Add to Cart'}
           </button>
           {buttonState === 'added' ? (
-            <Link
-              href="/cart"
-              className={`text-sm font-medium underline underline-offset-4 transition-colors duration-200 ${dark ? 'text-brand-accent-400 hover:text-white' : 'text-brand-accent hover:text-brand-primary'}`}
-            >
-              View cart →
-            </Link>
+            <p role="status" className={`text-sm ${dark ? 'text-white/80' : 'text-brand-ink'}`}>
+              {hasMultipleVariants && selectedVariant ? `${selectedVariant.title} is in your cart. ` : 'This item is in your cart. '}
+              <Link
+                href="/cart"
+                className={`font-medium underline underline-offset-4 transition-colors duration-200 ${dark ? 'text-brand-accent-400 hover:text-white' : 'text-brand-accent hover:text-brand-primary'}`}
+              >
+                View cart →
+              </Link>
+            </p>
           ) : buttonState === 'error' && addToCartError ? (
             <p className={`text-sm font-medium ${dark ? 'text-red-400' : 'text-red-600'}`}>
               {addToCartError}{' '}
