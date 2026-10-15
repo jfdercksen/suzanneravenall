@@ -1,0 +1,13 @@
+{
+  "section": "G-rewalk-KI066",
+  "date": "2026-10-15",
+  "commit": "0ef601b",
+  "console_errors": [],
+  "failed_requests": [],
+  "rows": [
+    {"id":"G-077","verdict":"PASS","order":385,"price_seen":"R1 660,00","placed_utc":"2026-10-15T15:57:24Z","first_click_accepted":true,"clicks":1,"url_had_variant":true,"add_to_cart_text":"Added to cart ✓ / Live Retaker is in your cart. View cart →","variant_kept_on_reload":true,"cart_first_snapshot":"Your Cart + Loading your cart... (status)","note":"First snapshot showed variant buttons disabled and Add to Cart 'Loading...'; click ~5s after navigate accepted first time.","evidence":["docs/testing/results/browser/G-077b-added.png","docs/testing/results/browser/G-077b-confirmation.png"]},
+    {"id":"G-084","verdict":"PASS","order":386,"price_seen":"R7 860,00","placed_utc":"2026-10-15T15:58:13Z","first_click_accepted":true,"clicks":1,"url_had_variant":true,"add_to_cart_text":"Added to cart ✓ / Live via Zoom is in your cart. View cart →","variant_kept_on_reload":true,"cart_first_snapshot":"Your Cart + Loading your cart... (status)","note":"Buttons already enabled at ~4s.","evidence":["docs/testing/results/browser/G-084b-added.png","docs/testing/results/browser/G-084b-confirmation.png"]},
+    {"id":"G-050","verdict":"PASS","order":387,"price_seen":"R5 980,00","placed_utc":"2026-10-15T15:58:57Z","first_click_accepted":true,"clicks":1,"url_had_variant":true,"add_to_cart_text":"Added to cart ✓ / Package of 08 is in your cart. View cart →","variant_kept_on_reload":true,"cart_first_snapshot":"Your Cart + Loading your cart... (status)","note":"Buttons enabled at click time.","evidence":["docs/testing/results/browser/G-050b-added.png","docs/testing/results/browser/G-050b-confirmation.png"]}
+  ],
+  "findings": ["Cart line item shows product title only, not the variant title (minor).", "Tooling cannot click within 1 s of load; refused-click-on-disabled not exercised."]
+}
