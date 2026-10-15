@@ -124,3 +124,114 @@ describe('order-placed cutover flags', () => {
     expect(enqueueAndKick).not.toHaveBeenCalled()
   })
 })
+
+/**
+ * KI070: member_subscriptions.tier_id is a uuid, so the free tier is resolved
+ * from membership_tiers by slug before the base row is inserted. The literal
+ * 'free' must never reach the insert.
+ */
+const FREE_TIER_ID = '6a906895-e0b7-48e0-a451-caf2affa27d3'
+
+function supabaseFake(opts: { tierRow: { id: string } | null; existing?: { access_level: number; track: string } | null }) {
+  const insert = vi.fn((_row: Record<string, unknown>) => Promise.resolve({ error: null }))
+  const update = vi.fn(() => ({ eq: () => ({ eq: () => Promise.resolve({ error: null }) }) }))
+  const tierEq = vi.fn(() => ({ maybeSingle: async () => ({ data: opts.tierRow, error: null }) }))
+  const tierSelect = vi.fn(() => ({ eq: tierEq }))
+  const upsert = vi.fn((_row: Record<string, unknown>, _opts: { onConflict: string }) => Promise.resolve({ error: null }))
+  const subSelect = () => {
+    const q = {
+      eq: () => q,
+      order: () => q,
+      limit: () => q,
+      maybeSingle: async () => ({ data: opts.existing ?? null, error: null }),
+    }
+    return q
+  }
+  const client = {
+    auth: { admin: { listUsers: async () => ({ data: { users: [{ id: 'user_qa', email: 'qa.buyer@example.com' }] }, error: null }) } },
+    from: (table: string) => {
+      if (table === 'membership_tiers') return { select: tierSelect }
+      if (table === 'member_subscriptions') return { select: subSelect, insert, update, upsert }
+      throw new Error(`unexpected table ${table}`)
+    },
+  }
+  return { client, insert, update, upsert, tierSelect, tierEq }
+}
+
+const programmeOrder = {
+  ...order,
+  customer: { email: 'qa.buyer@example.com' },
+  items: [
+    {
+      title: 'Rapid Repatterning Self Study',
+      variant: { title: 'Default', product: { title: 'Rapid Repatterning Self Study', metadata: {}, categories: [{ handle: 'rp-self-paced' }] } },
+    },
+  ],
+}
+
+async function placeProgrammeOrder(fake: ReturnType<typeof supabaseFake>, placed: Record<string, unknown> = programmeOrder) {
+  vi.doMock('@supabase/supabase-js', () => ({ createClient: vi.fn(() => fake.client) }))
+  vi.stubEnv('SUPABASE_URL', 'http://supabase.test')
+  vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'service-role-test')
+  vi.resetModules()
+  const mod = (await import('../order-placed.js')) as unknown as { default: (args: unknown) => Promise<void> }
+  const c = {
+    resolve: (key: string) => {
+      if (key === 'query') return { graph: vi.fn(async () => ({ data: [structuredClone(placed)] })) }
+      if (key === 'order') return { listOrders: vi.fn(async () => []) }
+      if (key === 'membershipsModule') return { activateMembership: vi.fn(async () => undefined) }
+      throw new Error(`unexpected resolve ${key}`)
+    },
+  }
+  await mod.default({ event: { data: { id: 'order_01QA' } }, container: c })
+  await new Promise((r) => setTimeout(r, 10))
+}
+
+describe('order-placed portal access base row (KI070)', () => {
+  afterEach(() => {
+    vi.doUnmock('@supabase/supabase-js')
+  })
+
+  it('inserts the base row with the free tier uuid looked up by slug, never the literal "free"', async () => {
+    const fake = supabaseFake({ tierRow: { id: FREE_TIER_ID } })
+    await placeProgrammeOrder(fake)
+    expect(fake.tierSelect).toHaveBeenCalledWith('id')
+    expect(fake.tierEq).toHaveBeenCalledWith('slug', 'free')
+    expect(fake.insert).toHaveBeenCalledTimes(1)
+    const row = fake.insert.mock.calls[0][0]
+    expect(row).toMatchObject({ user_id: 'user_qa', tier_id: FREE_TIER_ID, status: 'active', access_level: 3, track: 'general' })
+    expect(row.tier_id).not.toBe('free')
+  })
+
+  it('skips the insert and logs when the free tier is not seeded', async () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const fake = supabaseFake({ tierRow: null })
+    await placeProgrammeOrder(fake)
+    expect(fake.insert).not.toHaveBeenCalled()
+    expect(errorSpy.mock.calls.map((c) => String(c[0])).join('\n')).toContain('free tier not found')
+    errorSpy.mockRestore()
+  })
+
+  it('upgrades an existing row in place without touching membership_tiers', async () => {
+    const fake = supabaseFake({ tierRow: { id: FREE_TIER_ID }, existing: { access_level: 2, track: 'general' } })
+    await placeProgrammeOrder(fake)
+    expect(fake.insert).not.toHaveBeenCalled()
+    expect(fake.update).toHaveBeenCalledWith({ access_level: 3, track: 'general' })
+    expect(fake.tierSelect).not.toHaveBeenCalled()
+  })
+
+  it('membership orders upsert the tier uuid looked up by the product tier slug', async () => {
+    const SILVER_ID = 'bf4d1e22-1ad6-4dfc-9cec-786d56485def'
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
+    const membershipOrder = {
+      ...programmeOrder,
+      items: [{ title: 'Silver', variant: { title: 'Membership', product: { title: 'Silver', metadata: { product_type: 'membership', tier: 'silver' }, categories: [] } } }],
+    }
+    await placeProgrammeOrder(fake, membershipOrder)
+    expect(fake.tierEq).toHaveBeenCalledWith('slug', 'silver')
+    expect(fake.upsert).toHaveBeenCalledTimes(1)
+    const row = fake.upsert.mock.calls[0][0]
+    expect(row).toMatchObject({ user_id: 'user_qa', tier_id: SILVER_ID, status: 'active' })
+    expect(fake.insert).not.toHaveBeenCalled()
+  })
+})

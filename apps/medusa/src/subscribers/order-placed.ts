@@ -242,11 +242,55 @@ interface PortalSubscriptionTable {
   }): PortalWriteResult
 }
 
+// membership_tiers.id is a uuid generated when the tier was seeded
+// (infra/supabase/seed.sql), so a tier is addressed by its slug ('free',
+// 'silver', ...) and resolved to its id here. Writing the slug into
+// member_subscriptions.tier_id failed on every order with
+// `invalid input syntax for type uuid: "free"` (KI070, 15 Oct).
+interface TierLookupTable {
+  select(cols: string): {
+    eq(col: string, val: string): {
+      maybeSingle(): Promise<{ data: { id: string } | null; error: { message: string } | null }>
+    }
+  }
+}
+
+const tierIdCache = new Map<string, string>()
+
+async function resolveTierId(
+  supabase: ReturnType<typeof createClient>,
+  slug: string
+): Promise<string | null> {
+  const cached = tierIdCache.get(slug)
+  if (cached) return cached
+
+  const table = supabase.from('membership_tiers') as unknown as TierLookupTable
+  const { data, error } = await table.select('id').eq('slug', slug).maybeSingle()
+
+  if (error) {
+    console.error(`[order-placed] membership tier lookup failed for slug "${slug}": ${error.message}`)
+    return null
+  }
+  if (!data) {
+    console.error(`[order-placed] membership tier "${slug}" is not in membership_tiers — seed it (infra/supabase/seed.sql)`)
+    return null
+  }
+
+  tierIdCache.set(slug, data.id)
+  return data.id
+}
+
 async function syncSupabaseMembership(
   supabase: ReturnType<typeof createClient>,
   supabaseUserId: string,
   tier: string
 ): Promise<void> {
+  const tierId = await resolveTierId(supabase, tier)
+  if (!tierId) {
+    console.error(`[order-placed] Supabase member_subscriptions upsert skipped for user ${supabaseUserId}: unknown tier "${tier}"`)
+    return
+  }
+
   const isFree = tier === 'free'
   const endDate = isFree
     ? null
@@ -254,7 +298,7 @@ async function syncSupabaseMembership(
 
   const payload: MemberSubscriptionUpsert = {
     user_id: supabaseUserId,
-    tier_id: tier,
+    tier_id: tierId,
     status: 'active',
     start_date: new Date().toISOString(),
     end_date: endDate,
@@ -277,7 +321,7 @@ async function syncSupabaseMembership(
 /**
  * Grants or upgrades portal access_level for a programme purchase.
  * Never downgrades an existing higher access level.
- * If the user has no subscription row, inserts one with tier_id='free' as the base.
+ * If the user has no subscription row, inserts one on the free tier as the base.
  */
 async function syncPortalAccess(
   supabase: ReturnType<typeof createClient>,
@@ -286,7 +330,6 @@ async function syncPortalAccess(
   track: 'akashic' | 'energy-clearing' | 'general'
 ): Promise<void> {
   // Cast to bypass Supabase's strict generics — same pattern as SupabaseUpsertTable above.
-  // tier_id='free' is a valid FK value: the free tier row is seeded in Task 3.1.
   const table = supabase.from('member_subscriptions') as unknown as PortalSubscriptionTable
 
   // Fetch current active subscription to avoid downgrading
@@ -321,10 +364,17 @@ async function syncPortalAccess(
       console.log(`[order-placed] portal access already at level ${currentLevel} for user ${supabaseUserId} — no change`)
     }
   } else {
-    // No active subscription — insert a free-tier base with the programme's access level
+    // No active subscription — insert a free-tier base with the programme's access level.
+    // The free tier's uuid comes from membership_tiers by slug (KI070).
+    const freeTierId = await resolveTierId(supabase, 'free')
+    if (!freeTierId) {
+      console.error(`[order-placed] portal access insert skipped for user ${supabaseUserId}: free tier not found`)
+      return
+    }
+
     const { error: insertError } = await table.insert({
       user_id: supabaseUserId,
-      tier_id: 'free',
+      tier_id: freeTierId,
       status: 'active',
       start_date: new Date().toISOString(),
       end_date: null,
