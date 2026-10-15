@@ -185,8 +185,8 @@ Full checkout flow test checklist:
 - [ ] ITN/webhook received and verified
 - [ ] Order status updated to paid in Medusa
 - [ ] Order confirmation email sent via Resend
-- [ ] Invoice created in Sage via n8n workflow
-- [ ] Vtiger contact updated via n8n workflow
+- [ ] Invoice created in Sage by the `sage_invoice` outbox job (flag `off` until KI010 closes)
+- [ ] Vtiger contact updated by the `vtiger_order` outbox job
 
 ### Step 8 — Spawn integration-agent
 Ask integration-agent to review the payment flow end-to-end.

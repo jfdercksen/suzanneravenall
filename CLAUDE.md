@@ -61,12 +61,12 @@ suzanne-ravenall/
 | CRM | Vtiger (self-hosted, sales pipeline only) |
 | Accounting | Sage Business Cloud SA API (OAuth 2.0, JSON REST API) |
 | Payments | PayFast + PayPal via Medusa payment plugins |
-| Email | Brevo (transactional API for the app and n8n; SMTP relay for the login server) |
-| Marketing | Vibe Marketing (Ai Dynamic Advisory — Next.js + Supabase + Claude + n8n) |
+| Email | Brevo (transactional API for the app; SMTP relay for the login server) |
+| Marketing | Vibe Marketing (Ai Dynamic Advisory product with its own stack, called over a webhook) |
 | Search | MeiliSearch (self-hosted) |
 | Community | Discourse (self-hosted, SSO via Supabase Auth) |
 | Video | Bunny Stream |
-| Automation | n8n (self-hosted, replaces Zapier) |
+| Automation | In code: Medusa subscribers and scheduled jobs, web routes, outbox pattern per `docs/n8n-migration-plan.md` (n8n retired 6 Oct 2026) |
 | PDF Generation | react-pdf |
 | Analytics | GA4 + Microsoft Clarity |
 | CDN / Security | Cloudflare |
@@ -155,10 +155,6 @@ Docs: https://supabase.com/docs/guides/ai/mcp
 Repo, PR, and branch management.
 Docs: https://github.com/github/github-mcp-server
 
-### n8n MCP
-Creating and managing automation workflows.
-Docs: https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.mcp/
-
 ### Cloudflare MCP
 DNS, WAF rules, and cache management.
 Docs: https://developers.cloudflare.com/agents/
@@ -240,7 +236,7 @@ Docs: https://developers.cloudflare.com/agents/
 | `NEXT_PUBLIC_CLARITY_ID` | Yes | Microsoft Clarity measurement ID |
 | `MEILISEARCH_HOST` | No | MeiliSearch host URL |
 | `MEILISEARCH_ADMIN_KEY` | No | MeiliSearch admin API key |
-| `N8N_WEBHOOK_SECRET` | No | Shared secret for n8n webhook verification |
+| `N8N_WEBHOOK_SECRET` | No | Legacy name for the shared secret on the internal email and webhook routes; renamed to `INTERNAL_WEBHOOK_SECRET` at cutover (`docs/n8n-migration-plan.md` 4.4). Never add another `N8N_*` variable |
 | `VTIGER_URL` | No | Vtiger CRM instance URL |
 | `VTIGER_USERNAME` | No | Vtiger username |
 | `VTIGER_ACCESS_KEY` | No | Vtiger access key |
@@ -294,7 +290,7 @@ For unfamiliar integrations, spawn `research` agent first.
 | `research` | Docs, APIs, and patterns research |
 | `devops-agent` | Docker, Nginx, VPS, CI/CD, SSL |
 | `backend-agent` | Medusa modules, Supabase schema, API integrations |
-| `integration-agent` | Sage API, Vtiger webhooks, PayFast, n8n workflows |
+| `integration-agent` | Sage API, Vtiger webhooks, PayFast, in-code automations |
 | `migration-agent` | WooCommerce and Wild Apricot data migration |
 | `security-agent` | Supabase RLS policies, API authentication, Cloudflare WAF rules |
 
@@ -311,7 +307,6 @@ For unfamiliar integrations, spawn `research` agent first.
 | `screenshot-compare` | Visual comparison against reference |
 | `add-supabase-table` | New table with schema, migration, and RLS policies |
 | `add-medusa-module` | New Medusa v2 custom module or plugin |
-| `add-n8n-workflow` | New n8n automation workflow |
 | `add-docker-service` | New service in Docker Compose |
 | `add-rls-policy` | New Supabase Row Level Security policy |
 | `add-webhook` | New webhook handler between services |
@@ -342,8 +337,8 @@ Use the `add-medusa-module` skill — scaffolds the module directory, service, a
 ### Add a new Docker service
 Use the `add-docker-service` skill — adds the service to `infra/docker-compose.yml` and Nginx config.
 
-### Add an n8n workflow
-Use the `add-n8n-workflow` skill — generates the workflow JSON and webhook handler.
+### Add an automation
+Automations live in code, not in n8n (retired on this project 6 Oct 2026). Event-driven work is a Medusa subscriber that enqueues an outbox job in `apps/medusa/src/automations/`; scheduled work is a Medusa job in `apps/medusa/src/jobs/`; inbound events from outside land on a web route under `apps/web/app/api/webhooks/` and are processed in code. Design, flags and test rules per `docs/n8n-migration-plan.md`. Do not add workflow JSON under `infra/n8n/` or any `N8N_*` env var.
 
 ---
 

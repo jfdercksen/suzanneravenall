@@ -128,19 +128,19 @@ Deploy ONLY after all agents pass or NEEDS CHANGES fixes are applied.
 ### Architecture rules
 - MEDUSA_DATABASE_URL and PAYLOAD_DATABASE_URL must remain split
 - PAYLOAD_PUBLIC_SERVER_URL must NOT include /cms suffix (basePath appends it)
-- n8n internal URL: http://n8n:5678 (Docker internal, not exposed)
+- n8n: retired 6 Oct 2026, container switched off; automations run in code (`docs/n8n-migration-plan.md`)
 - Thinkific: ravenallinstitute-9629.thinkific.com (Legacy plan, no SSO)
 - Region detection: CF-IPCountry header → ZA = ZAR, all others = USD
 
 ### Current integrations (all live)
 - Supabase: mjhwonoekokxyisfljtj.supabase.co
 - Medusa v2: 48 consolidated products + 56 Thinkific course products
-- n8n: 11+ workflows active (Sage, Vtiger, Thinkific enrollment)
+- Automations: moving from n8n into code per `docs/n8n-migration-plan.md` (Thinkific enrolment, Vtiger, Sage, cart recovery, memberships, search sync); the n8n versions are retired
 - Resend: transactional email
 - PayFast: ZAR payments (live credentials pending from Suzanne)
 - PayPal: USD payments (live credentials pending from Suzanne)
 - Cal.com: suzanneravenall (booking)
-- Thinkific: 89 published courses, n8n enrollment workflow active
+- Thinkific: 89 published courses, enrolment automation in code (outbox job `thinkific_enrolment`)
 
 ### Key pending items (always check KNOWN_ISSUES.md for current state)
 - CMS login broken (highest priority — blocking Suzanne's team)

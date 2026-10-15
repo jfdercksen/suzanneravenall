@@ -61,12 +61,16 @@
 
 ## Search
 - MeiliSearch for all product and content search — docs: https://www.meilisearch.com/docs
-- Index updates triggered via n8n workflows on content change
+- Index updates run in code: the Medusa product subscriber on create/update/delete plus a nightly full reindex job (`docs/n8n-migration-plan.md` 3.7)
 - Never use Algolia or Elasticsearch
 
 ## Automation
-- n8n for all workflow automation — docs: https://docs.n8n.io
-- n8n replaces all Zapier workflows
+- All automation runs in our own code on the VPS. n8n is retired on this project (Johan, 6 Oct 2026): the container is switched off, `infra/n8n/` exports are history only, and no new workflow or `N8N_*` env var is added
+- Event-driven automations: a Medusa subscriber enqueues a durable outbox job (`automation_job`, idempotency key, retries 1 m / 5 m / 30 m / 2 h / 12 h, then dead with a Sentry event and one staff alert) and a handler in `apps/medusa/src/automations/` does the work
+- Scheduled automations: Medusa scheduled jobs in `apps/medusa/src/jobs/` (membership lifecycle, cart recovery, search reindex, automation report, weekly report)
+- Web-side automations (lead forms, Cal.com bookings, video log) run inside the route, with Next `after()` where the caller needs an immediate 200
+- Shared clients (Vtiger, Thinkific, Sage, Brevo, MeiliSearch, fetch with retry) live in `packages/integrations`; one client per system, never per call site
+- Every automation has a flag `AUTOMATION_<NAME>` (`n8n` | `shadow` | `code` | `off`) and honours `AUTOMATION_DRY_RUN`; design, cutover order and test rules are in `docs/n8n-migration-plan.md`
 - Webhook handlers go in `apps/web/app/api/webhooks/`
 - Always validate webhook signatures before processing
 

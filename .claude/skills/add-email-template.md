@@ -251,8 +251,8 @@ Build these in this order:
 1. `order-confirmation` — Triggered by Medusa order placed
 2. `booking-confirmation` — Triggered by Cal.com booking created
 3. `membership-welcome` — Triggered by first membership purchase
-4. `membership-renewal-reminder` — Triggered by n8n 7 days before expiry
-5. `membership-expired` — Triggered by n8n on expiry date
+4. `membership-renewal-reminder` - Triggered by the Medusa membership-lifecycle job 7 days before expiry (once per membership)
+5. `membership-expired` - Triggered by the Medusa membership-lifecycle job on the expiry date
 6. `cart-abandonment-1` — 1 hour after cart abandoned
 7. `cart-abandonment-2` — 24 hours after cart abandoned
 8. `cart-abandonment-3` — 72 hours after cart abandoned

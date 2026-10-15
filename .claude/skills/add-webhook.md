@@ -1,26 +1,25 @@
 ---
 name: add-webhook
-description: Add a new inbound webhook handler in Next.js that receives events from an external service and forwards to n8n or processes directly. Use when any external service needs to send events to the platform. Always verify signatures.
+description: Add a new inbound webhook handler in Next.js that receives events from an external service and processes them in code (inline, with Next after(), or by handing off to the Medusa outbox). Use when any external service needs to send events to the platform. Always verify signatures.
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 ---
 
 # Add Webhook Handler
 
 ## Goal
-Create a secure, production-ready inbound webhook handler that verifies the source, processes the payload and triggers the appropriate workflow.
+Create a secure, production-ready inbound webhook handler that verifies the source, processes the payload and triggers the appropriate in-code automation. n8n is retired on this project (docs/n8n-migration-plan.md): never forward a webhook to n8n or add an `N8N_*` env var.
 
 ## Inputs
-- Service sending the webhook (PayFast, Cal.com, Medusa, n8n, Vtiger)
+- Service sending the webhook (PayFast, Cal.com, Medusa, Vtiger)
 - Event types to handle
 - Signature verification method for that service
 - What should happen when each event is received
-- Whether to forward to n8n or process directly
+- Where the work runs: inline in the route, after the 200 with Next `after()`, or as a Medusa outbox job when it must survive a restart
 
 ## Key References
 - Next.js route handlers: https://nextjs.org/docs/app/building-your-application/routing/route-handlers
 - PayFast ITN: https://developers.payfast.co.za/docs#notify_validate
 - Cal.com webhooks: https://cal.com/docs/core-features/webhooks
-- n8n webhook node: https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/
 - Resend webhooks: https://resend.com/docs/dashboard/webhooks/introduction
 
 ## Project Structure
@@ -129,15 +128,11 @@ async function handleWebhookAsync(
   eventType: string,
   payload: unknown
 ): Promise<void> {
-  // Forward to n8n
-  await fetch(process.env.N8N_{SERVICE}_WEBHOOK_URL!, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-N8N-Signature": process.env.N8N_WEBHOOK_SECRET!,
-    },
-    body: JSON.stringify({ eventType, payload }),
-  })
+  // Process in code: call the shared client from packages/integrations
+  // (for example syncBookingToVtiger) with retry inside the client, or
+  // enqueue a Medusa outbox job when the work must survive a restart.
+  // Log the final failure with logError (Sentry); never swallow it.
+  await run{Service}Automation(eventType, payload)
 }
 ```
 
@@ -155,12 +150,11 @@ export interface {Service}WebhookPayload {
 Document exactly where to register:
 - PayFast: Merchant dashboard → Notifications → ITN URL
 - Cal.com: Settings → Developer → Webhooks → Add webhook
-- n8n: Workflow → Webhook node → copy URL
 - Medusa: `apps/medusa/medusa-config.ts` → subscriberExecution
 
 ### Step 6 — Add environment variables to .env.example
 {SERVICE}_WEBHOOK_SECRET=
-N8N_{SERVICE}_WEBHOOK_URL=
+(no N8N_* variables: n8n is retired on this project)
 
 ### Step 7 — Spawn integration-agent
 Ask integration-agent to review the signature verification implementation.
@@ -177,7 +171,6 @@ Ask qa-unit to write tests — mock fetch calls, test valid and invalid signatur
 |---------|--------|-----------|-------|
 | PayFast | None | Custom | Call PayFast validation endpoint |
 | Cal.com | X-Cal-Signature-256 | HMAC-SHA256 | Compare with webhook secret |
-| n8n | X-N8N-Signature | HMAC-SHA256 | Shared secret |
 | Resend | svix-signature | SVIX | Use svix library |
 | Medusa | x-medusa-signature | HMAC-SHA256 | Medusa webhook secret |
 
@@ -186,7 +179,8 @@ Ask qa-unit to write tests — mock fetch calls, test valid and invalid signatur
 - Always return 200 immediately — never make external service wait for processing
 - Process webhooks asynchronously after returning 200
 - Never log full payload if it may contain PII or payment data
-- Always handle the case where the n8n forward fails — log to Sentry
+- Always handle the case where the in-code processing fails - log to Sentry, and use the outbox when the work must not be lost on a restart
+- Never forward to n8n and never add an `N8N_*` env var: n8n is retired here (docs/n8n-migration-plan.md)
 - Test with both valid and invalid signatures before going live
 - Register webhook URLs in external service dashboards and document them
 
@@ -196,5 +190,5 @@ Always report:
 - Signature verification method used
 - Webhook URL to register in external service dashboard
 - Environment variables added
-- n8n workflow triggered (if applicable)
+- Automation triggered (in-process handler or outbox job), if applicable
 - Test results — valid signature, invalid signature, missing signature
