@@ -1,0 +1,146 @@
+variants to change: 135 on 58 products; skipped for Shayna: 4
+   SKIP Resonance Repatterning / Coaching Session / 90 min in-person : RR / Coaching 90 min in-person: current site USD 2,990 is the ZAR figure (hidden product)
+   SKIP Resonance Repatterning Program 7: Principles of Relationships / Live via Zoom : Program 7 Live: current site USD 5,315 is the ZAR figure
+   SKIP Resonance Repatterning Program 9: Energetics of Relationships / Live via Zoom : Program 9 Live: current site USD 5,315 is the ZAR figure
+   SKIP Resonance Repatterning Program 6: Inner Cultivation / Live via Zoom : Program 6 Live: current site USD 5,315 is the ZAR figure
+backup written: C:\Projects\suzanneravenall\infra\scripts\catalogue-parity\price-parity-backup-20261014-111257.json
+
+PLAN
+  rapid-repatterning-session / 60 min in-person: USD (none) -> 190.00
+  rapid-repatterning-session / 90 min online: USD (none) -> 230.00
+  rapid-repatterning-session / 90 min in-person: USD (none) -> 280.00
+  rapid-repatterning-session / Package of 04 (60 min online): USD (none) -> 590.00
+  rapid-repatterning-session / Package of 08 (60 min online): USD (none) -> 1,115.00
+  rapid-repatterning-session / Package of 12 (60 min online): USD (none) -> 1,580.00
+  rapid-repatterning-session / Package of 16 (60 min online): USD (none) -> 1,985.00
+  rapid-repatterning-session / Package of 04 (90 min online): USD (none) -> 885.00
+  rapid-repatterning-session / Package of 08 (90 min online): USD (none) -> 1,675.00
+  rapid-repatterning-session / Package of 12 (90 min online): USD (none) -> 2,370.00
+  rapid-repatterning-session / Package of 16 (90 min online): USD (none) -> 2,975.00
+  rapid-repatterning-session / 60 min online: USD (none) -> 155.00
+  resonance-repatterning-session / 60 min online: USD (none) -> 155.00
+  resonance-repatterning-session / 90 min online: USD (none) -> 230.00
+  resonance-repatterning-session / Package of 04 (60 min): USD (none) -> 590.00
+  resonance-repatterning-session / Package of 08 (60 min): USD (none) -> 1,115.00
+  resonance-repatterning-session / Package of 12 (60 min): USD (none) -> 1,580.00
+  resonance-repatterning-session / Package of 16 (60 min): USD (none) -> 1,985.00
+  resonance-repatterning-session / Package of 04 (90 min): USD (none) -> 885.00
+  resonance-repatterning-session / Package of 08 (90 min): USD (none) -> 1,675.00
+  resonance-repatterning-session / Package of 16 (90 min): USD (none) -> 2,975.00
+  resonance-repatterning-session / Package of 12 (90 min): USD (none) -> 2,370.00
+  transformation-coaching-60-mins / 60 min: USD (none) -> 195.00
+  transformation-coaching-60-mins / 90 min: USD (none) -> 275.00
+  transformation-coaching-60-mins / Package of 04: USD (none) -> 735.00
+  transformation-coaching-60-mins / Package of 08: USD (none) -> 1,395.00
+  transformation-coaching-60-mins / Package of 12: USD (none) -> 1,975.00
+  transformation-coaching-60-mins / Package of 16: USD (none) -> 2,480.00
+  executive-coaching-30-mins / 30 min: USD (none) -> 275.00
+  executive-coaching-30-mins / 60 min: USD (none) -> 445.00
+  executive-coaching-30-mins / Package of 04: USD (none) -> 1,685.00
+  executive-coaching-30-mins / Package of 08: USD (none) -> 3,190.00
+  executive-coaching-30-mins / Package of 12: USD (none) -> 4,515.00
+  executive-coaching-30-mins / Package of 16: USD (none) -> 5,670.00
+  akashic-clearing-session / 60 min: USD (none) -> 195.00
+  akashic-clearing-session / 90 min: USD (none) -> 230.00
+  akashic-clearing-session / Package of 04: USD (none) -> 735.00
+  akashic-clearing-session / Package of 08: USD (none) -> 1,395.00
+  akashic-clearing-session / Package of 12: USD (none) -> 1,975.00
+  group-family-coaching-60-mins / Single session: USD (none) -> 165.00
+  group-family-coaching-60-mins / Package of 04: USD (none) -> 630.00
+  group-family-coaching-60-mins / Package of 08: USD (none) -> 1,195.00
+  exploring-the-alpha-mind-45-minutes / Single session (45 min): USD (none) -> 135.00
+  exploring-the-alpha-mind-45-minutes / Package of 05: USD (none) -> 630.00
+  exploring-the-alpha-mind-45-minutes / Package of 08: USD (none) -> 955.00
+  rapid-transformation-therapy-session / 1 hypnosis session + recording: USD (none) -> 275.00
+  rapid-transformation-therapy-session / 1 hypnosis session + recording + 2 coaching sessions: USD (none) -> 555.00
+  energetic-clearing-completed-remotely / Single session: USD (none) -> 165.00
+  energetic-clearing-completed-remotely / Package of 04: USD (none) -> 630.00
+  energetic-clearing-completed-remotely / Package of 08: USD (none) -> 1,195.00
+  energetic-clearing-completed-remotely / Package of 12: USD (none) -> 1,695.00
+  resonance-repatterning-program-1-fundamentals-live-via-zoom / Self Study: ZAR 3,100.00 -> 4,205.00; USD (none) -> 550.00
+  resonance-repatterning-program-1-fundamentals-live-via-zoom / Live Retaker: USD (none) -> 275.00
+  resonance-repatterning-program-2-primary-patterns-live-via-zoom / Self Study: ZAR 3,100.00 -> 4,205.00; USD (none) -> 550.00
+  resonance-repatterning-program-2-primary-patterns-live-via-zoom / Live Retaker: USD (none) -> 275.00
+  resonance-repatterning-program-2-primary-patterns-live-via-zoom / Live via Zoom: USD (none) -> 555.00
+  resonance-repatterning-program-3-unconscious-patterns-live-via-zoom / Self Study: ZAR 3,100.00 -> 4,205.00; USD (none) -> 550.00
+  resonance-repatterning-program-3-unconscious-patterns-live-via-zoom / Live Retaker: USD (none) -> 275.00
+  resonance-repatterning-program-4-chakra-patterns-live-via-zoom / Self Study: ZAR 3,100.00 -> 4,205.00; USD (none) -> 550.00
+  resonance-repatterning-program-4-chakra-patterns-live-via-zoom / Live Retaker: USD (none) -> 275.00
+  resonance-repatterning-program-5-five-elements-meridians-live-via-zoom / Self Study: ZAR 3,100.00 -> 4,205.00; USD (none) -> 550.00
+  resonance-repatterning-program-5-five-elements-meridians-live-via-zoom / Live Retaker: USD (none) -> 275.00
+  resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom / Live via Zoom: USD (none) -> 1,105.00
+  resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom / Self Study: USD (none) -> 2,105.00
+  resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-live-via-zoom / Live via Zoom: USD (none) -> 550.00
+  resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-live-via-zoom / Self Study: USD (none) -> 550.00
+  akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom / Self Study: USD (none) -> 300.00
+  akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom / Live Retaker: USD (none) -> 275.00
+  akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom / Live via Zoom: USD (none) -> 500.00
+  akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom / Self Study: USD (none) -> 300.00
+  akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom / Live Retaker: USD (none) -> 275.00
+  akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom / Live via Zoom: USD (none) -> 500.00
+  akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom / Self Study: USD (none) -> 475.00
+  akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom / Live Retaker: USD (none) -> 555.00
+  akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom / Live via Zoom: USD (none) -> 660.00
+  deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom / Live Retaker: USD (none) -> 275.00
+  deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom / Live via Zoom: USD (none) -> 350.00
+  deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom / Self Study: USD (none) -> 250.00
+  deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom / Self Study: USD (none) -> 250.00
+  deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom / Live Retaker: USD (none) -> 275.00
+  deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom / Live via Zoom: USD (none) -> 350.00
+  be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live / Self Study: USD (none) -> 220.00
+  be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live / Live via Zoom: USD (none) -> 440.00
+  trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live / Self Study: USD (none) -> 399.00
+  trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live / Live via Zoom: USD 399.00 -> 440.00
+  finding-my-life-purpose-live / Live via Zoom: USD (none) -> 330.00
+  finding-my-life-purpose-live / Self Study: USD (none) -> 220.00
+  love-relationships-live / Self Study: USD (none) -> 220.00
+  love-relationships-live / Live via Zoom: USD (none) -> 330.00
+  intuition-in-my-personal-capacity-live / Business Capacity: Live via Zoom: USD (none) -> 330.00
+  intuition-in-my-personal-capacity-live / Business Capacity: Self Study: USD (none) -> 220.00
+  intuition-in-my-personal-capacity-live / Personal Capacity: Live via Zoom: USD (none) -> 330.00
+  intuition-in-my-personal-capacity-live / Personal Capacity: Self Study: USD (none) -> 220.00
+  meditation-live-via-zoom / Self Study: USD (none) -> 220.00
+  mindfulness-live / Live via Zoom: USD (none) -> 440.00
+  mindfulness-live / Self Study: USD (none) -> 220.00
+  group-session-being-a-great-boundary-setter-booked-as-a-series-only / Live (booked as series): USD (none) -> 300.00
+  group-session-being-a-great-boundary-setter-booked-as-a-series-only / Recorded series: USD (none) -> 300.00
+  career-progression-group-session / Live (booked as series): USD (none) -> 300.00
+  career-progression-group-session / Recorded series: USD (none) -> 300.00
+  group-session-develop-super-confidence / Recorded series: USD (none) -> 300.00
+  group-session-develop-super-confidence / Live: USD (none) -> 300.00
+  love-relationships-group-session / Live (booked as series): USD (none) -> 300.00
+  money-mastery-group-session / Recorded series: USD (none) -> 300.00
+  money-mastery-group-session / Live (booked as series): USD (none) -> 300.00
+  group-session-shedding-excess-weight / Recorded series: USD (none) -> 300.00
+  group-session-shedding-excess-weight / Live (booked as series): USD (none) -> 300.00
+  resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study / Self Study: USD (none) -> 550.00
+  resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study / Self Study: USD (none) -> 550.00
+  be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live / Live via Zoom: USD (none) -> 165.00
+  group-session-attraction-frequency-recorded / Recorded series: USD (none) -> 300.00
+  group-session-nice-or-not-nice-in-communication-booked-as-a-series-only / Live (booked as series): USD (none) -> 300.00
+  coherence-muscle-testing-self-study-online-2 / Self Study: USD (none) -> 110.00
+  resonance-repatterning-all-repatternings-as-demos-talk-throughs-resources-self-study / Self Study: USD (none) -> 220.00
+  post-traumatic-growth-self-study-online / Self Study: USD (none) -> 15.00
+  the-latest-book-by-suzanne / Pre-order: USD (none) -> 17.50
+  quantum-healing-codes-ebook-audio-download / eBook & Audio Download: USD (none) -> 17.95
+  bringing-your-energy-back / Default: USD (none) -> 20.00
+  energetic-alignment-inner-neutrality / Default: USD (none) -> 20.00
+  relaxation-energy-reclamation / Default: USD (none) -> 20.00
+  getting-unstuck-self-study / Default: USD (none) -> 110.00
+  resonance-repatterning-full-basic-5-series-demo-s-self-study-online-with-mentoring / Standard: USD 2,540.00 -> 2,105.00
+  resonance-repatterning-full-basic-5-series-demo-s-live / Standard: USD 2,990.00 -> 2,490.00
+  resonance-repatterning-program-6-inner-cultivation-practical-demos-live-via-zoom / Self Study: USD (none) -> 550.00
+  deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom / Live Retaker: USD (none) -> 555.00
+  deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom / Live via Zoom: USD (none) -> 845.00
+  mentorship-single-session-live / Single Session (Live): USD (none) -> 30.00
+  mentorship-single-session-live / Single Session (Self Study): USD (none) -> 30.00
+  mentorship-single-session-live / Bundle of 5 Sessions (Live): USD (none) -> 120.00
+  mentorship-single-session-live / Bundle of 5 Sessions (Self Study): USD (none) -> 120.00
+  email-support / Per month: USD (none) -> 30.00
+  coaching-support-package / Per session: USD (none) -> 195.00
+  vip-package / Per month: USD (none) -> 155.00
+  bonus-lifetime-access-self-study-online / Per programme level: USD (none) -> 100.00
+  ravenall-institute-certification-observation-fee / Once-off: USD (none) -> 150.00
+  rapid-repatterning-session-60-min-online (prod_01M3437XQFJPEVYHQSY1HA91QY): status published -> draft (12 variants, prices untouched)
+
+DRY RUN, nothing changed
