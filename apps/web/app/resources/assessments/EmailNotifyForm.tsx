@@ -37,7 +37,7 @@ export default function EmailNotifyForm() {
   if (status === 'success') {
     return (
       <div className="text-center py-6">
-        <p className="text-lg text-brand-primary font-medium">You&apos;re on the list!</p>
+        <p className="text-lg text-brand-primary font-medium">You&apos;re on the list.</p>
         <p className="text-brand-muted mt-2">
           We&apos;ll let you know as soon as assessments are available.
         </p>

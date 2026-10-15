@@ -55,6 +55,26 @@ describe('QuizGate', () => {
     expect(screen.getByText('Please enter your last name.')).toBeInTheDocument()
   })
 
+  // KI062: the heading does not inline the quiz title; the body line keeps it.
+  it('confirms the link is on its way without the title in the heading', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ success: true }), { status: 200 }),
+    )
+    vi.stubGlobal('fetch', fetchMock)
+    const user = userEvent.setup()
+    render(<QuizGate quiz={QUIZ} initialMode="gate" />)
+    await user.type(screen.getByLabelText('First name'), 'Ann')
+    await user.type(screen.getByLabelText('Last name'), 'Dlamini')
+    await user.type(screen.getByLabelText('Email'), 'ann@example.com')
+    await user.click(screen.getByRole('button', { name: 'Send Me the Diagnostic' }))
+
+    expect(await screen.findByRole('heading', { name: 'Your quiz link is on its way' })).toBeInTheDocument()
+    expect(screen.getByText(/Your link to/)).toHaveTextContent(
+      'Your link to Nervous System Pattern is on its way to ann@example.com. Check your inbox (and spam folder) to begin.',
+    )
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
   // Site check M9.
   it('links back to its topic', () => {
     render(<QuizGate quiz={QUIZ} initialMode="gate" topicTitle="Emotional & Nervous System Mastery" />)

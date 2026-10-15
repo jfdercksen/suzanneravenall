@@ -242,11 +242,12 @@ export default function QuizGate({ quiz, initialMode, subscriber, topicTitle }: 
               Check Your Inbox
             </p>
             <h1 className="text-3xl lg:text-4xl font-medium tracking-tight text-brand-primary leading-tight mb-3">
-              Your {quiz.title} link is on its way
+              Your quiz link is on its way
             </h1>
             <p className="text-base text-brand-muted font-light leading-relaxed mb-6">
-              We&apos;ve sent it to <span className="text-brand-primary font-medium">{sentTo}</span>. Check your
-              inbox (and spam folder) to begin.
+              Your link to <span className="text-brand-primary font-medium">{quiz.title}</span> is on its way to{' '}
+              <span className="text-brand-primary font-medium">{sentTo}</span>. Check your inbox (and spam
+              folder) to begin.
             </p>
             <button
               type="button"

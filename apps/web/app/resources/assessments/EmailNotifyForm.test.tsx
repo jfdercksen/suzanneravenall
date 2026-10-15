@@ -29,7 +29,8 @@ describe('EmailNotifyForm (site check B12)', () => {
 
     fill('Thandi', 'thandi@example.com')
 
-    await screen.findByText(/on the list/i)
+    // KI062: one punctuation across the three list forms.
+    await screen.findByText("You're on the list.")
     const [url, init] = fetchSpy.mock.calls[0] as [string, RequestInit]
     expect(url).toBe('/api/lead-magnet')
     expect(JSON.parse(init.body as string)).toEqual({

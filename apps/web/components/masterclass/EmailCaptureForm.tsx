@@ -3,7 +3,7 @@
 import { useId, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { emailError, hasErrors, requiredError, useFieldErrors } from '@/lib/forms/validation'
-import { MASTERCLASS_WATCH_PATH } from '@/lib/masterclass'
+import { MASTERCLASS_WATCH_PATH, formatWatchAt } from '@/lib/masterclass'
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error'
 type Field = 'firstName' | 'email' | 'watchDate' | 'watchTime'
@@ -95,13 +95,18 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
   const labelColor = variant === 'light' ? 'text-brand-ink' : 'text-white/80'
 
   if (state === 'success') {
+    // KI061: name the chosen time in the words the welcome mail uses
+    // ("Friday 16 October 2026 at 10:00"), so a mistyped date shows on the page.
+    const watchAt = formatWatchAt(watchDate, watchTime)
     return (
       <div className="rounded-card bg-brand-accent/5 border border-brand-primary-300/40 p-6 text-center">
         <p className={`font-medium text-lg ${variant === 'light' ? 'text-brand-ink' : 'text-white'}`}>
           Thank you, you&rsquo;re registered.
         </p>
         <p className={`mt-1 text-sm ${variant === 'light' ? 'text-brand-muted' : 'text-white/80'}`}>
-          We have emailed you the link to watch the masterclass at the time you chose.
+          {watchAt
+            ? `You chose to watch on ${watchAt}. We have emailed you the link, and it works whenever you are ready.`
+            : 'We have emailed you the link to watch the masterclass at the time you chose.'}
         </p>
       </div>
     )
