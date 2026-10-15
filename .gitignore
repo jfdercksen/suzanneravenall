@@ -36,3 +36,6 @@ logs/
 # System
 .DS_Store
 Thumbs.db
+
+# Playwright MCP accessibility snapshots (per-call noise; screenshots are kept)
+docs/testing/results/browser/*.yml
