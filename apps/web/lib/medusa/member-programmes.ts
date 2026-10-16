@@ -15,6 +15,7 @@ interface MedusaOrderItem {
   product_handle?: string | null
   variant?: {
     product_id?: string | null
+    metadata?: Record<string, unknown> | null
     product?: {
       title?: string | null
       handle?: string | null
@@ -58,9 +59,14 @@ async function fetchOrdersForCustomers(customerIds: string[]): Promise<MedusaOrd
   return orders ?? []
 }
 
+// Same lookup as the enrolment job (packages/integrations itemCourseId): a
+// programme sold in several formats keeps each format's Thinkific course on
+// the variant, so the variant id wins and the product id is the fallback.
 function courseUrlOf(item: MedusaOrderItem): string | null {
-  const id = item.variant?.product?.metadata?.thinkific_course_id
-  const hasCourse = (typeof id === 'string' && id.trim() !== '') || (typeof id === 'number' && Number.isFinite(id))
+  const candidates = [item.variant?.metadata?.thinkific_course_id, item.variant?.product?.metadata?.thinkific_course_id]
+  const hasCourse = candidates.some(
+    (id) => (typeof id === 'string' && id.trim() !== '') || (typeof id === 'number' && Number.isFinite(id)),
+  )
   return hasCourse ? THINKIFIC_COURSES_URL : null
 }
 

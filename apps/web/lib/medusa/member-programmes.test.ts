@@ -142,6 +142,16 @@ describe('fetchMemberProgrammes', () => {
     expect(programmes[0]?.purchasedAt).toBe('2026-10-16T00:00:00Z')
   })
 
+  it('links the Thinkific school when only the variant carries the course id', async () => {
+    adminFetch.mockResolvedValue(
+      response(200, {
+        orders: [{ id: 'o', status: 'completed', created_at: 'd', items: [{ ...gettingUnstuck, variant: { product_id: 'prod_gu', metadata: { thinkific_course_id: 2961541 }, product: { title: 'GU', metadata: {} } } }] }],
+      }),
+    )
+
+    expect((await fetchMemberProgrammes('a@b.c'))[0]?.courseUrl).toBe('https://ravenallinstitute-9629.thinkific.com/collections')
+  })
+
   it('has no course link when the product carries no thinkific_course_id', async () => {
     adminFetch.mockResolvedValue(
       response(200, {
