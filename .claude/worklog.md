@@ -304,3 +304,40 @@ anyone leans on those suites.
 - Verdicts: J-01, J-03, J-04 PASS; J-06 PASS on the page; J-02 FAIL KI079 (session order mail books the free discovery call: CALCOM_SESSION_BOOKING_URL unset, no session event type); J-05 BLOCKED on the n8n migration (route forwards BOOKING_CREATED to n8n only and Cal.com has no webhook). New KIs: KI079 session booking link, KI080 Cal.com account and calendar launch item (Johan's account, no calendar, every weekday open from 09:00 incl. same day), KI081 Cal.com polish (no phone field, doubled host cancel subject, stale tab title, stock mail template).
 - No console errors, no 400+ on /contact or the Cal.com pages; the /contact embed loads (the 15 Oct ERR_BLOCKED_BY_CLIENT was the walker's own origin list). Records: two booking uids, both ended; nothing to clean up. Logs on the box not read.
 - Not committed (Johan's ok per commit). Section I changes in the working tree left as they were.
+
+## 2026-10-16 ~06:30 - KI078 fixed: portal programmes read Medusa through a v2 admin client
+
+Cause: /portal/programmes and the dashboard count sent the Medusa v1 header
+x-medusa-access-token with MEDUSA_API_TOKEN. v2 ignores that header, every
+admin call 401ed and both pages swallowed it, so a buyer never saw a purchase.
+
+Fix (cbc046a, 153ba85, 36025b7 on feature/design-standard, web deployed by
+runs 38850062340 and 38860422142):
+- apps/web/lib/medusa/admin-client.ts: one server-side v2 admin client. A
+  secret API key (MEDUSA_API_KEY, or an sk_ value in MEDUSA_API_TOKEN) as
+  Basic auth, else an emailpass login with MEDUSA_ADMIN_EMAIL and
+  MEDUSA_ADMIN_PASSWORD; the JWT is cached per process, one re-login on 401,
+  a 30 s back-off after a rejected login, every failure through logError.
+- lib/medusa/get-customer-id.ts: all customers with that email, matched
+  case-insensitively, so the guest-checkout customer of order #389 is found.
+- lib/medusa/member-programmes.ts: the one loader both pages use; cancelled
+  orders skipped, one card per product; Thinkific course id read from the
+  variant then the product (same as the enrolment job), the card then says
+  "Open Course on Thinkific" and links to the school.
+- Orders are only looked up for a confirmed email address.
+- docker-compose passes MEDUSA_API_KEY, MEDUSA_ADMIN_EMAIL and
+  MEDUSA_ADMIN_PASSWORD to the web container.
+36 unit tests, apps/web build green, code-reviewer PASS WITH NOTES (case
+match, confirmed-email guard, token refresh race, login back-off applied).
+
+Proof 06:27Z: signed in as johan+portal@ via a magic link (the link was read
+from the inbox with Johan's ok; no password typed), /portal/programmes lists
+Getting Unstuck (Self Study), Purchased 16 Oct 2026, Open Course on
+Thinkific; dashboard Programmes 1 enrolled; no console errors. ACCEPTANCE I-05
+and I-12 now PASS. Screenshots I-12-programmes-fixed.png and
+I-05-dashboard-fixed.png.
+
+Open: the invoice and order-confirmation routes still read MEDUSA_API_TOKEN
+directly (they already use the v2 header helper); move them onto the client
+once a v2 secret key exists. Review notes left: orders beyond 100 per member
+are not paged. Order #389 still to cancel at cleanup.
