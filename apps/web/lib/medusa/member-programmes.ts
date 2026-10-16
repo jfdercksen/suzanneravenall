@@ -1,4 +1,5 @@
 import { logError } from '@/lib/log'
+import { THINKIFIC_COURSES_URL } from '@/lib/email/templates/CourseAccess'
 import { medusaAdminFetch } from './admin-client'
 import { getMedusaCustomerIds } from './get-customer-id'
 
@@ -37,6 +38,8 @@ export interface ProgrammeItem {
   purchasedAt: string
   deliveryMethod: string
   productHandle: string | null
+  /** Where the member opens the course: the Thinkific school for a Thinkific-backed product, else null. */
+  courseUrl: string | null
 }
 
 const ORDER_FIELDS = 'id,status,created_at,*items,*items.variant,*items.variant.product'
@@ -53,6 +56,12 @@ async function fetchOrdersForCustomers(customerIds: string[]): Promise<MedusaOrd
   }
   const { orders } = (await res.json()) as { orders?: MedusaOrder[] }
   return orders ?? []
+}
+
+function courseUrlOf(item: MedusaOrderItem): string | null {
+  const id = item.variant?.product?.metadata?.thinkific_course_id
+  const hasCourse = (typeof id === 'string' && id.trim() !== '') || (typeof id === 'number' && Number.isFinite(id))
+  return hasCourse ? THINKIFIC_COURSES_URL : null
 }
 
 function deliveryMethodOf(item: MedusaOrderItem): string {
@@ -89,6 +98,7 @@ export async function fetchMemberProgrammes(email: string): Promise<ProgrammeIte
           purchasedAt: order.created_at,
           deliveryMethod: deliveryMethodOf(item),
           productHandle: product?.handle ?? item.product_handle ?? null,
+          courseUrl: courseUrlOf(item),
         })
       }
     }

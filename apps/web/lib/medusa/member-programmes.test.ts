@@ -83,6 +83,7 @@ describe('fetchMemberProgrammes', () => {
         purchasedAt: '2026-10-16T09:00:00Z',
         deliveryMethod: 'Self Study',
         productHandle: 'getting-unstuck-self-study',
+        courseUrl: 'https://ravenallinstitute-9629.thinkific.com/collections',
       },
     ])
   })
@@ -119,6 +120,7 @@ describe('fetchMemberProgrammes', () => {
         purchasedAt: '2026-01-01T00:00:00Z',
         deliveryMethod: 'Self Study',
         productHandle: 'old-programme',
+        courseUrl: null,
       },
     ])
   })
@@ -138,6 +140,16 @@ describe('fetchMemberProgrammes', () => {
 
     expect(programmes.map((p) => p.id)).toEqual(['prod_gu'])
     expect(programmes[0]?.purchasedAt).toBe('2026-10-16T00:00:00Z')
+  })
+
+  it('has no course link when the product carries no thinkific_course_id', async () => {
+    adminFetch.mockResolvedValue(
+      response(200, {
+        orders: [{ id: 'o', status: 'completed', created_at: 'd', items: [{ ...gettingUnstuck, variant: { product_id: 'prod_gu', product: { title: 'GU', metadata: { delivery_method: 'Live' } } } }] }],
+      }),
+    )
+
+    expect((await fetchMemberProgrammes('a@b.c'))[0]?.courseUrl).toBeNull()
   })
 
   it('defaults the delivery method when the product has none', async () => {
