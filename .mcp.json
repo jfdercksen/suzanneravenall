@@ -28,7 +28,7 @@
         "@playwright/mcp@latest",
         "--isolated",
         "--allowed-origins",
-        "http://169.239.180.49;https://suzanne.db.aimate.co.za",
+        "http://169.239.180.49;http://169.239.180.49:3002;https://suzanne.db.aimate.co.za",
         "--output-dir",
         "docs/testing/results/browser"
       ]

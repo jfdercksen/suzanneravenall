@@ -1,0 +1,77 @@
+{
+  "section": "J",
+  "target": "http://169.239.180.49",
+  "date": "2026-10-16",
+  "rows": [
+    {
+      "id": "J-01",
+      "item": "Discovery call booking",
+      "actual": "/contact has the Cal.com inline embed iframe (:3002 .../discovery-call/embed?embed=discovery-inline) and a 'Book Discovery Call' button to http://169.239.180.49:3002/suzanneravenall/discovery-call. Booking page: Dr Suzanne Ravenall, Discovery Call, 30m, Africa/Johannesburg, Zoom link; no phone field. Booked Mon 19 Oct 2026 10:00-10:30. Confirmation: 'This meeting is scheduled.' What: 'Discovery Call between Dr Suzanne Ravenall and Johan QA Test'; When: 'Monday, October 19, 2026 10:00 - 10:30 (South Africa Standard Time)'. uid 2q9CTgaKy5WcdoTpkSpCpA. Controller confirmed attendee and host mails at 02:53:32Z.",
+      "verdict": "PASS",
+      "severity": "",
+      "evidence": ["docs/testing/results/browser/J-01-contact.png", "docs/testing/results/browser/J-01-booked.png"],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": ["Cal.com booking 2q9CTgaKy5WcdoTpkSpCpA (superseded by reschedule)"],
+      "submitted_at_utc": "2026-10-16T02:53:22Z"
+    },
+    {
+      "id": "J-02",
+      "item": "Session booking from order mail link",
+      "actual": "The link http://169.239.180.49:3002/suzanneravenall/discovery-call opens the generic 'Discovery Call' event (Dr Suzanne Ravenall, 30m, 'A free 30-minute discovery call'). Not a session event. Not booked. Verdict is the controller's.",
+      "verdict": "N/A",
+      "severity": "",
+      "evidence": ["docs/testing/results/browser/page-2026-10-16T02-54-40-827Z.yml"],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": [],
+      "submitted_at_utc": ""
+    },
+    {
+      "id": "J-03",
+      "item": "Reschedule",
+      "actual": "Mail link redirected to Reschedule Discovery Call (rescheduleUid=2q9CTgaKy5WcdoTpkSpCpA), 'Former time Monday, October 19, 2026 10:00'. Picked Tue 20 Oct 11:00-11:30 SAST (09:00Z), reason 'QA walk J-03'. Confirmation 'This meeting is scheduled' with Reschedule reason and Rescheduled by rows; new time 'Tuesday, October 20, 2026 11:00 - 11:30'. uid changed to 7ZRqv4YY1VvCL31Rgi78xR. Controller confirmed reschedule mails (attendee 02:55:06Z, host 02:55:09Z, reason and Rescheduled by shown, ics attached).",
+      "verdict": "PASS",
+      "severity": "",
+      "evidence": ["docs/testing/results/browser/J-03-rescheduled.png"],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": ["Cal.com booking 7ZRqv4YY1VvCL31Rgi78xR, 2026-10-20 11:00-11:30 SAST (09:00Z), replaces 2q9CTgaKy5WcdoTpkSpCpA"],
+      "submitted_at_utc": "2026-10-16T02:54:56Z"
+    },
+    {
+      "id": "J-04",
+      "item": "Cancel",
+      "actual": "Opened http://169.239.180.49:3002/booking/7ZRqv4YY1VvCL31Rgi78xR?cancel=true&allRemainingBookings=false&cancelledBy=johan%40aiautomations.co.za. Cancel-reason box shown with 'Cancellation reason will be shared with guests', buttons 'Nevermind' and 'Cancel event' (disabled until a reason is typed). Entered 'QA walk, please ignore' and confirmed. Page now: heading 'This event is canceled'; Reason 'QA walk, please ignore'; Cancelled By johan@aiautomations.co.za; Rescheduled by johan@aiautomations.co.za (link 'Original booking' to /booking/2q9CTgaKy5WcdoTpkSpCpA); What 'Discovery Call between Dr Suzanne Ravenall and Johan QA Test'; When 'Tuesday, October 20, 2026 11:00 - 11:30 (South Africa Standard Time)'; notes 'QA acceptance walk J-01, please ignore'. URL unchanged (same booking uid, cancel=true query). POST /api/cancel returned 200. Browser tab title still read 'Your booking has been confirmed | Cal.com' after cancelling.",
+      "verdict": "PASS",
+      "severity": "",
+      "evidence": ["docs/testing/results/browser/J-04-cancelled.png"],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": ["Cal.com booking 7ZRqv4YY1VvCL31Rgi78xR now cancelled"],
+      "submitted_at_utc": "2026-10-16T02:56:05Z"
+    },
+    {
+      "id": "J-06",
+      "item": "Account and calendar",
+      "actual": "Organiser 'Dr Suzanne Ravenall' on booking and confirmation pages. No calendar-connect prompt for visitors, only 'Overlay my calendar'. Mon-Fri open every week through at least 6 Nov, slots from 09:00 in 30 min steps, today also offered; host email equals attendee email; fixed Zoom link.",
+      "verdict": "PASS",
+      "severity": "",
+      "evidence": ["docs/testing/results/browser/J-06-bookingpage.png"],
+      "console_errors": [],
+      "failed_requests": [],
+      "records_created": [],
+      "submitted_at_utc": ""
+    }
+  ],
+  "records_created_all": [
+    "2q9CTgaKy5WcdoTpkSpCpA (booked 19 Oct 10:00 SAST, rescheduled away)",
+    "7ZRqv4YY1VvCL31Rgi78xR (20 Oct 11:00 SAST, cancelled)"
+  ],
+  "findings": [
+    {"id": "J-NEW-1", "severity": "minor", "text": "Host email on confirmation page equals the attendee email (johan@aiautomations.co.za); confirm intended."},
+    {"id": "J-NEW-2", "severity": "minor", "text": "Booking form has no phone field; persona phone not entered."},
+    {"id": "J-NEW-3", "severity": "minor", "text": "3 console warnings per Cal.com page, no errors, no 400+ requests. Contact page full-page screenshot did not visibly show the calendar although the iframe is in the DOM."},
+    {"id": "J-NEW-4", "severity": "minor", "text": "After cancelling, the tab title still reads 'Your booking has been confirmed | Cal.com' (Cal.com default behaviour)."}
+  ]
+}
