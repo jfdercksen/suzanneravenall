@@ -8,7 +8,7 @@ import type MembershipsModuleService from '../modules/memberships/service'
 import { orderVtigerMode, thinkificMode } from '../automations/config'
 import { dispatchOrderAutomations } from '../automations/dispatch'
 import { buildOrderSnapshot, ORDER_GRAPH_FIELDS } from '../automations/order-snapshot'
-import { createDryRunQueue, getAutomationQueue } from '../automations/runtime'
+import { createDryRunQueue, getAutomationQueue, staffAlerter } from '../automations/runtime'
 
 const N8N_BASE_URL = (process.env.N8N_WEBHOOK_URL ?? 'http://n8n:5678').replace(/\/$/, '')
 const N8N_WEBHOOK_SECRET = process.env.N8N_WEBHOOK_SECRET ?? ''
@@ -200,7 +200,32 @@ async function lookupSupabaseUserId(
   }
 }
 
-interface MemberSubscriptionUpsert {
+// ── Supabase member_subscriptions ─────────────────────────────────────────────
+//
+// Schema (infra/supabase/migrations/001_foundation.sql, supabase/migrations/
+// 20260526_membership_tiers.sql): the only unique key is the `id` primary key.
+// `user_id` is NOT unique, and the web app relies on that: it keeps one row per
+// user per tier (apps/web/app/api/portal/ensure-membership/route.ts) and reads
+// the newest `status = 'active'` row (apps/web/lib/access/check-access.ts).
+// So an expired or cancelled row is history and a new active row sits beside
+// it, and there is no key an upsert could conflict on: writes here are
+// select-then-update-or-insert on (user_id, tier_id).
+
+interface SupabaseError {
+  message: string
+  code?: string
+}
+
+interface WriteResult {
+  error: SupabaseError | null
+}
+
+// Supabase builders implement PromiseLike natively, so a filtered update is awaitable.
+interface AwaitableWrite {
+  then<R>(onfulfilled: (value: WriteResult) => R): Promise<R>
+}
+
+interface MembershipRow {
   user_id: string
   tier_id: string
   status: string
@@ -208,11 +233,15 @@ interface MemberSubscriptionUpsert {
   end_date: string | null
 }
 
-interface SupabaseUpsertTable {
-  upsert(
-    values: MemberSubscriptionUpsert,
-    options: { onConflict: string }
-  ): Promise<{ error: { message: string } | null }>
+interface MembershipSelectQuery {
+  eq(col: string, val: string): MembershipSelectQuery
+  maybeSingle(): Promise<{ data: { id: string } | null; error: SupabaseError | null }>
+}
+
+interface MembershipTable {
+  select(cols: string): MembershipSelectQuery
+  insert(values: MembershipRow): AwaitableWrite
+  update(values: Pick<MembershipRow, 'status' | 'start_date' | 'end_date'>): { eq(col: string, val: string): AwaitableWrite }
 }
 
 // Minimal builder interfaces to bypass Supabase's strict generics when the
@@ -221,25 +250,17 @@ interface PortalSelectQuery {
   eq(col: string, val: string): PortalSelectQuery
   order(col: string, opts: { ascending: boolean }): PortalSelectQuery
   limit(n: number): PortalSelectQuery
-  maybeSingle(): Promise<{ data: { access_level: number | null; track: string | null } | null; error: { message: string } | null }>
-}
-
-// Awaitable update/insert: supabase builders implement PromiseLike natively
-interface PortalWriteResult {
-  then<R>(onfulfilled: (value: { error: { message: string } | null }) => R): Promise<R>
+  maybeSingle(): Promise<{ data: { access_level: number | null; track: string | null } | null; error: SupabaseError | null }>
 }
 
 interface PortalUpdateQuery {
-  eq(col: string, val: string): PortalUpdateQuery & PortalWriteResult
+  eq(col: string, val: string): PortalUpdateQuery & AwaitableWrite
 }
 
 interface PortalSubscriptionTable {
   select(cols: string): PortalSelectQuery
-  update(values: { access_level: number; track: string }): PortalUpdateQuery & PortalWriteResult
-  insert(values: {
-    user_id: string; tier_id: string; status: string;
-    start_date: string; end_date: null; access_level: number; track: string
-  }): PortalWriteResult
+  update(values: { access_level: number; track: string }): PortalUpdateQuery & AwaitableWrite
+  insert(values: MembershipRow & { access_level: number; track: string }): AwaitableWrite
 }
 
 // membership_tiers.id is a uuid generated when the tier was seeded
@@ -250,16 +271,51 @@ interface PortalSubscriptionTable {
 interface TierLookupTable {
   select(cols: string): {
     eq(col: string, val: string): {
-      maybeSingle(): Promise<{ data: { id: string } | null; error: { message: string } | null }>
+      maybeSingle(): Promise<{ data: { id: string } | null; error: SupabaseError | null }>
     }
   }
 }
 
+/**
+ * Medusa has no Sentry SDK; its failure channel is the staff alerter
+ * (apps/medusa/src/automations/runtime.ts: one mail per key per 15 minutes,
+ * every alert logged in full, never throws). Every skip or failure path in
+ * the portal writes goes through here so a buyer silently losing portal
+ * access is visible to staff, not only in the container log.
+ * POPIA: order ids and Supabase user ids in the lines, never emails.
+ */
+function reportPortalFailure(key: string, subject: string, lines: string[]): void {
+  console.error(`[order-placed] ${subject}: ${lines.join(' | ')}`)
+  void staffAlerter()
+    .send({ key, subject, lines })
+    .catch(() => undefined)
+}
+
+/**
+ * Tier ids are cached for the life of the process: tiers are seeded once and
+ * never re-keyed. The one case where a cached id goes stale is a tier row
+ * deleted and reseeded under a new uuid; the next write then fails with a
+ * foreign key violation on tier_id, which evicts the entry so the following
+ * order re-resolves it. Otherwise a reseed needs a Medusa restart.
+ */
 const tierIdCache = new Map<string, string>()
+
+const PG_FOREIGN_KEY_VIOLATION = '23503'
+
+function isTierForeignKeyViolation(error: SupabaseError): boolean {
+  return error.code === PG_FOREIGN_KEY_VIOLATION || /violates foreign key constraint/i.test(error.message)
+}
+
+function evictTierIdOnForeignKeyViolation(slug: string, error: SupabaseError): void {
+  if (!isTierForeignKeyViolation(error)) return
+  tierIdCache.delete(slug)
+  console.warn(`[order-placed] membership tier "${slug}" evicted from the id cache after a foreign key violation; the next order re-resolves it`)
+}
 
 async function resolveTierId(
   supabase: ReturnType<typeof createClient>,
-  slug: string
+  slug: string,
+  orderId: string
 ): Promise<string | null> {
   const cached = tierIdCache.get(slug)
   if (cached) return cached
@@ -268,11 +324,20 @@ async function resolveTierId(
   const { data, error } = await table.select('id').eq('slug', slug).maybeSingle()
 
   if (error) {
-    console.error(`[order-placed] membership tier lookup failed for slug "${slug}": ${error.message}`)
+    reportPortalFailure('membership-tier-lookup', 'Membership tier lookup failed', [
+      `Order: ${orderId}`,
+      `Tier slug: ${slug}`,
+      `Error: ${error.message}`,
+      'The buyer has no portal access row from this order.',
+    ])
     return null
   }
   if (!data) {
-    console.error(`[order-placed] membership tier "${slug}" is not in membership_tiers — seed it (infra/supabase/seed.sql)`)
+    reportPortalFailure('membership-tier-missing', 'Membership tier is not seeded', [
+      `Order: ${orderId}`,
+      `Tier slug: ${slug}`,
+      'Seed it from infra/supabase/seed.sql. The buyer has no portal access row from this order.',
+    ])
     return null
   }
 
@@ -280,56 +345,80 @@ async function resolveTierId(
   return data.id
 }
 
+/**
+ * Makes the buyer active on the purchased tier: the (user_id, tier_id) row is
+ * re-activated with fresh dates when one exists (a lapsed renewal), otherwise
+ * a new row is inserted beside any other rows the user has.
+ */
 async function syncSupabaseMembership(
   supabase: ReturnType<typeof createClient>,
   supabaseUserId: string,
-  tier: string
+  tier: string,
+  orderId: string
 ): Promise<void> {
-  const tierId = await resolveTierId(supabase, tier)
-  if (!tierId) {
-    console.error(`[order-placed] Supabase member_subscriptions upsert skipped for user ${supabaseUserId}: unknown tier "${tier}"`)
-    return
-  }
+  const tierId = await resolveTierId(supabase, tier, orderId)
+  if (!tierId) return // resolveTierId has already reported it
 
   const isFree = tier === 'free'
   const endDate = isFree
     ? null
     : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
 
-  const payload: MemberSubscriptionUpsert = {
-    user_id: supabaseUserId,
-    tier_id: tierId,
-    status: 'active',
-    start_date: new Date().toISOString(),
-    end_date: endDate,
+  const table = supabase.from('member_subscriptions') as unknown as MembershipTable
+
+  const { data: existing, error: fetchError } = await table
+    .select('id')
+    .eq('user_id', supabaseUserId)
+    .eq('tier_id', tierId)
+    .maybeSingle()
+
+  if (fetchError) {
+    reportPortalFailure('membership-sync', 'Membership row lookup failed', [
+      `Order: ${orderId}`,
+      `Supabase user: ${supabaseUserId}`,
+      `Tier: ${tier}`,
+      `Error: ${fetchError.message}`,
+    ])
+    return
   }
 
-  const table = supabase.from('member_subscriptions') as unknown as SupabaseUpsertTable
-  const { error } = await table.upsert(payload, { onConflict: 'user_id' })
+  const dates = { status: 'active', start_date: new Date().toISOString(), end_date: endDate }
+  const { error } = existing
+    ? await table.update(dates).eq('id', existing.id)
+    : await table.insert({ user_id: supabaseUserId, tier_id: tierId, ...dates })
 
   if (error) {
-    console.error(
-      `[order-placed] Supabase member_subscriptions upsert failed for user ${supabaseUserId}: ${error.message}`
-    )
-  } else {
-    console.log(
-      `[order-placed] Supabase member_subscriptions synced for user ${supabaseUserId} → tier=${tier}`
-    )
+    evictTierIdOnForeignKeyViolation(tier, error)
+    reportPortalFailure('membership-sync', `Membership row ${existing ? 'update' : 'insert'} failed`, [
+      `Order: ${orderId}`,
+      `Supabase user: ${supabaseUserId}`,
+      `Tier: ${tier}`,
+      `Error: ${error.message}`,
+      'The buyer is not active on this tier in the portal.',
+    ])
+    return
   }
+
+  console.log(
+    `[order-placed] Supabase member_subscriptions ${existing ? 'reactivated' : 'created'} for user ${supabaseUserId} → tier=${tier}`
+  )
 }
 
 /**
  * Grants or upgrades portal access_level for a programme purchase.
  * Never downgrades an existing higher access level.
- * If the user has no subscription row, inserts one on the free tier as the base.
+ * If the user has no ACTIVE subscription row, inserts one on the free tier
+ * as the base. Expired or cancelled rows stay as history (user_id is not
+ * unique, see the schema note above), so the insert is always valid.
  */
 async function syncPortalAccess(
   supabase: ReturnType<typeof createClient>,
   supabaseUserId: string,
   accessLevel: number,
-  track: 'akashic' | 'energy-clearing' | 'general'
+  track: 'akashic' | 'energy-clearing' | 'general',
+  orderId: string
 ): Promise<void> {
-  // Cast to bypass Supabase's strict generics — same pattern as SupabaseUpsertTable above.
+  // Cast to bypass Supabase's strict generics, same pattern as MembershipTable above.
   const table = supabase.from('member_subscriptions') as unknown as PortalSubscriptionTable
 
   // Fetch current active subscription to avoid downgrading
@@ -342,7 +431,12 @@ async function syncPortalAccess(
     .maybeSingle()
 
   if (fetchError) {
-    console.error(`[order-placed] portal access fetch failed for user ${supabaseUserId}: ${fetchError.message}`)
+    reportPortalFailure('portal-access', 'Portal access lookup failed', [
+      `Order: ${orderId}`,
+      `Supabase user: ${supabaseUserId}`,
+      `Error: ${fetchError.message}`,
+      `The buyer did not receive access level ${accessLevel}.`,
+    ])
     return
   }
 
@@ -356,37 +450,46 @@ async function syncPortalAccess(
         .eq('status', 'active')
 
       if (updateError) {
-        console.error(`[order-placed] portal access update failed for user ${supabaseUserId}: ${updateError.message}`)
+        reportPortalFailure('portal-access', 'Portal access upgrade failed', [
+          `Order: ${orderId}`,
+          `Supabase user: ${supabaseUserId}`,
+          `Error: ${updateError.message}`,
+          `The buyer is still at access level ${currentLevel}, not ${accessLevel}.`,
+        ])
       } else {
         console.log(`[order-placed] portal access upgraded for user ${supabaseUserId} → level=${accessLevel} track=${track}`)
       }
     } else {
       console.log(`[order-placed] portal access already at level ${currentLevel} for user ${supabaseUserId} — no change`)
     }
+    return
+  }
+
+  // No active subscription: insert a free-tier base row with the programme's
+  // access level. The free tier's uuid comes from membership_tiers by slug (KI070).
+  const freeTierId = await resolveTierId(supabase, 'free', orderId)
+  if (!freeTierId) return // resolveTierId has already reported it
+
+  const { error: insertError } = await table.insert({
+    user_id: supabaseUserId,
+    tier_id: freeTierId,
+    status: 'active',
+    start_date: new Date().toISOString(),
+    end_date: null,
+    access_level: accessLevel,
+    track,
+  })
+
+  if (insertError) {
+    evictTierIdOnForeignKeyViolation('free', insertError)
+    reportPortalFailure('portal-access', 'Portal access insert failed', [
+      `Order: ${orderId}`,
+      `Supabase user: ${supabaseUserId}`,
+      `Error: ${insertError.message}`,
+      `The buyer did not receive access level ${accessLevel}.`,
+    ])
   } else {
-    // No active subscription — insert a free-tier base with the programme's access level.
-    // The free tier's uuid comes from membership_tiers by slug (KI070).
-    const freeTierId = await resolveTierId(supabase, 'free')
-    if (!freeTierId) {
-      console.error(`[order-placed] portal access insert skipped for user ${supabaseUserId}: free tier not found`)
-      return
-    }
-
-    const { error: insertError } = await table.insert({
-      user_id: supabaseUserId,
-      tier_id: freeTierId,
-      status: 'active',
-      start_date: new Date().toISOString(),
-      end_date: null,
-      access_level: accessLevel,
-      track,
-    })
-
-    if (insertError) {
-      console.error(`[order-placed] portal access insert failed for user ${supabaseUserId}: ${insertError.message}`)
-    } else {
-      console.log(`[order-placed] portal access created for user ${supabaseUserId} → level=${accessLevel} track=${track}`)
-    }
+    console.log(`[order-placed] portal access created for user ${supabaseUserId} → level=${accessLevel} track=${track}`)
   }
 }
 
@@ -435,7 +538,7 @@ async function handleMembershipActivation(
       }
 
       if (supabaseUserId) {
-        void syncSupabaseMembership(supabase, supabaseUserId, tier).catch(
+        void syncSupabaseMembership(supabase, supabaseUserId, tier, order.id).catch(
           (err: unknown) => {
             const message = err instanceof Error ? err.message : String(err)
             console.error(`[order-placed] Supabase sync error for order ${order.id}: ${message}`)
@@ -505,7 +608,7 @@ async function handlePortalAccessGrant(order: RetrievedOrder): Promise<void> {
     return
   }
 
-  await syncPortalAccess(supabase, supabaseUserId, accessGrant.access_level, accessGrant.track)
+  await syncPortalAccess(supabase, supabaseUserId, accessGrant.access_level, accessGrant.track, order.id)
 }
 
 // ── Subscriber ────────────────────────────────────────────────────────────────
