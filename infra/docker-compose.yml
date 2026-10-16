@@ -220,6 +220,11 @@ services:
       # "true", /api/region serves the ZAR region to everyone.
       MEDUSA_USD_REGION_ENABLED: ${MEDUSA_USD_REGION_ENABLED:-false}
       MEDUSA_API_TOKEN: ${MEDUSA_API_TOKEN}
+      # Medusa v2 admin auth for the member portal (KI078): a secret API key
+      # (sk_) as Basic auth, else an emailpass login with the admin account.
+      MEDUSA_API_KEY: ${MEDUSA_API_KEY:-}
+      MEDUSA_ADMIN_EMAIL: ${MEDUSA_ADMIN_EMAIL:-}
+      MEDUSA_ADMIN_PASSWORD: ${MEDUSA_ADMIN_PASSWORD:-}
       EMAIL_UNSUBSCRIBE_SECRET: ${EMAIL_UNSUBSCRIBE_SECRET}
       COMPANY_PHYSICAL_ADDRESS: ${COMPANY_PHYSICAL_ADDRESS:-}
       COMPANY_REGISTRATION_NUMBER: ${COMPANY_REGISTRATION_NUMBER:-}
