@@ -1,0 +1,13 @@
+{
+  "section": "REFIX2",
+  "date": "2026-10-19",
+  "base_url": "http://169.239.180.49",
+  "rows": [
+    {"id": "G-043", "item": "Free session order, session next steps (KI082)", "verdict": "PASS", "severity": "", "actual": "Order #391. Page: Your confirmation email has the link to book your session. Mail (controller): Book Your Session Now; What Happens Next 'Your booking link is above. Schedule your session at your convenience.'", "evidence": "docs/testing/results/browser/REFIX2-G-043-1.png; order #391 mail 14:49:47Z read by controller"},
+    {"id": "KI083", "item": "One main landmark", "verdict": "PASS", "severity": "", "actual": "main=1, nested=0 on 404, /portal/login, /shop", "evidence": "docs/testing/results/browser/REFIX2-KI083-1.png"},
+    {"id": "I-01", "item": "Signup with phone", "verdict": "PASS", "severity": "", "actual": "Phone field present; confirm link -> dashboard; account phone +27 82 555 0199", "evidence": "docs/testing/results/browser/REFIX2-I-01-1.png, -2.png, -3.png"},
+    {"id": "CK-01", "item": "Checkout prefill", "verdict": "PASS", "severity": "", "actual": "Prefilled Johan / QA Test / plus address / +27 82 555 0199; no order; cart emptied", "evidence": "docs/testing/results/browser/REFIX2-CK-01-1.png"},
+    {"id": "I-03", "item": "Password reset, plain auth layout (KI084)", "verdict": "PASS", "severity": "", "actual": "Reset page had no portal sidebar/Sign Out/Dashboard nav; 'Password updated'; Go to Your Dashboard shows sidebar + Sign Out; login with new password OK; signed out", "evidence": "docs/testing/results/browser/REFIX2-I-03-1.png .. REFIX2-I-03-5.png"}
+  ],
+  "findings": []
+}

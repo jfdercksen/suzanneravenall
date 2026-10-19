@@ -404,3 +404,27 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
 - 19 Oct 13:52 UTC, step 6 second try: Johan added the webhook on :3002; booking mkmWgSsvhBmAAhwQetAR8S reached the route but got 401 (secret on the Cal.com webhook is 21 chars, CALCOM_WEBHOOK_SECRET is 64; compared in-box, nothing printed). Cancelled 13:53. calcom container restarted by itself at 13:51 (restart count 1). Waiting on the secret fix.
 - 19 Oct 13:56 UTC: my in-box attempt to copy CALCOM_WEBHOOK_SECRET into the Cal.com webhook broke on shell quoting and psql echoed the value into the session output; the webhook secret ended up NULL (fails closed, 401). With Johan's ok the secret was ROTATED at 13:59 by a script piped to the box (openssl rand -hex 32, written to infra/.env and the Cal.com Webhook row 9284d18b, web recreated only, nothing printed); cal.com == web env == .env verified by comparison (64 chars). The old value is retired; backup of the previous .env at infra/.env.bak-20261019-calcom-rotate (chmod 600, holds the retired value, delete once Vaultwarden is updated). Lesson: never inline a secret into a nested quoted command; pipe a script file and discard tool output.
 - 19 Oct 14:00 UTC, step 6 PASS: booking 1GQmhVmENQVmgvuUt3QosL (Fri 23 Oct 11:00 SAST) -> Cal.com webhook 200 -> contact 12x413 Discovery Call Booked, Event 18x619 (30 min, UID in description); cancelled 14:01, cancel delivery 200 and ignored. QA leftovers in Vtiger: Events 18x618 and 18x619 (Planned) and contact 12x413 now at Discovery Call Booked (was Closed Won); remove or reset via /crm if wanted. Cal.com container restarted once by itself at 13:51 UTC.
+
+## 2026-10-19 13:30 - matrix section table brought up to date (EA session)
+- Section rows H, I, J, K rewritten to the 19 Oct state (H DONE for launch with H-07 N/A and H-11 BLOCKED on Sage; I DONE; J DONE except J-02/KI079; K PART: K-01, K-02, K-07, K-08 proven, K-03 code live, K-09/K-13 retired, K-04/05/06/10/11/12 not migrated). K-01..K-03 rows corrected from BLOCKED to their real state. Not committed (docs only, Johan's ok).
+- Handover status draft written: C:\Johan Brain\drafts\2026-10-19-shayna-handover-status.md (replaces the opening of the unsent 16 Oct "RE: Website Testing" draft). Open on Johan: KI059 apply + reindex, sandbox flags (two paid orders), CALCOM_SESSION_BOOKING_URL + session event (KI079), memberships decision (plan Q2), cleanup of johan+portal@, johan+portal1019@, order #389.
+
+## 2026-10-19 refix2: KI082, KI083, KI084, KI077
+
+- KI082: product type falls back to the nearest mapped parent category, in medusa
+  order-placed.ts (ORDER_GRAPH_FIELDS two parent levels) and the web mirror plus
+  /api/checkout/status. Blast radius (store API, 58 published): 9 products in
+  children of private-sessions; only Exploring the Alpha Mind and Energetic
+  Clearing change (generic to session plus booking link, Johan ok'd Energetic
+  Clearing). Access level stays 1, no portal grant change.
+- KI083: inner <main> to <div> across 26 files; global-error gets its own <main>.
+- KI084: middleware forwards x-pathname, portal layout keeps the four auth pages
+  on the auth layout when signed in; reset and login exits router.refresh().
+- KI077: optional phone at signup (user_metadata.phone), checkout prefill.
+- Commits fc0472b (web), 90defe6 (medusa); code-reviewer PASS WITH NOTES on both,
+  notes applied. Web 1624/1624 tests, medusa order-placed 68, build green.
+- Deploy run 39270262911 web + medusa. Re-walk 5/5 PASS
+  (docs/testing/results/acceptance-refix2-2026-10-19.*). Order #391 cancelled.
+  Cleanup owed: account johan+refix2-1019@ (plus earlier johan+portal@,
+  johan+portal1019@, order #389).
+
