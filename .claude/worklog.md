@@ -341,3 +341,22 @@ Open: the invoice and order-confirmation routes still read MEDUSA_API_TOKEN
 directly (they already use the v2 header helper); move them onto the client
 once a v2 secret key exists. Review notes left: orders beyond 100 per member
 are not paged. Order #389 still to cancel at cleanup.
+
+## 2026-10-19 04:40-09:50 - Rename "Nice or Not Nice in Communication" to "Coherent Communication" (side session)
+Client request (Shayna, 16 Oct), promised on the review site by Tue 20 Oct.
+- Web commit 7bdc2c6, deployed services=web (run 39213765245): programme
+  name + slug coherent-communication (data/programs.ts), services group card
+  (GroupCorporate.tsx), 308 from /programs/nice-or-not-nice-communication
+  (next.config.mjs + redirect test). Shop handle unchanged by design.
+- Medusa: product retitled "Group Session: Coherent Communication" by a
+  scratchpad script in the catalogue_fixes pattern (dry run, backup, apply,
+  verify PASS, 09:32). Description ends "Formerly called Nice or Not Nice in
+  Communication." so search still finds the old name (the index does not
+  search metadata); metadata.search_aliases set too.
+- Reseed: Johan ran reseed-meili.sh 09:40, 58/58 docs. Both names find the
+  product in /search.
+- Gotchas: the first apply attempt never ran (no apply backup existed); the
+  headless cdp-shots capture shows /search before its results load, so the
+  search screenshots came from the built-in browser. reseed-meili.sh ends
+  with a harmless `$'\r'` error when piped from PowerShell (CRLF last line).
+- Evidence: ACCEPTANCE.md results log block, results/browser/rename-*.
