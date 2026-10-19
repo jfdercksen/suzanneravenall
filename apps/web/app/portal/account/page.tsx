@@ -92,7 +92,9 @@ export default async function AccountPage() {
             Member Portal
           </p>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white leading-[1.05] mb-3">My Account</h1>
-          <p className="text-lg text-white/60">Manage your profile, password, and membership details.</p>
+          <p className="text-lg text-white/60">
+            {showMemberships ? 'Manage your profile, password, and membership details.' : 'Manage your profile and password.'}
+          </p>
         </div>
 
         {/* Profile section (client — form state + save handler) */}

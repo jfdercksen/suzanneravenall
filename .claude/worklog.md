@@ -360,3 +360,42 @@ Client request (Shayna, 16 Oct), promised on the review site by Tue 20 Oct.
   search screenshots came from the built-in browser. reseed-meili.sh ends
   with a harmless `$'\r'` error when piped from PowerShell (CRLF last line).
 - Evidence: ACCEPTANCE.md results log block, results/browser/rename-*.
+
+## 2026-10-19 08:55-10:30 - Batch fix of the acceptance defects, memberships off for launch, re-walk (side session)
+Triage: the 9 web test failures before today were stale expectations
+(tokens.test since the monochrome swap 746c797, privateSessions.test since
+a2214e0) plus a search route timeout under suite load; fixed the two tests,
+suite now 1602/1602.
+Commits (code-reviewer PASS WITH NOTES on each, notes applied, tsc at baseline):
+- 1cda11b KI058 404 tab title on unknown products (shared NOT_FOUND_TITLE),
+  KI063 shop hero reads the live product count.
+- d306e89 KI060 variant shown in cart, checkout, confirmation (store cart sends
+  variant_title, not subtitle); KI065/KI044 confirmation next steps branch on the
+  order mail's product type via /api/checkout/status; KI067 pre-order note, no
+  date; KI068 support packages up to 12 (smaller change, no catalogue write).
+- c9d5bfd KI073 reset states, KI074 real free resources, KI075 prices apart,
+  KI076 Videos in the phone tab bar and pill above it, KI077 first-session
+  "Welcome" and Sign Out clear of the cookie banner; MEMBERSHIPS_ENABLED (web,
+  server env read per request, default off) hides /portal/upgrade (404), tier
+  names and upgrade prompts: KI071/KI072 closed for launch, H-07 and I-09 N/A.
+Deploy: web only, run 39232705051 (f04b719). Re-walk: 13 rows, 11 PASS, 2 N/A
+for launch (results/acceptance-refix-2026-10-19.*). Order #390 placed and
+cancelled; account johan+portal1019@ created (delete at cleanup).
+KI059 is data: Program 2 in collection deep-dive; dry run
+ki059_program2_collection.py in this session's scratchpad, waits for Johan's
+apply plus a search reindex.
+New: KI082 product-type rule ignores parent categories (session buyers under a
+sub-category get generic steps and no booking link, mail and page alike; needs
+a medusa change), KI083 nested main, KI084 reset form inside the sidebar.
+Follow-up commit: account subtitle without "membership" while off, phone tab
+labels at 9 px so they fit at 360 px; flag documented in infra/.env.example,
+docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
+
+## 2026-10-19 - n8n migration steps 6 and 7 (Cal.com to Vtiger, MeiliSearch sync), workflows 9 and 13 retired
+
+- Built and deployed a148c7a + acec8ff (runs 39232954049 web+medusa, 39235088083 web). Code: packages/integrations/src/calcom-vtiger.ts, meili.ts; apps/web/lib/integrations/calcom-booking.ts and the Cal.com route (after(), n8n forward removed); apps/medusa subscribers/product-search-sync.ts (replaces product-updated.ts), jobs/search-reindex.ts (00:00 UTC), automations/search.ts; seed-meilisearch.ts on the shared transform. Two code-reviewer passes, fixes applied (stage re-applied on replay, describe not cached when empty, per-booking alert key, delete 404 tolerated, created_at+id order, count required, stale-delete guard, settings applied on rebuild). Tests: integrations 146, web route/runner green, medusa 121, web build green, medusa tsc clean.
+- Retired (Johan 16 Oct): workflow 9 video access log (route call, N8N_BASE_URL on web) and workflow 13 Vibe monitor; exports deleted, plan inventory says RETIRED.
+- Vtiger describe on suzanne.aimate.co.za (read only): cf_pipeline_stage, cf_total_spend_zar, cf_last_purchase_date, cf_membership_tier, cf_discovery_call_date all exist; Events LIKE query works; Events duration_minutes is a picklist 00/15/30/45 (fixed in acec8ff); leadsource picklist does not list Discovery Call / Shop / Lead Magnet (the proven order flow writes Shop anyway).
+- Step 7 live: draft rename stays out of the index (log "-> deleted"), published product upserted with price via Query; both reverted. Nightly rebuild not yet observed.
+- Step 6 live: waits on Johan adding the Cal.com webhook, then one QA booking, read-back, cancel.
+- Docs (ACCEPTANCE K-07/K-08/K-09/J-05 + results block, plan step status) edited but NOT committed yet: ACCEPTANCE.md also carries another session's uncommitted re-walk edits.

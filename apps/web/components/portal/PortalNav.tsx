@@ -197,7 +197,7 @@ export default function PortalNav({ tier, showTier = true }: PortalNavProps) {
                 }`}
               >
                 {link.icon}
-                <span className="max-w-full truncate text-[10px] font-medium">{link.shortLabel ?? link.label}</span>
+                <span className="whitespace-nowrap text-[9px] font-medium tracking-tight">{link.shortLabel ?? link.label}</span>
               </Link>
             )
           })}

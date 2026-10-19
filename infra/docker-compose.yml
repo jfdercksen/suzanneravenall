@@ -205,6 +205,8 @@ services:
       # n8n migration step 3: leads go to Vtiger from our own code (code),
       # from the old n8n webhook (n8n) or nowhere (off). Never both.
       LEADS_AUTOMATION: ${LEADS_AUTOMATION:-code}
+      # Memberships on sale (KI071/KI072). Off for launch; see infra/.env.example.
+      MEMBERSHIPS_ENABLED: ${MEMBERSHIPS_ENABLED:-false}
       AUTOMATION_ALERT_EMAIL: ${AUTOMATION_ALERT_EMAIL:-}
       AUTOMATION_DRY_RUN: ${AUTOMATION_DRY_RUN:-false}
       INTERNAL_WEBHOOK_SECRET: ${INTERNAL_WEBHOOK_SECRET:-}
