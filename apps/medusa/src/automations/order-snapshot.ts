@@ -21,6 +21,10 @@ export const ORDER_GRAPH_FIELDS = [
   "items.variant.*",
   "items.variant.product.*",
   "items.variant.product.categories.*",
+  // Two parent levels cover the whole tree (three deep): a product in a
+  // sub-category takes its parent's product type (KI082).
+  "items.variant.product.categories.parent_category.handle",
+  "items.variant.product.categories.parent_category.parent_category.handle",
   "customer.*",
   "billing_address.*",
   "shipping_address.*",

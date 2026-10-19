@@ -28,6 +28,7 @@ if (!N8N_WEBHOOK_SECRET) {
 
 interface OrderCategory {
   handle: string
+  parent_category?: OrderCategory | null
 }
 
 interface OrderItemProduct {
@@ -94,7 +95,36 @@ function isMembershipOrder(items: OrderItem[]): boolean {
   })
 }
 
-function detectOrderProductType(items: OrderItem[]): ProductType {
+// A category's own handle, then its parent's, up to the root (as far as
+// ORDER_GRAPH_FIELDS read it).
+function categoryChain(cat: OrderCategory): string[] {
+  const chain: string[] = []
+  const seen = new Set<OrderCategory>()
+  let node: OrderCategory | null | undefined = cat
+  while (node && !seen.has(node)) {
+    seen.add(node)
+    chain.push(node.handle)
+    node = node.parent_category
+  }
+  return chain
+}
+
+function mappedAccess(handle: string): CategoryAccess | undefined {
+  return Object.prototype.hasOwnProperty.call(CATEGORY_ACCESS_MAP, handle) ? CATEGORY_ACCESS_MAP[handle] : undefined
+}
+
+// The map entry for a category: its own handle first, then the nearest
+// mapped parent, so a session filed under a sub-category of private-sessions
+// (exploring-the-alpha-mind) reads as a session (KI082).
+function resolveCategory(cat: OrderCategory): CategoryAccess | undefined {
+  for (const handle of categoryChain(cat)) {
+    const match = mappedAccess(handle)
+    if (match) return match
+  }
+  return undefined
+}
+
+export function detectOrderProductType(items: OrderItem[]): ProductType {
   // Practitioner Mentorship is a monthly group session the team tracks and
   // confirms by email; nothing to book. Its handle contains "session", so it
   // was sent the private-session booking email (Shayna, 7 Oct).
@@ -104,7 +134,13 @@ function detectOrderProductType(items: OrderItem[]): ProductType {
 
   // Direct map lookup
   for (const cat of categories) {
-    const match = CATEGORY_ACCESS_MAP[cat.handle]
+    const match = mappedAccess(cat.handle)
+    if (match) return match.product_type
+  }
+
+  // Nearest mapped parent category (KI082)
+  for (const cat of categories) {
+    const match = resolveCategory(cat)
     if (match) return match.product_type
   }
 
@@ -136,12 +172,12 @@ function detectOrderProductType(items: OrderItem[]): ProductType {
   return 'other'
 }
 
-function getHighestCategoryAccess(items: OrderItem[]): CategoryAccess | null {
+export function getHighestCategoryAccess(items: OrderItem[]): CategoryAccess | null {
   const categories = items.flatMap((item) => item.variant?.product?.categories ?? [])
   let best: CategoryAccess | null = null
 
   for (const cat of categories) {
-    const match = CATEGORY_ACCESS_MAP[cat.handle]
+    const match = resolveCategory(cat)
     if (match && (!best || match.access_level > best.access_level)) {
       best = match
     }
