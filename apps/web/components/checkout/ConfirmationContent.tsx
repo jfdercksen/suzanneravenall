@@ -6,6 +6,9 @@ import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { CheckCircle, Mail, Calendar, ArrowRight, Clock, Loader2, ShoppingBag } from 'lucide-react'
 import { useCart } from '@/lib/cart'
+import type { OrderProductType } from '@/lib/email/types'
+import { confirmationNextSteps } from '@/lib/checkout/confirmationSteps'
+import { PREORDER_NOTE } from '@/lib/shop/lineItem'
 
 // confirmed: Medusa says the cart is now an order (or PayPal captured it).
 // pending:   a real cart, but no order yet (PayFast ITN still on its way, or
@@ -18,10 +21,41 @@ const POLL_INTERVAL_MS = 2000
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
+/** One order line as /api/checkout/status describes it (KI060, KI067). */
+interface OrderLine {
+  title: string
+  variant: string | null
+  quantity: number
+  preorder: boolean
+}
+
 interface StatusResult {
   state: SettledState
   /** The buyer-facing order number (display id), when Medusa returned one. */
   orderNumber: number | null
+  /** What was bought; empty when the lines could not be read. */
+  items: OrderLine[]
+  /** The order mail's product type, so the next steps match the mail (KI065). */
+  productType: OrderProductType | null
+}
+
+const NO_ORDER: Omit<StatusResult, 'state'> = { orderNumber: null, items: [], productType: null }
+
+function readLines(value: unknown): OrderLine[] {
+  if (!Array.isArray(value)) return []
+  return value.flatMap((raw): OrderLine[] => {
+    if (!raw || typeof raw !== 'object') return []
+    const line = raw as Record<string, unknown>
+    if (typeof line.title !== 'string' || line.title === '') return []
+    return [
+      {
+        title: line.title,
+        variant: typeof line.variant === 'string' && line.variant !== '' ? line.variant : null,
+        quantity: typeof line.quantity === 'number' ? line.quantity : 1,
+        preorder: line.preorder === true,
+      },
+    ]
+  })
 }
 
 // Asks /api/checkout/status whether the cart has become an order, retrying
@@ -33,24 +67,36 @@ async function checkOrderStatus(cartId: string, attempts: number): Promise<Statu
       const res = await fetch(`/api/checkout/status?cartId=${encodeURIComponent(cartId)}`, {
         cache: 'no-store',
       })
-      if (res.status === 404) return { state: 'none', orderNumber: null }
+      if (res.status === 404) return { state: 'none', ...NO_ORDER }
       if (res.ok) {
-        const data = (await res.json()) as { status?: string; orderNumber?: number | null }
+        const data = (await res.json()) as {
+          status?: string
+          orderNumber?: number | null
+          items?: unknown
+          productType?: OrderProductType
+        }
         if (data.status === 'completed') {
-          return { state: 'confirmed', orderNumber: typeof data.orderNumber === 'number' ? data.orderNumber : null }
+          return {
+            state: 'confirmed',
+            orderNumber: typeof data.orderNumber === 'number' ? data.orderNumber : null,
+            items: readLines(data.items),
+            productType: typeof data.productType === 'string' ? data.productType : null,
+          }
         }
       }
     } catch {
       // Network blip: try again on the next round.
     }
   }
-  return { state: 'pending', orderNumber: null }
+  return { state: 'pending', ...NO_ORDER }
 }
 
 export default function ConfirmationContent() {
   const { clearCart } = useCart()
   const searchParams = useSearchParams()
   const [orderNumber, setOrderNumber] = useState<number | null>(null)
+  const [orderLines, setOrderLines] = useState<OrderLine[]>([])
+  const [productType, setProductType] = useState<OrderProductType | null>(null)
   const [orderState, setOrderState] = useState<OrderState>('checking')
 
   // PayFast return params: gateway=payfast&m_payment_id=<cartId> (set in our return_url)
@@ -80,11 +126,12 @@ export default function ConfirmationContent() {
     async function finalise() {
       let state: SettledState = 'none'
       let number: number | null = null
+      let details: Pick<StatusResult, 'items' | 'productType'> = { items: [], productType: null }
 
       if (isFreeOrder && freeCartId) {
         // Completed server-side by /api/checkout/free before the redirect here;
         // confirm it with Medusa rather than trust the order number in the URL.
-        ;({ state, orderNumber: number } = await checkOrderStatus(freeCartId, 2))
+        ;({ state, orderNumber: number, ...details } = await checkOrderStatus(freeCartId, 2))
       } else if (isPayPal && payPalOrderId && payPalCartId) {
         try {
           const res = await fetch('/api/checkout/paypal/capture', {
@@ -102,10 +149,12 @@ export default function ConfirmationContent() {
         }
         if (state !== 'confirmed') {
           // Captured on an earlier visit (refresh) or completed by the PayPal webhook.
-          ;({ state, orderNumber: number } = await checkOrderStatus(payPalCartId, 2))
+          ;({ state, orderNumber: number, ...details } = await checkOrderStatus(payPalCartId, 2))
         } else {
-          // Captured just now: one read for the order number only.
-          number = (await checkOrderStatus(payPalCartId, 1)).orderNumber
+          // Captured just now: one read for the order number and lines only.
+          const read = await checkOrderStatus(payPalCartId, 1)
+          number = read.orderNumber
+          details = { items: read.items, productType: read.productType }
         }
       } else if (payFastCartId) {
         try {
@@ -118,10 +167,12 @@ export default function ConfirmationContent() {
         } catch {
           // The PayFast ITN completes the cart server-side; the status check decides.
         }
-        ;({ state, orderNumber: number } = await checkOrderStatus(payFastCartId, 6))
+        ;({ state, orderNumber: number, ...details } = await checkOrderStatus(payFastCartId, 6))
       }
 
       setOrderNumber(number)
+      setOrderLines(details.items)
+      setProductType(details.productType)
       setOrderState(state)
       // Only a confirmed order empties the cart, and only the cart it was for.
       if (state === 'confirmed' && cartId) {
@@ -138,6 +189,13 @@ export default function ConfirmationContent() {
   // Medusa's number first; the free-order URL number only once Medusa has
   // confirmed that cart (the state check above).
   const shownOrderNumber = orderNumber ?? (isFreeOrder ? freeOrderNumber : null)
+  // A pre-order ships later, and the page says so instead of a ship date (KI067).
+  const hasPreorder = orderLines.some((line) => line.preorder)
+  const nextSteps = hasPreorder
+    ? [PREORDER_NOTE, productType && productType !== 'other' ? confirmationNextSteps(productType) : '']
+        .filter(Boolean)
+        .join(' ')
+    : confirmationNextSteps(productType)
 
   return (
     <div className="min-h-screen bg-brand-cream">
@@ -181,12 +239,12 @@ export default function ConfirmationContent() {
               {
                 icon: Mail,
                 heading: 'Confirmation Email',
-                body: 'A receipt has been sent to your email address.',
+                body: 'Your order confirmation and invoice are on their way to your email address.',
               },
               {
                 icon: Calendar,
                 heading: 'What Happens Next',
-                body: 'If you bought a session, click the booking link in your email to schedule it. For programmes, your access details are in your email. If you have any issues, please email us and we\'ll be happy to help.',
+                body: nextSteps,
               },
               {
                 icon: ArrowRight,
@@ -209,6 +267,30 @@ export default function ConfirmationContent() {
               </motion.div>
             ))}
           </div>
+
+          {/* What was bought, with the chosen variant next to each title (KI060) */}
+          {orderLines.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.55 }}
+              className="mb-6 p-4 bg-brand-sand rounded-xl border border-brand-border"
+            >
+              <h2 className="text-sm font-medium text-brand-ink mb-3">Your order</h2>
+              <ul className="space-y-2">
+                {orderLines.map((line, i) => (
+                  <li key={`${line.title}-${i}`} className="text-sm">
+                    <span className="font-medium text-brand-ink">{line.title}</span>
+                    {line.variant && <span className="text-brand-muted"> ({line.variant})</span>}
+                    {line.quantity > 1 && <span className="text-brand-muted"> x{line.quantity}</span>}
+                    {line.preorder && (
+                      <span className="block text-xs text-brand-muted">Pre-order: ships when the book is released</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
 
           {/* Order reference */}
           {(paymentId ?? cartId ?? shownOrderNumber) && (

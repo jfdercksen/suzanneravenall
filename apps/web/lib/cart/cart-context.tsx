@@ -17,6 +17,8 @@ export interface CartItem {
   id: string
   title: string
   subtitle: string | null
+  /** The chosen variant ("Live via Zoom"); in the store cart's default fields, unlike subtitle */
+  variant_title?: string | null
   thumbnail: string | null
   quantity: number
   unit_price: number

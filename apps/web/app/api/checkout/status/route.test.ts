@@ -61,6 +61,77 @@ describe('GET /api/checkout/status', () => {
     expect(await res.json()).toEqual({ status: 'completed', orderNumber: null })
   })
 
+  it('lists the order lines with their variant and the product type the mail uses (KI060, KI065)', async () => {
+    const fetchMock = vi.fn(async (url: string) => ({
+      ok: true,
+      status: 200,
+      json: async () => {
+        if (url.includes('/store/order-by-cart/')) return { display_id: 71 }
+        if (url.includes('/store/products?')) {
+          return {
+            products: [
+              {
+                id: 'prod_rr1',
+                handle: 'rr-program-1-live-via-zoom',
+                metadata: null,
+                categories: [{ handle: 'rp-live' }],
+                variants: [{ id: 'variant_live', metadata: { thinkific_course_id: '1349879' } }],
+              },
+            ],
+          }
+        }
+        return {
+          cart: {
+            id: CART_ID,
+            completed_at: '2026-10-05T10:00:00Z',
+            items: [
+              { title: 'Program 1', variant_title: 'Live via Zoom', quantity: 1, product_id: 'prod_rr1', variant_id: 'variant_live', product_handle: 'rr-program-1-live-via-zoom' },
+            ],
+          },
+        }
+      },
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+    const res = await GET(makeRequest(CART_ID))
+    expect(await res.json()).toEqual({
+      status: 'completed',
+      orderNumber: 71,
+      items: [{ title: 'Program 1', variant: 'Live via Zoom', quantity: 1, preorder: false }],
+      productType: 'live-course',
+    })
+    const productsCall = fetchMock.mock.calls.map(([u]) => u).find((u) => u.includes('/store/products?'))
+    expect(productsCall).toContain('id%5B%5D=prod_rr1')
+  })
+
+  it('marks a pre-order line and still answers when the products cannot be read (KI067)', async () => {
+    const fetchMock = vi.fn(async (url: string) =>
+      url.includes('/store/products?')
+        ? { ok: false, status: 500, json: async () => ({}) }
+        : {
+            ok: true,
+            status: 200,
+            json: async () =>
+              url.includes('/store/order-by-cart/')
+                ? { display_id: 72 }
+                : {
+                    cart: {
+                      id: CART_ID,
+                      completed_at: '2026-10-05T10:00:00Z',
+                      items: [{ title: 'The Breakthrough Trilogy', variant_title: 'Default', quantity: 2, product_id: 'prod_book', product_handle: 'the-latest-book-by-suzanne' }],
+                    },
+                  },
+          },
+    )
+    vi.stubGlobal('fetch', fetchMock)
+    const res = await GET(makeRequest(CART_ID))
+    expect(await res.json()).toEqual({
+      status: 'completed',
+      orderNumber: 72,
+      items: [{ title: 'The Breakthrough Trilogy', variant: null, quantity: 2, preorder: true }],
+      productType: 'other',
+    })
+  })
+
   it('reports pending for a cart that is not an order yet', async () => {
     mockMedusa(200, { cart: { id: CART_ID, completed_at: null } })
     const res = await GET(makeRequest(CART_ID))

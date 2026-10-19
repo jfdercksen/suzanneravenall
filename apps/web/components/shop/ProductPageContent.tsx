@@ -9,6 +9,8 @@ import { Sparkles, Heart, Zap, Check } from 'lucide-react'
 import Link from 'next/link'
 import type { MedusaProduct } from '@/types/medusa'
 import { productTestimonials } from '@/data/testimonials'
+import { supportPackageUnit } from '@/components/cart/cartRules'
+import { isPreorder, PREORDER_NOTE } from '@/lib/shop/lineItem'
 import {
   defaultVariantId,
   descriptionParagraphs,
@@ -115,6 +117,16 @@ export default function ProductPageContent({ product, initialVariantId }: Produc
 
   const primaryCategory = product.categories[0]
 
+  // Buying notes under the price: a pre-order ships later (KI067); a support
+  // package is bought for a number of months or sessions, paid once (KI068).
+  const preorder = isPreorder(product.handle)
+  const packageUnit = supportPackageUnit(product.handle)
+  const buyingNote = preorder
+    ? PREORDER_NOTE
+    : packageUnit
+      ? `Choose how many ${packageUnit}s you need: add it to your cart, then set the number there (or press Add another). You pay once for the ${packageUnit}s you choose; nothing renews automatically.`
+      : null
+
   return (
     <div>
       {/* 1: Hero (dark) */}
@@ -136,6 +148,15 @@ export default function ProductPageContent({ product, initialVariantId }: Produc
               productHandle={product.handle}
               chooseLabel={variantChooserLabel(kind)}
             />
+
+            {buyingNote && (
+              <p
+                data-testid="product-buying-note"
+                className="mt-6 rounded-card border border-brand-border bg-brand-sand p-5 text-sm leading-relaxed text-brand-ink"
+              >
+                {buyingNote}
+              </p>
+            )}
 
             {isThinkificCourse && (
               <motion.div

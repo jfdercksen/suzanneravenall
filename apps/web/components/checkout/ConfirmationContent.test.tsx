@@ -100,6 +100,45 @@ describe('ConfirmationContent', () => {
     expect(screen.queryByText(CART_ID)).not.toBeInTheDocument()
   })
 
+  it('lists each line with its variant and gives the next steps for the product type (KI060, KI065)', async () => {
+    search = `free=1&order=71&cartId=${CART_ID}`
+    stubStatus(200, {
+      status: 'completed',
+      orderNumber: 71,
+      items: [{ title: 'Resonance Repatterning Program 1', variant: 'Live via Zoom', quantity: 1, preorder: false }],
+      productType: 'live-course',
+    })
+    render(<ConfirmationContent />)
+
+    expect(await screen.findByText('Resonance Repatterning Program 1')).toBeInTheDocument()
+    expect(screen.getByText(/\(Live via Zoom\)/)).toBeInTheDocument()
+    expect(screen.getByText(/course access email.*Zoom details/)).toBeInTheDocument()
+    expect(screen.queryByText(/If you bought a session/)).not.toBeInTheDocument()
+  })
+
+  it('says a pre-order ships later and promises no date (KI067)', async () => {
+    search = `free=1&order=72&cartId=${CART_ID}`
+    stubStatus(200, {
+      status: 'completed',
+      orderNumber: 72,
+      items: [{ title: 'The Breakthrough Trilogy', variant: null, quantity: 1, preorder: true }],
+      productType: 'other',
+    })
+    render(<ConfirmationContent />)
+
+    expect(await screen.findByText(/has not been released yet/)).toBeInTheDocument()
+    expect(screen.getByText(/ships when the book is released/)).toBeInTheDocument()
+  })
+
+  it('falls back to neutral next steps when the lines cannot be read', async () => {
+    search = `free=1&order=73&cartId=${CART_ID}`
+    stubStatus(200, { status: 'completed', orderNumber: 73 })
+    render(<ConfirmationContent />)
+
+    expect(await screen.findByText(/Your confirmation email has the details of your order/)).toBeInTheDocument()
+    expect(screen.queryByText('Your order')).not.toBeInTheDocument()
+  })
+
   it('keeps the cart and says so while a PayFast payment is unconfirmed', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
     try {

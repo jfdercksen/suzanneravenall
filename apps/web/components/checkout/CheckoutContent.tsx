@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShoppingBag, ChevronRight, Lock, Tag, X } from 'lucide-react'
 import { useCart, formatPrice } from '@/lib/cart'
+import { variantLabel, isPreorder } from '@/lib/shop/lineItem'
 import { PHONE_PATTERN, phoneError, sanitisePhone } from '@/lib/forms/validation'
 
 type Step = 1 | 2 | 3
@@ -122,8 +123,11 @@ function OrderSideBar() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium text-brand-ink leading-snug">{item.title}</p>
-              {item.subtitle && (
-                <p className="text-xs text-brand-muted">{item.subtitle}</p>
+              {variantLabel(item) !== null && (
+                <p className="text-xs text-brand-muted">{variantLabel(item)}</p>
+              )}
+              {isPreorder(item.product_handle) && (
+                <p className="text-xs text-brand-muted">Pre-order: ships when the book is released</p>
               )}
               <p className="text-xs text-brand-muted">Qty: {item.quantity}</p>
             </div>

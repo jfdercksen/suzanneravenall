@@ -195,3 +195,36 @@ describe('ProductPageContent keeps the chosen variant in the URL (KI066)', () =>
     expect(selectorProps[selectorProps.length - 1]?.selectedVariantId).toBe('var_retaker')
   })
 })
+
+describe('ProductPageContent buying notes (KI067, KI068)', () => {
+  it('tells a book buyer it is a pre-order without promising a ship date', () => {
+    render(<ProductPageContent product={book} />)
+    const note = screen.getByTestId('product-buying-note')
+    expect(note.textContent).toMatch(/Pre-order/)
+    expect(note.textContent).toMatch(/We will email you as soon as it ships/)
+    expect(note.textContent).not.toMatch(/\d{1,2} (January|February|March|April|May|June|July|August|September|October|November|December)/)
+  })
+
+  it('tells a per-month support package buyer how to choose the number of months', () => {
+    render(
+      <ProductPageContent
+        product={makeProduct({ handle: 'email-support', title: 'Email Support', categories: [] })}
+      />
+    )
+    expect(screen.getByTestId('product-buying-note').textContent).toMatch(/how many months.*nothing renews/)
+  })
+
+  it('speaks of sessions for the coaching support package', () => {
+    render(
+      <ProductPageContent
+        product={makeProduct({ handle: 'coaching-support-package', title: 'Coaching Support Package', categories: [] })}
+      />
+    )
+    expect(screen.getByTestId('product-buying-note').textContent).toMatch(/how many sessions/)
+  })
+
+  it('shows no buying note on an ordinary product', () => {
+    render(<ProductPageContent product={makeProduct()} />)
+    expect(screen.queryByTestId('product-buying-note')).not.toBeInTheDocument()
+  })
+})

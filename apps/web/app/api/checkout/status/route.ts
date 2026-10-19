@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import type { OrderProductType } from '@/lib/email/types'
+import { orderProductType, type OrderLineForType } from '@/lib/checkout/orderProductType'
+import { isPreorder, variantLabel } from '@/lib/shop/lineItem'
 
 // Read-only order status for the confirmation page. The page must not say
 // "payment received" or empty the buyer's cart on the strength of the URL
@@ -41,6 +44,87 @@ async function fetchOrderNumber(cartId: string): Promise<number | null> {
   }
 }
 
+interface CartLine {
+  title?: string | null
+  variant_title?: string | null
+  subtitle?: string | null
+  quantity?: number | null
+  product_id?: string | null
+  product_handle?: string | null
+  variant_id?: string | null
+}
+
+interface StoreProduct {
+  id: string
+  handle?: string | null
+  metadata?: Record<string, unknown> | null
+  categories?: Array<{ handle: string }> | null
+  variants?: Array<{ id: string; metadata?: Record<string, unknown> | null }> | null
+}
+
+/** One line as the confirmation page shows it (KI060, KI067). */
+export interface ConfirmationLine {
+  title: string
+  variant: string | null
+  quantity: number
+  preorder: boolean
+}
+
+// The products behind the order's lines, with the categories and metadata the
+// order mail decides its wording from. Empty when they cannot be read: the
+// page then still lists the lines and uses the neutral next steps.
+async function fetchLineProducts(productIds: string[]): Promise<StoreProduct[]> {
+  if (productIds.length === 0) return []
+  try {
+    const params = new URLSearchParams({
+      limit: String(productIds.length),
+      fields: 'id,handle,metadata,*categories,*variants',
+    })
+    productIds.forEach((id) => params.append('id[]', id))
+    const res = await fetch(`${medusaBase()}/store/products?${params.toString()}`, {
+      headers: storeHeaders(),
+      cache: 'no-store',
+    })
+    if (!res.ok) return []
+    const { products } = (await res.json()) as { products?: StoreProduct[] }
+    return Array.isArray(products) ? products : []
+  } catch {
+    return []
+  }
+}
+
+async function describeOrder(lines: CartLine[]): Promise<{ items: ConfirmationLine[]; productType: OrderProductType }> {
+  const productIds = [...new Set(lines.map((l) => l.product_id).filter((id): id is string => Boolean(id)))]
+  const products = new Map((await fetchLineProducts(productIds)).map((p) => [p.id, p]))
+
+  const typed: OrderLineForType[] = lines.map((line) => {
+    const product = line.product_id ? products.get(line.product_id) : undefined
+    const variant = product?.variants?.find((v) => v.id === line.variant_id)
+    return {
+      variant: {
+        metadata: variant?.metadata ?? null,
+        product: {
+          handle: product?.handle ?? line.product_handle ?? null,
+          metadata: product?.metadata ?? null,
+          categories: product?.categories ?? [],
+        },
+      },
+    }
+  })
+
+  const items = lines.map((line): ConfirmationLine => {
+    const product = line.product_id ? products.get(line.product_id) : undefined
+    return {
+      title: line.title ?? '',
+      variant: variantLabel(line),
+      quantity: typeof line.quantity === 'number' ? line.quantity : 1,
+      preorder: isPreorder(product?.handle ?? line.product_handle),
+    }
+  })
+
+  return { items, productType: orderProductType(typed) }
+}
+
 export async function GET(req: NextRequest) {
   const cartId = req.nextUrl.searchParams.get('cartId') ?? ''
   if (!CART_ID_RE.test(cartId)) {
@@ -58,13 +142,22 @@ export async function GET(req: NextRequest) {
     if (!res.ok) {
       return NextResponse.json({ status: 'unknown' }, { status: 502 })
     }
-    const { cart } = (await res.json()) as { cart?: { completed_at?: string | null } }
+    const { cart } = (await res.json()) as { cart?: { completed_at?: string | null; items?: CartLine[] | null } }
     if (!cart) {
       return NextResponse.json({ status: 'not_found' }, { status: 404 })
     }
-    const orderNumber = cart.completed_at ? await fetchOrderNumber(cartId) : null
+    if (!cart.completed_at) {
+      return NextResponse.json({ status: 'pending', orderNumber: null }, { headers: { 'Cache-Control': 'no-store' } })
+    }
+    // What was bought, for the page's order lines and next steps. Only once
+    // the cart is an order, so a pending page shows nothing it cannot stand by.
+    const lines = Array.isArray(cart.items) ? cart.items : []
+    const [orderNumber, described] = await Promise.all([
+      fetchOrderNumber(cartId),
+      lines.length > 0 ? describeOrder(lines) : Promise.resolve(null),
+    ])
     return NextResponse.json(
-      { status: cart.completed_at ? 'completed' : 'pending', orderNumber },
+      { status: 'completed', orderNumber, ...(described ?? {}) },
       { headers: { 'Cache-Control': 'no-store' } }
     )
   } catch (err) {

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Minus, Plus, Trash2, ShoppingBag, Lock, ShieldCheck, RefreshCw, Tag, X } from 'lucide-react'
 import { useCart, formatPrice } from '@/lib/cart'
+import { variantLabel, isPreorder } from '@/lib/shop/lineItem'
 import { isSubscriptionLine, maxQuantity } from './cartRules'
 
 const fadeUp = {
@@ -202,6 +203,7 @@ function CartItemRow({
   onRemove: () => void
 }) {
   const [isUpdating, setIsUpdating] = useState(false)
+  const variant = variantLabel(item)
 
   async function wrap(fn: () => void) {
     setIsUpdating(true)
@@ -235,8 +237,9 @@ function CartItemRow({
       {/* Details */}
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-brand-ink leading-snug">{item.title}</p>
-        {item.subtitle && (
-          <p className="text-xs text-brand-muted mt-0.5">{item.subtitle}</p>
+        {variant && <p className="text-xs text-brand-muted mt-0.5">{variant}</p>}
+        {isPreorder(item.product_handle) && (
+          <p className="text-xs text-brand-muted mt-0.5">Pre-order: ships when the book is released</p>
         )}
         <p className="text-sm font-medium text-brand-ink mt-2">
           {formatPrice(item.unit_price, currencyCode)}
