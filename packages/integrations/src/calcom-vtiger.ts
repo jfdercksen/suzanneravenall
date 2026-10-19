@@ -142,7 +142,9 @@ export function bookingEventElement(booking: CalcomBooking, contactId: string, u
     due_date: endIso.slice(0, 10),
     time_end: endIso.slice(11, 19),
     duration_hours: String(Math.floor(booking.durationMinutes / 60)),
-    duration_minutes: String(booking.durationMinutes % 60),
+    // Vtiger's duration_minutes is a picklist (00|15|30|45 on suzanne.aimate.co.za,
+    // read 19 Oct 2026): round down to the quarter. time_end carries the exact end.
+    duration_minutes: String(Math.floor((booking.durationMinutes % 60) / 15) * 15).padStart(2, '0'),
     eventstatus: 'Planned',
   }
 }

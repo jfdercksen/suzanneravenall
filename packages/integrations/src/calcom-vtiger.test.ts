@@ -133,6 +133,13 @@ describe('bookingEventElement', () => {
     expect(bookingEventElement(booking, 'c', 'u')).toMatchObject({ duration_hours: '1', duration_minutes: '30' })
   })
 
+  it('sends duration_minutes as one of the picklist values 00, 15, 30, 45', () => {
+    const at = (end: string) => bookingEventElement(parseCalcomBooking({ payload: { ...V1_BODY.payload, endTime: end } })!, 'c', 'u')
+    expect(at('2026-10-20T10:00:00.000Z')).toMatchObject({ duration_hours: '1', duration_minutes: '00' })
+    expect(at('2026-10-20T09:50:00.000Z')).toMatchObject({ duration_hours: '0', duration_minutes: '45' })
+    expect(at('2026-10-20T09:20:00.000Z')).toMatchObject({ duration_hours: '0', duration_minutes: '15' })
+  })
+
   it('escapes the UID in the idempotency query', () => {
     expect(findBookingEventQuery("a'b")).toBe("SELECT id FROM Events WHERE description LIKE '%Cal.com booking UID: a\\'b%' LIMIT 1;")
   })
