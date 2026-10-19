@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import { getMemberTier } from '@/lib/access/check-access'
+import { membershipsEnabled } from '@/lib/access/memberships'
 import VideosContent, { type VideoRow } from './VideosContent'
 
 export const metadata = {
@@ -31,5 +32,7 @@ export default async function PortalVideosPage() {
       .order('sort_order', { ascending: true }),
   ])
 
-  return <VideosContent tier={tier} videos={(videos as VideoRow[]) ?? []} />
+  return (
+    <VideosContent tier={tier} videos={(videos as VideoRow[]) ?? []} showMemberships={membershipsEnabled()} />
+  )
 }

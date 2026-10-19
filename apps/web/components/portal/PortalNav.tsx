@@ -15,6 +15,8 @@ const TIER_LABELS: Record<TierSlug, string> = {
 interface NavLink {
   href: string
   label: string
+  /** Shorter label for the phone tab bar, where six items share 375px */
+  shortLabel?: string
   icon: React.ReactNode
 }
 
@@ -33,6 +35,7 @@ const NAV_LINKS: readonly [NavLink, NavLink, NavLink, NavLink, NavLink, NavLink]
   {
     href: '/portal/programmes',
     label: 'My Programmes',
+    shortLabel: 'Programmes',
     icon: (
       <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
@@ -77,20 +80,17 @@ const NAV_LINKS: readonly [NavLink, NavLink, NavLink, NavLink, NavLink, NavLink]
   },
 ]
 
-// Subset of links for the mobile bottom nav (5 max)
-const MOBILE_NAV_LINKS: readonly NavLink[] = [
-  NAV_LINKS[0], // Dashboard
-  NAV_LINKS[1], // My Programmes
-  NAV_LINKS[2], // Resources
-  NAV_LINKS[4], // Community
-  NAV_LINKS[5], // Account
-]
+// The phone tab bar carries every link, Videos included (KI076: it was the
+// one portal page a phone could not reach).
+const MOBILE_NAV_LINKS: readonly NavLink[] = NAV_LINKS
 
 interface PortalNavProps {
   tier: TierSlug
+  /** Off while memberships are not on sale: no tier names anywhere (KI072) */
+  showTier?: boolean
 }
 
-export default function PortalNav({ tier }: PortalNavProps) {
+export default function PortalNav({ tier, showTier = true }: PortalNavProps) {
   const pathname = usePathname()
   const router = useRouter()
   const badgeClass = TIER_BADGE_STYLES[tier] ?? TIER_BADGE_STYLES.free
@@ -115,7 +115,9 @@ export default function PortalNav({ tier }: PortalNavProps) {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex fixed top-20 left-0 w-64 h-[calc(100vh-5rem)] flex-col bg-brand-primary border-r border-white/20 overflow-y-auto z-30">
+      {/* Ends above the cookie banner while it shows, so Sign Out is never
+          covered (KI077); --cookie-banner-h is unset once consent is chosen. */}
+      <aside className="hidden lg:flex fixed top-20 left-0 w-64 h-[calc(100vh-5rem-var(--cookie-banner-h,0px))] flex-col bg-brand-primary border-r border-white/20 overflow-y-auto z-30">
         <div className="flex flex-col h-full px-4 py-6">
 
           {/* Logo */}
@@ -130,11 +132,13 @@ export default function PortalNav({ tier }: PortalNavProps) {
           </Link>
 
           {/* Tier badge */}
-          <div className="mb-6 px-2">
-            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest ${badgeClass}`}>
-              {TIER_LABELS[tier]} Member
-            </span>
-          </div>
+          {showTier && (
+            <div className="mb-6 px-2">
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest ${badgeClass}`}>
+                {TIER_LABELS[tier]} Member
+              </span>
+            </div>
+          )}
 
           {/* Nav links */}
           <nav className="flex-1 space-y-1" aria-label="Portal navigation">
@@ -175,24 +179,25 @@ export default function PortalNav({ tier }: PortalNavProps) {
         </div>
       </aside>
 
-      {/* Mobile bottom nav */}
+      {/* Mobile bottom nav: sits on top of the cookie banner while it shows */}
       <nav
-        className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-brand-primary border-t border-white/20"
+        className="lg:hidden fixed bottom-[var(--cookie-banner-h,0px)] inset-x-0 z-30 bg-brand-primary border-t border-white/20"
         aria-label="Portal navigation"
       >
-        <div className="flex items-center justify-around h-16 px-2">
+        <div className="flex items-center justify-around h-16 px-1">
           {MOBILE_NAV_LINKS.map((link) => {
             const active = isActive(link.href)
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-colors duration-200 ${
+                aria-current={active ? 'page' : undefined}
+                className={`flex flex-1 flex-col items-center gap-0.5 min-w-0 px-0.5 py-1 rounded-lg text-center transition-colors duration-200 ${
                   active ? 'text-white' : 'text-white/70'
                 }`}
               >
                 {link.icon}
-                <span className="text-[10px] font-medium">{link.label}</span>
+                <span className="max-w-full truncate text-[10px] font-medium">{link.shortLabel ?? link.label}</span>
               </Link>
             )
           })}

@@ -1,11 +1,18 @@
 import { cookies } from 'next/headers'
+import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import { createClient } from '@/utils/supabase/server'
 import { getMemberAccessLevel } from '@/lib/access/check-access'
 import type { MembershipTrack } from '@/lib/access/tiers'
+import { membershipsEnabled } from '@/lib/access/memberships'
+import { NOT_FOUND_TITLE } from '@/lib/seo/notFoundTitle'
 import UpgradeContent from './UpgradeContent'
 
-export const metadata = {
-  title: 'Upgrade Membership | Member Portal',
+// While memberships are off the page is the 404 page, tab title included (KI071).
+export function generateMetadata(): Metadata {
+  return membershipsEnabled()
+    ? { title: 'Upgrade Membership | Member Portal' }
+    : { title: { absolute: NOT_FOUND_TITLE }, robots: { index: false } }
 }
 
 const FROM_LABELS: Record<string, string> = {
@@ -21,6 +28,8 @@ export default async function UpgradePage({
 }: {
   searchParams: Promise<{ from?: string }>
 }) {
+  if (!membershipsEnabled()) notFound()
+
   const cookieStore = await cookies()
   const supabase = createClient(cookieStore)
 

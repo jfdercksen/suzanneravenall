@@ -3,6 +3,8 @@ import { cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import { getMemberTier } from '@/lib/access/check-access'
 import { fetchMemberProgrammes } from '@/lib/medusa/member-programmes'
+import { membershipsEnabled } from '@/lib/access/memberships'
+import { isFirstSession } from '@/lib/portal/welcome'
 import DashboardContent from './DashboardContent'
 
 export const metadata = {
@@ -55,6 +57,8 @@ export default async function DashboardPage() {
       tierSlug={tierSlug}
       programmes={programmes}
       memberSince={memberSince}
+      firstSession={isFirstSession(user)}
+      showMemberships={membershipsEnabled()}
     />
   )
 }

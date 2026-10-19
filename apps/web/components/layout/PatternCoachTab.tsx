@@ -58,13 +58,15 @@ function isFooterInView(): boolean {
 
 /** Height of the band at the bottom of the screen the mobile pill occupies, with a little room. */
 const MOBILE_PILL_ZONE_PX = 112
+/** In the portal the pill rides 3.5rem higher, above the tab bar (KI076). */
+const PORTAL_PILL_LIFT_PX = 56
 
 /**
  * Site check V10: on mobile the pill sat over the "Send a Message" fields on /contact. It steps
  * aside while any form crosses the bottom band of the screen where the pill sits.
  */
-export function isFormUnderMobilePill(): boolean {
-  const zoneTop = window.innerHeight - MOBILE_PILL_ZONE_PX
+export function isFormUnderMobilePill(inPortal = false): boolean {
+  const zoneTop = window.innerHeight - MOBILE_PILL_ZONE_PX - (inPortal ? PORTAL_PILL_LIFT_PX : 0)
   return Array.from(document.querySelectorAll('form')).some((form) => {
     const rect = form.getBoundingClientRect()
     return rect.height > 0 && rect.top < window.innerHeight && rect.bottom > zoneTop
@@ -119,6 +121,9 @@ export default function PatternCoachTab() {
   const pathname = usePathname()
   const onProductPage =
     pathname === PRODUCT_PAGE_PATH || (pathname ?? '').startsWith(`${PRODUCT_PAGE_PATH}/`)
+  // The member portal has a 4rem tab bar fixed at the bottom on phones; the
+  // pill rides above it instead of covering its items (KI076).
+  const inPortal = (pathname ?? '').startsWith('/portal')
 
   useEffect(() => {
     const handleToggle = (e: Event) => {
@@ -137,7 +142,7 @@ export default function PatternCoachTab() {
       const tab = desktopTabRef.current
       setIsObstructing(
         isMobile
-          ? isFooterInView() || isFormUnderMobilePill()
+          ? isFooterInView() || isFormUnderMobilePill(inPortal)
           : tab
             ? isTabObstructingContent(tab)
             : false
@@ -160,7 +165,7 @@ export default function PatternCoachTab() {
       window.removeEventListener('resize', schedule)
       resizeObserver?.disconnect()
     }
-  }, [isVisible, isMobile, onProductPage, pathname])
+  }, [isVisible, isMobile, onProductPage, pathname, inPortal])
 
   useEffect(() => {
     const dismissed = window.localStorage.getItem(STORAGE_KEY) === 'true'
@@ -257,7 +262,7 @@ export default function PatternCoachTab() {
         <motion.aside
           key="pc-mobile"
           aria-label="Pattern Coach App"
-          className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 z-[60] flex flex-row items-center gap-3 bg-white rounded-[50px] border-t-4 border-brand-accent py-[10px] px-4 min-[415px]:px-5"
+          className={`fixed ${inPortal ? 'bottom-[calc(5rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1.5rem+env(safe-area-inset-bottom))]'} left-1/2 z-[60] flex flex-row items-center gap-3 bg-white rounded-[50px] border-t-4 border-brand-accent py-[10px] px-4 min-[415px]:px-5`}
           style={{
             translateX: '-50%',
             boxShadow: '0 8px 40px rgba(0,0,0,0.2)',

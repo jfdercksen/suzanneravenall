@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { afterEach, describe, it, expect, vi, beforeEach } from 'vitest'
 import { getMemberTier, requireAccess } from './check-access'
 
 // Mock next/navigation redirect — must be hoisted before any imports use it
@@ -119,6 +119,12 @@ describe('getMemberTier', () => {
 describe('requireAccess', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // The upgrade redirects below hold while memberships are on sale.
+    vi.stubEnv('MEMBERSHIPS_ENABLED', 'true')
+  })
+
+  afterEach(() => {
+    vi.unstubAllEnvs()
   })
 
   it('calls redirect("/portal/login") when user is null', async () => {
@@ -137,6 +143,19 @@ describe('requireAccess', () => {
     expect(redirect).toHaveBeenCalledWith(
       '/portal/login?redirect=%2Fportal%2Fresources'
     )
+  })
+
+  it('sends a member who lacks access to /resources while memberships are off (launch)', async () => {
+    vi.stubEnv('MEMBERSHIPS_ENABLED', '')
+    const supabase = makeSupabaseMock({
+      user: { id: 'user-123' },
+      subscription: null, // free tier
+    })
+    await expect(
+      requireAccess(supabase as any, 'resources_assessments', '/resources/media')
+    ).rejects.toThrow('NEXT_REDIRECT:/resources')
+    expect(redirect).toHaveBeenCalledWith('/resources')
+    vi.unstubAllEnvs()
   })
 
   it('calls redirect("/portal/upgrade") when authenticated user lacks access', async () => {

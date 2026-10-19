@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
 import { hasAccess, TIER_BADGE_STYLES, UPGRADE_PATH, type TierSlug } from '@/lib/access/tiers'
+import { welcomeHeading } from '@/lib/portal/welcome'
 
 function CountUp({ target }: { target: number }) {
   const ref = useRef<HTMLSpanElement>(null)
@@ -39,6 +40,10 @@ interface DashboardContentProps {
   tierSlug: TierSlug
   programmes: Programme[]
   memberSince: string | null
+  /** First session after signing up: "Welcome", not "Welcome back" (KI077) */
+  firstSession?: boolean
+  /** Memberships on sale: tier badge, tier card and upgrade prompt (KI071, KI072) */
+  showMemberships?: boolean
 }
 
 function formatMemberSince(dateStr: string | null): string {
@@ -53,6 +58,8 @@ export default function DashboardContent({
   tierSlug,
   programmes,
   memberSince,
+  firstSession = false,
+  showMemberships = true,
 }: DashboardContentProps) {
   const badgeClass = TIER_BADGE_STYLES[tierSlug] ?? TIER_BADGE_STYLES.free
   const isFreeTier = tierSlug === 'free'
@@ -80,11 +87,13 @@ export default function DashboardContent({
           </p>
           <div className="flex flex-wrap items-center gap-4 mb-3">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white leading-[1.05]">
-              Welcome back{firstName ? `, ${firstName}` : ''}
+              {welcomeHeading(firstName, firstSession)}
             </h1>
-            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest ${badgeClass}`}>
-              {tierName}
-            </span>
+            {showMemberships && (
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest ${badgeClass}`}>
+                {tierName}
+              </span>
+            )}
           </div>
           <p className="text-lg text-white/60">
             Your transformation continues. Everything you need is right here.
@@ -97,7 +106,7 @@ export default function DashboardContent({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5, delay: 0.05 }}
-          className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-10"
+          className={`grid grid-cols-2 ${showMemberships ? 'lg:grid-cols-3' : ''} gap-4 mb-10`}
         >
           <div className="p-5 bg-brand-primary-800 border border-white/25 rounded-card">
             <p className="text-xs uppercase tracking-widest text-white/70 mb-1">Member since</p>
@@ -113,12 +122,14 @@ export default function DashboardContent({
               )}
             </p>
           </div>
-          <div className="p-5 bg-brand-primary-800 border border-white/25 rounded-card col-span-2 lg:col-span-1">
-            <p className="text-xs uppercase tracking-widest text-white/70 mb-1">Membership tier</p>
-            <p className="font-semibold text-white">
-              {tierName}
-            </p>
-          </div>
+          {showMemberships && (
+            <div className="p-5 bg-brand-primary-800 border border-white/25 rounded-card col-span-2 lg:col-span-1">
+              <p className="text-xs uppercase tracking-widest text-white/70 mb-1">Membership tier</p>
+              <p className="font-semibold text-white">
+                {tierName}
+              </p>
+            </div>
+          )}
         </motion.div>
 
         {/* Silver+ tier content spotlights */}
@@ -324,8 +335,8 @@ export default function DashboardContent({
           </p>
         </motion.div>
 
-        {/* Upgrade CTA — free tier only */}
-        {isFreeTier && (
+        {/* Upgrade CTA: free tier only, and only while memberships are on sale */}
+        {isFreeTier && showMemberships && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

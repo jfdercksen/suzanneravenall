@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
 import { getMemberAccessLevel } from '@/lib/access/check-access'
+import { membershipsEnabled } from '@/lib/access/memberships'
 import ProfileForm from './ProfileForm'
 import PasswordForm from './PasswordForm'
 import styles from './account.module.css'
@@ -31,6 +32,7 @@ function formatTrack(track: string | null): string {
 }
 
 export default async function AccountPage() {
+  const showMemberships = membershipsEnabled()
   const cookieStore = await cookies()
   const supabase = createClient(cookieStore)
 
@@ -105,7 +107,9 @@ export default async function AccountPage() {
         {/* Password section (client — form state + update handler) */}
         <PasswordForm className={`${styles.fadeUp} ${styles.delay2}`} />
 
-        {/* Membership details — read-only, server-rendered (KI016) */}
+        {/* Membership details: read-only, server-rendered (KI016); only while
+            memberships are on sale (KI071, KI072) */}
+        {showMemberships && (
         <section
           className={`mb-8 p-6 lg:p-8 bg-brand-primary-800 border border-white/25 rounded-card ${styles.fadeUp} ${styles.delay3}`}
           aria-labelledby="membership-heading"
@@ -153,6 +157,7 @@ export default async function AccountPage() {
             </Link>
           </div>
         </section>
+        )}
 
         {/* Danger zone — read-only, server-rendered (KI016) */}
         <section
@@ -161,14 +166,16 @@ export default async function AccountPage() {
         >
           <h2 id="danger-heading" className="text-lg font-semibold text-red-400 mb-2">Danger Zone</h2>
           <p className="text-white/70 text-sm mb-5">
-            To cancel your membership or delete your account, please contact us directly so we can assist you.
+            {showMemberships
+              ? 'To cancel your membership or delete your account, please contact us directly so we can assist you.'
+              : 'To delete your account, please contact us directly so we can assist you.'}
           </p>
           <Link
             href="/contact"
-            aria-label="Contact us to cancel membership"
+            aria-label={showMemberships ? 'Contact us to cancel membership' : 'Contact us to delete your account'}
             className="inline-flex items-center gap-2 px-5 py-2.5 border border-red-400/70 hover:border-red-400 text-red-400 hover:text-red-300 text-sm font-semibold rounded-button transition-colors duration-300"
           >
-            Cancel Membership
+            {showMemberships ? 'Cancel Membership' : 'Delete My Account'}
           </Link>
         </section>
 

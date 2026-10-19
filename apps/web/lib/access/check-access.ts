@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { hasAccess, upgradeHref, type ResourceKey, type TierSlug, type MembershipTrack } from './tiers'
+import { membershipsEnabled } from './memberships'
 
 export async function getMemberTier(supabase: SupabaseClient): Promise<TierSlug> {
   const {
@@ -101,7 +102,8 @@ export async function requireAccess(
   const tier = await getMemberTier(supabase)
 
   if (!hasAccess(tier, resource)) {
-    redirect(upgradeHref(fromPath))
+    // Memberships off for launch: /portal/upgrade is a 404, so go to the hub.
+    redirect(membershipsEnabled() ? upgradeHref(fromPath) : '/resources')
   }
 
   return tier

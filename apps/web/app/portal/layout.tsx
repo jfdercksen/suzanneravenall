@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import type { TierSlug } from '@/lib/access/tiers'
+import { membershipsEnabled } from '@/lib/access/memberships'
 import PortalNav from '@/components/portal/PortalNav'
 import AuthOverlay from '@/components/portal/AuthOverlay'
 
@@ -48,7 +49,7 @@ export default async function PortalLayout({ children }: { children: React.React
 
   return (
     <>
-      <PortalNav tier={tier} />
+      <PortalNav tier={tier} showTier={membershipsEnabled()} />
       {/* Content offset: right of sidebar on lg, above mobile bottom nav */}
       <div className="lg:pl-64 pb-20 lg:pb-0">
         {children}

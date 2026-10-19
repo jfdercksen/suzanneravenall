@@ -7,7 +7,7 @@ import { hasAccess, tierLabel, upgradeHref, type TierSlug, type ResourceKey } fr
 interface Resource {
   title: string
   description: string
-  type: 'PDF' | 'Workbook' | 'Recording' | 'Template' | 'Assessment'
+  type: 'PDF' | 'Workbook' | 'Recording' | 'Template' | 'Assessment' | 'Guide'
   resource: ResourceKey
   href?: string
 }
@@ -24,25 +24,25 @@ const RESOURCE_CATEGORIES: ResourceCategory[] = [
     resource: 'resources_basic',
     resources: [
       {
-        title: 'Welcome to the Portal',
-        description: 'Your guide to navigating the member portal and getting the most from your membership.',
-        type: 'PDF',
+        title: 'Discover Your Pattern',
+        description: 'Free self-assessments that show the patterns shaping your relationships, work and wellbeing.',
+        type: 'Assessment',
         resource: 'resources_basic',
-        href: '#',
+        href: '/discover-your-pattern',
       },
       {
-        title: 'Introduction to Human Performance Replicator',
-        description: 'A foundational overview of the HPR methodology and how it creates lasting change.',
-        type: 'PDF',
+        title: 'The System: How Pattern Intelligence Works',
+        description: 'How the work changes patterns at their root, and the methods behind it.',
+        type: 'Guide',
         resource: 'resources_basic',
-        href: '#',
+        href: '/about/the-system',
       },
       {
-        title: 'Your Transformation Roadmap',
-        description: 'A step-by-step guide to planning your personal transformation journey.',
-        type: 'Workbook',
+        title: 'Free Masterclass',
+        description: 'Watch Suzanne\'s free masterclass at a time that suits you.',
+        type: 'Recording',
         resource: 'resources_basic',
-        href: '#',
+        href: '/masterclass',
       },
     ],
   },
@@ -186,6 +186,7 @@ const TYPE_BADGE: Record<Resource['type'], string> = {
   // #303134 on #232325 is 1.20:1 and the fill simply vanished.
   Template: 'text-white/85 border border-white/40',
   PDF: 'bg-white/10 text-white/90 border border-white/20',
+  Guide: 'bg-white/10 text-white/90 border border-white/20',
   Workbook: 'bg-white/20 text-white border border-white/30',
   Assessment: 'bg-white/35 text-white border border-white/40',
   Recording: 'bg-white text-brand-primary',
@@ -193,6 +194,8 @@ const TYPE_BADGE: Record<Resource['type'], string> = {
 
 interface ResourcesContentProps {
   tier: TierSlug
+  /** Memberships on sale: locked items, tier names and upgrade prompts (KI071, KI072) */
+  showMemberships?: boolean
 }
 
 function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }) {
@@ -209,6 +212,27 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
             {resource.type}
           </span>
           <svg className="w-4 h-4 text-brand-accent-400 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </div>
+        <p className="text-white font-semibold text-sm leading-snug">{resource.title}</p>
+        <p className="text-white/70 text-xs leading-relaxed">{resource.description}</p>
+      </Link>
+    )
+  }
+
+  // A page of the site: a normal link, not a file download (KI074).
+  if (unlocked && resource.href?.startsWith('/')) {
+    return (
+      <Link
+        href={resource.href}
+        className="group flex flex-col gap-3 p-5 bg-brand-primary-700 hover:bg-brand-primary-600 border border-white/25 rounded-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+      >
+        <div className="flex items-start justify-between gap-3">
+          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${TYPE_BADGE[resource.type]}`}>
+            {resource.type}
+          </span>
+          <svg aria-hidden="true" className="w-4 h-4 text-brand-accent-400 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </div>
@@ -281,7 +305,13 @@ function ResourceCard({ resource, tier }: { resource: Resource; tier: TierSlug }
   )
 }
 
-export default function ResourcesContent({ tier }: ResourcesContentProps) {
+export default function ResourcesContent({ tier, showMemberships = true }: ResourcesContentProps) {
+  // While memberships are off only what the member can open is listed: a
+  // locked item would point at an upgrade page that does not exist.
+  const categories = showMemberships
+    ? RESOURCE_CATEGORIES
+    : RESOURCE_CATEGORIES.filter((category) => hasAccess(tier, category.resource))
+
   return (
     <main className="relative w-full bg-brand-primary min-h-screen py-20 lg:py-32 overflow-hidden">
       {/* Ambient glow */}
@@ -309,7 +339,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
         </motion.div>
 
         <div className="space-y-16">
-          {RESOURCE_CATEGORIES.map((category, catIndex) => {
+          {categories.map((category, catIndex) => {
             const categoryUnlocked = hasAccess(tier, category.resource)
 
             return (
@@ -345,7 +375,7 @@ export default function ResourcesContent({ tier }: ResourcesContentProps) {
           })}
         </div>
 
-        {tier === 'free' && (
+        {tier === 'free' && showMemberships && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import { getMemberTier } from '@/lib/access/check-access'
+import { membershipsEnabled } from '@/lib/access/memberships'
 import ResourcesContent from './ResourcesContent'
 
 export const metadata = {
@@ -22,5 +23,5 @@ export default async function PortalResourcesPage() {
 
   const tier = await getMemberTier(supabase)
 
-  return <ResourcesContent tier={tier} />
+  return <ResourcesContent tier={tier} showMemberships={membershipsEnabled()} />
 }

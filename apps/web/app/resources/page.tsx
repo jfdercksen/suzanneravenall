@@ -2,6 +2,7 @@ import { cookies } from 'next/headers'
 import type { Metadata } from 'next'
 import { createClient } from '@/utils/supabase/server'
 import { getMemberTier } from '@/lib/access/check-access'
+import { membershipsEnabled } from '@/lib/access/memberships'
 import { type TierSlug } from '@/lib/access/tiers'
 import ResourcesHero from '@/components/resources/ResourcesHero'
 import ResourcesCategories from '@/components/resources/ResourcesCategories'
@@ -27,7 +28,7 @@ export default async function ResourcesPage() {
   } = await supabase.auth.getUser()
 
   let tier: TierSlug | null = null
-  if (user) {
+  if (user && membershipsEnabled()) {
     tier = await getMemberTier(supabase)
   }
 
@@ -35,7 +36,8 @@ export default async function ResourcesPage() {
     <main>
       <ResourcesHero />
       <ResourcesCategories />
-      <MemberResourcesSection tier={tier} />
+      {/* Tier names and "Unlock with" links, so only while memberships are on sale */}
+      {membershipsEnabled() && <MemberResourcesSection tier={tier} />}
       <ResourcesFeaturedMedia />
       <ResourcesFeaturedAwards />
       <ResourcesNewsletterCTA />

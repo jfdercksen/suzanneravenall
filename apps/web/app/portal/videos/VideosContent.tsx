@@ -194,9 +194,15 @@ function VideoCard({ video, tier, onWatch }: VideoCardProps) {
 interface VideosContentProps {
   tier: TierSlug
   videos: VideoRow[]
+  /** Memberships on sale: locked videos, tier names and upgrade prompts (KI071, KI072) */
+  showMemberships?: boolean
 }
 
-export default function VideosContent({ tier, videos }: VideosContentProps) {
+export default function VideosContent({ tier, videos: allVideos, showMemberships = true }: VideosContentProps) {
+  // While memberships are off only videos the member can watch are listed.
+  const videos = showMemberships
+    ? allVideos
+    : allVideos.filter((v) => hasAccess(tier, v.resource_key as ResourceKey))
   const categories = ['All', ...Array.from(new Set(videos.map((v) => v.category)))]
   const [activeCategory, setActiveCategory] = useState('All')
   const [playingVideo, setPlayingVideo] = useState<{ id: string; title: string } | null>(null)
@@ -297,7 +303,7 @@ export default function VideosContent({ tier, videos }: VideosContentProps) {
           </>
         )}
 
-        {tier === 'free' && videos.length > 0 && (
+        {tier === 'free' && showMemberships && videos.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

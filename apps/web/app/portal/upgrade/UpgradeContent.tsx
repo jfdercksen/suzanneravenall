@@ -58,7 +58,8 @@ function TierCard({ tier, isCurrentTier, isUpgrade }: TierCardProps) {
       <div className="mb-3">
         <span className="text-white font-semibold">{formatZAR(tier.zarPrice)}</span>
         {tier.usdPrice > 0 && (
-          <span className="text-white/70 text-xs ml-1.5">${tier.usdPrice} USD · annual</span>
+          // Own words either side of the ZAR price, so it never reads "R350$20" (KI075)
+          <span className="text-white/70 text-xs ml-1.5">or ${tier.usdPrice} USD{tier.annual ? ', per year' : ''}</span>
         )}
         {!tier.annual && tier.zarPrice === 0 && (
           <span className="text-white/70 text-xs ml-1.5">Unlimited</span>
