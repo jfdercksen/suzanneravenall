@@ -197,6 +197,9 @@ const nextConfig = {
       { source: '/services/group-sessions/:path*',                 destination: '/services', permanent: true },
       { source: '/services/group-sessions',                        destination: '/services', permanent: true },
 
+      // Renamed programmes: the old slug keeps working (Shayna, 16 Oct 2026)
+      { source: '/programs/nice-or-not-nice-communication', destination: '/programs/coherent-communication', permanent: true },
+
       // Transformation Pathways — old flat WP URLs → new nested routes
       { source: '/break-the-loop',                             destination: '/transformation-pathways/break-the-loop',                             permanent: true },
       { source: '/reclaim-your-power',                         destination: '/transformation-pathways/reclaim-your-power',                         permanent: true },

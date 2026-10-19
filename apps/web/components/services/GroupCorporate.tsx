@@ -51,8 +51,8 @@ export const groupOfferings: { name: string; slug?: string; image: string; descr
       'Setting boundaries is one of the most challenging aspects of being human, and something 99% of us were never taught. A 4-week series to understand what a boundary is, when it has been transgressed, and how to hold one in place.',
   },
   {
-    name: 'Nice or Not Nice Communication',
-    slug: 'nice-or-not-nice-communication',
+    name: 'Coherent Communication',
+    slug: 'coherent-communication',
     image: '/images/generated/group-coaching-real.webp',
     description:
       'We learn in early childhood to receive love and acceptance only by being nice or agreeable, a pattern with a flipside of cutting anger when it becomes too much. A 4-week series to move into a new way of being.',

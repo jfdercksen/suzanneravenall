@@ -63,6 +63,10 @@ describe('next.config.mjs redirects — repointed slug destinations', () => {
       source: '/services/rapid-transformational-therapy',
       destination: '/services/private-sessions/rapid-transformational-therapy',
     },
+    {
+      source: '/programs/nice-or-not-nice-communication',
+      destination: '/programs/coherent-communication',
+    },
   ]
 
   for (const { source, destination } of EXPECTED_REDIRECTS) {

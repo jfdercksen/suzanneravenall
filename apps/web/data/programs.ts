@@ -806,9 +806,9 @@ export const PROGRAMS: Program[] = [
     isFeatured: false,
   },
   {
-    slug: 'nice-or-not-nice-communication',
+    slug: 'coherent-communication',
     image: '/images/products/group-session-nice-or-not-nice-in-communication-booked-as-a-series-only.jpeg',
-    name: 'Nice or Not Nice Communication',
+    name: 'Coherent Communication',
     category: 'group',
     shortDescription:
       'Release the fear behind communication and learn when to be tough, and when not to be.',
@@ -819,7 +819,7 @@ export const PROGRAMS: Program[] = [
     shopHandle: 'group-session-nice-or-not-nice-in-communication-booked-as-a-series-only',
     duration: 'Recorded group session series',
     features: [
-      // Source: Thinkific Nice or Not Nice recording, "About this course"
+      // Source: Thinkific Coherent Communication (formerly Nice or Not Nice) recording, "About this course"
       '13 lessons, 6 hours of video',
       'Release the fear behind communication',
       'Know when to be tough, and when not to be',
