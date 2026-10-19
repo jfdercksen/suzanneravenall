@@ -42,12 +42,37 @@ async function fetchCategories(): Promise<MedusaCategory[]> {
   }
 }
 
+// The catalogue size for the hero line (KI063): the same unfiltered
+// /store/products count the list header prints, so the two always agree.
+async function fetchCatalogueCount(): Promise<number | null> {
+  const medusaUrl = process.env.NEXT_PUBLIC_MEDUSA_URL ?? ''
+  const pubKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? ''
+
+  try {
+    const res = await fetch(`${medusaUrl}/store/products?limit=1&fields=id`, {
+      headers: { 'x-publishable-api-key': pubKey },
+      // Live, like the list header it must agree with
+      cache: 'no-store',
+    })
+    if (!res.ok) return null
+    const data = (await res.json()) as { count?: unknown }
+    return typeof data.count === 'number' ? data.count : null
+  } catch {
+    return null
+  }
+}
+
 interface ShopPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
-  const [categories, reqHeaders, params] = await Promise.all([fetchCategories(), headers(), searchParams])
+  const [categories, catalogueCount, reqHeaders, params] = await Promise.all([
+    fetchCategories(),
+    fetchCatalogueCount(),
+    headers(),
+    searchParams,
+  ])
   // Same rule as the cart (/api/region): ZAR unless the visitor is known to be
   // abroad and USD is switched on, so a card never shows a currency the
   // product page and the cart will not use.
@@ -61,5 +86,10 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     )
   ).toString()
 
-  return <ShopCatalogueContent key={queryKey} initialCategories={categories} defaultCurrency={defaultCurrency} />
+  return <ShopCatalogueContent
+      key={queryKey}
+      initialCategories={categories}
+      defaultCurrency={defaultCurrency}
+      catalogueCount={catalogueCount}
+    />
 }

@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { NOT_FOUND_TITLE } from '@/lib/seo/notFoundTitle'
 
 export const metadata: Metadata = {
-  title: { absolute: 'Page not found | Dr. Suzanne Ravenall' },
+  title: { absolute: NOT_FOUND_TITLE },
   robots: { index: false },
 }
 

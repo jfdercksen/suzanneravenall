@@ -25,16 +25,17 @@ describe('colors', () => {
     expect(colors[key]).toMatch(HEX_PATTERN)
   })
 
-  it('primary is the confirmed navy brand colour', () => {
-    expect(colors.primary).toBe('#012B43')
+  // Monochrome standard since 2026-09-15 (docs/DESIGN-STANDARD.md)
+  it('primary is the black dark ground', () => {
+    expect(colors.primary).toBe('#000000')
   })
 
-  it('accent is the confirmed electric blue brand colour', () => {
-    expect(colors.accent).toBe('#1719F4')
+  it('accent is the near-black CTA colour', () => {
+    expect(colors.accent).toBe('#171717')
   })
 
-  it('accentHover is the confirmed hover colour', () => {
-    expect(colors.accentHover).toBe('#0E11C2')
+  it('accentHover is the black hover colour', () => {
+    expect(colors.accentHover).toBe('#000000')
   })
 })
 
@@ -49,8 +50,8 @@ describe('primaryScale', () => {
     expect(primaryScale[step]).toMatch(HEX_PATTERN)
   })
 
-  it('step 900 is the confirmed brand navy colour', () => {
-    expect(primaryScale[900]).toBe('#012B43')
+  it('step 900 is the black dark ground', () => {
+    expect(primaryScale[900]).toBe('#000000')
   })
 })
 
@@ -66,11 +67,11 @@ describe('accentScale', () => {
   })
 
   it('step 600 is the confirmed CTA colour', () => {
-    expect(accentScale[600]).toBe('#1719F4')
+    expect(accentScale[600]).toBe('#171717')
   })
 
   it('step 700 is the confirmed hover colour', () => {
-    expect(accentScale[700]).toBe('#0E11C2')
+    expect(accentScale[700]).toBe('#000000')
   })
 })
 

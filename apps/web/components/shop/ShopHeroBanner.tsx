@@ -4,7 +4,20 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { PageHeader, HEADER_UNDERLINE } from '@/components/shared/PageHeader'
 
-export function ShopHeroBanner() {
+interface ShopHeroBannerProps {
+  catalogueCount?: number | null
+}
+
+/** Hero line from the live catalogue size, so it never drifts from the list (KI063) */
+export function shopHeroDescription(catalogueCount: number | null | undefined): string {
+  const lead =
+    catalogueCount && catalogueCount > 1
+      ? `${catalogueCount} programmes, sessions and books. One destination.`
+      : 'Programmes, sessions and books in one destination.'
+  return `${lead} The tools Suzanne has refined over more than 30 years, now available to you.`
+}
+
+export function ShopHeroBanner({ catalogueCount = null }: ShopHeroBannerProps) {
   return (
     <>
       {/* Header: shared PageHeader, the header rule. The video plays behind
@@ -20,7 +33,7 @@ export function ShopHeroBanner() {
             <span className={HEADER_UNDERLINE}>Starts Here</span>
           </>
         }
-        description="48 programmes. One destination. The tools Suzanne has refined over more than 30 years, now available to you."
+        description={shopHeroDescription(catalogueCount)}
       >
         <button
           type="button"

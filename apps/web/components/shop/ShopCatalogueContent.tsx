@@ -64,9 +64,11 @@ function getCategoryAndDescendantIds(
 interface ShopCatalogueContentProps {
   initialCategories: MedusaCategory[]
   defaultCurrency?: string
+  /** Live catalogue size for the hero line (KI063); null when Medusa did not answer */
+  catalogueCount?: number | null
 }
 
-export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar' }: ShopCatalogueContentProps) {
+export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar', catalogueCount = null }: ShopCatalogueContentProps) {
   const searchParams = useSearchParams()
   const { cart } = useCart()
   // The currency the cards render prices in (ProductCard resolves it the same
@@ -259,7 +261,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
   return (
     <main className="min-h-screen">
       {/* 1: Video-backed header (PageHeader) and black stats band */}
-      <ShopHeroBanner />
+      <ShopHeroBanner catalogueCount={catalogueCount} />
 
       {/* 2: Light sticky filter bar (cream) */}
       <CategoryFilterBar

@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { MedusaProduct } from '@/types/medusa'
+import { NOT_FOUND_TITLE } from '@/lib/seo/notFoundTitle'
 import ProductPageContent from '@/components/shop/ProductPageContent'
 
 // Force dynamic rendering — product pages depend on live Medusa data.
@@ -48,7 +49,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { handle } = await params
   const product = await getProduct(handle)
-  if (!product) notFound()
+  // The page itself calls notFound(); calling it here too left the 404 tab
+  // with an empty title (KI058), so name it like the generic 404 instead.
+  if (!product) {
+    return { title: { absolute: NOT_FOUND_TITLE }, robots: { index: false } }
+  }
   return {
     title: product.title,
     description:

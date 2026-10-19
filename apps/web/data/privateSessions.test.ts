@@ -138,14 +138,16 @@ describe('bodyContent and thinContent specifics', () => {
     }
   })
 
-  it('akashic-intuitive-mastery has thinContent === true', () => {
+  // Thin flag cleared 2026-07-29 (a2214e0) once the source copy was filled in
+  it('akashic-intuitive-mastery has thinContent === false', () => {
     const session = privateSessionBySlug('akashic-intuitive-mastery')
-    expect(session?.thinContent).toBe(true)
+    expect(session?.thinContent).toBe(false)
   })
 
-  it('group-family-coaching has thinContent === true', () => {
+  // Thin flag cleared 2026-07-29 (a2214e0) once the source copy was filled in
+  it('group-family-coaching has thinContent === false', () => {
     const session = privateSessionBySlug('group-family-coaching')
-    expect(session?.thinContent).toBe(true)
+    expect(session?.thinContent).toBe(false)
   })
 
   it('executive-coaching has thinContent === false', () => {
