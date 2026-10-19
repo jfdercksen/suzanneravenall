@@ -373,13 +373,13 @@ Order follows "customer depends on it" first, lowest risk within that, then repo
 
 Customer-critical slice (steps 0 to 5): about 54 h. Calendar time is longer than the hours because of the shadow and watch windows (about 2 to 3 weeks if steps overlap).
 
-### Step status (updated 16 Oct 2026)
+### Step status (updated 19 Oct 2026)
 
 | Step | Status |
 |---|---|
 | 0 to 3 | In code, live on the review box, flags `code` (read back 15 Oct) |
-| 6 Cal.com to Vtiger | Built 16 Oct: `after()` in the webhook route, `syncBookingToVtiger` in `packages/integrations/src/calcom-vtiger.ts`, flag `AUTOMATION_CALCOM` (default `code`). Live check: pending |
-| 7 MeiliSearch sync | Built 16 Oct: subscriber `apps/medusa/src/subscribers/product-search-sync.ts`, job `apps/medusa/src/jobs/search-reindex.ts`, shared transform in `packages/integrations/src/meili.ts`, flag `AUTOMATION_SEARCH_SYNC` (default `code`). Live check: pending |
+| 6 Cal.com to Vtiger | Built 16 Oct: `after()` in the webhook route, `syncBookingToVtiger` in `packages/integrations/src/calcom-vtiger.ts`, flag `AUTOMATION_CALCOM` (default `code`). Deployed 19 Oct (a148c7a, acec8ff). Vtiger fields checked: all custom fields exist (section 8 q10 answered). Live booking: waits on the Cal.com webhook |
+| 7 MeiliSearch sync | Built 16 Oct: subscriber `apps/medusa/src/subscribers/product-search-sync.ts`, job `apps/medusa/src/jobs/search-reindex.ts`, shared transform in `packages/integrations/src/meili.ts`, flag `AUTOMATION_SEARCH_SYNC` (default `code`). Deployed 19 Oct; live sync PASS (ACCEPTANCE K-08); nightly run not yet observed |
 | 8 Video access log | RETIRED 16 Oct 2026 (Johan) |
 | 11 Vibe monitor | RETIRED 16 Oct 2026 (Johan) |
 | 4, 5, 9, 10 | Not started; 5 (memberships), 9 (Sage) and 10 (weekly report) wait on Johan's answers |
