@@ -23,7 +23,7 @@ All exports carry `"active": false` (that is how they are stored in git). Live s
 
 ## 2. Inventory
 
-Legend for "Live state": PROVEN = shown working end to end on the review VPS; BROKEN = active but cannot succeed as built; IDLE = active but its trigger never fires; BLOCKED = waiting on external credentials; DEAD = inactive and unused.
+Legend for "Live state": RETIRED = dropped by Johan, nothing replaces it; IN CODE = moved out of n8n into our code; PROVEN = shown working end to end on the review VPS; BROKEN = active but cannot succeed as built; IDLE = active but its trigger never fires; BLOCKED = waiting on external credentials; DEAD = inactive and unused.
 
 | # | Workflow (file) | Trigger | Systems touched | Live state | Needed? | Already in our code |
 |---|---|---|---|---|---|---|
@@ -33,13 +33,13 @@ Legend for "Live state": PROVEN = shown working end to end on the review VPS; BR
 | 4 | cart-abandonment-recovery | Webhook `POST /webhook/cart-updated`, from `cart-updated.ts` (30 min in-memory debounce) | Medusa store API (cart status), web `/api/email/cart-abandonment` (Brevo) | Queuing PROVEN 29 Sep (exec 802); reminder delivery unconfirmed | Yes (consent wording open) | All three templates and the send route in `apps/web/lib/email/cart-abandonment-*.ts`; route re-checks cart status and suppression list |
 | 5 | membership-expiry-check | Cron `0 7 * * *` (09:00 SAST) | Supabase REST (`member_subscriptions`), web `/api/email/membership-expired` | BROKEN: selects `tier_slug`, `expires_at`, `profiles(first_name,email)`; repo schema has `tier_id`, `end_date`, and `profiles` has no email | Yes, if paid memberships are sold | Email template and route `apps/web/lib/email/membership-expired.ts`; Medusa `memberships` module has `expires_at` |
 | 6 | membership-renewal-check | Cron `0 7 * * *` | Supabase REST, web `/api/email/membership-renewal-reminder` | BROKEN (same columns). Also no dedupe: a 7-day window run daily would send up to 7 reminders. Error branch posts junk to the reminder route | Yes, if paid memberships are sold | Template and route `membership-renewal-reminder.ts` |
-| 7 | calcom-booking-to-vtiger | Webhook `POST /webhook/calcom-booking`, forwarded by `apps/web/app/api/webhooks/calcom/route.ts` (HMAC verified there) on `BOOKING_CREATED` | Vtiger (contact, Activity, pipeline stage), Brevo alert | IDLE: Cal.com has no webhook configured (worklog 1 Oct). Would also fail: elementType `Activities`, no `assigned_user_id`, update drops mandatory fields | Yes (discovery calls into CRM) | Signature check and payload schema already in the route |
-| 8 | meilisearch-content-sync | Webhook `POST /webhook/product-updated` from `product-updated.ts`, plus cron `0 0 * * *` full reindex | Medusa admin API, MeiliSearch `products` index | BROKEN: n8n container has no `MEDUSA_BACKEND_URL`, `MEILISEARCH_HOST`, `MEILISEARCH_ADMIN_KEY`; webhook branch reads `$json.productId` instead of `body.productId`; Bearer auth with an `sk_` key (KI048) | Yes (search goes stale otherwise) | `apps/medusa/src/scripts/seed-meilisearch.ts` (document shape, index settings); Medusa container already has the Meili env vars |
-| 9 | bunny-video-access-log | Webhook `POST /webhook/video-access-log` from `apps/web/app/api/video/[videoId]/route.ts` | Supabase REST insert into `video_access_log` | IDLE: route only calls it when `N8N_BASE_URL` is set, and the web container does not have that var. `video_access_log` is not created by any migration in the repo | Doubtful (see open questions) | Route has user, video and tier at hand |
+| 7 | calcom-booking-to-vtiger | Webhook `POST /webhook/calcom-booking`, forwarded by `apps/web/app/api/webhooks/calcom/route.ts` (HMAC verified there) on `BOOKING_CREATED` | Vtiger (contact, Activity, pipeline stage), Brevo alert | IN CODE 16 Oct 2026 (step 6): `apps/web/app/api/webhooks/calcom/route.ts` + `packages/integrations/src/calcom-vtiger.ts`, n8n forward removed; live check pending (Cal.com webhook not yet added). Was IDLE: no Cal.com webhook; would also fail on `Activities`, no `assigned_user_id`, update dropping mandatory fields | Yes (discovery calls into CRM) | Signature check and payload schema already in the route |
+| 8 | meilisearch-content-sync | Webhook `POST /webhook/product-updated` from `product-updated.ts`, plus cron `0 0 * * *` full reindex | Medusa admin API, MeiliSearch `products` index | IN CODE 16 Oct 2026 (step 7): subscriber `product-search-sync.ts` + nightly `jobs/search-reindex.ts`, `product-updated.ts` (n8n webhook) removed; live check pending. Was BROKEN: n8n had no Meili/Medusa env, read `$json.productId`, Bearer `sk_` key (KI048) | Yes (search goes stale otherwise) | `apps/medusa/src/scripts/seed-meilisearch.ts` (document shape, index settings); Medusa container already has the Meili env vars |
+| 9 | bunny-video-access-log | Webhook `POST /webhook/video-access-log` from `apps/web/app/api/video/[videoId]/route.ts` | Supabase REST insert into `video_access_log` | RETIRED 16 Oct 2026 (Johan): call removed from the video route, `N8N_BASE_URL` removed from the web service and `.env.example`, export deleted. Was IDLE, no `video_access_log` migration | No | Route has user, video and tier at hand |
 | 10 | medusa-order-to-sage | Webhook `POST /webhook/medusa-order-placed` from `order-placed.ts` | Sage SA v2 (customer, tax types, accounts, TaxInvoice), Medusa admin (order metadata), Brevo alert | BLOCKED (KI010): fails on every order, alert mail each time. Also uses the 15% VAT tax type although the company is not VAT registered (KI033, KI007) | Only if Sage goes live | `apps/medusa/src/modules/sage/service.ts` (same logic, registered, unused) |
 | 11 | sage-invoice-sync (daily audit) | Cron `0 4 * * *` (06:00 SAST) | Medusa admin orders, Brevo alert | BLOCKED, and sends `x-medusa-access-token` (v1 header), so it most likely 401s on v2 | Only with #10 | Nothing |
 | 12 | weekly-report | Cron `0 6 * * 1` (Mon 08:00 SAST) | Supabase counts, Medusa orders (`status=completed`), Brevo | BROKEN: `tier_slug` column, v1 auth header; digital orders may never reach `completed`, so revenue would read 0 | Ask Johan | Nothing |
-| 13 | vibe-marketing-sync-monitor | Webhook `POST /webhook/vibe-sync-confirm` | n8n SMTP node (credential never created) | DEAD: inactive; no caller anywhere (searched `C:\Projects\vibe-marketing`) | No, retire | Vibe calls already live in `order-placed.ts` and the lead route |
+| 13 | vibe-marketing-sync-monitor | Webhook `POST /webhook/vibe-sync-confirm` | n8n SMTP node (credential never created) | RETIRED 16 Oct 2026 (Johan): export deleted. Was DEAD: inactive, no caller anywhere | No, retire | Vibe calls already live in `order-placed.ts` and the lead route |
 
 Note: the Medusa `order-placed.ts` subscriber also does invoice PDF, order confirmation mail, membership activation, portal access and Vibe onboarding in-process. Those are not n8n and stay as they are.
 
@@ -372,6 +372,17 @@ Order follows "customer depends on it" first, lowest risk within that, then repo
 | | **Total** | | **79** (range 70 to 90) |
 
 Customer-critical slice (steps 0 to 5): about 54 h. Calendar time is longer than the hours because of the shadow and watch windows (about 2 to 3 weeks if steps overlap).
+
+### Step status (updated 16 Oct 2026)
+
+| Step | Status |
+|---|---|
+| 0 to 3 | In code, live on the review box, flags `code` (read back 15 Oct) |
+| 6 Cal.com to Vtiger | Built 16 Oct: `after()` in the webhook route, `syncBookingToVtiger` in `packages/integrations/src/calcom-vtiger.ts`, flag `AUTOMATION_CALCOM` (default `code`). Live check: pending |
+| 7 MeiliSearch sync | Built 16 Oct: subscriber `apps/medusa/src/subscribers/product-search-sync.ts`, job `apps/medusa/src/jobs/search-reindex.ts`, shared transform in `packages/integrations/src/meili.ts`, flag `AUTOMATION_SEARCH_SYNC` (default `code`). Live check: pending |
+| 8 Video access log | RETIRED 16 Oct 2026 (Johan) |
+| 11 Vibe monitor | RETIRED 16 Oct 2026 (Johan) |
+| 4, 5, 9, 10 | Not started; 5 (memberships), 9 (Sage) and 10 (weekly report) wait on Johan's answers |
 
 Quick wins that need no migration and could ship now: set `AUTOMATION_SAGE`-equivalent behaviour today by deactivating the n8n Sage workflow (stops a failure alert per order); re-import the fixed lead workflow so leads reach Vtiger until step 3 lands.
 

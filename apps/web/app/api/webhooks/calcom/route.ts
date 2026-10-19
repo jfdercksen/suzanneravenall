@@ -1,7 +1,8 @@
-import { NextResponse, type NextRequest } from 'next/server'
+import { after, NextResponse, type NextRequest } from 'next/server'
 import crypto from 'crypto'
 import { z } from 'zod'
 import { logError } from '@/lib/log'
+import { runCalcomBookingSync } from '@/lib/integrations/calcom-booking'
 
 // Cal.com sends X-Cal-Signature-256: sha256=<hex> (HMAC-SHA256 of raw body)
 // Docs: https://cal.com/docs/core-features/webhooks
@@ -28,8 +29,6 @@ const CalcomPayloadSchema = z.object({
     .passthrough()
     .optional(),
 })
-
-const N8N_BASE_URL = (process.env.N8N_WEBHOOK_URL ?? 'http://n8n:5678').replace(/\/$/, '')
 
 export async function POST(request: NextRequest) {
   const webhookSecret = process.env.CALCOM_WEBHOOK_SECRET
@@ -86,16 +85,11 @@ export async function POST(request: NextRequest) {
 
   const { triggerEvent } = parsed.data
 
-  // Only forward booking creation events — ignore cancellations, reschedules, etc.
+  // Only booking creation reaches Vtiger; cancellations, reschedules etc. are
+  // acknowledged and ignored. The sync runs after the response is sent, so
+  // Cal.com never waits on the CRM (it retries slow webhooks).
   if (triggerEvent === 'BOOKING_CREATED') {
-    void fetch(`${N8N_BASE_URL}/webhook/calcom-booking`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: rawBody,
-    }).catch((err: unknown) => {
-      const message = err instanceof Error ? err.message : String(err)
-      logError(`[calcom webhook] n8n forward failed: ${message}`, err)
-    })
+    after(() => runCalcomBookingSync(rawPayload).then(() => undefined))
   }
 
   // Return 200 immediately — never block Cal.com

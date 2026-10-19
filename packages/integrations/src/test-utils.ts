@@ -14,12 +14,17 @@ export type FakeVtigerOptions = {
   userId?: string
   /** Operations the instance does not know (to simulate a missing `revise`). */
   unknownOperations?: string[]
+  /** Field names `describe` returns per module. A module not listed describes with no fields. */
+  fields?: Record<string, string[]>
+  /** Events already in the CRM (for idempotency queries on the description). */
+  events?: Array<Record<string, unknown> & { id: string }>
 }
 
 export function makeFakeVtiger(opts: FakeVtigerOptions = {}) {
   const calls: FakeCall[] = []
   const contacts = [...(opts.contacts ?? [])]
   const created: Array<{ elementType: string; element: Record<string, unknown> }> = []
+  const events = [...(opts.events ?? [])]
   let nextId = 500
   let sessionCounter = 0
   const validSessions = new Set<string>()
@@ -63,7 +68,18 @@ export function makeFakeVtiger(opts: FakeVtigerOptions = {}) {
     if (!validSessions.has(params.sessionName ?? '')) return fail('INVALID_SESSIONID', 'Session Identifier provided is Invalid')
 
     switch (operation) {
+      case 'describe':
+        return json({
+          success: true,
+          result: { name: params.elementType, fields: (opts.fields?.[params.elementType ?? ''] ?? []).map((name) => ({ name })) },
+        })
       case 'query': {
+        const like = /FROM Events WHERE description LIKE '%((?:[^'\\]|\\.)*)%'/.exec(params.query ?? '')
+        if (like) {
+          const needle = like[1]!.replace(/\\(.)/g, '$1')
+          const rows = events.filter((e) => String(e.description ?? '').includes(needle)).slice(0, 1)
+          return json({ success: true, result: rows })
+        }
         const m = /email='((?:[^'\\]|\\.)*)'/.exec(params.query ?? '')
         const email = m?.[1]?.replace(/\\(.)/g, '$1')
         const rows = contacts.filter((c) => c.email === email).slice(0, 1)
@@ -75,6 +91,7 @@ export function makeFakeVtiger(opts: FakeVtigerOptions = {}) {
         const id = `${prefix}x${nextId++}`
         created.push({ elementType: params.elementType ?? '', element })
         if (params.elementType === 'Contacts') contacts.push({ ...element, id })
+        if (params.elementType === 'Events') events.push({ ...element, id })
         return json({ success: true, result: { ...element, id } })
       }
       case 'revise':
@@ -94,6 +111,7 @@ export function makeFakeVtiger(opts: FakeVtigerOptions = {}) {
     fetchImpl,
     calls,
     contacts,
+    events,
     created,
     ops: () => calls.map((c) => c.operation),
     expireSessions: () => validSessions.clear(),

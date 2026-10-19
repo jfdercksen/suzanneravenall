@@ -75,6 +75,7 @@ export class VtigerClient {
   private readonly now: () => number
   private session: Session | null = null
   private pendingLogin: Promise<Session> | null = null
+  private readonly fieldCache = new Map<string, Set<string>>()
 
   constructor(opts: VtigerClientOptions) {
     this.opts = opts
@@ -154,6 +155,26 @@ export class VtigerClient {
     return (await this.withSession((sessionName) =>
       this.request('GET', { operation: 'retrieve', sessionName, id }, callOpts),
     callOpts)) as VtigerRecord
+  }
+
+  /**
+   * Field names of a module (webservice `describe`), cached per client.
+   * Null in dry run: the caller then assumes every field exists.
+   */
+  async fieldNames(elementType: string, callOpts: CallOptions = {}): Promise<Set<string> | null> {
+    if (this.dryRun) return null
+    const cached = this.fieldCache.get(elementType)
+    if (cached) return cached
+    const result = (await this.withSession((sessionName) =>
+      this.request('GET', { operation: 'describe', sessionName, elementType }, callOpts),
+    callOpts)) as { fields?: Array<{ name?: unknown }> } | null
+    const names = new Set(
+      (result?.fields ?? []).map((f) => f.name).filter((n): n is string => typeof n === 'string'),
+    )
+    // An empty list is more likely a permissions or server fault than a real
+    // module: not cached, so the next call asks again.
+    if (names.size > 0) this.fieldCache.set(elementType, names)
+    return names
   }
 
   async create(elementType: string, element: Record<string, unknown>, callOpts: CallOptions = {}): Promise<VtigerRecord> {

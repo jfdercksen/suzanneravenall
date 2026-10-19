@@ -52,20 +52,7 @@ export async function GET(
     )
   }
 
-  const n8nWebhookUrl = process.env.N8N_BASE_URL
-  const webhookSecret = process.env.N8N_WEBHOOK_SECRET
-  if (n8nWebhookUrl && webhookSecret) {
-    fetch(`${n8nWebhookUrl}/webhook/video-access-log`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-webhook-secret': webhookSecret },
-      body: JSON.stringify({
-        userId: user.id,
-        videoId: parsed.data.videoId,
-        tier,
-        accessedAt: new Date().toISOString(),
-      }),
-    }).catch(() => {})
-  }
-
+  // Workflow 9 (bunny-video-access-log) was retired on 16 Oct 2026 (Johan):
+  // no video access log is kept.
   return NextResponse.json({ url })
 }

@@ -20,6 +20,8 @@ consumed from source by both apps:
 | `src/thinkific.ts` | `ThinkificClient`: find user by email, create user, find enrolment, enrol |
 | `src/thinkific-enrolment.ts` | `enrolOrderInThinkific`: the medusa-thinkific-enrollment n8n workflow in code, resumable |
 | `src/order-vtiger.ts` | `syncOrderToVtiger`: the medusa-order-to-vtiger n8n workflow in code, resumable |
+| `src/calcom-vtiger.ts` | `syncBookingToVtiger`: the calcom-booking-to-vtiger n8n workflow in code, idempotent on the booking UID |
+| `src/meili.ts` | `MeiliClient`, `productToSearchDoc` (the one product document shape), `syncProductToSearch`, `reindexProducts` |
 | `src/orders.ts` | The order snapshot shape and the buyer name fallback both order workflows used |
 | `src/brevo.ts` | `sendBrevoEmail` (Brevo v3, same request as the web sender) and `createStaffAlerter` (throttled staff alerts for Medusa) |
 | `src/flags.ts` | `automationMode`: reads a cutover flag (`n8n` / `code` / `off`) |
@@ -203,3 +205,60 @@ Order to Vtiger (`medusa-order-to-vtiger.json`):
   order twice is a no-op (n8n double-counted a replay).
 - Event times are UTC (n8n used the container's local time, which is UTC).
 - Alerts as above; n8n mailed one alert per failure and still ended "success".
+
+## Cal.com bookings (migration step 6)
+
+`POST /api/webhooks/calcom` checks the HMAC signature (unchanged), answers
+Cal.com 200 at once and, for `BOOKING_CREATED`, runs
+`runCalcomBookingSync` (`apps/web/lib/integrations/calcom-booking.ts`) after
+the response with Next `after()`:
+
+1. normalise the v1 or v2 payload (attendee or booker email and name, `uid`
+   or `bookingUid`, `startTime`/`start`, `endTime`/`end`);
+2. find the contact by email, or create it with lead source `Discovery Call`
+   and `cf_pipeline_stage` `Discovery Call Booked`;
+3. create one Event (Call, Planned, real duration, `Cal.com booking UID: <uid>`
+   in the description), unless an Event with that marker exists already;
+4. `revise` an existing contact to the booked stage (mandatory fields carried
+   along, lead source only if blank).
+
+Custom fields: the client reads `describe Contacts` once; a `cf_` field the
+instance does not have is left out (logged), so a missing field never blocks
+the contact. Retries: the first try plus 3 retries (2 s, 10 s, 30 s), keeping
+progress, so a retry never creates a second contact or Event. Final failure:
+Sentry (booking UID only) and one staff alert per booking to
+`AUTOMATION_ALERT_EMAIL`.
+
+Known limit: the retries run in memory after the response. A container
+restart inside that window (about a minute) loses the booking, and Cal.com
+will not resend it because it already got its 200. Rare enough for discovery
+calls; the outbox pattern is the fix if it ever matters.
+
+Differences from the n8n workflow: an Event instead of `Activities`
+(KI054 e) with `assigned_user_id` and a duration; `revise` instead of a
+replacing `update`; no duplicate Event for a replayed webhook; the stage is
+re-applied on a replay; event times in UTC.
+
+| Name (web service) | Meaning |
+|---|---|
+| `AUTOMATION_CALCOM` | `code` (default) or `off`. `n8n` is retired and runs the code path |
+| `CALCOM_WEBHOOK_SECRET` | The secret set on the Cal.com webhook (already on the web service) |
+| `VTIGER_*`, `AUTOMATION_ALERT_EMAIL`, `AUTOMATION_DRY_RUN` | As for leads |
+
+## Product search (migration step 7)
+
+- `apps/medusa/src/subscribers/product-search-sync.ts` on `product.created`,
+  `product.updated`, `product.deleted`: reads the product through Query (no
+  admin token); published -> upsert into the `products` index, anything else
+  or deleted -> delete. A failure is logged; the nightly run catches up.
+- `apps/medusa/src/jobs/search-reindex.ts`, 00:00 UTC: every product page by
+  page, upsert the published ones, delete index documents that are not a
+  published product any more. If no published product is read at all it
+  deletes nothing. A failure mails one staff alert.
+- `apps/medusa/src/scripts/seed-meilisearch.ts` uses the same
+  `productToSearchDoc` and `PRODUCTS_INDEX_SETTINGS`.
+
+| Name (medusa service) | Meaning |
+|---|---|
+| `AUTOMATION_SEARCH_SYNC` | `code` (default) or `off` |
+| `MEILISEARCH_HOST`, `MEILISEARCH_ADMIN_KEY` | Already on the medusa service |

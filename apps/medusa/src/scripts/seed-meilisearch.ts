@@ -5,7 +5,13 @@
  *   docker compose exec medusa npx ts-node src/scripts/seed-meilisearch.ts
  *
  * Idempotent — safe to run multiple times. Existing documents are replaced.
+ *
+ * The product document shape and the index settings come from
+ * @suzanne/integrations (meili.ts), shared with the product-search-sync
+ * subscriber and the nightly search-reindex job.
  */
+
+import { PRODUCTS_INDEX, PRODUCTS_INDEX_SETTINGS, productToSearchDoc, type SearchProductInput } from '@suzanne/integrations'
 
 const MEILI_HOST = process.env.MEILISEARCH_HOST ?? 'http://meilisearch:7700'
 const MEILI_KEY = process.env.MEILISEARCH_ADMIN_KEY ?? ''
@@ -91,46 +97,15 @@ async function addDocuments(uid: string, documents: unknown[]): Promise<void> {
 // Products index
 // ---------------------------------------------------------------------------
 
-interface MedusaVariant {
-  id: string
-  title: string
-  prices: Array<{ currency_code: string; amount: number }>
-}
-
-interface MedusaProductResponse {
-  id: string
-  handle: string
-  title: string
-  description: string | null
-  thumbnail: string | null
-  status: string
-  variants: MedusaVariant[]
-  categories: Array<{ id: string; name: string }>
-  collection: { id: string; handle: string; title: string } | null
-}
-
-function getLowestZarPrice(variants: MedusaVariant[]): number | null {
-  const prices = variants
-    .flatMap((v) => v.prices)
-    .filter((p) => p.currency_code === 'zar')
-    .map((p) => p.amount)
-  return prices.length > 0 ? Math.min(...prices) : null
-}
-
 async function seedProducts(): Promise<void> {
   console.log('\nSeeding products index…')
 
-  await ensureIndex('products', 'id')
+  await ensureIndex(PRODUCTS_INDEX, 'id')
 
-  await updateSettings('products', {
-    searchableAttributes: ['title', 'description', 'collection_title', 'category_names', 'variant_titles'],
-    filterableAttributes: ['category_ids', 'collection_id', 'status'],
-    sortableAttributes: ['title', 'price_zar'],
-    rankingRules: ['words', 'typo', 'proximity', 'attribute', 'sort', 'exactness'],
-  })
+  await updateSettings(PRODUCTS_INDEX, PRODUCTS_INDEX_SETTINGS)
 
   // Fetch all published products
-  const products: MedusaProductResponse[] = []
+  const products: SearchProductInput[] = []
   let offset = 0
   const limit = 100
 
@@ -148,7 +123,7 @@ async function seedProducts(): Promise<void> {
 
     if (!res.ok) throw new Error(`Medusa products fetch failed: ${res.status}`)
 
-    const data = (await res.json()) as { products: MedusaProductResponse[]; count: number }
+    const data = (await res.json()) as { products: SearchProductInput[]; count: number }
     products.push(...data.products)
     console.log(`  Fetched ${products.length} / ${data.count} products from Medusa`)
 
@@ -156,23 +131,9 @@ async function seedProducts(): Promise<void> {
     offset += limit
   }
 
-  const documents = products.map((p) => ({
-    id: p.id,
-    handle: p.handle,
-    title: p.title,
-    description: p.description,
-    thumbnail: p.thumbnail,
-    status: p.status,
-    price_zar: getLowestZarPrice(p.variants),
-    collection_id: p.collection?.id ?? null,
-    collection_handle: p.collection?.handle ?? null,
-    collection_title: p.collection?.title ?? null,
-    category_ids: p.categories.map((c) => c.id),
-    category_names: p.categories.map((c) => c.name),
-    variant_titles: p.variants.map((v) => v.title).join(' '),
-  }))
+  const documents = products.map(productToSearchDoc)
 
-  await addDocuments('products', documents)
+  await addDocuments(PRODUCTS_INDEX, documents)
   console.log(`  Products index complete — ${documents.length} documents`)
 }
 

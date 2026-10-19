@@ -362,8 +362,6 @@ Workflows that must be manually imported and activated before go-live:
 - `medusa-order-to-sage.json`
 - `sage-invoice-sync.json`
 - `weekly-report.json`
-- `bunny-video-access-log.json`
-- `vibe-marketing-sync-monitor.json`
 
 ---
 
@@ -382,7 +380,7 @@ Once Sentry DSNs are set:
 
 - Open n8n → **Executions** to see recent workflow runs.
 - Failed executions are logged here with error detail.
-- The `sage-invoice-sync` and `vibe-marketing-sync-monitor` workflows send Resend alerts on failure.
+- The `sage-invoice-sync` workflow sends alerts on failure. (`bunny-video-access-log` and `vibe-marketing-sync-monitor` were retired on 16 Oct 2026; Cal.com to Vtiger and the MeiliSearch sync now run in code, see `docs/n8n-migration-plan.md`.)
 
 ### Docker health checks
 
