@@ -30,7 +30,7 @@ export default function DiscoverYourPatternPage() {
         {`(function(){var d=document.documentElement,x=false;try{x=localStorage.getItem('pattern-hub-bar-dismissed')==='1'}catch(e){}if(x){d.setAttribute('data-pattern-bar-dismissed','')}else{d.style.setProperty('--pattern-bar-offset','2.5rem');document.body.style.paddingTop='2.5rem'}})();`}
       </Script>
       <PatternHubStickyBar />
-      <main>
+      <div>
         <PatternHubHero />
         <PatternHubPositioning />
         <PatternHubHowItWorks />
@@ -39,7 +39,7 @@ export default function DiscoverYourPatternPage() {
         <PatternHubMethod />
         <PatternHubQuote />
         <PatternHubFinalCta />
-      </main>
+      </div>
     </>
   )
 }

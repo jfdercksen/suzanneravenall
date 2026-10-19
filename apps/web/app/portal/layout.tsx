@@ -1,19 +1,32 @@
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
+import { PATHNAME_HEADER } from '@/utils/supabase/pathname'
 import type { TierSlug } from '@/lib/access/tiers'
 import { membershipsEnabled } from '@/lib/access/memberships'
 import PortalNav from '@/components/portal/PortalNav'
 import AuthOverlay from '@/components/portal/AuthOverlay'
 
+// Pages that always render on the plain auth layout. A reset link signs the
+// member in, so without this the reset form sat in the signed-in sidebar next
+// to Sign Out (KI084).
+const AUTH_PAGES = ['/portal/login', '/portal/signup', '/portal/forgot-password', '/portal/reset-password']
+
+function isAuthPage(pathname: string): boolean {
+  return AUTH_PAGES.some((page) => pathname === page || pathname.startsWith(page + '/'))
+}
+
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies()
   const supabase = createClient(cookieStore)
+  // Without the header (a path the middleware does not match) this falls back
+  // to the member layout, as before KI084.
+  const pathname = (await headers()).get(PATHNAME_HEADER) ?? ''
 
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
+  if (!user || isAuthPage(pathname)) {
     // Auth pages (login, signup, forgot-password, reset-password) should be
     // full-screen cinematic dark — no public site header or footer visible.
     // The fixed overlay (z-[100] > header z-50) covers the marketing nav cleanly.

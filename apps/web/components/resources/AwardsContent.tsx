@@ -62,7 +62,7 @@ const cardVariants = {
 
 export default function AwardsContent() {
   return (
-    <main>
+    <div>
       {/* Hero */}
       <section
         aria-labelledby="awards-hero-heading"
@@ -206,6 +206,6 @@ export default function AwardsContent() {
           </motion.div>
         </div>
       </section>
-    </main>
+    </div>
   )
 }

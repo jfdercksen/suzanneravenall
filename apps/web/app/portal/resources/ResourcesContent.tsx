@@ -313,7 +313,7 @@ export default function ResourcesContent({ tier, showMemberships = true }: Resou
     : RESOURCE_CATEGORIES.filter((category) => hasAccess(tier, category.resource))
 
   return (
-    <main className="relative w-full bg-brand-primary min-h-screen py-20 lg:py-32 overflow-hidden">
+    <div className="relative w-full bg-brand-primary min-h-screen py-20 lg:py-32 overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         <div className="absolute bg-white/[0.06] blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
@@ -408,6 +408,6 @@ export default function ResourcesContent({ tier, showMemberships = true }: Resou
         )}
 
       </div>
-    </main>
+    </div>
   )
 }

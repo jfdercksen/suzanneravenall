@@ -19,6 +19,9 @@ vi.mock('@/lib/cart', () => ({
   formatPrice: (n: number) => `R${(n / 100).toFixed(2)}`,
 }))
 
+const readMemberContact = vi.fn(async (): Promise<unknown> => null)
+vi.mock('@/lib/checkout/memberContact', () => ({ readMemberContact: () => readMemberContact() }))
+
 import CheckoutContent from './CheckoutContent'
 
 describe('CheckoutContent with nothing to check out', () => {
@@ -83,5 +86,22 @@ describe('CheckoutContent contact step', () => {
     await user.type(phone, '082abc5551234')
     expect(phone).toHaveValue('0825551234')
     expect(phone).toHaveAttribute('inputmode', 'tel')
+  })
+
+  // KI077: a signed-in member starts with their account details filled in.
+  it('prefills the contact step from the signed-in member', async () => {
+    readMemberContact.mockResolvedValueOnce({ firstName: 'Ann', lastName: 'van Wyk', email: 'ann@example.com', phone: '+27 82 555 1234' })
+    render(<CheckoutContent />)
+    await waitFor(() => expect(screen.getByLabelText('Phone number')).toHaveValue('+27 82 555 1234'))
+    expect(screen.getByLabelText(/First name/)).toHaveValue('Ann')
+    expect(screen.getByLabelText(/Last name/)).toHaveValue('van Wyk')
+    expect(screen.getByLabelText(/Email address/)).toHaveValue('ann@example.com')
+  })
+
+  it('leaves the contact step empty for a guest', async () => {
+    render(<CheckoutContent />)
+    await waitFor(() => expect(readMemberContact).toHaveBeenCalled())
+    expect(screen.getByLabelText('Phone number')).toHaveValue('')
+    expect(screen.getByLabelText(/Email address/)).toHaveValue('')
   })
 })

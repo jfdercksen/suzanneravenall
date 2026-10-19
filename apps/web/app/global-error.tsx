@@ -16,7 +16,9 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
 
   return (
     <html lang="en">
-      <body className="flex min-h-screen flex-col items-center justify-center bg-brand-cream text-brand-ink px-4 py-24 font-sans antialiased">
+      <body className="bg-brand-cream text-brand-ink font-sans antialiased">
+        {/* Outside the root layout, so this page carries its own main landmark (KI083). */}
+        <main className="flex min-h-screen flex-col items-center justify-center px-4 py-24">
         <h1 className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary text-center">Something went wrong</h1>
         <p className="mt-4 text-lg text-brand-muted text-center">
           A critical error occurred. Please try again.
@@ -27,6 +29,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
         >
           Try again
         </button>
+        </main>
       </body>
     </html>
   )

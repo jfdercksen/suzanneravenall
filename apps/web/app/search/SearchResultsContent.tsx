@@ -93,7 +93,7 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
   }, [fetchResults])
 
   return (
-    <main className="relative min-h-screen bg-brand-sand py-16 overflow-hidden">
+    <div className="relative min-h-screen bg-brand-sand py-16 overflow-hidden">
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -283,6 +283,6 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
           </motion.ul>
         )}
       </div>
-    </main>
+    </div>
   )
 }

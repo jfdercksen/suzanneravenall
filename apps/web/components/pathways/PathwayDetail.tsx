@@ -47,7 +47,7 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
     'inline-flex items-center justify-center gap-3 px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300'
 
   return (
-    <main>
+    <div>
       {/* ── Header: shared PageHeader, the header rule ──────────────────── */}
       {/* The category badge is now the eyebrow. One picture serves every
           pathway, so the default left alignment and centre crop apply. */}
@@ -321,6 +321,6 @@ export default function PathwayDetail({ pathway }: { pathway: Pathway }) {
           </motion.div>
         </div>
       </section>
-    </main>
+    </div>
   )
 }

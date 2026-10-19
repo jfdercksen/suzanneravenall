@@ -31,7 +31,7 @@ export default function ForgotPasswordPage() {
 
   if (sent) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
+      <div className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
         <div className="w-full max-w-md bg-brand-primary-800 border border-white/25 rounded-2xl p-8 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/10 text-white mb-6">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -52,12 +52,12 @@ export default function ForgotPasswordPage() {
             Back to Login
           </Link>
         </div>
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
+    <div className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
@@ -109,6 +109,6 @@ export default function ForgotPasswordPage() {
           </p>
         </div>
       </div>
-    </main>
+    </div>
   )
 }

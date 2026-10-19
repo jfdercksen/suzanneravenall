@@ -9,7 +9,7 @@ const { signInWithOtp, signInWithPassword } = vi.hoisted(() => ({
 let search = ''
 
 vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: vi.fn() }),
+  useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }),
   useSearchParams: () => new URLSearchParams(search),
 }))
 vi.mock('@/utils/supabase/client', () => ({

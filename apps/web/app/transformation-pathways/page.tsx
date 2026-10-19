@@ -15,12 +15,12 @@ export function generateMetadata(): Metadata {
 
 export default function TransformationPathwaysPage() {
   return (
-    <main>
+    <div>
       <PathwaysHero />
       <PathwaysIntro />
       <PathwaysGrid />
       <PathwaysGroupSection />
       <PathwaysQuizCTA />
-    </main>
+    </div>
   )
 }

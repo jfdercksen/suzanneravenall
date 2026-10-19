@@ -72,7 +72,7 @@ function ArticleCard({ article }: { article: MediaArticle }) {
 
 export default function ArticlesContent() {
   return (
-    <main>
+    <div>
       {/* Hero */}
       <section
         aria-labelledby="articles-hero-heading"
@@ -209,6 +209,6 @@ export default function ArticlesContent() {
           </motion.div>
         </div>
       </section>
-    </main>
+    </div>
   )
 }

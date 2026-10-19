@@ -68,7 +68,7 @@ function MediaCard({ item }: { item: MediaArticle }) {
 
 export default function MediaContent() {
   return (
-    <main>
+    <div>
       {/* Hero */}
       <section
         aria-labelledby="media-hero-heading"
@@ -205,6 +205,6 @@ export default function MediaContent() {
           </motion.div>
         </div>
       </section>
-    </main>
+    </div>
   )
 }

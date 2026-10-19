@@ -259,7 +259,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
   const busy = loading || (isSearching && (searchLoading || searchIds === null))
 
   return (
-    <main className="min-h-screen">
+    <div className="min-h-screen">
       {/* 1: Video-backed header (PageHeader) and black stats band */}
       <ShopHeroBanner catalogueCount={catalogueCount} />
 
@@ -367,7 +367,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
 
       {/* 4: Photo-backed final CTA (dark, allowed as CTA band) */}
       <ShopFinalCTA />
-    </main>
+    </div>
   )
 }
 

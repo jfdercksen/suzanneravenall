@@ -33,7 +33,7 @@ export default async function ResourcesPage() {
   }
 
   return (
-    <main>
+    <div>
       <ResourcesHero />
       <ResourcesCategories />
       {/* Tier names and "Unlock with" links, so only while memberships are on sale */}
@@ -41,6 +41,6 @@ export default async function ResourcesPage() {
       <ResourcesFeaturedMedia />
       <ResourcesFeaturedAwards />
       <ResourcesNewsletterCTA />
-    </main>
+    </div>
   )
 }

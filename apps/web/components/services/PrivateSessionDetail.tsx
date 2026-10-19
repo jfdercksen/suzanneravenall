@@ -25,7 +25,7 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
     : []
 
   return (
-    <main>
+    <div>
       {/* ── Hero (light) ────────────────────────────────────────────────── */}
       <section
         aria-labelledby="session-hero-heading"
@@ -208,6 +208,6 @@ export default function PrivateSessionDetail({ session }: { session: PrivateSess
           </motion.div>
         </div>
       </section>
-    </main>
+    </div>
   )
 }

@@ -20,7 +20,7 @@ const assessmentTypes = [
 
 export default function AssessmentsContent() {
   return (
-    <main>
+    <div>
       <section className="w-full bg-brand-sand min-h-[70vh] flex items-center py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -101,6 +101,6 @@ export default function AssessmentsContent() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   )
 }

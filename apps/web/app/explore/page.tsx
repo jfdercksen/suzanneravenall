@@ -14,11 +14,11 @@ export function generateMetadata(): Metadata {
 
 export default function ExplorePage() {
   return (
-    <main>
+    <div>
       <ExploreHero />
       <ExploreTopicGrid />
       <ExploreDiagnosticCTA />
       <ExploreFinalCTA />
-    </main>
+    </div>
   )
 }

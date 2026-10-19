@@ -3,6 +3,10 @@ import { render, screen, fireEvent } from '@testing-library/react'
 
 const getSession = vi.fn()
 const updateUser = vi.fn()
+const push = vi.fn()
+const refresh = vi.fn()
+
+vi.mock('next/navigation', () => ({ useRouter: () => ({ push, refresh }) }))
 
 vi.mock('@/utils/supabase/client', () => ({
   createClient: () => ({ auth: { getSession, updateUser } }),
@@ -37,6 +41,12 @@ describe('ResetPasswordPage (KI073)', () => {
     expect(await screen.findByText('Password updated')).toBeInTheDocument()
     expect(updateUser).toHaveBeenCalledWith({ password: 'a-long-password' })
     expect(screen.getByRole('link', { name: 'Go to Your Dashboard' })).toHaveAttribute('href', '/portal/dashboard')
+
+    // KI084: the page sits on the plain auth layout, so leaving it refreshes
+    // the portal layout to bring the signed-in sidebar back.
+    fireEvent.click(screen.getByRole('link', { name: 'Go to Your Dashboard' }))
+    expect(push).toHaveBeenCalledWith('/portal/dashboard')
+    expect(refresh).toHaveBeenCalled()
   })
 
   it('keeps the form and shows the error when the update fails', async () => {

@@ -17,9 +17,15 @@ export interface OrderLineForType {
     product?: {
       handle?: string | null
       metadata?: Record<string, unknown> | null
-      categories?: Array<{ handle: string }> | null
+      categories?: OrderCategoryForType[] | null
     } | null
   } | null
+}
+
+/** A product category with as much of its parent chain as was read. */
+export interface OrderCategoryForType {
+  handle: string
+  parent_category?: OrderCategoryForType | null
 }
 
 type CategoryType = Exclude<OrderProductType, 'live-course' | 'download'>
@@ -42,14 +48,40 @@ const CATEGORY_TYPE: Record<string, CategoryType> = {
   'digital-downloads': 'other',
 }
 
+// A category's own handle, then its parent's, up to the root.
+function categoryChain(cat: OrderCategoryForType): string[] {
+  const chain: string[] = []
+  const seen = new Set<OrderCategoryForType>()
+  let node: OrderCategoryForType | null | undefined = cat
+  while (node && !seen.has(node)) {
+    seen.add(node)
+    chain.push(node.handle)
+    node = node.parent_category
+  }
+  return chain
+}
+
+function mappedType(handle: string): CategoryType | undefined {
+  return Object.hasOwn(CATEGORY_TYPE, handle) ? CATEGORY_TYPE[handle] : undefined
+}
+
 function categoryType(items: OrderLineForType[]): CategoryType {
   if (items.some((item) => (item.variant?.product?.handle ?? '').includes('mentorship'))) return 'mentorship'
 
   const categories = items.flatMap((item) => item.variant?.product?.categories ?? [])
 
   for (const cat of categories) {
-    const match = Object.hasOwn(CATEGORY_TYPE, cat.handle) ? CATEGORY_TYPE[cat.handle] : undefined
+    const match = mappedType(cat.handle)
     if (match) return match
+  }
+
+  // A product in a sub-category (exploring-the-alpha-mind under
+  // private-sessions) takes the type of the nearest mapped parent (KI082).
+  for (const cat of categories) {
+    for (const handle of categoryChain(cat).slice(1)) {
+      const match = mappedType(handle)
+      if (match) return match
+    }
   }
 
   for (const cat of categories) {

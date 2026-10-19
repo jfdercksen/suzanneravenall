@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 
 // checking: reading the recovery session the reset link starts.
@@ -10,6 +11,7 @@ import { createClient } from '@/utils/supabase/client'
 type Stage = 'checking' | 'no-link' | 'ready' | 'done'
 
 export default function ResetPasswordPage() {
+  const router = useRouter()
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -62,14 +64,14 @@ export default function ResetPasswordPage() {
 
   if (stage === 'checking') {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-brand-primary">
+      <div className="min-h-screen flex items-center justify-center bg-brand-primary">
         <div role="status" aria-label="Checking your reset link" className="w-8 h-8 border-2 border-white/70 border-t-transparent rounded-full animate-spin" />
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
+    <div className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
@@ -108,8 +110,16 @@ export default function ResetPasswordPage() {
             <p className="text-white/70 text-sm mb-8">
               Your new password is saved. Use it the next time you log in.
             </p>
+            {/* The portal layout keeps this page on the plain auth layout
+                (KI084) and a layout is not re-rendered on a client
+                navigation, so refresh to bring in the signed-in sidebar. */}
             <Link
               href="/portal/dashboard"
+              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                e.preventDefault()
+                router.push('/portal/dashboard')
+                router.refresh()
+              }}
               className="block w-full text-center bg-white hover:bg-brand-sand text-brand-primary font-semibold py-4 rounded-xl transition-colors duration-300"
             >
               Go to Your Dashboard
@@ -173,6 +183,6 @@ export default function ResetPasswordPage() {
         </div>
         )}
       </div>
-    </main>
+    </div>
   )
 }

@@ -88,7 +88,7 @@ export default function CommunityContent() {
   }
 
   return (
-    <main className="w-full">
+    <div className="w-full">
 
       {/* ── Section 1: Hero (light) ─────────────────────────────────────── */}
       <section className="relative w-full bg-brand-sand min-h-screen flex items-center py-20 lg:py-32 overflow-hidden">
@@ -277,6 +277,6 @@ export default function CommunityContent() {
         </div>
       </section>
 
-    </main>
+    </div>
   )
 }

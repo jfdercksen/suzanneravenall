@@ -125,7 +125,7 @@ const cards = () => screen.queryAllByTestId('card').map((a) => a.getAttribute('h
 describe('ShopCatalogueContent', () => {
   it('opens filtered from ?category=<handle>, including sub-categories, and highlights the parent pill', async () => {
     mockSearch = 'category=products-tools'
-    render(<ShopCatalogueContent initialCategories={categories} />)
+    render(<main><ShopCatalogueContent initialCategories={categories} /></main>)
     await waitFor(() => expect(cards()).toHaveLength(2))
     expect(cards()).toEqual(['/shop/b0-handle', '/shop/b1-handle'])
     expect(screen.getByRole('button', { name: 'Products & Tools' })).toHaveAttribute('aria-pressed', 'true')
@@ -133,7 +133,7 @@ describe('ShopCatalogueContent', () => {
 
   it('a sub-category link (breadcrumb) highlights its top-level pill', async () => {
     mockSearch = 'category=books'
-    render(<ShopCatalogueContent initialCategories={categories} />)
+    render(<main><ShopCatalogueContent initialCategories={categories} /></main>)
     await waitFor(() => expect(cards()).toHaveLength(2))
     expect(screen.getByRole('button', { name: 'Products & Tools' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute('aria-pressed', 'false')
@@ -142,7 +142,7 @@ describe('ShopCatalogueContent', () => {
   it('a sub-category link names the sub-category, counts sessions, and can be cleared to the parent', async () => {
     mockSearch = 'category=rapid-repatterning'
     const user = userEvent.setup()
-    render(<ShopCatalogueContent initialCategories={categories} />)
+    render(<main><ShopCatalogueContent initialCategories={categories} /></main>)
     await waitFor(() => expect(cards()).toHaveLength(12))
     const main = within(screen.getByRole('main'))
     expect(main.getByText('Rapid Repatterning')).toBeInTheDocument()
@@ -156,7 +156,7 @@ describe('ShopCatalogueContent', () => {
 
   it('a top-level category link shows no sub-category chip', async () => {
     mockSearch = 'category=products-tools'
-    render(<ShopCatalogueContent initialCategories={categories} />)
+    render(<main><ShopCatalogueContent initialCategories={categories} /></main>)
     await waitFor(() => expect(cards()).toHaveLength(2))
     expect(screen.queryByRole('button', { name: /^Clear .* filter$/ })).not.toBeInTheDocument()
     expect(within(screen.getByRole('main')).getByText('2 products')).toBeInTheDocument()
@@ -164,7 +164,7 @@ describe('ShopCatalogueContent', () => {
 
   it('sorts the whole catalogue by price, not just the current page', async () => {
     mockSearch = 'sort=price_asc'
-    render(<ShopCatalogueContent initialCategories={categories} />)
+    render(<main><ShopCatalogueContent initialCategories={categories} /></main>)
     await waitFor(() => expect(cards()).toHaveLength(12))
     // The two books are the cheapest even though the store lists them last.
     expect(cards().slice(0, 2)).toEqual(['/shop/b0-handle', '/shop/b1-handle'])
@@ -173,7 +173,7 @@ describe('ShopCatalogueContent', () => {
   it('restores the page from the URL and writes state changes back to it', async () => {
     mockSearch = 'category=private-sessions&page=2'
     const user = userEvent.setup()
-    render(<ShopCatalogueContent initialCategories={categories} />)
+    render(<main><ShopCatalogueContent initialCategories={categories} /></main>)
     await waitFor(() => expect(cards()).toHaveLength(2))
     expect(cards()).toEqual(['/shop/p12-handle', '/shop/p13-handle'])
 
@@ -188,7 +188,7 @@ describe('ShopCatalogueContent', () => {
     mockSearch = 'category=private-sessions'
     searchHits = ['b0', 'p3', 'p1']
     const user = userEvent.setup()
-    render(<ShopCatalogueContent initialCategories={categories} />)
+    render(<main><ShopCatalogueContent initialCategories={categories} /></main>)
     await waitFor(() => expect(cards()).toHaveLength(12))
 
     await user.type(screen.getByPlaceholderText(/search programmes/i), 'rapid')
@@ -228,7 +228,7 @@ describe('ShopCatalogueContent', () => {
     })
     vi.stubGlobal('fetch', fetchMock)
     mockSearch = 'collection=programmes'
-    render(<ShopCatalogueContent initialCategories={categories} />)
+    render(<main><ShopCatalogueContent initialCategories={categories} /></main>)
     await waitFor(() => expect(cards()).toEqual(['/shop/self-handle', '/shop/both-handle']))
     expect(within(screen.getByRole('main')).getByText('2 courses')).toBeInTheDocument()
   })
@@ -236,7 +236,7 @@ describe('ShopCatalogueContent', () => {
   it('pages through search results beyond the first page', async () => {
     searchHits = allProducts.map((p) => p.id)
     mockSearch = 'q=session&page=2'
-    render(<ShopCatalogueContent initialCategories={categories} />)
+    render(<main><ShopCatalogueContent initialCategories={categories} /></main>)
     await waitFor(() => expect(cards()).toHaveLength(4), { timeout: 2000 })
     expect(screen.getByRole('button', { name: /next page/i })).toBeDisabled()
   })

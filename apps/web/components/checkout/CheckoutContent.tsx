@@ -9,6 +9,7 @@ import { ShoppingBag, ChevronRight, Lock, Tag, X } from 'lucide-react'
 import { useCart, formatPrice } from '@/lib/cart'
 import { variantLabel, isPreorder } from '@/lib/shop/lineItem'
 import { PHONE_PATTERN, phoneError, sanitisePhone } from '@/lib/forms/validation'
+import { readMemberContact } from '@/lib/checkout/memberContact'
 
 type Step = 1 | 2 | 3
 
@@ -296,6 +297,25 @@ export default function CheckoutContent() {
       router.replace('/cart')
     }
   }, [isLoading, hasItems, router])
+
+  // A signed-in member starts with their account details filled in (KI077).
+  // Only empty fields are filled, so nothing typed before it arrives is lost.
+  useEffect(() => {
+    let active = true
+    readMemberContact().then((member) => {
+      if (!active || !member) return
+      setContact((prev) => ({
+        ...prev,
+        firstName: prev.firstName || member.firstName,
+        lastName: prev.lastName || member.lastName,
+        email: prev.email || member.email,
+        phone: prev.phone || member.phone,
+      }))
+    })
+    return () => {
+      active = false
+    }
+  }, [])
 
   function updateContact(field: keyof ContactForm, value: string) {
     setContact((prev) => ({ ...prev, [field]: value }))

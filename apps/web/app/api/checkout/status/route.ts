@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import type { OrderProductType } from '@/lib/email/types'
-import { orderProductType, type OrderLineForType } from '@/lib/checkout/orderProductType'
+import { orderProductType, type OrderCategoryForType, type OrderLineForType } from '@/lib/checkout/orderProductType'
 import { isPreorder, variantLabel } from '@/lib/shop/lineItem'
 
 // Read-only order status for the confirmation page. The page must not say
@@ -58,7 +58,7 @@ interface StoreProduct {
   id: string
   handle?: string | null
   metadata?: Record<string, unknown> | null
-  categories?: Array<{ handle: string }> | null
+  categories?: OrderCategoryForType[] | null
   variants?: Array<{ id: string; metadata?: Record<string, unknown> | null }> | null
 }
 
@@ -78,7 +78,10 @@ async function fetchLineProducts(productIds: string[]): Promise<StoreProduct[]> 
   try {
     const params = new URLSearchParams({
       limit: String(productIds.length),
-      fields: 'id,handle,metadata,*categories,*variants',
+      // Two parent levels cover the whole tree (three deep), so a product in a
+      // sub-category resolves the way the order mail resolves it (KI082).
+      fields:
+        'id,handle,metadata,*categories,*variants,categories.parent_category.handle,categories.parent_category.parent_category.handle',
     })
     productIds.forEach((id) => params.append('id[]', id))
     const res = await fetch(`${medusaBase()}/store/products?${params.toString()}`, {

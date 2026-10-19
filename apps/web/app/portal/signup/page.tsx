@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { ensureMembership } from '@/lib/access/ensure-membership'
-import { emailError, hasErrors, requiredError, useFieldErrors } from '@/lib/forms/validation'
+import { emailError, hasErrors, PHONE_PATTERN, phoneError, requiredError, useFieldErrors } from '@/lib/forms/validation'
 
-type Field = 'name' | 'email' | 'password' | 'confirmPassword'
+type Field = 'name' | 'email' | 'phone' | 'password' | 'confirmPassword'
 
 const MIN_PASSWORD = 8
 
@@ -22,6 +22,7 @@ export default function SignupPage() {
     redirect !== '/portal/dashboard' ? `?redirect=${encodeURIComponent(redirect)}` : ''
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -36,6 +37,8 @@ export default function SignupPage() {
         return requiredError(value, 'Please enter your full name.')
       case 'email':
         return emailError(value)
+      case 'phone':
+        return phoneError(value)
       case 'password':
         if (!value) return 'Please choose a password.'
         return value.length < MIN_PASSWORD ? `Your password needs at least ${MIN_PASSWORD} characters.` : undefined
@@ -69,6 +72,7 @@ export default function SignupPage() {
     const fieldErrors = {
       name: validate('name', name),
       email: validate('email', email),
+      phone: validate('phone', phone),
       password: validate('password', password),
       confirmPassword: validate('confirmPassword', confirmPassword),
     }
@@ -84,7 +88,9 @@ export default function SignupPage() {
       email,
       password,
       options: {
-        data: { full_name: name },
+        // phone is optional; it lands where the account page and the
+        // checkout prefill read it (KI077).
+        data: { full_name: name, phone: phone.trim() || null },
         emailRedirectTo: `${window.location.origin}/portal/callback${
           redirectQuery ? `?next=${encodeURIComponent(redirect)}` : ''
         }`,
@@ -136,7 +142,7 @@ export default function SignupPage() {
 
   if (success) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
+      <div className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
         <div className="w-full max-w-md bg-brand-primary-800 border border-white/25 rounded-2xl p-8 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/10 text-white mb-6">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -159,12 +165,12 @@ export default function SignupPage() {
             Return to Login
           </Link>
         </div>
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
+    <div className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -215,6 +221,25 @@ export default function SignupPage() {
                 placeholder="you@example.com"
               />
               {fieldMessage('email')}
+            </div>
+
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-white/70 mb-2">
+                Phone number{' '}
+                <span className="text-white/60 font-normal">(optional)</span>
+              </label>
+              <input
+                id="phone"
+                type="tel"
+                autoComplete="tel"
+                inputMode="tel"
+                pattern={PHONE_PATTERN}
+                value={phone}
+                {...fieldProps('phone', setPhone)}
+                className="w-full bg-brand-primary-700 border border-white/35 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/60 focus:ring-1 focus:ring-white/60 transition-colors duration-200"
+                placeholder="+27 82 123 4567"
+              />
+              {fieldMessage('phone')}
             </div>
 
             <div>
@@ -279,6 +304,6 @@ export default function SignupPage() {
           </Link>
         </p>
       </div>
-    </main>
+    </div>
   )
 }

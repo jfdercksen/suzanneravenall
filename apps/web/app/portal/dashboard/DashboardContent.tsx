@@ -67,7 +67,7 @@ export default function DashboardContent({
   const canAccessAssessments = hasAccess(tierSlug, 'resources_assessments')
 
   return (
-    <main className="relative w-full bg-brand-primary min-h-screen py-16 lg:py-24 overflow-hidden">
+    <div className="relative w-full bg-brand-primary min-h-screen py-16 lg:py-24 overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         <div className="absolute bg-white/[0.06] blur-[140px] rounded-full w-96 h-96 top-1/4 left-1/2 -translate-x-1/2" />
@@ -383,6 +383,6 @@ export default function DashboardContent({
         )}
 
       </div>
-    </main>
+    </div>
   )
 }

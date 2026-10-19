@@ -133,7 +133,7 @@ export default function UpgradeContent({
       : ''
 
   return (
-    <main className="w-full bg-brand-primary min-h-screen">
+    <div className="w-full bg-brand-primary min-h-screen">
 
       {/* Hero */}
       <section className="w-full bg-brand-primary py-20 lg:py-32">
@@ -271,6 +271,6 @@ export default function UpgradeContent({
         </div>
       </section>
 
-    </main>
+    </div>
   )
 }

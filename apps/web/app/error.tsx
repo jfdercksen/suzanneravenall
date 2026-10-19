@@ -14,7 +14,7 @@ export default function Error({ error, reset }: ErrorProps) {
   }, [error])
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-brand-cream px-4 py-24">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-brand-cream px-4 py-24">
       <h1 className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary text-center">Something went wrong</h1>
       <p className="mt-4 text-lg text-brand-muted text-center">
         An unexpected error occurred. Please try again.
@@ -25,6 +25,6 @@ export default function Error({ error, reset }: ErrorProps) {
       >
         Try again
       </button>
-    </main>
+    </div>
   )
 }

@@ -211,7 +211,7 @@ export default function VideosContent({ tier, videos: allVideos, showMemberships
     activeCategory === 'All' ? videos : videos.filter((v) => v.category === activeCategory)
 
   return (
-    <main className="relative w-full bg-brand-primary min-h-screen py-20 lg:py-32 overflow-hidden">
+    <div className="relative w-full bg-brand-primary min-h-screen py-20 lg:py-32 overflow-hidden">
       {playingVideo && (
         <VideoPlayerModal
           videoId={playingVideo.id}
@@ -336,6 +336,6 @@ export default function VideosContent({ tier, videos: allVideos, showMemberships
         )}
 
       </div>
-    </main>
+    </div>
   )
 }
