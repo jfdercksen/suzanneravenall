@@ -399,3 +399,5 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
 - Step 7 live: draft rename stays out of the index (log "-> deleted"), published product upserted with price via Query; both reverted. Nightly rebuild not yet observed.
 - Step 6 live: waits on Johan adding the Cal.com webhook, then one QA booking, read-back, cancel.
 - Docs (ACCEPTANCE K-07/K-08/K-09/J-05 + results block, plan step status) edited but NOT committed yet: ACCEPTANCE.md also carries another session's uncommitted re-walk edits.
+
+- 19 Oct 13:41-13:43 UTC, step 6 live: QA booking v4D7F8htkQhxMUATYtcmxY (Thu 22 Oct 11:00 SAST) made on :3002 and cancelled. Cal.com delivered nothing: its Webhook table is empty on the review box (the webhook was not added to this instance). Signed replay from inside the web container: 200, contact 12x413 to Discovery Call Booked, Event 18x618 (30 min, UID in description), second delivery idempotent. Left open: Cal.com delivery once the webhook is on :3002. Note: the stage write moves an existing contact from Closed Won back to Discovery Call Booked (same as n8n did).
