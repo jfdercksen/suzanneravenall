@@ -237,6 +237,7 @@ See `.env.example` in the repo root for the full list with descriptions. The tab
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | ⏳ Pending | Confirm GA4 property ID with Suzanne |
 | `NEXT_PUBLIC_CLARITY_ID` | ⏳ Pending | Confirm Clarity ID with Suzanne |
 | `ANTHROPIC_API_KEY` | ⏳ Pending | Only needed if Claude API features are used |
+| `MEMBERSHIPS_ENABLED` | ✅ Off (launch) | Web only, read at request time. Unset or `false` = memberships not on sale: `/portal/upgrade` is the 404 page, no tier names, locked items or upgrade prompts in the portal or on `/resources` (KI071, KI072, 19 Oct 2026). `true` = the tier ladder as before; set it in `infra/.env`, then `docker compose up -d web` (no rebuild). `lib/access/memberships.ts` |
 
 ---
 
