@@ -434,3 +434,15 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
 - Deploy run 39392862768 web + medusa. CALCOM_SESSION_BOOKING_URL is NOT in the box infra/.env (printenv empty in both); the fallback NEXT_PUBLIC_CAL_URL + /suzanneravenall gives the same base. Add the line anyway.
 - J-02 re-walk PASS 7/7 (results/acceptance-J02-2026-10-20.*): orders #392-#395, booking mD2wEnpyLdctCPdbv2MUKF, Vtiger Event 18x625, all cancelled.
 - Open: J-NEW-3 phone field defaults to +1 (set the default country in Cal.com); the memory file reference_vps.md holds the VPS password in plaintext (against the Vaultwarden rule).
+
+## 2026-10-20 G-00c / G-00d / G-00e paid gateways (side session)
+
+- P4 ticked: Johan's masked printenv, PAYFAST_SANDBOX and PAYPAL_SANDBOX true in web and medusa; PayPal client id/secret read as a `chan...` placeholder.
+- Playwright MCP refused sandbox.payfast.co.za and www.sandbox.paypal.com even after .mcp.json gained them and /mcp reconnect (kept its start-up origin list); walked in the built-in browser pane instead.
+- G-00c PASS: order #396, Post Traumatic Growth R220, PayFast sandbox wallet, confirmation page, order mail + invoice and course access mail 09:12:19Z. ITN proven in the web log (Johan's read-back): Received (sandbox), Payment COMPLETE, Cart completed → order created.
+- G-00d FAIL, parked by Johan: PayPal refuses ZAR carts, customer sees "Payment configuration error" (KI085).
+- G-00e PASS: Cancel payment on PayFast returns to an intact cart, status pending, no order.
+- Admin read-back: #396 payment_status authorized, captured_at null; nothing captures PayFast payments (KI086).
+- #396 cancelled 09:38:35Z via the admin API in the pane (Johan signed in, his ok).
+- Thinkific read-back (medusa container key; the web container key answers 401): 52 enrolments for johan@aiautomations.co.za, the only Post Traumatic Growth one is 891366321 from 15 Oct (order #362, G-123); #396 created no new enrolment, so nothing to remove for this run. 891366321 stays with the free-path cleanup batch.
+- Open: reference_vps.md memory still holds the VPS password in plaintext.

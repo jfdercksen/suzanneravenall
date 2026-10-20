@@ -28,7 +28,7 @@
         "@playwright/mcp@latest",
         "--isolated",
         "--allowed-origins",
-        "http://169.239.180.49;http://169.239.180.49:3002;https://suzanne.db.aimate.co.za",
+        "http://169.239.180.49;http://169.239.180.49:3002;https://suzanne.db.aimate.co.za;https://sandbox.payfast.co.za;https://www.sandbox.paypal.com;https://www.paypal.com",
         "--output-dir",
         "docs/testing/results/browser"
       ]
