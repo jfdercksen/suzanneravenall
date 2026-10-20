@@ -182,12 +182,16 @@ class PayFastPaymentProvider extends AbstractPaymentProvider<PayFastOptions> {
   async refundPayment(
     input: RefundPaymentInput
   ): Promise<RefundPaymentOutput> {
-    // PayFast refunds are initiated via the PayFast merchant portal
-    // Automatic refund API is available on PayFast Pro accounts only
+    // No money moves here: this account has no PayFast refund API. This call
+    // only records a refund that staff have already made in the PayFast
+    // merchant portal (admin: Refund on the payment). An admin cancel no
+    // longer reaches it for a captured PayFast payment: the cancel route keeps
+    // the payment captured and flags the order instead (KI087,
+    // api/admin/orders/[id]/cancel/route.ts).
     return {
       data: {
         ...(input.data ?? {}),
-        refund_note: 'PayFast refunds must be initiated via the PayFast merchant portal',
+        refund_note: 'Recorded only: the refund itself is made in the PayFast merchant portal',
       },
     }
   }
