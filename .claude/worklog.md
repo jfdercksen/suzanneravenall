@@ -428,3 +428,9 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
   Cleanup owed: account johan+refix2-1019@ (plus earlier johan+portal@,
   johan+portal1019@, order #389).
 
+## 2026-10-20 KI079 closed: session orders book the matching Cal.com session (side session)
+- Cal.com: the box image has no API (calcom/cal.com web only), so the four event types were made in the UI after Johan signed in: session-30, session-45, session-60, session-90 (ids 4-7), Link meeting to the same Zoom room as the Discovery Call, minimum notice 1 day, 15 min buffer after, phone required, hidden from the profile. Profile still lists the stock "15 min meeting" (15min): not part of KI079, Johan to decide.
+- Code 31a6d73: packages/integrations/src/session-booking.ts (variant minutes, Alpha Mind 45, packages inherit, default 60; base CALCOM_SESSION_BOOKING_URL, now the user page, never the discovery call) used by order-placed.ts and /api/checkout/status + a Book Your Session button on the confirmation page; calcom-vtiger.ts logs session-NN bookings as "Session - ..." and leaves the stage alone (a paid buyer was being moved back to Discovery Call Booked). code-reviewer PASS WITH NOTES (applied: secondary Browse button, softer subject); tests green, 52-variant CSV test.
+- Deploy run 39392862768 web + medusa. CALCOM_SESSION_BOOKING_URL is NOT in the box infra/.env (printenv empty in both); the fallback NEXT_PUBLIC_CAL_URL + /suzanneravenall gives the same base. Add the line anyway.
+- J-02 re-walk PASS 7/7 (results/acceptance-J02-2026-10-20.*): orders #392-#395, booking mD2wEnpyLdctCPdbv2MUKF, Vtiger Event 18x625, all cancelled.
+- Open: J-NEW-3 phone field defaults to +1 (set the default country in Cal.com); the memory file reference_vps.md holds the VPS password in plaintext (against the Vaultwarden rule).
