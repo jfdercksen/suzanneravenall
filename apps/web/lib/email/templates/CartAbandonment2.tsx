@@ -34,7 +34,7 @@ export default function CartAbandonment2({
   return (
     <Html lang="en">
       <Head />
-      <Preview>Your transformation is one step away — your place is still reserved</Preview>
+      <Preview>Your transformation is one step away - your place is still reserved</Preview>
       <Body style={{ backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif', margin: 0, padding: 0 }}>
         <Container style={{ maxWidth: '600px', margin: '0 auto' }}>
 
@@ -61,7 +61,7 @@ export default function CartAbandonment2({
             </Heading>
             <Text style={{ color: '#334155', fontSize: '16px', lineHeight: '1.6', margin: 0 }}>
               {greeting} the programme you selected is designed to create lasting change.
-              Hundreds of clients have walked this path — and you were this close to beginning yours.
+              Hundreds of clients have walked this path - and you were this close to beginning yours.
             </Text>
           </Section>
 
@@ -69,7 +69,7 @@ export default function CartAbandonment2({
           <Section style={{ padding: '40px' }}>
             <Text style={{ color: '#334155', fontSize: '16px', lineHeight: '1.6', margin: '0 0 24px' }}>
               Everything you need is already waiting for you. The tools, the frameworks, the
-              breakthroughs — they&apos;re built into what you were about to purchase.
+              breakthroughs - they&apos;re built into what you were about to purchase.
             </Text>
 
             {/* Cart items */}

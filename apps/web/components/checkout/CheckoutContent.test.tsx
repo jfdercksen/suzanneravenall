@@ -98,6 +98,15 @@ describe('CheckoutContent contact step', () => {
     expect(screen.getByLabelText(/Email address/)).toHaveValue('ann@example.com')
   })
 
+  // KI057 / POPIA: the address typed here also gets the cart reminders, so say so.
+  it('tells the buyer about cart reminders and the unsubscribe link at the email field', () => {
+    render(<CheckoutContent />)
+    const notice = screen.getByText(/up to three reminders about the items in this/)
+    expect(notice).toHaveTextContent('Every reminder has an unsubscribe link')
+    expect(screen.getByLabelText(/Email address/)).toHaveAttribute('aria-describedby', 'email-consent')
+    expect(screen.getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute('href', '/legal/privacy')
+  })
+
   it('leaves the contact step empty for a guest', async () => {
     render(<CheckoutContent />)
     await waitFor(() => expect(readMemberContact).toHaveBeenCalled())

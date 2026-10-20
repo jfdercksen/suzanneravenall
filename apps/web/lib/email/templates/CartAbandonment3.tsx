@@ -38,14 +38,14 @@ export default function CartAbandonment3({
   return (
     <Html lang="en">
       <Head />
-      <Preview>Last chance to secure your place — your cart expires today</Preview>
+      <Preview>Last chance to secure your place - your cart expires today</Preview>
       <Body style={{ backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif', margin: 0, padding: 0 }}>
         <Container style={{ maxWidth: '600px', margin: '0 auto' }}>
 
           {/* Urgency banner */}
           <Section style={{ backgroundColor: NAVY, padding: '16px 40px', textAlign: 'center' }}>
             <Text style={{ color: '#f59e0b', fontSize: '12px', fontWeight: '700', letterSpacing: '0.15em', textTransform: 'uppercase', margin: 0 }}>
-              Final Reminder — Cart Expiring Today
+              Final Reminder - Cart Expiring Today
             </Text>
           </Section>
 
@@ -83,7 +83,7 @@ export default function CartAbandonment3({
                   &ldquo;{emailTestimonial.quote}&rdquo;
                 </Text>
                 <Text style={{ color: MEDIUM_GRAY, fontSize: '13px', fontWeight: '600', margin: 0 }}>
-                  — {emailTestimonial.attribution}
+                  - {emailTestimonial.attribution}
                 </Text>
               </Section>
             )}

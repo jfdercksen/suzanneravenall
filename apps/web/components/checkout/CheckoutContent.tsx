@@ -179,6 +179,7 @@ function InputField({
   required,
   autoComplete,
   onBlur,
+  describedBy,
 }: {
   label: string
   id: string
@@ -189,6 +190,8 @@ function InputField({
   required?: boolean
   autoComplete?: string
   onBlur?: () => void
+  /** id of a hint paragraph outside the field, read out with it */
+  describedBy?: string
 }) {
   const isTel = type === 'tel'
   return (
@@ -208,7 +211,7 @@ function InputField({
         pattern={isTel ? PHONE_PATTERN : undefined}
         autoComplete={autoComplete}
         aria-invalid={!!error}
-        aria-describedby={error ? `${id}-error` : undefined}
+        aria-describedby={[error ? `${id}-error` : '', describedBy ?? ''].filter(Boolean).join(' ') || undefined}
         className={`w-full px-4 py-3 rounded-xl border text-brand-ink placeholder-brand-muted text-sm transition-colors duration-200 outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent ${
           error ? 'border-red-600 bg-red-50' : 'border-brand-primary-300 bg-white hover:border-brand-primary-400'
         }`}
@@ -578,7 +581,19 @@ export default function CheckoutContent() {
                         error={errors.email}
                         required
                         autoComplete="email"
+                        describedBy="email-consent"
                       />
+                      {/* POPIA notice at the point of capture (KI057): the address saved
+                          here also receives the cart reminders. */}
+                      <p id="email-consent" className="-mt-3 text-xs leading-relaxed text-brand-muted">
+                        We send your order confirmation to this address. If you leave before
+                        paying, we may email you up to three reminders about the items in this
+                        cart. Every reminder has an unsubscribe link. See our{' '}
+                        <Link href="/legal/privacy" className="underline hover:text-brand-ink">
+                          Privacy Policy
+                        </Link>
+                        .
+                      </p>
                       <InputField
                         label="Phone number"
                         id="phone"

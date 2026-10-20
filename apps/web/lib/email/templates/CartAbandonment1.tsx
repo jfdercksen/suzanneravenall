@@ -65,7 +65,7 @@ export default function CartAbandonment1({
               {greeting}
             </Text>
             <Text style={{ color: '#334155', fontSize: '16px', lineHeight: '1.6', margin: '0 0 32px' }}>
-              It looks like you didn&apos;t complete your purchase. Your cart is still saved —
+              It looks like you didn&apos;t complete your purchase. Your cart is still saved,
               just pick up where you left off.
             </Text>
 
@@ -137,7 +137,7 @@ export default function CartAbandonment1({
             </Section>
 
             <Text style={{ color: MEDIUM_GRAY, fontSize: '14px', lineHeight: '1.6', margin: '0 0 8px' }}>
-              If you have any questions, simply reply to this email — I&apos;m happy to help.
+              If you have any questions, simply reply to this email - I&apos;m happy to help.
             </Text>
             <Text style={{ color: '#334155', fontSize: '14px', margin: '16px 0 0' }}>
               Warm regards,<br />

@@ -15,28 +15,48 @@ import { logError } from '@/lib/log'
  * pattern as quiz_subscribers.
  */
 
-export async function isEmailUnsubscribed(email: string): Promise<boolean> {
+export type UnsubscribeStatus = 'unsubscribed' | 'subscribed' | 'unavailable'
+
+/**
+ * The lookup with its failure kept visible. 'unavailable' means the list could
+ * not be read (no service-role client, or a query error), so the caller cannot
+ * know whether the address opted out. The cart reminders fail CLOSED on it
+ * (KI057: they go to anyone who typed an address at checkout, so a reminder
+ * that might reach an opted-out address is not sent; the caller retries).
+ */
+export async function unsubscribeStatus(email: string): Promise<UnsubscribeStatus> {
   const supabase = getServiceRoleClient()
   if (!supabase) {
-    // Misconfigured server (missing Supabase env). Fail open so a config
-    // gap degrades to pre-suppression behaviour instead of silently
-    // dropping every marketing email; the error log makes it visible.
-    logError('[email/suppression] Supabase service-role client unavailable, skipping unsubscribe check')
-    return false
+    logError('[email/suppression] Supabase service-role client unavailable, cannot read the unsubscribe list')
+    return 'unavailable'
   }
 
-  const { data, error } = await supabase
-    .from('email_unsubscribes')
-    .select('email')
-    .eq('email', email.trim().toLowerCase())
-    .maybeSingle()
+  try {
+    const { data, error } = await supabase
+      .from('email_unsubscribes')
+      .select('email')
+      .eq('email', email.trim().toLowerCase())
+      .maybeSingle()
 
-  if (error) {
-    logError(`[email/suppression] lookup failed: ${error.message}`, error)
-    return false
+    if (error) {
+      logError(`[email/suppression] lookup failed: ${error.message}`, error)
+      return 'unavailable'
+    }
+
+    return data !== null ? 'unsubscribed' : 'subscribed'
+  } catch (err) {
+    logError('[email/suppression] lookup threw', err)
+    return 'unavailable'
   }
+}
 
-  return data !== null
+/**
+ * Fail-open form for the membership renewal/expired routes and the lead
+ * welcome: a config gap degrades to pre-suppression behaviour instead of
+ * silently dropping every one of those mails; the error log makes it visible.
+ */
+export async function isEmailUnsubscribed(email: string): Promise<boolean> {
+  return (await unsubscribeStatus(email)) === 'unsubscribed'
 }
 
 export async function recordUnsubscribe(email: string, source: string): Promise<void> {

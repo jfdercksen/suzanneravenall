@@ -20,10 +20,9 @@ vi.mock('@/lib/email/cart-abandonment-3', () => ({
 const { mockCartStatus } = vi.hoisted(() => ({ mockCartStatus: vi.fn() }))
 vi.mock('@/lib/medusa/cart-status', () => ({ getCartStatus: mockCartStatus }))
 
-// The suppression lookup hits Supabase; the route tests are about dispatch, not opt-outs.
-vi.mock('@/lib/email/suppression', () => ({
-  isEmailUnsubscribed: vi.fn().mockResolvedValue(false),
-}))
+// The suppression lookup hits Supabase; mocked here, 'subscribed' by default.
+const { mockOptOut } = vi.hoisted(() => ({ mockOptOut: vi.fn() }))
+vi.mock('@/lib/email/suppression', () => ({ unsubscribeStatus: mockOptOut }))
 
 const { mockClaim, mockRelease, mockRecord } = vi.hoisted(() => ({
   mockClaim: vi.fn(),
@@ -79,6 +78,7 @@ describe('POST /api/email/cart-abandonment', () => {
     vi.stubEnv('N8N_WEBHOOK_SECRET', TEST_SECRET)
     vi.stubEnv('BREVO_API_KEY', 'test_brevo_key')
     mockCartStatus.mockResolvedValue('open')
+    mockOptOut.mockResolvedValue('subscribed')
     mockClaim.mockResolvedValue('claimed')
     mockRelease.mockResolvedValue(undefined)
     mockRecord.mockResolvedValue(undefined)
@@ -505,6 +505,26 @@ describe('POST /api/email/cart-abandonment', () => {
       expect(mockRelease).toHaveBeenCalledWith('cart_abc', 1)
       expect(mockRecord).not.toHaveBeenCalled()
       consoleSpy.mockRestore()
+    })
+
+    it('skips an unsubscribed address without claiming or sending', async () => {
+      mockOptOut.mockResolvedValue('unsubscribed')
+
+      const res = await POST(makeRequest(validBody) as any)
+
+      expect(await res.json()).toEqual({ skipped: true, reason: 'unsubscribed' })
+      expect(mockClaim).not.toHaveBeenCalled()
+      expect(mockSend1).not.toHaveBeenCalled()
+    })
+
+    it('answers 503 and sends nothing when the unsubscribe list cannot be read', async () => {
+      mockOptOut.mockResolvedValue('unavailable')
+
+      const res = await POST(makeRequest(validBody) as any)
+
+      expect(res.status).toBe(503)
+      expect(mockClaim).not.toHaveBeenCalled()
+      expect(mockSend1).not.toHaveBeenCalled()
     })
 
     it('checks the cart and the suppression list before claiming', async () => {

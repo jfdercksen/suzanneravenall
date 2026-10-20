@@ -4,7 +4,7 @@ import { sendCartAbandonmentEmail1 } from '@/lib/email/cart-abandonment-1'
 import { sendCartAbandonmentEmail2 } from '@/lib/email/cart-abandonment-2'
 import { sendCartAbandonmentEmail3 } from '@/lib/email/cart-abandonment-3'
 import { isEmailConfigured } from '@/lib/email/send'
-import { isEmailUnsubscribed } from '@/lib/email/suppression'
+import { unsubscribeStatus } from '@/lib/email/suppression'
 import { claimCartReminder, recordCartReminderEmailId, releaseCartReminder } from '@/lib/email/cart-reminder-log'
 import type { CartEmailData, CartItem } from '@/lib/email/types'
 import { getCartStatus } from '@/lib/medusa/cart-status'
@@ -125,9 +125,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ skipped: true, reason: `cart_${cartStatus}` })
   }
 
-  // POPIA: cart-abandonment emails are marketing — honour the suppression list.
-  if (await isEmailUnsubscribed(email)) {
+  // POPIA: cart-abandonment emails are marketing, so honour the suppression
+  // list, and fail closed when it cannot be read: 503 makes the caller retry
+  // later instead of mailing an address that may have opted out (KI057).
+  const optOut = await unsubscribeStatus(email)
+  if (optOut === 'unsubscribed') {
     return NextResponse.json({ skipped: true, reason: 'unsubscribed' })
+  }
+  if (optOut === 'unavailable') {
+    return NextResponse.json({ error: 'Unsubscribe list unavailable' }, { status: 503 })
   }
 
   // n8n and the Medusa job overlap during the cutover; a retried request may
