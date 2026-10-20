@@ -86,6 +86,8 @@ services:
     environment:
       DATABASE_URL: ${MEDUSA_DATABASE_URL}
       NODE_ENV: production
+      # KI090: V8 defaults to a 524 MB heap here and idle Medusa sits near it; leave headroom inside the 1g limit
+      NODE_OPTIONS: --max-old-space-size=768
       MEDUSA_ADMIN_ONBOARDING_TYPE: ${MEDUSA_ADMIN_ONBOARDING_TYPE}
       JWT_SECRET: ${JWT_SECRET}
       COOKIE_SECRET: ${COOKIE_SECRET}
