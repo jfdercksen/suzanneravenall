@@ -146,11 +146,18 @@ class PayFastPaymentProvider extends AbstractPaymentProvider<PayFastOptions> {
   ): Promise<AuthorizePaymentOutput> {
     const sessionData = input.data as unknown as PayFastSessionData
 
-    // Authorized when ITN has confirmed the payment (status set by getWebhookActionAndData)
-    if (sessionData?.status === 'authorized') {
+    // The session reads 'authorized' only when initiatePayment saw a valid ITN
+    // proof, i.e. PayFast has already taken the money (a COMPLETE ITN is a
+    // settled payment, there is no separate capture step). Returning 'captured'
+    // makes Medusa record the capture as part of authorisation, so the order
+    // reads as paid instead of sitting at Authorized with nothing captured
+    // (KI086). Medusa skips authorisation for a session that already has a
+    // payment, so ITN retries cannot capture twice. 'captured' is accepted too
+    // in case the session data was already moved on.
+    if (sessionData?.status === 'authorized' || sessionData?.status === 'captured') {
       return {
-        status: 'authorized',
-        data: { ...input.data },
+        status: 'captured',
+        data: { ...input.data, status: 'captured' },
       }
     }
 

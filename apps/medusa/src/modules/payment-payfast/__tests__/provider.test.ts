@@ -52,3 +52,49 @@ describe('PayFast provider session authorisation', () => {
     expect(await statusFor({ cart_id: 'cart_1', pf_payment_id: '9', amount_cents: 16500, itn_proof: proof('cart_2', '9', 16500) })).toBe('pending')
   })
 })
+
+describe('PayFast provider authorisation and capture (KI086)', () => {
+  async function authorizeFor(data: Record<string, unknown>) {
+    const session = await provider.initiatePayment({ amount: 16500, currency_code: 'zar', data, context: {} } as never)
+    return provider.authorizePayment({ data: session.data, context: {} } as never)
+  }
+
+  it('reports a verified ITN payment as captured so Medusa records the capture', async () => {
+    const out = await authorizeFor({ cart_id: 'cart_1', pf_payment_id: '9', amount_cents: 16500, itn_proof: proof('cart_1', '9', 16500) })
+    expect(out.status).toBe('captured')
+    expect((out.data as { status: string }).status).toBe('captured')
+  })
+
+  it('keeps an unverified session pending, so it is neither authorised nor captured', async () => {
+    const out = await authorizeFor({ cart_id: 'cart_1' })
+    expect(out.status).toBe('pending')
+  })
+
+  it('keeps a forged proof pending', async () => {
+    const out = await authorizeFor({ cart_id: 'cart_1', pf_payment_id: '9', amount_cents: 16500, itn_proof: proof('cart_1', '9', 16500, 'guess') })
+    expect(out.status).toBe('pending')
+  })
+
+  it('stays captured when authorisation runs again on already captured data', async () => {
+    const out = await provider.authorizePayment({ data: { cartId: 'cart_1', status: 'captured' }, context: {} } as never)
+    expect(out.status).toBe('captured')
+  })
+
+  it('reads captured session data back as captured', async () => {
+    expect(await provider.getPaymentStatus({ data: { status: 'captured' } } as never)).toEqual({ status: 'captured' })
+  })
+})
+
+describe('PayFast provider updatePayment (KI086)', () => {
+  it('re-checks the proof, so an update with a forged proof never reaches captured', async () => {
+    const out = await provider.updatePayment({
+      amount: 16500,
+      currency_code: 'zar',
+      data: { cart_id: 'cart_1', pf_payment_id: '9', amount_cents: 16500, itn_proof: proof('cart_1', '9', 16500, 'guess'), status: 'captured' },
+      context: {},
+    } as never)
+    expect((out.data as { status: string }).status).toBe('pending')
+    const auth = await provider.authorizePayment({ data: out.data, context: {} } as never)
+    expect(auth.status).toBe('pending')
+  })
+})
