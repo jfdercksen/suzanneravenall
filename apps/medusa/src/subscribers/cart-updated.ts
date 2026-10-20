@@ -1,61 +1,36 @@
 import type { SubscriberArgs, SubscriberConfig } from '@medusajs/framework'
 import { ContainerRegistrationKeys } from '@medusajs/framework/utils'
+import { maskEmail } from '@suzanne/integrations'
+import {
+  cartPayload,
+  cartRecoveryMode,
+  isRecoverable,
+  loadCart,
+  recordCartActivity,
+  type QueryGraph,
+} from '../automations/cart-recovery'
+import { dryRun } from '../automations/config'
+import { getCartRecoveryStore } from '../automations/runtime'
+
+/**
+ * cart.updated -> abandoned-cart reminders (n8n migration step 4), per
+ * AUTOMATION_CART_RECOVERY (src/automations/cart-recovery.ts):
+ *
+ *   code - upsert the cart_recovery row (the unique cart_id is the debounce;
+ *          reminder 1 is due 1 h after the LAST activity); the reminders are
+ *          sent by jobs/cart-recovery.ts
+ *   n8n  - post the cart to the n8n webhook as before (30 min debounce)
+ *   off  - nothing
+ */
 
 const N8N_BASE_URL = (process.env.N8N_WEBHOOK_URL ?? 'http://n8n:5678').replace(/\/$/, '')
 const N8N_WEBHOOK_SECRET = process.env.N8N_WEBHOOK_SECRET ?? ''
-// NEXT_PUBLIC_SITE_URL is passed to the Medusa container in docker-compose.yml
-const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  'https://suzanneravenall.com'
-).replace(/\/$/, '')
 
-// 30-minute debounce: cart.updated fires on every cart mutation (item add,
+// n8n mode only: cart.updated fires on every cart mutation (item add,
 // quantity change, coupon apply, etc.). This gate ensures n8n is called at
 // most once per 30 minutes per cart to avoid flooding the abandonment workflow.
 const DEBOUNCE_MS = 30 * 60 * 1000
 const queuedCarts = new Map<string, number>()
-
-interface CartItem {
-  id: string
-  title: string
-  variant_title?: string | null
-  quantity: number | string
-  unit_price: number | string
-  thumbnail?: string | null
-}
-
-interface CartName {
-  first_name?: string | null
-}
-
-interface Cart {
-  id: string
-  email?: string | null
-  completed_at?: string | Date | null
-  customer?: CartName | null
-  billing_address?: CartName | null
-  shipping_address?: CartName | null
-  items?: CartItem[] | null
-  total?: number | string | null
-  currency_code?: string | null
-}
-
-function firstNameOf(cart: Cart): string {
-  // Guest carts carry the name on the address, not on a customer record.
-  return (
-    cart.customer?.first_name ||
-    cart.billing_address?.first_name ||
-    cart.shipping_address?.first_name ||
-    ''
-  )
-}
-
-function totalOf(cart: Cart, items: CartItem[]): number {
-  const total = Number(cart.total)
-  if (Number.isFinite(total) && cart.total !== null && cart.total !== undefined) return total
-  // Totals are computed fields; fall back to the line sum if they were not returned.
-  return items.reduce((sum, item) => sum + Number(item.unit_price) * Number(item.quantity), 0)
-}
 
 export default async function cartUpdatedHandler({
   event: { data },
@@ -64,40 +39,43 @@ export default async function cartUpdatedHandler({
   const cartId = data.id
   if (!cartId) return
 
-  // Debounce: skip if this cart was already queued within the last 30 minutes
-  const lastQueued = queuedCarts.get(cartId)
-  if (lastQueued !== undefined && Date.now() - lastQueued < DEBOUNCE_MS) return
-  queuedCarts.set(cartId, Date.now())
+  const mode = cartRecoveryMode()
+  if (mode === 'off') return
+
+  if (mode === 'n8n') {
+    // Debounce: skip if this cart was already queued within the last 30 minutes
+    const lastQueued = queuedCarts.get(cartId)
+    if (lastQueued !== undefined && Date.now() - lastQueued < DEBOUNCE_MS) return
+    queuedCarts.set(cartId, Date.now())
+  }
 
   try {
-    // Customer and addresses are module links, not relations of the Cart module:
-    // retrieveCart(..., { relations: ['customer'] }) throws on every call. Use Query.
-    const query = container.resolve(ContainerRegistrationKeys.QUERY)
-    const { data: carts } = await query.graph({
-      entity: 'cart',
-      fields: [
-        'id',
-        'email',
-        'completed_at',
-        'currency_code',
-        'total',
-        'items.*',
-        'customer.first_name',
-        'billing_address.first_name',
-        'shipping_address.first_name',
-      ],
-      filters: { id: cartId },
-    })
-    const cart = carts[0] as unknown as Cart | undefined
+    const query = container.resolve(ContainerRegistrationKeys.QUERY) as unknown as QueryGraph
+    const cart = await loadCart(query, cartId)
+    const completed = Boolean(cart?.completed_at)
 
     // Not recoverable: gone, already ordered, no address to write to, or empty.
-    const items = cart?.items ?? []
-    if (!cart || cart.completed_at || !cart.email || items.length === 0) {
+    if (!isRecoverable(cart)) {
       queuedCarts.delete(cartId)
+      // Close an open sequence now rather than at its next send (the route re-checks either way).
+      if (mode === 'code' && completed && !dryRun()) {
+        await getCartRecoveryStore(container).finish(cartId, 'completed', 'cart_completed')
+      }
       return
     }
 
-    const cartUrl = `${SITE_URL}/checkout?cartId=${cartId}`
+    if (mode === 'code') {
+      if (dryRun()) {
+        console.info(`[cart-updated:dry-run] would record activity for cart ${cartId} (${maskEmail(String(cart.email))})`)
+        return
+      }
+      const { record, created } = await recordCartActivity(getCartRecoveryStore(container), cart)
+      console.info(
+        `[cart-updated] cart ${cartId} ${created ? 'recovery started' : 'activity recorded'}: ` +
+          `step=${record.step} status=${record.status} next_send_at=${record.next_send_at?.toISOString() ?? 'none'}`
+      )
+      return
+    }
 
     void fetch(`${N8N_BASE_URL}/webhook/cart-updated`, {
       method: 'POST',
@@ -105,22 +83,7 @@ export default async function cartUpdatedHandler({
         'Content-Type': 'application/json',
         ...(N8N_WEBHOOK_SECRET ? { 'x-webhook-secret': N8N_WEBHOOK_SECRET } : {}),
       },
-      body: JSON.stringify({
-        cartId,
-        email: cart.email,
-        firstName: firstNameOf(cart),
-        items: items.map((item) => ({
-          id: item.id,
-          title: item.title,
-          variant_title: item.variant_title ?? undefined,
-          quantity: Number(item.quantity),
-          unit_price: Number(item.unit_price),
-          thumbnail: item.thumbnail ?? undefined,
-        })),
-        total: totalOf(cart, items),
-        currency: (cart.currency_code ?? 'ZAR').toUpperCase(),
-        cartUrl,
-      }),
+      body: JSON.stringify(cartPayload(cart)),
     })
       .then((res) => {
         if (!res.ok) {
@@ -138,7 +101,7 @@ export default async function cartUpdatedHandler({
       })
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err)
-    console.error(`[cart-updated] failed to retrieve cart ${cartId}: ${message}`)
+    console.error(`[cart-updated] failed for cart ${cartId}: ${message}`)
     queuedCarts.delete(cartId)
   }
 }

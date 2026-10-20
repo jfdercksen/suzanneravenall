@@ -11,10 +11,12 @@
 import { MedusaService } from "@medusajs/framework/utils"
 import AutomationJob from "./models/automation-job"
 import AutomationModeState from "./models/automation-mode-state"
+import CartRecovery from "./models/cart-recovery"
 
 class AutomationsModuleService extends MedusaService({
   AutomationJob,
   AutomationModeState,
+  CartRecovery,
 }) {}
 
 export default AutomationsModuleService

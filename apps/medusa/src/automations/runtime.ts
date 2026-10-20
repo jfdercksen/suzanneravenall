@@ -16,6 +16,13 @@ import {
 import { AutomationQueue } from "../modules/automations/queue"
 import { PgJobStore, type RawSql } from "../modules/automations/pg-store"
 import { MemoryJobStore } from "../modules/automations/memory-store"
+import { PgCartRecoveryStore, type CartRecoveryStore } from "../modules/automations/cart-recovery-store"
+import {
+  cartRecoveryEmailHandler,
+  loadCart,
+  sendCartReminderViaWeb,
+  type QueryGraph,
+} from "./cart-recovery"
 import { dryRun, modeFor } from "./config"
 import {
   courseAccessEmailHandler,
@@ -93,6 +100,23 @@ export function buildHandlers(deps: AutomationDeps) {
   return [thinkificEnrolmentHandler(deps), courseAccessEmailHandler(deps), vtigerOrderHandler(deps)]
 }
 
+let cartStore: CartRecoveryStore | null = null
+
+/** The cart_recovery rows on Medusa's Postgres (n8n migration step 4). */
+export function getCartRecoveryStore(container: Resolver): CartRecoveryStore {
+  if (!cartStore) cartStore = new PgCartRecoveryStore(container.resolve<RawSql>(ContainerRegistrationKeys.PG_CONNECTION))
+  return cartStore
+}
+
+function cartRecoveryHandler(container: Resolver) {
+  return cartRecoveryEmailHandler({
+    store: () => getCartRecoveryStore(container),
+    loadCart: (cartId) => loadCart(container.resolve<QueryGraph>(ContainerRegistrationKeys.QUERY), cartId),
+    sendReminder: (body) => sendCartReminderViaWeb(body),
+    logger,
+  })
+}
+
 let queue: AutomationQueue | null = null
 
 /** The durable queue (Medusa Postgres). Jobs whose flag is "off" are held. */
@@ -101,7 +125,7 @@ export function getAutomationQueue(container: Resolver): AutomationQueue {
     const db = container.resolve<RawSql>(ContainerRegistrationKeys.PG_CONNECTION)
     queue = new AutomationQueue({
       store: new PgJobStore(db),
-      handlers: buildHandlers(realDeps()),
+      handlers: [...buildHandlers(realDeps()), cartRecoveryHandler(container)],
       alert: (a) => staffAlerter().send(a),
       logger,
       isRunnable: (automation) => !dryRun() && modeFor(automation) !== "off",
@@ -132,4 +156,5 @@ export function createDryRunQueue(): AutomationQueue {
 export function resetAutomationRuntime(): void {
   queue = null
   alerter = null
+  cartStore = null
 }

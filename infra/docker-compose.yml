@@ -121,6 +121,10 @@ services:
       # n8n = unchanged behaviour; code = our own durable queue; off = nobody.
       AUTOMATION_THINKIFIC: ${AUTOMATION_THINKIFIC:-n8n}
       AUTOMATION_ORDER_VTIGER: ${AUTOMATION_ORDER_VTIGER:-n8n}
+      # n8n migration step 4: abandoned-cart reminders (cart_recovery rows +
+      # jobs/cart-recovery.ts). Empty delays = "1h,23h,48h".
+      AUTOMATION_CART_RECOVERY: ${AUTOMATION_CART_RECOVERY:-n8n}
+      CART_RECOVERY_DELAYS: ${CART_RECOVERY_DELAYS:-}
       AUTOMATION_ALERT_EMAIL: ${AUTOMATION_ALERT_EMAIL:-}
       # Medusa's own dry-run switch, separate from the web app's
       # AUTOMATION_DRY_RUN so a shadow run here never pauses live lead sync.
