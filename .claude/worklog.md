@@ -487,3 +487,11 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
 - c562f9c (Johan's ok): NODE_OPTIONS=--max-old-space-size=768 on the medusa service in infra/docker-compose.yml. Deploy run 39453501231 (medusa) success. In the container: heap_size_limit 780 MB (was 524), healthy, RSS 639 MiB after start. No code-reviewer pass for this one-line compose setting.
 - #408 cancelled 16:09Z via the admin API in the Playwright browser (Johan signed in): 200, no restart, no heap error, RSS 572 MiB. All seven test orders #399, #400, #401, #403, #404, #408 and #411 read canceled; #411's payment is still captured (KI087).
 - Watch: the container memory limit stays 1g; raise it together with the heap if Medusa grows.
+
+## 2026-10-20 Nightly re-walk pilot (side session, section F of /acceptance)
+- aimate-db1 prepped: Node 22.23.3 (NodeSource), Claude Code 2.1.304, @playwright/mcp 0.0.83 local in /srv/qa/suzanne (Playwright 1.64.0-alpha, chromium-1247 + system deps), jq 1.8.1. /srv/qa/suzanne with prompts/, out/, artifacts/, .env (chmod 600, gitignored) holding ANTHROPIC_API_KEY placed by Johan from the vault (first key rejected as invalid, second works).
+- Runner infra/qa-nightly/ (qa.mcp.json, findings.schema.json, prompts/nightly.md, run.sh, README with the 02:17 SAST cron line, NOT installed). Not committed: waits for Johan's ok.
+- Differences from reference.md section F: explicit Playwright tool list (the wildcard grants browser_run_code_unsafe, which the walker did try in run 1, denied), --restricted, --browser chromium, --snapshot-mode none, --image-responses omit, no Read/Write needed, optional summary object in the schema, CRON_TZ. Note for the EA to port: side-session-notes/.../nightly-rewalk-pilot-2026-10-20.md.
+- Pilot: run 1 $0.72 / 6 min 31 s / 140 pages 328 links / 23 rows (3 FAIL minor, 2 N/A); 2 were brief errors (footer count 33 not 35, wrong product handle) plus the GA wording, all tuned; run 2 $0.72 / 7 min 31 s, only the real finding left.
+- KI091 new: /community title carries the site name twice; fixed in apps/web/app/community/page.tsx (title 'Community'), not committed or deployed.
+- Recorded in ACCEPTANCE.md (Results log "Nightly re-walk"). Nothing sent; summary is drafted for Johan.

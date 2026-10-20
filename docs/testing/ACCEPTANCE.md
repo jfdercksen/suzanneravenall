@@ -39,7 +39,7 @@ Rules: one section at a time; every item gets PASS, FAIL (KI number), N/A or BLO
 | K | Automations | WRITE | 12 automations in code (Medusa outbox jobs, scheduled jobs, web routes) per `docs/n8n-migration-plan.md` | PART 20 Oct: in code and proven K-01, K-02, K-03 (CRM read-back 20 Oct), K-04, K-07, K-08; K-09 and K-13 retired; K-05, K-06, K-10, K-11, K-12 not yet migrated (plan steps 5, 9, 10); n8n stays on until those flags are code or off |
 | L | Data correctness | READ | catalogue parity vs current site (ZAR + USD), programme shop links, search index count | DONE 14 Oct (parity 0 diff on 138; 4 USD await Shayna) |
 | M | Legal and technical | READ | legal pages, cookie notice, robots, sitemap, health, analytics id, error tracker, headers | DONE 1 Oct; LAUNCH ITEMS: NEXT_PUBLIC_SITE_URL, GA id, canonical, duplicate headers |
-| N | Phone and desktop look | READ | 207 pages at 375 and 1280, header types by eye | DONE 1 Oct (look-scan); portal pages move to I |
+| N | Phone and desktop look | READ | 207 pages at 375 and 1280, header types by eye | DONE 1 Oct (look-scan); portal pages move to I. Sections A B C D L M N are re-walked unattended by the nightly runner (pilot 20 Oct, see Results log) |
 
 ## Items
 
@@ -384,6 +384,26 @@ One PayFast sandbox order in the built-in browser pane: #397, Breakthrough Trilo
 - Box: ITN Received (sandbox), Payment COMPLETE, Cart completed and order created; Medusa /complete 200, order.placed processed, vtiger_order job done. Order mail "Your transformation begins - Order #411" 15:51:24Z with the invoice attached.
 - KI087 live proof on #411 (Johan signed in to the admin): POST /admin/orders/:id/cancel 200, status canceled, payment_status captured, refunded 0, no refund rows, metadata payfast_refund_required true, staff alert sent. PASS.
 - Cleanup: cancels of #399, #400, #401, #403 and #404 answered 200. Medusa ran out of heap on the next cancel (#408, KI090) and restarted. #408 is still pending (no payment, no email). After the KI090 fix (c562f9c, heap 780 MB) #408 was cancelled at 16:09Z (200); all seven test orders #399, #400, #401, #403, #404, #408 and #411 read canceled, #411 with its payment still captured.
+
+### Nightly re-walk, pilot 20 Oct 2026 (sections A B C D L M N, unattended on aimate-db1)
+
+Runner `infra/qa-nightly/` (qa.mcp.json, findings.schema.json, prompts/nightly.md, run.sh, README), deployed to `/srv/qa/suzanne` on aimate-db1: Node 22.23.3, Claude Code 2.1.304, Playwright MCP 0.0.83 (Playwright 1.64.0-alpha, headless chromium-1247), `claude -p --bare --restricted --model sonnet`, explicit Playwright tool list, `dontAsk`, `--max-budget-usd 5`, JSON by schema F. Read-only: no form, cart, login or mail; records_created empty in both runs. Cron NOT installed.
+
+| Run | Start (UTC) | Wall | Cost | Turns | Pages / links | Rows | Not PASS |
+|---|---|---|---|---|---|---|---|
+| 1 | 17:01:36 | 6 min 31 s | $0.72 | 132 | 140 / 328 | 23 | C-02 FAIL minor, D-02 FAIL minor, L-02 FAIL minor, M-05 N/A, M-06 N/A |
+| 2 (brief tuned) | 17:09:21 | 7 min 31 s | $0.72 | 118 | 140 / 328 | 24 | C-02 FAIL minor (+ duplicate NEW-1), M-05 N/A, M-06 N/A |
+
+Triage against the matrix. Real finding: C-02, `/community` title "Community \| Suzanne Ravenall \| Dr. Suzanne Ravenall" (KI091, fixed in code, not deployed). False positives tuned out of the brief after run 1:
+- D-02: the footer has 33 anchors (24 internal, 9 external). The 15 Oct "35" was a different count, and `Footer.tsx` has not changed since 14 Oct.
+- L-02: the brief named `/shop/getting-unstuck`, which does not exist; the product is `/shop/getting-unstuck-self-study`, priced R1 660,00.
+- M-05: the app drops the G-XXXXXXXXXX placeholder, so the launch item reads "no G- id in the page".
+
+Run 2 confirmed all three clean. Headless behaviour: 0 retries, 2 snapshots per run, no flakiness. The only blocked requests were the guard rail on the Cal.com embed (:3002) and external origins, by design. Run 1 tried `browser_run_code_unsafe` and was denied by the allowlist.
+
+Everything else PASS in both runs: 140/140 sitemap pages 200 with one h1, 0 broken internal links, no placeholder text, header 23 links, phone menu, Ctrl+K and /search, both 404s with title and status, 58 products = /shop count, prices in `R1 660,00` form, legal pages, cookie notice, robots, health, no overflow at 375 or 1280, h1 at most 60 px.
+
+Results: `/srv/qa/suzanne/out/run1/` and `out/2026-10-20.{json,log}`, `-summary.md`; screenshots in `artifacts/2026-10-20-run1/` and `artifacts/2026-10-20/`.
 
 ### Section K row K-04, 20 Oct 2026 13:58-14:12Z (qa-e2e walker for the carts, controller for mail and box read-back)
 
