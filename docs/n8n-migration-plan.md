@@ -373,7 +373,7 @@ Order follows "customer depends on it" first, lowest risk within that, then repo
 
 Customer-critical slice (steps 0 to 5): about 54 h. Calendar time is longer than the hours because of the shadow and watch windows (about 2 to 3 weeks if steps overlap).
 
-### Step status (updated 19 Oct 2026)
+### Step status (updated 20 Oct 2026)
 
 | Step | Status |
 |---|---|
@@ -384,6 +384,7 @@ Customer-critical slice (steps 0 to 5): about 54 h. Calendar time is longer than
 | 11 Vibe monitor | RETIRED 16 Oct 2026 (Johan) |
 | 4 Cart abandonment | Built and deployed 20 Oct: commits 09286a2 (medusa), 9165f40 (web), deploy run 39431344169. Supabase `cart_reminder_sends` applied on aimate-db1. Flag `AUTOMATION_CART_RECOVERY=code` on the review box since 14:12 UTC 20 Oct, delays default. Live PASS (ACCEPTANCE K-04): 3 reminders in order, none after the order, replay answered already_sent. Open: deactivate the n8n cart-abandonment-recovery workflow (its chains are deduped by the sent-log meanwhile); consent wording at checkout (KI057, section 8 q5) still to be approved |
 | 5, 9, 10 | Not started; 5 (memberships), 9 (Sage) and 10 (weekly report) wait on Johan's answers |
+| 12 Decommission (progress) | 20 Oct: Cart Abandonment Recovery deactivated by the EA session (15:10). Next five, all superseded by code: medusa-thinkific-enrollment-v1, medusa-order-to-vtiger-v1, lead-magnet-to-vtiger-v1, calcom-booking-to-vtiger-v1, se0AXYg6Msynwb7R (MeiliSearch Content Sync). Flags read on the box 20 Oct before the change: medusa AUTOMATION_THINKIFIC=code, AUTOMATION_ORDER_VTIGER=code, AUTOMATION_CART_RECOVERY=code; web LEADS_AUTOMATION=code; AUTOMATION_CALCOM and AUTOMATION_SEARCH_SYNC unset, default `code`, and both n8n call paths were removed from the code on 16 Oct. Active list BEFORE (n8n list:workflow --active=true, 20 Oct): medusa-order-to-sage-v1, c2gNZ2WwVmVawq1t Weekly Business Report, yYL9XPK8ZeJwB0OR Sage Invoice Sync Daily Audit, dTulmbtUNRXRjqy5 Membership Renewal Check, 1d2MSHtGvEnTXOL7 Membership Expiry Check, se0AXYg6Msynwb7R MeiliSearch Content Sync, medusa-order-to-vtiger-v1, lead-magnet-to-vtiger-v1, calcom-booking-to-vtiger-v1, medusa-thinkific-enrollment-v1, ZGO2e2dDVa7QXoEq Bunny Video Access Logger (11). Inactive: Cart Abandonment Recovery, Vibe Marketing Sync Monitor. Deactivation of the five: PENDING Johan's go (the box command was held for approval in the side session); expected AFTER list: Sage order, Sage daily audit, Weekly Business Report, Membership Renewal, Membership Expiry, Bunny Video Access Logger (6) |
 
 Quick wins that need no migration and could ship now: set `AUTOMATION_SAGE`-equivalent behaviour today by deactivating the n8n Sage workflow (stops a failure alert per order); re-import the fixed lead workflow so leads reach Vtiger until step 3 lands.
 
