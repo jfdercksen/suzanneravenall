@@ -1,7 +1,7 @@
 import type { SubscriberArgs, SubscriberConfig } from '@medusajs/framework'
 import { ContainerRegistrationKeys } from '@medusajs/framework/utils'
 import { createClient } from '@supabase/supabase-js'
-import { orderHasCourses } from '@suzanne/integrations'
+import { bookerName, orderHasCourses, sessionBookingUrl } from '@suzanne/integrations'
 import ws from 'ws'
 import { MEMBERSHIPS_MODULE } from '../modules/memberships'
 import type MembershipsModuleService from '../modules/memberships/service'
@@ -16,8 +16,9 @@ const WEB_BASE_URL = (process.env.WEB_BASE_URL ?? 'http://web:3000').replace(/\/
 const VIBE_MARKETING_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
 // docker-compose passes unset variables as empty strings, so || not ??.
 const CAL_BASE_URL = (process.env.NEXT_PUBLIC_CAL_URL || 'https://cal.suzanneravenall.com').replace(/\/$/, '')
-const CALCOM_SESSION_BOOKING_URL =
-  process.env.CALCOM_SESSION_BOOKING_URL || `${CAL_BASE_URL}/suzanneravenall/discovery-call`
+// The Cal.com user page the session event types hang off (session-30, -45,
+// -60, -90); never the discovery call, which is free and 30 minutes (KI079).
+const CALCOM_SESSION_BOOKING_URL = process.env.CALCOM_SESSION_BOOKING_URL || `${CAL_BASE_URL}/suzanneravenall`
 const N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL = (process.env.N8N_THINKIFIC_ENROLLMENT_WEBHOOK_URL ?? '').replace(/\/$/, '')
 
 if (!N8N_WEBHOOK_SECRET) {
@@ -32,12 +33,14 @@ interface OrderCategory {
 }
 
 interface OrderItemProduct {
+  title?: string
   metadata?: Record<string, unknown>
   categories?: OrderCategory[]
   handle?: string
 }
 
 interface OrderItemVariant {
+  title?: string
   product?: OrderItemProduct
 }
 
@@ -51,10 +54,16 @@ interface OrderCustomer {
   last_name?: string
 }
 
+interface OrderAddressName {
+  first_name?: string | null
+  last_name?: string | null
+}
+
 interface RetrievedOrder {
   id: string
   customer_id: string
   customer?: OrderCustomer
+  billing_address?: OrderAddressName | null
   items?: OrderItem[]
   [key: string]: unknown
 }
@@ -170,6 +179,26 @@ export function detectOrderProductType(items: OrderItem[]): ProductType {
   }
 
   return 'other'
+}
+
+// The "Book Your Session" link for a session order: the Cal.com event that
+// matches the first session line's length, with the buyer's name and email
+// filled in (KI079).
+export function orderSessionBookingUrl(
+  order: Pick<RetrievedOrder, 'items' | 'customer' | 'billing_address'>,
+  baseUrl: string = CALCOM_SESSION_BOOKING_URL
+): string {
+  const items = order.items ?? []
+  const line = items.find((item) => detectOrderProductType([item]) === 'session') ?? items[0]
+  const product = line?.variant?.product
+  const name =
+    bookerName(order.customer?.first_name, order.customer?.last_name) ??
+    bookerName(order.billing_address?.first_name, order.billing_address?.last_name)
+  return sessionBookingUrl(
+    baseUrl,
+    { productTitle: product?.title, productHandle: product?.handle, variantTitle: line?.variant?.title },
+    { name, email: order.customer?.email }
+  )
 }
 
 export function getHighestCategoryAccess(items: OrderItem[]): CategoryAccess | null {
@@ -711,7 +740,7 @@ export default async function orderPlacedHandler({
     const hasCourses = orderHasCourses(buildOrderSnapshot(order))
     const productType: ProductType = hasCourses ? (categoryType === 'live' ? 'live-course' : 'self-paced') : categoryType
     const isSessionOrder = categoryType === 'session'
-    const calBookingUrl = isSessionOrder ? CALCOM_SESSION_BOOKING_URL : null
+    const calBookingUrl = isSessionOrder ? orderSessionBookingUrl(order) : null
 
     // 1. n8n → Sage: fire-and-forget
     void fetch(`${N8N_BASE_URL}/webhook/medusa-order-placed`, {

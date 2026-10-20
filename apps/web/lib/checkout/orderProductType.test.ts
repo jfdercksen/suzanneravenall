@@ -86,7 +86,7 @@ describe('orderProductType (mirror of order-placed.ts)', () => {
 
 describe('confirmationNextSteps', () => {
   it('gives each product type its own steps', () => {
-    expect(confirmationNextSteps('session')).toMatch(/book your session/)
+    expect(confirmationNextSteps('session')).toMatch(/book your session/i)
     expect(confirmationNextSteps('self-paced')).toMatch(/course access email/)
     expect(confirmationNextSteps('live')).toMatch(/Zoom details/)
     expect(confirmationNextSteps('live-course')).toMatch(/course access email.*Zoom details/)

@@ -98,6 +98,7 @@ describe('GET /api/checkout/status', () => {
       orderNumber: 71,
       items: [{ title: 'Program 1', variant: 'Live via Zoom', quantity: 1, preorder: false }],
       productType: 'live-course',
+      bookingUrl: null,
     })
     const productsCall = fetchMock.mock.calls.map(([u]) => u).find((u) => u.includes('/store/products?'))
     expect(productsCall).toContain('id%5B%5D=prod_rr1')
@@ -129,7 +130,54 @@ describe('GET /api/checkout/status', () => {
       orderNumber: 72,
       items: [{ title: 'The Breakthrough Trilogy', variant: null, quantity: 2, preorder: true }],
       productType: 'other',
+      bookingUrl: null,
     })
+  })
+
+  it('gives a session order the matching Cal.com session event with the buyer filled in (KI079)', async () => {
+    process.env.CALCOM_SESSION_BOOKING_URL = 'http://cal-test:3002/suzanneravenall'
+    const fetchMock = vi.fn(async (url: string) => ({
+      ok: true,
+      status: 200,
+      json: async () => {
+        if (url.includes('/store/order-by-cart/')) return { display_id: 73 }
+        if (url.includes('/store/products?')) {
+          return {
+            products: [
+              {
+                id: 'prod_rrs',
+                handle: 'rapid-repatterning-session',
+                metadata: null,
+                categories: [{ handle: 'private-sessions' }],
+                variants: [{ id: 'variant_90', metadata: null }],
+              },
+            ],
+          }
+        }
+        return {
+          cart: {
+            id: CART_ID,
+            completed_at: '2026-10-20T10:00:00Z',
+            email: 'johan@aiautomations.co.za',
+            billing_address: { first_name: 'Johan', last_name: 'QA Test' },
+            items: [
+              { title: 'Rapid Repatterning Session', product_title: 'Rapid Repatterning Session', variant_title: '90 min online', quantity: 1, product_id: 'prod_rrs', variant_id: 'variant_90' },
+            ],
+          },
+        }
+      },
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+    try {
+      const res = await GET(makeRequest(CART_ID))
+      const body = await res.json()
+      expect(body.productType).toBe('session')
+      expect(body.bookingUrl).toBe(
+        'http://cal-test:3002/suzanneravenall/session-90?name=Johan+QA+Test&email=johan%40aiautomations.co.za'
+      )
+    } finally {
+      delete process.env.CALCOM_SESSION_BOOKING_URL
+    }
   })
 
   it('reports pending for a cart that is not an order yet', async () => {

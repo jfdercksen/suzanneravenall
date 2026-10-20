@@ -145,6 +145,53 @@ describe('bookingEventElement', () => {
   })
 })
 
+describe('session bookings (KI079)', () => {
+  const SESSION_BODY = {
+    triggerEvent: 'BOOKING_CREATED',
+    payload: {
+      ...V1_BODY.payload,
+      uid: 'bk_session_60',
+      type: 'session-60',
+      title: 'Session (60 min) between Dr Suzanne Ravenall and Jane Smith',
+      endTime: '2026-10-20T10:00:00.000Z',
+    },
+  }
+
+  it('reads the session-NN slug or the Session (NN min) title as a paid session', () => {
+    expect(parseCalcomBooking(SESSION_BODY)?.session).toBe(true)
+    const { type: _slug, ...noSlug } = SESSION_BODY.payload
+    expect(parseCalcomBooking({ payload: noSlug })?.session).toBe(true)
+    expect(parseCalcomBooking(V1_BODY)?.session).toBe(false)
+    expect(parseCalcomBooking(V2_BODY)?.session).toBe(false)
+  })
+
+  it('logs the Event as a session, not a discovery call', () => {
+    expect(bookingEventElement(parseCalcomBooking(SESSION_BODY)!, 'c', 'u')).toMatchObject({
+      subject: 'Session - Session (60 min) between Dr Suzanne Ravenall and Jane Smith',
+      duration_hours: '1',
+      duration_minutes: '00',
+    })
+  })
+
+  it('leaves an existing customer on their stage', async () => {
+    const { fake, c } = client({ contacts: [{ id: '12x7', email: 'jane.smith@example.com', firstname: 'Jane', lastname: 'Smith', leadsource: 'Shop', cf_pipeline_stage: 'Closed Won' }] })
+    const res = await syncBookingToVtiger(c, parseCalcomBooking(SESSION_BODY)!)
+    expect(res).toMatchObject({ contactId: '12x7', created: false })
+    expect(fake.created.filter((x) => x.elementType === 'Events')).toHaveLength(1)
+    expect(fake.ops()).not.toContain('revise')
+    expect(fake.ops()).not.toContain('update')
+    expect(fake.contacts[0]).toMatchObject({ cf_pipeline_stage: 'Closed Won' })
+  })
+
+  it('creates an unknown booker as a shop contact without the discovery-call stage', async () => {
+    const { fake, c } = client()
+    await syncBookingToVtiger(c, parseCalcomBooking(SESSION_BODY)!)
+    const contact = fake.created.find((x) => x.elementType === 'Contacts')!.element
+    expect(contact).toMatchObject({ leadsource: 'Shop' })
+    expect(contact).not.toHaveProperty('cf_pipeline_stage')
+  })
+})
+
 describe('syncBookingToVtiger', () => {
   it('creates a new contact with lead source and stage, then one Event', async () => {
     const { fake, c } = client()

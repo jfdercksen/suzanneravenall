@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { bookerName, sessionBookingUrl } from '@suzanne/integrations'
 import type { OrderProductType } from '@/lib/email/types'
 import { orderProductType, type OrderCategoryForType, type OrderLineForType } from '@/lib/checkout/orderProductType'
 import { isPreorder, variantLabel } from '@/lib/shop/lineItem'
@@ -44,8 +45,16 @@ async function fetchOrderNumber(cartId: string): Promise<number | null> {
   }
 }
 
+// The Cal.com user page the session event types hang off, as in the order mail
+// (apps/medusa order-placed). Server-only: read per request so the box env wins.
+function sessionBookingBase(): string {
+  const calUrl = (process.env.NEXT_PUBLIC_CAL_URL || 'https://cal.suzanneravenall.com').replace(/\/$/, '')
+  return process.env.CALCOM_SESSION_BOOKING_URL || `${calUrl}/suzanneravenall`
+}
+
 interface CartLine {
   title?: string | null
+  product_title?: string | null
   variant_title?: string | null
   subtitle?: string | null
   quantity?: number | null
@@ -96,7 +105,20 @@ async function fetchLineProducts(productIds: string[]): Promise<StoreProduct[]> 
   }
 }
 
-async function describeOrder(lines: CartLine[]): Promise<{ items: ConfirmationLine[]; productType: OrderProductType }> {
+interface CartBuyer {
+  email?: string | null
+  billing_address?: { first_name?: string | null; last_name?: string | null } | null
+  customer?: { first_name?: string | null; last_name?: string | null } | null
+}
+
+interface DescribedOrder {
+  items: ConfirmationLine[]
+  productType: OrderProductType
+  /** The session event to book on, with the buyer filled in; session orders only (KI079). */
+  bookingUrl: string | null
+}
+
+async function describeOrder(lines: CartLine[], buyer: CartBuyer): Promise<DescribedOrder> {
   const productIds = [...new Set(lines.map((l) => l.product_id).filter((id): id is string => Boolean(id)))]
   const products = new Map((await fetchLineProducts(productIds)).map((p) => [p.id, p]))
 
@@ -125,7 +147,30 @@ async function describeOrder(lines: CartLine[]): Promise<{ items: ConfirmationLi
     }
   })
 
-  return { items, productType: orderProductType(typed) }
+  const productType = orderProductType(typed)
+  let bookingUrl: string | null = null
+  // The first session line decides the length, as in the order mail.
+  const sessionIndex = productType === 'session' ? typed.findIndex((line) => orderProductType([line]) === 'session') : -1
+  const index = productType === 'session' ? Math.max(sessionIndex, 0) : -1
+  const line = index >= 0 ? lines[index] : undefined
+  if (line) {
+    bookingUrl = sessionBookingUrl(
+      sessionBookingBase(),
+      {
+        productTitle: line.product_title ?? line.title,
+        productHandle: typed[index]?.variant?.product?.handle,
+        variantTitle: line.variant_title,
+      },
+      {
+        name:
+          bookerName(buyer.customer?.first_name, buyer.customer?.last_name) ??
+          bookerName(buyer.billing_address?.first_name, buyer.billing_address?.last_name),
+        email: buyer.email,
+      }
+    )
+  }
+
+  return { items, productType, bookingUrl }
 }
 
 export async function GET(req: NextRequest) {
@@ -145,7 +190,9 @@ export async function GET(req: NextRequest) {
     if (!res.ok) {
       return NextResponse.json({ status: 'unknown' }, { status: 502 })
     }
-    const { cart } = (await res.json()) as { cart?: { completed_at?: string | null; items?: CartLine[] | null } }
+    const { cart } = (await res.json()) as {
+      cart?: { completed_at?: string | null; items?: CartLine[] | null } & CartBuyer
+    }
     if (!cart) {
       return NextResponse.json({ status: 'not_found' }, { status: 404 })
     }
@@ -157,7 +204,7 @@ export async function GET(req: NextRequest) {
     const lines = Array.isArray(cart.items) ? cart.items : []
     const [orderNumber, described] = await Promise.all([
       fetchOrderNumber(cartId),
-      lines.length > 0 ? describeOrder(lines) : Promise.resolve(null),
+      lines.length > 0 ? describeOrder(lines, cart) : Promise.resolve(null),
     ])
     return NextResponse.json(
       { status: 'completed', orderNumber, ...(described ?? {}) },

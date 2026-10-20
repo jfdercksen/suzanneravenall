@@ -91,6 +91,16 @@ export {
   type BookingSyncRunOptions,
 } from './calcom-vtiger'
 export {
+  sessionDurationMinutes,
+  sessionBookingUrl,
+  bookerName,
+  SESSION_DURATIONS,
+  DEFAULT_SESSION_DURATION,
+  type SessionDuration,
+  type SessionLine,
+  type SessionBooker,
+} from './session-booking'
+export {
   MeiliClient,
   productToSearchDoc,
   lowestZarPrice,

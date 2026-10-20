@@ -130,6 +130,38 @@ describe('ConfirmationContent', () => {
     expect(screen.getByText(/ships when the book is released/)).toBeInTheDocument()
   })
 
+  it('offers a Book Your Session button on the session event for a session order (KI079)', async () => {
+    const bookingUrl = 'http://169.239.180.49:3002/suzanneravenall/session-60?name=Johan+QA+Test&email=johan%40aiautomations.co.za'
+    search = `free=1&order=74&cartId=${CART_ID}`
+    stubStatus(200, {
+      status: 'completed',
+      orderNumber: 74,
+      items: [{ title: 'Rapid Repatterning Session', variant: '60 min online', quantity: 1, preorder: false }],
+      productType: 'session',
+      bookingUrl,
+    })
+    render(<ConfirmationContent />)
+
+    const button = await screen.findByRole('link', { name: /Book Your Session/ })
+    expect(button).toHaveAttribute('href', bookingUrl)
+    expect(button).toHaveAttribute('target', '_blank')
+  })
+
+  it('shows no booking button for other orders or a link that is not http(s)', async () => {
+    search = `free=1&order=75&cartId=${CART_ID}`
+    stubStatus(200, {
+      status: 'completed',
+      orderNumber: 75,
+      items: [{ title: 'Rapid Repatterning Session', variant: '60 min online', quantity: 1, preorder: false }],
+      productType: 'session',
+      bookingUrl: 'javascript:alert(1)',
+    })
+    render(<ConfirmationContent />)
+
+    expect(await screen.findByText(/Order #75 is confirmed/)).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Book Your Session/ })).not.toBeInTheDocument()
+  })
+
   it('falls back to neutral next steps when the lines cannot be read', async () => {
     search = `free=1&order=73&cartId=${CART_ID}`
     stubStatus(200, { status: 'completed', orderNumber: 73 })

@@ -37,9 +37,22 @@ interface StatusResult {
   items: OrderLine[]
   /** The order mail's product type, so the next steps match the mail (KI065). */
   productType: OrderProductType | null
+  /** Session orders: the Cal.com event to book on, as in the order mail (KI079). */
+  bookingUrl: string | null
 }
 
-const NO_ORDER: Omit<StatusResult, 'state'> = { orderNumber: null, items: [], productType: null }
+const NO_ORDER: Omit<StatusResult, 'state'> = { orderNumber: null, items: [], productType: null, bookingUrl: null }
+
+// Only an http(s) link becomes a button; anything else is dropped.
+function readBookingUrl(value: unknown): string | null {
+  if (typeof value !== 'string') return null
+  try {
+    const url = new URL(value)
+    return url.protocol === 'https:' || url.protocol === 'http:' ? url.toString() : null
+  } catch {
+    return null
+  }
+}
 
 function readLines(value: unknown): OrderLine[] {
   if (!Array.isArray(value)) return []
@@ -74,6 +87,7 @@ async function checkOrderStatus(cartId: string, attempts: number): Promise<Statu
           orderNumber?: number | null
           items?: unknown
           productType?: OrderProductType
+          bookingUrl?: unknown
         }
         if (data.status === 'completed') {
           return {
@@ -81,6 +95,7 @@ async function checkOrderStatus(cartId: string, attempts: number): Promise<Statu
             orderNumber: typeof data.orderNumber === 'number' ? data.orderNumber : null,
             items: readLines(data.items),
             productType: typeof data.productType === 'string' ? data.productType : null,
+            bookingUrl: data.productType === 'session' ? readBookingUrl(data.bookingUrl) : null,
           }
         }
       }
@@ -97,6 +112,7 @@ export default function ConfirmationContent() {
   const [orderNumber, setOrderNumber] = useState<number | null>(null)
   const [orderLines, setOrderLines] = useState<OrderLine[]>([])
   const [productType, setProductType] = useState<OrderProductType | null>(null)
+  const [bookingUrl, setBookingUrl] = useState<string | null>(null)
   const [orderState, setOrderState] = useState<OrderState>('checking')
 
   // PayFast return params: gateway=payfast&m_payment_id=<cartId> (set in our return_url)
@@ -126,7 +142,11 @@ export default function ConfirmationContent() {
     async function finalise() {
       let state: SettledState = 'none'
       let number: number | null = null
-      let details: Pick<StatusResult, 'items' | 'productType'> = { items: [], productType: null }
+      let details: Pick<StatusResult, 'items' | 'productType' | 'bookingUrl'> = {
+        items: [],
+        productType: null,
+        bookingUrl: null,
+      }
 
       if (isFreeOrder && freeCartId) {
         // Completed server-side by /api/checkout/free before the redirect here;
@@ -154,7 +174,7 @@ export default function ConfirmationContent() {
           // Captured just now: one read for the order number and lines only.
           const read = await checkOrderStatus(payPalCartId, 1)
           number = read.orderNumber
-          details = { items: read.items, productType: read.productType }
+          details = { items: read.items, productType: read.productType, bookingUrl: read.bookingUrl }
         }
       } else if (payFastCartId) {
         try {
@@ -173,6 +193,7 @@ export default function ConfirmationContent() {
       setOrderNumber(number)
       setOrderLines(details.items)
       setProductType(details.productType)
+      setBookingUrl(details.bookingUrl)
       setOrderState(state)
       // Only a confirmed order empties the cart, and only the cart it was for.
       if (state === 'confirmed' && cartId) {
@@ -331,9 +352,25 @@ export default function ConfirmationContent() {
             transition={{ duration: 0.5, delay: 0.7 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
+            {bookingUrl && (
+              // External: the Cal.com session event for this purchase (KI079).
+              <a
+                href={bookingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-button text-base font-medium text-center bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                <Calendar className="w-5 h-5" />
+                Book Your Session
+              </a>
+            )}
             <Link
               href="/shop"
-              className="inline-block text-center py-4 px-8 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+              className={
+                bookingUrl
+                  ? 'inline-block text-center py-4 px-8 rounded-button text-base font-medium border-2 border-brand-primary-300 text-brand-ink hover:border-brand-accent hover:text-brand-accent transition-all duration-300'
+                  : 'inline-block text-center py-4 px-8 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg'
+              }
             >
               Browse More Programmes
             </Link>

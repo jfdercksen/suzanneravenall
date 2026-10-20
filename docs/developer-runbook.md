@@ -230,6 +230,7 @@ See `.env.example` in the repo root for the full list with descriptions. The tab
 | `VTIGER_ACCESS_KEY` | ⏳ Pending | From Vtiger admin → My Preferences (KI013) |
 | `VIBE_MARKETING_WEBHOOK_URL` | ⏳ Pending | From Vibe Marketing dashboard |
 | `CALCOM_WEBHOOK_SECRET` | ⏳ Pending | `openssl rand -hex 32` — add to Cal.com webhook settings |
+| `CALCOM_SESSION_BOOKING_URL` | ⏳ Pending | Medusa and web, read at runtime. The Cal.com user page the session event types hang off (slugs `session-30`, `session-45`, `session-60`, `session-90`); the order mail and the confirmation page append `/session-<minutes>?name=&email=` (KI079). Review box: `http://169.239.180.49:3002/suzanneravenall`. Unset falls back to `NEXT_PUBLIC_CAL_URL` + `/suzanneravenall`, never to the discovery call. Set it in `infra/.env`, then `docker compose up -d medusa web` (no rebuild). `packages/integrations/src/session-booking.ts` |
 | `MEDUSA_API_TOKEN` | ⏳ Pending | Generate in Medusa Admin → Settings → API Keys |
 | `WEB_BASE_URL` | ✅ Set | |
 | `NEXT_PUBLIC_SENTRY_DSN` | ⏳ Deferred | Phase 5 (KI001) |

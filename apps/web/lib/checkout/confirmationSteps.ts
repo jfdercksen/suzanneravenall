@@ -9,7 +9,7 @@ import type { OrderProductType } from '@/lib/email/types'
 export function confirmationNextSteps(productType: OrderProductType | null): string {
   switch (productType) {
     case 'session':
-      return 'Your confirmation email has the link to book your session. Choose a time that suits you, and bring any questions or intentions you want to explore.'
+      return 'Book your session with the button below or the link in your confirmation email. Choose a time that suits you, and bring any questions or intentions you want to explore.'
     case 'self-paced':
       return 'Watch for your course access email from Ravenall Institute: it has your login for the course platform. Then work through the materials at your own pace.'
     case 'live':

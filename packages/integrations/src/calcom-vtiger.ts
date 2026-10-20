@@ -1,5 +1,6 @@
 import { VtigerError, vtqlString, type VtigerClient, type VtigerRecord } from './vtiger'
 import { findContactQuery } from './leads'
+import { SHOP_LEAD_SOURCE } from './order-vtiger'
 
 /**
  * Cal.com booking -> Vtiger contact + Event, ported from
@@ -34,7 +35,17 @@ export type CalcomBooking = {
   start: Date
   end: Date
   durationMinutes: number
+  /**
+   * A paid private session (event types session-30/-45/-60/-90, KI079), not a
+   * discovery call: the buyer is already a customer, so the booking is logged
+   * without touching the lead source or pipeline stage.
+   */
+  session?: boolean
 }
+
+/** The session event types' slugs and titles: session-60, "Session (60 min)". */
+const SESSION_SLUG = /^session-\d+$/
+const SESSION_TITLE = /^Session \(\d+ min\)/
 
 type Obj = Record<string, unknown>
 
@@ -82,7 +93,11 @@ export function parseCalcomBooking(body: unknown): CalcomBooking | null {
   const lastName = parts.slice(1).join(' ')
   const title = str(p.title) || str(p.eventTitle) || DISCOVERY_CALL_LEAD_SOURCE
 
-  return { uid, email, firstName, lastName, title, start, end, durationMinutes }
+  // v1 carries the event type slug as `type`; v2 as `eventTypeSlug`.
+  const slug = str(p.type) || str(p.eventTypeSlug)
+  const session = SESSION_SLUG.test(slug) || SESSION_TITLE.test(title)
+
+  return { uid, email, firstName, lastName, title, start, end, durationMinutes, session }
 }
 
 /** Keeps only the custom fields the instance has. `fields` null = unknown (dry run): keep all. */
@@ -98,14 +113,15 @@ function withKnownCustomFields<T extends Obj>(element: T, fields: Set<string> | 
 
 /** n8n "Prepare: New Contact Payload", plus assigned_user_id and a mandatory lastname. */
 export function newBookingContactElement(booking: CalcomBooking, userId: string) {
-  return {
+  const contact = {
     email: booking.email,
     firstname: booking.firstName,
     lastname: booking.lastName || booking.firstName, // Vtiger: lastname is mandatory
     assigned_user_id: userId,
-    leadsource: DISCOVERY_CALL_LEAD_SOURCE,
-    cf_pipeline_stage: DISCOVERY_CALL_STAGE,
   }
+  // A session is booked after a purchase: a shop customer, never a discovery-call lead.
+  if (booking.session) return { ...contact, leadsource: SHOP_LEAD_SOURCE }
+  return { ...contact, leadsource: DISCOVERY_CALL_LEAD_SOURCE, cf_pipeline_stage: DISCOVERY_CALL_STAGE }
 }
 
 /** n8n "Prepare: Pipeline Stage Update", with the mandatory fields carried along and lead source only if blank. */
@@ -133,7 +149,7 @@ export function bookingEventElement(booking: CalcomBooking, contactId: string, u
   const endIso = booking.end.toISOString()
   return {
     activitytype: 'Call',
-    subject: `Discovery Call - ${booking.title}`.slice(0, 255),
+    subject: `${booking.session ? 'Session' : 'Discovery Call'} - ${booking.title}`.slice(0, 255),
     description: bookingMarker(booking.uid),
     assigned_user_id: userId,
     contact_id: contactId,
@@ -177,7 +193,8 @@ const REVISE_UNSUPPORTED = new Set(['UNKNOWN_OPERATION', 'OPERATION_NOT_SUPPORTE
 /**
  * Finds or creates the contact, logs one Event for the booking (skipped when
  * an Event with this booking UID exists), then moves an existing contact to
- * the Discovery Call Booked stage (also on a replay). Throws on any Vtiger failure.
+ * the Discovery Call Booked stage (also on a replay); a paid session booking
+ * leaves the stage alone (KI079). Throws on any Vtiger failure.
  */
 export async function syncBookingToVtiger(
   client: VtigerClient,
@@ -196,6 +213,8 @@ export async function syncBookingToVtiger(
       existing = row
       state.contactId = row.id
       state.contactCreated = false
+      // A paying customer booking a session keeps their stage (Closed Won from the order).
+      if (booking.session) state.stageDone = true
     } else {
       state.contactId = (await client.create('Contacts', withKnownCustomFields(newBookingContactElement(booking, userId), fields))).id
       state.contactCreated = true
