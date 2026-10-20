@@ -6,7 +6,7 @@ import {
   planOrderCancel,
   type CancelPlanOrder,
 } from "../../../../../modules/payment-payfast/cancel-plan"
-import { cancelOrderKeepPayfastCaptureWorkflow } from "../../../../../workflows/cancel-order-keep-payfast-capture"
+import { cancelOrderKeepPayfastCaptureWorkflow } from "./keep-payfast-capture-workflow"
 import { staffAlerter } from "../../../../../automations/runtime"
 
 /**

@@ -22,6 +22,14 @@ import {
  * The admin cancel route picks this workflow only for orders with a captured
  * PayFast balance (modules/payment-payfast/cancel-plan.ts) and then flags the
  * order for a manual refund in the PayFast portal.
+ *
+ * It lives beside its route, not in src/workflows (KI089): Medusa's workflow
+ * loader imports src/workflows outside the require cache, so the route's import
+ * composed it a second time. With Medusa 2.14.1, composing it twice made
+ * complete-cart lose a parallel step (a checkpoint retry swaps the run's flow while
+ * update-carts is still running), every cart completion stopped half way and
+ * the store route answered 409. Import it from here only, never re-export it
+ * into src/workflows.
  */
 
 type Input = { order_id: string; uncaptured_payment_ids: string[] }

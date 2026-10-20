@@ -17,7 +17,7 @@ vi.mock('@medusajs/framework/utils', () => ({
   },
 }))
 vi.mock('@medusajs/core-flows', () => ({ cancelOrderWorkflow: () => ({ run: coreRun }) }))
-vi.mock('../../../../../../workflows/cancel-order-keep-payfast-capture', () => ({
+vi.mock('../keep-payfast-capture-workflow', () => ({
   cancelOrderKeepPayfastCaptureWorkflow: () => ({ run: keepRun }),
 }))
 vi.mock('../../../../../../automations/runtime', () => ({ staffAlerter: () => ({ send: alertSend }) }))
