@@ -482,3 +482,8 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
 - KI087 PASS on #411: cancel 200, payment captured, refunded 0, payfast_refund_required true, staff alert sent.
 - Cleanup: #399, #400, #401, #403, #404 cancelled (200). Medusa then hit a JS heap OOM on the #408 cancel and restarted (about 1 min down, admin session lost). Filed KI090: default 524 MB heap, 553 MiB RSS at idle; proposed NODE_OPTIONS=--max-old-space-size=768. #408 left pending.
 - Open: KI090 fix (Johan's ok + medusa deploy); #408 cancel; latent core race until a Medusa upgrade (2.19 out); docs commit (KNOWN_ISSUES, ACCEPTANCE, worklog) needs Johan's ok.
+
+## 2026-10-20 KI090 Medusa heap (side session)
+- c562f9c (Johan's ok): NODE_OPTIONS=--max-old-space-size=768 on the medusa service in infra/docker-compose.yml. Deploy run 39453501231 (medusa) success. In the container: heap_size_limit 780 MB (was 524), healthy, RSS 639 MiB after start. No code-reviewer pass for this one-line compose setting.
+- #408 cancelled 16:09Z via the admin API in the Playwright browser (Johan signed in): 200, no restart, no heap error, RSS 572 MiB. All seven test orders #399, #400, #401, #403, #404, #408 and #411 read canceled; #411's payment is still captured (KI087).
+- Watch: the container memory limit stays 1g; raise it together with the heap if Medusa grows.

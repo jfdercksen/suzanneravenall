@@ -383,7 +383,7 @@ One PayFast sandbox order in the built-in browser pane: #397, Breakthrough Trilo
 - Walked in the Playwright MCP browser (the desktop pane was hidden). Johan QA Test, johan+ki089-1020@aiautomations.co.za, Breakthrough Trilogy R165, PayFast sandbox wallet, Complete Payment, back to /checkout/confirmation: "Order #411 is confirmed."
 - Box: ITN Received (sandbox), Payment COMPLETE, Cart completed and order created; Medusa /complete 200, order.placed processed, vtiger_order job done. Order mail "Your transformation begins - Order #411" 15:51:24Z with the invoice attached.
 - KI087 live proof on #411 (Johan signed in to the admin): POST /admin/orders/:id/cancel 200, status canceled, payment_status captured, refunded 0, no refund rows, metadata payfast_refund_required true, staff alert sent. PASS.
-- Cleanup: cancels of #399, #400, #401, #403 and #404 answered 200. Medusa ran out of heap on the next cancel (#408, KI090) and restarted. #408 is still pending (no payment, no email).
+- Cleanup: cancels of #399, #400, #401, #403 and #404 answered 200. Medusa ran out of heap on the next cancel (#408, KI090) and restarted. #408 is still pending (no payment, no email). After the KI090 fix (c562f9c, heap 780 MB) #408 was cancelled at 16:09Z (200); all seven test orders #399, #400, #401, #403, #404, #408 and #411 read canceled, #411 with its payment still captured.
 
 ### Section K row K-04, 20 Oct 2026 13:58-14:12Z (qa-e2e walker for the carts, controller for mail and box read-back)
 
