@@ -469,3 +469,7 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
 - n8n step 12: flags read (medusa THINKIFIC/ORDER_VTIGER/CART_RECOVERY=code, web LEADS_AUTOMATION=code, CALCOM/SEARCH_SYNC default code), active list recorded in the plan. The unpublish of the five was held for approval: not run, n8n not restarted.
 - KI032 re-check: all four gaps closed on the box (secret set, bad token 400, table live, PO Box footer e2b5a5f, VAT unset); lead-form consent left as KI088.
 - KNOWN_ISSUES: KI018, KI038, KI039, KI041, KI046, KI054, KI056 set Resolved with evidence; KI087 fixed (live proof pending deploy); KI088 new.
+- Commits cb98b7f (medusa), 3ed15fa (web), 050d82a (docs), pushed with Johan's ok; deploy run 39442661213 (web medusa) success at about 15:00Z.
+- n8n: the five unpublished 14:49Z on Johan's go (the EA session ran the same at 16:50 SAST), n8n restarted healthy, 6 active (Sage x2, weekly report, membership x2, Bunny logger).
+- KI057 live: checkout consent line checked in the browser pane at 375 (no horizontal scroll, #696969 12px, aria-describedby=email-consent) and 1280. PASS.
+- KI087 live proof NOT done: sandbox PayFast orders #399 and #400 (Breakthrough Trilogy R165, johan+ki087-1020@ / johan+ki087b-1020@) both came back from /complete with 409 and were created without any payment or order.placed. Filed KI089 (Critical); #399 and #400 left uncancelled as evidence.
