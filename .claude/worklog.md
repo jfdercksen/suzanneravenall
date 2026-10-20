@@ -446,3 +446,4 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
 - #396 cancelled 09:38:35Z via the admin API in the pane (Johan signed in, his ok).
 - Thinkific read-back (medusa container key; the web container key answers 401): 52 enrolments for johan@aiautomations.co.za, the only Post Traumatic Growth one is 891366321 from 15 Oct (order #362, G-123); #396 created no new enrolment, so nothing to remove for this run. 891366321 stays with the free-path cleanup batch.
 - Open: reference_vps.md memory still holds the VPS password in plaintext.
+- 10:29Z G-00c re-walk after the KI086 fix (7e2685c, box at 8637aa4): order #397 R165 via PayFast sandbox; admin API: payment_status captured, collection completed, one capture 16500 = total. KI086 proven live. #397 cancelled 13:31:49Z (Johan's ok); Medusa marked it refunded although PayFast refunds nothing (KI087).
