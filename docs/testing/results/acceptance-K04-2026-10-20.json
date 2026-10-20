@@ -1,0 +1,27 @@
+{
+  "section": "K-04 cart recovery",
+  "date": "2026-10-20",
+  "base": "http://169.239.180.49",
+  "rows": [
+    {"id": "K-04a", "verdict": "PASS", "severity": "none",
+     "actual": "Added Energetic Clearing (R830) to cart, checkout contact step saved with email johan+k04a-1020@aiautomations.co.za, Johan / QA Test, phone 0820000000; page moved to Payment step (Pay with PayFast), not paid. Form has no address fields. Cart left untouched.",
+     "T_A_utc": "2026-10-20T13:58:33Z (cart update POST 200 on Continue to Payment)",
+     "cart_a_id": "cart_01M5CSN7Y70XJYB7ZD35E5A1JN",
+     "evidence": ["docs/testing/results/browser/K-04-a-checkout-filled.png"]},
+    {"id": "K-04b", "verdict": "PASS", "severity": "none",
+     "actual": "New cart, cheapest non-course item Breakthrough Trilogy (R165 pre-order book), contact saved with cart B email, voucher QA-SELFTEST-100 applied, total R0,00. Waited without touching the form, clicked Place order at T_B+153 s. Confirmation: Order #398.",
+     "T_B_utc": "2026-10-20T14:00:03.5Z (voucher promotions POST 200)",
+     "cart_b_id": "cart_01M5CSR33TZ2HKQH7TGEQS3T7W",
+     "T_B_done_utc": "2026-10-20T14:02:36.8Z (click; confirmation page loaded immediately)",
+     "order_number": "398",
+     "evidence": ["docs/testing/results/browser/K-04-b-ready-to-place.png", "docs/testing/results/browser/K-04-b-confirmation.png"]}
+  ],
+  "findings": [
+    {"id": "K04-NEW-1", "severity": "major", "actual": "First load of /shop showed 'Unable to load programmes' (GET /api/store/products returned 502 twice, ~28 s apart). A reload about 60 s later worked. Transient Medusa 502."},
+    {"id": "K04-NEW-2", "severity": "minor", "actual": "Checkout contact form has no address fields, so the requested address was not entered."},
+    {"id": "K04-NEW-3", "severity": "minor", "actual": "Cart page shows 'Loading your cart...' for several seconds before Proceed to Checkout appears."}
+  ],
+  "console_errors": "Only the two 502s on /shop; none on cart/checkout/confirmation.",
+  "failed_requests": "GET /api/store/products 502 x2 (shop, first load only).",
+  "records_created": ["cart_01M5CSN7Y70XJYB7ZD35E5A1JN (open, email k04a)", "cart_01M5CSR33TZ2HKQH7TGEQS3T7W -> order #398 (R0, voucher QA-SELFTEST-100)"]
+}

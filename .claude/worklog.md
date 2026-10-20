@@ -447,3 +447,12 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
 - Thinkific read-back (medusa container key; the web container key answers 401): 52 enrolments for johan@aiautomations.co.za, the only Post Traumatic Growth one is 891366321 from 15 Oct (order #362, G-123); #396 created no new enrolment, so nothing to remove for this run. 891366321 stays with the free-path cleanup batch.
 - Open: reference_vps.md memory still holds the VPS password in plaintext.
 - 10:29Z G-00c re-walk after the KI086 fix (7e2685c, box at 8637aa4): order #397 R165 via PayFast sandbox; admin API: payment_status captured, collection completed, one capture 16500 = total. KI086 proven live. #397 cancelled 13:31:49Z (Johan's ok); Medusa marked it refunded although PayFast refunds nothing (KI087).
+
+## 2026-10-20 n8n migration step 4: cart abandonment in code (side session)
+
+- Medusa 09286a2: cart_recovery model + Migration20261020120000, cart-recovery-store (Pg + memory), automations/cart-recovery.ts (flag AUTOMATION_CART_RECOVERY n8n|code|off, CART_RECOVERY_DELAYS default 1h,23h,48h, job ticks every minute when a delay is under 10 min, MAX_LATE 24 h, reopen after cart_empty), cart-updated.ts per flag (Query read, KI057 class), jobs/cart-recovery.ts, outbox job cart_recovery_email. 186 medusa tests, tsc clean.
+- Web 9165f40: Supabase cart_reminder_sends sent-log, claim before Brevo, release on failure, stale claim (10 min) re-taken, 503 without the table; route accepts INTERNAL_WEBHOOK_SECRET too. Web 1705+ tests green.
+- code-reviewer: no blockers; 5 should-fix applied before commit (late backlog, stuck claim, reopen after empty, finite numbers, apply-order note).
+- Johan applied supabase/migrations/20261020120000_cart_reminder_sends.sql on aimate-db1, deploy run 39431344169 web + medusa (also pushed 107d75c). Box env: AUTOMATION_CART_RECOVERY=code (stays), CART_RECOVERY_DELAYS=60s,120s,180s for the test, emptied again 14:12 UTC.
+- K-04 PASS: cart A three reminders 14:00:03/14:03:00/14:07:01Z, cart B order #398 before reminder 2, nothing after; replay already_sent.
+- Open: cancel order #398 (Johan's ok); deactivate the n8n cart workflow; KI057 consent wording at checkout not built.
