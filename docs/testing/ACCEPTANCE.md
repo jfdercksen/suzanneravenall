@@ -394,7 +394,7 @@ Runner `infra/qa-nightly/` (qa.mcp.json, findings.schema.json, prompts/nightly.m
 | 1 | 17:01:36 | 6 min 31 s | $0.72 | 132 | 140 / 328 | 23 | C-02 FAIL minor, D-02 FAIL minor, L-02 FAIL minor, M-05 N/A, M-06 N/A |
 | 2 (brief tuned) | 17:09:21 | 7 min 31 s | $0.72 | 118 | 140 / 328 | 24 | C-02 FAIL minor (+ duplicate NEW-1), M-05 N/A, M-06 N/A |
 
-Triage against the matrix. Real finding: C-02, `/community` title "Community \| Suzanne Ravenall \| Dr. Suzanne Ravenall" (KI091, fixed in code, not deployed). False positives tuned out of the brief after run 1:
+Triage against the matrix. Real finding: C-02, `/community` title "Community \| Suzanne Ravenall \| Dr. Suzanne Ravenall" (KI091, resolved: 6c5e38a deployed by run 39466246063, title read back once on the box 17:36Z). False positives tuned out of the brief after run 1:
 - D-02: the footer has 33 anchors (24 internal, 9 external). The 15 Oct "35" was a different count, and `Footer.tsx` has not changed since 14 Oct.
 - L-02: the brief named `/shop/getting-unstuck`, which does not exist; the product is `/shop/getting-unstuck-self-study`, priced R1 660,00.
 - M-05: the app drops the G-XXXXXXXXXX placeholder, so the launch item reads "no G- id in the page".

@@ -495,3 +495,4 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
 - Pilot: run 1 $0.72 / 6 min 31 s / 140 pages 328 links / 23 rows (3 FAIL minor, 2 N/A); 2 were brief errors (footer count 33 not 35, wrong product handle) plus the GA wording, all tuned; run 2 $0.72 / 7 min 31 s, only the real finding left.
 - KI091 new: /community title carries the site name twice; fixed in apps/web/app/community/page.tsx (title 'Community'), not committed or deployed.
 - Recorded in ACCEPTANCE.md (Results log "Nightly re-walk"). Nothing sent; summary is drafted for Johan.
+- Follow-up (Johan via the parent session: "Push and deploy, but do not schedule the nightly run yet"): pushed 5f398d3, 6c5e38a, 8171b76; deploy run 39466246063 (web) success 17:36Z; /community title read back as "Community | Dr. Suzanne Ravenall", health 200. KI091 resolved. Cron NOT installed.
