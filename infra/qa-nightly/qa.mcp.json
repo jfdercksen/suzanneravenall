@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "/srv/qa/suzanne/node_modules/.bin/playwright-mcp",
+      "args": [
+        "--browser", "chromium",
+        "--headless",
+        "--isolated",
+        "--viewport-size", "1280x800",
+        "--allowed-origins", "http://169.239.180.49",
+        "--output-dir", "/srv/qa/suzanne/artifacts",
+        "--snapshot-mode", "none",
+        "--image-responses", "omit",
+        "--console-level", "error",
+        "--block-service-workers"
+      ]
+    }
+  }
+}

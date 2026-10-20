@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "required": ["section", "target", "date", "rows"],
+  "properties": {
+    "section": {"type": "string"},
+    "target": {"type": "string"},
+    "date": {"type": "string"},
+    "summary": {
+      "type": "object",
+      "properties": {
+        "routes_checked": {"type": "integer"},
+        "links_checked": {"type": "integer"},
+        "blocked_navigations": {"type": "integer"},
+        "retries": {"type": "integer"},
+        "notes": {"type": "string"}
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "item", "verdict", "actual"],
+        "properties": {
+          "id": {"type": "string"},
+          "item": {"type": "string"},
+          "steps": {"type": "string"},
+          "expected": {"type": "string"},
+          "actual": {"type": "string"},
+          "verdict": {"type": "string", "enum": ["PASS", "FAIL", "N/A", "BLOCKED"]},
+          "severity": {"type": "string", "enum": ["blocker", "major", "minor"]},
+          "evidence": {"type": "array", "items": {"type": "string"}},
+          "console_errors": {"type": "array", "items": {"type": "string"}},
+          "failed_requests": {"type": "array", "items": {"type": "string"}},
+          "records_created": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  }
+}
