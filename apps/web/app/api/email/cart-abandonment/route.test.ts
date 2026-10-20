@@ -25,6 +25,17 @@ vi.mock('@/lib/email/suppression', () => ({
   isEmailUnsubscribed: vi.fn().mockResolvedValue(false),
 }))
 
+const { mockClaim, mockRelease, mockRecord } = vi.hoisted(() => ({
+  mockClaim: vi.fn(),
+  mockRelease: vi.fn(),
+  mockRecord: vi.fn(),
+}))
+vi.mock('@/lib/email/cart-reminder-log', () => ({
+  claimCartReminder: mockClaim,
+  releaseCartReminder: mockRelease,
+  recordCartReminderEmailId: mockRecord,
+}))
+
 import { POST } from './route'
 
 // ---------------------------------------------------------------------------
@@ -68,6 +79,9 @@ describe('POST /api/email/cart-abandonment', () => {
     vi.stubEnv('N8N_WEBHOOK_SECRET', TEST_SECRET)
     vi.stubEnv('BREVO_API_KEY', 'test_brevo_key')
     mockCartStatus.mockResolvedValue('open')
+    mockClaim.mockResolvedValue('claimed')
+    mockRelease.mockResolvedValue(undefined)
+    mockRecord.mockResolvedValue(undefined)
   })
 
   // -------------------------------------------------------------------------
@@ -106,8 +120,20 @@ describe('POST /api/email/cart-abandonment', () => {
       expect(res.status).toBe(200)
     })
 
-    it('returns 500 when N8N_WEBHOOK_SECRET is not set', async () => {
+    it('accepts INTERNAL_WEBHOOK_SECRET (the Medusa job) next to the n8n secret', async () => {
+      vi.stubEnv('INTERNAL_WEBHOOK_SECRET', 'internal-secret')
+      mockSend1.mockResolvedValue('email_id_internal')
+
+      const internal = await POST(makeRequest(validBody, { 'x-webhook-secret': 'internal-secret' }) as any)
+      const n8n = await POST(makeRequest(validBody) as any)
+
+      expect(internal.status).toBe(200)
+      expect(n8n.status).toBe(200)
+    })
+
+    it('returns 500 when neither secret is set', async () => {
       vi.stubEnv('N8N_WEBHOOK_SECRET', '')
+      vi.stubEnv('INTERNAL_WEBHOOK_SECRET', '')
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       const res = await POST(makeRequest(validBody) as any)
@@ -410,6 +436,87 @@ describe('POST /api/email/cart-abandonment', () => {
       ])
     })
 
+  })
+
+  // -------------------------------------------------------------------------
+  // Sent-log: never the same (cart, template) twice
+  // -------------------------------------------------------------------------
+
+  describe('sent-log dedupe', () => {
+    it('claims (cart_id, template) before sending and stores the email id after', async () => {
+      mockSend2.mockResolvedValue('email_id_2')
+
+      const res = await POST(makeRequest({ ...validBody, template: 2 }) as any)
+
+      expect(res.status).toBe(200)
+      expect(mockClaim).toHaveBeenCalledWith('cart_abc', 2)
+      expect(mockClaim.mock.invocationCallOrder[0]).toBeLessThan(mockSend2.mock.invocationCallOrder[0]!)
+      expect(mockRecord).toHaveBeenCalledWith('cart_abc', 2, 'email_id_2')
+      expect(mockRelease).not.toHaveBeenCalled()
+    })
+
+    it('skips without sending when the reminder was already sent', async () => {
+      mockClaim.mockResolvedValue('already_sent')
+
+      const res = await POST(makeRequest(validBody) as any)
+
+      expect(res.status).toBe(200)
+      expect(await res.json()).toEqual({ skipped: true, reason: 'already_sent' })
+      expect(mockSend1).not.toHaveBeenCalled()
+    })
+
+    it('sends the second of two identical requests only once', async () => {
+      const claimed = new Set<string>()
+      mockClaim.mockImplementation(async (cartId: string, template: number) => {
+        const key = `${cartId}:${template}`
+        if (claimed.has(key)) return 'already_sent'
+        claimed.add(key)
+        return 'claimed'
+      })
+      mockSend1.mockResolvedValue('email_id_once')
+
+      const first = await POST(makeRequest(validBody) as any)
+      const second = await POST(makeRequest(validBody) as any)
+      const otherTemplate = await POST(makeRequest({ ...validBody, template: 2 }) as any)
+
+      expect(await first.json()).toEqual({ emailId: 'email_id_once' })
+      expect(await second.json()).toEqual({ skipped: true, reason: 'already_sent' })
+      expect(otherTemplate.status).toBe(200)
+      expect(mockSend1).toHaveBeenCalledTimes(1)
+      expect(mockSend2).toHaveBeenCalledTimes(1)
+    })
+
+    it('answers 503 and sends nothing when the sent-log is unavailable', async () => {
+      mockClaim.mockResolvedValue('unavailable')
+
+      const res = await POST(makeRequest(validBody) as any)
+
+      expect(res.status).toBe(503)
+      expect(mockSend1).not.toHaveBeenCalled()
+    })
+
+    it('releases the claim when the send fails, so a retry can send', async () => {
+      mockSend1.mockRejectedValue(new Error('Brevo down'))
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+      const res = await POST(makeRequest(validBody) as any)
+
+      expect(res.status).toBe(500)
+      expect(mockRelease).toHaveBeenCalledWith('cart_abc', 1)
+      expect(mockRecord).not.toHaveBeenCalled()
+      consoleSpy.mockRestore()
+    })
+
+    it('checks the cart and the suppression list before claiming', async () => {
+      mockCartStatus.mockResolvedValue('completed')
+
+      await POST(makeRequest(validBody) as any)
+
+      expect(mockClaim).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('configuration', () => {
     it('returns 500 when BREVO_API_KEY is not set', async () => {
       vi.stubEnv('BREVO_API_KEY', '')
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})

@@ -5,6 +5,7 @@ import { sendCartAbandonmentEmail2 } from '@/lib/email/cart-abandonment-2'
 import { sendCartAbandonmentEmail3 } from '@/lib/email/cart-abandonment-3'
 import { isEmailConfigured } from '@/lib/email/send'
 import { isEmailUnsubscribed } from '@/lib/email/suppression'
+import { claimCartReminder, recordCartReminderEmailId, releaseCartReminder } from '@/lib/email/cart-reminder-log'
 import type { CartEmailData, CartItem } from '@/lib/email/types'
 import { getCartStatus } from '@/lib/medusa/cart-status'
 import { logError } from '@/lib/log'
@@ -52,14 +53,25 @@ function parseItems(raw: unknown[]): CartItem[] {
     }))
 }
 
+/**
+ * Callers: the Medusa cart-recovery job (n8n migration step 4) and, until the
+ * n8n chains queued before the cutover have run out, the n8n workflow. Both
+ * send x-webhook-secret: INTERNAL_WEBHOOK_SECRET or N8N_WEBHOOK_SECRET.
+ *
+ * Gates before Brevo, in order: cart still open (store API), address not on
+ * the suppression list, and the (cart_id, template) sent-log claim, so no
+ * reminder can go twice.
+ */
 export async function POST(req: NextRequest) {
-  const webhookSecret = process.env.N8N_WEBHOOK_SECRET
-  if (!webhookSecret) {
-    logError('[email/cart-abandonment] N8N_WEBHOOK_SECRET is not set')
+  const secrets = [process.env.INTERNAL_WEBHOOK_SECRET, process.env.N8N_WEBHOOK_SECRET].filter(
+    (s): s is string => Boolean(s)
+  )
+  if (secrets.length === 0) {
+    logError('[email/cart-abandonment] neither INTERNAL_WEBHOOK_SECRET nor N8N_WEBHOOK_SECRET is set')
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
   }
   const provided = req.headers.get('x-webhook-secret') ?? ''
-  if (!provided || !verifySecret(provided, webhookSecret)) {
+  if (!provided || !secrets.some((s) => verifySecret(provided, s))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -118,6 +130,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ skipped: true, reason: 'unsubscribed' })
   }
 
+  // n8n and the Medusa job overlap during the cutover; a retried request may
+  // also arrive after the first one sent. Whoever claims first sends.
+  const claim = await claimCartReminder(cartId, template)
+  if (claim === 'already_sent') {
+    return NextResponse.json({ skipped: true, reason: 'already_sent' })
+  }
+  if (claim === 'unavailable') {
+    return NextResponse.json({ error: 'Sent-log unavailable' }, { status: 503 })
+  }
+
   const data: CartEmailData = {
     cartId,
     email,
@@ -128,8 +150,8 @@ export async function POST(req: NextRequest) {
     cartUrl: typeof cartUrl === 'string' ? cartUrl : '',
   }
 
+  let emailId: string
   try {
-    let emailId: string
     if (template === 1) {
       emailId = await sendCartAbandonmentEmail1(data)
     } else if (template === 2) {
@@ -137,10 +159,15 @@ export async function POST(req: NextRequest) {
     } else {
       emailId = await sendCartAbandonmentEmail3(data)
     }
-    return NextResponse.json({ emailId })
   } catch (err) {
+    // Nothing went out: give the claim back so the caller's retry can send.
+    await releaseCartReminder(cartId, template).catch(() => {})
     const msg = err instanceof Error ? err.message : String(err)
     logError(`[email/cart-abandonment] send failed (template ${template}, cart ${cartId}): ${msg}`, err, { template, cartId })
     return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
   }
+
+  // The mail is out: whatever happens to the id, the claim stays.
+  await recordCartReminderEmailId(cartId, template, emailId).catch(() => {})
+  return NextResponse.json({ emailId })
 }
