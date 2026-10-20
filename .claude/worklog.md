@@ -455,4 +455,5 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
 - code-reviewer: no blockers; 5 should-fix applied before commit (late backlog, stuck claim, reopen after empty, finite numbers, apply-order note).
 - Johan applied supabase/migrations/20261020120000_cart_reminder_sends.sql on aimate-db1, deploy run 39431344169 web + medusa (also pushed 107d75c). Box env: AUTOMATION_CART_RECOVERY=code (stays), CART_RECOVERY_DELAYS=60s,120s,180s for the test, emptied again 14:12 UTC.
 - K-04 PASS: cart A three reminders 14:00:03/14:03:00/14:07:01Z, cart B order #398 before reminder 2, nothing after; replay already_sent.
-- Open: cancel order #398 (Johan's ok); deactivate the n8n cart workflow; KI057 consent wording at checkout not built.
+- Order #398 cancelled via the admin API in the pane (Johan signed in, his ok).
+- Open: deactivate the n8n cart workflow; KI057 consent wording at checkout not built.
