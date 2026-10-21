@@ -216,6 +216,8 @@ Docs: https://developers.cloudflare.com/agents/
 | `SUPABASE_SERVICE_ROLE_KEY` | No | Supabase service role — server only |
 | `NEXT_PUBLIC_MEDUSA_URL` | Yes | Medusa storefront URL |
 | `MEDUSA_BACKEND_URL` | No | Medusa backend URL — server only |
+| `NEXT_PUBLIC_MEDUSA_REGION_ID` / `NEXT_PUBLIC_MEDUSA_REGION_USD_ID` | Yes | Medusa ZAR and USD region ids |
+| `MEDUSA_USD_REGION_ENABLED` | No | Master switch for USD pricing, default true; `false` = ZAR for everyone (DECISIONS.md D021) |
 | `DATABASE_URL` | No | Direct PostgreSQL connection string |
 | `NEXT_PUBLIC_SITE_URL` | Yes | Base URL |
 | `BREVO_API_KEY` | No | Brevo transactional API key (xkeysib-), server only |

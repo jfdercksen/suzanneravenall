@@ -124,7 +124,8 @@ describe('cart-context cart recovery (?cartId=)', () => {
     render(<CartProvider><Probe /></CartProvider>)
 
     await waitFor(() => expect(screen.getByTestId('cart').textContent).toBe('none'))
-    expect(fetchMock).not.toHaveBeenCalled()
+    // Only the visitor's region is asked for (the currency switcher needs it).
+    expect(fetchMock.mock.calls.map((c) => String(c[0]))).toEqual(['/api/region'])
     expect(localStorage.getItem(CART_ID_KEY)).toBeNull()
   })
 

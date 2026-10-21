@@ -235,9 +235,10 @@ services:
       NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
       NEXT_PUBLIC_MEDUSA_REGION_ID: ${NEXT_PUBLIC_MEDUSA_REGION_ID}
       NEXT_PUBLIC_MEDUSA_REGION_USD_ID: ${NEXT_PUBLIC_MEDUSA_REGION_USD_ID}
-      # Off until every variant carries a USD price (KI034). While this is not
-      # "true", /api/region serves the ZAR region to everyone.
-      MEDUSA_USD_REGION_ENABLED: ${MEDUSA_USD_REGION_ENABLED:-false}
+      # Master switch for USD pricing (D021). On by default since 21 Oct 2026:
+      # visitors outside South Africa see USD and pay with PayPal. "false"
+      # puts everyone on ZAR and hides the currency switcher.
+      MEDUSA_USD_REGION_ENABLED: ${MEDUSA_USD_REGION_ENABLED:-true}
       MEDUSA_API_TOKEN: ${MEDUSA_API_TOKEN}
       # Medusa v2 admin auth for the member portal (KI078): a secret API key
       # (sk_) as Basic auth, else an emailpass login with the admin account.

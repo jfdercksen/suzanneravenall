@@ -106,11 +106,11 @@ function getRootCategory(
 }
 
 function PriceDisplay({ variants, currency }: { variants: ProductVariant[]; currency: string }) {
-  // Same resolution the shop price sort uses (visitor currency, else ZAR).
+  // Same resolution the shop price sort uses: the visitor's currency only.
   const lowest = getDisplayPrice(variants, currency)
 
   if (!lowest) {
-    return <span className="text-2xl font-light text-brand-muted">Contact us</span>
+    return <span className="text-2xl font-light text-brand-muted">Price on request</span>
   }
 
   const amount = lowest.amount / 100

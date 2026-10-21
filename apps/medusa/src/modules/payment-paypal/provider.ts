@@ -1,3 +1,4 @@
+import { createHmac, timingSafeEqual } from 'crypto'
 import { AbstractPaymentProvider } from '@medusajs/framework/utils'
 import type {
   InitiatePaymentInput,
@@ -22,6 +23,46 @@ import type {
   WebhookActionResult,
 } from '@medusajs/framework/types'
 import type { PayPalOptions, PayPalSessionData, PayPalWebhookEvent } from './types'
+
+// The web app's capture route and PayPal webhook (apps/web/lib/paypal.ts,
+// openCapturedSession) capture the PayPal order first, check the amount
+// against the cart, then open this session with data { cart_id,
+// paypal_order_id, capture_id, amount_cents, currency_code, capture_proof }.
+// capture_proof is an HMAC of those values keyed with the PayPal client
+// secret, which only our servers hold, so a session is marked captured only
+// for a payment we verified, at the amount and in the currency the cart costs
+// (D021; same pattern as the PayFast ITN proof, KI086).
+function amountOf(amount: unknown): number {
+  return amount && typeof amount === 'object' && 'numeric' in (amount as Record<string, unknown>)
+    ? Number((amount as { numeric: unknown }).numeric)
+    : Number(amount)
+}
+
+export function captureProofValid(
+  data: Record<string, unknown> | undefined,
+  amount: unknown,
+  currencyCode: string,
+  secret: string
+): boolean {
+  if (!data || !secret) return false
+  const str = (key: string) => (typeof data[key] === 'string' ? (data[key] as string) : '')
+  const cartId = str('cart_id')
+  const orderId = str('paypal_order_id')
+  const captureId = str('capture_id')
+  const currency = str('currency_code').toUpperCase()
+  const proof = str('capture_proof')
+  const amountCents = Number(data['amount_cents'])
+  if (!cartId || !captureId || !currency || !proof || !Number.isFinite(amountCents)) return false
+  if (currency !== currencyCode.toUpperCase()) return false
+  const amountNum = amountOf(amount)
+  if (!Number.isFinite(amountNum) || Math.round(amountNum) !== Math.round(amountCents)) return false
+  const expected = createHmac('sha256', secret)
+    .update(`${cartId}:${orderId}:${captureId}:${amountCents}:${currency}`)
+    .digest('hex')
+  const a = Buffer.from(proof)
+  const b = Buffer.from(expected)
+  return a.length === b.length && timingSafeEqual(a, b)
+}
 
 class PayPalPaymentProvider extends AbstractPaymentProvider<PayPalOptions> {
   static identifier = 'paypal'
@@ -64,6 +105,27 @@ class PayPalPaymentProvider extends AbstractPaymentProvider<PayPalOptions> {
   async initiatePayment(input: InitiatePaymentInput): Promise<InitiatePaymentOutput> {
     const { amount, currency_code, context } = input
     const ctx = context as Record<string, unknown> | undefined
+    const inputData = (input as { data?: Record<string, unknown> }).data
+
+    // Already captured by the web app (see captureProofValid): record it, no
+    // second PayPal order. The proof fields stay in the data so an
+    // updatePayment re-check gives the same answer.
+    if (captureProofValid(inputData, amount, currency_code, this.options_.clientSecret)) {
+      const cartId = String(inputData?.['cart_id'])
+      const sessionData: PayPalSessionData = {
+        cartId,
+        orderId: String(inputData?.['paypal_order_id'] ?? ''),
+        captureId: String(inputData?.['capture_id']),
+        approvalUrl: '',
+        currencyCode: currency_code.toUpperCase(),
+        status: 'captured',
+      }
+      return {
+        id: `paypal_${cartId}`,
+        data: { ...inputData, ...sessionData } as unknown as Record<string, unknown>,
+      }
+    }
+
     const cartId = (ctx?.['cart_id'] as string | undefined) ?? ''
 
     if (!cartId) {
@@ -153,8 +215,12 @@ class PayPalPaymentProvider extends AbstractPaymentProvider<PayPalOptions> {
   async authorizePayment(input: AuthorizePaymentInput): Promise<AuthorizePaymentOutput> {
     const sessionData = input.data as unknown as PayPalSessionData
 
+    // A session reads 'captured' only when initiatePayment saw a valid capture
+    // proof, i.e. PayPal has already taken the money. Returning 'captured'
+    // makes Medusa record the capture as part of authorisation, so the order
+    // reads as paid instead of sitting at Authorized (the PayPal half of KI086).
     if (sessionData?.status === 'authorized' || sessionData?.status === 'captured') {
-      return { status: 'authorized', data: { ...input.data } }
+      return { status: 'captured', data: { ...input.data, status: 'captured' } }
     }
 
     return { status: 'pending', data: { ...input.data } }
@@ -163,7 +229,9 @@ class PayPalPaymentProvider extends AbstractPaymentProvider<PayPalOptions> {
   async capturePayment(input: CapturePaymentInput): Promise<CapturePaymentOutput> {
     const sessionData = input.data as unknown as PayPalSessionData
 
-    if (!sessionData?.orderId) {
+    // Captured before the session existed (the web capture route): nothing to
+    // ask PayPal, and a second capture call would fail.
+    if (!sessionData?.orderId || sessionData.status === 'captured') {
       return { data: { ...(input.data ?? {}), status: 'captured' } }
     }
 
@@ -201,33 +269,37 @@ class PayPalPaymentProvider extends AbstractPaymentProvider<PayPalOptions> {
   async refundPayment(input: RefundPaymentInput): Promise<RefundPaymentOutput> {
     const sessionData = input.data as unknown as PayPalSessionData
 
-    if (!sessionData?.orderId) {
+    if (!sessionData?.orderId && !sessionData?.captureId) {
       return { data: { ...(input.data ?? {}) } }
     }
 
     try {
       const token = await this.getAccessToken()
 
-      // Retrieve the capture ID from the order
-      const orderRes = await fetch(
-        `${this.apiBase}/v2/checkout/orders/${sessionData.orderId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+      // Sessions opened by the web capture route carry the capture id; older
+      // ones only the order, so look the capture up there.
+      let captureId = sessionData.captureId
+      if (!captureId) {
+        const orderRes = await fetch(
+          `${this.apiBase}/v2/checkout/orders/${sessionData.orderId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
 
-      if (!orderRes.ok) {
-        console.error('[PayPal] refundPayment — could not retrieve order', {
-          orderId: sessionData.orderId,
-        })
-        return { data: { ...(input.data ?? {}) } }
+        if (!orderRes.ok) {
+          console.error('[PayPal] refundPayment — could not retrieve order', {
+            orderId: sessionData.orderId,
+          })
+          return { data: { ...(input.data ?? {}) } }
+        }
+
+        const order = (await orderRes.json()) as {
+          purchase_units?: Array<{
+            payments?: { captures?: Array<{ id: string }> }
+          }>
+        }
+
+        captureId = order.purchase_units?.[0]?.payments?.captures?.[0]?.id
       }
-
-      const order = (await orderRes.json()) as {
-        purchase_units?: Array<{
-          payments?: { captures?: Array<{ id: string }> }
-        }>
-      }
-
-      const captureId = order.purchase_units?.[0]?.payments?.captures?.[0]?.id
 
       if (!captureId) {
         console.warn('[PayPal] refundPayment — no capture ID found', { orderId: sessionData.orderId })

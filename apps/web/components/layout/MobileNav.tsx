@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { ExternalLink } from 'lucide-react'
 import type { NavItem, NavGroup, NavLink, NavGroupChild } from './Header'
 import { isActivePath } from './navActive'
+import { CurrencySwitcher } from './CurrencySwitcher'
 
 interface MobileNavProps {
   items: NavItem[]
@@ -269,6 +270,7 @@ export default function MobileNav({ items }: MobileNavProps) {
 
           {/* CTA at bottom */}
           <div className="px-8 pb-12 flex flex-col gap-3">
+            <CurrencySwitcher className="mb-2" />
             <Link
               href="/discover-your-pattern"
               onClick={close}

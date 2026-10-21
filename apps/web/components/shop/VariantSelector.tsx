@@ -10,13 +10,12 @@ import { isCapacityLimitedHandle } from '@/lib/inventory/group-sessions'
 import { isComingSoonVariant } from './productKind'
 import type { MedusaVariant } from '@/types/medusa'
 
-function getPriceForCurrency(variant: MedusaVariant, currencyCode: string): number | null {
-  const prices = variant.prices ?? []
-  const match = prices.find((p) => p.currency_code === currencyCode)
-  if (match) return match.amount / 100
-  // Fall back to ZAR if the requested currency has no price
-  const zar = prices.find((p) => p.currency_code === 'zar')
-  return zar ? zar.amount / 100 : null
+// The price in the buyer's currency, or null. Never another currency's price:
+// a variant without a USD price is "price on request" to a USD visitor, not a
+// rand figure or a converted one (D021, Johan's rule).
+export function getPriceForCurrency(variant: MedusaVariant, currencyCode: string): number | null {
+  const match = (variant.prices ?? []).find((p) => p.currency_code === currencyCode.toLowerCase())
+  return match ? match.amount / 100 : null
 }
 
 function formatVariantPrice(amount: number, currencyCode: string): string {
@@ -42,6 +41,8 @@ interface VariantSelectorProps {
   productHandle?: string
   /** Heading over the variant buttons, matched to what is sold (productKind.ts). */
   chooseLabel?: string
+  /** The visitor's currency from the server, used until a cart exists (D021). */
+  defaultCurrency?: string
 }
 
 export function VariantSelector({
@@ -51,6 +52,7 @@ export function VariantSelector({
   dark = false,
   productHandle,
   chooseLabel = 'Choose an Option',
+  defaultCurrency = 'zar',
 }: VariantSelectorProps) {
   const [pendingState, setPendingState] = useState<'idle' | 'loading' | 'error'>('idle')
   // The variant the last successful add put in the cart. The confirmation stays
@@ -58,12 +60,12 @@ export function VariantSelector({
   // when the buyer picks a different one.
   const [addedVariantId, setAddedVariantId] = useState<string | null>(null)
   const [addToCartError, setAddToCartError] = useState<string | null>(null)
-  const { addItem, cart } = useCart()
+  const { addItem, cart, currency } = useCart()
   // Until React has taken over the server-rendered page, a click on these
   // buttons does nothing (KI066). They render disabled with a pending look
   // so the buyer sees the page is still getting ready instead of a lost click.
   const ready = useHydrated()
-  const cartCurrency = cart?.currency_code ?? 'zar'
+  const cartCurrency = cart?.currency_code ?? currency ?? defaultCurrency
   const isCapacityLimited = isCapacityLimitedHandle(productHandle)
 
   if (variants.length === 0) {
@@ -181,7 +183,7 @@ export function VariantSelector({
           </p>
         ) : (
           <p className={`text-xl font-light ${headingClass} opacity-60`}>
-            Contact us to discuss pricing
+            Price on request
           </p>
         )}
         {/* No "Only N spots left" count until Suzanne gives dates (sourcing

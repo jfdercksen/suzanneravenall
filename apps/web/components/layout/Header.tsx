@@ -3,6 +3,7 @@ import Image from 'next/image'
 import MobileNav from './MobileNav'
 import DesktopNav from './DesktopNav'
 import { CartIcon } from './CartIcon'
+import { CurrencySwitcher } from './CurrencySwitcher'
 import { SearchBar } from '../search/SearchBar'
 
 export interface NavLink {
@@ -112,6 +113,9 @@ export default function Header() {
           {/* Desktop CTA + cart + search + mobile hamburger */}
           <div className="flex items-center gap-2 lg:gap-3 shrink-0">
             <SearchBar />
+            {/* From sm up only: at 320px the header row has no room (site
+                check V7); phones get it in the menu and the footer. */}
+            <CurrencySwitcher className="hidden sm:flex" />
             <CartIcon />
             {/* xl: not lg: — with 8 top-level nav items there is no room for a
                 CTA button at 1024-1279px; the Contact tab and the site-wide

@@ -20,7 +20,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { logError, logWarn } from '@/lib/log'
-import { compareCapture, loadCart, medusaBase, medusaHeaders } from '@/lib/paypal'
+import { compareCapture, loadCart, medusaBase, medusaHeaders, openCapturedSession } from '@/lib/paypal'
 
 interface PayPalWebhookHeaders {
   transmissionId: string
@@ -154,7 +154,9 @@ async function completeCart(cartId: string): Promise<boolean> {
 }
 
 export async function POST(req: NextRequest) {
-  const isSandbox = process.env.NODE_ENV !== 'production'
+  // Same switch as the create and capture routes: the review box runs
+  // NODE_ENV=production against the PayPal sandbox.
+  const isSandbox = process.env.PAYPAL_SANDBOX === 'true'
   const rawBody = await req.text()
 
   const webhookHeaders: PayPalWebhookHeaders = {
@@ -190,6 +192,8 @@ export async function POST(req: NextRequest) {
       custom_id?: string
       // PAYMENT.CAPTURE.* events carry a capture resource: amount sits here.
       amount?: { value?: string; currency_code?: string }
+      // ...and the PayPal order it belongs to here.
+      supplementary_data?: { related_ids?: { order_id?: string } }
       purchase_units?: Array<{
         custom_id?: string
         payments?: {
@@ -234,7 +238,9 @@ export async function POST(req: NextRequest) {
 
     if (cartId) {
       // Only complete when PayPal collected exactly the cart total, in the cart
-      // currency. A mismatch or an unloadable cart is logged and left alone.
+      // currency. A mismatch is logged and left alone (200: a retry cannot fix
+      // it). Anything that may be temporary answers 500, so PayPal retries the
+      // event: the buyer has paid and the order must still be placed.
       const cart = await loadCart(cartId)
       if (!cart) {
         logError('[PayPal Webhook] Cart could not be loaded, not completing', undefined, {
@@ -243,6 +249,7 @@ export async function POST(req: NextRequest) {
           received: captured?.value ?? null,
           currency: captured?.currency_code ?? null,
         })
+        return new NextResponse('Cart unavailable', { status: 500 })
       } else {
         const check = compareCapture(cart, captured)
         if (!check.ok) {
@@ -254,8 +261,24 @@ export async function POST(req: NextRequest) {
             expectedCurrency: check.expectedCurrency,
             receivedCurrency: check.receivedCurrency,
           })
+        } else if (cart.completed_at) {
+          console.info('[PayPal Webhook] Cart already completed', { cartId, captureId })
         } else {
-          await completeCart(cartId)
+          const opened = await openCapturedSession(
+            {
+              cartId,
+              orderId: event.resource?.supplementary_data?.related_ids?.order_id ?? '',
+              captureId,
+              amountCents: check.received,
+              currencyCode: check.receivedCurrency ?? '',
+            },
+            process.env.PAYPAL_CLIENT_SECRET ?? ''
+          )
+          const placed = opened && (await completeCart(cartId))
+          // The capture route may have placed the order in the meantime.
+          if (!placed && !(await loadCart(cartId))?.completed_at) {
+            return new NextResponse('Order not placed yet', { status: 500 })
+          }
         }
       }
     } else {

@@ -90,7 +90,9 @@ module.exports = defineConfig({
             options: {
               clientId: process.env.PAYPAL_CLIENT_ID || "",
               clientSecret: process.env.PAYPAL_CLIENT_SECRET || "",
-              sandboxMode: process.env.NODE_ENV !== "production",
+              // Same switch as the web routes: the review box runs NODE_ENV=production
+              // against the PayPal sandbox, so refunds must go to the sandbox too.
+              sandboxMode: process.env.PAYPAL_SANDBOX === "true",
               siteUrl:
                 process.env.NEXT_PUBLIC_SITE_URL ||
                 "https://suzanneravenall.com",

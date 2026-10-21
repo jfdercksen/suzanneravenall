@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import { headers } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { ShopCatalogueContent } from '@/components/shop/ShopCatalogueContent'
-import { visitorWantsUsd } from '@/lib/visitor-region'
+import { CURRENCY_COOKIE, visitorCurrency } from '@/lib/visitor-region'
 
 export const metadata: Metadata = {
   title: 'Shop',
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     'Private sessions, guided programmes, and group coaching designed to create lasting change. Browse and invest in your transformation.',
 }
 
-// CF-IPCountry is only available at request time — force dynamic to read it.
+// The visitor's currency (cookie, Accept-Language) is only known at request time.
 export const dynamic = 'force-dynamic'
 
 interface MedusaCategory {
@@ -67,16 +67,16 @@ interface ShopPageProps {
 }
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
-  const [categories, catalogueCount, reqHeaders, params] = await Promise.all([
+  const [categories, catalogueCount, reqHeaders, reqCookies, params] = await Promise.all([
     fetchCategories(),
     fetchCatalogueCount(),
     headers(),
+    cookies(),
     searchParams,
   ])
-  // Same rule as the cart (/api/region): ZAR unless the visitor is known to be
-  // abroad and USD is switched on, so a card never shows a currency the
-  // product page and the cart will not use.
-  const defaultCurrency = visitorWantsUsd(reqHeaders) && process.env.NEXT_PUBLIC_MEDUSA_REGION_USD_ID ? 'usd' : 'zar'
+  // Same rule as the cart (/api/region, D021), so a card never shows a
+  // currency the product page and the cart will not use.
+  const defaultCurrency = visitorCurrency(reqHeaders, reqCookies.get(CURRENCY_COOKIE)?.value)
 
   // The catalogue reads its state from the URL on mount; keying on the query
   // remounts it when a link opens /shop with different params.

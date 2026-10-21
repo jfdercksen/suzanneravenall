@@ -6,7 +6,7 @@ import CartPageContent from './CartPageContent'
 const cartState: { cart: unknown; isLoading: boolean } = { cart: null, isLoading: true }
 
 vi.mock('@/lib/cart', () => ({
-  useCart: () => ({ ...cartState, updateItem: vi.fn(), removeItem: vi.fn() }),
+  useCart: () => ({ droppedOnSwitch: [], ...cartState, updateItem: vi.fn(), removeItem: vi.fn() }),
   formatPrice: (n: number) => `R${(n / 100).toFixed(2)}`,
 }))
 vi.mock('next/link', () => ({

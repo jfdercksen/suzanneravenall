@@ -4,7 +4,6 @@ import {
   shopCategoryLabel,
   displayPriceSortKey,
   getDisplayPrice,
-  INDICATIVE_ZAR_PER_USD,
   orderBySearchHits,
   parseShopParams,
   shopStateToQuery,
@@ -79,13 +78,14 @@ describe('sortProducts', () => {
     expect(sortProducts(list, 'price_desc', 'zar').map((p) => p.id)).toEqual(['c', 'b', 'a'])
   })
 
-  it('never compares dollars with rands: falls back to ZAR when some products have no USD price', () => {
+  it('a USD visitor never sees a rand price: products without a USD price go last as price on request (D021)', () => {
     const list = [
-      product('usd-priced', [['usd', 55500], ['zar', 999900]]),
       product('zar-only', [['zar', 77500]]),
+      product('usd-priced', [['usd', 55500], ['zar', 999900]]),
     ]
-    // Raw numbers would put $555 (55500) below R775 (77500); in ZAR it is R9,999.
-    expect(sortProducts(list, 'price_asc', 'usd').map((p) => p.id)).toEqual(['zar-only', 'usd-priced'])
+    expect(getDisplayPrice(list[0]!.variants, 'usd')).toBeNull()
+    expect(sortProducts(list, 'price_asc', 'usd').map((p) => p.id)).toEqual(['usd-priced', 'zar-only'])
+    expect(sortProducts(list, 'price_desc', 'usd').map((p) => p.id)).toEqual(['usd-priced', 'zar-only'])
   })
 
   it('uses the visitor currency when every product is priced in it', () => {
@@ -97,26 +97,20 @@ describe('sortProducts', () => {
     expect(sortProducts(list, 'price_asc', 'zar').map((p) => p.id)).toEqual(['y', 'x'])
   })
 
-  it('follows the displayed price for an overseas visitor, so the visible order is monotonic per currency', () => {
+  it('sorts an overseas visitor on the dollar price alone', () => {
     // Real catalogue shape: ZAR/USD ratios differ wildly per product, so
     // sorting by the hidden ZAR price showed $220 before $15 before $330.
     const list = [
       product('akashic-l2', [['usd', 22000], ['zar', 1029500]]),
       product('post-traumatic-growth', [['usd', 1500], ['zar', 22000]]),
       product('life-purpose', [['usd', 33000], ['zar', 99500]]),
-      product('energy-back', [['zar', 35000]]),
       product('trilogy', [['zar', 16500]]),
     ]
-    const asc = sortProducts(list, 'price_asc', 'usd')
-    const shown = asc.map((p) => getDisplayPrice(p.variants, 'usd')!)
-    const usd = shown.filter((s) => s.currency_code === 'usd').map((s) => s.amount)
-    const zar = shown.filter((s) => s.currency_code === 'zar').map((s) => s.amount)
-    expect(usd).toEqual([...usd].sort((a, b) => a - b))
-    expect(zar).toEqual([...zar].sort((a, b) => a - b))
-    // R165, $15 (about R270), R350, $220 (about R3,960), $330 (about R5,940)
-    expect(asc.map((p) => p.id)).toEqual(['trilogy', 'post-traumatic-growth', 'energy-back', 'akashic-l2', 'life-purpose'])
+    expect(sortProducts(list, 'price_asc', 'usd').map((p) => p.id)).toEqual(
+      ['post-traumatic-growth', 'akashic-l2', 'life-purpose', 'trilogy']
+    )
     expect(sortProducts(list, 'price_desc', 'usd').map((p) => p.id)).toEqual(
-      ['life-purpose', 'akashic-l2', 'energy-back', 'post-traumatic-growth', 'trilogy']
+      ['life-purpose', 'akashic-l2', 'post-traumatic-growth', 'trilogy']
     )
   })
 
@@ -128,10 +122,10 @@ describe('sortProducts', () => {
     expect(sortProducts(list, 'price_asc', 'zar').map((p) => p.id)).toEqual(['life-purpose', 'akashic-l2'])
   })
 
-  it('displayPriceSortKey converts shown dollars at the indicative rate and keeps rands as is', () => {
-    expect(displayPriceSortKey(product('a', [['usd', 1500], ['zar', 22000]]), 'usd')).toBe(1500 * INDICATIVE_ZAR_PER_USD)
-    expect(displayPriceSortKey(product('b', [['zar', 16500]]), 'usd')).toBe(16500)
-    expect(displayPriceSortKey(product('c', [['eur', 1000], ['zar', 20000]]), 'eur')).toBe(20000)
+  it('displayPriceSortKey is the shown amount in the visitor currency, or null', () => {
+    expect(displayPriceSortKey(product('a', [['usd', 1500], ['zar', 22000]]), 'usd')).toBe(1500)
+    expect(displayPriceSortKey(product('b', [['zar', 16500]]), 'usd')).toBeNull()
+    expect(displayPriceSortKey(product('c', [['zar', 16500]]), 'zar')).toBe(16500)
     expect(displayPriceSortKey(product('d', []), 'usd')).toBeNull()
   })
 
