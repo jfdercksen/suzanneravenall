@@ -91,4 +91,31 @@ describe('PayPal provider: captured session from the web capture route (D021)', 
     expect(urls.some((u) => u.includes('/v2/payments/captures/CAP1/refund'))).toBe(true)
     expect(urls.some((u) => u.includes('/v2/checkout/orders/'))).toBe(false)
   })
+
+  // 21 Oct, order #419: Medusa passes a BigNumber; PayPal got "NaN" and the
+  // failure was recorded as a refund.
+  it('refunds the BigNumber amount in the capture currency', async () => {
+    const fetchMock = vi.fn(async (url: string) => {
+      if (url.endsWith('/v1/oauth2/token')) return { ok: true, json: async () => ({ access_token: 't' }) }
+      return { ok: true, json: async () => ({ id: 'REF2', status: 'COMPLETED' }), text: async () => '' }
+    })
+    vi.stubGlobal('fetch', fetchMock)
+    await provider.refundPayment({ amount: { numeric: 2000 }, data: { captureId: 'CAP1', currencyCode: 'USD' } } as never)
+    const call = fetchMock.mock.calls.find((c) => String(c[0]).includes('/refund')) as unknown as [string, RequestInit]
+    expect(JSON.parse(String(call[1].body))).toEqual({ amount: { value: '20.00', currency_code: 'USD' } })
+  })
+
+  it('throws when PayPal refuses the refund, so Medusa does not record one', async () => {
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => {
+      if (url.endsWith('/v1/oauth2/token')) return { ok: true, json: async () => ({ access_token: 't' }) }
+      return { ok: false, status: 400, text: async () => 'INVALID_REQUEST', json: async () => ({}) }
+    }))
+    await expect(
+      provider.refundPayment({ amount: 2000, data: { captureId: 'CAP1', currencyCode: 'USD' } } as never)
+    ).rejects.toThrow('PayPal refund failed (400)')
+  })
+
+  it('throws for a payment without any PayPal id instead of pretending to refund', async () => {
+    await expect(provider.refundPayment({ amount: 2000, data: {} } as never)).rejects.toThrow('no PayPal order or capture id')
+  })
 })

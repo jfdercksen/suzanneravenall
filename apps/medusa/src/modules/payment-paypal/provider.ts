@@ -266,81 +266,69 @@ class PayPalPaymentProvider extends AbstractPaymentProvider<PayPalOptions> {
     }
   }
 
+  // Throws whenever PayPal has not confirmed the refund: Medusa records a
+  // refund only when this returns, and the old version returned on every
+  // failure, so #419 (21 Oct) read "refunded" while PayPal still held the $20.
   async refundPayment(input: RefundPaymentInput): Promise<RefundPaymentOutput> {
     const sessionData = input.data as unknown as PayPalSessionData
 
     if (!sessionData?.orderId && !sessionData?.captureId) {
-      return { data: { ...(input.data ?? {}) } }
+      throw new Error('PayPal refund: the payment has no PayPal order or capture id')
     }
 
-    try {
-      const token = await this.getAccessToken()
+    const token = await this.getAccessToken()
 
-      // Sessions opened by the web capture route carry the capture id; older
-      // ones only the order, so look the capture up there.
-      let captureId = sessionData.captureId
-      if (!captureId) {
-        const orderRes = await fetch(
-          `${this.apiBase}/v2/checkout/orders/${sessionData.orderId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        )
-
-        if (!orderRes.ok) {
-          console.error('[PayPal] refundPayment — could not retrieve order', {
-            orderId: sessionData.orderId,
-          })
-          return { data: { ...(input.data ?? {}) } }
-        }
-
-        const order = (await orderRes.json()) as {
-          purchase_units?: Array<{
-            payments?: { captures?: Array<{ id: string }> }
-          }>
-        }
-
-        captureId = order.purchase_units?.[0]?.payments?.captures?.[0]?.id
-      }
-
-      if (!captureId) {
-        console.warn('[PayPal] refundPayment — no capture ID found', { orderId: sessionData.orderId })
-        return { data: { ...(input.data ?? {}) } }
-      }
-
-      const amountValue = input.amount ? (Number(input.amount) / 100).toFixed(2) : undefined
-
-      const currencyCode = sessionData.currencyCode ?? 'ZAR'
-      const refundBody = amountValue
-        ? { amount: { value: amountValue, currency_code: currencyCode } }
-        : {}
-
-      const refundRes = await fetch(
-        `${this.apiBase}/v2/payments/captures/${captureId}/refund`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(refundBody),
-        }
+    // Sessions opened by the web capture route carry the capture id; older
+    // ones only the order, so look the capture up there.
+    let captureId = sessionData.captureId
+    if (!captureId) {
+      const orderRes = await fetch(
+        `${this.apiBase}/v2/checkout/orders/${sessionData.orderId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       )
-
-      if (!refundRes.ok) {
-        const errBody = (await refundRes.text()).slice(0, 300)
-        console.error('[PayPal] refundPayment failed', { captureId, status: refundRes.status, body: errBody })
+      if (!orderRes.ok) {
+        throw new Error(`PayPal refund: could not read order ${sessionData.orderId} (${orderRes.status})`)
       }
-
-      const refundData = (await refundRes.json().catch(() => ({}))) as { id?: string }
-
-      return {
-        data: {
-          ...(input.data ?? {}),
-          refund_id: refundData.id,
-        },
+      const order = (await orderRes.json()) as {
+        purchase_units?: Array<{ payments?: { captures?: Array<{ id: string }> } }>
       }
-    } catch (err) {
-      console.error('[PayPal] refundPayment error', err)
-      return { data: { ...(input.data ?? {}) } }
+      captureId = order.purchase_units?.[0]?.payments?.captures?.[0]?.id
+      if (!captureId) {
+        throw new Error(`PayPal refund: order ${sessionData.orderId} has no capture`)
+      }
+    }
+
+    // Medusa passes a BigNumber ({ numeric }), not a number: Number() on it
+    // gave NaN and PayPal refused "value":"NaN".
+    const cents = input.amount === undefined || input.amount === null ? NaN : amountOf(input.amount)
+    const refundBody = Number.isFinite(cents) && cents > 0
+      ? { amount: { value: (cents / 100).toFixed(2), currency_code: (sessionData.currencyCode ?? 'USD').toUpperCase() } }
+      : {}
+
+    const refundRes = await fetch(`${this.apiBase}/v2/payments/captures/${captureId}/refund`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        // One refund per capture and amount, even if Medusa retries.
+        'PayPal-Request-Id': `sr-refund-${captureId}-${Number.isFinite(cents) ? cents : 'full'}`,
+      },
+      body: JSON.stringify(refundBody),
+    })
+
+    if (!refundRes.ok) {
+      const errBody = (await refundRes.text()).slice(0, 300)
+      console.error('[PayPal] refundPayment failed', { captureId, status: refundRes.status, body: errBody })
+      throw new Error(`PayPal refund failed (${refundRes.status})`)
+    }
+
+    const refundData = (await refundRes.json().catch(() => ({}))) as { id?: string; status?: string }
+    return {
+      data: {
+        ...(input.data ?? {}),
+        refund_id: refundData.id,
+        refund_status: refundData.status,
+      },
     }
   }
 
