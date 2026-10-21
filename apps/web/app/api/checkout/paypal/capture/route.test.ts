@@ -30,9 +30,33 @@ function makeFetchMock({
   sessionOk = true,
   completedAt = null as string | null,
   captureStatus = 'COMPLETED',
+  // 'full' answers with custom_id; 'minimal' is PayPal's default answer
+  // without it; 'already' is the 422 for an order captured on an earlier call.
+  captureShape = 'full' as 'full' | 'minimal' | 'already',
 } = {}) {
+  const order = (withCustomId: boolean) => ({
+    id: ORDER_ID,
+    status: 'COMPLETED',
+    purchase_units: [
+      {
+        ...(withCustomId ? { custom_id: 'cart_1' } : {}),
+        payments: {
+          captures: [{ id: 'CAP1', status: captureStatus, amount: { value: capturedValue, currency_code: capturedCurrency } }],
+        },
+      },
+    ],
+  })
   return vi.fn(async (url: string | URL, _init?: RequestInit) => {
     const href = url.toString()
+    if (href.endsWith(`/v2/checkout/orders/${ORDER_ID}`)) {
+      return { ok: true, status: 200, json: async () => order(true) }
+    }
+    if (href.endsWith('/capture') && captureShape === 'already') {
+      return { ok: false, status: 422, text: async (): Promise<string> => '{"name":"UNPROCESSABLE_ENTITY","details":[{"issue":"ORDER_ALREADY_CAPTURED"}]}' }
+    }
+    if (href.endsWith('/capture') && captureShape === 'minimal') {
+      return { ok: true, status: 201, json: async () => order(false) }
+    }
     if (href.endsWith('/store/payment-collections')) {
       return { ok: true, status: 200, json: async () => ({ payment_collection: { id: 'paycol_1' } }) }
     }
@@ -204,6 +228,35 @@ describe('POST /api/checkout/paypal/capture', () => {
       const res = await POST(makeRequest({ orderId: ORDER_ID, cartId: 'cart_1' }) as never)
       expect(res.status).toBe(202)
       expect(sessionCalls(fetchMock)).toHaveLength(0)
+      expect(completeCalls(fetchMock)).toHaveLength(0)
+    })
+
+    // G-00d, 21 Oct: PayPal's default capture answer has no custom_id, so the
+    // cart check refused a paid order.
+    it('asks PayPal for the full answer, and completes from the order when custom_id is missing', async () => {
+      const fetchMock = makeFetchMock({ captureShape: 'minimal' })
+      vi.stubGlobal('fetch', fetchMock)
+      const res = await POST(makeRequest({ orderId: ORDER_ID, cartId: 'cart_1' }) as never)
+      expect(res.status).toBe(200)
+      expect(completeCalls(fetchMock)).toHaveLength(1)
+      const capture = fetchMock.mock.calls.find(([u]) => u.toString().endsWith('/capture'))
+      expect((capture?.[1]?.headers as Record<string, string>).Prefer).toBe('return=representation')
+    })
+
+    it('places the order for a PayPal order captured on an earlier attempt', async () => {
+      const fetchMock = makeFetchMock({ captureShape: 'already' })
+      vi.stubGlobal('fetch', fetchMock)
+      const res = await POST(makeRequest({ orderId: ORDER_ID, cartId: 'cart_1' }) as never)
+      expect(res.status).toBe(200)
+      expect(sessionCalls(fetchMock)).toHaveLength(1)
+      expect(completeCalls(fetchMock)).toHaveLength(1)
+    })
+
+    it('still refuses an already-captured order that belongs to another cart', async () => {
+      const fetchMock = makeFetchMock({ captureShape: 'already' })
+      vi.stubGlobal('fetch', fetchMock)
+      const res = await POST(makeRequest({ orderId: ORDER_ID, cartId: 'cart_2' }) as never)
+      expect(res.status).toBe(400)
       expect(completeCalls(fetchMock)).toHaveLength(0)
     })
   })

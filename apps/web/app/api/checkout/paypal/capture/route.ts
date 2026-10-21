@@ -25,6 +25,32 @@ async function getAccessToken(base: string, clientId: string, clientSecret: stri
   return data.access_token
 }
 
+interface PayPalOrder {
+  id: string
+  status: string
+  purchase_units?: Array<{
+    custom_id?: string
+    payments?: {
+      captures?: Array<{
+        id: string
+        status: string
+        amount?: { value?: string; currency_code?: string }
+      }>
+    }
+  }>
+}
+
+async function fetchOrder(base: string, token: string, orderId: string): Promise<PayPalOrder | null> {
+  try {
+    const res = await fetch(`${base}/v2/checkout/orders/${orderId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    return res.ok ? ((await res.json()) as PayPalOrder) : null
+  } catch {
+    return null
+  }
+}
+
 async function completeMedusaCart(cartId: string): Promise<{ type?: string; order?: { id: string } }> {
   const res = await fetch(`${medusaBase()}/store/carts/${encodeURIComponent(cartId)}/complete`, {
     method: 'POST',
@@ -81,28 +107,34 @@ export async function POST(req: NextRequest) {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
         'PayPal-Request-Id': `sr-capture-${orderId}`,
+        // The default (minimal) capture answer leaves out purchase_units[].custom_id,
+        // so the cart check below saw '' and refused a paid order (G-00d, 21 Oct).
+        Prefer: 'return=representation',
       },
     })
 
-    if (!captureRes.ok) {
+    let captureData: PayPalOrder
+    if (captureRes.ok) {
+      captureData = (await captureRes.json()) as PayPalOrder
+    } else {
       const errBody = (await captureRes.text()).slice(0, 400)
-      logError('[PayPal] Capture failed', undefined, { orderId, status: captureRes.status, body: errBody })
-      return NextResponse.json({ error: 'PayPal capture failed' }, { status: 502 })
+      // Captured on an earlier attempt (a reload of the return page, or a call
+      // that failed after PayPal took the money): read the order and carry on,
+      // so a paid cart still becomes an order.
+      const existing = errBody.includes('ORDER_ALREADY_CAPTURED')
+        ? await fetchOrder(apiBase, token, orderId)
+        : null
+      if (!existing || existing.status !== 'COMPLETED') {
+        logError('[PayPal] Capture failed', undefined, { orderId, status: captureRes.status, body: errBody })
+        return NextResponse.json({ error: 'PayPal capture failed' }, { status: 502 })
+      }
+      captureData = existing
     }
 
-    const captureData = (await captureRes.json()) as {
-      id: string
-      status: string
-      purchase_units?: Array<{
-        custom_id?: string
-        payments?: {
-          captures?: Array<{
-            id: string
-            status: string
-            amount?: { value?: string; currency_code?: string }
-          }>
-        }
-      }>
+    // Belt and braces: an answer without custom_id is completed from the order.
+    if (!captureData.purchase_units?.[0]?.custom_id) {
+      const full = await fetchOrder(apiBase, token, orderId)
+      if (full?.status === 'COMPLETED') captureData = full
     }
 
     // Verify that the order's custom_id matches the cartId provided by the client.
