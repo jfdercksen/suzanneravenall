@@ -170,6 +170,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
     logError('[PayPal] Create order error', err, { message })
-    return NextResponse.json({ error: message }, { status: 500 })
+    // Fixed copy: the internal reason ("PayPal OAuth failed: 401") went to the buyer.
+    return NextResponse.json({ error: 'Could not start the PayPal payment. Please try again shortly.' }, { status: 500 })
   }
 }

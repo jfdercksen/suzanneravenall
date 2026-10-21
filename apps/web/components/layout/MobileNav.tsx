@@ -270,7 +270,7 @@ export default function MobileNav({ items }: MobileNavProps) {
 
           {/* CTA at bottom */}
           <div className="px-8 pb-12 flex flex-col gap-3">
-            <CurrencySwitcher className="mb-2" />
+            <CurrencySwitcher className="mt-4 mb-2" />
             <Link
               href="/discover-your-pattern"
               onClick={close}

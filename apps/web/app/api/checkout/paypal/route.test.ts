@@ -37,11 +37,12 @@ function makeFetchMock({
   cart = BASE_CART as Record<string, unknown>,
   cartStatus = 200,
   cartOk = true,
+  oauthOk = true,
 } = {}) {
   return vi.fn(async (url: string | URL, _init?: RequestInit) => {
     const href = url.toString()
     if (href.endsWith('/v1/oauth2/token')) {
-      return { ok: true, status: 200, json: async () => ({ access_token: 'tok' }) }
+      return { ok: oauthOk, status: oauthOk ? 200 : 401, json: async () => ({ access_token: 'tok' }) }
     }
     if (href.endsWith('/v2/checkout/orders')) {
       return {
@@ -161,5 +162,16 @@ describe('POST /api/checkout/paypal', () => {
     vi.stubGlobal('fetch', makeFetchMock({ cart: { ...BASE_CART, total: 0 } }))
     const res = await POST(makeRequest(BASE_BODY) as never)
     expect(res.status).toBe(400)
+  })
+
+  // 21 Oct: the box's placeholder credentials made the buyer see "PayPal OAuth failed: 401".
+  it('answers a fixed message, not the internal reason, when PayPal refuses our credentials', async () => {
+    const fetchMock = makeFetchMock({ oauthOk: false })
+    vi.stubGlobal('fetch', fetchMock)
+    const res = await POST(makeRequest(BASE_BODY) as never)
+    expect(res.status).toBe(500)
+    const data = (await res.json()) as { error: string }
+    expect(data.error).toBe('Could not start the PayPal payment. Please try again shortly.')
+    expect(data.error).not.toContain('OAuth')
   })
 })
