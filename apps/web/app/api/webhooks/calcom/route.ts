@@ -3,6 +3,7 @@ import crypto from 'crypto'
 import { z } from 'zod'
 import { logError } from '@/lib/log'
 import { runCalcomBookingSync } from '@/lib/integrations/calcom-booking'
+import { BOOKING_TRIGGERS, runSessionBookingRecord } from '@/lib/portal/session-bookings'
 
 // Cal.com sends X-Cal-Signature-256: sha256=<hex> (HMAC-SHA256 of raw body)
 // Docs: https://cal.com/docs/core-features/webhooks
@@ -18,12 +19,14 @@ const CalcomPayloadSchema = z.object({
       attendees: z
         .array(
           z.object({
-            email: z.string().email(),
+            // Not .email(): one odd guest address must not drop the whole
+            // delivery; the handlers check the address themselves.
+            email: z.string(),
             name: z.string().optional(),
           })
         )
         .optional(),
-      bookerEmail: z.string().email().optional(),
+      bookerEmail: z.string().optional(),
       bookerName: z.string().optional(),
     })
     .passthrough()
@@ -85,11 +88,14 @@ export async function POST(request: NextRequest) {
 
   const { triggerEvent } = parsed.data
 
-  // Only booking creation reaches Vtiger; cancellations, reschedules etc. are
-  // acknowledged and ignored. The sync runs after the response is sent, so
-  // Cal.com never waits on the CRM (it retries slow webhooks).
+  // Booking creation reaches Vtiger. Creation, reschedule and cancellation are
+  // stored for the member's /portal/appointments page (I-13). Both run after
+  // the response is sent, so Cal.com never waits on the CRM or the database.
   if (triggerEvent === 'BOOKING_CREATED') {
     after(() => runCalcomBookingSync(rawPayload).then(() => undefined))
+  }
+  if ((BOOKING_TRIGGERS as readonly string[]).includes(triggerEvent)) {
+    after(() => runSessionBookingRecord(rawPayload).then(() => undefined))
   }
 
   // Return 200 immediately — never block Cal.com

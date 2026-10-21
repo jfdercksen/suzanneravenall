@@ -5,6 +5,7 @@ import { getMemberTier } from '@/lib/access/check-access'
 import { fetchMemberProgrammes } from '@/lib/medusa/member-programmes'
 import { membershipsEnabled } from '@/lib/access/memberships'
 import { isFirstSession } from '@/lib/portal/welcome'
+import { loadNextAppointment } from '@/lib/portal/load-appointments'
 import DashboardContent from './DashboardContent'
 
 export const metadata = {
@@ -46,9 +47,14 @@ export default async function DashboardPage() {
 
   // Same loader as /portal/programmes, so the count and the list agree (KI078).
   // Only a confirmed address proves ownership of the orders placed with it.
-  const programmes = user.email && user.email_confirmed_at
-    ? (await fetchMemberProgrammes(user.email)).slice(0, 6).map(({ id, title, thumbnailUrl }) => ({ id, title, thumbnailUrl }))
-    : []
+  const [programmes, nextAppointment] = await Promise.all([
+    user.email && user.email_confirmed_at
+      ? fetchMemberProgrammes(user.email).then((items) =>
+          items.slice(0, 6).map(({ id, title, thumbnailUrl }) => ({ id, title, thumbnailUrl })),
+        )
+      : Promise.resolve([]),
+    loadNextAppointment(supabase, user),
+  ])
 
   return (
     <DashboardContent
@@ -56,6 +62,7 @@ export default async function DashboardPage() {
       tierName={tierName}
       tierSlug={tierSlug}
       programmes={programmes}
+      nextAppointment={nextAppointment}
       memberSince={memberSince}
       firstSession={isFirstSession(user)}
       showMemberships={membershipsEnabled()}

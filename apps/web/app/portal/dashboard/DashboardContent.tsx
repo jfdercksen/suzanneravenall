@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
 import { hasAccess, TIER_BADGE_STYLES, UPGRADE_PATH, type TierSlug } from '@/lib/access/tiers'
 import { welcomeHeading } from '@/lib/portal/welcome'
+import type { NextAppointment } from '@/lib/portal/load-appointments'
 
 function CountUp({ target }: { target: number }) {
   const ref = useRef<HTMLSpanElement>(null)
@@ -39,6 +40,8 @@ interface DashboardContentProps {
   tierName: string
   tierSlug: TierSlug
   programmes: Programme[]
+  /** The next booked session (I-13); null when nothing is booked */
+  nextAppointment?: NextAppointment | null
   memberSince: string | null
   /** First session after signing up: "Welcome", not "Welcome back" (KI077) */
   firstSession?: boolean
@@ -57,6 +60,7 @@ export default function DashboardContent({
   tierName,
   tierSlug,
   programmes,
+  nextAppointment = null,
   memberSince,
   firstSession = false,
   showMemberships = true,
@@ -259,7 +263,7 @@ export default function DashboardContent({
           )}
         </motion.div>
 
-        {/* Two-column bottom row: Upcoming Sessions + Community */}
+        {/* Two-column bottom row: Next Appointment + Community */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -267,7 +271,7 @@ export default function DashboardContent({
           transition={{ duration: 0.6, delay: 0.2 }}
           className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10"
         >
-          {/* Upcoming sessions widget */}
+          {/* Next appointment (I-13) */}
           <div className="p-6 bg-brand-primary-800 border border-white/25 rounded-card">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center text-white">
@@ -275,17 +279,24 @@ export default function DashboardContent({
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                 </svg>
               </div>
-              <h3 className="text-white font-semibold">Upcoming Sessions</h3>
+              <h3 className="text-white font-semibold">Next Appointment</h3>
             </div>
-            <p className="text-white/70 text-sm mb-4">
-              {/* TODO: Replace with live Cal.com booking data once Cal.com API integration is wired */}
-              Book a one-on-one session with Dr. Suzanne Ravenall or register for an upcoming group intensive.
-            </p>
+            {nextAppointment ? (
+              <div className="mb-4" data-testid="next-appointment">
+                <p className="text-white font-semibold">{nextAppointment.dateLabel}</p>
+                <p className="text-white/85 text-sm">{nextAppointment.timeLabel}</p>
+                <p className="text-white/70 text-sm truncate">{nextAppointment.service}</p>
+              </div>
+            ) : (
+              <p className="text-white/70 text-sm mb-4">
+                No session booked yet. Your appointments and the sessions you still have to book are on your appointments page.
+              </p>
+            )}
             <Link
-              href="/contact#book"
+              href="/portal/appointments"
               className="inline-flex items-center gap-2 text-brand-accent-400 text-sm font-medium hover:underline"
             >
-              View available sessions
+              {nextAppointment ? 'All my appointments' : 'My appointments'}
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>

@@ -2,9 +2,10 @@
 import crypto from 'crypto'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-const { afterCallbacks, runCalcomBookingSync, logError } = vi.hoisted(() => ({
+const { afterCallbacks, runCalcomBookingSync, runSessionBookingRecord, logError } = vi.hoisted(() => ({
   afterCallbacks: [] as Array<() => unknown>,
   runCalcomBookingSync: vi.fn(),
+  runSessionBookingRecord: vi.fn(),
   logError: vi.fn(),
 }))
 
@@ -13,6 +14,10 @@ vi.mock('next/server', async (importOriginal) => {
   return { ...actual, after: (cb: () => unknown) => afterCallbacks.push(cb) }
 })
 vi.mock('@/lib/integrations/calcom-booking', () => ({ runCalcomBookingSync }))
+vi.mock('@/lib/portal/session-bookings', () => ({
+  BOOKING_TRIGGERS: ['BOOKING_CREATED', 'BOOKING_RESCHEDULED', 'BOOKING_CANCELLED'],
+  runSessionBookingRecord,
+}))
 vi.mock('@/lib/log', () => ({ logError }))
 
 import { NextRequest } from 'next/server'
@@ -59,6 +64,7 @@ describe('POST /api/webhooks/calcom', () => {
     process.env.CALCOM_WEBHOOK_SECRET = SECRET
     afterCallbacks.length = 0
     runCalcomBookingSync.mockReset().mockResolvedValue({ status: 'synced' })
+    runSessionBookingRecord.mockReset().mockResolvedValue('created')
     logError.mockReset()
     vi.stubGlobal('fetch', fetchSpy)
   })
@@ -73,9 +79,11 @@ describe('POST /api/webhooks/calcom', () => {
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ ok: true })
     expect(runCalcomBookingSync).not.toHaveBeenCalled()
-    expect(afterCallbacks).toHaveLength(1)
-    await afterCallbacks[0]!()
+    expect(runSessionBookingRecord).not.toHaveBeenCalled()
+    expect(afterCallbacks).toHaveLength(2)
+    await Promise.all(afterCallbacks.map((cb) => cb()))
     expect(runCalcomBookingSync).toHaveBeenCalledWith(V1)
+    expect(runSessionBookingRecord).toHaveBeenCalledWith(V1)
   })
 
   it('passes the v2 payload shape through to the sync', async () => {
@@ -91,8 +99,20 @@ describe('POST /api/webhooks/calcom', () => {
     expect(fetchSpy).not.toHaveBeenCalled()
   })
 
+  it.each(['BOOKING_RESCHEDULED', 'BOOKING_CANCELLED'])(
+    'stores %s for the appointments page but does not send it to Vtiger',
+    async (triggerEvent) => {
+      const payload = { ...V1, triggerEvent }
+      expect((await POST(request(JSON.stringify(payload)))).status).toBe(200)
+      expect(afterCallbacks).toHaveLength(1)
+      await afterCallbacks[0]!()
+      expect(runSessionBookingRecord).toHaveBeenCalledWith(payload)
+      expect(runCalcomBookingSync).not.toHaveBeenCalled()
+    },
+  )
+
   it('ignores other trigger events', async () => {
-    const body = JSON.stringify({ ...V1, triggerEvent: 'BOOKING_CANCELLED' })
+    const body = JSON.stringify({ ...V1, triggerEvent: 'MEETING_ENDED' })
     expect((await POST(request(body))).status).toBe(200)
     expect(afterCallbacks).toHaveLength(0)
   })

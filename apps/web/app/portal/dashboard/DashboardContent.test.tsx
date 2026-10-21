@@ -51,4 +51,15 @@ describe('DashboardContent', () => {
     expect(screen.getByText('Membership tier')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'View Membership Plans' })).toHaveAttribute('href', '/portal/upgrade')
   })
+
+  it('shows the next appointment with a link to the appointments page (I-13)', () => {
+    const next = { service: 'Session (60 min)', dateLabel: 'Tue, 3 November 2026', timeLabel: '10:00 - 11:00 SAST' }
+    const { rerender } = render(<DashboardContent {...base} nextAppointment={next} showMemberships={false} />)
+    expect(screen.getByTestId('next-appointment')).toHaveTextContent('Tue, 3 November 2026')
+    expect(screen.getByTestId('next-appointment')).toHaveTextContent('10:00 - 11:00 SAST')
+    expect(screen.getByRole('link', { name: /All my appointments/ })).toHaveAttribute('href', '/portal/appointments')
+    rerender(<DashboardContent {...base} nextAppointment={null} showMemberships={false} />)
+    expect(screen.getByText(/No session booked yet/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /My appointments/ })).toHaveAttribute('href', '/portal/appointments')
+  })
 })

@@ -24,7 +24,14 @@ describe('PortalNav', () => {
   it('puts Videos in the phone tab bar (KI076)', () => {
     render(<PortalNav tier="free" />)
     expect(within(phoneNav()).getByRole('link', { name: /Videos/ })).toHaveAttribute('href', '/portal/videos')
-    expect(within(phoneNav()).getAllByRole('link')).toHaveLength(6)
+    expect(within(phoneNav()).getAllByRole('link')).toHaveLength(7)
+  })
+
+  it('links My Appointments in the sidebar and the phone tab bar (I-13)', () => {
+    render(<PortalNav tier="free" />)
+    expect(within(phoneNav()).getByRole('link', { name: /Sessions/ })).toHaveAttribute('href', '/portal/appointments')
+    const sidebar = screen.getAllByRole('navigation', { name: 'Portal navigation' }).find((n) => n.closest('aside'))!
+    expect(within(sidebar).getByRole('link', { name: /My Appointments/ })).toHaveAttribute('href', '/portal/appointments')
   })
 
   it('keeps the phone tab bar above the cookie banner while it shows (KI077)', () => {
