@@ -118,6 +118,11 @@ GRANT SELECT (
   cal_booking_id, location, cancelled_at, created_at, updated_at
 ) ON public.session_bookings TO authenticated;
 
+-- PostgREST on the self-hosted stack does not reload on DDL: without this
+-- reads work (they go straight to SQL) but every insert answers 404 {}
+-- because the table is not in the schema cache (found 21 Oct on the I-13 walk).
+NOTIFY pgrst, 'reload schema';
+
 -- ---------------------------------------------------------------------------
 -- DOWN
 -- ---------------------------------------------------------------------------
