@@ -1,5 +1,5 @@
 -- =============================================================================
--- Migration: 20261021120000_session_bookings
+-- Migration: 20261021130000_session_bookings
 -- Description: One row per Cal.com booking, written by the Cal.com webhook
 --              (apps/web/app/api/webhooks/calcom) on BOOKING_CREATED,
 --              BOOKING_RESCHEDULED and BOOKING_CANCELLED. The member portal
