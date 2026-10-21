@@ -127,6 +127,11 @@ services:
       # jobs/cart-recovery.ts). Empty delays = "1h,23h,48h".
       AUTOMATION_CART_RECOVERY: ${AUTOMATION_CART_RECOVERY:-n8n}
       CART_RECOVERY_DELAYS: ${CART_RECOVERY_DELAYS:-}
+      # Intake forms (H-12): order -> web /api/intake/orders, hourly reminders.
+      # code (default) | off. Empty delays = "1d,3d,5d,8d,11d,14d" (web app).
+      AUTOMATION_INTAKE: ${AUTOMATION_INTAKE:-code}
+      INTAKE_REMINDER_DELAYS: ${INTAKE_REMINDER_DELAYS:-}
+      INTAKE_SWEEP_SINCE: ${INTAKE_SWEEP_SINCE:-}
       AUTOMATION_ALERT_EMAIL: ${AUTOMATION_ALERT_EMAIL:-}
       # Medusa's own dry-run switch, separate from the web app's
       # AUTOMATION_DRY_RUN so a shadow run here never pauses live lead sync.
@@ -187,6 +192,10 @@ services:
       EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS:-}
       CONTACT_NOTIFY_EMAIL: ${CONTACT_NOTIFY_EMAIL:-}
       QUIZ_NOTIFY_EMAIL: ${QUIZ_NOTIFY_EMAIL:-}
+      # Intake forms (H-12): completed forms go here (else CONTACT_NOTIFY_EMAIL,
+      # else support@ravenallinstitute.com); same delays as medusa.
+      INTAKE_NOTIFY_EMAIL: ${INTAKE_NOTIFY_EMAIL:-}
+      INTAKE_REMINDER_DELAYS: ${INTAKE_REMINDER_DELAYS:-}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN}
       SENTRY_DSN_WEB: ${SENTRY_DSN_WEB}
