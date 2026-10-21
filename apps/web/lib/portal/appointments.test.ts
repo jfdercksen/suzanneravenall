@@ -63,7 +63,15 @@ describe('buildAppointmentsView', () => {
   it('puts a cancelled booking under past without links and gives its session back', () => {
     const view = buildAppointmentsView([row('bk_x', '2026-11-03T08:00:00Z', { status: 'cancelled' })], [PACKAGE], OPTS)
     expect(view.upcoming).toEqual([])
-    expect(view.past).toEqual([expect.objectContaining({ uid: 'bk_x', status: 'cancelled', rescheduleUrl: null, cancelUrl: null })])
+    expect(view.past).toEqual([
+      expect.objectContaining({
+        uid: 'bk_x',
+        status: 'cancelled',
+        service: 'Resonance Repatterning / Coaching Session',
+        rescheduleUrl: null,
+        cancelUrl: null,
+      }),
+    ])
     expect(view.toBook[0]).toMatchObject({ remaining: 4, total: 4 })
   })
 

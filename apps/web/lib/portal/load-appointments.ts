@@ -4,11 +4,7 @@ import { logError } from '@/lib/log'
 import {
   buildAppointmentsView,
   calBaseUrl,
-  eventName,
-  formatSastDate,
-  formatSastTimes,
   MEMBER_BOOKING_COLUMNS,
-  liveBookings,
   sessionBookingBase,
   type AppointmentsView,
   type MemberBookingRow,
@@ -66,26 +62,12 @@ export async function loadMemberAppointments(supabase: SupabaseClient, user: Use
   return { ...view, ordersUnavailable: lines === null, bookingsUnavailable: bookings === null }
 }
 
-/** The member's next booked appointment for the dashboard card, or null. */
+/**
+ * The member's next booked appointment for the dashboard card, or null. Uses
+ * the page's loader so the card and the page name the service the same way.
+ */
 export async function loadNextAppointment(supabase: SupabaseClient, user: User): Promise<NextAppointment | null> {
-  if (!confirmedEmail(user)) return null
-  const { data, error } = await supabase
-    .from('session_bookings')
-    .select(MEMBER_BOOKING_COLUMNS)
-    .gt('end_time', new Date().toISOString())
-    .order('start_time', { ascending: true })
-    .limit(20)
-  if (error) {
-    logError('[portal/dashboard] next appointment read failed', error)
-    return null
-  }
-  // Cancelled rows stay in the read: a moved booking's old row is hidden by
-  // its replacement even when the replacement was cancelled.
-  const row = liveBookings((data ?? []) as MemberBookingRow[]).find((r) => r.status !== 'cancelled')
-  if (!row) return null
-  return {
-    service: eventName(row),
-    dateLabel: formatSastDate(row.start_time),
-    timeLabel: formatSastTimes(row.start_time, row.end_time),
-  }
+  const { upcoming } = await loadMemberAppointments(supabase, user)
+  const next = upcoming[0]
+  return next ? { service: next.service, dateLabel: next.dateLabel, timeLabel: next.timeLabel } : null
 }

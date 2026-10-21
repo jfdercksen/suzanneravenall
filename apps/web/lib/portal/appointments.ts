@@ -133,12 +133,19 @@ export function buildAppointmentsView(
   const rescheduleQuery = by ? `?${new URLSearchParams({ rescheduledBy: by })}` : ''
   const cancelQuery = new URLSearchParams({ cancel: 'true', allRemainingBookings: 'false', ...(by ? { cancelledBy: by } : {}) }).toString()
 
+  // The service a session of this length was bought for (oldest purchase).
+  const serviceForLength = (row: MemberBookingRow): string | null => {
+    const minutes = bookingSessionMinutes(row.event_slug)
+    if (minutes === null) return null
+    return credits.find((c) => c.durationMinutes === minutes)?.service ?? credits[0]?.service ?? null
+  }
+
   const toView = (row: MemberBookingRow, upcoming: boolean): AppointmentView => {
     const live = upcoming && row.status !== 'cancelled'
     const uid = encodeURIComponent(row.booking_uid)
     return {
       uid: row.booking_uid,
-      service: serviceByBooking.get(row.booking_uid) ?? eventName(row),
+      service: serviceByBooking.get(row.booking_uid) ?? serviceForLength(row) ?? eventName(row),
       dateLabel: formatSastDate(row.start_time),
       timeLabel: formatSastTimes(row.start_time, row.end_time),
       durationLabel: `${minutesOf(row)} min`,

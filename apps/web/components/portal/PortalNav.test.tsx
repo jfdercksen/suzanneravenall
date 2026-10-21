@@ -27,6 +27,13 @@ describe('PortalNav', () => {
     expect(within(phoneNav()).getAllByRole('link')).toHaveLength(7)
   })
 
+  it('keeps phone labels short enough for seven 52px tabs (I-13 walk)', () => {
+    render(<PortalNav tier="free" />)
+    for (const link of within(phoneNav()).getAllByRole('link')) {
+      expect(link.textContent?.trim().length ?? 0).toBeLessThanOrEqual(9)
+    }
+  })
+
   it('links My Appointments in the sidebar and the phone tab bar (I-13)', () => {
     render(<PortalNav tier="free" />)
     expect(within(phoneNav()).getByRole('link', { name: /Sessions/ })).toHaveAttribute('href', '/portal/appointments')
