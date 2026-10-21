@@ -69,9 +69,15 @@ export interface NewIntakeRecord {
 /** The row for (order, service), inserting it when it is new. `created` is false on a replay. */
 export async function upsertIntakeRecord(row: NewIntakeRecord): Promise<{ record: IntakeRecord; created: boolean }> {
   const supabase = client()
-  const { data, error } = await supabase.from(INTAKE_TABLE).insert(row).select('*').maybeSingle()
-  if (!error && data) return { record: data as IntakeRecord, created: true }
-  if (error && error.code !== '23505') fail('insert', error)
+  // ON CONFLICT DO NOTHING: the hourly sweep re-posts every recent order, and a
+  // plain insert made Postgres log a unique-key error for each one.
+  const { data, error } = await supabase
+    .from(INTAKE_TABLE)
+    .upsert(row, { onConflict: 'order_id,service_key', ignoreDuplicates: true })
+    .select('*')
+  if (error) fail('insert', error)
+  const inserted = Array.isArray(data) ? (data[0] as IntakeRecord | undefined) : undefined
+  if (inserted) return { record: inserted, created: true }
 
   const { data: existing, error: readError } = await supabase
     .from(INTAKE_TABLE)
