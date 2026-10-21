@@ -39,3 +39,6 @@ Thumbs.db
 
 # Playwright MCP accessibility snapshots (per-call noise; screenshots are kept)
 docs/testing/results/browser/*.yml
+
+# DB-IP country database, downloaded on the box (infra/scripts/geoip/update-dbip.sh)
+infra/geoip/

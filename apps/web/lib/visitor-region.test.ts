@@ -48,15 +48,23 @@ describe('Accept-Language detection table (D021)', () => {
   })
 })
 
-describe('geo header (none in the stack today, KI034)', () => {
-  it('beats Accept-Language when present', () => {
-    expect(detectCurrency(h({ 'CF-IPCountry': 'ZA', 'Accept-Language': 'en-US' }))).toBe('zar')
-    expect(detectCurrency(h({ 'CF-IPCountry': 'GB', 'Accept-Language': 'en-ZA' }))).toBe('usd')
+describe('Cloudflare geo header (trusted only behind Cloudflare)', () => {
+  const cf = { TRUST_CF_IPCOUNTRY: 'true' }
+
+  it('is ignored until TRUST_CF_IPCOUNTRY is set: a visitor can forge it', () => {
+    expect(visitorCountry(h({ 'CF-IPCountry': 'ZA' }), {})).toBe('')
+    expect(visitorCountry(h({ 'X-Geo-Country': 'ZA' }), cf)).toBe('')
+    expect(detectCurrency(h({ 'CF-IPCountry': 'ZA', 'Accept-Language': 'en-US' }), {})).toBe('usd')
+  })
+
+  it('beats Accept-Language when trusted', () => {
+    expect(detectCurrency(h({ 'CF-IPCountry': 'ZA', 'Accept-Language': 'en-US' }), cf)).toBe('zar')
+    expect(detectCurrency(h({ 'CF-IPCountry': 'GB', 'Accept-Language': 'en-ZA' }), cf)).toBe('usd')
   })
 
   it('ignores Cloudflare unknown (XX) and Tor (T1) and falls through', () => {
-    expect(visitorCountry(h({ 'CF-IPCountry': 'XX', 'X-Geo-Country': 'US' }))).toBe('US')
-    expect(detectCurrency(h({ 'CF-IPCountry': 'T1', 'Accept-Language': 'en-ZA' }))).toBe('zar')
+    expect(visitorCountry(h({ 'CF-IPCountry': 'XX' }), cf)).toBe('')
+    expect(detectCurrency(h({ 'CF-IPCountry': 'T1', 'Accept-Language': 'en-ZA' }), cf)).toBe('zar')
   })
 })
 
@@ -87,5 +95,26 @@ describe('visitorCurrency', () => {
     const noUsd = { NEXT_PUBLIC_MEDUSA_REGION_ID: 'reg_zar' }
     expect(usdEnabled(noUsd)).toBe(false)
     expect(visitorCurrency(h({ 'Accept-Language': 'en-US' }), undefined, noUsd)).toBe('zar')
+  })
+})
+
+describe('location first (Johan, 21 Oct: South Africa = ZAR, everywhere else = USD)', () => {
+  it('the IP country beats the cookie and the browser language', () => {
+    expect(visitorCurrency(h({ 'Accept-Language': 'en-US' }), 'usd', env, 'ZA')).toBe('zar')
+    expect(visitorCurrency(h({ 'Accept-Language': 'en-ZA' }), 'zar', env, 'US')).toBe('usd')
+  })
+
+  it('a trusted Cloudflare header beats the IP country; an untrusted one is ignored', () => {
+    expect(visitorCurrency(h({ 'CF-IPCountry': 'ZA' }), undefined, { ...env, TRUST_CF_IPCOUNTRY: 'true' }, 'US')).toBe('zar')
+    expect(visitorCurrency(h({ 'CF-IPCountry': 'ZA' }), undefined, env, 'US')).toBe('usd')
+  })
+
+  it('unknown location falls back to the cookie, then the browser language', () => {
+    expect(visitorCurrency(h({ 'Accept-Language': 'en-US' }), 'zar', env, '')).toBe('zar')
+    expect(visitorCurrency(h({ 'Accept-Language': 'en-US' }), undefined, env, null)).toBe('usd')
+  })
+
+  it('master switch off: ZAR even for a US IP', () => {
+    expect(visitorCurrency(h({}), undefined, { ...env, MEDUSA_USD_REGION_ENABLED: 'false' }, 'US')).toBe('zar')
   })
 })

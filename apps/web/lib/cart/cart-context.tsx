@@ -79,11 +79,7 @@ export interface CartContextType {
   clearCart: (cartId?: string) => void
   /** The visitor's currency (D021), null until /api/region has answered. */
   currency: Currency | null
-  /** False when MEDUSA_USD_REGION_ENABLED is off: the switcher hides itself. */
-  usdEnabled: boolean
-  /** Switch currency: sets the cookie and moves the cart to the matching region. */
-  setCurrency: (currency: Currency) => Promise<void>
-  /** Lines that had no price in the new currency and were left behind on a switch. */
+  /** Lines that had no price in the visitor's currency when a stored cart was moved to it. */
   droppedOnSwitch: string[]
 }
 
@@ -141,7 +137,7 @@ interface RegionAnswer {
   regionId: string
   currency: Currency | null
   usdEnabled: boolean
-  /** The currency is still the middleware's guess, not the visitor's choice. */
+  /** The currency is still a browser-language guess (location unknown). */
   auto: boolean
 }
 
@@ -171,7 +167,7 @@ async function fetchRegion(): Promise<RegionAnswer | null> {
   return regionId ? { regionId, currency: 'zar', usdEnabled: false, auto: false } : null
 }
 
-// Record the visitor's choice server-side (cookie) and get its region back.
+// Record a currency server-side (cookie, when the location is unknown) and get its region back.
 async function chooseCurrency(currency: Currency): Promise<RegionAnswer | null> {
   try {
     const res = await fetch('/api/region', {
@@ -376,7 +372,6 @@ export function CartProvider({ children, onCurrencyChange }: CartProviderProps) 
   const [cart, setCartState] = useState<Cart | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [currency, setCurrencyState] = useState<Currency | null>(null)
-  const [usdEnabled, setUsdEnabled] = useState(false)
   const [droppedOnSwitch, setDroppedOnSwitch] = useState<string[]>([])
   const regionIdRef = useRef<string | null>(null)
   const onCurrencyChangeRef = useRef(onCurrencyChange)
@@ -390,10 +385,6 @@ export function CartProvider({ children, onCurrencyChange }: CartProviderProps) 
   // with the stored cart (item gone until a reload) or, when the stored cart was
   // already an order, deleted the new cart's id from localStorage.
   const initDoneRef = useRef<Promise<void>>(Promise.resolve())
-  // Currency switches run one at a time, and cart writes wait for the one in
-  // flight: an Add to Cart during a switch would otherwise land in the cart
-  // that is being replaced.
-  const switchRef = useRef<Promise<void>>(Promise.resolve())
 
   const setCart = useCallback((next: Cart | null) => {
     cartRef.current = next
@@ -411,7 +402,6 @@ export function CartProvider({ children, onCurrencyChange }: CartProviderProps) 
     async function resolveRegion(): Promise<RegionAnswer | null> {
       const answer = await fetchRegion()
       if (!answer) return null
-      setUsdEnabled(answer.usdEnabled)
       if (answer.auto && answer.usdEnabled && answer.currency === 'usd' && looksSouthAfrican()) {
         const corrected = await chooseCurrency('zar')
         if (corrected) {
@@ -466,8 +456,8 @@ export function CartProvider({ children, onCurrencyChange }: CartProviderProps) 
         const [existing, region] = await Promise.all([fetchCart(cartId), regionPromise])
         if (region) applyRegion(region)
         if (existing && !existing.completed_at) {
-          // A cart from before a currency switch (or from when everyone got
-          // ZAR) is moved to the visitor's region, not thrown away.
+          // A cart from another region (the visitor moved, or one from before USD
+          // went live) is moved to the visitor's region, not thrown away.
           const resolved = regionIdRef.current
           if (!resolved || existing.region_id === resolved) {
             setCart(existing)
@@ -497,7 +487,6 @@ export function CartProvider({ children, onCurrencyChange }: CartProviderProps) 
 
   const getOrCreateCart = useCallback(async (): Promise<Cart | null> => {
     await initDoneRef.current
-    await switchRef.current
     if (cartRef.current) return cartRef.current
 
     let regionId = regionIdRef.current
@@ -516,39 +505,6 @@ export function CartProvider({ children, onCurrencyChange }: CartProviderProps) 
     return newCart
   }, [setCart, applyRegion])
 
-  const setCurrency = useCallback(
-    (next: Currency): Promise<void> => {
-      const run = async () => {
-        await initDoneRef.current
-        const chosen = await chooseCurrency(next)
-        if (!chosen) throw new Error('Could not change the currency right now. Please try again.')
-        applyRegion(chosen)
-        const current = cartRef.current
-        if (current && current.region_id !== chosen.regionId) {
-          const moved = await moveCartToRegion(current, chosen.regionId)
-          if (moved) {
-            rememberCartId(moved.cart.id)
-            setCart(moved.cart)
-            setDroppedOnSwitch(moved.dropped)
-          } else {
-            // Could not build a cart in the new region: start clean rather than
-            // keep a cart priced in the other currency.
-            rememberCartId(null)
-            setCart(null)
-            setDroppedOnSwitch(current.items.map((item) => item.title))
-          }
-        } else {
-          setDroppedOnSwitch([])
-        }
-        onCurrencyChangeRef.current?.()
-      }
-      const task = switchRef.current.then(run)
-      // The queue itself never rejects; the caller still sees this switch's error.
-      switchRef.current = task.catch(() => {})
-      return task
-    },
-    [applyRegion, setCart]
-  )
 
   const addItem = useCallback(
     async (variantId: string, quantity = 1) => {
@@ -740,11 +696,9 @@ export function CartProvider({ children, onCurrencyChange }: CartProviderProps) 
       removePromoCode,
       clearCart,
       currency,
-      usdEnabled,
-      setCurrency,
       droppedOnSwitch,
     }),
-    [cart, isLoading, itemCount, addItem, updateItem, removeItem, setEmail, setContact, applyPromoCode, removePromoCode, clearCart, currency, usdEnabled, setCurrency, droppedOnSwitch]
+    [cart, isLoading, itemCount, addItem, updateItem, removeItem, setEmail, setContact, applyPromoCode, removePromoCode, clearCart, currency, droppedOnSwitch]
   )
 
   return <CartCtx.Provider value={value}>{children}</CartCtx.Provider>

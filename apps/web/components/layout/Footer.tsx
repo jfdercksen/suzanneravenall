@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import CookieSettingsButton from './CookieSettingsButton'
-import { CurrencySwitcher } from './CurrencySwitcher'
 
 const footerLinks = {
   services: {
@@ -184,7 +183,6 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <CurrencySwitcher />
           <p className="text-xs text-white/70">
             {/* Rights holder: https://suzanneravenall.com/terms-and-conditions/ */}
             &copy; {year} The Ravenall Institute Pty Ltd. All rights reserved.

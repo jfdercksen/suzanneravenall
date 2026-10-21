@@ -146,6 +146,14 @@ export default function LegalPrivacyContent() {
                 <li>
                   <strong>Cal.com</strong>: appointment scheduling
                 </li>
+                <li>
+                  <strong>DB-IP</strong>: a country database we keep on our own server to show
+                  prices in rand in South Africa and in US dollars elsewhere. Your IP address is
+                  looked up there and is not sent to DB-IP or anyone else.{' '}
+                  <a href="https://db-ip.com" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+                    IP Geolocation by DB-IP
+                  </a>
+                </li>
                 <li>Regulatory authorities, where required by law</li>
               </ul>
             </div>

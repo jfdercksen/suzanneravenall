@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { cookies, headers } from 'next/headers'
 import { ShopCatalogueContent } from '@/components/shop/ShopCatalogueContent'
+import { ipCountry } from '@/lib/geoip'
 import { CURRENCY_COOKIE, visitorCurrency } from '@/lib/visitor-region'
 
 export const metadata: Metadata = {
@@ -76,7 +77,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   ])
   // Same rule as the cart (/api/region, D021), so a card never shows a
   // currency the product page and the cart will not use.
-  const defaultCurrency = visitorCurrency(reqHeaders, reqCookies.get(CURRENCY_COOKIE)?.value)
+  const defaultCurrency = visitorCurrency(reqHeaders, reqCookies.get(CURRENCY_COOKIE)?.value, process.env, ipCountry(reqHeaders))
 
   // The catalogue reads its state from the URL on mount; keying on the query
   // remounts it when a link opens /shop with different params.

@@ -6,8 +6,6 @@ import MobileNav from './MobileNav'
 import type { NavItem } from './Header'
 
 // Mock next/navigation
-// CurrencySwitcher reads the cart context; it has its own tests.
-vi.mock('./CurrencySwitcher', () => ({ CurrencySwitcher: () => null }))
 vi.mock('next/navigation', () => ({
   usePathname: () => '/',
 }))

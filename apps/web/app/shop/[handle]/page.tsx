@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import type { MedusaProduct } from '@/types/medusa'
 import { NOT_FOUND_TITLE } from '@/lib/seo/notFoundTitle'
 import ProductPageContent from '@/components/shop/ProductPageContent'
+import { ipCountry } from '@/lib/geoip'
 import { CURRENCY_COOKIE, visitorCurrency } from '@/lib/visitor-region'
 
 // Force dynamic rendering — product pages depend on live Medusa data.
@@ -83,7 +84,7 @@ export default async function ProductDetailPage({
   const initialVariantId = typeof variant === 'string' ? variant : undefined
 
   // Same rule as the cart and the shop cards (D021).
-  const defaultCurrency = visitorCurrency(reqHeaders, reqCookies.get(CURRENCY_COOKIE)?.value)
+  const defaultCurrency = visitorCurrency(reqHeaders, reqCookies.get(CURRENCY_COOKIE)?.value, process.env, ipCountry(reqHeaders))
 
   return <ProductPageContent product={product} initialVariantId={initialVariantId} defaultCurrency={defaultCurrency} />
 }

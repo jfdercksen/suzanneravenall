@@ -1,5 +1,9 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { NextRequest } from 'next/server'
+
+// The IP lookup (DB-IP database on the box) is stubbed: '' = location unknown.
+let ipCountryValue = ''
+vi.mock('@/lib/geoip', () => ({ ipCountry: () => ipCountryValue }))
 
 import { GET, POST } from './route'
 
@@ -25,6 +29,7 @@ function post(body: unknown, headers: Record<string, string> = {}): NextRequest 
 
 describe('GET /api/region', () => {
   beforeEach(() => {
+    ipCountryValue = ''
     process.env.NEXT_PUBLIC_MEDUSA_REGION_ID = ZAR
     process.env.NEXT_PUBLIC_MEDUSA_REGION_USD_ID = USD
     delete process.env.MEDUSA_USD_REGION_ENABLED
@@ -75,8 +80,9 @@ describe('GET /api/region', () => {
     expect(r.usdEnabled).toBe(false)
   })
 
-  it('still serves ZAR to a known South African (geo header) with USD on', async () => {
-    expect((await resolve({ 'CF-IPCountry': 'ZA', 'Accept-Language': 'en-US' })).regionId).toBe(ZAR)
+  it('still serves ZAR to a South African IP with USD on', async () => {
+    ipCountryValue = 'ZA'
+    expect((await resolve({ 'Accept-Language': 'en-US' })).regionId).toBe(ZAR)
   })
 
   it('falls back to ZAR when the USD region is unconfigured', async () => {
@@ -85,8 +91,56 @@ describe('GET /api/region', () => {
   })
 })
 
-describe('POST /api/region (the switcher)', () => {
+describe('GET /api/region by IP location (Johan, 21 Oct)', () => {
   beforeEach(() => {
+    process.env.NEXT_PUBLIC_MEDUSA_REGION_ID = ZAR
+    process.env.NEXT_PUBLIC_MEDUSA_REGION_USD_ID = USD
+    delete process.env.MEDUSA_USD_REGION_ENABLED
+  })
+
+  afterEach(() => {
+    ipCountryValue = ''
+    delete process.env.NEXT_PUBLIC_MEDUSA_REGION_ID
+    delete process.env.NEXT_PUBLIC_MEDUSA_REGION_USD_ID
+  })
+
+  it('a South African IP gets ZAR, whatever the browser language or cookie', async () => {
+    ipCountryValue = 'ZA'
+    const r = await resolve({ 'Accept-Language': 'en-US', Cookie: 'sr_currency=usd' })
+    expect(r).toEqual({ regionId: ZAR, currency: 'zar', country: 'ZA', usdEnabled: true, auto: false })
+  })
+
+  it.each(['US', 'GB', 'DE', 'AU', 'NA'])('an IP in %s gets USD, even with an en-ZA browser and a zar cookie', async (cc) => {
+    ipCountryValue = cc
+    const r = await resolve({ 'Accept-Language': 'en-ZA', Cookie: 'sr_currency=zar' })
+    expect(r.regionId).toBe(USD)
+    expect(r.currency).toBe('usd')
+    expect(r.auto).toBe(false)
+  })
+
+  it('a forged CF-IPCountry header cannot buy in rand while Cloudflare is not in front', async () => {
+    ipCountryValue = 'US'
+    expect((await resolve({ 'CF-IPCountry': 'ZA' })).currency).toBe('usd')
+  })
+
+  it('behind Cloudflare (TRUST_CF_IPCOUNTRY=true) its header beats the IP database', async () => {
+    process.env.TRUST_CF_IPCOUNTRY = 'true'
+    ipCountryValue = 'US'
+    expect((await resolve({ 'CF-IPCountry': 'ZA' })).currency).toBe('zar')
+    delete process.env.TRUST_CF_IPCOUNTRY
+  })
+
+  it('a located visitor cannot pick the other currency with a POST', async () => {
+    ipCountryValue = 'US'
+    const res = await POST(post({ currency: 'zar' }))
+    expect(await res.json()).toEqual({ regionId: USD, currency: 'usd' })
+    expect(res.cookies.get('sr_currency')?.value).toBe('usd')
+  })
+})
+
+describe('POST /api/region (time-zone correction, recovery link)', () => {
+  beforeEach(() => {
+    ipCountryValue = ''
     process.env.NEXT_PUBLIC_MEDUSA_REGION_ID = ZAR
     process.env.NEXT_PUBLIC_MEDUSA_REGION_USD_ID = USD
     delete process.env.MEDUSA_USD_REGION_ENABLED

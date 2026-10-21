@@ -5,8 +5,6 @@ import { render, screen } from '@testing-library/react'
 import Header from './Header'
 
 // Mock next/link as a passthrough <a>
-// CurrencySwitcher reads the cart context; it has its own tests.
-vi.mock('./CurrencySwitcher', () => ({ CurrencySwitcher: () => null }))
 vi.mock('next/link', () => ({
   default: ({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) => (
     <a href={href} {...props}>{children}</a>

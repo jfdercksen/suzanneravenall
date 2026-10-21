@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, waitFor, act } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 
 import { CartProvider, useCart, type Cart } from './cart-context'
 
-// D021: the cart follows the visitor's currency; a switch moves it.
+// D021: the cart follows the visitor's currency (their location).
 
 const MEDUSA_BASE = 'http://medusa-test:9000'
 const CART_ID_KEY = 'medusa_cart_id'
@@ -40,15 +40,12 @@ const item = (variant: string, title: string) => ({
   variant_id: variant,
 })
 
-let switchTo: ((c: 'zar' | 'usd') => Promise<void>) | null = null
-
 function Probe() {
-  const { cart, isLoading, currency, usdEnabled, setCurrency, droppedOnSwitch } = useCart()
-  switchTo = setCurrency
+  const { cart, isLoading, currency, droppedOnSwitch } = useCart()
   return (
     <div>
       <div data-testid="cart">{isLoading ? 'loading' : `${cart?.id ?? 'none'}:${cart?.region_id ?? ''}:${cart?.items.length ?? 0}`}</div>
-      <div data-testid="currency">{`${currency ?? 'null'}:${usdEnabled}`}</div>
+      <div data-testid="currency">{currency ?? 'null'}</div>
       <div data-testid="dropped">{droppedOnSwitch.join('|')}</div>
     </div>
   )
@@ -116,39 +113,23 @@ describe('cart-context currency (D021)', () => {
     delete process.env.NEXT_PUBLIC_MEDUSA_URL
   })
 
-  it('exposes the visitor currency and the master switch from /api/region', async () => {
+  it('exposes the visitor currency from /api/region', async () => {
     stub({ region: { regionId: 'reg_usd', currency: 'usd', usdEnabled: true, auto: false } })
     render(<CartProvider><Probe /></CartProvider>)
-    await waitFor(() => expect(screen.getByTestId('currency').textContent).toBe('usd:true'))
+    await waitFor(() => expect(screen.getByTestId('currency').textContent).toBe('usd'))
   })
 
-  it('a switch re-assigns the cart to the new region and refreshes the page', async () => {
-    const stored = makeCart(OLD, { items: [item('v1', 'Program Live')] })
-    stub({ stored })
-    localStorage.setItem(CART_ID_KEY, OLD)
-    const refresh = vi.fn()
-    render(<CartProvider onCurrencyChange={refresh}><Probe /></CartProvider>)
-    await waitFor(() => expect(screen.getByTestId('cart').textContent).toBe(`${OLD}:reg_zar:1`))
-
-    await act(async () => {
-      await switchTo?.('usd')
-    })
-    expect(screen.getByTestId('cart').textContent).toBe(`${OLD}:reg_usd:1`)
-    expect(screen.getByTestId('currency').textContent).toBe('usd:true')
-    expect(refresh).toHaveBeenCalledTimes(1)
-  })
-
-  it('when a line has no USD price, rebuilds the cart from the priced lines and names the rest', async () => {
+  it('when a stored line has no USD price, rebuilds the cart from the priced lines and names the rest', async () => {
     const stored = makeCart(OLD, { items: [item('v1', 'Program Live'), item('v2', 'Breakthrough Trilogy')] })
-    const fetchMock = stub({ stored, regionUpdateOk: false, pricedInUsd: ['v1'] })
+    const fetchMock = stub({
+      stored,
+      regionUpdateOk: false,
+      pricedInUsd: ['v1'],
+      region: { regionId: 'reg_usd', currency: 'usd', usdEnabled: true, auto: false },
+    })
     localStorage.setItem(CART_ID_KEY, OLD)
     render(<CartProvider><Probe /></CartProvider>)
-    await waitFor(() => expect(screen.getByTestId('cart').textContent).toBe(`${OLD}:reg_zar:2`))
-
-    await act(async () => {
-      await switchTo?.('usd')
-    })
-    expect(screen.getByTestId('cart').textContent).toBe(`${NEW}:reg_usd:1`)
+    await waitFor(() => expect(screen.getByTestId('cart').textContent).toBe(`${NEW}:reg_usd:1`))
     expect(screen.getByTestId('dropped').textContent).toBe('Breakthrough Trilogy')
     expect(localStorage.getItem(CART_ID_KEY)).toBe(NEW)
     // The old cart is emptied so no reminder mails its rand prices.
@@ -157,22 +138,6 @@ describe('cart-context currency (D021)', () => {
       `${MEDUSA_BASE}/store/carts/${OLD}/line-items/li_v1`,
       `${MEDUSA_BASE}/store/carts/${OLD}/line-items/li_v2`,
     ])
-  })
-
-  it('runs switches one at a time and holds an Add to Cart until the switch is done', async () => {
-    const stored = makeCart(OLD, { items: [item('v1', 'Program Live')] })
-    const fetchMock = stub({ stored })
-    localStorage.setItem(CART_ID_KEY, OLD)
-    render(<CartProvider><Probe /></CartProvider>)
-    await waitFor(() => expect(screen.getByTestId('cart').textContent).toBe(`${OLD}:reg_zar:1`))
-
-    await act(async () => {
-      await Promise.all([switchTo?.('usd'), switchTo?.('zar')])
-    })
-    const regionPosts = fetchMock.mock.calls
-      .filter(([u, i]) => String(u) === `${MEDUSA_BASE}/store/carts/${OLD}` && i?.method === 'POST')
-      .map(([, i]) => (JSON.parse(String(i?.body)) as { region_id: string }).region_id)
-    expect(regionPosts).toEqual(['reg_usd', 'reg_zar'])
   })
 
   it('moves a stored cart from another region on load instead of discarding it', async () => {
@@ -190,17 +155,17 @@ describe('cart-context currency (D021)', () => {
     } as Intl.ResolvedDateTimeFormatOptions)
     const refresh = vi.fn()
     render(<CartProvider onCurrencyChange={refresh}><Probe /></CartProvider>)
-    await waitFor(() => expect(screen.getByTestId('currency').textContent).toBe('zar:true'))
+    await waitFor(() => expect(screen.getByTestId('currency').textContent).toBe('zar'))
     expect(fetchMock.mock.calls.some(([u, i]) => u === '/api/region' && i?.method === 'POST')).toBe(true)
     expect(refresh).toHaveBeenCalled()
   })
 
-  it('never overrides a currency the visitor chose', async () => {
+  it('never corrects a currency that is not a guess (location known)', async () => {
     stub({ region: { regionId: 'reg_usd', currency: 'usd', usdEnabled: true, auto: false } })
     vi.spyOn(Intl.DateTimeFormat.prototype, 'resolvedOptions').mockReturnValue({
       timeZone: 'Africa/Johannesburg',
     } as Intl.ResolvedDateTimeFormatOptions)
     render(<CartProvider><Probe /></CartProvider>)
-    await waitFor(() => expect(screen.getByTestId('currency').textContent).toBe('usd:true'))
+    await waitFor(() => expect(screen.getByTestId('currency').textContent).toBe('usd'))
   })
 })

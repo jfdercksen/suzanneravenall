@@ -239,6 +239,9 @@ services:
       # visitors outside South Africa see USD and pay with PayPal. "false"
       # puts everyone on ZAR and hides the currency switcher.
       MEDUSA_USD_REGION_ENABLED: ${MEDUSA_USD_REGION_ENABLED:-true}
+      # IP-to-country database for the currency rule (D021), refreshed monthly
+      # by infra/scripts/geoip/update-dbip.sh. Missing file = browser signals only.
+      GEOIP_DB_PATH: /data/geoip/dbip-country-lite.mmdb
       MEDUSA_API_TOKEN: ${MEDUSA_API_TOKEN}
       # Medusa v2 admin auth for the member portal (KI078): a secret API key
       # (sk_) as Basic auth, else an emailpass login with the admin account.
@@ -249,6 +252,8 @@ services:
       COMPANY_PHYSICAL_ADDRESS: ${COMPANY_PHYSICAL_ADDRESS:-}
       COMPANY_REGISTRATION_NUMBER: ${COMPANY_REGISTRATION_NUMBER:-}
       COMPANY_VAT_NUMBER: ${COMPANY_VAT_NUMBER:-}
+    volumes:
+      - ./geoip:/data/geoip:ro
     networks:
       - suzanne_network
     healthcheck:

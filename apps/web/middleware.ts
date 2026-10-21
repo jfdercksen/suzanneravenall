@@ -68,10 +68,11 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   return rememberCurrency(request, expireLegacyCookies(request, supabaseResponse))
 }
 
-// First visit: store the currency guess (D021) so the cart, the shop and the
-// product page all read the same answer. The auto flag marks it as a guess the
-// client may correct once; a choice made with the switcher replaces both.
-// The master switch is applied where the cookie is read, not here.
+// First visit: store the browser-language currency guess (D021). It is used
+// only where the visitor's location is unknown; server pages and /api/region
+// apply the IP lookup first (the edge cannot read the database). The auto flag
+// lets the client correct the guess once (time zone). The master switch is
+// applied where the cookie is read, not here.
 function rememberCurrency(request: NextRequest, response: NextResponse): NextResponse {
   if (parseCurrency(request.cookies.get(CURRENCY_COOKIE)?.value)) return response
   // Pages only: not API calls (webhooks, ITNs) and not files (images, fonts).
