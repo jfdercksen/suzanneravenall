@@ -39,6 +39,8 @@ function updateGtagConsent(granted: boolean) {
 
 function loadClarity(clarityId: string) {
   if (!clarityId || document.getElementById('clarity-script')) return
+  // The intake form holds health answers and a secret link: never record it.
+  if (window.location.pathname.startsWith('/intake/')) return
   const s = document.createElement('script')
   s.id = 'clarity-script'
   s.async = true

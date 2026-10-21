@@ -183,6 +183,7 @@ Docs: https://developers.cloudflare.com/agents/
 | `/portal/resources` | `app/portal/resources/page.tsx` | Member resource library |
 | `/portal/videos` | `app/portal/videos/page.tsx` | Gated video content |
 | `/portal/community` | `app/portal/community/page.tsx` | Discourse forum embed |
+| `/intake/[token]` | `app/intake/[token]/page.tsx` | Client intake form after a private-session purchase (personal link, form from the CMS) |
 
 ---
 

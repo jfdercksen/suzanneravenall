@@ -73,6 +73,7 @@ export interface Config {
     testimonials: Testimonial;
     pages: Page;
     media: Media;
+    'intake-forms': IntakeForm;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -86,6 +87,7 @@ export interface Config {
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'intake-forms': IntakeFormsSelect<false> | IntakeFormsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -383,6 +385,88 @@ export interface Page {
   createdAt: string;
 }
 /**
+ * The forms clients complete after buying a private session. Changes show on the site straight away; forms already completed keep the questions they were answered against.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "intake-forms".
+ */
+export interface IntakeForm {
+  id: number;
+  /**
+   * Shown as the page title, e.g. "Client intake form".
+   */
+  title: string;
+  /**
+   * Internal name, lower case with dashes, e.g. "standard". Do not change it once in use.
+   */
+  formKey: string;
+  /**
+   * Off: purchases of its services get the default form instead.
+   */
+  active?: boolean | null;
+  /**
+   * Used for a private session that no form lists. Tick it on one form only.
+   */
+  isDefault?: boolean | null;
+  /**
+   * The products that use this form. The handle is the last part of the shop link, e.g. "rapid-repatterning-session" for /shop/rapid-repatterning-session.
+   */
+  services?:
+    | {
+        productHandle: string;
+        /**
+         * The service name the client sees, e.g. "Rapid Repatterning Session".
+         */
+        label: string;
+        /**
+         * Optional text shown at the top of the form for this service only (for example the Rapid Repatterning introduction). Blank lines start a new paragraph.
+         */
+        introduction?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Shown above the questions. Blank lines start a new paragraph.
+   */
+  intro?: string | null;
+  /**
+   * When filled in, the client must tick this statement before sending the form.
+   */
+  acknowledgement?: string | null;
+  /**
+   * In the order the client sees them. Drag to reorder.
+   */
+  fields?:
+    | {
+        type: 'heading' | 'text' | 'textarea' | 'email' | 'date' | 'select' | 'checkbox-group' | 'scale';
+        required?: boolean | null;
+        /**
+         * Adds a text box under the answer, e.g. "Other, please specify".
+         */
+        withDetail?: boolean | null;
+        /**
+         * The question, or the heading text.
+         */
+        label: string;
+        /**
+         * Optional hint under the question.
+         */
+        helpText?: string | null;
+        /**
+         * For "Choose one" and "Tick all that apply": one option per line.
+         */
+        options?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional. Completed forms go to this address instead of the usual team address (support).
+   */
+  recipientEmail?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -429,6 +513,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'intake-forms';
+        value: number | IntakeForm;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -629,6 +717,40 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "intake-forms_select".
+ */
+export interface IntakeFormsSelect<T extends boolean = true> {
+  title?: T;
+  formKey?: T;
+  active?: T;
+  isDefault?: T;
+  services?:
+    | T
+    | {
+        productHandle?: T;
+        label?: T;
+        introduction?: T;
+        id?: T;
+      };
+  intro?: T;
+  acknowledgement?: T;
+  fields?:
+    | T
+    | {
+        type?: T;
+        required?: T;
+        withDetail?: T;
+        label?: T;
+        helpText?: T;
+        options?: T;
+        id?: T;
+      };
+  recipientEmail?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

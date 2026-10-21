@@ -96,6 +96,8 @@ export async function sendEmail(input: SendEmailInput): Promise<string> {
       accept: 'application/json',
     },
     body: JSON.stringify(payload),
+    // A hung Brevo call must not hold a route (or the hourly intake run) open.
+    signal: AbortSignal.timeout(20_000),
   })
 
   const body = (await res.json().catch(() => ({}))) as {

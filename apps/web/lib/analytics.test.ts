@@ -49,6 +49,14 @@ function runInitScript(gaId: string, href: string, referrer = ''): unknown[][] {
   return (fakeWindow.dataLayer ?? []).map((args) => Array.from(args as ArrayLike<unknown>))
 }
 
+describe('sanitiseAnalyticsUrl on the intake form', () => {
+  it('replaces the token in the path', () => {
+    expect(sanitiseAnalyticsUrl('http://169.239.180.49/intake/AbC123secret')).toBe('http://169.239.180.49/intake/redacted')
+    expect(sanitiseAnalyticsUrl('/intake/AbC123secret#top')).toBe('/intake/redacted')
+    expect(sanitiseAnalyticsUrl('https://suzanneravenall.com/intakes')).toBe('https://suzanneravenall.com/intakes')
+  })
+})
+
 describe('buildGaInitScript', () => {
   it('returns an empty script for a placeholder ID so no hits are sent', () => {
     expect(buildGaInitScript('G-XXXXXXXXXX')).toBe('')
@@ -71,6 +79,16 @@ describe('buildGaInitScript', () => {
       },
     ])
     expect(JSON.stringify(pushed)).not.toMatch(/secret123|other456/)
+  })
+
+  it('never puts the intake form token (in the path) into page_location', () => {
+    const pushed = runInitScript('G-AB12CD34EF', 'https://suzanneravenall.com/intake/AbC123secretTOKEN_-x?x=1')
+    expect(pushed.find((args) => args[0] === 'config')).toEqual([
+      'config',
+      'G-AB12CD34EF',
+      { page_location: 'https://suzanneravenall.com/intake/redacted' },
+    ])
+    expect(JSON.stringify(pushed)).not.toMatch(/secretTOKEN/)
   })
 
   it('leaves page_location to GA on ordinary pages', () => {

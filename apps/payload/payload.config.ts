@@ -29,6 +29,8 @@ import { Programs } from './src/collections/Programs'
 import { Testimonials } from './src/collections/Testimonials'
 import { Pages } from './src/collections/Pages'
 import { Media } from './src/collections/Media'
+import { IntakeForms } from './src/collections/IntakeForms'
+import { seedIntakeForms } from './src/seed/seedIntakeForms'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -49,7 +51,13 @@ export default buildConfig({
     },
   },
 
-  collections: [Users, BlogPosts, Programs, Testimonials, Pages, Media],
+  collections: [Users, BlogPosts, Programs, Testimonials, Pages, Media, IntakeForms],
+
+  // Seeds the client's intake forms into an empty collection (never overwrites
+  // the team's edits). Never throws: a missing table only logs.
+  onInit: async (payload) => {
+    await seedIntakeForms(payload)
+  },
 
   editor: lexicalEditor({
     features: [
