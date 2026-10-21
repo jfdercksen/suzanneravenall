@@ -119,3 +119,29 @@ describe('VariantSelector after an add, per quantity rule (review note)', () => 
     expect(screen.getByRole('button', { name: 'Add another' })).not.toBeDisabled()
   })
 })
+
+describe('VariantSelector price per region (D021)', () => {
+  const priced = [
+    { id: 'live', title: 'Live', prices: [{ currency_code: 'zar', amount: 531500 }, { currency_code: 'usd', amount: 55500 }] },
+    { id: 'self', title: 'Self Study', prices: [{ currency_code: 'zar', amount: 310000 }] },
+  ]
+
+  it('shows the dollar price and the buy button to a USD visitor', () => {
+    render(<VariantSelector variants={priced} selectedVariantId="live" onSelect={() => {}} defaultCurrency="usd" />)
+    expect(screen.getByText('$555.00')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /add to cart|loading/i })).toBeInTheDocument()
+  })
+
+  it('shows the rand price to a ZAR visitor', () => {
+    render(<VariantSelector variants={priced} selectedVariantId="live" onSelect={() => {}} defaultCurrency="zar" />)
+    expect(screen.getByText(/^R5.315.00$/)).toBeInTheDocument()
+  })
+
+  it('shows price on request and no buy button for a variant without a USD price', () => {
+    render(<VariantSelector variants={priced} selectedVariantId="self" onSelect={() => {}} defaultCurrency="usd" />)
+    expect(screen.getByText('Price on request')).toBeInTheDocument()
+    expect(screen.queryByText(/R3[\s,]100/)).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /add to cart|loading/i })).not.toBeInTheDocument()
+    expect(screen.getByText('Contact Us to Discuss Pricing').closest('a')).toHaveAttribute('href', '/contact')
+  })
+})

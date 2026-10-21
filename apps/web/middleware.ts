@@ -1,5 +1,12 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/middleware'
+import {
+  CURRENCY_AUTO_COOKIE,
+  CURRENCY_COOKIE,
+  CURRENCY_COOKIE_MAX_AGE,
+  detectCurrency,
+  parseCurrency,
+} from '@/lib/visitor-region'
 
 const PROTECTED_PREFIXES = ['/portal']
 
@@ -58,7 +65,23 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
     }
   }
 
-  return expireLegacyCookies(request, supabaseResponse)
+  return rememberCurrency(request, expireLegacyCookies(request, supabaseResponse))
+}
+
+// First visit: store the currency guess (D021) so the cart, the shop and the
+// product page all read the same answer. The auto flag marks it as a guess the
+// client may correct once; a choice made with the switcher replaces both.
+// The master switch is applied where the cookie is read, not here.
+function rememberCurrency(request: NextRequest, response: NextResponse): NextResponse {
+  if (parseCurrency(request.cookies.get(CURRENCY_COOKIE)?.value)) return response
+  // Pages only: not API calls (webhooks, ITNs) and not files (images, fonts).
+  const { pathname } = request.nextUrl
+  if (pathname.startsWith('/api/') || /\.[a-z0-9]+$/i.test(pathname)) return response
+  const secure = request.headers.get('x-forwarded-proto') === 'https' || request.nextUrl.protocol === 'https:'
+  const options = { path: '/', maxAge: CURRENCY_COOKIE_MAX_AGE, sameSite: 'lax' as const, secure }
+  response.cookies.set(CURRENCY_COOKIE, detectCurrency(request.headers), options)
+  response.cookies.set(CURRENCY_AUTO_COOKIE, '1', options)
+  return response
 }
 
 export const config = {

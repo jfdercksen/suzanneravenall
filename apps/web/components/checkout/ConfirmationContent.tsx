@@ -159,9 +159,10 @@ export default function ConfirmationContent() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ orderId: payPalOrderId, cartId: payPalCartId }),
           })
-          if (res.ok) {
+          if (res.status === 200) {
             // The capture route only answers 200 once PayPal has captured the
-            // payment for this cart.
+            // payment for this cart. 202 means PayPal is still reviewing it:
+            // the status check below then shows the order as pending.
             state = 'confirmed'
           }
         } catch {

@@ -83,7 +83,7 @@ function EmptyCart() {
 }
 
 export default function CartPageContent() {
-  const { cart, isLoading, updateItem, removeItem } = useCart()
+  const { cart, isLoading, updateItem, removeItem, droppedOnSwitch } = useCart()
 
   // KI064: the first load used to show only grey bars with no title and no
   // words for as long as the stored cart took to fetch. The page title and a
@@ -143,6 +143,17 @@ export default function CartPageContent() {
       {/* Cart body */}
       <section className="w-full bg-brand-cream py-12 lg:py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {droppedOnSwitch.length > 0 && (
+            <div role="status" className="mb-8 p-4 rounded-xl bg-brand-sand border border-brand-border text-sm text-brand-ink">
+              {droppedOnSwitch.length === 1 ? 'This item has' : 'These items have'} no price in the
+              currency you chose and {droppedOnSwitch.length === 1 ? 'was' : 'were'} left out of your
+              cart: {droppedOnSwitch.join(', ')}.{' '}
+              <Link href="/contact" className="font-medium underline underline-offset-4 hover:text-brand-primary">
+                Contact us for a price
+              </Link>{' '}
+              or switch the currency back.
+            </div>
+          )}
           {!hasItems ? (
             <EmptyCart />
           ) : (

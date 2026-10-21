@@ -9,6 +9,8 @@ export interface PayPalOptions {
 export interface PayPalSessionData {
   cartId: string
   orderId: string
+  /** Set when the web app captured the order before opening the session (D021). */
+  captureId?: string
   approvalUrl: string
   currencyCode: string
   status: 'pending' | 'authorized' | 'captured' | 'failed' | 'canceled'

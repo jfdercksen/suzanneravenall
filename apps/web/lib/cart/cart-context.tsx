@@ -12,6 +12,8 @@ import {
 
 const CART_ID_KEY = 'medusa_cart_id'
 
+export type Currency = 'zar' | 'usd'
+
 // Medusa v2 line item shape from GET /store/carts/:id
 export interface CartItem {
   id: string
@@ -26,6 +28,7 @@ export interface CartItem {
   total: number
   product_handle: string | null
   variant_id: string | null
+  metadata?: Record<string, unknown> | null
 }
 
 export interface Cart {
@@ -74,6 +77,14 @@ export interface CartContextType {
   // With a cart id, clears only if that is the cart this browser holds, so a
   // stale confirmation link cannot empty a different, live cart.
   clearCart: (cartId?: string) => void
+  /** The visitor's currency (D021), null until /api/region has answered. */
+  currency: Currency | null
+  /** False when MEDUSA_USD_REGION_ENABLED is off: the switcher hides itself. */
+  usdEnabled: boolean
+  /** Switch currency: sets the cookie and moves the cart to the matching region. */
+  setCurrency: (currency: Currency) => Promise<void>
+  /** Lines that had no price in the new currency and were left behind on a switch. */
+  droppedOnSwitch: string[]
 }
 
 const CartCtx = createContext<CartContextType | null>(null)
@@ -126,18 +137,69 @@ function getMedusaHeaders(): HeadersInit {
   }
 }
 
-async function fetchRegionId(): Promise<string | null> {
-  // Ask the server which region this visitor should use (Cloudflare country detection)
+interface RegionAnswer {
+  regionId: string
+  currency: Currency | null
+  usdEnabled: boolean
+  /** The currency is still the middleware's guess, not the visitor's choice. */
+  auto: boolean
+}
+
+function asCurrency(value: unknown): Currency | null {
+  return value === 'zar' || value === 'usd' ? value : null
+}
+
+// The server's answer for this visitor (cookie, then Accept-Language; D021).
+async function fetchRegion(): Promise<RegionAnswer | null> {
   try {
     const res = await fetch('/api/region')
     if (res.ok) {
-      const data = (await res.json()) as { regionId?: string }
-      if (data.regionId) return data.regionId
+      const data = (await res.json()) as Partial<{ regionId: string; currency: string; usdEnabled: boolean; auto: boolean }>
+      if (data.regionId) {
+        return {
+          regionId: data.regionId,
+          currency: asCurrency(data.currency),
+          usdEnabled: data.usdEnabled === true,
+          auto: data.auto === true,
+        }
+      }
     }
   } catch {
-    // fall through to env var fallback
+    // fall through to the pinned ZAR region
   }
+  const regionId = await fetchFallbackRegionId()
+  return regionId ? { regionId, currency: 'zar', usdEnabled: false, auto: false } : null
+}
 
+// Record the visitor's choice server-side (cookie) and get its region back.
+async function chooseCurrency(currency: Currency): Promise<RegionAnswer | null> {
+  try {
+    const res = await fetch('/api/region', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ currency }),
+    })
+    if (!res.ok) return null
+    const data = (await res.json()) as { regionId?: string; currency?: string }
+    if (!data.regionId) return null
+    return { regionId: data.regionId, currency: asCurrency(data.currency), usdEnabled: true, auto: false }
+  } catch {
+    return null
+  }
+}
+
+// Many South African browsers send en-US or en-GB, so the Accept-Language
+// guess says USD. A browser on South African time is moved to ZAR, once, and
+// only while the currency is still a guess (D021).
+function looksSouthAfrican(): boolean {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone === 'Africa/Johannesburg'
+  } catch {
+    return false
+  }
+}
+
+async function fetchFallbackRegionId(): Promise<string | null> {
   // Fallback: use the pinned ZAR region baked in at build time
   const pinned = process.env.NEXT_PUBLIC_MEDUSA_REGION_ID
   if (pinned) return pinned
@@ -172,6 +234,107 @@ async function createCart(regionId: string): Promise<Cart | null> {
   }
 }
 
+// One line into a cart. 'refused' is Medusa saying no (no price in this
+// region, sold out); 'failed' may be temporary and is worth one more try.
+async function postLineItem(
+  cartId: string,
+  item: Pick<CartItem, 'variant_id' | 'quantity' | 'metadata'>,
+): Promise<Cart | 'refused' | 'failed'> {
+  try {
+    const res = await fetch(`${getMedusaBase()}/store/carts/${cartId}/line-items`, {
+      method: 'POST',
+      headers: getMedusaHeaders(),
+      body: JSON.stringify({
+        variant_id: item.variant_id,
+        quantity: item.quantity,
+        ...(item.metadata ? { metadata: item.metadata } : {}),
+      }),
+    })
+    if (res.status >= 400 && res.status < 500) return 'refused'
+    if (!res.ok) return 'failed'
+    return normaliseCart(((await res.json()) as { cart: Cart }).cart)
+  } catch {
+    return 'failed'
+  }
+}
+
+// Empty the cart left behind by a rebuild, so the abandoned-cart reminders
+// (which skip empty carts) never mail the buyer prices in the old currency.
+async function emptyCart(cart: Cart): Promise<void> {
+  await Promise.all(
+    cart.items.map((item) =>
+      fetch(`${getMedusaBase()}/store/carts/${cart.id}/line-items/${item.id}`, {
+        method: 'DELETE',
+        headers: getMedusaHeaders(),
+      }).catch(() => null),
+    ),
+  )
+}
+
+function rememberCartId(id: string | null): void {
+  try {
+    if (id) localStorage.setItem(CART_ID_KEY, id)
+    else localStorage.removeItem(CART_ID_KEY)
+  } catch {
+    // Storage blocked (private mode): the cart still works for this page view.
+  }
+}
+
+/**
+ * Put a cart into another region (currency). Medusa re-prices every line on a
+ * region change, and refuses the whole change when one line has no price in
+ * the new region. Then a fresh cart is built in the new region from the lines
+ * that do have a price, with the email and voucher carried over, and the rest
+ * are reported back so the buyer can be told.
+ */
+async function moveCartToRegion(cart: Cart, regionId: string): Promise<{ cart: Cart; dropped: string[] } | null> {
+  try {
+    const res = await fetch(`${getMedusaBase()}/store/carts/${cart.id}`, {
+      method: 'POST',
+      headers: getMedusaHeaders(),
+      body: JSON.stringify({ region_id: regionId }),
+    })
+    if (res.ok) {
+      const moved = normaliseCart(((await res.json()) as { cart: Cart }).cart)
+      if (moved.region_id === regionId) return { cart: moved, dropped: [] }
+    }
+  } catch {
+    // rebuild below
+  }
+
+  const fresh = await createCart(regionId)
+  if (!fresh) return null
+  let next: Cart = fresh
+  const dropped: string[] = []
+  for (const item of cart.items) {
+    let added: Cart | 'refused' | 'failed' = item.variant_id ? await postLineItem(next.id, item) : 'refused'
+    if (added === 'failed') added = await postLineItem(next.id, item)
+    if (typeof added === 'object') next = added
+    else dropped.push(item.title)
+  }
+  const extras: Record<string, unknown> = {}
+  if (cart.email) extras.email = cart.email
+  if (Object.keys(extras).length > 0) {
+    const res = await fetch(`${getMedusaBase()}/store/carts/${next.id}`, {
+      method: 'POST',
+      headers: getMedusaHeaders(),
+      body: JSON.stringify(extras),
+    }).catch(() => null)
+    if (res?.ok) next = normaliseCart(((await res.json()) as { cart: Cart }).cart)
+  }
+  const codes = cart.promotions.map((p) => p.code).filter((c): c is string => Boolean(c))
+  if (codes.length > 0 && next.items.length > 0) {
+    const res = await fetch(`${getMedusaBase()}/store/carts/${next.id}/promotions`, {
+      method: 'POST',
+      headers: getMedusaHeaders(),
+      body: JSON.stringify({ promo_codes: codes }),
+    }).catch(() => null)
+    if (res?.ok) next = normaliseCart(((await res.json()) as { cart: Cart }).cart)
+  }
+  await emptyCart(cart)
+  return { cart: next, dropped }
+}
+
 async function fetchCart(cartId: string): Promise<Cart | null> {
   try {
     const res = await fetch(`${getMedusaBase()}/store/carts/${cartId}`, {
@@ -199,10 +362,25 @@ function readRecoveryCartId(): string | null {
   return id && CART_ID_RE.test(id) ? id : null
 }
 
-export function CartProvider({ children }: { children: React.ReactNode }) {
+interface CartProviderProps {
+  children: React.ReactNode
+  /**
+   * Called after the visitor's currency changed, so server-rendered prices
+   * (shop cards, product page) re-render with the new cookie. Providers.tsx
+   * passes router.refresh.
+   */
+  onCurrencyChange?: () => void
+}
+
+export function CartProvider({ children, onCurrencyChange }: CartProviderProps) {
   const [cart, setCartState] = useState<Cart | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [currency, setCurrencyState] = useState<Currency | null>(null)
+  const [usdEnabled, setUsdEnabled] = useState(false)
+  const [droppedOnSwitch, setDroppedOnSwitch] = useState<string[]>([])
   const regionIdRef = useRef<string | null>(null)
+  const onCurrencyChangeRef = useRef(onCurrencyChange)
+  onCurrencyChangeRef.current = onCurrencyChange
   // The cart as of the last commit, readable from inside an async callback
   // after an await (the `cart` closure value is stale by then).
   const cartRef = useRef<Cart | null>(null)
@@ -212,41 +390,71 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // with the stored cart (item gone until a reload) or, when the stored cart was
   // already an order, deleted the new cart's id from localStorage.
   const initDoneRef = useRef<Promise<void>>(Promise.resolve())
+  // Currency switches run one at a time, and cart writes wait for the one in
+  // flight: an Add to Cart during a switch would otherwise land in the cart
+  // that is being replaced.
+  const switchRef = useRef<Promise<void>>(Promise.resolve())
 
   const setCart = useCallback((next: Cart | null) => {
     cartRef.current = next
     setCartState(next)
   }, [])
 
+  const applyRegion = useCallback((answer: RegionAnswer) => {
+    regionIdRef.current = answer.regionId
+    if (answer.currency) setCurrencyState(answer.currency)
+  }, [])
+
   useEffect(() => {
-    // Usable means: exists, not already an order, and in the region this
-    // visitor resolves to NOW, not "any configured region". A cart created
-    // while /api/region was handing out USD is permanently broken for most of
-    // the catalogue, and keeping it would carry the 500 across the fix for
-    // every returning visitor.
-    async function loadUsable(cartId: string): Promise<Cart | null> {
-      // Both requests at once: the cart page waited for them in series.
-      const [existing, regionId] = await Promise.all([
-        fetchCart(cartId),
-        regionIdRef.current ? Promise.resolve(regionIdRef.current) : fetchRegionId(),
-      ])
-      if (!regionIdRef.current) regionIdRef.current = regionId
-      const resolved = regionIdRef.current
-      if (existing && !existing.completed_at && (!resolved || existing.region_id === resolved)) {
-        return existing
+    // Resolve the visitor's region once: the server's answer, corrected to ZAR
+    // for a browser on South African time while that answer is still a guess.
+    async function resolveRegion(): Promise<RegionAnswer | null> {
+      const answer = await fetchRegion()
+      if (!answer) return null
+      setUsdEnabled(answer.usdEnabled)
+      if (answer.auto && answer.usdEnabled && answer.currency === 'usd' && looksSouthAfrican()) {
+        const corrected = await chooseCurrency('zar')
+        if (corrected) {
+          onCurrencyChangeRef.current?.()
+          return corrected
+        }
       }
-      return null
+      return answer
     }
 
     async function init() {
+      const regionPromise = resolveRegion()
       // Cart-recovery links in the abandonment emails open
       // /checkout?cartId=<id>, often on another device, so that id wins over
-      // whatever this browser had stored.
+      // whatever this browser had stored. The reminder showed that cart's
+      // prices, so it is kept in its own region and the visitor's currency
+      // follows it.
       const recoveryId = readRecoveryCartId()
       if (recoveryId) {
-        const recovered = await loadUsable(recoveryId)
-        if (recovered) {
-          localStorage.setItem(CART_ID_KEY, recovered.id)
+        const [recovered, region] = await Promise.all([fetchCart(recoveryId), regionPromise])
+        if (region) applyRegion(region)
+        if (recovered && !recovered.completed_at) {
+          if (region && recovered.region_id !== region.regionId) {
+            const own = asCurrency(recovered.currency_code?.toLowerCase())
+            const chosen = own ? await chooseCurrency(own) : null
+            if (chosen) {
+              applyRegion(chosen)
+              onCurrencyChangeRef.current?.()
+            }
+            // USD switched off since the reminder went out: the server only
+            // offers ZAR, so the cart moves there.
+            const target = regionIdRef.current
+            if (target && recovered.region_id !== target) {
+              const moved = await moveCartToRegion(recovered, target)
+              if (moved) {
+                rememberCartId(moved.cart.id)
+                setCart(moved.cart)
+                setDroppedOnSwitch(moved.dropped)
+                return
+              }
+            }
+          }
+          rememberCartId(recovered.id)
           setCart(recovered)
           return
         }
@@ -254,14 +462,30 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       const cartId = localStorage.getItem(CART_ID_KEY)
       if (cartId && cartId !== recoveryId) {
-        const existing = await loadUsable(cartId)
-        if (existing) {
-          setCart(existing)
-          return
+        // Both requests at once: the cart page waited for them in series.
+        const [existing, region] = await Promise.all([fetchCart(cartId), regionPromise])
+        if (region) applyRegion(region)
+        if (existing && !existing.completed_at) {
+          // A cart from before a currency switch (or from when everyone got
+          // ZAR) is moved to the visitor's region, not thrown away.
+          const resolved = regionIdRef.current
+          if (!resolved || existing.region_id === resolved) {
+            setCart(existing)
+            return
+          }
+          const moved = await moveCartToRegion(existing, resolved)
+          if (moved) {
+            rememberCartId(moved.cart.id)
+            setCart(moved.cart)
+            setDroppedOnSwitch(moved.dropped)
+            return
+          }
         }
         localStorage.removeItem(CART_ID_KEY)
-      } else if (cartId) {
-        localStorage.removeItem(CART_ID_KEY)
+      } else {
+        if (cartId) localStorage.removeItem(CART_ID_KEY)
+        const region = await regionPromise
+        if (region) applyRegion(region)
       }
     }
     // Never a rejected promise: localStorage can throw (private mode, storage
@@ -269,16 +493,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     initDoneRef.current = init()
       .catch(() => {})
       .finally(() => setIsLoading(false))
-  }, [setCart])
+  }, [setCart, applyRegion])
 
   const getOrCreateCart = useCallback(async (): Promise<Cart | null> => {
     await initDoneRef.current
+    await switchRef.current
     if (cartRef.current) return cartRef.current
 
     let regionId = regionIdRef.current
     if (!regionId) {
-      regionId = await fetchRegionId()
-      regionIdRef.current = regionId
+      const region = await fetchRegion()
+      if (region) applyRegion(region)
+      regionId = regionIdRef.current
     }
     if (!regionId) return null
 
@@ -288,7 +514,41 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setCart(newCart)
     }
     return newCart
-  }, [setCart])
+  }, [setCart, applyRegion])
+
+  const setCurrency = useCallback(
+    (next: Currency): Promise<void> => {
+      const run = async () => {
+        await initDoneRef.current
+        const chosen = await chooseCurrency(next)
+        if (!chosen) throw new Error('Could not change the currency right now. Please try again.')
+        applyRegion(chosen)
+        const current = cartRef.current
+        if (current && current.region_id !== chosen.regionId) {
+          const moved = await moveCartToRegion(current, chosen.regionId)
+          if (moved) {
+            rememberCartId(moved.cart.id)
+            setCart(moved.cart)
+            setDroppedOnSwitch(moved.dropped)
+          } else {
+            // Could not build a cart in the new region: start clean rather than
+            // keep a cart priced in the other currency.
+            rememberCartId(null)
+            setCart(null)
+            setDroppedOnSwitch(current.items.map((item) => item.title))
+          }
+        } else {
+          setDroppedOnSwitch([])
+        }
+        onCurrencyChangeRef.current?.()
+      }
+      const task = switchRef.current.then(run)
+      // The queue itself never rejects; the caller still sees this switch's error.
+      switchRef.current = task.catch(() => {})
+      return task
+    },
+    [applyRegion, setCart]
+  )
 
   const addItem = useCallback(
     async (variantId: string, quantity = 1) => {
@@ -479,8 +739,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       applyPromoCode,
       removePromoCode,
       clearCart,
+      currency,
+      usdEnabled,
+      setCurrency,
+      droppedOnSwitch,
     }),
-    [cart, isLoading, itemCount, addItem, updateItem, removeItem, setEmail, setContact, applyPromoCode, removePromoCode, clearCart]
+    [cart, isLoading, itemCount, addItem, updateItem, removeItem, setEmail, setContact, applyPromoCode, removePromoCode, clearCart, currency, usdEnabled, setCurrency, droppedOnSwitch]
   )
 
   return <CartCtx.Provider value={value}>{children}</CartCtx.Provider>

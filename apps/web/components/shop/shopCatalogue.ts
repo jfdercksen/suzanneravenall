@@ -103,45 +103,19 @@ function lowestIn(variants: ProductVariant[], currency: string): number | null {
 
 /**
  * The "from" price a product card shows: the lowest price in the visitor's
- * currency, falling back to the lowest ZAR price. ProductCard and the price
- * sort both use this, so the sort follows what is on screen.
+ * currency, or null ("Price on request"). Never another currency's price and
+ * never a converted one (D021): a USD visitor sees dollars or nothing.
+ * ProductCard and the price sort both use this, so the sort follows what is
+ * on screen.
  */
 export function getDisplayPrice(variants: ProductVariant[], currency: string): DisplayPrice | null {
   const inCurrency = lowestIn(variants, currency)
-  if (inCurrency !== null) return { amount: inCurrency, currency_code: currency }
-  const inZar = lowestIn(variants, 'zar')
-  if (inZar !== null) return { amount: inZar, currency_code: 'zar' }
-  return null
+  return inCurrency !== null ? { amount: inCurrency, currency_code: currency } : null
 }
 
-/**
- * Fixed, indicative rand-per-dollar rate used only to order a mixed list of
- * dollar and rand cards. It is never shown and never used to charge anyone.
- */
-export const INDICATIVE_ZAR_PER_USD = 18
-
-/**
- * Sort key in ZAR cents for the price the card actually displays.
- *
- * Rule for mixed currencies: a visitor outside South Africa sees dollars on
- * products that have a USD price and rands on the rest. Each displayed
- * amount is converted to ZAR and the list is sorted on that.
- * - Rand amounts are used as they are.
- * - Dollar amounts are converted with one fixed rate (INDICATIVE_ZAR_PER_USD),
- *   not with the product's own ZAR price. The store's ZAR/USD ratios range
- *   from about 4.5 to 47 per product, so a per-product conversion is the same
- *   as sorting by the hidden ZAR price and makes the visible dollar amounts
- *   jump up and down. A single rate keeps the order monotonic within each
- *   currency and slots rand-only cards in at a sensible point.
- * - Any other currency (none are configured today) uses the product's own
- *   ZAR price when it has one.
- */
+/** Sort key for the price the card actually displays, in that currency's cents. */
 export function displayPriceSortKey(product: MedusaProduct, currency: string): number | null {
-  const shown = getDisplayPrice(product.variants, currency)
-  if (!shown) return null
-  if (shown.currency_code === 'zar') return shown.amount
-  if (shown.currency_code === 'usd') return shown.amount * INDICATIVE_ZAR_PER_USD
-  return lowestIn(product.variants, 'zar') ?? shown.amount
+  return getDisplayPrice(product.variants, currency)?.amount ?? null
 }
 
 /**

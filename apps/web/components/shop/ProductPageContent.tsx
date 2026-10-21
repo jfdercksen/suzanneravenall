@@ -72,9 +72,11 @@ interface ProductPageContentProps {
   product: MedusaProduct
   /** `?variant=<id>` from the URL, so a reload or a shared link keeps the choice (KI066). */
   initialVariantId?: string
+  /** The visitor's currency from the server (D021), used until a cart exists. */
+  defaultCurrency?: string
 }
 
-export default function ProductPageContent({ product, initialVariantId }: ProductPageContentProps) {
+export default function ProductPageContent({ product, initialVariantId, defaultCurrency = 'zar' }: ProductPageContentProps) {
   // A "Live Retaker" seat is never preselected (site check C1), unless the
   // URL names it: then the buyer chose it before a reload.
   const [selectedVariantId, setSelectedVariantId] = useState<string>(() =>
@@ -147,6 +149,7 @@ export default function ProductPageContent({ product, initialVariantId }: Produc
               onSelect={selectVariant}
               productHandle={product.handle}
               chooseLabel={variantChooserLabel(kind)}
+              defaultCurrency={defaultCurrency}
             />
 
             {buyingNote && (
@@ -432,6 +435,7 @@ export default function ProductPageContent({ product, initialVariantId }: Produc
               onSelect={selectVariant}
               productHandle={product.handle}
               chooseLabel={variantChooserLabel(kind)}
+              defaultCurrency={defaultCurrency}
             />
           </motion.div>
 

@@ -1,8 +1,10 @@
+import { cookies, headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { MedusaProduct } from '@/types/medusa'
 import { NOT_FOUND_TITLE } from '@/lib/seo/notFoundTitle'
 import ProductPageContent from '@/components/shop/ProductPageContent'
+import { CURRENCY_COOKIE, visitorCurrency } from '@/lib/visitor-region'
 
 // Force dynamic rendering — product pages depend on live Medusa data.
 // Static pre-rendering at build time would fail because variant prices
@@ -69,7 +71,7 @@ export default async function ProductDetailPage({
   params: Promise<{ handle: string }>
   searchParams: Promise<{ variant?: string | string[] }>
 }) {
-  const [{ handle }, { variant }] = await Promise.all([params, searchParams])
+  const [{ handle }, { variant }, reqHeaders, reqCookies] = await Promise.all([params, searchParams, headers(), cookies()])
   const product = await getProduct(handle)
 
   if (!product) {
@@ -80,5 +82,8 @@ export default async function ProductDetailPage({
   // component checks it against the product's variants.
   const initialVariantId = typeof variant === 'string' ? variant : undefined
 
-  return <ProductPageContent product={product} initialVariantId={initialVariantId} />
+  // Same rule as the cart and the shop cards (D021).
+  const defaultCurrency = visitorCurrency(reqHeaders, reqCookies.get(CURRENCY_COOKIE)?.value)
+
+  return <ProductPageContent product={product} initialVariantId={initialVariantId} defaultCurrency={defaultCurrency} />
 }

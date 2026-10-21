@@ -10,6 +10,7 @@ import { useCart, formatPrice } from '@/lib/cart'
 import { variantLabel, isPreorder } from '@/lib/shop/lineItem'
 import { PHONE_PATTERN, phoneError, sanitisePhone } from '@/lib/forms/validation'
 import { readMemberContact } from '@/lib/checkout/memberContact'
+import { paymentGatewayFor } from '@/lib/checkout/gateway'
 
 type Step = 1 | 2 | 3
 
@@ -291,6 +292,14 @@ export default function CheckoutContent() {
   // A cart the voucher has taken to zero skips the gateway entirely. Number()
   // because Medusa's money fields are not always plain numbers on the wire.
   const isFreeOrder = Boolean(cart && appliedVoucher && Number(cart.total) === 0)
+  // The gateway follows the cart currency, not the billing country (D021):
+  // PayFast settles only in rand and PayPal cannot take rand at all.
+  const gateway = paymentGatewayFor(cart?.currency_code)
+  // A dollar cart is almost always an international buyer: start the billing
+  // country there. The buyer can still change it.
+  useEffect(() => {
+    if (gateway === 'paypal') setContact((prev) => (prev.country === 'ZA' ? { ...prev, country: 'INTL' } : prev))
+  }, [gateway])
 
   // Nothing to check out (no cart at all, or an empty one): back to /cart once
   // the cart has loaded. A null cart counts too, for a fresh visitor.
@@ -346,7 +355,9 @@ export default function CheckoutContent() {
       email: contact.email,
       firstName: contact.firstName.trim(),
       lastName: contact.lastName.trim(),
-      countryCode: contact.country === 'ZA' ? 'za' : undefined,
+      // The ZAR region holds only ZA; a USD cart's region has no ZA in it, so
+      // only a rand cart records the country on its billing address.
+      countryCode: contact.country === 'ZA' && gateway === 'payfast' ? 'za' : undefined,
     })
     setIsSubmitting(false)
     if (!saved) {
@@ -416,15 +427,16 @@ export default function CheckoutContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amountInCents: cart.total,
-          currencyCode: 'ZAR',
           itemName,
           cartId: cart.id,
         }),
       })
 
       if (!res.ok) {
-        throw new Error('Payment configuration error')
+        // The route's own message is written for the buyer ("Add your email
+        // address first"); KI085 hid it behind a generic line.
+        const err = (await res.json().catch(() => ({}))) as { error?: string }
+        throw new Error(err.error ?? 'Unable to initialise PayPal payment. Please try again.')
       }
 
       const data = (await res.json()) as { orderId: string; approvalUrl: string }
@@ -605,7 +617,8 @@ export default function CheckoutContent() {
                         autoComplete="tel"
                       />
 
-                      {/* Country: determines payment provider */}
+                      {/* Billing country: recorded for the invoice. The payment
+                          provider follows the cart currency, not this field. */}
                       <div>
                         <label
                           htmlFor="country"
@@ -649,7 +662,7 @@ export default function CheckoutContent() {
                     <p className="text-sm text-brand-muted mb-6">
                       {isFreeOrder
                         ? 'Your voucher covers the full amount. There is nothing to pay.'
-                        : contact.country === 'ZA'
+                        : gateway === 'payfast'
                           ? 'You will be securely redirected to PayFast to complete your payment.'
                           : 'You will be securely redirected to PayPal to complete your payment.'}
                     </p>
@@ -754,7 +767,7 @@ export default function CheckoutContent() {
                           No payment needed · Your confirmation will arrive by email
                         </p>
                       </>
-                    ) : contact.country === 'ZA' ? (
+                    ) : gateway === 'payfast' ? (
                       <>
                         <button
                           onClick={handlePayWithPayFast}

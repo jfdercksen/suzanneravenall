@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logError } from '@/lib/log'
-import { compareCapture, loadCart, medusaBase, medusaHeaders } from '@/lib/paypal'
+import { compareCapture, loadCart, medusaBase, medusaHeaders, openCapturedSession } from '@/lib/paypal'
 
 interface CaptureRequest {
   orderId: string
@@ -123,6 +123,21 @@ export async function POST(req: NextRequest) {
     // change after the order was created, and this is the last point where an
     // underpayment can be stopped before an order exists.
     const capture = captureData.purchase_units?.[0]?.payments?.captures?.[0]
+    // PayPal can answer 201 with a capture that is PENDING (review hold,
+    // eCheck) or DECLINED. Only a COMPLETED capture is money taken; a pending
+    // one is placed by the PAYMENT.CAPTURE.COMPLETED webhook once it clears.
+    if (captureData.status !== 'COMPLETED' || capture?.status !== 'COMPLETED') {
+      console.warn('[PayPal] Capture not completed yet, not placing the order', {
+        orderId,
+        cartId,
+        orderStatus: captureData.status,
+        captureStatus: capture?.status ?? null,
+      })
+      return NextResponse.json(
+        { error: 'Your payment is being reviewed by PayPal. Your order will be confirmed by email once it clears.', pending: true },
+        { status: 202 }
+      )
+    }
     const cart = await loadCart(cartId)
     if (!cart) {
       logError('[PayPal] Cart could not be loaded after capture, not completing', undefined, {
@@ -155,6 +170,33 @@ export async function POST(req: NextRequest) {
       captureId: captureData.purchase_units?.[0]?.payments?.captures?.[0]?.id,
     })
 
+    // A cart already completed (the webhook got there first) needs nothing more.
+    if (cart.completed_at) {
+      return NextResponse.json({ paypalOrderId: orderId, paypalStatus: captureData.status, medusaOrderId: null })
+    }
+
+    // Medusa completes a cart only with a paid payment session on it: open the
+    // captured PayPal session first (proof keyed with the client secret, D021).
+    const sessionOpened = await openCapturedSession(
+      {
+        cartId,
+        orderId,
+        captureId: capture?.id ?? '',
+        amountCents: check.received,
+        currencyCode: check.receivedCurrency ?? '',
+      },
+      clientSecret
+    )
+    if (!sessionOpened) {
+      // The webhook may have placed the order in the meantime.
+      if ((await loadCart(cartId))?.completed_at) {
+        return NextResponse.json({ paypalOrderId: orderId, paypalStatus: captureData.status, medusaOrderId: null })
+      }
+      // PayPal has the money but there is no order yet. Logged loudly in
+      // openCapturedSession; the PAYMENT.CAPTURE.COMPLETED webhook retries.
+      return NextResponse.json({ error: 'Payment received, order not yet placed' }, { status: 502 })
+    }
+
     // Complete the Medusa cart to create an order record.
     // The PayPal webhook (PAYMENT.CAPTURE.COMPLETED) also calls completeCart as a
     // server-side fallback. Medusa's cart complete is idempotent — the second call
@@ -169,6 +211,6 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
     logError('[PayPal] Capture error', err, { message })
-    return NextResponse.json({ error: message }, { status: 500 })
+    return NextResponse.json({ error: 'PayPal capture failed' }, { status: 500 })
   }
 }

@@ -251,13 +251,17 @@ const s = StyleSheet.create({
   footerText: { fontSize: 7, color: MEDIUM_GRAY },
 })
 
-function zarFormat(cents: number): string {
+// Amounts in the order's own currency: a USD order is invoiced in dollars,
+// never in rand (D021).
+function moneyFormat(cents: number, currencyCode: string): string {
   const amount = (cents / 100).toFixed(2)
   const dotIndex = amount.indexOf('.')
   const integer = dotIndex >= 0 ? amount.slice(0, dotIndex) : amount
   const decimal = dotIndex >= 0 ? amount.slice(dotIndex + 1) : '00'
   const formatted = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  return `R ${formatted}.${decimal}`
+  const code = currencyCode.toLowerCase()
+  const prefix = code === 'zar' ? 'R ' : code === 'usd' ? '$' : `${code.toUpperCase()} `
+  return `${prefix}${formatted}.${decimal}`
 }
 
 function dateFormat(iso: string): string {
@@ -386,15 +390,15 @@ export default function InvoiceDocument({ order }: Props) {
                 style={[s.tableRow, idx % 2 === 1 ? s.tableRowAlt : {}]}
               >
                 <Text style={[s.cell, s.colDesc]}>{item.title}</Text>
-                <Text style={[s.cell, s.colVariant]}>{item.variant_title ?? '—'}</Text>
+                <Text style={[s.cell, s.colVariant]}>{item.variant_title ?? '-'}</Text>
                 <Text style={[s.cell, s.colQty]}>{item.quantity}</Text>
                 <Text style={[s.cell, s.colUnit]}>
-                  {zarFormat(vatRegistered ? unitExclVat : item.unit_price)}
+                  {moneyFormat(vatRegistered ? unitExclVat : item.unit_price, order.currency_code)}
                 </Text>
                 {vatRegistered ? (
-                  <Text style={[s.cell, s.colVat]}>{zarFormat(vatPortion)}</Text>
+                  <Text style={[s.cell, s.colVat]}>{moneyFormat(vatPortion, order.currency_code)}</Text>
                 ) : null}
-                <Text style={[s.cell, s.colTotal]}>{zarFormat(lineTotal)}</Text>
+                <Text style={[s.cell, s.colTotal]}>{moneyFormat(lineTotal, order.currency_code)}</Text>
               </View>
             )
           })}
@@ -407,21 +411,21 @@ export default function InvoiceDocument({ order }: Props) {
               <>
                 <View style={s.totalRow}>
                   <Text style={s.totalLabel}>Subtotal (excl VAT)</Text>
-                  <Text style={s.totalVal}>{zarFormat(order.subtotal)}</Text>
+                  <Text style={s.totalVal}>{moneyFormat(order.subtotal, order.currency_code)}</Text>
                 </View>
                 {discountTotal > 0 ? (
                   <View style={s.totalRow}>
                     <Text style={s.totalLabel}>Voucher / discount</Text>
-                    <Text style={s.totalVal}>-{zarFormat(discountTotal)}</Text>
+                    <Text style={s.totalVal}>-{moneyFormat(discountTotal, order.currency_code)}</Text>
                   </View>
                 ) : null}
                 <View style={s.totalRow}>
                   <Text style={s.totalLabel}>VAT (15%)</Text>
-                  <Text style={s.totalVal}>{zarFormat(order.tax_total)}</Text>
+                  <Text style={s.totalVal}>{moneyFormat(order.tax_total, order.currency_code)}</Text>
                 </View>
                 <View style={s.totalRowFinal}>
                   <Text style={s.totalLabelFinal}>TOTAL (incl VAT)</Text>
-                  <Text style={s.totalValFinal}>{zarFormat(order.total)}</Text>
+                  <Text style={s.totalValFinal}>{moneyFormat(order.total, order.currency_code)}</Text>
                 </View>
               </>
             ) : (
@@ -436,12 +440,12 @@ export default function InvoiceDocument({ order }: Props) {
                 {discountTotal > 0 ? (
                   <View style={s.totalRow}>
                     <Text style={s.totalLabel}>Voucher / discount</Text>
-                    <Text style={s.totalVal}>-{zarFormat(discountTotal)}</Text>
+                    <Text style={s.totalVal}>-{moneyFormat(discountTotal, order.currency_code)}</Text>
                   </View>
                 ) : null}
                 <View style={s.totalRowFinal}>
                   <Text style={s.totalLabelFinal}>TOTAL</Text>
-                  <Text style={s.totalValFinal}>{zarFormat(order.total)}</Text>
+                  <Text style={s.totalValFinal}>{moneyFormat(order.total, order.currency_code)}</Text>
                 </View>
               </>
             )}

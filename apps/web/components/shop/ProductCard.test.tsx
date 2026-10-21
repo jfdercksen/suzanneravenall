@@ -199,3 +199,27 @@ describe('ProductCard - format badge and category (site check C3)', () => {
     expect(screen.queryByText('Guided Programmes')).not.toBeInTheDocument()
   })
 })
+
+describe('ProductCard price per region (D021)', () => {
+  const both = makeProduct({
+    variants: [{ id: 'v', title: 'Default', prices: [{ currency_code: 'zar', amount: 531500 }, { currency_code: 'usd', amount: 55500 }] }],
+  })
+  const zarOnly = makeProduct({ variants: [{ id: 'v', title: 'Default', prices: [{ currency_code: 'zar', amount: 16500 }] }] })
+
+  it('shows rand to a ZAR visitor', () => {
+    render(<ProductCard product={both} index={0} defaultCurrency="zar" />)
+    expect(screen.getByText(/^R5[\s,]315$/)).toBeInTheDocument()
+  })
+
+  it('shows dollars to a USD visitor', () => {
+    render(<ProductCard product={both} index={0} defaultCurrency="usd" />)
+    expect(screen.getByText('$555')).toBeInTheDocument()
+    expect(screen.queryByText(/R5[\s,]315/)).not.toBeInTheDocument()
+  })
+
+  it('shows price on request, never a rand or converted figure, when there is no USD price', () => {
+    render(<ProductCard product={zarOnly} index={0} defaultCurrency="usd" />)
+    expect(screen.getByText('Price on request')).toBeInTheDocument()
+    expect(screen.queryByText(/R165/)).not.toBeInTheDocument()
+  })
+})
