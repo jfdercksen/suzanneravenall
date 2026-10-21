@@ -25,7 +25,7 @@ if [ "${1:-}" = "--install-cron" ]; then
   self="$(readlink -f "${BASH_SOURCE[0]}")"
   # 04:17 UTC on the 3rd of each month. `|| true`: grep -v exits 1 on an
   # empty result, and under pipefail that would feed crontab an empty list.
-  line="17 4 3 * * ${self} >> ${LOG_FILE} 2>&1"
+  line="17 4 3 * * /bin/bash ${self} >> ${LOG_FILE} 2>&1"
   { crontab -l 2>/dev/null | grep -v 'update-dbip.sh' || true; echo "${line}"; } | crontab -
   echo "cron installed: ${line}"
 fi
