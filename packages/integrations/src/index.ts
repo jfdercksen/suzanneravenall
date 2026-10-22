@@ -104,6 +104,7 @@ export {
   MeiliClient,
   productToSearchDoc,
   lowestZarPrice,
+  lowestPrice,
   isSearchable,
   syncProductToSearch,
   reindexProducts,

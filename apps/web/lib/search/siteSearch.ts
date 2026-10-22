@@ -149,6 +149,7 @@ export function searchDocuments(
       url: doc.url,
       thumbnail: null,
       price_zar: null,
+      price_usd: null,
       label: doc.label,
     }))
 }

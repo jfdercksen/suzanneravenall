@@ -4,6 +4,10 @@ import userEvent from '@testing-library/user-event'
 import { SearchBar } from './SearchBar'
 import type { SearchResultItem } from '@/lib/search/types'
 
+// The visitor's currency (D021); tests switch it with cartState.currency.
+const cartState = vi.hoisted(() => ({ currency: 'zar' as 'zar' | 'usd' | null }))
+vi.mock('@/lib/cart', () => ({ useCart: () => ({ cart: null, currency: cartState.currency }) }))
+
 // ---------------------------------------------------------------------------
 // Mock next/navigation — SearchBar calls useRouter() and router.push()
 // ---------------------------------------------------------------------------
@@ -57,6 +61,7 @@ function makeResults(overrides: Partial<SearchResultItem>[] = []): SearchResultI
     url: `/shop/item-${i}`,
     thumbnail: null,
     price_zar: 9900,
+    price_usd: 600,
     ...o,
   }))
 }
@@ -296,6 +301,20 @@ describe('SearchBar — results display', () => {
       },
       { timeout: 2000 }
     )
+  })
+
+  it.each([
+    ['usd', '$6'],
+    ['zar', 'R99'],
+  ] as const)('shows the price in the visitor currency (%s, KI094)', async (currency, text) => {
+    cartState.currency = currency
+    vi.stubGlobal('fetch', mockFetchWith(makeResults([{ title: 'Mindset Mastery', url: '/shop/mindset' }])))
+    const user = userEvent.setup()
+    render(<SearchBar />)
+    await user.click(screen.getByRole('button', { name: /open search/i }))
+    await user.type(screen.getByPlaceholderText(/search programmes/i), 'mindset')
+    await waitFor(() => expect(screen.getByText(text)).toBeInTheDocument(), { timeout: 2000 })
+    cartState.currency = 'zar'
   })
 
   it('displays a "Topic" badge for results with null price_zar', async () => {

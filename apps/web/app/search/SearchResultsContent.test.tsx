@@ -4,6 +4,10 @@ import userEvent from '@testing-library/user-event'
 import { SearchResultsContent } from './SearchResultsContent'
 import type { SearchResultItem } from '@/lib/search/types'
 
+// The visitor's currency (D021); tests switch it with cartState.currency.
+const cartState = vi.hoisted(() => ({ currency: 'zar' as 'zar' | 'usd' | null }))
+vi.mock('@/lib/cart', () => ({ useCart: () => ({ cart: null, currency: cartState.currency }) }))
+
 vi.mock('next/link', () => ({
   default: ({ href, children, className }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
     <a href={href} className={className}>
@@ -18,7 +22,7 @@ vi.mock('next/image', () => ({
 }))
 
 function result(title: string, url: string): SearchResultItem {
-  return { type: 'pages', id: url, title, subtitle: '', url, thumbnail: null, price_zar: null, label: 'Page' }
+  return { type: 'pages', id: url, title, subtitle: '', url, thumbnail: null, price_zar: null, price_usd: null, label: 'Page' }
 }
 
 function mockSearchApi() {

@@ -6,7 +6,9 @@ import Image from 'next/image'
 import { Search } from 'lucide-react'
 import { motion } from 'framer-motion'
 import type { SearchResultItem, SearchIndex } from '@/lib/search/types'
-import { resultBadge } from '@/lib/search/utils'
+import { resultBadge, resultPrice } from '@/lib/search/utils'
+import { useCart } from '@/lib/cart'
+import { formatDisplayPrice } from '@/components/shop/shopCatalogue'
 
 type TabFilter = 'all' | SearchIndex
 
@@ -19,15 +21,18 @@ const TABS: { id: TabFilter; label: string }[] = [
 
 const PAGE_SIZE = 20
 
-function formatPrice(cents: number): string {
-  return `R${new Intl.NumberFormat('en-ZA').format(cents / 100)}`
-}
-
 interface SearchResultsContentProps {
   initialQuery: string
 }
 
 export function SearchResultsContent({ initialQuery }: SearchResultsContentProps) {
+  const { cart, currency: visitorCurrency } = useCart()
+  // The visitor's currency only (D021); no price while it is still unknown.
+  const currency = cart?.currency_code ?? visitorCurrency
+  const priceText = (item: SearchResultItem): string | null => {
+    const price = resultPrice(item, currency)
+    return price ? formatDisplayPrice(price) : null
+  }
   const [activeTab, setActiveTab] = useState<TabFilter>('all')
   const [results, setResults] = useState<SearchResultItem[]>([])
   const [loading, setLoading] = useState(false)
@@ -265,9 +270,9 @@ export function SearchResultsContent({ initialQuery }: SearchResultsContentProps
                       </div>
 
                       <div className="flex-shrink-0 text-right">
-                        {item.price_zar !== null ? (
+                        {priceText(item) ? (
                           <span className="text-sm font-semibold text-brand-primary">
-                            {formatPrice(item.price_zar)}
+                            {priceText(item)}
                           </span>
                         ) : (
                           <span className="text-xs px-2 py-1 bg-brand-sand text-brand-ink border border-brand-border rounded-full">

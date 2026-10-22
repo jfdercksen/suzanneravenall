@@ -5,6 +5,8 @@ export interface ProductSearchHit {
   description: string | null
   thumbnail: string | null
   price_zar: number | null
+  /** Absent until the index is rebuilt with price_usd (KI094). */
+  price_usd?: number | null
   collection_title: string | null
   collection_handle: string | null
   category_names: string[]
@@ -30,7 +32,9 @@ export interface SearchResultItem {
   subtitle: string
   url: string
   thumbnail: string | null
+  /** Cents per currency; the result shows the visitor's only (D021). */
   price_zar: number | null
+  price_usd: number | null
   /** Badge text for results without a price, e.g. "Page" or "Article". */
   label?: string
 }

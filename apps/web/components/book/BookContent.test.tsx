@@ -4,6 +4,8 @@ import { render, screen } from '@testing-library/react'
 import BookContent from './BookContent'
 import BookPromotion from '@/components/home/BookPromotion'
 
+vi.mock('@/lib/cart', () => ({ useCart: () => ({ cart: null, currency: 'zar' }) }))
+
 vi.mock('next/link', () => ({
   default: ({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) => (
     <a href={href} {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>{children}</a>
@@ -65,14 +67,30 @@ describe('BookContent (decision 7)', () => {
   })
 })
 
+const BOOK_PRICES = [
+  { currency_code: 'zar', amount: 16500 },
+  { currency_code: 'usd', amount: 1750 },
+]
+
 describe('BookPromotion (decision 7)', () => {
   it('labels the home book card as a pre-order, never "Available now"', () => {
-    render(<BookPromotion />)
+    render(<BookPromotion prices={BOOK_PRICES} defaultCurrency="zar" />)
     expect(screen.queryByText(/available now/i)).not.toBeInTheDocument()
     expect(screen.getByText('Pre-order')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Pre-order: R165' })).toHaveAttribute(
       'href',
       '/shop/the-latest-book-by-suzanne',
     )
+  })
+
+  it('shows the book price in dollars to a visitor outside South Africa (KI094)', () => {
+    render(<BookPromotion prices={BOOK_PRICES} defaultCurrency="usd" />)
+    expect(screen.getByRole('link', { name: 'Pre-order: $17.50' })).toBeInTheDocument()
+  })
+
+  it('shows no price rather than a guessed one when Medusa could not be read', () => {
+    render(<BookPromotion prices={null} defaultCurrency="usd" />)
+    expect(screen.getAllByText('Pre-order').length).toBeGreaterThan(0)
+    expect(screen.queryByRole('link', { name: /R165|\$/ })).not.toBeInTheDocument()
   })
 })

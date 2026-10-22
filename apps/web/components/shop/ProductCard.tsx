@@ -7,7 +7,7 @@ import { useCart } from '@/lib/cart'
 import { getSpotsInfo, isLiveVariantTitle } from '@/lib/inventory/spots'
 import { isCapacityLimitedHandle } from '@/lib/inventory/group-sessions'
 import { getHighlightBadge } from '@/data/shopHighlights'
-import { getDisplayPrice, shopCategoryLabel } from './shopCatalogue'
+import { formatDisplayPrice, getDisplayPrice, shopCategoryLabel } from './shopCatalogue'
 import { getDeliveryBadge } from './productKind'
 import type { MedusaProduct, ProductVariant } from '@/types/medusa'
 
@@ -113,21 +113,12 @@ function PriceDisplay({ variants, currency }: { variants: ProductVariant[]; curr
     return <span className="text-2xl font-light text-brand-muted">Price on request</span>
   }
 
-  const amount = lowest.amount / 100
-  const hasMultipleVariants = variants.length > 1
-  const prefix = hasMultipleVariants ? 'from ' : ''
-
-  if (lowest.currency_code === 'usd') {
-    return (
-      <span className="text-2xl font-semibold tracking-tight text-brand-ink">
-        {prefix}${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}
-      </span>
-    )
-  }
+  const prefix = variants.length > 1 ? 'from ' : ''
 
   return (
     <span className="text-2xl font-semibold tracking-tight text-brand-ink">
-      {prefix}R{amount.toLocaleString('en-ZA', { maximumFractionDigits: 0 })}
+      {prefix}
+      {formatDisplayPrice(lowest)}
     </span>
   )
 }

@@ -1,3 +1,4 @@
+import type { DisplayPrice } from '@/components/shop/shopCatalogue'
 import type { SearchResultItem } from './types'
 
 /**
@@ -41,4 +42,15 @@ const TYPE_BADGES: Record<SearchResultItem['type'], string> = {
 /** Badge shown on a result that has no price. */
 export function resultBadge(item: Pick<SearchResultItem, 'type' | 'label'>): string {
   return item.label ?? TYPE_BADGES[item.type]
+}
+
+/**
+ * The price a result shows: the visitor's currency only, never another one
+ * (D021). Null (the result shows its badge) while the currency is unknown or
+ * the product has no price in it.
+ */
+export function resultPrice(item: SearchResultItem, currency: string | null | undefined): DisplayPrice | null {
+  const code = currency?.toLowerCase()
+  const amount = code === 'usd' ? item.price_usd : code === 'zar' ? item.price_zar : null
+  return amount == null || !code ? null : { amount, currency_code: code }
 }

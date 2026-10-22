@@ -83,6 +83,7 @@ function productToResult(hit: ProductSearchHit): SearchResultItem {
     url: `/shop/${hit.handle}`,
     thumbnail: hit.thumbnail,
     price_zar: hit.price_zar,
+    price_usd: hit.price_usd ?? null,
   }
 }
 
@@ -95,6 +96,7 @@ function topicToResult(hit: TopicSearchHit): SearchResultItem {
     url: hit.url,
     thumbnail: null,
     price_zar: null,
+    price_usd: null,
   }
 }
 

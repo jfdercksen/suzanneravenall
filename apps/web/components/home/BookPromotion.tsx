@@ -3,8 +3,22 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useCart } from '@/lib/cart'
+import type { VariantPrice } from '@/lib/shop/product-prices'
+import { formatDisplayPrice, getPriceIn } from '@/components/shop/shopCatalogue'
 
-export default function BookPromotion() {
+interface BookPromotionProps {
+  /** The book's prices (cents, every currency); null when Medusa was unreachable. */
+  prices?: VariantPrice[] | null
+  /** The visitor's currency from the server (D021), used until a cart exists. */
+  defaultCurrency?: string
+}
+
+export default function BookPromotion({ prices = null, defaultCurrency = 'zar' }: BookPromotionProps) {
+  const { cart } = useCart()
+  // The visitor's currency only; without a price in it the button says Pre-order.
+  const price = getPriceIn(prices, cart?.currency_code ?? defaultCurrency)
+
   return (
     <section aria-labelledby="book-heading" className="relative overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -123,7 +137,7 @@ export default function BookPromotion() {
                 href="/shop/the-latest-book-by-suzanne"
                 className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent hover:bg-brand-accent-700 text-white font-semibold rounded-button transition-all duration-300 hover:shadow-lg"
               >
-                Pre-order: R165
+                {price ? `Pre-order: ${formatDisplayPrice(price)}` : 'Pre-order'}
               </Link>
               {/* No chapter PDF exists yet (Johan, 6 Oct): this asks for release news instead. */}
               <Link

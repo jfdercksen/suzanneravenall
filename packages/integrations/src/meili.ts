@@ -19,7 +19,7 @@ export const PRODUCTS_INDEX = 'products'
 export const PRODUCTS_INDEX_SETTINGS = {
   searchableAttributes: ['title', 'description', 'collection_title', 'category_names', 'variant_titles'],
   filterableAttributes: ['category_ids', 'collection_id', 'status'],
-  sortableAttributes: ['title', 'price_zar'],
+  sortableAttributes: ['title', 'price_zar', 'price_usd'],
   rankingRules: ['words', 'typo', 'proximity', 'attribute', 'sort', 'exactness'],
 }
 
@@ -43,7 +43,9 @@ export type ProductSearchDoc = {
   description: string | null
   thumbnail: string | null
   status: string | null
+  /** Lowest variant price per currency, in cents; null when none in that currency (D021). */
   price_zar: number | null
+  price_usd: number | null
   collection_id: string | null
   collection_handle: string | null
   collection_title: string | null
@@ -52,13 +54,18 @@ export type ProductSearchDoc = {
   variant_titles: string
 }
 
-export function lowestZarPrice(product: SearchProductInput): number | null {
+/** The lowest variant price in one currency, in cents, or null. Never a converted price. */
+export function lowestPrice(product: SearchProductInput, currency: 'zar' | 'usd'): number | null {
   const prices = (product.variants ?? [])
     .flatMap((v) => v.prices ?? [])
-    .filter((p) => p.currency_code === 'zar')
+    .filter((p) => p.currency_code?.toLowerCase() === currency && p.amount != null && p.amount !== '')
     .map((p) => Number(p.amount))
     .filter((n) => Number.isFinite(n))
   return prices.length > 0 ? Math.min(...prices) : null
+}
+
+export function lowestZarPrice(product: SearchProductInput): number | null {
+  return lowestPrice(product, 'zar')
 }
 
 export function productToSearchDoc(p: SearchProductInput): ProductSearchDoc {
@@ -71,7 +78,8 @@ export function productToSearchDoc(p: SearchProductInput): ProductSearchDoc {
     description: p.description ?? null,
     thumbnail: p.thumbnail ?? null,
     status: p.status ?? null,
-    price_zar: lowestZarPrice(p),
+    price_zar: lowestPrice(p, 'zar'),
+    price_usd: lowestPrice(p, 'usd'),
     collection_id: p.collection?.id ?? null,
     collection_handle: p.collection?.handle ?? null,
     collection_title: p.collection?.title ?? null,

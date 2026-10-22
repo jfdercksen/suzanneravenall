@@ -1,4 +1,5 @@
 import { getSpotsInfo, isLiveVariantTitle } from './spots'
+import { HOMEPAGE_FETCH_TIMEOUT_MS, medusaServerUrl, type VariantPrice } from '@/lib/shop/product-prices'
 
 /**
  * Server-side fetch for the homepage's real "next cohort" widget.
@@ -54,7 +55,8 @@ export interface FeaturedCohort {
   variantTitle: string
   spotsRemaining: number
   capacity: number
-  priceZar: number | null
+  /** The Live variant's prices (cents, every currency); the card shows the visitor's (D021). */
+  prices: VariantPrice[]
   duration: string | null
 }
 
@@ -87,7 +89,7 @@ interface ProductsResponse {
  * invent placeholder numbers in that case.
  */
 export async function getFeaturedCohort(): Promise<FeaturedCohort | null> {
-  const medusaUrl = process.env.NEXT_PUBLIC_MEDUSA_URL ?? ''
+  const medusaUrl = medusaServerUrl()
   const pubKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? ''
   if (!medusaUrl) return null
 
@@ -103,6 +105,8 @@ export async function getFeaturedCohort(): Promise<FeaturedCohort | null> {
     const res = await fetch(`${medusaUrl}/store/products?${params.toString()}`, {
       headers: { 'x-publishable-api-key': pubKey },
       next: { revalidate: 300 },
+      // The homepage is rendered per visitor (currency): never wait long on Medusa.
+      signal: AbortSignal.timeout(HOMEPAGE_FETCH_TIMEOUT_MS),
     })
     if (!res.ok) return null
     const data = (await res.json()) as ProductsResponse
@@ -122,15 +126,13 @@ export async function getFeaturedCohort(): Promise<FeaturedCohort | null> {
     // environment (seed script not run) — skip rather than guess.
     if (spots === null) continue
 
-    const zarPrice = liveVariant.prices.find((p) => p.currency_code === 'zar')
-
     candidates.push({
       productTitle: product.title,
       productHandle: product.handle,
       variantTitle: liveVariant.title,
       spotsRemaining: spots.spotsRemaining,
       capacity: SEAT_CAPACITY,
-      priceZar: zarPrice ? zarPrice.amount / 100 : null,
+      prices: liveVariant.prices.map((p) => ({ currency_code: p.currency_code, amount: p.amount })),
       duration: typeof product.metadata?.duration === 'string' ? product.metadata.duration : null,
     })
   }

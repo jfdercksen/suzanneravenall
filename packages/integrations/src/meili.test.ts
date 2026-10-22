@@ -68,19 +68,41 @@ function n8nDoc(product: unknown): Record<string, unknown> {
   return fn({ item: { json: { product } } })[0]!.json
 }
 
+// price_usd (KI094) came after the legacy seed and the n8n node; the parity
+// checks compare everything else.
+function withoutUsd(doc: ReturnType<typeof productToSearchDoc>) {
+  const { price_usd: _usd, ...rest } = doc
+  return rest
+}
+
 describe('productToSearchDoc', () => {
   it('produces exactly the document the seed script produced', () => {
-    expect(productToSearchDoc(PRODUCT)).toEqual(legacySeedDoc(PRODUCT as LegacyProduct))
+    expect(withoutUsd(productToSearchDoc(PRODUCT))).toEqual(legacySeedDoc(PRODUCT as LegacyProduct))
   })
 
   it('matches the n8n Transform node too', () => {
-    expect(productToSearchDoc(PRODUCT)).toEqual(n8nDoc(PRODUCT))
+    expect(withoutUsd(productToSearchDoc(PRODUCT))).toEqual(n8nDoc(PRODUCT))
+  })
+
+  it('carries the lowest USD price next to the ZAR one, never a converted one (KI094)', () => {
+    const doc = productToSearchDoc({
+      id: 'p',
+      status: 'published',
+      variants: [
+        { title: 'A', prices: [{ currency_code: 'zar', amount: 16500 }, { currency_code: 'usd', amount: 1750 }] },
+        { title: 'B', prices: [{ currency_code: 'zar', amount: 9900 }, { currency_code: 'USD', amount: '1200' }] },
+      ],
+    })
+    expect(doc.price_zar).toBe(9900)
+    expect(doc.price_usd).toBe(1200)
+    expect(productToSearchDoc({ id: 'p', variants: [{ prices: [{ currency_code: 'zar', amount: 100 }] }] }).price_usd).toBeNull()
   })
 
   it('matches for a product without collection, categories or ZAR price', () => {
     const bare: SearchProductInput = { ...PRODUCT, collection: null, categories: [], variants: [{ title: 'Default', prices: [{ currency_code: 'usd', amount: 10 }] }] }
-    expect(productToSearchDoc(bare)).toEqual(legacySeedDoc(bare as LegacyProduct))
+    expect(withoutUsd(productToSearchDoc(bare))).toEqual(legacySeedDoc(bare as LegacyProduct))
     expect(productToSearchDoc(bare).price_zar).toBeNull()
+    expect(productToSearchDoc(bare).price_usd).toBe(10)
   })
 
   it('tolerates the missing relations Query can return', () => {
@@ -89,7 +111,7 @@ describe('productToSearchDoc', () => {
 
   it('keeps the index settings the seed script set', () => {
     expect(PRODUCTS_INDEX_SETTINGS.filterableAttributes).toEqual(['category_ids', 'collection_id', 'status'])
-    expect(PRODUCTS_INDEX_SETTINGS.sortableAttributes).toEqual(['title', 'price_zar'])
+    expect(PRODUCTS_INDEX_SETTINGS.sortableAttributes).toEqual(['title', 'price_zar', 'price_usd'])
   })
 })
 

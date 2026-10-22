@@ -4,7 +4,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ChevronRight, Clock, Users } from 'lucide-react'
+import { useCart } from '@/lib/cart'
 import type { FeaturedCohort } from '@/lib/inventory/group-sessions'
+import { formatDisplayPrice, getPriceIn } from '@/components/shop/shopCatalogue'
 
 // 1-on-1 availability isn't inventory-backed (it's Cal.com-governed, not a
 // capacity count) — kept as static copy, out of scope for the group-session
@@ -25,9 +27,15 @@ interface UpcomingProgramsProps {
    *  fabricate a fallback number here — render the honest waitlist card
    *  instead. */
   cohort: FeaturedCohort | null
+  /** The visitor's currency from the server (D021), used until a cart exists. */
+  defaultCurrency?: string
 }
 
-export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
+export default function UpcomingPrograms({ cohort, defaultCurrency = 'zar' }: UpcomingProgramsProps) {
+  const { cart } = useCart()
+  // Same rule and helper as the shop cards: the visitor's currency only.
+  const price = getPriceIn(cohort?.prices, cart?.currency_code ?? defaultCurrency)
+
   return (
     <section className="bg-brand-cream py-14 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -117,9 +125,7 @@ export default function UpcomingPrograms({ cohort }: UpcomingProgramsProps) {
                   {/* Bottom row — price + CTA */}
                   <div className="flex items-center justify-between flex-wrap gap-4">
                     <span className="text-3xl font-semibold tracking-tight text-white">
-                      {cohort.priceZar !== null
-                        ? `R${cohort.priceZar.toLocaleString('en-ZA', { maximumFractionDigits: 0 })}`
-                        : 'Contact us'}
+                      {price ? formatDisplayPrice(price) : 'Contact us'}
                     </span>
                     <Link
                       href={`/shop/${cohort.productHandle}`}

@@ -1,8 +1,12 @@
 import React from 'react'
-import { describe, it, expect, vi } from 'vitest'
+import { afterEach, describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import UpcomingEvents from './UpcomingEvents'
 import type { FeaturedCohort } from '@/lib/inventory/group-sessions'
+
+// The visitor's currency (D021); tests switch it with cartState.currency.
+const cartState = vi.hoisted(() => ({ currency: 'zar' as 'zar' | 'usd' | null }))
+vi.mock('@/lib/cart', () => ({ useCart: () => ({ cart: null, currency: cartState.currency }) }))
 
 vi.mock('next/link', () => ({
   default: ({ href, children, ...props }: { href: string; children: React.ReactNode }) => (
@@ -35,7 +39,10 @@ const cohort: FeaturedCohort = {
   variantTitle: 'Live (booked as series)',
   spotsRemaining: 12,
   capacity: 12,
-  priceZar: 1500,
+  prices: [
+    { currency_code: 'zar', amount: 150000 },
+    { currency_code: 'usd', amount: 9000 },
+  ],
   duration: null,
 }
 
@@ -69,5 +76,34 @@ describe('UpcomingEvents (site check C5)', () => {
   it('does not claim the discovery call is "Available this week"', () => {
     render(<UpcomingEvents cohort={cohort} />)
     expect(screen.queryByText('Available this week')).not.toBeInTheDocument()
+  })
+})
+
+describe('UpcomingEvents prices follow the visitor currency (KI094)', () => {
+  const book = [
+    { currency_code: 'zar', amount: 16500 },
+    { currency_code: 'usd', amount: 1750 },
+  ]
+  afterEach(() => {
+    cartState.currency = 'zar'
+  })
+
+  it('shows dollars to a visitor outside South Africa', () => {
+    render(<UpcomingEvents cohort={cohort} bookPrices={book} defaultCurrency="usd" />)
+    expect(screen.getByText('$90')).toBeInTheDocument()
+    expect(screen.getByText('$17.50')).toBeInTheDocument()
+    expect(screen.queryByText(/^R/)).not.toBeInTheDocument()
+  })
+
+  it('shows rand to a South African visitor', () => {
+    render(<UpcomingEvents cohort={cohort} bookPrices={book} defaultCurrency="zar" />)
+    expect(screen.getByText(/^R1\s?500$/)).toBeInTheDocument()
+    expect(screen.getByText('R165')).toBeInTheDocument()
+  })
+
+  it('shows no price rather than rand when the product has none in dollars', () => {
+    render(<UpcomingEvents cohort={{ ...cohort, prices: [{ currency_code: 'zar', amount: 150000 }] }} bookPrices={null} defaultCurrency="usd" />)
+    expect(screen.queryByText(/^R/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/^\$/)).not.toBeInTheDocument()
   })
 })

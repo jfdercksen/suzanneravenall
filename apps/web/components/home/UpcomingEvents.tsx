@@ -2,7 +2,10 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useCart } from '@/lib/cart'
 import type { FeaturedCohort } from '@/lib/inventory/group-sessions'
+import type { VariantPrice } from '@/lib/shop/product-prices'
+import { formatDisplayPrice, getPriceIn } from '@/components/shop/shopCatalogue'
 
 // TODO: Suzanne to provide real upcoming event dates for the FREE/BOOK cards
 // below — replace with dynamic data from Payload CMS when the real programme
@@ -37,16 +40,21 @@ interface UpcomingEventsProps {
    *  no group session currently has tracked inventory. Never fabricate a
    *  fallback number here. */
   cohort: FeaturedCohort | null
+  /** The book's prices (cents, every currency); null when Medusa was unreachable. */
+  bookPrices?: VariantPrice[] | null
+  /** The visitor's currency from the server (D021), used until a cart exists. */
+  defaultCurrency?: string
 }
 
-/** Same ZAR format as the cohort card on UpcomingPrograms, so the page shows
- *  one price style. Undefined when the product has no ZAR price. */
-function formatCohortPrice(cohort: FeaturedCohort): string | undefined {
-  if (cohort.priceZar === null) return undefined
-  return `R${cohort.priceZar.toLocaleString('en-ZA', { maximumFractionDigits: 0 })}`
+/** The price in the visitor's currency through the shop's own helper, so the
+ *  page shows one price style. Undefined (no price shown) when the product has
+ *  none in that currency: never another currency's price (D021). */
+function formatPriceIn(prices: VariantPrice[] | null | undefined, currency: string): string | undefined {
+  const price = getPriceIn(prices, currency)
+  return price ? formatDisplayPrice(price) : undefined
 }
 
-function buildGroupOpportunity(cohort: FeaturedCohort | null): Opportunity {
+function buildGroupOpportunity(cohort: FeaturedCohort | null, currency: string): Opportunity {
   if (cohort && cohort.spotsRemaining > 0) {
     return {
       type: 'GROUP',
@@ -56,7 +64,7 @@ function buildGroupOpportunity(cohort: FeaturedCohort | null): Opportunity {
         'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
       cta: 'View Details',
       href: `/shop/${cohort.productHandle}`,
-      price: formatCohortPrice(cohort),
+      price: formatPriceIn(cohort.prices, currency),
     }
   }
 
@@ -70,7 +78,7 @@ function buildGroupOpportunity(cohort: FeaturedCohort | null): Opportunity {
       cta: 'Join Waitlist',
       href: `/shop/${cohort.productHandle}`,
       badge: 'Fully booked',
-      price: formatCohortPrice(cohort),
+      price: formatPriceIn(cohort.prices, currency),
     }
   }
 
@@ -85,7 +93,9 @@ function buildGroupOpportunity(cohort: FeaturedCohort | null): Opportunity {
   }
 }
 
-export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
+export default function UpcomingEvents({ cohort, bookPrices = null, defaultCurrency = 'zar' }: UpcomingEventsProps) {
+  const { cart } = useCart()
+  const currency = cart?.currency_code ?? defaultCurrency
   const opportunities: Opportunity[] = [
     {
       type: 'FREE',
@@ -96,14 +106,14 @@ export default function UpcomingEvents({ cohort }: UpcomingEventsProps) {
       cta: 'Book Now',
       href: '/contact#book',
     },
-    buildGroupOpportunity(cohort),
+    buildGroupOpportunity(cohort, currency),
     {
       type: 'BOOK',
       variant: 'book',
       title: 'Breakthrough Trilogy',
       description:
         "Start your transformation journey with Suzanne's complete guide to decoding your patterns.",
-      price: 'R165',
+      price: formatPriceIn(bookPrices, currency),
       cta: 'Pre-Order Now',
       href: '/shop/the-latest-book-by-suzanne',
       // Matches the Pre-Order CTA and the /book page

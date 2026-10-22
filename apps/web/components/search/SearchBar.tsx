@@ -7,11 +7,9 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Search, X, ArrowRight } from 'lucide-react'
 import type { SearchResultItem } from '@/lib/search/types'
-import { resultBadge } from '@/lib/search/utils'
-
-function formatPrice(cents: number): string {
-  return `R${new Intl.NumberFormat('en-ZA').format(cents / 100)}`
-}
+import { resultBadge, resultPrice } from '@/lib/search/utils'
+import { useCart } from '@/lib/cart'
+import { formatDisplayPrice } from '@/components/shop/shopCatalogue'
 
 function useDebounce<T>(value: T, delay: number): T {
   const [debounced, setDebounced] = useState(value)
@@ -23,6 +21,13 @@ function useDebounce<T>(value: T, delay: number): T {
 }
 
 export function SearchBar() {
+  const { cart, currency: visitorCurrency } = useCart()
+  // The visitor's currency only (D021); no price while it is still unknown.
+  const currency = cart?.currency_code ?? visitorCurrency
+  const priceText = (item: SearchResultItem): string | null => {
+    const price = resultPrice(item, currency)
+    return price ? formatDisplayPrice(price) : null
+  }
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -255,9 +260,9 @@ export function SearchBar() {
 
                     {/* Price or badge */}
                     <div className="flex-shrink-0 text-right">
-                      {item.price_zar !== null ? (
+                      {priceText(item) ? (
                         <span className="text-sm font-medium text-white">
-                          {formatPrice(item.price_zar)}
+                          {priceText(item)}
                         </span>
                       ) : (
                         <span className="text-xs px-2 py-0.5 bg-brand-accent/20 text-brand-accent-400 rounded-full">

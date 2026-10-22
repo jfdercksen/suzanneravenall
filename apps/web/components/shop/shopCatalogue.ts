@@ -94,10 +94,12 @@ export interface DisplayPrice {
 }
 
 function lowestIn(variants: ProductVariant[], currency: string): number | null {
-  const amounts = variants
-    .flatMap((v) => v.prices)
-    .filter((p) => p.currency_code === currency)
-    .map((p) => p.amount)
+  return lowestPriceIn(variants.flatMap((v) => v.prices), currency)
+}
+
+function lowestPriceIn(prices: ProductVariant['prices'], currency: string): number | null {
+  const code = currency.toLowerCase()
+  const amounts = prices.filter((p) => p.currency_code.toLowerCase() === code).map((p) => p.amount)
   return amounts.length > 0 ? Math.min(...amounts) : null
 }
 
@@ -110,7 +112,28 @@ function lowestIn(variants: ProductVariant[], currency: string): number | null {
  */
 export function getDisplayPrice(variants: ProductVariant[], currency: string): DisplayPrice | null {
   const inCurrency = lowestIn(variants, currency)
-  return inCurrency !== null ? { amount: inCurrency, currency_code: currency } : null
+  return inCurrency !== null ? { amount: inCurrency, currency_code: currency.toLowerCase() } : null
+}
+
+/**
+ * The same rule for a plain price list (one variant's prices, a homepage
+ * card): the lowest price in the visitor's currency, or null.
+ */
+export function getPriceIn(prices: ProductVariant['prices'] | null | undefined, currency: string): DisplayPrice | null {
+  const amount = prices ? lowestPriceIn(prices, currency) : null
+  return amount !== null ? { amount, currency_code: currency.toLowerCase() } : null
+}
+
+/**
+ * A display price as text: "$20", "$17.50", "R1 500". Whole amounts without
+ * cents, other amounts with them, so $17.50 is never rounded to $18.
+ */
+export function formatDisplayPrice(price: DisplayPrice): string {
+  const amount = price.amount / 100
+  const digits = Number.isInteger(amount) ? 0 : 2
+  const opts = { minimumFractionDigits: digits, maximumFractionDigits: digits }
+  if (price.currency_code === 'usd') return `$${amount.toLocaleString('en-US', opts)}`
+  return `R${amount.toLocaleString('en-ZA', opts)}`
 }
 
 /** Sort key for the price the card actually displays, in that currency's cents. */
