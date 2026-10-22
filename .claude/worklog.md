@@ -567,3 +567,6 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
 - Tests 311 pass in the touched areas, tsc clean. Web-only deploy run 39748612064 success 08:42Z (no Medusa restart).
 - Proof: #427 RR online (steps + Zoom), #428 RR in-person (steps, no Zoom), #429 Resonance online (Zoom, no steps), all read back in Outlook; cancelled by exact id after read-back; forms closed.
 
+
+## 2026-10-22 KI087 follow-up: refund amount in rand
+- The PayFast cancel alert and payfast_refund_amount used the stored cents as rand (order #411 alert read "ZAR 16500.00"). route.ts now divides by 100: alert "ZAR 165.00", flag 165. Test updated to a 16500-cent capture. Medusa tests green, tsc clean. Committed, NOT deployed: ships with the next medusa deploy (Johan, 22 Oct).

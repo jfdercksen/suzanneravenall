@@ -52,7 +52,7 @@ const payfastCaptured: Order = {
   display_id: 397,
   currency_code: 'zar',
   metadata: { invoice_url: 'https://x/inv.pdf' },
-  payment_collections: [{ payments: [{ id: 'pay_1', provider_id: 'pp_payfast_payfast', captures: [{ amount: 165 }], refunds: [] }] }],
+  payment_collections: [{ payments: [{ id: 'pay_1', provider_id: 'pp_payfast_payfast', captures: [{ amount: 16500 }], refunds: [] }] }],
 }
 
 describe('POST /admin/orders/:id/cancel', () => {
@@ -75,7 +75,7 @@ describe('POST /admin/orders/:id/cancel', () => {
       invoice_url: 'https://x/inv.pdf',
       sage_document_number: 'SI-1',
       payfast_refund_required: true,
-      payfast_refund_amount: 165,
+      payfast_refund_amount: 165, // rand, from 16500 cents
     })
   })
 

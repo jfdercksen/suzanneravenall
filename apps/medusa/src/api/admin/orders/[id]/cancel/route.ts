@@ -64,9 +64,12 @@ export async function POST(req: AuthenticatedMedusaRequest, res: MedusaResponse)
  * are logged. Medusa has no Sentry SDK; the staff alert is its failure channel,
  * so a failed flag write is named in the alert. The alerter never throws.
  */
-async function flagManualRefund(req: AuthenticatedMedusaRequest, order: PlanOrder, amount: number) {
+async function flagManualRefund(req: AuthenticatedMedusaRequest, order: PlanOrder, amountCents: number) {
   const currency = (order.currency_code ?? "zar").toUpperCase()
   const label = order.display_id ? `#${order.display_id}` : order.id
+  // This store keeps amounts in cents (16500 = R165.00), as the PayFast
+  // provider does; staff refund in rand, so the flag and the alert use rand.
+  const amount = Math.round(amountCents) / 100
   const formatted = `${currency} ${amount.toFixed(2)}`
 
   let flagSaved = true
