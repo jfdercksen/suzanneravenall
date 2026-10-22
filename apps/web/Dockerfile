@@ -68,9 +68,16 @@ COPY --from=builder /app/apps/web/public ./apps/web/public
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 
+# KI092: nginx serves the JS and CSS chunks from this shared volume, so a cold
+# page load never waits for them behind Node (2.8 s per chunk while the box was
+# building images). Owned by nextjs so the first mount of the empty named
+# volume takes these permissions.
+RUN mkdir -p /app/shared-static && chown nextjs:nodejs /app/shared-static
+
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "apps/web/server.js"]
+COPY --chown=nextjs:nodejs apps/web/docker/publish-static.sh ./publish-static.sh
+CMD ["sh", "./publish-static.sh"]

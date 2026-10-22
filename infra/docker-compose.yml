@@ -20,6 +20,8 @@ services:
       - /var/www/certbot:/var/www/certbot:ro
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - medusa_uploads:/app/uploads:ro
+      # Next.js chunks published by the web container (KI092)
+      - web_static:/var/www/next/_next/static:ro
     depends_on:
       web:
         condition: service_healthy
@@ -254,6 +256,8 @@ services:
       COMPANY_VAT_NUMBER: ${COMPANY_VAT_NUMBER:-}
     volumes:
       - ./geoip:/data/geoip:ro
+      # Chunks for nginx to serve (KI092); filled at container start
+      - web_static:/app/shared-static
     networks:
       - suzanne_network
     healthcheck:
@@ -437,6 +441,7 @@ volumes:
   meilisearch_data:
   n8n_data:
   medusa_uploads:
+  web_static:
 
 # -----------------------------------------------------------------------------
 # Networks
