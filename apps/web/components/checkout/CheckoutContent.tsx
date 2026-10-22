@@ -11,6 +11,14 @@ import { variantLabel, isPreorder } from '@/lib/shop/lineItem'
 import { PHONE_PATTERN, phoneError, sanitisePhone } from '@/lib/forms/validation'
 import { readMemberContact } from '@/lib/checkout/memberContact'
 import { paymentGatewayFor } from '@/lib/checkout/gateway'
+import {
+  EMPTY_BUSINESS,
+  businessMetadata,
+  normaliseBusiness,
+  validateBusiness,
+  type BusinessDetails,
+  type BusinessErrors,
+} from '@/lib/checkout/business'
 
 type Step = 1 | 2 | 3
 
@@ -284,6 +292,10 @@ export default function CheckoutContent() {
   } | null>(null)
   const [paymentError, setPaymentError] = useState<string | null>(null)
   const [payPalApprovalUrl, setPayPalApprovalUrl] = useState<string | null>(null)
+  // Business checkout (optional): off by default so the personal checkout is unchanged.
+  const [isBusiness, setIsBusiness] = useState(false)
+  const [business, setBusiness] = useState<BusinessDetails>(EMPTY_BUSINESS)
+  const [businessErrors, setBusinessErrors] = useState<BusinessErrors>({})
   const [voucherInput, setVoucherInput] = useState('')
   const [voucherBusy, setVoucherBusy] = useState(false)
   const [voucherError, setVoucherError] = useState<string | null>(null)
@@ -336,6 +348,17 @@ export default function CheckoutContent() {
     }
   }
 
+  function updateBusiness(field: keyof BusinessDetails, value: string) {
+    setBusiness((prev) => ({ ...prev, [field]: value }))
+    if (businessErrors[field]) {
+      setBusinessErrors((prev) => ({ ...prev, [field]: undefined }))
+    }
+  }
+
+  function blurBusinessField(field: keyof BusinessErrors) {
+    setBusinessErrors((prev) => ({ ...prev, [field]: validateBusiness(business, contact.country)[field] }))
+  }
+
   // Site check M5: check a field as soon as it loses focus, not only on submit.
   function blurField(field: keyof FormErrors) {
     setErrors((prev) => ({ ...prev, [field]: validateContact(contact)[field] }))
@@ -344,10 +367,13 @@ export default function CheckoutContent() {
   async function handleContactSubmit(e: React.FormEvent) {
     e.preventDefault()
     const validation = validateContact(contact)
-    if (Object.keys(validation).length > 0) {
+    const businessValidation = isBusiness ? validateBusiness(business, contact.country) : {}
+    if (Object.keys(validation).length > 0 || Object.keys(businessValidation).length > 0) {
       setErrors(validation)
+      setBusinessErrors(businessValidation)
       return
     }
+    const businessDetails = isBusiness ? normaliseBusiness(business) : null
     setIsSubmitting(true)
     // Names go on the billing address: a guest customer has none, and Thinkific,
     // Vtiger and the invoice read them from there.
@@ -358,6 +384,10 @@ export default function CheckoutContent() {
       // The ZAR region holds only ZA; a USD cart's region has no ZA in it, so
       // only a rand cart records the country on its billing address.
       countryCode: contact.country === 'ZA' && gateway === 'payfast' ? 'za' : undefined,
+      // Always written, empty for a personal checkout, so details typed and
+      // then switched off never reach the order.
+      company: businessDetails?.companyName ?? '',
+      metadata: businessMetadata(businessDetails),
     })
     setIsSubmitting(false)
     if (!saved) {
@@ -639,6 +669,89 @@ export default function CheckoutContent() {
                         </select>
                       </div>
 
+                      {/* Business checkout (Shayna, 22 Oct): company details for the invoice. */}
+                      <div className="rounded-xl border border-brand-border p-4">
+                        <label className="flex items-center gap-3 text-sm font-medium text-brand-ink cursor-pointer">
+                          <input
+                            id="isBusiness"
+                            type="checkbox"
+                            checked={isBusiness}
+                            onChange={(e) => {
+                              setIsBusiness(e.target.checked)
+                              if (!e.target.checked) setBusinessErrors({})
+                            }}
+                            aria-controls="business-fields"
+                            aria-expanded={isBusiness}
+                            className="w-4 h-4 accent-brand-accent-600"
+                          />
+                          Buying for a business?
+                        </label>
+                        <p className="mt-1 ml-7 text-xs text-brand-muted">
+                          Add your company details and they appear on your invoice.
+                        </p>
+                        {isBusiness && (
+                          <div id="business-fields" className="mt-4 space-y-5">
+                            <InputField
+                              label="Company name"
+                              id="companyName"
+                              value={business.companyName}
+                              onChange={(v) => updateBusiness('companyName', v)}
+                              onBlur={() => blurBusinessField('companyName')}
+                              error={businessErrors.companyName}
+                              required
+                              autoComplete="organization"
+                            />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                              <InputField
+                                label="VAT number"
+                                id="vatNumber"
+                                value={business.vatNumber}
+                                onChange={(v) => updateBusiness('vatNumber', v)}
+                                onBlur={() => blurBusinessField('vatNumber')}
+                                error={businessErrors.vatNumber}
+                                autoComplete="off"
+                              />
+                              <InputField
+                                label="Company registration number"
+                                id="registrationNumber"
+                                value={business.registrationNumber}
+                                onChange={(v) => updateBusiness('registrationNumber', v)}
+                                onBlur={() => blurBusinessField('registrationNumber')}
+                                error={businessErrors.registrationNumber}
+                                autoComplete="off"
+                              />
+                            </div>
+                            <div>
+                              <label htmlFor="companyAddress" className="block text-sm font-medium text-brand-ink mb-1.5">
+                                Company billing address
+                              </label>
+                              <textarea
+                                id="companyAddress"
+                                rows={3}
+                                value={business.address}
+                                onChange={(e) => updateBusiness('address', e.target.value)}
+                                onBlur={() => blurBusinessField('address')}
+                                autoComplete="street-address"
+                                aria-invalid={!!businessErrors.address}
+                                aria-describedby={businessErrors.address ? 'companyAddress-error' : 'companyAddress-hint'}
+                                className={`w-full px-4 py-3 rounded-xl border text-brand-ink placeholder-brand-muted text-sm transition-colors duration-200 outline-none focus:ring-2 focus:ring-brand-accent/30 focus:border-brand-accent ${
+                                  businessErrors.address ? 'border-red-600 bg-red-50' : 'border-brand-primary-300 bg-white hover:border-brand-primary-400'
+                                }`}
+                              />
+                              {businessErrors.address ? (
+                                <p id="companyAddress-error" className="mt-1 text-xs text-red-600" role="alert">
+                                  {businessErrors.address}
+                                </p>
+                              ) : (
+                                <p id="companyAddress-hint" className="mt-1 text-xs text-brand-muted">
+                                  Optional. Leave blank to use your billing country above.
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
                       <div className="pt-2">
                         <button
                           type="submit"
@@ -680,6 +793,12 @@ export default function CheckoutContent() {
                         <span className="font-medium">Billing country:</span>{' '}
                         {contact.country === 'ZA' ? 'South Africa' : 'International'}
                       </p>
+                      {isBusiness && business.companyName.trim() && (
+                        <p className="text-brand-ink">
+                          <span className="font-medium">Company:</span> {business.companyName.trim()}
+                          {business.vatNumber.trim() ? ` (VAT ${normaliseBusiness(business).vatNumber})` : ''}
+                        </p>
+                      )}
                       <button
                         onClick={() => setStep(1)}
                         className="text-brand-accent text-xs underline underline-offset-4 hover:text-brand-primary transition-colors duration-200 mt-1"

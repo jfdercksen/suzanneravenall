@@ -105,6 +105,19 @@ describe('email template rendering (POPIA footer)', () => {
     expect(html).not.toContain('href="#"')
   })
 
+  it('OrderConfirmation shows the company the order is billed to (business checkout)', () => {
+    const html = renderToStaticMarkup(
+      createElement(OrderConfirmation, {
+        ...orderProps,
+        business: { companyName: 'Acme (Pty) Ltd', vatNumber: '4123456789' },
+      })
+    )
+    expect(html).toContain('Billed To')
+    expect(html).toContain('Acme (Pty) Ltd')
+    expect(html).toContain('VAT No: 4123456789')
+    expect(renderToStaticMarkup(createElement(OrderConfirmation, orderProps))).not.toContain('Billed To')
+  })
+
   it('OrderConfirmation shows no VAT line or tax-invoice wording when not VAT registered (default)', () => {
     vi.stubEnv('COMPANY_VAT_NUMBER', '')
     const html = renderToStaticMarkup(createElement(OrderConfirmation, orderProps))

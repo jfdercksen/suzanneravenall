@@ -61,6 +61,11 @@ type InvoiceDelivery =
   | { kind: 'link'; url: string }
   | { kind: 'none' }
 
+/** "Acme (Pty) Ltd, VAT 4123456789": the company line in the order mail. */
+export function billedToLine(business: NonNullable<OrderEmailData['business']>): string {
+  return business.vatNumber ? `${business.companyName}, VAT ${business.vatNumber}` : business.companyName
+}
+
 function buildPlainText(order: OrderEmailData, invoice: InvoiceDelivery): string {
   const formattedDate = new Date(order.createdAt).toLocaleDateString('en-ZA', {
     day: 'numeric',
@@ -90,6 +95,7 @@ function buildPlainText(order: OrderEmailData, invoice: InvoiceDelivery): string
     '=============',
     `Order: #${order.displayId}`,
     `Date: ${formattedDate}`,
+    ...(order.business ? [`Billed to: ${billedToLine(order.business)}`] : []),
     '',
   ]
 

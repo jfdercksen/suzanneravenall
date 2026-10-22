@@ -114,6 +114,7 @@ export default function OrderConfirmation({
   productType,
   calBookingUrl,
   downloads,
+  business,
 }: OrderConfirmationProps) {
   const greeting = `Dear ${firstName ?? 'valued customer'},`
   const formattedDate = new Date(createdAt).toLocaleDateString('en-ZA', {
@@ -258,6 +259,22 @@ export default function OrderConfirmation({
                   </Text>
                 </Column>
               </Row>
+
+              {business ? (
+                <Row style={{ marginBottom: '12px' }}>
+                  <Column>
+                    <Text style={{ color: MEDIUM_GRAY, fontSize: '12px', margin: 0 }}>Billed To</Text>
+                    <Text style={{ color: NAVY, fontSize: '14px', fontWeight: '600', margin: '2px 0 0' }}>
+                      {business.companyName}
+                    </Text>
+                    {business.vatNumber ? (
+                      <Text style={{ color: DARK_TEXT, fontSize: '13px', margin: '2px 0 0' }}>
+                        VAT No: {business.vatNumber}
+                      </Text>
+                    ) : null}
+                  </Column>
+                </Row>
+              ) : null}
 
               <Hr style={{ borderColor: '#e2e8f0', margin: '16px 0' }} />
 

@@ -74,6 +74,8 @@ export interface OrderEmailData {
   calBookingUrl?: string | null
   /** Signed links for files bought as a download; shown above the order summary. */
   downloads?: OrderDownload[]
+  /** Business checkout: the company the order is billed to, shown under the order reference. */
+  business?: { companyName: string; vatNumber: string | null } | null
 }
 
 export interface QuizInviteEmailData {

@@ -6,6 +6,7 @@ import { logError, logWarn } from '@/lib/log'
 import { downloadInvoicePdf } from '@/lib/invoices/storage'
 import { downloadsForOrder, isDownloadOnlyOrder, signDownloadUrls } from '@/lib/downloads/storage'
 import { medusaAdminAuthHeader } from '@/lib/medusa/admin-auth'
+import { readOrderBusiness } from '@/lib/checkout/business'
 
 interface MedusaOrderItem {
   id: string
@@ -31,12 +32,18 @@ interface MedusaAdminOrder {
   }
   billing_address?: {
     first_name?: string | null
+    company?: string | null
   } | null
   items: MedusaOrderItem[]
   subtotal: number
   discount_total?: number
   tax_total: number
   total: number
+  metadata?: Record<string, unknown> | null
+}
+
+function businessForEmail(b: ReturnType<typeof readOrderBusiness>): OrderEmailData['business'] {
+  return b ? { companyName: b.companyName, vatNumber: b.vatNumber } : null
 }
 
 function verifySecret(provided: string, expected: string): boolean {
@@ -158,6 +165,7 @@ export async function POST(req: NextRequest) {
     total: order.total,
     productType,
     calBookingUrl,
+    business: businessForEmail(readOrderBusiness(order)),
   }
 
   // Files bought as a download (metadata.download_file on the product or

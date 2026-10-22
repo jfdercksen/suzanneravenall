@@ -7,6 +7,7 @@ import { z } from 'zod'
 import InvoiceDocument, { type InvoiceOrder } from '@/components/invoice/InvoiceDocument'
 import { logError } from '@/lib/log'
 import { medusaAdminAuthHeader } from '@/lib/medusa/admin-auth'
+import { readOrderBusiness } from '@/lib/checkout/business'
 
 const bodySchema = z.object({
   orderId: z.string().min(1).max(64).regex(/^[a-zA-Z0-9_-]+$/, 'Invalid order ID format'),
@@ -33,6 +34,9 @@ interface MedusaAdminOrder {
     email: string
   }
   billing_address?: {
+    first_name?: string
+    last_name?: string
+    company?: string | null
     address_1?: string
     city?: string
     country_code?: string
@@ -105,6 +109,7 @@ function buildInvoiceOrder(order: MedusaAdminOrder): InvoiceOrder {
     sage_invoice_number: order.metadata?.sage_document_number
       ? String(order.metadata.sage_document_number)
       : undefined,
+    business: readOrderBusiness(order),
   }
 }
 

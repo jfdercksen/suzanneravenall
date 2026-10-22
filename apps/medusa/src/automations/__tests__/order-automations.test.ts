@@ -403,6 +403,7 @@ describe('buildOrderSnapshot', () => {
       customer: { email: 'qa.buyer@example.com', first_name: null, last_name: null },
       billing_address: { first_name: 'QA', last_name: 'SelfTest' },
       shipping_address: null,
+      business: null,
       items: [
         {
           title: 'Program 1 Self Study',
@@ -410,5 +411,15 @@ describe('buildOrderSnapshot', () => {
         },
       ],
     })
+  })
+
+  it('carries the business checkout company from the order metadata (22 Oct 2026)', () => {
+    const snap = buildOrderSnapshot(
+      graphOrder({
+        metadata: { business_company_name: 'Acme (Pty) Ltd', business_vat_number: '4123456789', business_registration_number: '' },
+      }),
+      new Date(T0),
+    )
+    expect(snap.business).toEqual({ companyName: 'Acme (Pty) Ltd', vatNumber: '4123456789', registrationNumber: null })
   })
 })

@@ -14,6 +14,7 @@ import { findContactQuery } from './leads'
 import { makeFakeVtiger } from './test-utils'
 import { loadWorkflow } from './n8n-test-harness'
 import type { OrderSnapshot } from './orders'
+import { orderBusiness } from './business'
 
 const noSleep = () => Promise.resolve()
 
@@ -101,6 +102,8 @@ describe('parity with medusa-order-to-vtiger.json', () => {
         productNames: n8n.productNames,
         orderId: n8n.orderId,
         displayId: n8n.displayId,
+        // Ours only (business checkout, 22 Oct 2026): null for a personal order.
+        business: null,
       })
     } finally {
       vi.useRealTimers()
@@ -268,5 +271,40 @@ describe('syncOrderToVtiger', () => {
     expect(fetchImpl).not.toHaveBeenCalled()
     expect(res.contactId).toMatch(/^dryrun-/)
     expect(JSON.stringify(logger.info.mock.calls)).not.toContain('qa.buyer@example.com')
+  })
+})
+
+describe('business checkout (22 Oct 2026)', () => {
+  it('adds the company, VAT and registration number to the Event description', () => {
+    const o = order({
+      metadata: {
+        business_company_name: 'Acme (Pty) Ltd',
+        business_vat_number: '4123456789',
+        business_registration_number: '2020/123456/07',
+      },
+    })
+    const prep = prepareOrderForVtiger({ ...o, business: orderBusiness(o) })
+    const ev = orderEventElement(prep, '12x900', '19x1') as Record<string, string>
+    expect(ev.description).toBe(
+      'Order ID: order_01ABC. Products: Program 1, Program 2 - Live via Zoom, Line C. Total: R3315.00. Company: Acme (Pty) Ltd, VAT 4123456789, Reg 2020/123456/07',
+    )
+  })
+
+  it('leaves a personal order description unchanged', () => {
+    const ev = orderEventElement(prepareOrderForVtiger(order()), '12x900', '19x1') as Record<string, string>
+    expect(ev.description).toBe('Order ID: order_01ABC. Products: Program 1, Program 2 - Live via Zoom, Line C. Total: R3315.00')
+  })
+
+  it('orderBusiness falls back to the billing address company and ignores empty keys', () => {
+    expect(orderBusiness({ metadata: { business_company_name: '' }, billing_address: { company: 'Beta CC' } })).toEqual({
+      companyName: 'Beta CC',
+      vatNumber: null,
+      registrationNumber: null,
+    })
+    expect(orderBusiness({ metadata: { business_company_name: '' }, billing_address: { company: '' } })).toBeNull()
+  })
+
+  it('collapses line breaks in the company name for the one-line description', () => {
+    expect(orderBusiness({ metadata: { business_company_name: 'Acme\n (Pty)   Ltd' } })?.companyName).toBe('Acme (Pty) Ltd')
   })
 })

@@ -43,6 +43,7 @@ export interface Cart {
   region_id: string
   email: string | null
   promotions: CartPromotion[]
+  metadata?: Record<string, unknown> | null
   // Set once the cart has become an order. A completed cart cannot be reused.
   completed_at?: string | null
 }
@@ -55,6 +56,9 @@ export interface CartContact {
   firstName: string
   lastName: string
   countryCode?: string
+  /** Business checkout: the company name for the billing address, and the cart metadata it goes with. */
+  company?: string
+  metadata?: Record<string, string>
 }
 
 // Voucher (Medusa promotion) applied to the cart, as returned by the store API.
@@ -596,7 +600,7 @@ export function CartProvider({ children, onCurrencyChange }: CartProviderProps) 
   )
 
   const setContact = useCallback(
-    async ({ email, firstName, lastName, countryCode }: CartContact) => {
+    async ({ email, firstName, lastName, countryCode, company, metadata }: CartContact) => {
       const currentCart = await getOrCreateCart()
       if (!currentCart) return false
       try {
@@ -609,7 +613,10 @@ export function CartProvider({ children, onCurrencyChange }: CartProviderProps) 
               first_name: firstName,
               last_name: lastName,
               ...(countryCode ? { country_code: countryCode.toLowerCase() } : {}),
+              ...(company !== undefined ? { company } : {}),
             },
+            // Medusa merges metadata: unsent keys stay, an empty value deletes the key.
+            ...(metadata ? { metadata } : {}),
           }),
         })
         if (!res.ok) return false

@@ -236,4 +236,21 @@ describe('sendOrderConfirmationEmail', () => {
     expect(text).toContain('last Wednesday of every month')
     expect(text).not.toContain('BOOK YOUR SESSION')
   })
+
+  it('names the company in the plain text for a business order', async () => {
+    mockSend.mockResolvedValue('email_id_biz')
+    await sendOrderConfirmationEmail({
+      order: { ...baseOrder, business: { companyName: 'Acme (Pty) Ltd', vatNumber: '4123456789' } },
+      invoiceUrl: null,
+    })
+    const text = (mockSend.mock.calls[0]![0] as { text: string }).text
+    expect(text).toContain('Billed to: Acme (Pty) Ltd, VAT 4123456789')
+  })
+
+  it('has no billed-to line for a personal order', async () => {
+    mockSend.mockResolvedValue('email_id_personal')
+    await sendOrderConfirmationEmail({ order: baseOrder, invoiceUrl: null })
+    const text = (mockSend.mock.calls[0]![0] as { text: string }).text
+    expect(text).not.toContain('Billed to')
+  })
 })

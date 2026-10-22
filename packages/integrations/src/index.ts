@@ -23,6 +23,7 @@ export {
 } from './leads'
 export { automationMode, type AutomationMode } from './flags'
 export { orderBuyer, toOrderSnapshot, type OrderSnapshot, type OrderItemSnapshot, type OrderAddress } from './orders'
+export { orderBusiness, BUSINESS_META_KEYS, type OrderBusiness } from './business'
 export {
   ThinkificClient,
   ThinkificError,

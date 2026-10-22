@@ -126,3 +126,43 @@ describe('InvoiceDocument - VAT on (COMPANY_VAT_NUMBER set)', () => {
     expect(text).toContain('R 2,173.91')
   })
 })
+
+// Business checkout (Shayna, 22 Oct): the company goes above the contact person.
+describe('InvoiceDocument - business checkout', () => {
+  it('shows company, VAT and registration number above the contact person', () => {
+    const { text } = renderText({
+      ...order,
+      business: {
+        companyName: 'Acme (Pty) Ltd',
+        vatNumber: '4123456789',
+        registrationNumber: '2020/123456/07',
+        address: '1 Main Road\nSandton',
+      },
+    })
+    const billTo = text.slice(text.indexOf('BILL TO'))
+    const company = billTo.indexOf('Acme (Pty) Ltd')
+    expect(company).toBeGreaterThan(0)
+    expect(billTo).toContain('VAT No: 4123456789')
+    expect(billTo).toContain('Reg No: 2020/123456/07')
+    expect(billTo).toContain('1 Main Road\nSandton')
+    expect(billTo.indexOf('Attention: Alice Smith')).toBeGreaterThan(company)
+  })
+
+  it('leaves a personal invoice unchanged', () => {
+    const { text } = renderText({ ...order, business: null })
+    expect(text).toBe(renderText(order).text)
+    expect(text).not.toContain('Attention:')
+    expect(text).not.toContain('VAT No:')
+  })
+
+  it('omits the VAT and registration lines when not given', () => {
+    const { text } = renderText({
+      ...order,
+      business: { companyName: 'Beta CC', vatNumber: null, registrationNumber: null, address: null },
+    })
+    const billTo = text.slice(text.indexOf('BILL TO'))
+    expect(billTo).toContain('Beta CC')
+    expect(billTo).not.toContain('VAT No:')
+    expect(billTo).toContain('Attention: Alice Smith')
+  })
+})

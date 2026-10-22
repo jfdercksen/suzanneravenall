@@ -4,6 +4,7 @@ import {
   companyRegistrationNumber,
   companyVatNumber,
 } from '../../lib/email/company'
+import type { OrderBusiness } from '../../lib/checkout/business'
 
 export interface InvoiceLineItem {
   id: string
@@ -38,6 +39,8 @@ export interface InvoiceOrder {
   payment_method?: string
   payment_reference?: string
   sage_invoice_number?: string
+  /** Business checkout: the company billed, shown above the contact person. */
+  business?: OrderBusiness | null
 }
 
 // react-pdf hyphenates long words by default, so a product title wrapped as
@@ -349,14 +352,33 @@ export default function InvoiceDocument({ order }: Props) {
           </View>
           <View style={[s.partyBox, s.partyBoxRight]}>
             <Text style={s.partyLabel}>BILL TO</Text>
-            <Text style={s.partyName}>{customerName}</Text>
+            {order.business ? (
+              <>
+                <Text style={s.partyName}>{order.business.companyName}</Text>
+                {order.business.vatNumber ? (
+                  <Text style={s.partyMuted}>VAT No: {order.business.vatNumber}</Text>
+                ) : null}
+                {order.business.registrationNumber ? (
+                  <Text style={s.partyMuted}>Reg No: {order.business.registrationNumber}</Text>
+                ) : null}
+                {order.business.address
+                  ? order.business.address.split('\n').map((line, i) => (
+                      <Text key={`addr-${i}`} style={s.partyLine}>{line}</Text>
+                    ))
+                  : null}
+                <Text style={s.partyLine}>Attention: {customerName}</Text>
+              </>
+            ) : (
+              <Text style={s.partyName}>{customerName}</Text>
+            )}
             {order.customer?.email ? (
               <Text style={s.partyLine}>{order.customer.email}</Text>
             ) : null}
-            {order.billing_address?.address_1 ? (
+            {/* A company address replaces the contact's own address lines. */}
+            {!order.business?.address && order.billing_address?.address_1 ? (
               <Text style={s.partyLine}>{order.billing_address.address_1}</Text>
             ) : null}
-            {order.billing_address?.city ? (
+            {!order.business?.address && order.billing_address?.city ? (
               <Text style={s.partyLine}>{order.billing_address.city}</Text>
             ) : null}
             {countryDisplay ? (

@@ -7,7 +7,7 @@
  * through the Query graph, never orderService.retrieveOrder (KI045).
  */
 
-import { toOrderSnapshot, type OrderSnapshot } from "@suzanne/integrations"
+import { orderBusiness, toOrderSnapshot, type OrderSnapshot } from "@suzanne/integrations"
 
 export const ORDER_GRAPH_FIELDS = [
   "id",
@@ -56,6 +56,7 @@ export function buildOrderSnapshot(order: unknown, receivedAt: Date = new Date()
     },
     billing_address: addr(full.billing_address),
     shipping_address: addr(full.shipping_address),
+    business: orderBusiness(full),
     items: (full.items ?? []).map((item) => ({
       title: item?.title ?? null,
       variant: item?.variant

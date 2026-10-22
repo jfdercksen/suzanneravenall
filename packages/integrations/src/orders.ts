@@ -5,7 +5,9 @@
  * read identical input.
  */
 
-export type OrderAddress = { first_name?: string | null; last_name?: string | null } | null
+import type { OrderBusiness } from './business'
+
+export type OrderAddress = { first_name?: string | null; last_name?: string | null; company?: string | null } | null
 
 export type OrderItemSnapshot = {
   title?: string | null
@@ -30,6 +32,9 @@ export type OrderSnapshot = {
   billing_address?: OrderAddress
   shipping_address?: OrderAddress
   items?: OrderItemSnapshot[] | null
+  metadata?: Record<string, unknown> | null
+  /** Business checkout: the company billed. Absent on jobs queued before it existed. */
+  business?: OrderBusiness | null
 }
 
 /**

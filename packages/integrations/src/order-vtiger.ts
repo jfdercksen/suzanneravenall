@@ -47,6 +47,7 @@ export function prepareOrderForVtiger(order: OrderSnapshot, now: Date = new Date
     productNames,
     orderId: order.id,
     displayId: order.display_id,
+    business: order.business ?? null,
   }
 }
 
@@ -95,7 +96,7 @@ export function orderEventElement(prep: PreparedVtigerOrder, contactId: string, 
   return {
     activitytype: 'Call',
     subject: subject.slice(0, 255),
-    description: `Order ID: ${prep.orderId}. Products: ${prep.productNames}. Total: ${totalDisplay}`,
+    description: `Order ID: ${prep.orderId}. Products: ${prep.productNames}. Total: ${totalDisplay}${businessNote(prep.business)}`,
     assigned_user_id: userId,
     contact_id: contactId,
     date_start: prep.createdAt.slice(0, 10),
@@ -106,6 +107,15 @@ export function orderEventElement(prep: PreparedVtigerOrder, contactId: string, 
     duration_minutes: '15',
     eventstatus: 'Held',
   }
+}
+
+/** ". Company: Acme (Pty) Ltd, VAT 4123456789, Reg 2020/123456/07" for a business purchase, else "". */
+function businessNote(business: PreparedVtigerOrder['business']): string {
+  if (!business) return ''
+  const parts = [business.companyName]
+  if (business.vatNumber) parts.push(`VAT ${business.vatNumber}`)
+  if (business.registrationNumber) parts.push(`Reg ${business.registrationNumber}`)
+  return `. Company: ${parts.join(', ')}`
 }
 
 export type OrderVtigerState = {
