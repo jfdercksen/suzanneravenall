@@ -560,3 +560,10 @@ docker-compose (MEMBERSHIPS_ENABLED default false) and the runbook.
 - code-reviewer: no blockers; fixed the metadata comment (merge, not replace) and dropped the spread, caps on read, whitespace collapse for Vtiger, no double address on the invoice. Tests: web touched areas 618 pass, medusa automations 81 pass, next build green.
 - 1b0b7d4 pushed, deploy 39746053416 (web medusa) success; box on d17fe3a (another session's docs commit on top).
 - Proof docs/testing/results/business-checkout-2026-10-22.md: #425 business (mail Billed To + VAT, invoice SR-00425 company/VAT/reg above Attention, Vtiger Event 18x659 with company), #426 personal unchanged. Both cancelled by exact id after read-back.
+
+## 2026-10-22 Intake mail in Shayna's template (task from the EA session, Johan's decisions)
+- 7bc581b: IntakeRequest HTML + text in her wording (support, 21 Oct 08:41 SAST), form button instead of attachment, 3-days-before ask kept, reminders use the same blocks; RR introduction steps only for rapid-repatterning handles; Zoom only when online. Her Thinkific link was the /manage/ admin URL: replaced with the public course page /courses/Rapid-Repatterning-Session-Introduction (course 1896029, product 1987025, published, not hidden, read from the Thinkific API); her steps 2-3 (category listing) folded into "Select this course". Coupon free22 not verified.
+- Online vs in-person: new column intake_submissions.in_person (migration 20261022090000, applied on aimate-db1 + PostgREST reload before deploy), set from the order's variant titles read through the Medusa admin API (items.product_handle, items.variant_title, checked on #412/#414); unknown counts as online so the mail always goes (code-reviewer should-fix 1 declined on purpose; the 5 s timeout and call-site guard applied). Only RR sells in-person variants today.
+- Tests 311 pass in the touched areas, tsc clean. Web-only deploy run 39748612064 success 08:42Z (no Medusa restart).
+- Proof: #427 RR online (steps + Zoom), #428 RR in-person (steps, no Zoom), #429 Resonance online (Zoom, no steps), all read back in Outlook; cancelled by exact id after read-back; forms closed.
+
