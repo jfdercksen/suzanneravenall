@@ -30,6 +30,7 @@ const RECORD: IntakeRecord = {
   form_id: '1',
   form_key: 'standard',
   purchased_at: '2026-10-21T08:00:00Z',
+  in_person: false,
   status: 'completed',
   intake_sent_at: '2026-10-21T08:00:00Z',
   reminders_sent: 1,
@@ -74,6 +75,8 @@ describe('intake request mail', () => {
         formUrl: 'http://169.239.180.49/intake/abc',
         reminder: 0,
         supportEmail: INTAKE_SUPPORT_EMAIL,
+        rapidRepatterning: true,
+        online: true,
       }),
     )
     expect(html).toContain('href="http://169.239.180.49/intake/abc"')
@@ -86,7 +89,7 @@ describe('intake request mail', () => {
 
   it('words a reminder as a reminder', async () => {
     const html = await render(
-      createElement(IntakeRequest, { firstName: null, serviceName: 'X', formUrl: 'http://h/intake/a', reminder: 2, supportEmail: 's@x.com' }),
+      createElement(IntakeRequest, { firstName: null, serviceName: 'X', formUrl: 'http://h/intake/a', reminder: 2, supportEmail: 's@x.com', rapidRepatterning: false, online: false }),
     )
     expect(html).toContain('still open')
     expect(html).toContain('Hi there,')
@@ -148,5 +151,58 @@ describe('completed form mail to the team', () => {
     process.env.INTAKE_NOTIFY_EMAIL = 'intake@x.com'
     expect(intakeTeamAddress({ recipientEmail: null })).toBe('intake@x.com')
     expect(intakeTeamAddress({ recipientEmail: 'form@x.com' })).toBe('form@x.com')
+  })
+})
+
+describe('Shayna\'s template: Rapid Repatterning steps and Zoom by service and mode', () => {
+  const textFor = async (overrides: Partial<IntakeRecord>, reminder = 0) => {
+    vi.mocked(sendEmail).mockClear()
+    await sendIntakeRequestEmail({ ...RECORD, status: 'pending', ...overrides }, reminder)
+    return vi.mocked(sendEmail).mock.calls[0]!
+  }
+
+  it('Rapid Repatterning online: her wording, the intro steps with the public course link, and Zoom', async () => {
+    const [call] = await textFor({ service_key: 'rapid-repatterning-session', in_person: false })
+    expect(call.text).toContain('thank you so much for purchasing and booking your Rapid Repatterning Session')
+    expect(call.text).toContain('at least 3 days before your session')
+    expect(call.text).toContain('how hard to push!')
+    expect(call.text).toContain('https://ravenallinstitute-9629.thinkific.com/courses/Rapid-Repatterning-Session-Introduction')
+    expect(call.text).toContain('free22')
+    expect(call.text).toContain('https://zoom.us/j/3603768111')
+    expect(call.text).not.toContain('/manage/')
+    const html = await render(call.react!)
+    expect(html).toContain('Steps to access the short programme')
+    expect(html).toContain('href="https://zoom.us/j/3603768111"')
+  })
+
+  it('Rapid Repatterning in-person: the intro steps, no Zoom', async () => {
+    const [call] = await textFor({ service_key: 'rapid-repatterning-session', in_person: true })
+    expect(call.text).toContain('free22')
+    expect(call.text).not.toContain('zoom.us')
+    expect(await render(call.react!)).not.toContain('zoom.us')
+  })
+
+  it('another online service: Zoom, no intro steps (Resonance is not Rapid Repatterning)', async () => {
+    const [call] = await textFor({ service_key: 'resonance-repatterning-session', service_name: 'Resonance Repatterning Session' })
+    expect(call.text).toContain('https://zoom.us/j/3603768111')
+    expect(call.text).not.toContain('free22')
+    expect(await render(call.react!)).not.toContain('Steps to access the short programme')
+  })
+
+  it('a reminder keeps the same blocks and the 3-day ask', async () => {
+    const [call] = await textFor({ service_key: 'rapid-repatterning-session', in_person: false }, 3)
+    expect(call.subject).toBe('Reminder: your intake form for Rapid Repatterning Session')
+    expect(call.text).toContain('friendly reminder')
+    expect(call.text).toContain('at least 3 days before your session')
+    expect(call.text).toContain('free22')
+    expect(call.text).toContain('zoom.us')
+  })
+
+  it('has no em dashes in any variant', async () => {
+    for (const overrides of [{ service_key: 'rapid-repatterning-session' }, { in_person: true }]) {
+      const [call] = await textFor(overrides)
+      expect(call.text).not.toContain('\u2014')
+      expect(await render(call.react!)).not.toContain('\u2014')
+    }
   })
 })

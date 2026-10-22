@@ -2,6 +2,7 @@ import { createElement } from 'react'
 import { sendEmail } from './send'
 import { siteUrl } from './site-url'
 import IntakeRequest from './templates/IntakeRequest'
+import { isRapidRepatterning, RR_INTRO_COUPON, RR_INTRO_COURSE_URL, ZOOM_URL } from './intake-content'
 import IntakeCompleted from './templates/IntakeCompleted'
 import { answerText } from '../intake/validate'
 import type { IntakeForm, IntakeRecord } from '../intake/types'
@@ -40,24 +41,41 @@ export function intakeRequestSubject(serviceName: string, reminder: number): str
 }
 
 function requestText(record: IntakeRecord, reminder: number, formUrl: string): string {
-  return [
+  const lines = [
     record.first_name ? `Hi ${record.first_name},` : 'Hi there,',
     '',
     reminder > 0
-      ? `We have not received your intake form for ${record.service_name} yet. It helps us prepare for your session, so please take a few minutes to complete it.`
-      : `Thank you for booking ${record.service_name}. Before your session, please complete your intake form. It helps us understand you and prepare, so you have a great and comfortable experience.`,
+      ? `I hope you're doing well. This is a friendly reminder that we have not yet received your intake form for your ${record.service_name}.`
+      : `I hope you're doing well, and thank you so much for purchasing and booking your ${record.service_name}.`,
     '',
-    'It takes about 10 to 15 minutes. Leave out anything you would prefer not to answer.',
+    'May I kindly ask you to please complete your intake form at least 3 days before your session, as this helps ensure you get the best session possible. We work holistically, and therefore want to understand more about your overall wellbeing, so we know how to work with you, and how hard to push! But if any questions feel uncomfortable, feel free not to answer them.',
     '',
     `Complete your intake form: ${formUrl}`,
     '',
-    'This link is personal to you; please do not forward it.',
+  ]
+  if (isRapidRepatterning(record.service_key)) {
+    lines.push(
+      'To get you started on your journey we have given you access to a short program of information about what will happen in the session and also short informative videos, along with an understanding of how our system works and a little information about what is going on inside of you that causes stuckness, flow, pain, illness. We hope you enjoy this gift.',
+      '',
+      'Steps to access the short programme',
+      `Step 1: Go to ${RR_INTRO_COURSE_URL} and open a free account.`,
+      'Step 2: Select this course.',
+      `Step 3: Check out using this code: ${RR_INTRO_COUPON}`,
+      '',
+    )
+  }
+  if (!record.in_person) {
+    lines.push(`Your session will be via Zoom. Click on this link at the time of your session: ${ZOOM_URL}`, '')
+  }
+  lines.push(
+    `If you have any questions at all, please don't hesitate to reach out: reply to this email or write to ${INTAKE_SUPPORT_EMAIL}.`,
     '',
-    `Questions about your form or your session? Contact us at ${INTAKE_SUPPORT_EMAIL} or simply reply to this email.`,
+    'This link is personal to you; please do not forward it.',
     '',
     'Warm regards,',
     'The Ravenall Institute team',
-  ].join('\n')
+  )
+  return lines.join('\n')
 }
 
 /** The first mail (reminder 0) or reminder 1 to 6. Returns the Brevo message id; throws on failure. */
@@ -73,6 +91,8 @@ export async function sendIntakeRequestEmail(record: IntakeRecord, reminder: num
       formUrl,
       reminder,
       supportEmail: INTAKE_SUPPORT_EMAIL,
+      rapidRepatterning: isRapidRepatterning(record.service_key),
+      online: !record.in_person,
     }),
     text: requestText(record, reminder, formUrl),
   })

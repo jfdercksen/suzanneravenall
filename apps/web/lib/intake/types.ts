@@ -79,6 +79,8 @@ export interface IntakeRecord {
   form_id: string
   form_key: string | null
   purchased_at: string
+  /** Every purchased variant of the service is in-person: the mail has no Zoom link. */
+  in_person: boolean
   status: IntakeStatus
   intake_sent_at: string | null
   reminders_sent: number

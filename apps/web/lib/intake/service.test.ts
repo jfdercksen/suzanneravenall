@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 vi.mock('@/lib/log', () => ({ logError: vi.fn(), logWarn: vi.fn() }))
 
 import {
+  isInPerson,
   cancelIntakesForOrder,
   createIntakesForOrder,
   loadIntakePage,
@@ -181,6 +182,7 @@ beforeEach(() => {
     store: mem as unknown as typeof storeModule,
     loadForms: async () => [STANDARD, EXEC],
     loadForm: async (id) => [STANDARD, EXEC].find((f) => f.id === id) ?? null,
+    loadVariantTitles: async () => new Map([['rapid-repatterning-session', ['90 min in-person', '90 min in-person']]]),
     sendRequest,
     sendCompleted,
     alert,
@@ -218,6 +220,22 @@ describe('createIntakesForOrder', () => {
     expect(mem.rows.every((r) => r.intake_sent_at)).toBe(true)
     expect(mem.rows[0]!.next_reminder_at).toBe(new Date(T0.getTime() + DAY).toISOString())
     expect(mem.rows[0]!.service_name).toBe('Rapid Repatterning Session')
+  })
+
+  it('marks a service in-person only when every variant bought says so', async () => {
+    await createIntakesForOrder(ORDER, deps)
+    expect(mem.rows.find((r) => r.service_key === 'rapid-repatterning-session')?.in_person).toBe(true)
+    expect(mem.rows.find((r) => r.service_key === 'executive-coaching-30-mins')?.in_person).toBe(false)
+  })
+
+  it('still mails the form, as online, when the Medusa lookup fails', async () => {
+    deps.loadVariantTitles = async () => {
+      throw new Error('medusa down')
+    }
+    const result = await createIntakesForOrder({ ...ORDER, lines: [ORDER.lines[0]!] }, deps)
+    expect(result.failed).toBe(0)
+    expect(sendRequest).toHaveBeenCalledTimes(1)
+    expect(mem.rows[0]!.in_person).toBe(false)
   })
 
   it('does nothing new when the order is posted again', async () => {
@@ -408,5 +426,19 @@ describe('submitIntake and the page', () => {
     deps.loadForm = async () => null
     const page = await loadIntakePage(mem.rows[0]!.token, deps)
     expect(page.state === 'open' && page.form.formKey).toBe('standard')
+  })
+})
+
+describe('isInPerson', () => {
+  it.each([
+    [['90 min in-person'], true],
+    [['90 min In Person', '60 min in-person'], true],
+    [['90 min in-person', '90 min online'], false],
+    [['Package of 04 (60 min online)'], false],
+    [['30 min'], false],
+    [[], false],
+    [undefined, false],
+  ])('%j -> %s', (titles, expected) => {
+    expect(isInPerson(titles as string[] | undefined)).toBe(expected)
   })
 })

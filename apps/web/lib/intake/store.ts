@@ -62,6 +62,7 @@ export interface NewIntakeRecord {
   form_id: string
   form_key: string
   purchased_at: string
+  in_person: boolean
   next_reminder_at: string
   expires_at: string
 }

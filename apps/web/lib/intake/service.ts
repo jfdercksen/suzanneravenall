@@ -2,6 +2,7 @@ import { randomBytes } from 'crypto'
 import { logError } from '@/lib/log'
 import { sendStaffAlert } from '@/lib/integrations/staff-alert'
 import { sendIntakeCompletedEmail, sendIntakeRequestEmail } from '@/lib/email/intake'
+import { orderVariantTitles } from '@/lib/medusa/order-variant-titles'
 import { chooseForm, fetchIntakeForm, fetchIntakeForms, serviceIntroduction } from './forms'
 import { firstReminderAt, linkExpiresAt, nextReminderAt, reminderDelays } from './schedule'
 import * as store from './store'
@@ -26,6 +27,8 @@ export interface IntakeDeps {
   store: typeof store
   loadForms: () => Promise<IntakeForm[]>
   loadForm: (id: string) => Promise<IntakeForm | null>
+  /** Variant titles per product handle for an order; empty when Medusa cannot be read. */
+  loadVariantTitles: (orderId: string) => Promise<Map<string, string[]>>
   sendRequest: typeof sendIntakeRequestEmail
   sendCompleted: typeof sendIntakeCompletedEmail
   alert: (input: { key: string; subject: string; lines: string[] }) => Promise<unknown>
@@ -38,6 +41,7 @@ export const defaultDeps: IntakeDeps = {
   store,
   loadForms: () => fetchIntakeForms(),
   loadForm: (id) => fetchIntakeForm(id),
+  loadVariantTitles: (orderId) => orderVariantTitles(orderId),
   sendRequest: sendIntakeRequestEmail,
   sendCompleted: sendIntakeCompletedEmail,
   alert: (input) => sendStaffAlert(input),
@@ -72,6 +76,17 @@ async function noteFailure(record: IntakeRecord, what: string, err: unknown, dep
 // ---------------------------------------------------------------------------
 // Order -> intake records + first mail
 // ---------------------------------------------------------------------------
+
+const IN_PERSON_RE = /\bin[\s-]?person\b/i
+
+/**
+ * In-person when every variant bought of the service says so ("90 min
+ * in-person"). Unknown (no titles, Medusa not readable) counts as online, so
+ * the client still gets the Zoom link.
+ */
+export function isInPerson(titles: string[] | undefined): boolean {
+  return Boolean(titles && titles.length > 0 && titles.every((t) => IN_PERSON_RE.test(t)))
+}
 
 export interface OrderLine {
   handle: string
@@ -113,6 +128,9 @@ export async function createIntakesForOrder(input: OrderIntakeInput, deps: Intak
   if (byHandle.size === 0) return result
 
   const forms = await deps.loadForms()
+  // Unknown counts as online (the client gets the Zoom link): a Medusa hiccup
+  // must never hold back the intake mail itself.
+  const variantTitles = await deps.loadVariantTitles(input.orderId).catch(() => new Map<string, string[]>())
   const now = deps.now()
   const placedAt = input.placedAt && input.placedAt.getTime() <= now.getTime() ? input.placedAt : now
   const delays = deps.delays()
@@ -139,6 +157,7 @@ export async function createIntakesForOrder(input: OrderIntakeInput, deps: Intak
       form_id: choice.form.id,
       form_key: choice.form.formKey,
       purchased_at: placedAt.toISOString(),
+      in_person: isInPerson(variantTitles.get(line.handle)),
       next_reminder_at: firstReminderAt(placedAt, delays).toISOString(),
       expires_at: linkExpiresAt(placedAt).toISOString(),
     })
