@@ -3,9 +3,12 @@
  * memory, the clients, the staff alerter and the course-access mail sender.
  */
 
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
+// The path Medusa itself resolves, so the workflow is composed once (KI089).
+import { completeCartWorkflow } from "@medusajs/medusa/core-flows"
 import {
   createStaffAlerter,
+  sendSentryEvent,
   fetchWithRetry,
   IntegrationError,
   ThinkificClient,
@@ -24,6 +27,8 @@ import {
   type QueryGraph,
 } from "./cart-recovery"
 import { dryRun, modeFor } from "./config"
+import { findStuckPayments, paymentReconcileHandler, type ReconcileDeps } from "./payment-reconcile"
+import { toAmount, type AmountLike } from "../modules/payment-payfast/cancel-plan"
 import {
   courseAccessEmailHandler,
   thinkificEnrolmentHandler,
@@ -117,6 +122,79 @@ function cartRecoveryHandler(container: Resolver) {
   })
 }
 
+type OrderRow = { id: string; status: string; total: AmountLike; currency_code: string }
+
+/** The Medusa side of the stuck-payment repair (KI095). */
+export function reconcileDeps(container: Resolver): ReconcileDeps {
+  const db = () => container.resolve<RawSql>(ContainerRegistrationKeys.PG_CONNECTION)
+  return {
+    recheck: async (sessionId) =>
+      (await findStuckPayments(db(), { now: new Date(), minAgeMs: 0, sessionId }))[0] ?? null,
+    loadOrder: async (orderId) => {
+      const query = container.resolve<QueryGraph>(ContainerRegistrationKeys.QUERY)
+      const { data } = await query.graph({
+        entity: "order",
+        fields: ["id", "status", "total", "currency_code"],
+        filters: { id: orderId },
+      })
+      const order = data[0] as OrderRow | undefined
+      // total is a BigNumber ({ numeric }): Number() on it is NaN.
+      return order ? { id: order.id, status: order.status, total: toAmount(order.total), currencyCode: order.currency_code } : null
+    },
+    completeCart: async (cartId) => {
+      await completeCartWorkflow(container as never).run({ input: { id: cartId } })
+    },
+    authorizeSession: async (sessionId) => {
+      const payment = container.resolve<{ authorizePaymentSession(id: string, context: Record<string, unknown>): Promise<unknown> }>(Modules.PAYMENT)
+      await payment.authorizePaymentSession(sessionId, {})
+    },
+    recordOrderTransactions: async (orderId, sessionId) => {
+      // Same rows core's addOrderTransactionStep writes after authorising.
+      const payment = container.resolve<{
+        listPayments(filters: Record<string, unknown>, config: Record<string, unknown>): Promise<
+          Array<{ currency_code: string; captures?: Array<{ id: string; amount: unknown; raw_amount?: unknown }> }>
+        >
+      }>(Modules.PAYMENT)
+      const orders = container.resolve<{
+        listOrderTransactions(filters: Record<string, unknown>, config: Record<string, unknown>): Promise<Array<{ reference_id: string | null }>>
+        addOrderTransactions(data: Array<Record<string, unknown>>): Promise<unknown>
+      }>(Modules.ORDER)
+      const payments = await payment.listPayments({ payment_session_id: sessionId }, { relations: ["captures"] })
+      const rows = payments.flatMap((p) =>
+        (p.captures ?? []).map((c) => ({
+          order_id: orderId,
+          amount: c.raw_amount ?? c.amount,
+          currency_code: p.currency_code,
+          reference: "capture",
+          reference_id: c.id,
+        }))
+      )
+      if (rows.length === 0) throw new Error(`no capture recorded for payment session ${sessionId}`)
+      const existing = await orders.listOrderTransactions(
+        { order_id: orderId, reference: "capture", reference_id: rows.map((r) => r.reference_id) },
+        { select: ["reference_id"] }
+      )
+      const have = new Set(existing.map((t) => t.reference_id))
+      const missing = rows.filter((r) => !have.has(r.reference_id))
+      if (missing.length > 0) await orders.addOrderTransactions(missing)
+    },
+    paidAmount: async (orderId) => {
+      const res = await db().raw(
+        `SELECT COALESCE(SUM(amount), 0) AS paid FROM order_transaction WHERE order_id = ? AND deleted_at IS NULL`,
+        [orderId]
+      )
+      const rows = Array.isArray(res) ? res : res?.rows ?? []
+      return Number(rows[0]?.paid ?? 0)
+    },
+    emitOrderPlaced: async (orderId) => {
+      const bus = container.resolve<{ emit(event: { name: string; data: Record<string, unknown> }): Promise<void> }>(Modules.EVENT_BUS)
+      await bus.emit({ name: "order.placed", data: { id: orderId } })
+    },
+    sentry: (event) => sendSentryEvent(event, { logger }),
+    logger,
+  }
+}
+
 let queue: AutomationQueue | null = null
 
 /** The durable queue (Medusa Postgres). Jobs whose flag is "off" are held. */
@@ -125,7 +203,7 @@ export function getAutomationQueue(container: Resolver): AutomationQueue {
     const db = container.resolve<RawSql>(ContainerRegistrationKeys.PG_CONNECTION)
     queue = new AutomationQueue({
       store: new PgJobStore(db),
-      handlers: [...buildHandlers(realDeps()), cartRecoveryHandler(container)],
+      handlers: [...buildHandlers(realDeps()), cartRecoveryHandler(container), paymentReconcileHandler(reconcileDeps(container))],
       alert: (a) => staffAlerter().send(a),
       logger,
       isRunnable: (automation) => !dryRun() && modeFor(automation) !== "off",

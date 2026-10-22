@@ -6,6 +6,7 @@
  *   AUTOMATION_THINKIFIC     n8n (default) | code | off
  *   AUTOMATION_ORDER_VTIGER  n8n (default) | code | off
  *   AUTOMATION_CART_RECOVERY n8n (default) | code | off (see cart-recovery.ts)
+ *   AUTOMATION_PAYMENT_RECONCILE code (default) | off (see payment-reconcile.ts)
  *
  * n8n  - order-placed.ts calls the n8n webhook exactly as before.
  * code - our own code does the work through the durable queue; the n8n
@@ -19,6 +20,7 @@
 
 import { automationMode, isDryRun, type AutomationMode } from "@suzanne/integrations"
 import { CART_RECOVERY_EMAIL, cartRecoveryMode } from "./cart-recovery"
+import { PAYMENT_RECONCILE, paymentReconcileMode } from "./payment-reconcile"
 
 export const THINKIFIC_ENROLMENT = "thinkific_enrolment"
 export const COURSE_ACCESS_EMAIL = "course_access_email"
@@ -40,6 +42,7 @@ export function modeFor(automation: string, env: Record<string, string | undefin
   if (automation === THINKIFIC_ENROLMENT || automation === COURSE_ACCESS_EMAIL) return thinkificMode(env)
   if (automation === VTIGER_ORDER) return orderVtigerMode(env)
   if (automation === CART_RECOVERY_EMAIL) return cartRecoveryMode(env)
+  if (automation === PAYMENT_RECONCILE) return paymentReconcileMode(env)
   return "off"
 }
 

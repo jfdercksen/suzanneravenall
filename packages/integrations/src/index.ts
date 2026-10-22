@@ -117,3 +117,4 @@ export {
   type ProductPage,
   type ReindexResult,
 } from './meili'
+export { sendSentryEvent, parseSentryDsn, type SentryEvent, type SentryLevel, type SentryOutcome } from './sentry'

@@ -94,6 +94,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       COOKIE_SECRET: ${COOKIE_SECRET}
       SENTRY_DSN: ${SENTRY_DSN_MEDUSA}
+      SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT:-}
       ADMIN_CORS: ${ADMIN_CORS:-http://169.239.180.49}
       STORE_CORS: ${STORE_CORS:-http://169.239.180.49}
       AUTH_CORS: ${AUTH_CORS:-http://169.239.180.49}
@@ -134,6 +135,9 @@ services:
       AUTOMATION_INTAKE: ${AUTOMATION_INTAKE:-code}
       INTAKE_REMINDER_DELAYS: ${INTAKE_REMINDER_DELAYS:-}
       INTAKE_SWEEP_SINCE: ${INTAKE_SWEEP_SINCE:-}
+      # KI095 safety net: paid carts that never became a paid order are repaired
+      # once or reported to staff (jobs/payment-reconcile.ts). code (default) | off.
+      AUTOMATION_PAYMENT_RECONCILE: ${AUTOMATION_PAYMENT_RECONCILE:-code}
       AUTOMATION_ALERT_EMAIL: ${AUTOMATION_ALERT_EMAIL:-}
       # Medusa's own dry-run switch, separate from the web app's
       # AUTOMATION_DRY_RUN so a shadow run here never pauses live lead sync.

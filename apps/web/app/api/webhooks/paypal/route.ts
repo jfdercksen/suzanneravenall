@@ -153,6 +153,39 @@ async function completeCart(cartId: string): Promise<boolean> {
   }
 }
 
+type ReconcileStatus = 'clear' | 'recovered' | 'pending' | 'alerted' | 'held'
+
+/**
+ * KI095: Medusa 2.14.1 can complete a cart into an order row without its
+ * payment (#418). The capture event then finds the cart completed; Medusa's
+ * reconcile hook checks the cart's payment reached its order and repairs it
+ * once, or alerts staff (apps/medusa/src/automations/payment-reconcile.ts).
+ * Null means the hook could not be reached or refused the call.
+ */
+async function reconcileCompletedCart(cartId: string): Promise<ReconcileStatus | null> {
+  const secret = process.env.INTERNAL_WEBHOOK_SECRET || process.env.N8N_WEBHOOK_SECRET || ''
+  if (!secret) {
+    logError('[PayPal Webhook] INTERNAL_WEBHOOK_SECRET not set, cannot ask Medusa to reconcile', undefined, { cartId })
+    return null
+  }
+  try {
+    const res = await fetch(`${medusaBase()}/hooks/payment-reconcile`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-webhook-secret': secret },
+      body: JSON.stringify({ cart_id: cartId }),
+    })
+    if (!res.ok) {
+      logError('[PayPal Webhook] Reconcile hook refused the call', undefined, { cartId, status: res.status })
+      return null
+    }
+    const data = (await res.json()) as { status?: ReconcileStatus }
+    return data.status ?? null
+  } catch (err) {
+    logError('[PayPal Webhook] Reconcile hook unreachable', err, { cartId })
+    return null
+  }
+}
+
 export async function POST(req: NextRequest) {
   // Same switch as the create and capture routes: the review box runs
   // NODE_ENV=production against the PayPal sandbox.
@@ -262,7 +295,15 @@ export async function POST(req: NextRequest) {
             receivedCurrency: check.receivedCurrency,
           })
         } else if (cart.completed_at) {
-          console.info('[PayPal Webhook] Cart already completed', { cartId, captureId })
+          const status = await reconcileCompletedCart(cartId)
+          console.info('[PayPal Webhook] Cart already completed', { cartId, captureId, reconcile: status })
+          // Too soon to judge (or Medusa unreachable): PayPal retries the event.
+          if (status === null || status === 'pending') {
+            return new NextResponse('Order payment not confirmed yet', { status: 500 })
+          }
+          if (status === 'alerted') {
+            logError('[PayPal Webhook] Paid order could not be completed, staff alerted', undefined, { cartId, captureId })
+          }
         } else {
           const opened = await openCapturedSession(
             {

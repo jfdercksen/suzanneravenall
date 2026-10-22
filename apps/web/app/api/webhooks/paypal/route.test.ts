@@ -34,9 +34,19 @@ function makeEvent(value: string, currency = 'USD', eventType = 'PAYMENT.CAPTURE
 }
 
 // Answers PayPal OAuth, signature verification, the Medusa cart GET and /complete.
-function makeFetchMock({ cartTotal = 4900, cartCurrency = 'usd', cartOk = true, completedAt = null as string | null, sessionOk = true } = {}) {
+function makeFetchMock({
+  cartTotal = 4900,
+  cartCurrency = 'usd',
+  cartOk = true,
+  completedAt = null as string | null,
+  sessionOk = true,
+  reconcile = { ok: true, status: 'clear' } as { ok: boolean; status?: string },
+} = {}) {
   return vi.fn(async (url: string | URL, _init?: RequestInit) => {
     const href = url.toString()
+    if (href.endsWith('/hooks/payment-reconcile')) {
+      return { ok: reconcile.ok, status: reconcile.ok ? 200 : 500, json: async () => ({ status: reconcile.status }) }
+    }
     if (href.endsWith('/store/payment-collections')) {
       return { ok: true, status: 200, json: async () => ({ payment_collection: { id: 'paycol_1' } }) }
     }
@@ -78,6 +88,7 @@ describe('POST /api/webhooks/paypal', () => {
     process.env.PAYPAL_WEBHOOK_ID = 'WH1'
     // The test cert URL is the sandbox host, as on the review box.
     process.env.PAYPAL_SANDBOX = 'true'
+    process.env.INTERNAL_WEBHOOK_SECRET = 'internal'
   })
 
   afterEach(() => {
@@ -87,6 +98,7 @@ describe('POST /api/webhooks/paypal', () => {
     delete process.env.PAYPAL_CLIENT_SECRET
     delete process.env.PAYPAL_WEBHOOK_ID
     delete process.env.PAYPAL_SANDBOX
+    delete process.env.INTERNAL_WEBHOOK_SECRET
   })
 
   it('completes the cart when the captured amount matches the cart total', async () => {
@@ -113,12 +125,51 @@ describe('POST /api/webhooks/paypal', () => {
     expect(completeCalls(fetchMock)).toHaveLength(0)
   })
 
-  it('leaves a cart the capture route already completed alone', async () => {
+  it('leaves a cart the capture route already completed alone once Medusa confirms its order is paid', async () => {
     const fetchMock = makeFetchMock({ completedAt: '2026-10-21T08:00:00Z' })
     vi.stubGlobal('fetch', fetchMock)
     const res = await POST(makeEvent('49.00') as never)
     expect(res.status).toBe(200)
     expect(completeCalls(fetchMock)).toHaveLength(0)
+    const hook = fetchMock.mock.calls.find(([u]) => u.toString().endsWith('/hooks/payment-reconcile'))
+    expect(hook?.[0]).toBe(`${MEDUSA_BASE}/hooks/payment-reconcile`)
+    expect(new Headers(hook?.[1]?.headers).get('x-webhook-secret')).toBe('internal')
+    expect(JSON.parse(String(hook?.[1]?.body))).toEqual({ cart_id: 'cart_1' })
+  })
+
+  it('asks PayPal to retry, without calling Medusa, when the internal secret is not configured', async () => {
+    delete process.env.INTERNAL_WEBHOOK_SECRET
+    const fetchMock = makeFetchMock({ completedAt: '2026-10-21T08:00:00Z' })
+    vi.stubGlobal('fetch', fetchMock)
+    expect((await POST(makeEvent('49.00') as never)).status).toBe(500)
+    expect(fetchMock.mock.calls.some(([u]) => u.toString().endsWith('/hooks/payment-reconcile'))).toBe(false)
+    expect(logError).toHaveBeenCalledWith(
+      '[PayPal Webhook] INTERNAL_WEBHOOK_SECRET not set, cannot ask Medusa to reconcile',
+      undefined,
+      expect.objectContaining({ cartId: 'cart_1' })
+    )
+  })
+
+  it('answers 200 when Medusa recovered the stuck order (KI095)', async () => {
+    vi.stubGlobal('fetch', makeFetchMock({ completedAt: '2026-10-21T08:00:00Z', reconcile: { ok: true, status: 'recovered' } }))
+    expect((await POST(makeEvent('49.00') as never)).status).toBe(200)
+  })
+
+  it('answers 200 and logs when staff were alerted about the stuck order', async () => {
+    vi.stubGlobal('fetch', makeFetchMock({ completedAt: '2026-10-21T08:00:00Z', reconcile: { ok: true, status: 'alerted' } }))
+    expect((await POST(makeEvent('49.00') as never)).status).toBe(200)
+    expect(logError).toHaveBeenCalledWith(
+      '[PayPal Webhook] Paid order could not be completed, staff alerted',
+      undefined,
+      expect.objectContaining({ cartId: 'cart_1' })
+    )
+  })
+
+  it('asks PayPal to retry while the reconcile is pending or Medusa cannot be reached', async () => {
+    vi.stubGlobal('fetch', makeFetchMock({ completedAt: '2026-10-21T08:00:00Z', reconcile: { ok: true, status: 'pending' } }))
+    expect((await POST(makeEvent('49.00') as never)).status).toBe(500)
+    vi.stubGlobal('fetch', makeFetchMock({ completedAt: '2026-10-21T08:00:00Z', reconcile: { ok: false } }))
+    expect((await POST(makeEvent('49.00') as never)).status).toBe(500)
   })
 
   it('does not complete the cart when the captured amount is less than the cart total', async () => {

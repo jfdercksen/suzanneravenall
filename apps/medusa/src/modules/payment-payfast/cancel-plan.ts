@@ -13,7 +13,7 @@
  * unchanged (PayPal refunds really happen, unpaid orders refund nothing).
  */
 
-type AmountLike = number | string | { numeric?: unknown } | null | undefined
+export type AmountLike = number | string | { numeric?: unknown } | null | undefined
 
 export type CancelPlanPayment = {
   id: string
