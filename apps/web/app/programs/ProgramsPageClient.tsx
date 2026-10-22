@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { PageHeader } from '@/components/shared/PageHeader'
+import { useProgramPrices } from '@/components/programs/ProgramPrices'
 import {
   getProgramsByCategory,
   getProgramsBySeries,
@@ -25,13 +26,6 @@ const CARD_CATEGORY_LABELS: Record<Program['category'], string> = {
   group: 'Recorded Group',
 }
 
-function formatPrice(program: Program): string | null {
-  if (program.priceUsd == null) return null
-  const usd = `$${program.priceUsd.toLocaleString('en-US')}`
-  if (program.priceZar == null) return usd
-  return `${usd} · R${program.priceZar.toLocaleString('en-US')}`
-}
-
 const sectionVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -48,7 +42,7 @@ const childVariants = {
 }
 
 function ProgramCard({ program }: { program: Program }) {
-  const price = formatPrice(program)
+  const price = useProgramPrices().priceOf(program.slug)
   return (
     <motion.div
       variants={childVariants}
@@ -64,11 +58,9 @@ function ProgramCard({ program }: { program: Program }) {
         <p className="text-brand-muted text-sm font-light leading-relaxed mb-4">
           {program.shortDescription}
         </p>
-        {price && (
-          <p className="text-brand-primary font-semibold text-lg mb-2">
-            {price}
-          </p>
-        )}
+        <p className="text-brand-primary font-semibold text-lg mb-2">
+          {price}
+        </p>
         {program.duration && (
           <p className="text-xs text-brand-muted mb-6">{program.duration}</p>
         )}
@@ -84,7 +76,7 @@ function ProgramCard({ program }: { program: Program }) {
 }
 
 function DarkProgramCard({ program }: { program: Program }) {
-  const price = formatPrice(program)
+  const price = useProgramPrices().priceOf(program.slug)
   return (
     <motion.div
       variants={childVariants}
@@ -112,11 +104,9 @@ function DarkProgramCard({ program }: { program: Program }) {
           <p className="text-white/70 text-sm font-light leading-relaxed mb-4">
             {program.shortDescription}
           </p>
-          {price && (
-            <p className="text-white font-semibold text-lg mb-2">
-              {price}
-            </p>
-          )}
+          <p className="text-white font-semibold text-lg mb-2">
+            {price}
+          </p>
           {program.duration && (
             <p className="text-xs text-white/70 mb-6">{program.duration}</p>
           )}
@@ -153,6 +143,7 @@ function ChevronIcon({ open }: { open: boolean }) {
 
 export default function ProgramsPageClient() {
   const [activeCategory, setActiveCategory] = useState<string>('practitioner')
+  const { priceOf } = useProgramPrices()
   const [rrOpen, setRrOpen] = useState(false)
   const sectionRefs = useRef<Partial<Record<'practitioner' | 'self-paced' | 'live' | 'group', HTMLElement | null>>>({})
   const chipBarRef = useRef<HTMLDivElement>(null)
@@ -538,11 +529,9 @@ export default function ProgramsPageClient() {
                   <p className="text-brand-muted text-sm font-light leading-relaxed mb-4">
                     {program.shortDescription}
                   </p>
-                  {formatPrice(program) && (
-                    <p className="text-brand-primary font-semibold text-lg mb-2">
-                      {formatPrice(program)}
-                    </p>
-                  )}
+                  <p className="text-brand-primary font-semibold text-lg mb-2">
+                    {priceOf(program.slug)}
+                  </p>
                   {program.duration && (
                     <p className="text-xs text-brand-muted mb-6">
                       {program.duration}

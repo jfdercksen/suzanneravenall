@@ -3,6 +3,9 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
 import ProgramsPageClient from './ProgramsPageClient'
 
+const cartState: { cart: { currency_code: string } | null } = { cart: null }
+vi.mock('@/lib/cart', () => ({ useCart: () => cartState }))
+
 vi.mock('next/link', () => ({
   default: ({ href, children }: { href: string; children: React.ReactNode }) => (
     <a href={href}>{children}</a>

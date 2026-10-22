@@ -72,6 +72,28 @@ const BOOK_PRICES = [
   { currency_code: 'usd', amount: 1750 },
 ]
 
+describe('BookContent price in the visitor currency (L-USD3)', () => {
+  it('shows a South African visitor R165 from Medusa', () => {
+    render(<BookContent prices={BOOK_PRICES} defaultCurrency="zar" />)
+    expect(screen.getAllByText('R165').length).toBe(2)
+    expect(screen.getByRole('link', { name: 'Pre-Order Now: R165' })).toBeInTheDocument()
+  })
+
+  it('shows a visitor elsewhere the Medusa dollar price only', () => {
+    render(<BookContent prices={BOOK_PRICES} defaultCurrency="usd" />)
+    expect(screen.getAllByText('$17.50').length).toBe(2)
+    expect(screen.getByRole('link', { name: 'Pre-Order Now: $17.50' })).toBeInTheDocument()
+    expect(screen.queryByText(/R165/)).not.toBeInTheDocument()
+  })
+
+  it('says "Price on request" in dollars when the book has no dollar price', () => {
+    render(<BookContent prices={[{ currency_code: 'zar', amount: 16500 }]} defaultCurrency="usd" />)
+    expect(screen.getAllByText('Price on request').length).toBe(2)
+    expect(screen.queryByRole('link', { name: /Pre-Order Now:/ })).not.toBeInTheDocument()
+    expect(screen.queryByText(/R165/)).not.toBeInTheDocument()
+  })
+})
+
 describe('BookPromotion (decision 7)', () => {
   it('labels the home book card as a pre-order, never "Available now"', () => {
     render(<BookPromotion prices={BOOK_PRICES} defaultCurrency="zar" />)

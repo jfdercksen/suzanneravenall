@@ -18,10 +18,14 @@ import VideoTestimonials from '../components/shared/VideoTestimonials'
 import FinalCTA from '../components/home/FinalCTA'
 import { getFeaturedCohort } from '../lib/inventory/group-sessions'
 import { getProductPrices } from '../lib/shop/product-prices'
+import { getProgramPriceTexts } from '../lib/programs/fetch-program-prices'
+import { lowestProgramPrice } from '../lib/programs/program-prices'
+import { getProgramBySlug, getProgramsByCategory } from '../data/programs'
 import { ipCountry } from '../lib/geoip'
 import { CURRENCY_COOKIE, visitorCurrency } from '../lib/visitor-region'
 
 const BOOK_HANDLE = 'the-latest-book-by-suzanne'
+const BASIC_FIVE_SLUG = 'resonance-repatterning-basic-5-series'
 
 // Prices follow the visitor's currency (D021), so the page is rendered per
 // request, like /shop. The two Medusa reads stay cached for 5 minutes.
@@ -86,9 +90,12 @@ const personJsonLd = {
 }
 
 export default async function HomePage() {
-  const [featuredCohort, bookPrices, reqHeaders, reqCookies] = await Promise.all([
+  const groupPrograms = getProgramsByCategory('group')
+  const basicFive = getProgramBySlug(BASIC_FIVE_SLUG)
+  const [featuredCohort, bookPrices, programPrices, reqHeaders, reqCookies] = await Promise.all([
     getFeaturedCohort(),
     getProductPrices(BOOK_HANDLE),
+    getProgramPriceTexts(basicFive ? [...groupPrograms, basicFive] : groupPrograms),
     headers(),
     cookies(),
   ])
@@ -122,7 +129,11 @@ export default async function HomePage() {
       {/* 6 — light grey */}
       <AboutTeaser />
       {/* 7 — white */}
-      <FeaturedPrograms />
+      <FeaturedPrograms
+        groupPrice={lowestProgramPrice(groupPrograms.map((p) => programPrices[p.slug]).filter((t) => t !== undefined))}
+        basicFivePrice={programPrices[BASIC_FIVE_SLUG]}
+        defaultCurrency={currency}
+      />
       {/* 8 — dark (full-bleed video) */}
       <TransformationQuote />
       {/* 9 — white (photo panel) */}

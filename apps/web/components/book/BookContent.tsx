@@ -5,12 +5,20 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { bookTestimonials } from '@/data/testimonials'
+import { useCart } from '@/lib/cart'
+import type { VariantPrice } from '@/lib/shop/product-prices'
+import { formatDisplayPrice, getPriceIn } from '@/components/shop/shopCatalogue'
+import { PRICE_ON_REQUEST } from '@/lib/programs/program-prices'
 
 // Sourced 6 Oct 2026 (content-sourcing-2026-10-06.md section 4): the live
 // product is one pre-order, "Breakthrough Trilogy", R165
 // (https://suzanneravenall.com/product/the-latest-book-by-suzanne/). No
 // individual book titles, release date or excerpt are published anywhere,
 // so the per-book cards and the "excerpt" block were removed.
+//
+// The price follows the visitor's currency (D021, L-USD3) from the Medusa
+// product; the sourced R165 stands in for rand only when Medusa is unreachable.
+const SOURCED_ZAR_PRICE = 'R165'
 
 const themes = [
   {
@@ -87,7 +95,20 @@ const scrollFadeUp = (delay = 0) => ({
   transition: { duration: 0.6, delay, ease: 'easeOut' as const },
 })
 
-export default function BookContent() {
+interface BookContentProps {
+  /** The book's prices (cents, every currency); null when Medusa was unreachable. */
+  prices?: VariantPrice[] | null
+  /** The visitor's currency from the server (D021), used until a cart exists. */
+  defaultCurrency?: string
+}
+
+export default function BookContent({ prices = null, defaultCurrency = 'zar' }: BookContentProps) {
+  const { cart } = useCart()
+  const currency = (cart?.currency_code ?? defaultCurrency).toLowerCase()
+  const price = getPriceIn(prices, currency)
+  const priceText = price ? formatDisplayPrice(price) : currency === 'zar' ? SOURCED_ZAR_PRICE : PRICE_ON_REQUEST
+  const hasPrice = priceText !== PRICE_ON_REQUEST
+
   return (
     <>
       {/* ─── 1. Header: shared PageHeader, the header rule ─────────────── */}
@@ -211,7 +232,7 @@ export default function BookContent() {
                   <p className="text-xs text-brand-muted uppercase tracking-widest mb-1">
                     Pre-order price
                   </p>
-                  <p className="text-3xl font-semibold tracking-tight text-brand-primary">R165</p>
+                  <p className="text-3xl font-semibold tracking-tight text-brand-primary">{priceText}</p>
                 </div>
                 <Link
                   href="/shop/the-latest-book-by-suzanne"
@@ -408,7 +429,7 @@ export default function BookContent() {
                 <p className="text-xs text-white/80 uppercase tracking-widest mb-2">
                   Pre-order price
                 </p>
-                <p className="text-5xl font-semibold tracking-tight text-white">R165</p>
+                <p className="text-5xl font-semibold tracking-tight text-white">{priceText}</p>
               </motion.div>
 
               <motion.div
@@ -419,7 +440,7 @@ export default function BookContent() {
                   href="/shop/the-latest-book-by-suzanne"
                   className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
                 >
-                  Pre-Order Now: R165
+                  {hasPrice ? `Pre-Order Now: ${priceText}` : 'Pre-Order Now'}
                 </Link>
                 {/* The shop product has no gift option yet, so gifting is an
                     enquiry until one exists. */}

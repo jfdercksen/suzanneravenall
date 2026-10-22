@@ -3,6 +3,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useCart } from '@/lib/cart'
+import { PRICE_ON_REQUEST, programPriceIn, type ProgramPriceTexts } from '@/lib/programs/program-prices'
 
 // Poster-style cards modelled on the reference site's event carousel: full-bleed
 // portrait photo, neutral black scrim, centered white type lockup. All text over
@@ -11,7 +13,8 @@ const programs: {
   title: string
   subtitle: string
   tagline: string
-  price: string | null
+  /** Which price the card shows: none (priced per session), the group "From" price or the Basic Five. */
+  price: 'group' | 'basicFive' | null
   image: string
   href: string
 }[] = [
@@ -27,7 +30,7 @@ const programs: {
     title: 'Recorded Group Repatterning',
     subtitle: 'Rapid Repatterning® Groups',
     tagline: 'Money, confidence, boundaries, attraction and more.',
-    price: 'From $90 · R1,500',
+    price: 'group',
     image: '/images/generated/group-coaching-real.webp',
     href: '/programs#group',
   },
@@ -35,13 +38,32 @@ const programs: {
     title: 'The Basic Five',
     subtitle: 'Practitioner Certification',
     tagline: 'Train as an internationally certified practitioner.',
-    price: '$2,540 · R13,950',
+    price: 'basicFive',
     image: '/images/products/resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom.jpeg',
     href: '/programs/resonance-repatterning-basic-5-series',
   },
 ]
 
-export default function FeaturedPrograms() {
+interface FeaturedProgramsProps {
+  /** The lowest group-session price, both currencies (Medusa for dollars, L-USD3). */
+  groupPrice?: ProgramPriceTexts
+  /** The Basic Five's price, both currencies. */
+  basicFivePrice?: ProgramPriceTexts
+  /** The visitor's currency from the server (D021), used until a cart exists. */
+  defaultCurrency?: string
+}
+
+export default function FeaturedPrograms({ groupPrice, basicFivePrice, defaultCurrency = 'zar' }: FeaturedProgramsProps) {
+  const { cart } = useCart()
+  // The visitor's currency only, like the shop cards: never both, never converted.
+  const currency = cart?.currency_code ?? defaultCurrency
+  const priceText = (price: 'group' | 'basicFive' | null): string => {
+    if (price === null) return 'Priced per session'
+    if (price === 'basicFive') return programPriceIn(basicFivePrice, currency)
+    const text = programPriceIn(groupPrice, currency)
+    return text === PRICE_ON_REQUEST ? text : `From ${text}`
+  }
+
   return (
     <section aria-labelledby="programs-heading" className="py-14 lg:py-24 bg-brand-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -103,7 +125,7 @@ export default function FeaturedPrograms() {
                 <div className="absolute bottom-0 inset-x-0 p-6 text-center">
                   <p className="text-white/80 text-sm leading-snug">{tagline}</p>
                   <p className="mt-3 text-white text-sm font-semibold uppercase tracking-widest">
-                    {price ?? 'Priced per session'}
+                    {priceText(price)}
                   </p>
                   <p className="mt-3 inline-flex items-center gap-2 text-white text-xs font-semibold uppercase tracking-widest border-b border-white/40 group-hover:border-white pb-0.5 transition-colors duration-300">
                     Learn more <span aria-hidden="true">→</span>

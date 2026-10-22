@@ -4,6 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { PageHeader } from '@/components/shared/PageHeader'
+import { useProgramPrices } from '@/components/programs/ProgramPrices'
+import { programPriceSuffix } from '@/lib/programs/program-prices'
 import { getProgramBySlug, getProgramCta, isResonanceRepatterning, type Program } from '@/data/programs'
 
 type Props = {
@@ -34,16 +36,6 @@ function getDeliveryMethod(program: Program): string {
   // interest only (sourcing report 6 Oct, decision 5)
   if (program.series === 'energy-clearing') return 'Self-Study Online: Start Anytime'
   return DELIVERY_METHODS[program.category]
-}
-
-function formatPriceUsd(program: Program): string | null {
-  if (program.priceUsd == null) return null
-  return `$${program.priceUsd.toLocaleString('en-US')}`
-}
-
-function formatPriceZar(program: Program): string | null {
-  if (program.priceZar == null) return null
-  return `R${program.priceZar.toLocaleString('en-US')}`
 }
 
 // -- motion variants --
@@ -176,8 +168,10 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
   const cta = getProgramCta(program)
   const deliveryMethod = getDeliveryMethod(program)
   const categoryLabel = CATEGORY_LABELS[program.category]
-  const priceUsd = formatPriceUsd(program)
-  const priceZar = formatPriceZar(program)
+  // The visitor's currency only (D021): "R13,950 ZAR", "$2,105 USD" or "Price on request".
+  const { priceOf, currency } = useProgramPrices()
+  const price = priceOf(program.slug)
+  const priceSuffix = programPriceSuffix(price, currency)
   const prerequisiteProgram = program.prerequisite?.slug
     ? getProgramBySlug(program.prerequisite.slug)
     : undefined
@@ -242,24 +236,10 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
             )}
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-white/80 mb-1">Investment</p>
-              {priceUsd || priceZar ? (
-                <p className="text-sm font-semibold text-white">
-                  {priceUsd && (
-                    <>
-                      {priceUsd}
-                      <span className="text-white/80 font-normal ml-1">USD</span>
-                    </>
-                  )}
-                  {priceUsd && priceZar && <span className="text-white/80 font-normal ml-2">/</span>}
-                  {priceZar && (
-                    <span className={priceUsd ? 'text-white/80 font-normal ml-2' : ''}>
-                      {priceZar} ZAR
-                    </span>
-                  )}
-                </p>
-              ) : (
-                <p className="text-sm text-white/80 font-light">Enquire</p>
-              )}
+              <p className="text-sm font-semibold text-white">
+                {price}
+                {priceSuffix && <span className="text-white/80 font-normal ml-1">{priceSuffix}</span>}
+              </p>
             </div>
           </div>
         </div>
@@ -424,17 +404,10 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               {/* Investment callout */}
               <div className="mt-12 p-6 bg-white border border-brand-border rounded-card shadow-sm">
                 <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-3">Investment</p>
-                {priceUsd || priceZar ? (
-                  <p className="text-3xl font-semibold tracking-tight text-brand-primary mb-4">
-                    {priceUsd ?? `${priceZar} ZAR`}
-                    {priceUsd && <span className="text-brand-muted text-base font-normal ml-2">USD</span>}
-                    {priceUsd && priceZar && (
-                      <span className="text-brand-muted text-base font-normal ml-2">/ {priceZar} ZAR</span>
-                    )}
-                  </p>
-                ) : (
-                  <p className="text-xl font-light text-brand-muted mb-4">Enquire</p>
-                )}
+                <p className="text-3xl font-semibold tracking-tight text-brand-primary mb-4">
+                  {price}
+                  {priceSuffix && <span className="text-brand-muted text-base font-normal ml-2">{priceSuffix}</span>}
+                </p>
                 <Link
                   href={cta.href}
                   className="inline-flex items-center justify-center w-full py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
