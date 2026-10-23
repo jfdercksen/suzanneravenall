@@ -55,6 +55,7 @@ export interface IntakeOrderItem {
 
 export interface IntakeOrder {
   id: string
+  customer_id?: string | null
   display_id?: number | string | null
   created_at?: string | Date | null
   email?: string | null
@@ -71,6 +72,8 @@ export interface IntakeOrderPayload {
   lastName: string | null
   /** When the order was placed (ISO); the reminders count from here. */
   placedAt: string | null
+  /** An earlier, not cancelled order of this address with a session ("#123"): no intake mail (D023). */
+  priorSessionOrder?: string | null
   lines: { handle: string; title: string; session: boolean }[]
 }
 
@@ -128,6 +131,82 @@ export function buildIntakePayload(
     lastName: clean(names?.last_name),
     placedAt: placedAtOf(order.created_at),
     lines,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Returning client (D023)
+// ---------------------------------------------------------------------------
+
+export type QueryGraph = { graph(input: Record<string, unknown>): Promise<{ data: unknown[] }> }
+
+/** ILIKE pattern that matches `value` exactly, any case (\, % and _ escaped). */
+export function exactIlike(value: string): string {
+  return value.replace(/[\\%_]/g, (c) => `\\${c}`)
+}
+
+/**
+ * The newest earlier order of the same address (any case) that was not
+ * cancelled and holds a session, as "#123"; null for a first-time client.
+ * Johan, 23 Oct 2026: any service counts, not only the one bought now.
+ * `isSession` is the order mail's rule for one line.
+ */
+export async function findPriorSessionOrder(
+  query: QueryGraph,
+  order: { id: string; email?: string | null; customer_id?: string | null; created_at?: string | Date | null },
+  email: string,
+  isSession: (item: IntakeOrderItem) => boolean,
+): Promise<string | null> {
+  const placedAt = placedAtOf(order.created_at)
+  if (!placedAt) return null
+  // The buyer's address on the order or the account, and the customer record:
+  // a registered client may type another address at checkout.
+  const emails = [...new Set([email, order.email].map((e) => e?.trim()).filter((e): e is string => Boolean(e)))]
+  const who: Record<string, unknown>[] = emails.map((e) => ({ email: { $ilike: exactIlike(e) } }))
+  if (order.customer_id) who.push({ customer_id: order.customer_id })
+  const { data } = await query.graph({
+    entity: "order",
+    fields: [
+      "id",
+      "display_id",
+      "status",
+      "created_at",
+      "items.title",
+      "items.variant.product.handle",
+      "items.variant.product.categories.handle",
+      "items.variant.product.categories.parent_category.handle",
+      "items.variant.product.categories.parent_category.parent_category.handle",
+    ],
+    filters: { $or: who, created_at: { $lt: placedAt } },
+    pagination: { take: 20, order: { created_at: "DESC" } },
+  })
+  for (const raw of data) {
+    const earlier = raw as IntakeOrder & { status?: string | null }
+    if (earlier.id === order.id || earlier.status === "canceled") continue
+    if ((earlier.items ?? []).some((item) => isSession(item))) {
+      return earlier.display_id == null ? earlier.id : `#${earlier.display_id}`
+    }
+  }
+  return null
+}
+
+/**
+ * The payload with `priorSessionOrder` filled in. A failed lookup is logged
+ * and leaves it unset: the web app still checks its own intake records, and
+ * a Medusa hiccup must never hold back a first-time client's mail.
+ */
+export async function withPriorSessionOrder(
+  query: QueryGraph,
+  order: IntakeOrder,
+  payload: IntakeOrderPayload,
+  isSession: (item: IntakeOrderItem) => boolean,
+): Promise<IntakeOrderPayload> {
+  try {
+    return { ...payload, priorSessionOrder: await findPriorSessionOrder(query, order, payload.email, isSession) }
+  } catch (err) {
+    // The name only: a database error's message can carry the address it searched for.
+    console.error(`[intake] earlier-order lookup failed for order ${order.id} (${err instanceof Error ? err.name : "error"})`)
+    return payload
   }
 }
 

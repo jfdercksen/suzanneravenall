@@ -24,6 +24,7 @@ import {
   postIntakeOrder,
   postIntakeReminderRun,
   sweepSince,
+  withPriorSessionOrder,
   type IntakeOrder,
 } from "../automations/intake"
 import { ORDER_GRAPH_FIELDS } from "../automations/order-snapshot"
@@ -51,11 +52,13 @@ async function sweepRecentOrders(container: MedusaContainer, now: Date): Promise
       if (order.status === "canceled") continue
       // Every order with product lines: the web app decides which take a form
       // (sessions, plus products the team listed on a form in the CMS).
-      const payload = buildIntakePayload(order, (item) => detectOrderProductType([item as never]) === "session")
+      const isSession = (item: unknown) => detectOrderProductType([item as never]) === "session"
+      const payload = buildIntakePayload(order, isSession)
       if (!payload) continue
       try {
-        // One try each: the next hourly run is the retry.
-        await postIntakeOrder(payload, process.env, undefined, 0)
+        // One try each: the next hourly run is the retry. Returning clients (D023)
+        // are skipped by the web app on every pass.
+        await postIntakeOrder(await withPriorSessionOrder(query, order, payload, isSession), process.env, undefined, 0)
         counts.posted += 1
       } catch (err) {
         counts.failed += 1

@@ -12,12 +12,15 @@ vi.mock('../runtime', () => ({
 
 import {
   buildIntakePayload,
+  exactIlike,
+  findPriorSessionOrder,
   intakeMode,
   intakeReminderSchedule,
   postIntakeCancel,
   postIntakeOrder,
   postIntakeReminderRun,
   sweepSince,
+  withPriorSessionOrder,
   type IntakeOrder,
 } from '../intake'
 import { detectOrderProductType } from '../../subscribers/order-placed'
@@ -35,6 +38,7 @@ const isSession = (item: unknown) => detectOrderProductType([item as never]) ===
 
 const ORDER: IntakeOrder = {
   id: 'order_1',
+  customer_id: 'cus_1',
   display_id: 512,
   created_at: '2026-10-21T08:00:00Z',
   email: 'guest@example.com',
@@ -133,6 +137,52 @@ describe('web calls', () => {
     expect(await postIntakeReminderRun(env, fetchImpl)).toEqual({ reminders: 2 })
     await postIntakeCancel('order_9', env, fetchImpl)
     expect(fetchImpl.mock.calls[1][0]).toBe('http://web:3000/api/intake/cancel')
+  })
+})
+
+describe('earlier session order (D023, any service)', () => {
+  const session = line('executive-coaching-30-mins', 'Executive Coaching Session', [chain('private-sessions')])
+  const group = line('money-mastery-group-session', 'Group Session: Money Mastery', [chain('group-sessions-live')])
+  const graphOf = (orders: unknown[]) => ({ graph: vi.fn().mockResolvedValue({ data: orders }) })
+
+  it('asks for earlier orders of the address, any case, and names the first with a session', async () => {
+    const query = graphOf([
+      { id: 'order_0c', display_id: 500, status: 'canceled', items: [session] },
+      { id: 'order_0g', display_id: 499, status: 'completed', items: [group] },
+      { id: 'order_0s', display_id: 498, status: 'pending', items: [session] },
+    ])
+    expect(await findPriorSessionOrder(query, ORDER, 'Johan+QA_1@AiAutomations.co.za', isSession)).toBe('#498')
+    expect(query.graph).toHaveBeenCalledWith(
+      expect.objectContaining({
+        entity: 'order',
+        filters: {
+          $or: [{ email: { $ilike: 'Johan+QA\\_1@AiAutomations.co.za' } }, { email: { $ilike: 'guest@example.com' } }, { customer_id: 'cus_1' }],
+          created_at: { $lt: '2026-10-21T08:00:00.000Z' },
+        },
+      }),
+    )
+  })
+
+  it('a first-time client: null (cancelled, non-session and the order itself do not count)', async () => {
+    const query = graphOf([
+      { id: 'order_1', display_id: 512, status: 'pending', items: [session] },
+      { id: 'order_0c', display_id: 500, status: 'canceled', items: [session] },
+      { id: 'order_0g', display_id: 499, status: 'completed', items: [group] },
+    ])
+    expect(await findPriorSessionOrder(query, ORDER, 'johan@aiautomations.co.za', isSession)).toBeNull()
+  })
+
+  it('escapes the ILIKE wildcards', () => {
+    expect(exactIlike('a_b%c\\d@x.co')).toBe('a\\_b\\%c\\\\d@x.co')
+  })
+
+  it('a failed lookup leaves the payload as it was, so a first-time mail is never held back', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    const payload = buildIntakePayload(ORDER, isSession)!
+    const query = { graph: vi.fn().mockRejectedValue(new Error('bad filter')) }
+    expect(await withPriorSessionOrder(query, ORDER, payload, isSession)).toEqual(payload)
+    const found = await withPriorSessionOrder(graphOf([{ id: 'order_0s', display_id: 498, status: 'pending', items: [session] }]), ORDER, payload, isSession)
+    expect(found.priorSessionOrder).toBe('#498')
   })
 })
 

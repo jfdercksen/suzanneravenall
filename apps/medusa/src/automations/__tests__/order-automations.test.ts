@@ -259,6 +259,38 @@ describe('outages', () => {
     expect(t.mails).toEqual([])
   })
 
+  it('a course that is a draft in Thinkific: enrolled, mailed, and staff told once to publish it (KI097)', async () => {
+    const t = setup({ thinkific: { users: [{ id: 5, email: 'qa.buyer@example.com' }], draftCourses: [1284792] } })
+    await t.dispatch()
+    const job = t.store.all().find((j) => j.automation === 'thinkific_enrolment')!
+    expect(job.status).toBe('done')
+    expect(t.thinkific.enrolments).toHaveLength(1)
+    expect(t.mails).toHaveLength(1)
+    expect(t.alerts).toHaveLength(1)
+    expect(t.alerts[0]!.subject).toBe('Course not published in Thinkific - order #21 (order_01QA)')
+    const text = t.alerts[0]!.lines.join(' ')
+    expect(text).toContain('Course ID 1284792 (Program 1 Self Study): status draft')
+    expect(text).not.toContain('qa.buyer@example.com')
+    expect((job.state as { courses: Record<string, { visibility?: string }> }).courses['1284792']!.visibility).toBe('draft')
+  })
+
+  it('a published course: no visibility alert, and the status is read once', async () => {
+    const t = setup()
+    await t.dispatch()
+    expect(t.alerts).toEqual([])
+    expect(t.thinkific.calls.filter((c) => c.path.startsWith('/products/'))).toHaveLength(1)
+  })
+
+  it('the status read failing never fails the enrolment', async () => {
+    const t = setup({
+      thinkific: { users: [{ id: 5, email: 'qa.buyer@example.com' }], failures: { 'GET /courses/1284792': [new Response('no', { status: 403 })] } },
+    })
+    await t.dispatch()
+    expect(t.store.all().find((j) => j.automation === 'thinkific_enrolment')!.status).toBe('done')
+    expect(t.mails).toHaveLength(1)
+    expect(t.alerts).toEqual([])
+  })
+
   it('the course-access mail route down: the mail is retried on its own, enrolment is not repeated', async () => {
     const t = setup({ mailFails: 1 })
     await t.dispatch()

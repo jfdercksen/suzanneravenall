@@ -88,6 +88,8 @@ export type CourseState = {
   emailed?: boolean
   /** Staff have been alerted about this course. */
   alerted?: boolean
+  /** The course's Thinkific product status was read after enrolling (KI097); staff are told when it is not "published". */
+  visibility?: string
 }
 
 export type EnrolmentState = {

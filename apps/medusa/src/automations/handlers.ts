@@ -115,6 +115,40 @@ export function thinkificEnrolmentHandler(deps: AutomationDeps): AutomationHandl
         await save(state)
       }
 
+      // A course that is not published in Thinkific (a draft) is enrolled but
+      // never shows on the buyer's dashboard (KI097, order #433). Read each
+      // granted course's status once; best effort, never fails the job.
+      const unchecked = outcome.granted.filter((c) => state.courses[c.courseId]?.visibility === undefined)
+      const thinkific = deps.thinkific()
+      const statuses = await Promise.all(
+        unchecked.map(async (c) => {
+          try {
+            return { ...c, status: (await thinkific.courseProductStatus(c.courseId)) ?? "no product" }
+          } catch (err) {
+            deps.logger.warn(
+              `[thinkific] could not read the status of course ${c.courseId} for order ${orderLabel(ctx.job)}: ${err instanceof Error ? err.message : String(err)}`
+            )
+            return null
+          }
+        })
+      )
+      const read = statuses.filter((s): s is NonNullable<typeof s> => s !== null)
+      const hidden = read.filter((c) => c.status !== "published")
+      if (hidden.length > 0) {
+        await ctx.alert({
+          key: `thinkific-unpublished:${hidden.map((c) => c.courseId).join(",")}`,
+          subject: `Course not published in Thinkific - order ${orderLabel(ctx.job)}`,
+          lines: [
+            `The buyer of order ${orderLabel(ctx.job)} is enrolled, but this course is not published in Thinkific, so it does not show on their dashboard:`,
+            ...hidden.map((c) => `- Course ID ${c.courseId} (${c.title}): status ${c.status}`),
+            `Please publish the course in the Thinkific admin (${THINKIFIC_ADMIN_URL}); the enrolment is already in place.`,
+          ],
+        })
+      }
+      // Marked as read only after the alert went, so a failed alert is tried again.
+      for (const c of read) state.courses[c.courseId] = { ...state.courses[c.courseId]!, visibility: c.status }
+      if (read.length > 0) await save(state)
+
       if (outcome.retry.length > 0) {
         throw new Error(
           `${outcome.retry.length} course(s) not enrolled yet: ${outcome.retry.map((c) => `${c.courseId} (${c.error})`).join("; ")}`

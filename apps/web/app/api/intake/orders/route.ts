@@ -10,6 +10,8 @@ import { logError } from '@/lib/log'
  * POST /api/intake/orders - internal, from Medusa's order-placed-intake
  * subscriber. Creates one intake record per service in the order and sends
  * the first mail with the personal link (H-12). Idempotent per (order, service).
+ * A returning client (earlier session order or a completed form, D023) gets
+ * no record and no mail: 200 { records: [], skipped: reason }.
  *
  * 200 { records } done; 401 bad secret; 422 bad body; 503 the table or the
  * mail provider is missing; 500 a mail or Payload failed (Medusa retries).
@@ -25,6 +27,8 @@ const bodySchema = z.object({
   firstName: z.string().max(200).nullable().optional(),
   lastName: z.string().max(200).nullable().optional(),
   placedAt: z.string().datetime({ offset: true }).nullable().optional(),
+  // An earlier, not cancelled session order of this address (D023): no intake mail.
+  priorSessionOrder: z.string().max(100).nullable().optional(),
   lines: z
     .array(
       z.object({
@@ -57,7 +61,7 @@ export async function POST(request: NextRequest) {
   }
   if (!isEmailConfigured()) return NextResponse.json({ error: 'Email is not configured' }, { status: 503 })
 
-  const { orderId, displayId, email, firstName, lastName, placedAt, lines } = parsed.data
+  const { orderId, displayId, email, firstName, lastName, placedAt, priorSessionOrder, lines } = parsed.data
   try {
     const result = await createIntakesForOrder({
       orderId,
@@ -66,12 +70,13 @@ export async function POST(request: NextRequest) {
       firstName: orNull(firstName),
       lastName: orNull(lastName),
       placedAt: placedAt ? new Date(placedAt) : null,
+      priorSessionOrder: orNull(priorSessionOrder),
       lines: lines.map((l) => ({ handle: l.handle.trim(), title: l.title.trim(), session: l.session })),
     })
     if (result.failed > 0) {
       return NextResponse.json({ error: 'An intake mail could not be sent', records: result.records }, { status: 500 })
     }
-    return NextResponse.json({ records: result.records })
+    return NextResponse.json(result.skipped ? { records: result.records, skipped: result.skipped } : { records: result.records })
   } catch (err) {
     logError('[intake] order intake failed', err, { orderId })
     const missing = err instanceof IntakeStoreError && err.missingTable

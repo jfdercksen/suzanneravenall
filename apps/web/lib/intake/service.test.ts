@@ -155,6 +155,16 @@ function memoryStore() {
       const r = rows.find((x) => x.id === id)
       if (r) r.team_notified_at = null
     },
+    endOrderReminders: async (orderId: string) => {
+      const open = rows.filter((r) => r.order_id === orderId && r.status === 'pending' && r.next_reminder_at)
+      for (const r of open) r.next_reminder_at = null
+      return open.length
+    },
+    listOtherIntakesForEmail: async (email: string, excludeOrderId: string) =>
+      rows
+        .filter((r) => r.customer_email.toLowerCase() === email.trim().toLowerCase() && r.order_id !== excludeOrderId && r.status !== 'cancelled')
+        .sort((a, b) => a.purchased_at.localeCompare(b.purchased_at))
+        .map((r) => ({ ...r })),
   }
   return s
 }
@@ -206,6 +216,100 @@ const ORDER = {
     { handle: 'money-mastery-group-session', title: 'Money Mastery', session: false },
   ],
 }
+
+describe('returning clients get no intake mail (D023, any service)', () => {
+  const SESSION = [{ handle: 'rapid-repatterning-session', title: 'Rapid Repatterning Session', session: true }]
+  const first = { ...ORDER, orderId: 'order_a', displayId: '601', email: 'johan+intake1a@aiautomations.co.za', lines: SESSION }
+
+  it('a first-time client gets the mail and the reminder schedule', async () => {
+    const result = await createIntakesForOrder(first, deps)
+    expect(result.skipped).toBeUndefined()
+    expect(sendRequest).toHaveBeenCalledTimes(1)
+    expect(mem.rows[0]!.next_reminder_at).not.toBeNull()
+  })
+
+  it('(a) an earlier session order found by Medusa: no record, no mail, the reason logged', async () => {
+    const info = vi.spyOn(console, 'info').mockImplementation(() => undefined)
+    const result = await createIntakesForOrder({ ...first, priorSessionOrder: '#433' }, deps)
+    expect(result).toMatchObject({ records: [], failed: 0, skipped: 'earlier session order #433' })
+    expect(mem.rows).toEqual([])
+    expect(sendRequest).not.toHaveBeenCalled()
+    expect(info.mock.calls.join(' ')).toContain('returning client (earlier session order #433)')
+    expect(info.mock.calls.join(' ')).not.toContain('intake1a')
+    info.mockRestore()
+  })
+
+  it('(a) an earlier order of another service on record, address in another case: skipped', async () => {
+    await createIntakesForOrder({ ...first, lines: [{ handle: 'executive-coaching-30-mins', title: 'Executive Coaching Session', session: true }] }, deps)
+    clock.now = new Date(T0.getTime() + 3_600_000)
+    const second = await createIntakesForOrder(
+      { ...first, orderId: 'order_b', displayId: '602', email: 'Johan+Intake1A@AiAutomations.co.za', placedAt: clock.now },
+      deps,
+    )
+    expect(second.skipped).toBe('earlier session order #601')
+    expect(mem.rows.map((r) => r.order_id)).toEqual(['order_a'])
+    expect(sendRequest).toHaveBeenCalledTimes(1)
+  })
+
+  it('(a) a cancelled earlier order does not count', async () => {
+    await createIntakesForOrder(first, deps)
+    await cancelIntakesForOrder('order_a', deps)
+    clock.now = new Date(T0.getTime() + 3_600_000)
+    const second = await createIntakesForOrder({ ...first, orderId: 'order_b', displayId: '602', placedAt: clock.now }, deps)
+    expect(second.skipped).toBeUndefined()
+    expect(sendRequest).toHaveBeenCalledTimes(2)
+  })
+
+  it('(b) a completed intake form and no earlier order: skipped', async () => {
+    const other = 'johan+intake1c@aiautomations.co.za'
+    await createIntakesForOrder({ ...first, orderId: 'order_old', displayId: '590', email: other }, deps)
+    Object.assign(mem.rows[0]!, { status: 'completed', completed_at: T0.toISOString() })
+    sendRequest.mockClear()
+    // Dated before that record, so only the completed-form branch can match.
+    const placedAt = new Date(T0.getTime() - 3_600_000)
+    const result = await createIntakesForOrder({ ...first, orderId: 'order_c', displayId: '603', email: other, placedAt }, deps)
+    expect(result.skipped).toBe('completed intake form for order #590')
+    expect(sendRequest).not.toHaveBeenCalled()
+  })
+
+  it('a form already made for the order (Medusa lookup failed then) stops reminding when the order turns out returning', async () => {
+    await createIntakesForOrder(first, deps)
+    const later = await createIntakesForOrder({ ...first, priorSessionOrder: '#433' }, deps)
+    expect(later.skipped).toBe('earlier session order #433')
+    expect(mem.rows[0]!.next_reminder_at).toBeNull()
+  })
+
+  it('an earlier form whose mail never went does not make the client returning', async () => {
+    sendRequest.mockRejectedValueOnce(new Error('Brevo down'))
+    await createIntakesForOrder(first, deps)
+    clock.now = new Date(T0.getTime() + 3_600_000)
+    const second = await createIntakesForOrder({ ...first, orderId: 'order_b', displayId: '602', placedAt: clock.now }, deps)
+    expect(second.skipped).toBeUndefined()
+  })
+
+  it('a re-post of the first order still counts as first-time (its own record is not "earlier")', async () => {
+    await createIntakesForOrder(first, deps)
+    const again = await createIntakesForOrder(first, deps)
+    expect(again.skipped).toBeUndefined()
+    expect(again.records[0]).toMatchObject({ created: false, mailed: true })
+  })
+
+  it('the reminder run ends the reminders of the record of a returning client and sends none', async () => {
+    // Two records made before the rule (or racing it): the second order's reminders stop, the first's go on.
+    await createIntakesForOrder(first, deps)
+    const later = new Date(T0.getTime() + 3_600_000)
+    mem.rows.push({ ...mem.rows[0]!, id: 'id_b', token: token(99), order_id: 'order_b', order_display_id: '602', purchased_at: later.toISOString() })
+    sendRequest.mockClear()
+    const info = vi.spyOn(console, 'info').mockImplementation(() => undefined)
+    clock.now = new Date(T0.getTime() + 2 * DAY)
+    const run = await runIntakeReminders(deps)
+    info.mockRestore()
+    expect(run.reminders).toBe(1)
+    expect(run.skipped).toBe(1)
+    expect(sendRequest.mock.calls.map(([r]) => r.order_id)).toEqual(['order_a'])
+    expect(mem.rows.find((r) => r.id === 'id_b')!.next_reminder_at).toBeNull()
+  })
+})
 
 describe('createIntakesForOrder', () => {
   it('creates one record per service, not per line, and mails each link once', async () => {

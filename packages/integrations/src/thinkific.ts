@@ -137,6 +137,23 @@ export class ThinkificClient {
     return (await this.request('POST', '/enrollments', undefined, body)) as ThinkificEnrolment
   }
 
+  /**
+   * The status of the Thinkific product that sells a course ("published",
+   * "draft", ...), or null when the course has no product. A student enrolled
+   * in a draft course does not see it on their dashboard (KI097), so the
+   * enrolment handler warns staff when it is anything but published.
+   */
+  async courseProductStatus(courseId: number | string): Promise<string | null> {
+    if (this.dryRun) {
+      this.logger.info(`[thinkific:dry-run] course status ${courseId} -> published`)
+      return 'published'
+    }
+    const course = (await this.request('GET', `/courses/${encodeURIComponent(String(courseId))}`)) as { product_id?: number | string | null }
+    if (course?.product_id === undefined || course.product_id === null) return null
+    const product = (await this.request('GET', `/products/${encodeURIComponent(String(course.product_id))}`)) as { status?: string | null }
+    return typeof product?.status === 'string' ? product.status : null
+  }
+
   // -------------------------------------------------------------------------
 
   private async request(

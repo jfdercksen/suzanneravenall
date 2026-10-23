@@ -103,6 +103,8 @@ export interface OrderIntakeInput {
   lastName: string | null
   /** When the order was placed; the reminders count from here. Defaults to now. */
   placedAt?: Date | null
+  /** An earlier, not cancelled order of this address with a session in it, found by Medusa (D023). */
+  priorSessionOrder?: string | null
   lines: OrderLine[]
 }
 
@@ -110,6 +112,35 @@ export interface OrderIntakeResult {
   records: { serviceKey: string; formKey: string; created: boolean; mailed: boolean }[]
   /** Mails that failed, plus session lines with no form to send. > 0 means the route answers 5xx. */
   failed: number
+  /** Set when the order got no intake mail because the client is a returning one (D023). */
+  skipped?: string
+}
+
+/**
+ * Why this address counts as a returning client, or null for a first-time one
+ * (D023, Johan 23 Oct: the rule is any service, not per service). Returning:
+ *  (a) an earlier order with a session that was not cancelled: Medusa's answer
+ *      (`priorSessionOrder`), or an intake row of an earlier, not cancelled
+ *      order of the same address;
+ *  (b) a completed intake form under the address, from any other order.
+ * The email match is case-insensitive.
+ */
+export async function returningClientReason(
+  email: string,
+  orderId: string,
+  placedAt: Date,
+  priorSessionOrder: string | null | undefined,
+  deps: IntakeDeps = defaultDeps,
+): Promise<string | null> {
+  if (priorSessionOrder) return `earlier session order ${priorSessionOrder}`
+  const others = await deps.store.listOtherIntakesForEmail(email, orderId)
+  const label = (r: IntakeRecord) => (r.order_display_id ? `#${r.order_display_id}` : r.order_id)
+  const completed = others.find((r) => r.status === 'completed')
+  if (completed) return `completed intake form for order ${label(completed)}`
+  // Only a form that was actually mailed: a row whose mail never went did not reach the client.
+  const earlier = others.find((r) => r.intake_sent_at !== null && new Date(r.purchased_at).getTime() < placedAt.getTime())
+  if (earlier) return `earlier session order ${label(earlier)}`
+  return null
 }
 
 /**
@@ -127,12 +158,21 @@ export async function createIntakesForOrder(input: OrderIntakeInput, deps: Intak
   }
   if (byHandle.size === 0) return result
 
+  const now = deps.now()
+  const placedAt = input.placedAt && input.placedAt.getTime() <= now.getTime() ? input.placedAt : now
+  // A returning client gets no intake mail and so no reminders (D023).
+  const returning = await returningClientReason(input.email, input.orderId, placedAt, input.priorSessionOrder, deps)
+  if (returning) {
+    // A form already made for this order (the Medusa lookup failed on an earlier pass) stops reminding.
+    await deps.store.endOrderReminders(input.orderId)
+    console.info(`[intake] order ${input.displayId ? `#${input.displayId}` : input.orderId}: no intake mail, returning client (${returning})`)
+    return { ...result, skipped: returning }
+  }
+
   const forms = await deps.loadForms()
   // Unknown counts as online (the client gets the Zoom link): a Medusa hiccup
   // must never hold back the intake mail itself.
   const variantTitles = await deps.loadVariantTitles(input.orderId).catch(() => new Map<string, string[]>())
-  const now = deps.now()
-  const placedAt = input.placedAt && input.placedAt.getTime() <= now.getTime() ? input.placedAt : now
   const delays = deps.delays()
 
   for (const line of byHandle.values()) {
@@ -206,6 +246,15 @@ function purchaseTime(record: IntakeRecord): Date {
   return new Date(record.purchased_at ?? record.created_at)
 }
 
+/** True (and logged) when the record belongs to a returning client (D023). */
+async function skipReturning(record: IntakeRecord, deps: IntakeDeps): Promise<boolean> {
+  const reason = await returningClientReason(record.customer_email, record.order_id, purchaseTime(record), null, deps)
+  if (!reason) return false
+  const order = record.order_display_id ? `#${record.order_display_id}` : record.order_id
+  console.info(`[intake] order ${order}: no intake mail or reminder, returning client (${reason})`)
+  return true
+}
+
 export async function runIntakeReminders(deps: IntakeDeps = defaultDeps): Promise<ReminderRunResult> {
   const out: ReminderRunResult = { firstMails: 0, reminders: 0, teamMails: 0, failed: 0, skipped: 0 }
   const now = deps.now()
@@ -213,6 +262,10 @@ export async function runIntakeReminders(deps: IntakeDeps = defaultDeps): Promis
 
   // 1. First mails that never went.
   for (const record of await deps.store.listUnsentIntakes(new Date(now.getTime() - UNSENT_GRACE_MS), now)) {
+    if (await skipReturning(record, deps)) {
+      out.skipped += 1
+      continue
+    }
     if (!(await deps.store.claimIntakeSend(record.id, deps.now()))) {
       out.skipped += 1
       continue
@@ -232,6 +285,12 @@ export async function runIntakeReminders(deps: IntakeDeps = defaultDeps): Promis
     const n = record.reminders_sent + 1
     if (n > delays.length) {
       // The schedule was shortened under a running sequence: end it.
+      await deps.store.endReminders(record.id)
+      out.skipped += 1
+      continue
+    }
+    if (await skipReturning(record, deps)) {
+      // A returning client's form (made before D023, or racing an earlier order): no reminders.
       await deps.store.endReminders(record.id)
       out.skipped += 1
       continue

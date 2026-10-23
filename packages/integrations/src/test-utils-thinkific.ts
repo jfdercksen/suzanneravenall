@@ -14,6 +14,8 @@ export type FakeThinkificOptions = {
   badCourses?: number[]
   /** Return users whose email only contains the query (Thinkific search is fuzzy). */
   fuzzyUserSearch?: boolean
+  /** Course ids whose Thinkific product is a draft; every other course is published (product id = course id + 100000). */
+  draftCourses?: number[]
 }
 
 export function makeFakeThinkific(opts: FakeThinkificOptions = {}) {
@@ -71,6 +73,13 @@ export function makeFakeThinkific(opts: FakeThinkificOptions = {}) {
       const e = { id: nextId++, user_id: b.user_id, course_id: b.course_id, expired: false, activated_at: b.activated_at }
       enrolments.push(e)
       return json(e, 201)
+    }
+    const course = /^\/courses\/(\d+)$/.exec(path)
+    if (method === 'GET' && course) return json({ id: Number(course[1]), product_id: Number(course[1]) + 100000 })
+    const product = /^\/products\/(\d+)$/.exec(path)
+    if (method === 'GET' && product) {
+      const courseId = Number(product[1]) - 100000
+      return json({ id: Number(product[1]), status: opts.draftCourses?.includes(courseId) ? 'draft' : 'published' })
     }
     return json({ error: 'not found' }, 404)
   }

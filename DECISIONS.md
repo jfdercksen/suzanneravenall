@@ -156,3 +156,14 @@ This is the decision log. Every significant architectural choice is recorded her
 
 **Edge cases:** a booking counts against the address typed at Cal.com (the gate fills in the buyer's; counting it against the link's buyer instead would let anyone holding a link bought under another person's address spend that person's sessions, audit 23 Oct), so a client who types another address with no purchase under it is flagged and staff sort it out; if Medusa cannot be read the gate falls back to the order line alone and the webhook alerts staff instead of flagging; an `over_limit` booking keeps its calendar slot until staff cancel it; a booking of another length than the one bought (a 90 min session on a 30 min credit) uses one credit and is not flagged (Johan, 23 Oct: leave it). Orders placed before the gate keep their old direct link, guarded by the flag only.
 **Date:** 23 Oct 2026 | **Decided by:** proposed by the build (no API on the box decides the mechanism), for Johan to confirm; requested by Suzanne 22 Oct
+
+## D023 - Intake form only for first-time clients, any service
+
+**Decision:** Johan, 23 Oct 2026: "the rule is ANY service, not per service: skip the intake mail and its reminders when that email address already has an earlier session order or a completed intake submission." Before an order's intake mail goes, the address (case-insensitive) is checked for (a) an earlier order that was not cancelled and contains any session product, or (b) a completed intake form from any order. Either one: no intake record, no mail, no reminders, and the skip is logged with the reason (order number and reason, never the address).
+
+**How:** Medusa finds (a) when it hands the order to the web app (the order-placed subscriber and the hourly sweep, `findPriorSessionOrder`); the web app also checks its own intake records for (a) and for (b), so the rule holds if the Medusa lookup fails. The hourly reminder run applies the same check to records that already exist and ends their reminders (records made before this rule, such as a second package bought the same day).
+
+**Why:** Shayna received the intake mail again on her second Resonance Repatterning Package of 4 (23 Oct). A returning client has already given the practice this information.
+
+**Edge cases:** a cancelled earlier order does not count; a first-time client's own order re-posted by the hourly sweep still counts as first-time; two orders placed in the same second can both be treated as first-time.
+**Date:** 23 Oct 2026 | **Decided by:** Johan

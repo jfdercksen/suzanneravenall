@@ -91,6 +91,45 @@ export async function upsertIntakeRecord(row: NewIntakeRecord): Promise<{ record
   return { record: existing as IntakeRecord, created: false }
 }
 
+/** ILIKE pattern that matches `value` exactly, any case (\, % and _ escaped). */
+export function exactIlike(value: string): string {
+  return value.replace(/[\\%_]/g, (c) => `\\${c}`)
+}
+
+/**
+ * The address's intake rows from OTHER orders that were not cancelled, oldest
+ * first: what tells a returning client apart (D023). Case-insensitive on the
+ * email, as addresses are typed by hand at checkout.
+ */
+export async function listOtherIntakesForEmail(email: string, excludeOrderId: string, limit = 20): Promise<IntakeRecord[]> {
+  const wanted = email.trim().toLowerCase()
+  // PostgREST reads * in an ilike value as %, and * is legal in an address:
+  // match it as one character, then keep exact matches only.
+  const { data, error } = await client()
+    .from(INTAKE_TABLE)
+    .select('*')
+    .ilike('customer_email', exactIlike(email.trim()).replace(/\*/g, '_'))
+    .neq('order_id', excludeOrderId)
+    .neq('status', 'cancelled')
+    .order('purchased_at', { ascending: true })
+    .limit(limit)
+  if (error) fail('list intakes for email', error)
+  return ((data as IntakeRecord[] | null) ?? []).filter((r) => r.customer_email.trim().toLowerCase() === wanted)
+}
+
+/** Ends the reminders of an order's open forms (a returning client, D023). Returns how many. */
+export async function endOrderReminders(orderId: string): Promise<number> {
+  const { data, error } = await client()
+    .from(INTAKE_TABLE)
+    .update({ next_reminder_at: null })
+    .eq('order_id', orderId)
+    .eq('status', 'pending')
+    .not('next_reminder_at', 'is', null)
+    .select('id')
+  if (error) fail('end order reminders', error)
+  return Array.isArray(data) ? data.length : 0
+}
+
 /** Takes the first mail for this row; false when it already went or another caller is sending it. */
 export async function claimIntakeSend(id: string, now: Date): Promise<boolean> {
   const { data, error } = await client()
