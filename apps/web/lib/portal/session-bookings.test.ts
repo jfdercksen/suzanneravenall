@@ -2,6 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const { logError } = vi.hoisted(() => ({ logError: vi.fn() }))
 vi.mock('@/lib/log', () => ({ logError }))
+// Offline: no Medusa or Supabase behind the limit check unless a test injects one.
+vi.mock('@/lib/booking/limits', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/booking/limits')>()),
+  checkBookingLimit: vi.fn().mockResolvedValue('within'),
+}))
 
 import {
   parseBookingEvent,
@@ -251,5 +256,33 @@ describe('runSessionBookingRecord', () => {
 
   it('reports failed when the Supabase env is missing', async () => {
     expect(await runSessionBookingRecord(CREATED, null)).toBe('failed')
+  })
+
+  it('checks a new booking against the paid sessions, under the attendee address', async () => {
+    const check = vi.fn().mockResolvedValue('within')
+    expect(await runSessionBookingRecord(CREATED, memoryStore(), check)).toBe('created')
+    expect(check).toHaveBeenCalledWith(expect.objectContaining({ uid: 'bk_1' }), 'johan+appt@example.com')
+  })
+
+  it('checks a reschedule too, but not a replay or a cancel', async () => {
+    const store = memoryStore()
+    const check = vi.fn().mockResolvedValue('within')
+    await runSessionBookingRecord(CREATED, store, check)
+    await runSessionBookingRecord(CREATED, store, check)
+    await runSessionBookingRecord(
+      { triggerEvent: 'BOOKING_RESCHEDULED', payload: { ...CREATED.payload, uid: 'bk_2', rescheduleUid: 'bk_1' } },
+      store,
+      check,
+    )
+    await runSessionBookingRecord({ triggerEvent: 'BOOKING_CANCELLED', payload: { ...CREATED.payload, uid: 'bk_2' } }, store, check)
+    expect(check.mock.calls.map((c) => c[0].uid)).toEqual(['bk_1', 'bk_2'])
+  })
+
+  it('keeps the gate token out of the stored payload', async () => {
+    const store = memoryStore()
+    const body = { ...CREATED, payload: { ...CREATED.payload, metadata: { videoCallUrl: 'https://meet.example.com/abc', bt: 'x'.repeat(43) } } }
+    await runSessionBookingRecord(body, store, vi.fn().mockResolvedValue('within'))
+    const stored = store.rows.get('bk_1')?.raw_payload as { metadata?: Record<string, unknown> }
+    expect(stored.metadata).toEqual({ videoCallUrl: 'https://meet.example.com/abc' })
   })
 })

@@ -57,6 +57,20 @@ describe('sanitiseAnalyticsUrl on the intake form', () => {
   })
 })
 
+describe('sanitiseAnalyticsUrl on the booking link (J-07)', () => {
+  it('replaces the token in /book/<token> and leaves the book page alone', () => {
+    expect(sanitiseAnalyticsUrl('http://169.239.180.49/book/AbC123secret')).toBe('http://169.239.180.49/book/redacted')
+    expect(sanitiseAnalyticsUrl('/book/AbC123secret?x=1')).toBe('/book/redacted')
+    expect(sanitiseAnalyticsUrl('https://suzanneravenall.com/book')).toBe('https://suzanneravenall.com/book')
+    expect(sanitiseAnalyticsUrl('https://suzanneravenall.com/books')).toBe('https://suzanneravenall.com/books')
+  })
+
+  it('drops the email from the portal invite links (H-13)', () => {
+    expect(sanitiseAnalyticsUrl('http://169.239.180.49/portal/signup?email=a%40b.c')).toBe('http://169.239.180.49/portal/signup')
+    expect(sanitiseAnalyticsUrl('/portal/login?redirect=%2Fportal&email=a%40b.c')).toBe('/portal/login')
+  })
+})
+
 describe('buildGaInitScript', () => {
   it('returns an empty script for a placeholder ID so no hits are sent', () => {
     expect(buildGaInitScript('G-XXXXXXXXXX')).toBe('')

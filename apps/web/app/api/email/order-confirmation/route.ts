@@ -7,14 +7,24 @@ import { downloadInvoicePdf } from '@/lib/invoices/storage'
 import { downloadsForOrder, isDownloadOnlyOrder, signDownloadUrls } from '@/lib/downloads/storage'
 import { medusaAdminAuthHeader } from '@/lib/medusa/admin-auth'
 import { readOrderBusiness } from '@/lib/checkout/business'
+import { bookerName } from '@suzanne/integrations'
+import { orderProductType, type OrderCategoryForType } from '@/lib/checkout/orderProductType'
+import { orderGateLink } from '@/lib/booking/order-link'
+import { portalInviteFor } from '@/lib/portal/portal-invite'
 
 interface MedusaOrderItem {
   id: string
   title: string
+  product_title?: string | null
   variant?: {
     title?: string
     metadata?: Record<string, unknown> | null
-    product?: { title?: string; metadata?: Record<string, unknown> | null } | null
+    product?: {
+      title?: string
+      handle?: string | null
+      metadata?: Record<string, unknown> | null
+      categories?: OrderCategoryForType[] | null
+    } | null
   } | null
   quantity: number
   unit_price: number
@@ -32,6 +42,7 @@ interface MedusaAdminOrder {
   }
   billing_address?: {
     first_name?: string | null
+    last_name?: string | null
     company?: string | null
   } | null
   items: MedusaOrderItem[]
@@ -106,7 +117,7 @@ export async function POST(req: NextRequest) {
   try {
     // `fields=` REPLACES Medusa's default field list, so the scalars must be
     // named or currency_code, total and created_at arrive undefined (order #3).
-    const fields = ['id', 'display_id', 'status', 'currency_code', 'email', 'customer_id', 'created_at', 'subtotal', 'discount_total', 'tax_total', 'shipping_total', 'total', 'metadata', '*items', '*items.variant', 'items.variant.metadata', '*items.variant.product', 'items.variant.product.metadata', '*customer', '*billing_address'].join(',')
+    const fields = ['id', 'display_id', 'status', 'currency_code', 'email', 'customer_id', 'created_at', 'subtotal', 'discount_total', 'tax_total', 'shipping_total', 'total', 'metadata', '*items', '*items.variant', 'items.variant.metadata', '*items.variant.product', 'items.variant.product.metadata', '*items.variant.product.categories', 'items.variant.product.categories.parent_category.handle', 'items.variant.product.categories.parent_category.parent_category.handle', '*customer', '*billing_address'].join(',')
     const res = await fetch(
       `${medusaBase}/admin/orders/${orderId}?fields=${encodeURIComponent(fields)}`,
       {
@@ -167,6 +178,33 @@ export async function POST(req: NextRequest) {
     calBookingUrl,
     business: businessForEmail(readOrderBusiness(order)),
   }
+
+  // Session orders: the per-order /book link instead of the reusable Cal.com
+  // page (J-07). Same line rule as the order mail: the first session line.
+  if (productType === 'session') {
+    const sessionItem = order.items.find((item) => orderProductType([item]) === 'session') ?? order.items[0]
+    const gateLink = sessionItem
+      ? await orderGateLink({
+          orderId: order.id,
+          displayId: order.display_id,
+          email: customerEmail,
+          name:
+            bookerName(order.customer?.first_name, order.customer?.last_name) ??
+            bookerName(order.billing_address?.first_name, order.billing_address?.last_name),
+          line: {
+            // Same title rule as the confirmation page and the portal: product, snapshot, line.
+            productTitle: sessionItem.variant?.product?.title ?? sessionItem.product_title ?? sessionItem.title,
+            productHandle: sessionItem.variant?.product?.handle ?? null,
+            variantTitle: sessionItem.variant?.title ?? null,
+            quantity: sessionItem.quantity,
+          },
+        })
+      : null
+    if (gateLink) emailOrder.calBookingUrl = gateLink
+  }
+
+  // Every order: the portal block, signup or login (H-13).
+  emailOrder.portalInvite = await portalInviteFor(customerEmail)
 
   // Files bought as a download (metadata.download_file on the product or
   // variant): one signed link each, listed above the order summary. When the

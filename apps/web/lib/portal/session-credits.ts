@@ -5,11 +5,14 @@ import { sessionDurationMinutes, type SessionDuration, type SessionLine } from '
  *
  * Credits come from the member's session order lines: "Package of N" gives N
  * sessions, any other session variant one, times the line quantity. Every
- * booking on a session-NN Cal.com event that is not cancelled uses one. A
- * booking is matched to the oldest purchase of the same length that still has
- * room, else to the oldest purchase with room at all (a member who picked
- * another length still used a session), so mixed services stay apart and the
- * remaining count never drops below zero.
+ * booking on a session-NN Cal.com event that is not cancelled or over_limit
+ * uses one. Bookings take credits in the order they were made (created_at,
+ * else start time), so the booking past the limit is always the newest one
+ * (J-07). A booking is matched to the oldest purchase of the same length that
+ * still has room, else to the oldest purchase with room at all (a member who
+ * picked another length still used a session), so mixed services stay apart
+ * and the remaining count never drops below zero. The /book gate, the
+ * webhook's over-limit check and the portal all use these sums.
  */
 
 export interface PurchasedSessionLine extends SessionLine {
@@ -23,7 +26,12 @@ export interface BookingForCredit {
   event_slug: string | null
   status: string
   start_time: string
+  /** When the booking reached us; decides which booking is past the limit */
+  created_at?: string | null
 }
+
+/** Statuses that hold no session: cancelled, and past the package limit. */
+export const NON_CREDIT_STATUSES: ReadonlySet<string> = new Set(['cancelled', 'over_limit'])
 
 export interface SessionCredit {
   /** Product title: the service the sessions were bought for */
@@ -89,10 +97,14 @@ export function computeSessionCredits(
   }
 
   const used = bookings
-    .filter((b) => b.status !== 'cancelled')
-    .map((b) => ({ uid: b.booking_uid, minutes: bookingSessionMinutes(b.event_slug), start: b.start_time }))
-    .filter((b): b is { uid: string; minutes: number; start: string } => b.minutes !== null)
-    .sort((a, b) => a.start.localeCompare(b.start))
+    .filter((b) => !NON_CREDIT_STATUSES.has(b.status))
+    .map((b) => ({
+      uid: b.booking_uid,
+      minutes: bookingSessionMinutes(b.event_slug),
+      order: new Date(b.created_at || b.start_time).getTime(),
+    }))
+    .filter((b): b is { uid: string; minutes: number; order: number } => b.minutes !== null)
+    .sort((a, b) => a.order - b.order)
 
   const serviceByBooking = new Map<string, string>()
   for (const booking of used) {

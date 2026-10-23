@@ -76,6 +76,28 @@ export interface OrderEmailData {
   downloads?: OrderDownload[]
   /** Business checkout: the company the order is billed to, shown under the order reference. */
   business?: { companyName: string; vatNumber: string | null } | null
+  /** The portal block (H-13): sign up with the order email, or log in when an account exists. */
+  portalInvite?: PortalInvite | null
+}
+
+/** Where the order mail sends the buyer for the member portal (H-13). */
+export interface PortalInvite {
+  kind: 'signup' | 'login'
+  url: string
+}
+
+/** A Cal.com booking past the client's paid sessions (J-07). */
+export interface BookingOverLimitEmailData {
+  email: string
+  firstName: string | null
+  /** "Fri, 30 October 2026" (SAST) */
+  dateLabel: string
+  /** "10:00 - 11:00 SAST" */
+  timeLabel: string
+  /** False when the address has no session purchase at all */
+  hasPackage: boolean
+  buyMoreUrl: string
+  appointmentsUrl: string
 }
 
 export interface QuizInviteEmailData {

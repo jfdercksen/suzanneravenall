@@ -25,10 +25,13 @@ export function isUsableGaId(id: string | undefined | null): id is string {
 
 // Pages whose query string must never reach analytics.
 const PRIVATE_PATH_PATTERN = /^\/explore\/[^/]+\/quiz\/?$/
-const TOKEN_PARAM_PATTERN = /[?&]token=/i
-// Pages whose PATH carries a secret (the intake form link /intake/<token>):
-// the token is replaced, whatever follows it is dropped.
-const TOKEN_PATH_PATTERN = /^([a-z][a-z0-9+.-]*:\/\/[^/]*)?\/intake\/[^?#]*/i
+// email=: the order mail's portal links (/portal/signup?email=, H-13) must not
+// send the buyer's address to GA or Clarity.
+const TOKEN_PARAM_PATTERN = /[?&](token|email)=/i
+// Pages whose PATH carries a secret (the intake form link /intake/<token>,
+// the booking link /book/<token>): the token is replaced, whatever follows it
+// is dropped. The bare /book page (the book) carries none and is left alone.
+const TOKEN_PATH_PATTERN = /^([a-z][a-z0-9+.-]*:\/\/[^/]*)?\/(intake|book)\/[^?#]+/i
 
 // Returns the URL with its query string and fragment removed when it belongs
 // to a private page or carries a token param; otherwise returns it unchanged.
@@ -37,7 +40,7 @@ const TOKEN_PATH_PATTERN = /^([a-z][a-z0-9+.-]*:\/\/[^/]*)?\/intake\/[^?#]*/i
 export function sanitiseAnalyticsUrl(href: string): string {
   if (!href) return href
   const tokenPath = TOKEN_PATH_PATTERN.exec(href)
-  if (tokenPath) return `${tokenPath[1] ?? ''}/intake/redacted`
+  if (tokenPath) return `${tokenPath[1] ?? ''}/${(tokenPath[2] ?? '').toLowerCase()}/redacted`
   const queryStart = href.search(/[?#]/)
   if (queryStart === -1) return href
   const base = href.slice(0, queryStart)
@@ -63,7 +66,7 @@ export function buildGaInitScript(gaId: string): string {
     var sanitise = function (href) {
       if (!href) return href;
       var tokenPath = TOKEN_PATH_PATTERN.exec(href);
-      if (tokenPath) return (tokenPath[1] || '') + '/intake/redacted';
+      if (tokenPath) return (tokenPath[1] || '') + '/' + tokenPath[2].toLowerCase() + '/redacted';
       var queryStart = href.search(/[?#]/);
       if (queryStart === -1) return href;
       var base = href.slice(0, queryStart);

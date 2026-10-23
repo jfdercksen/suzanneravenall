@@ -117,4 +117,18 @@ describe('computeSessionCredits', () => {
   it('returns nothing for a member without session purchases', () => {
     expect(computeSessionCredits([], [booking('session-60')]).credits).toEqual([])
   })
+
+  it('gives credits in the order bookings were made, so the newest one is left uncovered (J-07)', () => {
+    const first = { ...booking('session-60', 'booked', '2026-11-20T08:00:00Z'), created_at: '2026-10-23T08:00:00Z' }
+    const late = { ...booking('session-60', 'booked', '2026-11-02T08:00:00Z'), created_at: '2026-10-23T09:00:00Z' }
+    const { credits, serviceByBooking } = computeSessionCredits([line(RR, '60 min online')], [late, first])
+    expect(credits[0]?.remaining).toBe(0)
+    expect(serviceByBooking.has(first.booking_uid)).toBe(true)
+    expect(serviceByBooking.has(late.booking_uid)).toBe(false)
+  })
+
+  it('does not count an over_limit booking against the package', () => {
+    const { credits } = computeSessionCredits([line(RR, 'Package of 04 (60 min online)')], [booking('session-60'), booking('session-60', 'over_limit')])
+    expect(credits[0]).toMatchObject({ used: 1, remaining: 3 })
+  })
 })

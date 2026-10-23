@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { bookerName, sessionBookingUrl } from '@suzanne/integrations'
+import { bookerName, sessionBookingUrl, type SessionLine } from '@suzanne/integrations'
 import type { OrderProductType } from '@/lib/email/types'
 import { orderProductType, type OrderCategoryForType, type OrderLineForType } from '@/lib/checkout/orderProductType'
 import { isPreorder, variantLabel } from '@/lib/shop/lineItem'
+import { orderGateLink } from '@/lib/booking/order-link'
 
 // Read-only order status for the confirmation page. The page must not say
 // "payment received" or empty the buyer's cart on the strength of the URL
 // alone, so it asks here whether Medusa has actually turned the cart into an
 // order (completed_at is set by cart completion, which the PayFast ITN, the
-// PayPal capture and the free-order route all perform). Nothing is written.
+// PayPal capture and the free-order route all perform). The one write: a
+// session order's /book link (J-07), issued idempotently, the same row the
+// order mail links to.
 
 // Medusa v2 cart ids: "cart_" plus a ULID. Also keeps the id path-safe.
 const CART_ID_RE = /^cart_[A-Za-z0-9]{10,40}$/
@@ -65,6 +68,7 @@ interface CartLine {
 
 interface StoreProduct {
   id: string
+  title?: string | null
   handle?: string | null
   metadata?: Record<string, unknown> | null
   categories?: OrderCategoryForType[] | null
@@ -90,7 +94,7 @@ async function fetchLineProducts(productIds: string[]): Promise<StoreProduct[]> 
       // Two parent levels cover the whole tree (three deep), so a product in a
       // sub-category resolves the way the order mail resolves it (KI082).
       fields:
-        'id,handle,metadata,*categories,*variants,categories.parent_category.handle,categories.parent_category.parent_category.handle',
+        'id,title,handle,metadata,*categories,*variants,categories.parent_category.handle,categories.parent_category.parent_category.handle',
     })
     productIds.forEach((id) => params.append('id[]', id))
     const res = await fetch(`${medusaBase()}/store/products?${params.toString()}`, {
@@ -116,6 +120,8 @@ interface DescribedOrder {
   productType: OrderProductType
   /** The session event to book on, with the buyer filled in; session orders only (KI079). */
   bookingUrl: string | null
+  /** The session line and buyer the /book link is issued for (J-07); not sent to the browser */
+  gate: { line: SessionLine & { quantity: number }; name: string | null; email: string | null } | null
 }
 
 async function describeOrder(lines: CartLine[], buyer: CartBuyer): Promise<DescribedOrder> {
@@ -149,28 +155,30 @@ async function describeOrder(lines: CartLine[], buyer: CartBuyer): Promise<Descr
 
   const productType = orderProductType(typed)
   let bookingUrl: string | null = null
+  let gate: DescribedOrder['gate'] = null
   // The first session line decides the length, as in the order mail.
   const sessionIndex = productType === 'session' ? typed.findIndex((line) => orderProductType([line]) === 'session') : -1
   const index = productType === 'session' ? Math.max(sessionIndex, 0) : -1
   const line = index >= 0 ? lines[index] : undefined
   if (line) {
-    bookingUrl = sessionBookingUrl(
-      sessionBookingBase(),
-      {
-        productTitle: line.product_title ?? line.title,
-        productHandle: typed[index]?.variant?.product?.handle,
-        variantTitle: line.variant_title,
-      },
-      {
-        name:
-          bookerName(buyer.customer?.first_name, buyer.customer?.last_name) ??
-          bookerName(buyer.billing_address?.first_name, buyer.billing_address?.last_name),
-        email: buyer.email,
-      }
-    )
+    const sessionLine = {
+      // Same title rule as the order mail and the portal: product, snapshot, line.
+      productTitle: (line.product_id ? products.get(line.product_id)?.title : null) ?? line.product_title ?? line.title,
+      productHandle: typed[index]?.variant?.product?.handle,
+      variantTitle: line.variant_title,
+    }
+    const name =
+      bookerName(buyer.customer?.first_name, buyer.customer?.last_name) ??
+      bookerName(buyer.billing_address?.first_name, buyer.billing_address?.last_name)
+    bookingUrl = sessionBookingUrl(sessionBookingBase(), sessionLine, { name, email: buyer.email })
+    gate = {
+      line: { ...sessionLine, quantity: typeof line.quantity === 'number' ? line.quantity : 1 },
+      name,
+      email: buyer.email ?? null,
+    }
   }
 
-  return { items, productType, bookingUrl }
+  return { items, productType, bookingUrl, gate }
 }
 
 export async function GET(req: NextRequest) {
@@ -206,8 +214,16 @@ export async function GET(req: NextRequest) {
       fetchOrderNumber(cartId),
       lines.length > 0 ? describeOrder(lines, cart) : Promise.resolve(null),
     ])
+    let response: Omit<DescribedOrder, 'gate'> | null = null
+    if (described) {
+      const { gate, ...shown } = described
+      // The per-order /book link replaces the reusable Cal.com page once the
+      // order number is known; if it cannot be issued the direct link stays.
+      const gateLink = gate ? await orderGateLink({ displayId: orderNumber, ...gate }) : null
+      response = gateLink ? { ...shown, bookingUrl: gateLink } : shown
+    }
     return NextResponse.json(
-      { status: 'completed', orderNumber, ...(described ?? {}) },
+      { status: 'completed', orderNumber, ...(response ?? {}) },
       { headers: { 'Cache-Control': 'no-store' } }
     )
   } catch (err) {

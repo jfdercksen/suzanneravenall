@@ -1,6 +1,6 @@
 import { createElement } from 'react'
 import { sendEmail } from './send'
-import OrderConfirmation, { getNextSteps } from '../../emails/OrderConfirmation'
+import OrderConfirmation, { BOOKING_LINK_REUSE_LINE, getNextSteps, portalInviteCopy } from '../../emails/OrderConfirmation'
 import type { OrderEmailData } from './types'
 import { companyVatNumber } from './company'
 import { formatAmount } from './utils'
@@ -66,6 +66,11 @@ export function billedToLine(business: NonNullable<OrderEmailData['business']>):
   return business.vatNumber ? `${business.companyName}, VAT ${business.vatNumber}` : business.companyName
 }
 
+function portalInviteLines(invite: NonNullable<OrderEmailData['portalInvite']>): string[] {
+  const copy = portalInviteCopy(invite.kind)
+  return [copy.heading.toUpperCase(), '='.repeat(copy.heading.length), copy.body, `${copy.button}: ${invite.url}`, '']
+}
+
 function buildPlainText(order: OrderEmailData, invoice: InvoiceDelivery): string {
   const formattedDate = new Date(order.createdAt).toLocaleDateString('en-ZA', {
     day: 'numeric',
@@ -81,7 +86,9 @@ function buildPlainText(order: OrderEmailData, invoice: InvoiceDelivery): string
     "You've taken a powerful step towards transformation.",
     "We're honoured to be part of your journey.",
     '',
-    ...(order.calBookingUrl ? ['BOOK YOUR SESSION', '=================', `Choose a date and time: ${order.calBookingUrl}`, ''] : []),
+    ...(order.calBookingUrl
+      ? ['BOOK YOUR SESSION', '=================', `Choose a date and time: ${order.calBookingUrl}`, BOOKING_LINK_REUSE_LINE, '']
+      : []),
     ...(order.downloads && order.downloads.length > 0
       ? [
           'YOUR DOWNLOADS',
@@ -91,6 +98,7 @@ function buildPlainText(order: OrderEmailData, invoice: InvoiceDelivery): string
           '',
         ]
       : []),
+    ...(order.portalInvite ? portalInviteLines(order.portalInvite) : []),
     'ORDER SUMMARY',
     '=============',
     `Order: #${order.displayId}`,

@@ -5,11 +5,15 @@ const h = vi.hoisted(() => ({
   download: vi.fn(),
   logError: vi.fn(),
   logWarn: vi.fn(),
+  gate: vi.fn(),
+  invite: vi.fn(),
 }))
 
 vi.mock('@/lib/email/order-confirmation', () => ({ sendOrderConfirmationEmail: h.send }))
 vi.mock('@/lib/invoices/storage', () => ({ downloadInvoicePdf: h.download }))
 vi.mock('@/lib/log', () => ({ logError: h.logError, logWarn: h.logWarn }))
+vi.mock('@/lib/booking/order-link', () => ({ orderGateLink: h.gate }))
+vi.mock('@/lib/portal/portal-invite', () => ({ portalInviteFor: h.invite }))
 
 import { POST } from './route'
 
@@ -47,6 +51,8 @@ describe('POST /api/email/order-confirmation', () => {
       vi.fn(async () => new Response(JSON.stringify({ order: medusaOrder }), { status: 200 }))
     )
     h.send.mockResolvedValue('msg-1')
+    h.gate.mockResolvedValue(null)
+    h.invite.mockResolvedValue({ kind: 'signup', url: 'http://site/portal/signup?email=alice%40example.com' })
   })
 
   afterEach(() => {
@@ -112,5 +118,64 @@ describe('POST /api/email/order-confirmation', () => {
 
     expect(res.status).toBe(500)
     expect(h.logError).toHaveBeenCalled()
+  })
+
+  describe('booking link and portal invite (J-07, H-13)', () => {
+    const sessionOrder = {
+      ...medusaOrder,
+      display_id: 431,
+      customer: { first_name: 'Johan', last_name: 'QA Test', email: 'johan+limit1023@aiautomations.co.za' },
+      items: [
+        { id: 'b1', title: 'A Book', quantity: 1, unit_price: 100, variant: { title: 'Paperback', product: { title: 'A Book', handle: 'a-book', categories: [{ handle: 'books' }] } } },
+        {
+          id: 's1',
+          title: 'Package of 04 (60 min online)',
+          product_title: 'Private Session',
+          quantity: 1,
+          unit_price: 0,
+          variant: { title: 'Package of 04 (60 min online)', product: { title: 'Private Session', handle: 'private-session', categories: [{ handle: 'private-sessions' }] } },
+        },
+      ],
+    }
+
+    beforeEach(() => {
+      h.download.mockResolvedValue({ pdf: null, reason: 'none' })
+      vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ order: sessionOrder }), { status: 200 })))
+    })
+
+    it('replaces the Cal.com page with the per-order link, issued for the session line', async () => {
+      h.gate.mockResolvedValue('http://site/book/' + 'a'.repeat(43))
+      await POST(makeRequest({ orderId: 'order_1', productType: 'session', calBookingUrl: 'http://cal/suzanneravenall/session-60' }) as never)
+      expect(h.gate).toHaveBeenCalledWith({
+        orderId: 'order_1',
+        displayId: 431,
+        email: 'johan+limit1023@aiautomations.co.za',
+        name: 'Johan QA Test',
+        line: { productTitle: 'Private Session', productHandle: 'private-session', variantTitle: 'Package of 04 (60 min online)', quantity: 1 },
+      })
+      expect(h.send.mock.calls[0]![0].order.calBookingUrl).toBe('http://site/book/' + 'a'.repeat(43))
+    })
+
+    it('keeps the Cal.com page when the link cannot be issued', async () => {
+      await POST(makeRequest({ orderId: 'order_1', productType: 'session', calBookingUrl: 'http://cal/suzanneravenall/session-60' }) as never)
+      expect(h.send.mock.calls[0]![0].order.calBookingUrl).toBe('http://cal/suzanneravenall/session-60')
+    })
+
+    it('issues no link for an order that is not a session order', async () => {
+      await POST(makeRequest({ orderId: 'order_1', productType: 'other' }) as never)
+      expect(h.gate).not.toHaveBeenCalled()
+    })
+
+    it('adds the signup invite for a buyer without an account', async () => {
+      await POST(makeRequest({ orderId: 'order_1' }) as never)
+      expect(h.invite).toHaveBeenCalledWith('johan+limit1023@aiautomations.co.za')
+      expect(h.send.mock.calls[0]![0].order.portalInvite).toEqual({ kind: 'signup', url: 'http://site/portal/signup?email=alice%40example.com' })
+    })
+
+    it('adds the login link for a buyer who has an account', async () => {
+      h.invite.mockResolvedValue({ kind: 'login', url: 'http://site/portal/login?email=x' })
+      await POST(makeRequest({ orderId: 'order_1' }) as never)
+      expect(h.send.mock.calls[0]![0].order.portalInvite).toMatchObject({ kind: 'login' })
+    })
   })
 })

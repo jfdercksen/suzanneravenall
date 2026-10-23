@@ -33,6 +33,24 @@ interface OrderConfirmationProps extends OrderEmailData {
   invoiceAttachmentName?: string | null
 }
 
+/** The portal block's words (H-13), shared with the plain-text part. */
+export function portalInviteCopy(kind: 'signup' | 'login'): { heading: string; body: string; button: string } {
+  return kind === 'login'
+    ? {
+        heading: 'Your member portal',
+        body: 'Log in with this email address to see your sessions, book the next one and find your resources in one place.',
+        button: 'Log in to your portal',
+      }
+    : {
+        heading: 'Set up your portal account',
+        body: 'Create your free account with this email address to see your sessions, book the next one and find your resources in one place.',
+        button: 'Set up your portal account',
+      }
+}
+
+/** Under the booking button: one link books every session of the order (J-07). */
+export const BOOKING_LINK_REUSE_LINE = 'Keep this link: it stays open until every session you paid for is booked.'
+
 interface NextStep {
   step: string
   text: string
@@ -115,6 +133,7 @@ export default function OrderConfirmation({
   calBookingUrl,
   downloads,
   business,
+  portalInvite,
 }: OrderConfirmationProps) {
   const greeting = `Dear ${firstName ?? 'valued customer'},`
   const formattedDate = new Date(createdAt).toLocaleDateString('en-ZA', {
@@ -196,6 +215,9 @@ export default function OrderConfirmation({
                   Book Your Session Now →
                 </Button>
               </Section>
+              <Text style={{ color: '#94a3b8', fontSize: '13px', textAlign: 'center', margin: '0 0 12px' }}>
+                {BOOKING_LINK_REUSE_LINE}
+              </Text>
               <Text style={{ color: '#64748b', fontSize: '12px', textAlign: 'center', margin: 0 }}>
                 Or copy this link:{' '}
                 <Link href={calBookingUrl} style={{ color: BLUE, textDecoration: 'none' }}>
@@ -236,6 +258,35 @@ export default function OrderConfirmation({
                   </Button>
                 </Section>
               ))}
+            </Section>
+          )}
+
+          {/* Member portal: signup with the order email, or login (H-13) */}
+          {portalInvite && (
+            <Section style={{ padding: '32px 40px 0' }} data-testid="portal-invite">
+              <Section style={{ backgroundColor: LIGHT_GRAY, borderRadius: '4px', padding: '24px' }}>
+                <Text style={{ color: NAVY, fontSize: '16px', fontWeight: '600', margin: '0 0 8px' }}>
+                  {portalInviteCopy(portalInvite.kind).heading}
+                </Text>
+                <Text style={{ color: '#334155', fontSize: '14px', lineHeight: '1.6', margin: '0 0 16px' }}>
+                  {portalInviteCopy(portalInvite.kind).body}
+                </Text>
+                <Button
+                  href={portalInvite.url}
+                  style={{
+                    backgroundColor: NAVY,
+                    color: '#ffffff',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    padding: '12px 28px',
+                    borderRadius: '4px',
+                    textDecoration: 'none',
+                    display: 'inline-block',
+                  }}
+                >
+                  {portalInviteCopy(portalInvite.kind).button}
+                </Button>
+              </Section>
             </Section>
           )}
 

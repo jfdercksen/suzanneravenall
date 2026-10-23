@@ -8,7 +8,7 @@ import type { SessionBookingStatus } from './session-bookings'
 
 /** The columns a member may read (raw_payload stays server side). */
 export const MEMBER_BOOKING_COLUMNS =
-  'booking_uid, rescheduled_from_uid, event_slug, title, duration_minutes, start_time, end_time, status, location'
+  'booking_uid, rescheduled_from_uid, event_slug, title, duration_minutes, start_time, end_time, status, location, created_at'
 
 export interface MemberBookingRow {
   booking_uid: string
@@ -20,6 +20,7 @@ export interface MemberBookingRow {
   end_time: string
   status: SessionBookingStatus
   location: string | null
+  created_at?: string | null
 }
 
 export interface AppointmentView {
@@ -115,12 +116,14 @@ export interface BuildOptions {
   calBase: string
   sessionBase: string
   booker: SessionBooker
+  /** "<service>|<minutes>" -> the member's /book link for that pool (J-07) */
+  gateLinks?: ReadonlyMap<string, string>
 }
 
 export function buildAppointmentsView(
   allBookings: readonly MemberBookingRow[],
   lines: readonly PurchasedSessionLine[],
-  { now, calBase, sessionBase, booker }: BuildOptions,
+  { now, calBase, sessionBase, booker, gateLinks }: BuildOptions,
 ): AppointmentsView {
   const bookings = liveBookings(allBookings)
   const { credits, serviceByBooking } = computeSessionCredits(lines, bookings)
@@ -142,6 +145,8 @@ export function buildAppointmentsView(
 
   const toView = (row: MemberBookingRow, upcoming: boolean): AppointmentView => {
     const live = upcoming && row.status !== 'cancelled'
+    // A booking past the package limit can be cancelled, not moved.
+    const movable = live && row.status !== 'over_limit'
     const uid = encodeURIComponent(row.booking_uid)
     return {
       uid: row.booking_uid,
@@ -150,9 +155,9 @@ export function buildAppointmentsView(
       timeLabel: formatSastTimes(row.start_time, row.end_time),
       durationLabel: `${minutesOf(row)} min`,
       status: row.status,
-      rescheduleUrl: live ? `${calBase}/reschedule/${uid}${rescheduleQuery}` : null,
+      rescheduleUrl: movable ? `${calBase}/reschedule/${uid}${rescheduleQuery}` : null,
       cancelUrl: live ? `${calBase}/booking/${uid}?${cancelQuery}` : null,
-      joinUrl: live ? row.location : null,
+      joinUrl: movable ? row.location : null,
     }
   }
 
@@ -179,7 +184,12 @@ export function buildAppointmentsView(
       durationLabel: `${credit.durationMinutes} min`,
       remaining: credit.remaining,
       total: credit.total,
-      bookUrl: credit.remaining > 0 ? sessionBookingUrl(sessionBase, credit.line, booker) : null,
+      // The /book gate counts again at click time; the direct Cal.com link
+      // only for purchases made before the gate existed.
+      bookUrl:
+        credit.remaining > 0
+          ? (gateLinks?.get(`${credit.service}|${credit.durationMinutes}`) ?? sessionBookingUrl(sessionBase, credit.line, booker))
+          : null,
     }))
 
   return { upcoming, past, toBook }

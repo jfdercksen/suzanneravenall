@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { NextRequest } from 'next/server'
 
+const h = vi.hoisted(() => ({ gate: vi.fn() }))
+vi.mock('@/lib/booking/order-link', () => ({ orderGateLink: h.gate }))
+
 import { GET } from './route'
 
 const MEDUSA_BASE = 'http://medusa-test:9000'
@@ -25,6 +28,7 @@ describe('GET /api/checkout/status', () => {
   beforeEach(() => {
     process.env.MEDUSA_BACKEND_URL = MEDUSA_BASE
     process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY = 'pk_test_123'
+    h.gate.mockReset().mockResolvedValue(null)
   })
 
   afterEach(() => {
@@ -175,6 +179,17 @@ describe('GET /api/checkout/status', () => {
       expect(body.bookingUrl).toBe(
         'http://cal-test:3002/suzanneravenall/session-90?name=Johan+QA+Test&email=johan%40aiautomations.co.za'
       )
+      // J-07: once the order number is known, the per-order link replaces it.
+      expect(h.gate).toHaveBeenCalledWith({
+        displayId: 73,
+        line: { productTitle: 'Rapid Repatterning Session', productHandle: 'rapid-repatterning-session', variantTitle: '90 min online', quantity: 1 },
+        name: 'Johan QA Test',
+        email: 'johan@aiautomations.co.za',
+      })
+      h.gate.mockResolvedValueOnce('http://site/book/' + 'a'.repeat(43))
+      const gated = await (await GET(makeRequest(CART_ID))).json()
+      expect(gated.bookingUrl).toBe('http://site/book/' + 'a'.repeat(43))
+      expect(gated.gate).toBeUndefined()
     } finally {
       delete process.env.CALCOM_SESSION_BOOKING_URL
     }

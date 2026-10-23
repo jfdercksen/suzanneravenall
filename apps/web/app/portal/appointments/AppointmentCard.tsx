@@ -4,6 +4,7 @@ const STATUS_BADGE: Record<AppointmentView['status'], { label: string; className
   booked: { label: 'Booked', className: 'bg-white text-brand-primary' },
   rescheduled: { label: 'Rescheduled', className: 'bg-white/20 text-white border border-white/30' },
   cancelled: { label: 'Cancelled', className: 'text-white/85 border border-white/40' },
+  over_limit: { label: 'Not in your package', className: 'text-white/85 border border-white/40' },
 }
 
 interface AppointmentCardProps {
@@ -14,7 +15,7 @@ interface AppointmentCardProps {
 
 export function AppointmentCard({ appointment, past = false }: AppointmentCardProps) {
   const badge =
-    past && appointment.status !== 'cancelled'
+    past && appointment.status !== 'cancelled' && appointment.status !== 'over_limit'
       ? { label: 'Completed', className: 'bg-white/20 text-white border border-white/30' }
       : STATUS_BADGE[appointment.status]
   const hasActions = Boolean(appointment.rescheduleUrl || appointment.cancelUrl || appointment.joinUrl)

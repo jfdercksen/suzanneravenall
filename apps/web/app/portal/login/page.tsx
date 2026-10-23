@@ -36,7 +36,8 @@ export default function LoginPage() {
     redirect !== '/portal/dashboard' ? `?redirect=${encodeURIComponent(redirect)}` : ''
 
   const [mode, setMode] = useState<LoginMode>('password')
-  const [email, setEmail] = useState('')
+  // H-13: the order mail links here with ?email= for a buyer who has an account.
+  const [email, setEmail] = useState(() => (searchParams.get('email') ?? '').trim().slice(0, 254))
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(
     callbackError ? (ERROR_MESSAGES[callbackError] ?? 'Something went wrong. Please try again.') : null

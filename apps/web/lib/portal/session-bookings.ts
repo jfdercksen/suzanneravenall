@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { logError } from '@/lib/log'
+import { checkBookingLimit, TOKEN_METADATA_KEY, type LimitOutcome } from '@/lib/booking/limits'
 
 /**
  * Cal.com webhook -> public.session_bookings (I-13, /portal/appointments).
@@ -15,7 +16,8 @@ import { logError } from '@/lib/log'
 export const BOOKING_TRIGGERS = ['BOOKING_CREATED', 'BOOKING_RESCHEDULED', 'BOOKING_CANCELLED'] as const
 export type BookingTrigger = (typeof BOOKING_TRIGGERS)[number]
 
-export type SessionBookingStatus = 'booked' | 'rescheduled' | 'cancelled'
+/** over_limit: past the client's paid sessions, uses no credit (J-07). */
+export type SessionBookingStatus = 'booked' | 'rescheduled' | 'cancelled' | 'over_limit'
 
 export interface SessionBookingRow {
   booking_uid: string
@@ -291,23 +293,40 @@ export function supabaseBookingStore(): SessionBookingStore | null {
   }
 }
 
+function withoutGateToken(payload: Record<string, unknown>): Record<string, unknown> {
+  const meta = payload.metadata
+  if (!meta || typeof meta !== 'object' || Array.isArray(meta) || !(TOKEN_METADATA_KEY in meta)) return payload
+  const rest = { ...(meta as Record<string, unknown>) }
+  delete rest[TOKEN_METADATA_KEY]
+  return { ...payload, metadata: rest }
+}
+
 /**
  * Runs after the webhook has answered Cal.com. Never throws: a failure is
- * logged with the booking uid only (no email, POPIA).
+ * logged with the booking uid only (no email, POPIA). A new or moved session
+ * booking is then checked against the paid sessions (J-07, lib/booking/limits.ts).
  */
 export async function runSessionBookingRecord(
   body: unknown,
   store: SessionBookingStore | null = supabaseBookingStore(),
+  limitCheck: (event: BookingEvent, creditEmail: string) => Promise<LimitOutcome> = checkBookingLimit,
 ): Promise<RecordOutcome | 'failed'> {
-  const event = parseBookingEvent(body)
-  if (!event) {
+  const parsed = parseBookingEvent(body)
+  if (!parsed) {
     console.warn('[session-bookings] booking event without uid, attendee email or start time; not stored')
     return 'invalid-payload'
   }
   if (!store) return 'failed'
+  // The gate token stays out of raw_payload: it is a live booking credential.
+  // A booking always counts against the address typed at Cal.com, never the
+  // link's buyer: moving it onto the buyer would let anyone holding a link
+  // (bought under someone else's address) spend that person's sessions.
+  const event: BookingEvent = { ...parsed, payload: withoutGateToken(parsed.payload) }
   try {
     const outcome = await recordBookingEvent(store, event)
     console.info(`[session-bookings] ${event.trigger} ${event.uid}: ${outcome}`)
+    // A reschedule is checked too, so a moved over_limit booking cannot take a credit.
+    if (outcome === 'created' || outcome === 'rescheduled') await limitCheck(event, event.email)
     return outcome
   } catch (error) {
     logError('[session-bookings] booking could not be stored', error, { bookingUid: event.uid, trigger: event.trigger })

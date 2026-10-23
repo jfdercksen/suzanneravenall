@@ -15,13 +15,15 @@ export default function SignupPage() {
   const router = useRouter()
   // Site check M6: keep the login page's ?redirect= so a new member still
   // lands where they were heading. Same relative-only rule as the login page.
-  const rawRedirect = useSearchParams().get('redirect') ?? ''
+  const searchParams = useSearchParams()
+  const rawRedirect = searchParams.get('redirect') ?? ''
   const redirect =
     rawRedirect.startsWith('/') && !rawRedirect.startsWith('//') ? rawRedirect : '/portal/dashboard'
   const redirectQuery =
     redirect !== '/portal/dashboard' ? `?redirect=${encodeURIComponent(redirect)}` : ''
   const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
+  // H-13: the order mail links here with ?email= so the order address is filled in.
+  const [email, setEmail] = useState(() => (searchParams.get('email') ?? '').trim().slice(0, 254))
   const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
