@@ -182,12 +182,26 @@ describe('Shayna\'s template: Rapid Repatterning steps and Zoom by service and m
     expect(await render(call.react!)).not.toContain('zoom.us')
   })
 
-  it('another online service: Zoom, no intro steps (Resonance is not Rapid Repatterning)', async () => {
-    const [call] = await textFor({ service_key: 'resonance-repatterning-session', service_name: 'Resonance Repatterning Session' })
+  it.each([
+    ['resonance-repatterning-session', 'Resonance Repatterning Session'],
+    ['rapid-transformation-therapy-session', 'Rapid Transformation Therapy Session'],
+    ['transformation-coaching-60-mins', 'Transformation Coaching Session'],
+  ])('%s (23 Oct list): intro steps and Zoom', async (service_key, service_name) => {
+    const [call] = await textFor({ service_key, service_name })
     expect(call.text).toContain('https://zoom.us/j/3603768111')
-    expect(call.text).not.toContain('free22')
-    expect(await render(call.react!)).not.toContain('Steps to access the short programme')
+    expect(call.text).toContain('free22')
+    expect(await render(call.react!)).toContain('Steps to access the short programme')
   })
+
+  it.each(['exploring-the-alpha-mind-45-minutes', 'executive-coaching-30-mins', 'akashic-clearing-session', 'resonance-repatterning-program-1-fundamentals-live-via-zoom'])(
+    '%s: Zoom, no intro steps',
+    async (service_key) => {
+      const [call] = await textFor({ service_key })
+      expect(call.text).toContain('https://zoom.us/j/3603768111')
+      expect(call.text).not.toContain('free22')
+      expect(await render(call.react!)).not.toContain('Steps to access the short programme')
+    },
+  )
 
   it('a reminder keeps the same blocks and the 3-day ask', async () => {
     const [call] = await textFor({ service_key: 'rapid-repatterning-session', in_person: false }, 3)
