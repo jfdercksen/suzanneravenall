@@ -6,7 +6,7 @@ import type { MembershipEmailData } from './types'
 
 export type { MembershipEmailData }
 
-const REPLY_TO = 'sravenall@suzanneravenall.com'
+const REPLY_TO = 'bookings@studiobooking.co.za'
 
 export async function sendMembershipWelcomeEmail(data: MembershipEmailData): Promise<string> {
   const subject = data.firstName

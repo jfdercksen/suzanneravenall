@@ -315,7 +315,7 @@ export default function InvoiceDocument({ order }: Props) {
             {/* TODO: Replace with Image component once Suzanne provides PNG logo */}
             <Text style={s.logoText}>Dr Suzanne Ravenall</Text>
             <Text style={s.logoInstitute}>Ravenall Institute</Text>
-            <Text style={s.logoEmail}>sravenall@suzanneravenall.com</Text>
+            <Text style={s.logoEmail}>bookings@studiobooking.co.za</Text>
           </View>
           <View style={s.invoiceMeta}>
             <Text style={s.taxInvoiceLabel}>{vatRegistered ? 'TAX INVOICE' : 'INVOICE'}</Text>
@@ -348,7 +348,7 @@ export default function InvoiceDocument({ order }: Props) {
             {vatRegistered ? (
               <Text style={s.partyMuted}>VAT Reg: {vatNumber}</Text>
             ) : null}
-            <Text style={s.partyMuted}>sravenall@suzanneravenall.com</Text>
+            <Text style={s.partyMuted}>bookings@studiobooking.co.za</Text>
           </View>
           <View style={[s.partyBox, s.partyBoxRight]}>
             <Text style={s.partyLabel}>BILL TO</Text>

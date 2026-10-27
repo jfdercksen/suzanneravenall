@@ -33,7 +33,7 @@ describe('sendContactAcknowledgementEmail', () => {
     expect(id).toBe('msg-ack')
     const arg = mockSend.mock.calls[0]![0]
     expect(arg.to).toEqual(['alice@example.com'])
-    expect(arg.replyTo).toBe('sravenall@suzanneravenall.com')
+    expect(arg.replyTo).toBe('bookings@studiobooking.co.za')
     expect(arg.subject).toBe('We received your message, Alice')
     expect(arg.react).toBeTruthy()
   })
@@ -46,7 +46,7 @@ describe('sendContactAcknowledgementEmail', () => {
     expect(text).toContain('We received your message about Speaking Enquiry.')
     expect(text).toContain(CONTACT_REPLY_PROMISE)
     expect(text).toContain('Could Suzanne speak at our conference?\nWe are in Durban.')
-    expect(text).toContain('Email: sravenall@suzanneravenall.com')
+    expect(text).toContain('Email: bookings@studiobooking.co.za')
     expect(text).toContain('Phone: +27 10 597 0841')
     expect(text).toContain('Website: https://suzanneravenall.com/contact')
     expect(text).not.toMatch(/\u2014/)

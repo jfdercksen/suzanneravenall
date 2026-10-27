@@ -210,8 +210,8 @@ describe('Footer', () => {
   describe('contact details', () => {
     it('renders the contact email as a mailto link', () => {
       render(<Footer />)
-      const email = screen.getByRole('link', { name: 'sravenall@suzanneravenall.com' })
-      expect(email).toHaveAttribute('href', 'mailto:sravenall@suzanneravenall.com')
+      const email = screen.getByRole('link', { name: 'bookings@studiobooking.co.za' })
+      expect(email).toHaveAttribute('href', 'mailto:bookings@studiobooking.co.za')
     })
 
     it('renders the phone number as a tel link', () => {

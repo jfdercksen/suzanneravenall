@@ -11,7 +11,7 @@ import {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 // Public contact address: https://suzanneravenall.com/contact/ (Johan's decision 10, 6 Oct).
 const DELIVERY_FAILED =
-  'We could not send your message right now. Please email sravenall@suzanneravenall.com directly.'
+  'We could not send your message right now. Please email bookings@studiobooking.co.za directly.'
 
 type ContactBody = {
   name: string

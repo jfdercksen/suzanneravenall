@@ -70,7 +70,7 @@ export function getNextSteps(productType: OrderProductType | undefined): NextSte
         // welcome and "course access is ready" mails follow this one.
         { step: '01', text: 'Watch for your course access email from Ravenall Institute: it has your login for the course platform.' },
         { step: '02', text: `Sign in at ${THINKIFIC_COURSES_URL} and work through the materials at your own pace.` },
-        { step: '03', text: 'Reach out to sravenall@suzanneravenall.com any time you need guidance.' },
+        { step: '03', text: 'Reach out to bookings@studiobooking.co.za any time you need guidance.' },
       ]
     case 'live':
       return [
@@ -106,13 +106,13 @@ export function getNextSteps(productType: OrderProductType | undefined): NextSte
       return [
         { step: '01', text: 'Mentorship runs on the last Wednesday of every month at 4pm South African time.' },
         { step: '02', text: 'There is nothing to book. We will email you closer to the time to confirm your attendance and send the joining details.' },
-        { step: '03', text: 'Reach out to sravenall@suzanneravenall.com with any questions before then.' },
+        { step: '03', text: 'Reach out to bookings@studiobooking.co.za with any questions before then.' },
       ]
     default:
       return [
         { step: '01', text: 'You will receive access details and confirmation within 24 hours.' },
         { step: '02', text: 'Check your email for further details and instructions.' },
-        { step: '03', text: 'Reach out to sravenall@suzanneravenall.com with any questions.' },
+        { step: '03', text: 'Reach out to bookings@studiobooking.co.za with any questions.' },
       ]
   }
 }
@@ -505,10 +505,10 @@ export default function OrderConfirmation({
             <Text style={{ color: DARK_TEXT, fontSize: '14px', lineHeight: '1.6', margin: '0 0 8px' }}>
               Email:{' '}
               <Link
-                href="mailto:sravenall@suzanneravenall.com"
+                href="mailto:bookings@studiobooking.co.za"
                 style={{ color: BLUE, textDecoration: 'none' }}
               >
-                sravenall@suzanneravenall.com
+                bookings@studiobooking.co.za
               </Link>
             </Text>
             <Text style={{ color: DARK_TEXT, fontSize: '14px', margin: 0 }}>

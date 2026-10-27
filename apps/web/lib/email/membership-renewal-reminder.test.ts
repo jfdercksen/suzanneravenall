@@ -77,7 +77,7 @@ describe('sendMembershipRenewalReminderEmail', () => {
     await sendMembershipRenewalReminderEmail(baseData)
 
     expect(mockSend).toHaveBeenCalledWith(
-      expect.objectContaining({ replyTo: 'sravenall@suzanneravenall.com' }),
+      expect.objectContaining({ replyTo: 'bookings@studiobooking.co.za' }),
     )
   })
 

@@ -80,7 +80,7 @@ describe('sendMembershipWelcomeEmail', () => {
     await sendMembershipWelcomeEmail(baseData)
 
     expect(mockSend).toHaveBeenCalledWith(
-      expect.objectContaining({ replyTo: 'sravenall@suzanneravenall.com' }),
+      expect.objectContaining({ replyTo: 'bookings@studiobooking.co.za' }),
     )
   })
 

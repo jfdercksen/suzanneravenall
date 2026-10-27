@@ -91,10 +91,10 @@ export default function ContactOptions({ enquiry, topic }: ContactOptionsProps =
                 <div>
                   <p className="text-xs uppercase tracking-wider text-brand-muted mb-0.5">Email</p>
                   <a
-                    href="mailto:sravenall@suzanneravenall.com"
+                    href="mailto:bookings@studiobooking.co.za"
                     className="text-brand-ink hover:text-brand-accent text-sm transition-colors"
                   >
-                    sravenall@suzanneravenall.com
+                    bookings@studiobooking.co.za
                   </a>
                 </div>
               </li>
