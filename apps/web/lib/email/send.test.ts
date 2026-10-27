@@ -67,7 +67,7 @@ describe('sendEmail', () => {
 
     const id = await sendEmail({
       to: ['alice@example.com'],
-      replyTo: 'sravenall@suzanneravenall.com',
+      replyTo: 'bookings@studiobooking.co.za',
       subject: 'Hello',
       html: '<p>Hi</p>',
       text: 'Hi',
@@ -81,7 +81,7 @@ describe('sendEmail', () => {
     expect(JSON.parse(init.body as string)).toEqual({
       sender: { name: 'Dr Suzanne Ravenall', email: 'hello@suzanneravenall.com' },
       to: [{ email: 'alice@example.com' }],
-      replyTo: { email: 'sravenall@suzanneravenall.com' },
+      replyTo: { email: 'bookings@studiobooking.co.za' },
       subject: 'Hello',
       htmlContent: '<p>Hi</p>',
       textContent: 'Hi',

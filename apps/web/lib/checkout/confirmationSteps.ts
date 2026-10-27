@@ -23,6 +23,6 @@ export function confirmationNextSteps(productType: OrderProductType | null): str
     case 'mentorship':
       return 'Mentorship runs on the last Wednesday of every month at 4pm South African time. There is nothing to book: we will email you closer to the time with the joining details.'
     default:
-      return 'Your confirmation email has the details of your order. If anything is unclear, email sravenall@suzanneravenall.com and we will help.'
+      return 'Your confirmation email has the details of your order. If anything is unclear, email bookings@studiobooking.co.za and we will help.'
   }
 }

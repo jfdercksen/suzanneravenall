@@ -207,7 +207,7 @@ describe('email template rendering (POPIA footer)', () => {
     expect(html).toContain('We received your message about Group Program.')
     expect(html).toContain('within 2 business days')
     expect(html).toContain('Hello &lt;b&gt;there&lt;/b&gt; &amp; welcome')
-    expect(html).toContain('mailto:sravenall@suzanneravenall.com')
+    expect(html).toContain('mailto:bookings@studiobooking.co.za')
     expect(html).toContain('tel:+27105970841')
     expect(html).toContain(ADDRESS)
     expect(html).not.toContain('href="#"')

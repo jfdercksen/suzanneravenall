@@ -13,7 +13,7 @@ import CourseAccess, { THINKIFIC_COURSES_URL } from './templates/CourseAccess'
  * order confirmation.
  */
 
-const REPLY_TO = 'sravenall@suzanneravenall.com'
+const REPLY_TO = 'bookings@studiobooking.co.za'
 
 export type CourseAccessEmailData = {
   email: string

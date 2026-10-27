@@ -80,8 +80,8 @@ export default function CalInlineBooking() {
               send us a message
             </a>{' '}
             or email{' '}
-            <a href="mailto:sravenall@suzanneravenall.com" className="text-brand-accent hover:underline">
-              sravenall@suzanneravenall.com
+            <a href="mailto:bookings@studiobooking.co.za" className="text-brand-accent hover:underline">
+              bookings@studiobooking.co.za
             </a>
             .
           </p>

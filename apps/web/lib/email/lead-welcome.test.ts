@@ -26,7 +26,7 @@ describe('sendLeadWelcomeEmail', () => {
     const arg = mockSend.mock.calls[0]![0]
     const content = LEAD_WELCOME_CONTENT[source]
     expect(arg.to).toEqual(['user@example.com'])
-    expect(arg.replyTo).toBe('sravenall@suzanneravenall.com')
+    expect(arg.replyTo).toBe('bookings@studiobooking.co.za')
     expect(arg.subject).toBe(content.subject)
     expect(arg.headers['List-Unsubscribe']).toMatch(/^<https:\/\/suzanneravenall\.com\/api\/email\/unsubscribe\?token=/)
     expect(arg.headers['List-Unsubscribe-Post']).toBe('List-Unsubscribe=One-Click')

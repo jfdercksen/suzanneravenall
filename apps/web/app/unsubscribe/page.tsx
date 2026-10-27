@@ -38,8 +38,8 @@ export default async function UnsubscribePage({ searchParams }: PageProps) {
             </p>
             <p className="text-gray-600 leading-relaxed">
               If the problem persists, contact us at{' '}
-              <a href="mailto:sravenall@suzanneravenall.com" className="text-brand-accent underline">
-                sravenall@suzanneravenall.com
+              <a href="mailto:bookings@studiobooking.co.za" className="text-brand-accent underline">
+                bookings@studiobooking.co.za
               </a>{' '}
               and we will remove you manually.
             </p>
