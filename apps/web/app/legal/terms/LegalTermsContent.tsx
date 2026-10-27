@@ -1,10 +1,16 @@
 "use client"
 
 import { motion } from 'framer-motion'
+import { SESSION_TERMS, SESSION_TERMS_TITLE, type SessionTermsMode } from '@/lib/legal/session-terms'
 
 const LAST_UPDATED = '6 October 2026'
 
-export default function LegalTermsContent() {
+interface LegalTermsContentProps {
+  /** The session rules section (D024): hidden until Suzanne approves it */
+  sessionTerms?: SessionTermsMode
+}
+
+export default function LegalTermsContent({ sessionTerms = 'hidden' }: LegalTermsContentProps) {
   return (
     <>
       {/* Dark hero */}
@@ -131,6 +137,26 @@ export default function LegalTermsContent() {
                 goods have already been dispatched. Apart from these cases, payments are not refundable.
               </p>
             </div>
+
+            {/* 4A. Sessions (D024): behind SESSION_TERMS_LIVE until Suzanne approves the wording */}
+            {sessionTerms !== 'hidden' && (
+              <div data-testid="session-terms">
+                {sessionTerms === 'draft' && (
+                  <p role="note" className="mb-4 p-3 bg-brand-sand border border-brand-border rounded-card text-sm text-brand-ink">
+                    Draft for approval: this section is not yet part of the published Terms.
+                  </p>
+                )}
+                <h2 className="text-2xl font-medium text-brand-primary mb-4">{SESSION_TERMS_TITLE}</h2>
+                {SESSION_TERMS.map((paragraph, i) => (
+                  <p
+                    key={paragraph.lead}
+                    className={`text-brand-ink leading-relaxed${i < SESSION_TERMS.length - 1 ? ' mb-3' : ''}`}
+                  >
+                    <span className="font-medium">{paragraph.lead}</span> {paragraph.text}
+                  </p>
+                ))}
+              </div>
+            )}
 
             {/* 5. IP */}
             <div>

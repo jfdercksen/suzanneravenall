@@ -7,6 +7,21 @@ const STATUS_BADGE: Record<AppointmentView['status'], { label: string; className
   over_limit: { label: 'Not in your package', className: 'text-white/85 border border-white/40' },
 }
 
+// Session rules (D024): what happened to a session the client lost or missed.
+const OUTCOME_BADGE: Record<NonNullable<AppointmentView['outcome']>, string> = {
+  no_show: 'No-show',
+  late_cancel: 'Late cancellation',
+  late_move: 'Moved at short notice',
+}
+
+function outcomeNote({ outcome, creditRestored }: AppointmentView): string | null {
+  if (!outcome) return null
+  if (creditRestored) return 'This session was given back to your package.'
+  return outcome === 'no_show'
+    ? 'This session was missed, so it counts as used.'
+    : 'Changed with less than 48 working hours notice, so this session counts as used.'
+}
+
 interface AppointmentCardProps {
   appointment: AppointmentView
   /** Past list: no actions, finished bookings read "Completed" */
@@ -14,10 +29,12 @@ interface AppointmentCardProps {
 }
 
 export function AppointmentCard({ appointment, past = false }: AppointmentCardProps) {
-  const badge =
-    past && appointment.status !== 'cancelled' && appointment.status !== 'over_limit'
+  const badge = appointment.outcome
+    ? { label: OUTCOME_BADGE[appointment.outcome], className: 'text-white/85 border border-white/40' }
+    : past && appointment.status !== 'cancelled' && appointment.status !== 'over_limit'
       ? { label: 'Completed', className: 'bg-white/20 text-white border border-white/30' }
       : STATUS_BADGE[appointment.status]
+  const note = outcomeNote(appointment)
   const hasActions = Boolean(appointment.rescheduleUrl || appointment.cancelUrl || appointment.joinUrl)
 
   return (
@@ -36,6 +53,11 @@ export function AppointmentCard({ appointment, past = false }: AppointmentCardPr
           {appointment.timeLabel} <span className="text-white/60">({appointment.durationLabel})</span>
         </p>
         <p className="text-white/70 text-sm truncate">{appointment.service}</p>
+        {note && (
+          <p className="mt-1 text-white/85 text-sm" data-testid="appointment-outcome">
+            {note}
+          </p>
+        )}
       </div>
 
       {!past && hasActions && (

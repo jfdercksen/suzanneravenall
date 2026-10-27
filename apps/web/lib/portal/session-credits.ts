@@ -6,7 +6,8 @@ import { sessionDurationMinutes, type SessionDuration, type SessionLine } from '
  * Credits come from the member's session order lines: "Package of N" gives N
  * sessions, any other session variant one, times the line quantity. Every
  * booking on a session-NN Cal.com event that is not cancelled or over_limit
- * uses one. Bookings take credits in the order they were made (created_at,
+ * uses one, and so does a no-show or a late cancellation or move (D024) unless
+ * staff gave that session back. Bookings take credits in the order they were made (created_at,
  * else start time), so the booking past the limit is always the newest one
  * (J-07). A booking is matched to the oldest purchase of the same length that
  * still has room, else to the oldest purchase with room at all (a member who
@@ -28,10 +29,31 @@ export interface BookingForCredit {
   start_time: string
   /** When the booking reached us; decides which booking is past the limit */
   created_at?: string | null
+  /** Staff marked the client as a no-show (D024) */
+  no_show_at?: string | null
+  /** Cancelled or moved with less than 48 working hours to go (D024) */
+  late_change_at?: string | null
+  /** Staff gave the session back */
+  credit_restored_at?: string | null
+  /** Was past the package (J-07); stays set when the booking is later cancelled */
+  over_limit_at?: string | null
 }
 
-/** Statuses that hold no session: cancelled, and past the package limit. */
-export const NON_CREDIT_STATUSES: ReadonlySet<string> = new Set(['cancelled', 'over_limit'])
+/**
+ * Whether a booking uses a session: a held slot does, an over_limit booking
+ * does not, a cancelled one only when it was late or a no-show, and none once
+ * staff gave the session back. A late move keeps its credit through the row it
+ * moved away from (appointments.ts creditBookings).
+ */
+export function usesCredit(
+  b: Pick<BookingForCredit, 'status' | 'no_show_at' | 'late_change_at' | 'credit_restored_at' | 'over_limit_at'>,
+): boolean {
+  if (b.credit_restored_at) return false
+  if (b.status === 'over_limit') return false
+  if (b.status === 'cancelled' && b.over_limit_at) return false
+  if (b.status === 'cancelled') return Boolean(b.late_change_at || b.no_show_at)
+  return true
+}
 
 export interface SessionCredit {
   /** Product title: the service the sessions were bought for */
@@ -97,7 +119,7 @@ export function computeSessionCredits(
   }
 
   const used = bookings
-    .filter((b) => !NON_CREDIT_STATUSES.has(b.status))
+    .filter(usesCredit)
     .map((b) => ({
       uid: b.booking_uid,
       minutes: bookingSessionMinutes(b.event_slug),

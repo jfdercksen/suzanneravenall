@@ -2,10 +2,11 @@
 import crypto from 'crypto'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-const { afterCallbacks, runCalcomBookingSync, runSessionBookingRecord, logError } = vi.hoisted(() => ({
+const { afterCallbacks, runCalcomBookingSync, runSessionBookingRecord, runNoShowUpdate, logError } = vi.hoisted(() => ({
   afterCallbacks: [] as Array<() => unknown>,
   runCalcomBookingSync: vi.fn(),
   runSessionBookingRecord: vi.fn(),
+  runNoShowUpdate: vi.fn(),
   logError: vi.fn(),
 }))
 
@@ -18,6 +19,7 @@ vi.mock('@/lib/portal/session-bookings', () => ({
   BOOKING_TRIGGERS: ['BOOKING_CREATED', 'BOOKING_RESCHEDULED', 'BOOKING_CANCELLED'],
   runSessionBookingRecord,
 }))
+vi.mock('@/lib/booking/session-rules', () => ({ runNoShowUpdate }))
 vi.mock('@/lib/log', () => ({ logError }))
 
 import { NextRequest } from 'next/server'
@@ -65,6 +67,7 @@ describe('POST /api/webhooks/calcom', () => {
     afterCallbacks.length = 0
     runCalcomBookingSync.mockReset().mockResolvedValue({ status: 'synced' })
     runSessionBookingRecord.mockReset().mockResolvedValue('created')
+    runNoShowUpdate.mockReset().mockResolvedValue('marked')
     logError.mockReset()
     vi.stubGlobal('fetch', fetchSpy)
   })
@@ -110,6 +113,19 @@ describe('POST /api/webhooks/calcom', () => {
       expect(runCalcomBookingSync).not.toHaveBeenCalled()
     },
   )
+
+  it('hands a host no-show mark to the session rules, nothing else (D024)', async () => {
+    const payload = {
+      triggerEvent: 'BOOKING_NO_SHOW_UPDATED',
+      payload: { message: 'marked', bookingUid: 'bk_v1', bookingId: 7, attendees: [{ email: 'jane@example.com', noShow: true }] },
+    }
+    expect((await POST(request(JSON.stringify(payload)))).status).toBe(200)
+    expect(afterCallbacks).toHaveLength(1)
+    await afterCallbacks[0]!()
+    expect(runNoShowUpdate).toHaveBeenCalledWith(payload)
+    expect(runSessionBookingRecord).not.toHaveBeenCalled()
+    expect(runCalcomBookingSync).not.toHaveBeenCalled()
+  })
 
   it('ignores other trigger events', async () => {
     const body = JSON.stringify({ ...V1, triggerEvent: 'MEETING_ENDED' })

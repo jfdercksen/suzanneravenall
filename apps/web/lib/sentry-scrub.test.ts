@@ -50,3 +50,30 @@ describe('scrubSentryEvent', () => {
     expect(() => scrubSentryEvent(event)).not.toThrow()
   })
 })
+
+describe('scrubSentryEvent on token paths (D024)', () => {
+  it('redacts the token segment of /intake, /book and /staff/booking links', () => {
+    const event = scrubSentryEvent({
+      request: { url: 'https://suzanneravenall.com/staff/booking/AbCdEf123?done=restored' },
+      transaction: '/book/Secret456',
+      breadcrumbs: [{ data: { url: '/intake/Secret789' } }],
+    })
+    expect(event.request?.url).toBe('https://suzanneravenall.com/staff/booking/[redacted]?done=restored')
+    expect(event.transaction).toBe('/book/[redacted]')
+    expect(event.breadcrumbs?.[0]?.data?.url).toBe('/intake/[redacted]')
+  })
+
+  it('scrubs navigation crumbs and span URLs too', () => {
+    const event = scrubSentryEvent({
+      breadcrumbs: [{ data: { from: '/portal', to: '/staff/booking/Tok1' } }],
+      spans: [{ description: 'GET /staff/booking/Tok2', data: { 'url.full': 'https://x.test/book/Tok3' } }],
+    })
+    expect(event.breadcrumbs?.[0]?.data).toEqual({ from: '/portal', to: '/staff/booking/[redacted]' })
+    expect(event.spans?.[0]?.description).toBe('GET /staff/booking/[redacted]')
+    expect(event.spans?.[0]?.data?.['url.full']).toBe('https://x.test/book/[redacted]')
+  })
+
+  it('leaves the bare /book page alone', () => {
+    expect(scrubSentryEvent({ request: { url: 'https://suzanneravenall.com/book' } }).request?.url).toBe('https://suzanneravenall.com/book')
+  })
+})

@@ -29,9 +29,9 @@ const PRIVATE_PATH_PATTERN = /^\/explore\/[^/]+\/quiz\/?$/
 // send the buyer's address to GA or Clarity.
 const TOKEN_PARAM_PATTERN = /[?&](token|email)=/i
 // Pages whose PATH carries a secret (the intake form link /intake/<token>,
-// the booking link /book/<token>): the token is replaced, whatever follows it
-// is dropped. The bare /book page (the book) carries none and is left alone.
-const TOKEN_PATH_PATTERN = /^([a-z][a-z0-9+.-]*:\/\/[^/]*)?\/(intake|book)\/[^?#]+/i
+// the booking link /book/<token>, the staff link /staff/booking/<token>): the
+// token is replaced, whatever follows it is dropped. The bare /book page (the book) carries none and is left alone.
+const TOKEN_PATH_PATTERN = /^([a-z][a-z0-9+.-]*:\/\/[^/]*)?\/(intake|book|staff\/booking)\/[^?#]+/i
 
 // Returns the URL with its query string and fragment removed when it belongs
 // to a private page or carries a token param; otherwise returns it unchanged.

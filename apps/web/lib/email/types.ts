@@ -100,6 +100,22 @@ export interface BookingOverLimitEmailData {
   appointmentsUrl: string
 }
 
+/** A session the client cancelled or moved with less than 48 working hours to go (D024). */
+export interface SessionLateChangeEmailData {
+  email: string
+  firstName: string | null
+  /** The client cancelled the session, or moved it to another time */
+  kind: 'cancelled' | 'rescheduled'
+  /** The session that counts as used: "Fri, 30 October 2026" (SAST) */
+  dateLabel: string
+  /** "10:00 - 11:00 SAST" */
+  timeLabel: string
+  /** The new time of a moved session, when known */
+  newDateLabel?: string | null
+  newTimeLabel?: string | null
+  appointmentsUrl: string
+}
+
 export interface QuizInviteEmailData {
   email: string
   firstName: string

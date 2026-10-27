@@ -267,15 +267,42 @@ describe('runSessionBookingRecord', () => {
   it('checks a reschedule too, but not a replay or a cancel', async () => {
     const store = memoryStore()
     const check = vi.fn().mockResolvedValue('within')
-    await runSessionBookingRecord(CREATED, store, check)
-    await runSessionBookingRecord(CREATED, store, check)
+    const notice = vi.fn().mockResolvedValue('in-time')
+    await runSessionBookingRecord(CREATED, store, check, notice)
+    await runSessionBookingRecord(CREATED, store, check, notice)
     await runSessionBookingRecord(
       { triggerEvent: 'BOOKING_RESCHEDULED', payload: { ...CREATED.payload, uid: 'bk_2', rescheduleUid: 'bk_1' } },
       store,
       check,
+      notice,
     )
-    await runSessionBookingRecord({ triggerEvent: 'BOOKING_CANCELLED', payload: { ...CREATED.payload, uid: 'bk_2' } }, store, check)
+    await runSessionBookingRecord({ triggerEvent: 'BOOKING_CANCELLED', payload: { ...CREATED.payload, uid: 'bk_2' } }, store, check, notice)
     expect(check.mock.calls.map((c) => c[0].uid)).toEqual(['bk_1', 'bk_2'])
+  })
+
+  it('applies the notice rule to a cancel and a move, before the limit check (D024)', async () => {
+    const store = memoryStore()
+    const order: string[] = []
+    const check = vi.fn().mockImplementation(async () => {
+      order.push('limit')
+      return 'within'
+    })
+    const notice = vi.fn().mockImplementation(async (_e: unknown, outcome: string) => {
+      order.push(`notice:${outcome}`)
+      return 'in-time'
+    })
+    const createdAt = new Date(Date.now() - 10 * 60_000).toISOString()
+    await runSessionBookingRecord(CREATED, store, check, notice)
+    await runSessionBookingRecord(
+      { triggerEvent: 'BOOKING_RESCHEDULED', createdAt, payload: { ...CREATED.payload, uid: 'bk_2', rescheduleUid: 'bk_1' } },
+      store,
+      check,
+      notice,
+    )
+    await runSessionBookingRecord({ triggerEvent: 'BOOKING_CANCELLED', payload: { ...CREATED.payload, uid: 'bk_2' } }, store, check, notice)
+    expect(order).toEqual(['limit', 'notice:rescheduled', 'limit', 'notice:cancelled'])
+    // The change time is the delivery's createdAt, not the time it arrived.
+    expect(notice.mock.calls[0]![2]).toEqual(new Date(createdAt))
   })
 
   it('keeps the gate token out of the stored payload', async () => {

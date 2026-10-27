@@ -5,7 +5,8 @@ import { logError } from '@/lib/log'
  * Staff alert mail for automation failures a human should know about.
  *
  * Recipient: AUTOMATION_ALERT_EMAIL (during the n8n migration this points at
- * AiDa, not Suzanne's team). Unset means no mail, only the log line.
+ * AiDa, not Suzanne's team), or the caller's own `to` (the session alerts for
+ * Shayna, D024). Unset means no mail, only the log line.
  *
  * Throttled per key: at most one mail per 15 minutes per process, so a Vtiger
  * outage produces one alert, not one per visitor. The next alert after a quiet
@@ -27,12 +28,14 @@ export async function sendStaffAlert(input: {
   subject: string
   /** Plain lines; keep personal data out of them (POPIA). */
   lines: string[]
+  /** Recipient instead of AUTOMATION_ALERT_EMAIL; blank falls back to it */
+  to?: string | null
   now?: number
 }): Promise<StaffAlertOutcome> {
   const now = input.now ?? Date.now()
-  const recipient = (process.env.AUTOMATION_ALERT_EMAIL ?? '').trim()
+  const recipient = (input.to?.trim() || process.env.AUTOMATION_ALERT_EMAIL || '').trim()
   if (!recipient) {
-    console.warn(`[staff-alert] AUTOMATION_ALERT_EMAIL is not set; alert "${input.subject}" not mailed`)
+    console.warn(`[staff-alert] no alert recipient is set; alert "${input.subject}" not mailed`)
     return 'no-recipient'
   }
 

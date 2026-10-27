@@ -3,6 +3,7 @@ import {
   bookingSessionMinutes,
   computeSessionCredits,
   sessionsPerUnit,
+  usesCredit,
   type BookingForCredit,
   type PurchasedSessionLine,
 } from './session-credits'
@@ -130,5 +131,29 @@ describe('computeSessionCredits', () => {
   it('does not count an over_limit booking against the package', () => {
     const { credits } = computeSessionCredits([line(RR, 'Package of 04 (60 min online)')], [booking('session-60'), booking('session-60', 'over_limit')])
     expect(credits[0]).toMatchObject({ used: 1, remaining: 3 })
+  })
+})
+
+describe('usesCredit (session rules, D024)', () => {
+  const at = '2026-10-26T08:00:00Z'
+  it('counts a held slot and a no-show, not an over_limit or an ordinary cancel', () => {
+    expect(usesCredit({ status: 'booked' })).toBe(true)
+    expect(usesCredit({ status: 'booked', no_show_at: at })).toBe(true)
+    expect(usesCredit({ status: 'over_limit' })).toBe(false)
+    expect(usesCredit({ status: 'cancelled' })).toBe(false)
+  })
+
+  it('counts a late cancel until staff give the session back', () => {
+    expect(usesCredit({ status: 'cancelled', late_change_at: at })).toBe(true)
+    expect(usesCredit({ status: 'cancelled', late_change_at: at, credit_restored_at: at })).toBe(false)
+  })
+
+  it('a late cancel keeps its session in the sums', () => {
+    const { credits } = computeSessionCredits([line(RR, 'Package of 04 (60 min online)')], [
+      { ...booking('session-60', 'cancelled'), late_change_at: at },
+      booking('session-60', 'cancelled'),
+      booking('session-60'),
+    ])
+    expect(credits[0]).toMatchObject({ used: 2, remaining: 2 })
   })
 })

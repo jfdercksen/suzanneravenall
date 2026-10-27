@@ -22,6 +22,8 @@ import {
 
 type Step = 1 | 2 | 3
 
+export const TERMS_REQUIRED_MESSAGE = 'Please accept the Terms and Conditions to continue.'
+
 interface ContactForm {
   firstName: string
   lastName: string
@@ -296,6 +298,9 @@ export default function CheckoutContent() {
   const [isBusiness, setIsBusiness] = useState(false)
   const [business, setBusiness] = useState<BusinessDetails>(EMPTY_BUSINESS)
   const [businessErrors, setBusinessErrors] = useState<BusinessErrors>({})
+  // Every order needs the Terms accepted before payment (Suzanne, 24 Oct).
+  const [termsAccepted, setTermsAccepted] = useState(false)
+  const [termsError, setTermsError] = useState<string | null>(null)
   const [voucherInput, setVoucherInput] = useState('')
   const [voucherBusy, setVoucherBusy] = useState(false)
   const [voucherError, setVoucherError] = useState<string | null>(null)
@@ -368,7 +373,9 @@ export default function CheckoutContent() {
     e.preventDefault()
     const validation = validateContact(contact)
     const businessValidation = isBusiness ? validateBusiness(business, contact.country) : {}
-    if (Object.keys(validation).length > 0 || Object.keys(businessValidation).length > 0) {
+    const termsMissing = termsAccepted ? null : TERMS_REQUIRED_MESSAGE
+    setTermsError(termsMissing)
+    if (Object.keys(validation).length > 0 || Object.keys(businessValidation).length > 0 || termsMissing) {
       setErrors(validation)
       setBusinessErrors(businessValidation)
       return
@@ -387,7 +394,8 @@ export default function CheckoutContent() {
       // Always written, empty for a personal checkout, so details typed and
       // then switched off never reach the order.
       company: businessDetails?.companyName ?? '',
-      metadata: businessMetadata(businessDetails),
+      // When the buyer ticked the Terms box; it reaches the order with the cart.
+      metadata: { ...businessMetadata(businessDetails), terms_accepted_at: new Date().toISOString() },
     })
     setIsSubmitting(false)
     if (!saved) {
@@ -749,6 +757,40 @@ export default function CheckoutContent() {
                               )}
                             </div>
                           </div>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="flex items-start gap-3 text-sm text-brand-ink cursor-pointer">
+                          <input
+                            id="acceptTerms"
+                            type="checkbox"
+                            checked={termsAccepted}
+                            onChange={(e) => {
+                              setTermsAccepted(e.target.checked)
+                              if (e.target.checked) setTermsError(null)
+                            }}
+                            required
+                            aria-invalid={!!termsError}
+                            aria-describedby={termsError ? 'acceptTerms-error' : undefined}
+                            className="mt-0.5 w-4 h-4 accent-brand-accent-600"
+                          />
+                          <span>
+                            I have read and accept the{' '}
+                            <Link
+                              href="/legal/terms"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-medium underline underline-offset-4 hover:text-brand-primary"
+                            >
+                              Terms and Conditions
+                            </Link>
+                          </span>
+                        </label>
+                        {termsError && (
+                          <p id="acceptTerms-error" className="mt-1 ml-7 text-xs text-red-600" role="alert">
+                            {termsError}
+                          </p>
                         )}
                       </div>
 

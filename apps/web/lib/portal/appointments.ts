@@ -8,7 +8,10 @@ import type { SessionBookingStatus } from './session-bookings'
 
 /** The columns a member may read (raw_payload stays server side). */
 export const MEMBER_BOOKING_COLUMNS =
-  'booking_uid, rescheduled_from_uid, event_slug, title, duration_minutes, start_time, end_time, status, location, created_at'
+  'booking_uid, rescheduled_from_uid, event_slug, title, duration_minutes, start_time, end_time, status, location, created_at, no_show_at, late_change_at, late_change_kind, late_change_by_staff, credit_restored_at, over_limit_at'
+
+/** What happened to a session under the session rules (D024). */
+export type SessionOutcome = 'no_show' | 'late_cancel' | 'late_move' | null
 
 export interface MemberBookingRow {
   booking_uid: string
@@ -21,6 +24,12 @@ export interface MemberBookingRow {
   status: SessionBookingStatus
   location: string | null
   created_at?: string | null
+  no_show_at?: string | null
+  late_change_at?: string | null
+  late_change_kind?: 'cancelled' | 'rescheduled' | null
+  late_change_by_staff?: boolean | null
+  credit_restored_at?: string | null
+  over_limit_at?: string | null
 }
 
 export interface AppointmentView {
@@ -35,6 +44,10 @@ export interface AppointmentView {
   cancelUrl: string | null
   /** Video link or address from Cal.com */
   joinUrl: string | null
+  /** No-show or late change (D024); null for an ordinary booking */
+  outcome: SessionOutcome
+  /** Staff gave the session back after a no-show or late change */
+  creditRestored: boolean
 }
 
 export interface SessionsToBookView {
@@ -74,6 +87,11 @@ export function formatSastDate(iso: string): string {
   return DATE_FORMAT.format(new Date(iso))
 }
 
+/** "14:00 SAST" */
+export function formatSastTime(iso: string): string {
+  return `${TIME_FORMAT.format(new Date(iso))} SAST`
+}
+
 /** "14:00 - 15:00 SAST" */
 export function formatSastTimes(startIso: string, endIso: string): string {
   return `${TIME_FORMAT.format(new Date(startIso))} - ${TIME_FORMAT.format(new Date(endIso))} SAST`
@@ -91,6 +109,30 @@ function minutesOf(row: MemberBookingRow): number {
 export function liveBookings<T extends Pick<MemberBookingRow, 'booking_uid' | 'rescheduled_from_uid'>>(rows: readonly T[]): T[] {
   const replaced = new Set(rows.map((row) => row.rescheduled_from_uid).filter((uid): uid is string => Boolean(uid)))
   return rows.filter((row) => !replaced.has(row.booking_uid))
+}
+
+/**
+ * The bookings the credit sums count: the live ones plus every booking that
+ * was moved away late (D024). That row is the session the client lost, so it
+ * keeps its credit even though the new booking replaced it on the calendar.
+ */
+export function creditBookings<
+  T extends Pick<MemberBookingRow, 'booking_uid' | 'rescheduled_from_uid' | 'late_change_at' | 'credit_restored_at'>,
+>(rows: readonly T[]): T[] {
+  const live = new Set(liveBookings(rows))
+  return rows.filter((row) => live.has(row) || (Boolean(row.late_change_at) && !row.credit_restored_at))
+}
+
+/** A late move lives on the row the booking moved away from; it is shown in Past. */
+function isLateMove(row: MemberBookingRow): boolean {
+  return Boolean(row.late_change_at) && row.late_change_kind === 'rescheduled'
+}
+
+function outcomeOf(row: MemberBookingRow): SessionOutcome {
+  if (row.no_show_at) return 'no_show'
+  // A staff change that stayed given back is an ordinary move or cancel to the client.
+  if (!row.late_change_at || (row.late_change_by_staff && row.credit_restored_at)) return null
+  return row.late_change_kind === 'rescheduled' ? 'late_move' : 'late_cancel'
 }
 
 // A Cal.com title reads "Session (60 min) between Dr Suzanne Ravenall and ...";
@@ -126,7 +168,10 @@ export function buildAppointmentsView(
   { now, calBase, sessionBase, booker, gateLinks }: BuildOptions,
 ): AppointmentsView {
   const bookings = liveBookings(allBookings)
-  const { credits, serviceByBooking } = computeSessionCredits(lines, bookings)
+  const { credits, serviceByBooking } = computeSessionCredits(lines, creditBookings(allBookings))
+  const liveSet = new Set(bookings)
+  // Moved away late: no longer on the calendar, but the session was used.
+  const lateMoves = allBookings.filter((row) => !liveSet.has(row) && isLateMove(row))
   const nowMs = now.getTime()
   const pastFrom = nowMs - PAST_WINDOW_DAYS * 24 * 60 * 60_000
 
@@ -144,7 +189,7 @@ export function buildAppointmentsView(
   }
 
   const toView = (row: MemberBookingRow, upcoming: boolean): AppointmentView => {
-    const live = upcoming && row.status !== 'cancelled'
+    const live = upcoming && row.status !== 'cancelled' && !row.no_show_at
     // A booking past the package limit can be cancelled, not moved.
     const movable = live && row.status !== 'over_limit'
     const uid = encodeURIComponent(row.booking_uid)
@@ -158,6 +203,8 @@ export function buildAppointmentsView(
       rescheduleUrl: movable ? `${calBase}/reschedule/${uid}${rescheduleQuery}` : null,
       cancelUrl: live ? `${calBase}/booking/${uid}?${cancelQuery}` : null,
       joinUrl: movable ? row.location : null,
+      outcome: outcomeOf(row),
+      creditRestored: Boolean(row.credit_restored_at),
     }
   }
 
@@ -165,14 +212,14 @@ export function buildAppointmentsView(
   const upcoming = byStart
     .filter((row) => row.status !== 'cancelled' && new Date(row.end_time).getTime() > nowMs)
     .map((row) => toView(row, true))
-  // Finished sessions and every cancelled one, newest first, last 12 months.
-  const past = byStart
-    .filter((row) => {
-      const start = new Date(row.start_time).getTime()
-      const finished = new Date(row.end_time).getTime() <= nowMs
-      return (finished || row.status === 'cancelled') && start >= pastFrom
-    })
-    .reverse()
+  // Finished sessions, every cancelled one and every late move, newest first,
+  // last 12 months.
+  const finishedOrCancelled = byStart.filter(
+    (row) => new Date(row.end_time).getTime() <= nowMs || row.status === 'cancelled',
+  )
+  const past = [...finishedOrCancelled, ...lateMoves]
+    .filter((row) => new Date(row.start_time).getTime() >= pastFrom)
+    .sort((a, b) => b.start_time.localeCompare(a.start_time))
     .map((row) => toView(row, false))
 
   // Fully booked purchases stay listed ("0 of 4 left") without a button.

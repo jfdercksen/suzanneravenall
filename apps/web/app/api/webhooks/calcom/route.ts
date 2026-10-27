@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { logError } from '@/lib/log'
 import { runCalcomBookingSync } from '@/lib/integrations/calcom-booking'
 import { BOOKING_TRIGGERS, runSessionBookingRecord } from '@/lib/portal/session-bookings'
+import { runNoShowUpdate } from '@/lib/booking/session-rules'
 
 // Cal.com sends X-Cal-Signature-256: sha256=<hex> (HMAC-SHA256 of raw body)
 // Docs: https://cal.com/docs/core-features/webhooks
@@ -96,6 +97,10 @@ export async function POST(request: NextRequest) {
   }
   if ((BOOKING_TRIGGERS as readonly string[]).includes(triggerEvent)) {
     after(() => runSessionBookingRecord(rawPayload).then(() => undefined))
+  }
+  // Staff marked the client as a no-show in Cal.com (D024).
+  if (triggerEvent === 'BOOKING_NO_SHOW_UPDATED') {
+    after(() => runNoShowUpdate(rawPayload).then(() => undefined))
   }
 
   // Return 200 immediately — never block Cal.com

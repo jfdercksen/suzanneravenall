@@ -41,6 +41,8 @@ const FULL: MemberAppointments = {
       rescheduleUrl: 'http://cal.test/reschedule/bk_next',
       cancelUrl: 'http://cal.test/booking/bk_next?cancel=true',
       joinUrl: null,
+      outcome: null,
+      creditRestored: false,
     },
   ],
   past: [
@@ -54,6 +56,8 @@ const FULL: MemberAppointments = {
       rescheduleUrl: null,
       cancelUrl: null,
       joinUrl: null,
+      outcome: null,
+      creditRestored: false,
     },
   ],
   toBook: [

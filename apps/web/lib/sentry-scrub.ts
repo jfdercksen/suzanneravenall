@@ -16,17 +16,45 @@ export function scrubTokenParam(url: string): string {
   }
 }
 
-export function scrubSentryEvent<T extends { request?: { url?: string }; breadcrumbs?: Array<{ data?: Record<string, unknown> }> }>(
+// Pages whose PATH is the secret (same list as lib/analytics.ts).
+// Built from a string: the regex literal broke the Sentry-wrapped webpack build.
+const TOKEN_PATH = new RegExp('(/(?:intake|book|staff/booking)/)[^/?#]+', 'i')
+
+/** Both: the token query param and a token path segment. */
+export function scrubTokenUrl(url: string): string {
+  return scrubTokenParam(url).replace(TOKEN_PATH, '$1[redacted]')
+}
+
+function scrubStrings(data: Record<string, unknown> | undefined): void {
+  if (!data) return
+  for (const [key, value] of Object.entries(data)) {
+    if (typeof value === 'string') data[key] = scrubTokenUrl(value)
+  }
+}
+
+export function scrubSentryEvent<
+  T extends {
+    request?: { url?: string }
+    transaction?: string
+    breadcrumbs?: Array<{ message?: string; data?: Record<string, unknown> }>
+    spans?: Array<{ description?: string; data?: Record<string, unknown> }>
+  },
+>(
   event: T
 ): T {
   if (event.request?.url) {
-    event.request.url = scrubTokenParam(event.request.url)
+    event.request.url = scrubTokenUrl(event.request.url)
   }
+  if (event.transaction) event.transaction = scrubTokenUrl(event.transaction)
+  // Navigation crumbs carry the URL in data.to / data.from, fetch crumbs in
+  // data.url, spans in description and data['url.full']: scrub every string.
   for (const breadcrumb of event.breadcrumbs ?? []) {
-    const url = breadcrumb.data?.url
-    if (typeof url === 'string') {
-      breadcrumb.data!.url = scrubTokenParam(url)
-    }
+    if (breadcrumb.message) breadcrumb.message = scrubTokenUrl(breadcrumb.message)
+    scrubStrings(breadcrumb.data)
+  }
+  for (const span of event.spans ?? []) {
+    if (span.description) span.description = scrubTokenUrl(span.description)
+    scrubStrings(span.data)
   }
   return event
 }

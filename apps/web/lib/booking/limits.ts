@@ -4,10 +4,11 @@ import { logError } from '@/lib/log'
 import { siteUrl } from '@/lib/email/site-url'
 import { sendBookingOverLimitEmail } from '@/lib/email/booking-over-limit'
 import { sendStaffAlert } from '@/lib/integrations/staff-alert'
-import { calBaseUrl, formatSastDate, formatSastTimes, liveBookings, sessionBookingBase } from '@/lib/portal/appointments'
+import { calBaseUrl, creditBookings, formatSastDate, formatSastTimes, liveBookings, sessionBookingBase } from '@/lib/portal/appointments'
 import {
   bookingSessionMinutes,
   computeSessionCredits,
+  usesCredit,
   type BookingForCredit,
   type PurchasedSessionLine,
   type SessionCredit,
@@ -51,7 +52,8 @@ export interface LimitDeps {
   bookings(email: string): Promise<BookingRowForLimit[]>
 }
 
-const BOOKING_COLUMNS = 'booking_uid, rescheduled_from_uid, event_slug, status, start_time, end_time, created_at'
+const BOOKING_COLUMNS =
+  'booking_uid, rescheduled_from_uid, event_slug, status, start_time, end_time, created_at, no_show_at, late_change_at, credit_restored_at, over_limit_at'
 
 async function readBookingsForEmail(email: string): Promise<BookingRowForLimit[]> {
   const supabase = getServiceRoleClient()
@@ -87,10 +89,13 @@ export async function creditStateFor(
 ): Promise<CreditState> {
   const [lines, rows] = await Promise.all([deps.lines(email), deps.bookings(email)])
   const live = liveBookings(rows)
-  const { credits, serviceByBooking } = computeSessionCredits(lines ?? fallback, live)
+  // A session moved away late still holds its credit (D024).
+  const { credits, serviceByBooking } = computeSessionCredits(lines ?? fallback, creditBookings(rows))
   const uncovered = live.filter(
     (row) =>
-      FLAGGABLE.has(row.status) && bookingSessionMinutes(row.event_slug) !== null && !serviceByBooking.has(row.booking_uid),
+      FLAGGABLE.has(row.status) &&
+      usesCredit(row) &&
+      bookingSessionMinutes(row.event_slug) !== null && !serviceByBooking.has(row.booking_uid),
   )
   return { credits, serviceByBooking, uncovered, ordersUnavailable: lines === null }
 }
@@ -243,6 +248,33 @@ export async function checkBookingLimit(
     return thisOne ? 'over-limit' : 'within'
   } catch (error) {
     logError('[booking-limits] limit check failed', error, { bookingUid: event.uid })
+    return 'failed'
+  }
+}
+
+/**
+ * Re-counts an address after staff count a given-back session as used again
+ * (D024): a booking that the give-back had covered is flagged over_limit and
+ * mailed like any other. Never throws.
+ */
+export async function recheckLimits(
+  email: string,
+  firstName: string | null,
+  deps: OverLimitDeps = defaultOverLimitDeps,
+  now: Date = new Date(),
+): Promise<'within' | 'over-limit' | 'unknown' | 'failed'> {
+  try {
+    const state = await creditStateFor(email, deps)
+    if (state.uncovered.length === 0) return 'within'
+    if (state.ordersUnavailable) return 'unknown'
+    const client = { email, firstName, hasPackage: state.credits.length > 0 }
+    for (const row of state.uncovered) {
+      if (!(await deps.markOverLimit(row.booking_uid, now))) continue
+      await notifyOverLimit(row.booking_uid, row.start_time, row.end_time || endFrom(row), client, deps)
+    }
+    return 'over-limit'
+  } catch (error) {
+    logError('[booking-limits] re-check failed', error)
     return 'failed'
   }
 }

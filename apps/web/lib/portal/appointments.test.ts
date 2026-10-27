@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { buildAppointmentsView, formatSastTimes, type MemberBookingRow } from './appointments'
+import { buildAppointmentsView, creditBookings, formatSastTimes, type MemberBookingRow } from './appointments'
 
 const NOW = new Date('2026-10-21T10:00:00Z')
 const OPTS = {
@@ -111,5 +111,57 @@ describe('buildAppointmentsView', () => {
 
   it('is empty for a member with nothing', () => {
     expect(buildAppointmentsView([], [], OPTS)).toEqual({ upcoming: [], past: [], toBook: [] })
+  })
+})
+
+describe('session rules in the portal (D024)', () => {
+  const at = '2026-10-20T08:00:00Z'
+
+  it('shows a no-show in Past and keeps its session used', () => {
+    const view = buildAppointmentsView([row('bk_ns', '2026-10-20T08:00:00Z', { no_show_at: at })], [PACKAGE], OPTS)
+    expect(view.past[0]).toMatchObject({ uid: 'bk_ns', outcome: 'no_show', creditRestored: false })
+    expect(view.toBook[0]).toMatchObject({ remaining: 3, total: 4 })
+  })
+
+  it('a late cancel stays used; given back, the session returns', () => {
+    const late = row('bk_lc', '2026-10-22T08:00:00Z', { status: 'cancelled', late_change_at: at, late_change_kind: 'cancelled' })
+    const view = buildAppointmentsView([late], [PACKAGE], OPTS)
+    expect(view.past[0]).toMatchObject({ outcome: 'late_cancel', creditRestored: false, cancelUrl: null })
+    expect(view.toBook[0]!.remaining).toBe(3)
+
+    const restored = buildAppointmentsView([{ ...late, credit_restored_at: at }], [PACKAGE], OPTS)
+    expect(restored.past[0]).toMatchObject({ outcome: 'late_cancel', creditRestored: true })
+    expect(restored.toBook[0]!.remaining).toBe(4)
+  })
+
+  it('a late move uses the old session and the new booking another one', () => {
+    const old = row('bk_old', '2026-10-22T08:00:00Z', { late_change_at: at, late_change_kind: 'rescheduled' })
+    const moved = row('bk_new', '2026-10-29T08:00:00Z', { status: 'rescheduled', rescheduled_from_uid: 'bk_old' })
+    const view = buildAppointmentsView([old, moved], [PACKAGE], OPTS)
+    expect(view.upcoming.map((a) => a.uid)).toEqual(['bk_new'])
+    expect(view.past[0]).toMatchObject({ uid: 'bk_old', outcome: 'late_move', rescheduleUrl: null })
+    expect(view.toBook[0]!.remaining).toBe(2)
+  })
+
+  it('a staff change that stayed given back reads as an ordinary booking; counted as used, it shows', () => {
+    const staff = row('bk_st', '2026-10-22T08:00:00Z', { status: 'cancelled', late_change_at: at, late_change_kind: 'cancelled', late_change_by_staff: true, credit_restored_at: at })
+    const given = buildAppointmentsView([staff], [PACKAGE], OPTS)
+    expect(given.past[0]!.outcome).toBeNull()
+    expect(given.toBook[0]!.remaining).toBe(4)
+    const used = buildAppointmentsView([{ ...staff, credit_restored_at: null }], [PACKAGE], OPTS)
+    expect(used.past[0]!.outcome).toBe('late_cancel')
+    expect(used.toBook[0]!.remaining).toBe(3)
+  })
+
+  it('a cancelled over_limit booking never counts, whatever else is set', () => {
+    const odd = row('bk_ol', '2026-10-22T08:00:00Z', { status: 'cancelled', over_limit_at: at, late_change_at: at })
+    expect(buildAppointmentsView([odd], [PACKAGE], OPTS).toBook[0]!.remaining).toBe(4)
+  })
+
+  it('an ordinary move still counts once', () => {
+    const old = row('bk_old', '2026-10-22T08:00:00Z')
+    const moved = row('bk_new', '2026-10-29T08:00:00Z', { status: 'rescheduled', rescheduled_from_uid: 'bk_old' })
+    expect(creditBookings([old, moved]).map((r) => r.booking_uid)).toEqual(['bk_new'])
+    expect(buildAppointmentsView([old, moved], [PACKAGE], OPTS).toBook[0]!.remaining).toBe(3)
   })
 })

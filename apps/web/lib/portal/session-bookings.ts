@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { logError } from '@/lib/log'
 import { checkBookingLimit, TOKEN_METADATA_KEY, type LimitOutcome } from '@/lib/booking/limits'
+import { applyNoticeRule, changeTime, defaultRuleDeps, type NoticeOutcome } from '@/lib/booking/session-rules'
 
 /**
  * Cal.com webhook -> public.session_bookings (I-13, /portal/appointments).
@@ -303,13 +304,18 @@ function withoutGateToken(payload: Record<string, unknown>): Record<string, unkn
 
 /**
  * Runs after the webhook has answered Cal.com. Never throws: a failure is
- * logged with the booking uid only (no email, POPIA). A new or moved session
- * booking is then checked against the paid sessions (J-07, lib/booking/limits.ts).
+ * logged with the booking uid only (no email, POPIA). A cancel or move is
+ * checked against the 48 working hours notice rule (D024, lib/booking/session-rules.ts),
+ * then a new or moved session booking against the paid sessions (J-07,
+ * lib/booking/limits.ts). The notice rule runs first, so a session lost to a
+ * late move holds its credit before the new booking is counted.
  */
 export async function runSessionBookingRecord(
   body: unknown,
   store: SessionBookingStore | null = supabaseBookingStore(),
   limitCheck: (event: BookingEvent, creditEmail: string) => Promise<LimitOutcome> = checkBookingLimit,
+  noticeRule: (event: BookingEvent, outcome: RecordOutcome, changedAt: Date) => Promise<NoticeOutcome> = (e, o, at) =>
+    applyNoticeRule(e, o, at, defaultRuleDeps()),
 ): Promise<RecordOutcome | 'failed'> {
   const parsed = parseBookingEvent(body)
   if (!parsed) {
@@ -325,6 +331,7 @@ export async function runSessionBookingRecord(
   try {
     const outcome = await recordBookingEvent(store, event)
     console.info(`[session-bookings] ${event.trigger} ${event.uid}: ${outcome}`)
+    if (outcome === 'cancelled' || outcome === 'rescheduled') await noticeRule(event, outcome, changeTime(body, new Date()))
     // A reschedule is checked too, so a moved over_limit booking cannot take a credit.
     if (outcome === 'created' || outcome === 'rescheduled') await limitCheck(event, event.email)
     return outcome

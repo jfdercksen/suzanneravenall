@@ -27,6 +27,12 @@ describe('sendStaffAlert', () => {
     expect(mail.text).toContain('Line one')
   })
 
+  it('mails the caller recipient when given, else AUTOMATION_ALERT_EMAIL (D024)', async () => {
+    await sendStaffAlert({ key: 'a', subject: 'S', lines: [], to: 'shayna@example.test', now: 0 })
+    await sendStaffAlert({ key: 'b', subject: 'S', lines: [], to: '  ', now: 0 })
+    expect(sendEmail.mock.calls.map((c) => (c[0] as { to: string[] }).to[0])).toEqual(['shayna@example.test', 'ops@example.test'])
+  })
+
   it('throttles per key for 15 minutes, then reports how many were held back', async () => {
     await sendStaffAlert({ key: 'k', subject: 's', lines: [], now: 0 })
     expect(await sendStaffAlert({ key: 'k', subject: 's', lines: [], now: 1_000 })).toBe('throttled')

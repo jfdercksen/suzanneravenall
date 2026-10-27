@@ -45,6 +45,7 @@ async function reachPayment(country?: 'ZA' | 'INTL') {
   await user.type(screen.getByLabelText(/Last name/), 'QA Test')
   await user.type(screen.getByLabelText(/Email address/), 'qa@example.com')
   if (country) await user.selectOptions(screen.getByLabelText('Billing country'), country)
+  await user.click(screen.getByLabelText(/I have read and accept the/))
   await user.click(screen.getByRole('button', { name: /Continue to Payment/ }))
   return user
 }

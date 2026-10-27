@@ -229,6 +229,14 @@ services:
       # Memberships on sale (KI071/KI072). Off for launch; see infra/.env.example.
       MEMBERSHIPS_ENABLED: ${MEMBERSHIPS_ENABLED:-false}
       AUTOMATION_ALERT_EMAIL: ${AUTOMATION_ALERT_EMAIL:-}
+      # Session rules (D024): who gets the late-change alerts (blank = the
+      # AUTOMATION_ALERT_EMAIL address), whose Cal.com changes are staff changes,
+      # the Terms section switch and any declared extra public holidays.
+      AUTOMATION_SESSION_NOTICE: ${AUTOMATION_SESSION_NOTICE:-off}
+      SESSION_ALERT_EMAIL: ${SESSION_ALERT_EMAIL:-}
+      SESSION_STAFF_EMAILS: ${SESSION_STAFF_EMAILS:-}
+      SESSION_TERMS_LIVE: ${SESSION_TERMS_LIVE:-false}
+      SA_EXTRA_PUBLIC_HOLIDAYS: ${SA_EXTRA_PUBLIC_HOLIDAYS:-}
       AUTOMATION_DRY_RUN: ${AUTOMATION_DRY_RUN:-false}
       INTERNAL_WEBHOOK_SECRET: ${INTERNAL_WEBHOOK_SECRET:-}
       VIBE_MARKETING_WEBHOOK_URL: ${VIBE_MARKETING_WEBHOOK_URL:-}

@@ -38,6 +38,7 @@ async function fillPerson(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/First name/), 'Ann')
   await user.type(screen.getByLabelText(/Last name/), 'Buyer')
   await user.type(screen.getByLabelText(/Email address/), 'ann@example.com')
+  await user.click(screen.getByLabelText(/I have read and accept the/))
 }
 
 describe('CheckoutContent business checkout', () => {
