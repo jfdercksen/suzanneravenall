@@ -12,7 +12,19 @@ export const RR_INTRO_COURSE_URL =
 export const RR_INTRO_COUPON = 'free22'
 export const ZOOM_URL = 'https://zoom.us/j/3603768111'
 
-/** Rapid Repatterning sessions and packages (product handles), not Resonance Repatterning. */
+/**
+ * The session products whose intake mail carries the Rapid Repatterning
+ * introduction steps (Shayna, 23 Oct 2026): exact handles, because the
+ * Resonance Repatterning training programmes share a handle prefix and must
+ * not get it.
+ */
+const RR_INTRO_HANDLES: ReadonlySet<string> = new Set([
+  'rapid-repatterning-session',
+  'resonance-repatterning-session',
+  'rapid-transformation-therapy-session',
+  'transformation-coaching-60-mins',
+])
+
 export function isRapidRepatterning(serviceKey: string): boolean {
-  return serviceKey.startsWith('rapid-repatterning')
+  return RR_INTRO_HANDLES.has(serviceKey)
 }
