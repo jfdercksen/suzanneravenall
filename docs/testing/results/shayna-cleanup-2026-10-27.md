@@ -179,3 +179,9 @@ Source: Medusa order table on the review box, filtered on email customersuccess@
 - Portal account customersuccess@chatmarshal.com exists (signed in 27 Oct 06:52 UTC). Its products and sessions come from non-cancelled orders and non-cancelled session_bookings: both are now 0.
 - `/book/<token>` for order 445 now answers "All sessions in this package are booked" with no booking link (refuses). The token row is left in place.
 - The portal itself was not opened as her (no password); verified through the sources above.
+
+## E. Contact address proof (web deploy run 40485165163, success)
+
+- Rendered pages on the review box (/, /about, /services, /shop, /unsubscribe, legal pages, /events, /blog, /checkout, /cart, /portal): 0 occurrences of the old address; /contact shows bookings@studiobooking.co.za (6 times); the checkout footer shows it.
+- QA order #447 (Rapid Repatterning Session, 90 min online, voucher QA-SELFTEST-100, R0) as johan+addr1027@aiautomations.co.za: mail "Your transformation begins - Order #447" from hello@suzanneravenall.com, footer "Questions? ... Email: bookings@studiobooking.co.za" with the mailto link. The Reply-To header is not exposed by the Outlook reader; it is set from the same constant and covered by the unit tests (send, order-confirmation, course-access).
+- Order #447 (order_01M5YDVFE94NSZG80JT71ET9JB) cancelled by exact id after matching display id and email: status canceled.
