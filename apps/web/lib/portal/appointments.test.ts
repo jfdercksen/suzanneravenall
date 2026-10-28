@@ -123,6 +123,12 @@ describe('session rules in the portal (D024)', () => {
     expect(view.toBook[0]).toMatchObject({ remaining: 3, total: 4 })
   })
 
+  it('a no-show mark on a cancelled booking shows a plain cancel and gives the session back', () => {
+    const view = buildAppointmentsView([row('bk_c', '2026-10-20T08:00:00Z', { status: 'cancelled', no_show_at: at })], [PACKAGE], OPTS)
+    expect(view.past[0]).toMatchObject({ status: 'cancelled', outcome: null })
+    expect(view.toBook[0]!.remaining).toBe(4)
+  })
+
   it('a late cancel stays used; given back, the session returns', () => {
     const late = row('bk_lc', '2026-10-22T08:00:00Z', { status: 'cancelled', late_change_at: at, late_change_kind: 'cancelled' })
     const view = buildAppointmentsView([late], [PACKAGE], OPTS)

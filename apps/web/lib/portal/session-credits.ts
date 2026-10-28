@@ -40,18 +40,21 @@ export interface BookingForCredit {
 }
 
 /**
- * Whether a booking uses a session: a held slot does, an over_limit booking
- * does not, a cancelled one only when it was late or a no-show, and none once
- * staff gave the session back. A late move keeps its credit through the row it
- * moved away from (appointments.ts creditBookings).
+ * Whether a booking uses a session: a held slot does (a no-show included), an
+ * over_limit booking does not, a cancelled one only when it was cancelled
+ * late, and none once staff gave the session back. A late move keeps its
+ * credit through the row it moved away from (appointments.ts creditBookings).
  */
 export function usesCredit(
   b: Pick<BookingForCredit, 'status' | 'no_show_at' | 'late_change_at' | 'credit_restored_at' | 'over_limit_at'>,
 ): boolean {
   if (b.credit_restored_at) return false
   if (b.status === 'over_limit') return false
+  // A cancelled booking counts only when it was cancelled late. A no-show
+  // mark on one does not: the session was never held (Shayna, 27 Oct: a
+  // no-show set on a booking we had already cancelled took her last session).
   if (b.status === 'cancelled' && b.over_limit_at) return false
-  if (b.status === 'cancelled') return Boolean(b.late_change_at || b.no_show_at)
+  if (b.status === 'cancelled') return Boolean(b.late_change_at)
   return true
 }
 

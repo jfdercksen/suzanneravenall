@@ -143,6 +143,17 @@ describe('usesCredit (session rules, D024)', () => {
     expect(usesCredit({ status: 'cancelled' })).toBe(false)
   })
 
+  it('a no-show mark on a cancelled booking uses no session (Shayna, 27 Oct)', () => {
+    expect(usesCredit({ status: 'cancelled', no_show_at: at })).toBe(false)
+    const { credits } = computeSessionCredits([line(RR, 'Package of 04 (60 min online)')], [
+      { ...booking('session-60', 'cancelled'), no_show_at: at },
+      booking('session-60'),
+      booking('session-60'),
+      booking('session-60'),
+    ])
+    expect(credits[0]).toMatchObject({ used: 3, remaining: 1 })
+  })
+
   it('counts a late cancel until staff give the session back', () => {
     expect(usesCredit({ status: 'cancelled', late_change_at: at })).toBe(true)
     expect(usesCredit({ status: 'cancelled', late_change_at: at, credit_restored_at: at })).toBe(false)

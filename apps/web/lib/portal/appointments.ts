@@ -129,9 +129,10 @@ function isLateMove(row: MemberBookingRow): boolean {
 }
 
 function outcomeOf(row: MemberBookingRow): SessionOutcome {
-  if (row.no_show_at) return 'no_show'
+  // A no-show mark on a cancelled booking uses no session, so it is not shown.
+  if (row.no_show_at && row.status !== 'cancelled') return 'no_show'
   // A staff change that stayed given back is an ordinary move or cancel to the client.
-  if (!row.late_change_at || (row.late_change_by_staff && row.credit_restored_at)) return null
+  if (!row.late_change_at || row.over_limit_at || (row.late_change_by_staff && row.credit_restored_at)) return null
   return row.late_change_kind === 'rescheduled' ? 'late_move' : 'late_cancel'
 }
 

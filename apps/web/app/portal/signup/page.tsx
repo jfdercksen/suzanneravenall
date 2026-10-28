@@ -30,6 +30,8 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  // The address already has an account: GoTrue sends nothing and keeps the old password.
+  const [existing, setExisting] = useState(false)
   // Site check M5: field messages on blur, before anything is sent.
   const { errors, setError: setFieldError, setErrors: setFieldErrors } = useFieldErrors<Field>()
 
@@ -121,7 +123,16 @@ export default function SignupPage() {
     // keeps working whichever way autoconfirm is set, so turning it off later
     // needs no code change.
     if (!data.session) {
-      setSuccess(true)
+      // An address that already has an account comes back as a user with no
+      // identities: GoTrue sends no mail and keeps the old password. "Check
+      // your email" would then wait for a mail that never comes (Shayna,
+      // 27 Oct). Saying the account exists does tell the visitor the address
+      // is registered; Johan chose that over a silent dead end (28 Oct).
+      if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        setExisting(true)
+      } else {
+        setSuccess(true)
+      }
       setLoading(false)
       return
     }
@@ -140,6 +151,35 @@ export default function SignupPage() {
 
     router.push(redirect)
     router.refresh()
+  }
+
+  if (existing) {
+    const loginQuery = new URLSearchParams({ email, ...(redirectQuery ? { redirect } : {}) }).toString()
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-brand-primary px-4">
+        <div className="w-full max-w-md bg-brand-primary-800 border border-white/25 rounded-2xl p-8 text-center">
+          <h1 className="text-2xl font-medium tracking-tight text-white mb-3">You already have an account</h1>
+          <p className="text-white/60 mb-2">An account already exists for</p>
+          <p className="text-brand-accent-400 font-medium mb-8">{email}</p>
+          <p className="text-white/70 text-sm mb-8">
+            Your password has not changed. Log in with it, or choose Magic Link on the login page to get a
+            sign-in link by email. If you have forgotten your password, you can reset it.
+          </p>
+          <Link
+            href={`/portal/login?${loginQuery}`}
+            className="inline-flex items-center justify-center w-full px-8 py-4 mb-3 bg-white hover:bg-brand-sand text-brand-primary font-semibold rounded-xl transition-colors duration-300"
+          >
+            Log In
+          </Link>
+          <Link
+            href="/portal/forgot-password"
+            className="inline-flex items-center justify-center w-full px-8 py-4 border border-white/50 hover:bg-white/10 text-white font-semibold rounded-xl transition-colors duration-300"
+          >
+            Reset my password
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   if (success) {
