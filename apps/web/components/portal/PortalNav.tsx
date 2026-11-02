@@ -46,7 +46,7 @@ const NAV_LINKS: readonly [NavLink, NavLink, NavLink, NavLink, NavLink, NavLink,
   },
   {
     href: '/portal/appointments',
-    label: 'My Appointments',
+    label: 'My Sessions',
     shortLabel: 'Sessions',
     icon: (
       <svg aria-hidden="true" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

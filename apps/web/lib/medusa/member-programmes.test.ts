@@ -63,9 +63,38 @@ describe('fetchMemberProgrammes', () => {
     const [path] = adminFetch.mock.calls[0] as [string]
     const params = new URL(`http://x${path}`).searchParams
     expect(path.startsWith('/orders?')).toBe(true)
-    expect(params.get('fields')).toBe('id,status,created_at,*items,*items.variant,*items.variant.product')
+    expect(params.get('fields')).toBe(
+      'id,status,created_at,*items,*items.variant,*items.variant.product,*items.variant.product.categories,' +
+        'items.variant.product.categories.parent_category.handle,' +
+        'items.variant.product.categories.parent_category.parent_category.handle',
+    )
     expect(params.getAll('customer_id[]')).toEqual(['cus_guest', 'cus_account'])
     expect(params.get('limit')).toBe('100')
+  })
+
+  it('leaves out private sessions and session packages, which belong on My Sessions', async () => {
+    const packageOf4 = {
+      id: 'ordli_s4',
+      title: 'Transformation Coaching Session Package of 4',
+      thumbnail: null,
+      product_id: 'prod_tc4',
+      variant: {
+        product_id: 'prod_tc4',
+        product: {
+          title: 'Transformation Coaching Session Package of 4',
+          handle: 'transformation-coaching-package-of-4',
+          thumbnail: null,
+          categories: [{ handle: 'package-sessions', parent_category: { handle: 'private-sessions' } }],
+        },
+      },
+    }
+    adminFetch.mockResolvedValue(
+      response(200, {
+        orders: [{ id: 'order_448', status: 'completed', created_at: '2026-10-28T09:00:00Z', items: [packageOf4, gettingUnstuck] }],
+      }),
+    )
+
+    expect((await fetchMemberProgrammes('a@b.c')).map((p) => p.id)).toEqual(['prod_gu'])
   })
 
   it('maps an order line to a programme using the product record', async () => {

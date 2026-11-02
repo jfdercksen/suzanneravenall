@@ -1,5 +1,6 @@
 import { logError } from '@/lib/log'
 import { THINKIFIC_COURSES_URL } from '@/lib/email/templates/CourseAccess'
+import { orderProductType, type OrderCategoryForType } from '@/lib/checkout/orderProductType'
 import { medusaAdminFetch } from './admin-client'
 import { getMedusaCustomerIds } from './get-customer-id'
 
@@ -21,6 +22,7 @@ interface MedusaOrderItem {
       handle?: string | null
       thumbnail?: string | null
       metadata?: Record<string, unknown> | null
+      categories?: OrderCategoryForType[] | null
     } | null
   } | null
 }
@@ -43,7 +45,19 @@ export interface ProgrammeItem {
   courseUrl: string | null
 }
 
-const ORDER_FIELDS = 'id,status,created_at,*items,*items.variant,*items.variant.product'
+// Categories (with two parent levels) let the session rule below see a
+// product filed under a sub-category of private-sessions.
+const ORDER_FIELDS = [
+  'id',
+  'status',
+  'created_at',
+  '*items',
+  '*items.variant',
+  '*items.variant.product',
+  '*items.variant.product.categories',
+  'items.variant.product.categories.parent_category.handle',
+  'items.variant.product.categories.parent_category.parent_category.handle',
+].join(',')
 
 async function fetchOrdersForCustomers(customerIds: string[]): Promise<MedusaOrder[]> {
   const params = new URLSearchParams({ fields: ORDER_FIELDS, limit: '100', order: '-created_at' })
@@ -77,7 +91,9 @@ function deliveryMethodOf(item: MedusaOrderItem): string {
 
 /**
  * Programmes the member has bought, newest order first, one entry per
- * product. Cancelled orders do not count. Returns [] both for a member with
+ * product. Cancelled orders do not count. Private sessions and session
+ * packages are left out: they live on /portal/appointments (My Sessions),
+ * by the same rule that lists them there (Shayna, 28 Oct 2026). Returns [] both for a member with
  * no orders and when Medusa cannot be reached; the latter is logged.
  */
 export async function fetchMemberProgrammes(email: string): Promise<ProgrammeItem[]> {
@@ -92,6 +108,7 @@ export async function fetchMemberProgrammes(email: string): Promise<ProgrammeIte
     for (const order of orders) {
       if (order.status === 'canceled') continue
       for (const item of order.items ?? []) {
+        if (orderProductType([item]) === 'session') continue
         const product = item.variant?.product ?? null
         const productId = item.variant?.product_id ?? item.product_id ?? item.title
         if (seen.has(productId)) continue

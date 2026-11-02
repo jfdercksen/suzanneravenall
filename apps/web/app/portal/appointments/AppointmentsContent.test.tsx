@@ -79,7 +79,7 @@ function section(name: RegExp) {
 describe('AppointmentsContent', () => {
   it('renders the three sections with the booking, the remaining sessions and the past list', () => {
     render(<AppointmentsContent {...FULL} />)
-    expect(screen.getByRole('heading', { level: 1, name: 'My Appointments' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'My Sessions' })).toBeInTheDocument()
 
     const upcoming = section(/Upcoming/)
     expect(within(upcoming).getByText('Tue, 3 November 2026')).toBeInTheDocument()

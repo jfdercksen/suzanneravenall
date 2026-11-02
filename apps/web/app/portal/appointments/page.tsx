@@ -5,7 +5,7 @@ import { loadMemberAppointments } from '@/lib/portal/load-appointments'
 import AppointmentsContent from './AppointmentsContent'
 
 export const metadata = {
-  title: 'My Appointments | Member Portal',
+  title: 'My Sessions | Member Portal',
 }
 
 export default async function AppointmentsPage() {

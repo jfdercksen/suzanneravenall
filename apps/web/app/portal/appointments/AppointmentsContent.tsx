@@ -40,7 +40,7 @@ export default function AppointmentsContent({
             Member Portal
           </p>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white leading-[1.05] mb-3">
-            My Appointments
+            My Sessions
           </h1>
           <p className="text-lg text-white/60">
             Your booked sessions with Dr. Suzanne Ravenall and the sessions you still have to book. Times are South African time (SAST).
