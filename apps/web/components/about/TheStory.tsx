@@ -83,7 +83,7 @@ export default function TheStory() {
               became a radical journey into metaphysics, neuroscience, trauma science,
               energy psychology, NLP, the neurobiology of performance, consciousness
               studies, and ancient healing arts. Today, through Rapid Repatterning&reg;
-              and Neuro-repatterning&reg;, Suzanne helps people and organisations
+              and Neuro-repatterning&reg; &amp; Pattern Intelligence&trade;, Suzanne helps people and organisations
               rewire from the inside out, unlock their potential, and rise.
             </motion.p>
 

@@ -28,7 +28,7 @@ export default function TheMethod() {
           className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] max-w-4xl mb-16"
         >
           Rewiring from the inside out through{' '}
-          <span className="text-brand-accent">Rapid Repatterning&reg; &amp; Neuro-repatterning&reg;</span>
+          <span className="text-brand-accent">Rapid Repatterning&reg;, Neuro-repatterning&reg; &amp; Pattern Intelligence&trade;</span>
         </motion.h2>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">

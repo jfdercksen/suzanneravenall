@@ -61,7 +61,7 @@ export default function VideoTestimonials({ showViewAllLink = true, tone = 'crea
             Real transformations. Real people.
           </h2>
           <p className="text-brand-muted text-lg font-light max-w-2xl mx-auto">
-            Hear directly from clients who have experienced the Rapid Repatterning® process with Suzanne.
+            Hear directly from clients who have experienced the Rapid Repatterning® & Pattern Intelligence™ process with Suzanne.
           </p>
         </motion.div>
 

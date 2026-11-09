@@ -33,7 +33,7 @@ export default function TopicApproach({ topic }: { topic: Topic }) {
             <span className="text-brand-accent">through this</span>
           </h2>
           <p className="text-lg text-brand-muted font-light leading-relaxed max-w-2xl">
-            Using Rapid Repatterning®, we work at the level where patterns are
+            Using Rapid Repatterning® & Pattern Intelligence™, we work at the level where patterns are
             formed. This is not about coping. This is about changing the pattern.
           </p>
         </motion.div>

@@ -67,10 +67,10 @@ export const allPrivateSessions: PrivateSession[] = [
     title: 'Rapid Repatterning®',
     medusaHandle: 'rapid-repatterning-session',
     shortDescription:
-      'We think 60–70,000 thoughts a day, 90% of them the same as yesterday, driven by memorised beliefs and programmes. Those thoughts lead to the same choices, behaviours and emotions. Rapid Repatterning interrupts the loop at its root.',
+      'We think 60–70,000 thoughts a day, 90% of them the same as yesterday, driven by memorised beliefs and programmes. Those thoughts lead to the same choices, behaviours and emotions. Rapid Repatterning® & Pattern Intelligence™ interrupts the loop at its root.',
     thinContent: false,
     bodyContent: [
-      'Frustrated that you keep meeting the same patterns over and over? Rapid Repatterning, using the Ravenall Institute Method, is a combination approach designed to interrupt that loop at its root and create rapid, lasting change.',
+      'Frustrated that you keep meeting the same patterns over and over? Rapid Repatterning® & Pattern Intelligence™, using the Ravenall Institute Method, is a combination approach designed to interrupt that loop at its root and create rapid, lasting change.',
       'We think 60,000–70,000 thoughts a day, and around 90% are the same as yesterday, driven by memorised beliefs and programmes. The same thoughts lead to the same choices, the same behaviours and experiences, and the same emotions, and then the cycle begins again. When those patterns are helpful they serve us; when they are harmful, life can feel like groundhog day. Neuroscience puts it simply: nerve cells that fire together wire together, so repeating the same responses keeps the brain firing the same way.',
       'What to expect: the process blends repatterning, hypnotherapy and coaching. You will complete a questionnaire on your history and current challenges, and together we build a plan that may include assessments and hypnosis to cement a new way of being. Using biofeedback and applied kinesiology we locate the unconscious programme beneath the issue, repattern the belief, and shift the resonance, with coaching throughout.',
       // Decision 9 (6 Oct): Zoom and in person in Kyalami. The live shop sells online and

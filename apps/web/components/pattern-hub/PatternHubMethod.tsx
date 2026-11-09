@@ -38,7 +38,7 @@ export default function PatternHubMethod() {
             The Method Behind the Work
           </h2>
           <p className="text-base lg:text-lg text-brand-muted">
-            Rapid Repatterning® works at the level where patterns are formed
+            Rapid Repatterning® & Pattern Intelligence™ works at the level where patterns are formed
           </p>
         </motion.div>
 

@@ -23,7 +23,7 @@ const cards: {
 }[] = [
   {
     label: 'Methodology',
-    title: 'Rapid Repatterning\u00ae',
+    title: 'Rapid Repatterning\u00ae & Pattern Intelligence\u2122',
     description:
       'The flagship method. A fusion of metaphysics, neuroscience, trauma science, energy psychology and NLP, helping people and organisations rewire from the inside out, unlock their potential, and rise.',
     href: '/services/private-sessions/rapid-repatterning',

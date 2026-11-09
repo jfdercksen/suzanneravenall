@@ -281,7 +281,7 @@ export default function BookContent({ prices = null, defaultCurrency = 'zar' }: 
                 it ever reached the page.
               </motion.p>
               <motion.p {...scrollFadeUp(0.4)} className="text-brand-muted leading-relaxed mb-10">
-                As the founder of Rapid Repatterning® and Neuro-repatterning® methodology, Suzanne
+                As the founder of Rapid Repatterning® and Neuro-repatterning® & Pattern Intelligence™ methodology, Suzanne
                 brings a unique fusion of neuroscience, quantum physics, and energetic psychology
                 to every page, giving you tools that work at the deepest level of your being.
               </motion.p>

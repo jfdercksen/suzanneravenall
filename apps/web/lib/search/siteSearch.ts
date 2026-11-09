@@ -275,7 +275,7 @@ const STATIC_PAGES: Omit<SiteDocument, 'type' | 'label'>[] = [
     url: '/testimonials',
     title: 'Testimonials',
     description:
-      'Real transformations from real people. Watch and read what clients around the world say about working with Dr. Suzanne Ravenall: private sessions, group programmes and Rapid Repatterning®.',
+      'Real transformations from real people. Watch and read what clients around the world say about working with Dr. Suzanne Ravenall: private sessions, group programmes and Rapid Repatterning® & Pattern Intelligence™.',
     body: ['Reviews'],
   },
   {

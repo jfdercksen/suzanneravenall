@@ -61,7 +61,7 @@ function buildGroupOpportunity(cohort: FeaturedCohort | null, currency: string):
       variant: 'group',
       title: cohort.productTitle,
       description:
-        'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
+        'Join Suzanne and a small group for a powerful Rapid Repatterning® & Pattern Intelligence™ session.',
       cta: 'View Details',
       href: `/shop/${cohort.productHandle}`,
       price: formatPriceIn(cohort.prices, currency),
@@ -74,7 +74,7 @@ function buildGroupOpportunity(cohort: FeaturedCohort | null, currency: string):
       variant: 'group',
       title: cohort.productTitle,
       description:
-        'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
+        'Join Suzanne and a small group for a powerful Rapid Repatterning® & Pattern Intelligence™ session.',
       cta: 'Join Waitlist',
       href: `/shop/${cohort.productHandle}`,
       badge: 'Fully booked',
@@ -87,7 +87,7 @@ function buildGroupOpportunity(cohort: FeaturedCohort | null, currency: string):
     variant: 'group',
     title: 'Group Transformation Session',
     description:
-      'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
+      'Join Suzanne and a small group for a powerful Rapid Repatterning® & Pattern Intelligence™ session.',
     cta: 'Register Interest',
     href: '/events',
   }

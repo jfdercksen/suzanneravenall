@@ -58,7 +58,7 @@ export default function PatternHubDeeperPositioning() {
             </p>
             <p>
               This is the work of{' '}
-              <span className="text-brand-accent font-medium">Rapid Repatterning®</span>
+              <span className="text-brand-accent font-medium">Rapid Repatterning® & Pattern Intelligence™</span>
               : going beneath the behaviour to the pattern that produces it,
               and changing it at that level.
             </p>

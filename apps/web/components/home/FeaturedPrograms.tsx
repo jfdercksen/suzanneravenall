@@ -28,7 +28,7 @@ const programs: {
   },
   {
     title: 'Recorded Group Repatterning',
-    subtitle: 'Rapid Repatterning® Groups',
+    subtitle: 'Rapid Repatterning® & Pattern Intelligence™ Groups',
     tagline: 'Money, confidence, boundaries, attraction and more.',
     price: 'group',
     image: '/images/generated/group-coaching-real.webp',

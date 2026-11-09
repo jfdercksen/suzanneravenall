@@ -46,7 +46,7 @@ const confirmedOpportunities: ConfirmedOpportunity[] = [
     variant: 'group',
     title: 'Group Transformation Session',
     description:
-      'Join Suzanne and a small group for a powerful Rapid Repatterning® session.',
+      'Join Suzanne and a small group for a powerful Rapid Repatterning® & Pattern Intelligence™ session.',
     cta: 'Join Waitlist',
     href: contactHref('group', 'Group Transformation Session waitlist'),
   },

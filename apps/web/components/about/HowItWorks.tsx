@@ -20,7 +20,7 @@ const steps: { title: string; description: string }[] = [
   {
     title: 'Disrupt the pattern',
     description:
-      'Using Rapid Repatterning\u00ae, we repattern at the neurological, emotional and energetic level, not through motivation or mindset tricks, but by rewriting the underlying code.',
+      'Using Rapid Repatterning\u00ae & Pattern Intelligence\u2122, we repattern at the neurological, emotional and energetic level, not through motivation or mindset tricks, but by rewriting the underlying code.',
   },
   {
     title: 'Rewire from the inside out',
