@@ -25,7 +25,11 @@ export interface NavGroup {
 
 export type NavItem = NavLink | NavGroup
 
-const navItems: NavItem[] = [
+// Suzanne, 8 Nov 2026: the Pattern Discovery Hub ("the main entry to the
+// website") and the Pattern Coach must be in the main menu. The bar had no
+// room for two more links at 1024px, so Events and Masterclass moved into
+// Work With Me and the Resource Library and Blog into Explore.
+export const navItems: NavItem[] = [
   {
     label: 'About',
     children: [
@@ -47,8 +51,13 @@ const navItems: NavItem[] = [
       { label: 'Leadership', href: '/explore/leadership-high-performance' },
       { label: 'Intuition', href: '/explore/intuition-as-patterned-intelligence' },
       { label: 'All Topics →', href: '/explore' },
+      { divider: true },
+      { label: 'Resource Library', href: '/resources' },
+      { label: 'Blog', href: '/blog' },
     ],
   },
+  { label: 'Pattern Discovery Hub', href: '/discover-your-pattern' },
+  { label: 'Pattern Coach', href: '/pattern-coach' },
   {
     label: 'Work With Me',
     children: [
@@ -57,15 +66,9 @@ const navItems: NavItem[] = [
       { label: 'Corporate & Retreats', href: '/services#group' },
       { label: 'Speaking', href: '/speaking' },
       { label: 'Programs', href: '/programs' },
-    ],
-  },
-  { label: 'Events', href: '/events' },
-  { label: 'Masterclass', href: '/masterclass' },
-  {
-    label: 'Resources',
-    children: [
-      { label: 'Resource Library', href: '/resources' },
-      { label: 'Blog', href: '/blog' },
+      { divider: true },
+      { label: 'Events', href: '/events' },
+      { label: 'Masterclass', href: '/masterclass' },
     ],
   },
   { label: 'Shop', href: '/shop' },
@@ -113,7 +116,7 @@ export default function Header() {
           <div className="flex items-center gap-2 lg:gap-3 shrink-0">
             <SearchBar />
             <CartIcon />
-            {/* xl: not lg: — with 8 top-level nav items there is no room for a
+            {/* xl: not lg: — with 7 top-level nav items there is no room for a
                 CTA button at 1024-1279px; the Contact tab and the site-wide
                 Pattern Hub sticky bar cover both CTAs at lg, and the mobile
                 overlay surfaces both links below lg. The hero's primary CTA

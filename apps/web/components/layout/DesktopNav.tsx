@@ -50,11 +50,13 @@ export default function DesktopNav({ items }: DesktopNavProps) {
     }
   }, [openGroup, close])
 
-  // gap-3/text-sm at lg — 8 top-level items must fit 1024-1279px next to
-  // logo + search + cart. Only gap-4 from xl and no larger type: at exactly
-  // 1280 the CTA button appears and a scrollbar takes 15px of the row.
+  // gap-2.5/text-sm at lg: 7 top-level items (with Pattern Discovery Hub and
+  // Pattern Coach since 9 Nov 2026) must fit 1024-1279px next to logo +
+  // search + cart; measured ~18px to spare at 1024. Only gap-4 from xl and no
+  // larger type: at exactly 1280 the CTA button appears and a scrollbar takes
+  // 15px of the row (~27px to spare). Re-measure before adding a top item.
   return (
-    <nav ref={navRef} aria-label="Main navigation" className="hidden lg:flex items-center gap-3 xl:gap-4">
+    <nav ref={navRef} aria-label="Main navigation" className="hidden lg:flex items-center gap-2.5 xl:gap-4">
       {items.map((item) => {
         if (isNavGroup(item)) {
           const isOpen = openGroup === item.label

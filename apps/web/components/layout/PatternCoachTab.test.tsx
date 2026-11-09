@@ -1,6 +1,6 @@
 import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, waitFor, act } from '@testing-library/react'
+import { render, screen, waitFor, act, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import PatternCoachTab, { isTabObstructingContent, isFormUnderMobilePill } from './PatternCoachTab'
 
@@ -141,6 +141,21 @@ describe('PatternCoachTab', () => {
         expect(aside).toHaveAttribute('aria-label', 'Pattern Coach App')
       }
     })
+  })
+
+  // Suzanne, 8 Nov 2026 ("there is no chat bot"): on desktop the tab must not
+  // wait for the cookie choice; only the phone pill does (KI027).
+  it('shows the desktop tab before any cookie choice has been made', async () => {
+    setViewportWidth(1280)
+    expect(localStorage.getItem(CONSENT_STORAGE_KEY)).toBeNull()
+
+    await act(async () => {
+      render(<PatternCoachTab />)
+    })
+
+    const tab = await screen.findByRole('complementary', { name: 'Pattern Coach App' })
+    expect(tab.className).toContain('w-7')
+    expect(within(tab).getByRole('link', { name: /Discover Pattern Coach/ })).toHaveAttribute('href', '/pattern-coach')
   })
 
   // KI027 — on mobile the pill must never stack on top of the cookie consent banner

@@ -2,7 +2,7 @@
 import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import Header from './Header'
+import Header, { navItems, type NavLink } from './Header'
 
 // Mock next/link as a passthrough <a>
 vi.mock('next/link', () => ({
@@ -63,13 +63,13 @@ describe('Header', () => {
     expect(logo).toBeInTheDocument()
   })
 
-  it('renders the DesktopNav with 8 top-level items', () => {
+  it('renders the DesktopNav with 7 top-level items', () => {
     render(<Header />)
     const desktopNav = screen.getByTestId('desktop-nav')
     expect(desktopNav).toBeInTheDocument()
-    // 4 groups (About, Explore, Work With Me, Resources) + 4 standalone links
-    // (Events, Masterclass, Shop, Contact)
-    expect(desktopNav).toHaveAttribute('data-item-count', '8')
+    // 3 groups (About, Explore, Work With Me) + 4 standalone links
+    // (Pattern Discovery Hub, Pattern Coach, Shop, Contact)
+    expect(desktopNav).toHaveAttribute('data-item-count', '7')
   })
 
   it('renders "Book a Discovery Call" CTA link pointing to the booking card on /contact', () => {
@@ -82,7 +82,7 @@ describe('Header', () => {
   it('"Book a Discovery Call" CTA is hidden below the xl breakpoint', () => {
     render(<Header />)
     const cta = screen.getByRole('link', { name: 'Book a Discovery Call' })
-    // Tailwind: hidden xl:inline-flex — with 8 top-level nav items there is no
+    // Tailwind: hidden xl:inline-flex — with 7 top-level nav items there is no
     // room for a CTA button at 1024-1279px; the Contact tab covers it at lg.
     expect(cta.className).toContain('hidden')
     expect(cta.className).toContain('xl:inline-flex')
@@ -101,17 +101,36 @@ describe('Header', () => {
     expect(mobileNav).toBeInTheDocument()
   })
 
-  it('passes the same 8 grouped nav items to MobileNav as the desktop nav', () => {
+  it('passes the same 7 grouped nav items to MobileNav as the desktop nav', () => {
     render(<Header />)
     const mobileNav = screen.getByTestId('mobile-nav')
     // Site check V11: the mobile menu keeps the desktop groups as an accordion
     // instead of flattening them into 23 links.
-    expect(mobileNav).toHaveAttribute('data-item-count', '8')
+    expect(mobileNav).toHaveAttribute('data-item-count', '7')
   })
 
   it('renders a <nav> with aria-label "Main navigation"', () => {
     render(<Header />)
     const nav = screen.getByRole('navigation', { name: 'Main navigation' })
     expect(nav).toBeInTheDocument()
+  })
+})
+
+describe('navItems (Suzanne, 8 Nov 2026)', () => {
+  const topLinks = navItems.filter((item): item is NavLink => 'href' in item)
+  const allLinks = navItems.flatMap((item) =>
+    'children' in item ? item.children.filter((c): c is NavLink => 'href' in c) : [item],
+  )
+
+  it('puts the Pattern Discovery Hub and the Pattern Coach in the top bar', () => {
+    expect(topLinks).toContainEqual({ label: 'Pattern Discovery Hub', href: '/discover-your-pattern' })
+    expect(topLinks).toContainEqual({ label: 'Pattern Coach', href: '/pattern-coach' })
+  })
+
+  it('still reaches every page the old top bar linked to', () => {
+    const hrefs = allLinks.map((l) => l.href)
+    for (const href of ['/events', '/masterclass', '/resources', '/blog', '/shop', '/contact', '/programs']) {
+      expect(hrefs).toContain(href)
+    }
   })
 })
