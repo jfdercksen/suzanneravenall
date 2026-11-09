@@ -2,8 +2,14 @@
 
 import { motion } from 'framer-motion'
 import type { Topic } from '@/app/explore/topics'
+import { topicCopy } from '@/app/explore/topicCopy'
 
 export default function TopicDiscover({ topic }: { topic: Topic }) {
+  // Suzanne's copy (8 Nov 2026) where she has written it; the older cards
+  // otherwise.
+  const copy = topicCopy[topic.slug]?.shifts
+  const items = copy ? copy.items : topic.discover
+
   return (
     <section
       aria-labelledby="topic-discover-heading"
@@ -25,22 +31,31 @@ export default function TopicDiscover({ topic }: { topic: Topic }) {
             id="topic-discover-heading"
             className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight"
           >
-            Life after{' '}
-            <span className="text-brand-accent">repatterning</span>
+            {copy ? (
+              copy.headline
+            ) : (
+              <>
+                Life after{' '}
+                <span className="text-brand-accent">repatterning</span>
+              </>
+            )}
           </h2>
+          {copy && (
+            <p className="mt-6 text-lg text-brand-ink font-light leading-relaxed">{copy.intro}</p>
+          )}
         </motion.div>
 
         {/* Sand cards grid */}
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {topic.discover.map((item, index) => (
+        <ul className={`grid grid-cols-1 sm:grid-cols-2 gap-6 ${items.length === 6 ? 'lg:grid-cols-3' : ''}`}>
+          {items.map((item, index) => (
             <motion.li
-              key={item.title}
+              key={`${index}-${item.title}`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px' }}
               transition={{
                 duration: 0.6,
-                delay: index * 0.1,
+                delay: (index % 3) * 0.1,
                 ease: 'easeOut',
               }}
               className="group relative rounded-card bg-brand-sand border border-brand-border border-t-2 border-t-brand-accent p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl overflow-hidden"
@@ -54,7 +69,10 @@ export default function TopicDiscover({ topic }: { topic: Topic }) {
               </span>
 
               {/* Number chip */}
-              <span className="inline-block text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+              <span
+                aria-hidden="true"
+                className="inline-block text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4"
+              >
                 {String(index + 1).padStart(2, '0')}
               </span>
 
@@ -68,6 +86,18 @@ export default function TopicDiscover({ topic }: { topic: Topic }) {
             </motion.li>
           ))}
         </ul>
+
+        {copy && (
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '0px' }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            className="mt-16 text-2xl lg:text-3xl font-medium tracking-tight text-brand-primary text-center"
+          >
+            {copy.closing}
+          </motion.p>
+        )}
       </div>
     </section>
   )

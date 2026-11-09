@@ -13,6 +13,7 @@
  * match (as a prefix, so partly typed words work while the user types).
  */
 import { topics } from '@/app/explore/topics'
+import { topicCopy, topicCopyText } from '@/app/explore/topicCopy'
 import { allPrivateSessions } from '@/data/privateSessions'
 import type { BlogPost, PayloadResponse } from '@/types/payload'
 import type { SearchIndex, SearchResultItem } from './types'
@@ -158,26 +159,35 @@ export function searchDocuments(
 // Documents
 // ---------------------------------------------------------------------------
 
-export const TOPIC_DOCUMENTS: SiteDocument[] = topics.map((t) => ({
-  type: 'explore_topics',
-  id: t.slug,
-  url: `/explore/${t.slug}`,
-  label: 'Topic',
-  title: t.title,
-  description: t.shortDescription,
-  body: [
-    t.heroHeadline,
-    t.heroSubheadline,
-    t.openingQuestion,
-    ...t.recognitionItems,
-    ...t.overview,
-    t.corePrinciple,
-    ...t.discover.flatMap((d) => [d.title, d.body]),
-    ...t.approach.flatMap((a) => [a.title, a.body]),
-    t.ctaHook,
-    t.metaDescription,
-  ],
-}))
+// The top three bands come from topicCopy where Suzanne has rewritten them
+// (8 Nov 2026), so search matches what the page shows.
+export const TOPIC_DOCUMENTS: SiteDocument[] = topics.map((t) => {
+  const copy = topicCopy[t.slug]
+  return {
+    type: 'explore_topics',
+    id: t.slug,
+    url: `/explore/${t.slug}`,
+    label: 'Topic',
+    title: t.title,
+    description: t.shortDescription,
+    body: [
+      t.heroHeadline,
+      t.heroSubheadline,
+      t.openingQuestion,
+      ...(copy
+        ? topicCopyText(copy)
+        : [
+            ...t.recognitionItems,
+            ...t.overview,
+            t.corePrinciple,
+            ...t.discover.flatMap((d) => [d.title, d.body]),
+          ]),
+      ...t.approach.flatMap((a) => [a.title, a.body]),
+      t.ctaHook,
+      t.metaDescription,
+    ],
+  }
+})
 
 // Titles and descriptions are the pages' own metadata copy (see each page.tsx).
 // Keep them in step when a page's metadata changes.
