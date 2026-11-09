@@ -143,12 +143,12 @@ export function SearchBar() {
       <button
         onClick={openModal}
         aria-label={`Open search (${isMac ? 'Cmd' : 'Ctrl'}+K)`}
-        className="flex items-center gap-1.5 px-3 py-2 text-white/70 hover:text-white rounded-md transition-colors duration-150"
+        className="flex items-center p-2 text-white/70 hover:text-white rounded-md transition-colors duration-150"
       >
-        <Search className="w-4 h-4" />
-        <kbd className="hidden xl:inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-medium bg-white/10 rounded border border-white/20">
-          {isMac ? '⌘K' : 'Ctrl K'}
-        </kbd>
+        {/* No visible Ctrl K / Cmd K hint (Suzanne, 8 Nov 2026: "Control k is
+            there whatever that is"). The shortcut still works and the label
+            above still names it for screen readers. */}
+        <Search className="w-4 h-4" aria-hidden="true" />
       </button>
     )
   }

@@ -921,11 +921,11 @@ export default function CheckoutContent() {
                           disabled={isSubmitting || voucherBusy}
                           className="w-full py-4 px-6 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
                         >
-                          <Lock className="w-4 h-4" />
+                          <Lock className="w-4 h-4" aria-hidden="true" />
                           {isSubmitting ? 'Placing your order...' : 'Place order'}
                         </button>
                         <p className="text-xs text-brand-muted text-center mt-4">
-                          No payment needed · Your confirmation will arrive by email
+                          Secure checkout · No payment needed · Your confirmation will arrive by email
                         </p>
                       </>
                     ) : gateway === 'payfast' ? (
@@ -935,11 +935,11 @@ export default function CheckoutContent() {
                           disabled={isSubmitting}
                           className="w-full py-4 px-6 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
                         >
-                          <Lock className="w-4 h-4" />
+                          <Lock className="w-4 h-4" aria-hidden="true" />
                           {isSubmitting ? 'Preparing payment...' : 'Pay with PayFast'}
                         </button>
                         <p className="text-xs text-brand-muted text-center mt-4">
-                          Secured by PayFast · South Africa&apos;s leading payment gateway
+                          Secure checkout · Secured by PayFast · South Africa&apos;s leading payment gateway
                         </p>
                       </>
                     ) : (
@@ -952,11 +952,11 @@ export default function CheckoutContent() {
                           disabled={isSubmitting}
                           className="w-full py-4 px-6 rounded-button text-base font-medium bg-brand-accent-600 hover:bg-brand-accent-700 disabled:opacity-60 disabled:cursor-wait text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
                         >
-                          <Lock className="w-4 h-4" />
+                          <Lock className="w-4 h-4" aria-hidden="true" />
                           {isSubmitting ? 'Preparing payment...' : 'Pay with PayPal'}
                         </button>
                         <p className="text-xs text-brand-muted text-center mt-4">
-                          Secured by PayPal · Accepted worldwide
+                          Secure checkout · Secured by PayPal · Accepted worldwide
                         </p>
                       </>
                     )}
@@ -966,9 +966,10 @@ export default function CheckoutContent() {
                 {/* Step 3: Redirecting */}
                 {step === 3 && (
                   <motion.div key="step3" {...slideProps} className="text-center py-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-accent/10 mb-6">
-                      <Lock className="w-6 h-6 text-brand-accent" />
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-accent/10 mb-2">
+                      <Lock className="w-6 h-6 text-brand-accent" aria-hidden="true" />
                     </div>
+                    <p className="text-xs uppercase tracking-widest text-brand-muted mb-6">Secure checkout</p>
                     <h2 className="text-xl font-medium text-brand-ink mb-2">
                       {payPalApprovalUrl ? 'Redirecting to PayPal' : 'Redirecting to PayFast'}
                     </h2>

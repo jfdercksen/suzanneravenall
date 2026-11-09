@@ -450,7 +450,7 @@ function OrderSummary({ cart }: { cart: import('@/lib/cart').Cart }) {
           ...(hasSubscription ? [{ icon: RefreshCw, label: 'Cancel anytime' }] : []),
         ].map(({ icon: Icon, label }) => (
           <div key={label} className="flex items-center gap-2 text-xs text-brand-muted">
-            <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+            <Icon className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
             <span>{label}</span>
           </div>
         ))}

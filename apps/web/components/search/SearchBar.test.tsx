@@ -398,10 +398,19 @@ describe('SearchBar - layering and closing (site check V1)', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
-  it('shows the Ctrl K shortcut hint outside Apple devices', () => {
+  // Suzanne, 8 Nov 2026: the visible shortcut hint confused her; it is gone,
+  // the shortcut itself stays and the button label still names it.
+  it('shows no visible shortcut hint but keeps the shortcut in the label', () => {
     render(<SearchBar />)
-    expect(screen.getByText('Ctrl K')).toBeInTheDocument()
+    expect(screen.queryByText('Ctrl K')).not.toBeInTheDocument()
     expect(screen.queryByText('⌘K')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Open search (Ctrl+K)' })).toBeInTheDocument()
+  })
+
+  it('still opens on Ctrl+K', () => {
+    render(<SearchBar />)
+    fireEvent.keyDown(document, { key: 'k', ctrlKey: true })
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
   })
 
   it('labels page results from their label instead of "Topic"', async () => {

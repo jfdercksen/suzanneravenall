@@ -81,6 +81,18 @@ describe('CheckoutContent gateway by cart currency', () => {
     expect(screen.queryByRole('button', { name: /Pay with PayPal/ })).not.toBeInTheDocument()
   })
 
+  // Suzanne, 8 Nov 2026: "a locking button is there whatever that is". The
+  // padlock on the pay button now has the words beside it.
+  it.each([
+    ['zar', /^Secure checkout · Secured by PayFast/],
+    ['usd', /^Secure checkout · Secured by PayPal/],
+  ] as const)('a %s cart says Secure checkout under the padlocked pay button', async (currency, line) => {
+    cartState = { cart: cartIn(currency), isLoading: false }
+    await reachPayment(currency === 'zar' ? 'ZA' : 'INTL')
+    await screen.findByRole('button', { name: /Pay with/ })
+    expect(screen.getByText(line)).toBeInTheDocument()
+  })
+
   it('a ZAR cart records ZA on the billing address', async () => {
     cartState = { cart: cartIn('zar'), isLoading: false }
     await reachPayment('ZA')
