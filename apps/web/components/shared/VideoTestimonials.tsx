@@ -11,10 +11,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 // https://img.youtube.com/vi/<id>/maxresdefault.jpg before adding the flag.
 const videos: ReadonlyArray<{ id: string; name: string; maxRes?: boolean }> = [
   { id: '8Yw_n8NribA', name: 'Transformation Highlights', maxRes: true },
-  { id: 'wPTh5Z8iwwU', name: 'Matheo' },
-  { id: 'iHe9dZq1YdY', name: 'Amelia' },
-  { id: 'nLrXITVsXz8', name: 'Jayne' },
-  { id: 'Gz3NUPWdxAI', name: 'Ivana' },
+  // No client names on the posters (Suzanne, 8 Nov 2026): a neutral label.
+  { id: 'wPTh5Z8iwwU', name: 'Client story 1' },
+  { id: 'iHe9dZq1YdY', name: 'Client story 2' },
+  { id: 'nLrXITVsXz8', name: 'Client story 3' },
+  { id: 'Gz3NUPWdxAI', name: 'Client story 4' },
 ]
 
 interface VideoTestimonialsProps {

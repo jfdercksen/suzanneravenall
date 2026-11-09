@@ -72,10 +72,10 @@ describe('VideoTestimonials featured poster', () => {
   it('requests hqdefault straight away for videos without a maxresdefault still', () => {
     render(<VideoTestimonials />)
     for (const [name, id] of [
-      ['Matheo', 'wPTh5Z8iwwU'],
-      ['Amelia', 'iHe9dZq1YdY'],
-      ['Jayne', 'nLrXITVsXz8'],
-      ['Ivana', 'Gz3NUPWdxAI'],
+      ['Client story 1', 'wPTh5Z8iwwU'],
+      ['Client story 2', 'iHe9dZq1YdY'],
+      ['Client story 3', 'nLrXITVsXz8'],
+      ['Client story 4', 'Gz3NUPWdxAI'],
     ] as const) {
       fireEvent.click(screen.getByRole('radio', { name: `Watch ${name}` }))
       expect(featuredPoster(name).getAttribute('src')).toBe(
@@ -91,5 +91,18 @@ describe('VideoTestimonials featured poster', () => {
     expect(featuredPoster('Transformation Highlights').getAttribute('src')).toBe(
       'https://img.youtube.com/vi/8Yw_n8NribA/hqdefault.jpg',
     )
+  })
+})
+
+describe('VideoTestimonials labels', () => {
+  // Suzanne, 8 Nov 2026: no client names on the front of a testimonial
+  it('shows no client name on any poster or thumbnail', () => {
+    const { container } = render(<VideoTestimonials />)
+    for (const name of ['Matheo', 'Amelia', 'Jayne', 'Ivana']) {
+      expect(container.innerHTML).not.toContain(name)
+    }
+    const labels = screen.getAllByRole('radio').map((r) => r.getAttribute('aria-label'))
+    expect(new Set(labels).size).toBe(labels.length)
+    expect(labels).toContain('Watch Client story 1')
   })
 })
