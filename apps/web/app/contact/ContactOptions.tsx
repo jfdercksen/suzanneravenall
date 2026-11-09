@@ -113,14 +113,13 @@ export default function ContactOptions({ enquiry, topic }: ContactOptionsProps =
                 </div>
               </li>
 
-              {/* Addresses: https://suzanneravenall.com/terms-and-conditions/ (no street number is published) */}
+              {/* Postal address only: Suzanne, 8 Nov 2026, took the physical
+                  address off this page. The legal pages keep it. */}
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-brand-accent mt-0.5 shrink-0" aria-hidden="true" />
                 <div>
                   <p className="text-xs uppercase tracking-wider text-brand-muted mb-0.5">Location</p>
-                  <span className="text-brand-ink text-sm block">
-                    Oxmoor Street, Kyalami Estates, Johannesburg, 1684
-                  </span>
+                  <span className="text-brand-ink text-sm block">Johannesburg, South Africa</span>
                   <span className="text-brand-muted text-sm block mt-1">Postal: PO Box 910, Kyalami, 1684</span>
                 </div>
               </li>
@@ -158,11 +157,23 @@ export default function ContactOptions({ enquiry, topic }: ContactOptionsProps =
                     href="https://www.facebook.com/suzanneravenalltransformation"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Facebook"
+                    aria-label="Facebook: Suzanne Ravenall"
                     className="inline-flex items-center gap-3 text-brand-muted hover:text-brand-accent text-sm transition-colors group"
                   >
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 group-hover:scale-110 transition-transform duration-300"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    Facebook
+                    Facebook: Suzanne Ravenall
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.facebook.com/EffectivenessCompany"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook: The Effectiveness Company"
+                    className="inline-flex items-center gap-3 text-brand-muted hover:text-brand-accent text-sm transition-colors group"
+                  >
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 group-hover:scale-110 transition-transform duration-300"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    Facebook: The Effectiveness Company
                   </a>
                 </li>
               </ul>
