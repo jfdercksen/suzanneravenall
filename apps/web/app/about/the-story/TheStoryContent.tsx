@@ -19,15 +19,64 @@ const reveal = (delay: number) => ({
   transition: { duration: 0.6, delay, ease: 'easeOut' as const },
 })
 
-const disciplines = [
-  'Metaphysics',
-  'Neuroscience',
-  'Trauma science',
-  'Energy psychology',
-  'NLP',
-  'Neurobiology of decision-making & performance',
-  'Consciousness studies',
-  'Ancient healing arts',
+// The Search, Suzanne's copy of 8 Nov 2026 (replaces the eight-item list).
+const searchStats = [
+  { value: '30+', label: 'years' },
+  { value: '35+', label: 'disciplines' },
+  { value: '7', label: 'domains of human change' },
+  { value: '1', label: 'integrated discipline' },
+]
+
+const domains = [
+  {
+    title: 'The Brain',
+    tagline: 'How we predict, decide and rewire.',
+    disciplines:
+      'Neurobiology · Neuroplasticity · Memory reconsolidation · Pattern recognition · Interpersonal neurobiology · The neuroscience of emotion, intuition and decision-making',
+    drawingOn: 'Doidge, Pascual-Leone, Siegel, Damasio and Neisser',
+  },
+  {
+    title: 'The Nervous System & Body',
+    tagline: 'Where patterns are held, and where they’re released.',
+    disciplines:
+      'Polyvagal theory · Window of tolerance · Somatic processing · Heart–brain coherence · Body biochemistry · Epigenetics · Kinesiology and biofeedback',
+    drawingOn: 'Porges, Levine, Van der Kolk, HeartMath and Waddington',
+  },
+  {
+    title: 'Trauma & Development',
+    tagline: 'Where patterns begin.',
+    disciplines:
+      'Trauma science · Developmental and psychodynamic theory · Developmental mapping from in utero to adulthood · Early pattern imprints',
+    drawingOn: 'Van der Kolk, Levine, Bowlby, Winnicott and Maté',
+  },
+  {
+    title: 'The Subconscious Mind',
+    tagline: 'The code running beneath awareness.',
+    disciplines:
+      'Clinical hypnotherapy · NLP · Cognitive behavioural therapy · Transactional analysis · Mindfulness-based emotional processing',
+    drawingOn: 'Braid, Bandler & Grinder, Beck, Berne and Kabat-Zinn',
+  },
+  {
+    title: 'Behaviour & Performance',
+    tagline: 'How change becomes the new normal.',
+    disciplines:
+      'Behavioural science · Flow states · Visuo-motor behaviour rehearsal · Habit and ritual architecture · Learning design',
+    drawingOn: 'Skinner, Pavlov, Csikszentmihalyi, Suinn and Bloom',
+  },
+  {
+    title: 'Relationships & Systems',
+    tagline: 'How patterns move between people, teams and organisations.',
+    disciplines:
+      'Emotional intelligence · Relational intelligence · Triangulation dynamics · Life-skills science · International mediation',
+    drawingOn: 'Goleman, Salovey & Mayer, Botvin and Daniels',
+  },
+  {
+    title: 'Energy & Consciousness',
+    tagline: 'The questions science is only beginning to measure.',
+    disciplines:
+      'Energy psychology and Thought Field Therapy · Biophotonics · Consciousness engineering · Quantum theory · Metaphysics · Ancient healing arts',
+    drawingOn: 'Callahan, Gallo, Gurwitsch and Bentov',
+  },
 ]
 
 export default function TheStoryContent() {
@@ -44,7 +93,7 @@ export default function TheStoryContent() {
             <span className={HEADER_UNDERLINE}>rebuilt</span>.
           </>
         }
-        description="Dr. Suzanne Ravenall is a modern-day explorer of human potential, a transformation and performance coach, speaker, and multiple award-winning entrepreneur. This is the journey that shaped her work."
+        description="Dr. Suzanne Ravenall is a modern-day explorer of human potential, a transformation and performance specialist & strategist, speaker, and multiple award-winning entrepreneur. This is the journey that shaped her work."
       />
 
       {/* The Rise: light */}
@@ -129,53 +178,123 @@ export default function TheStoryContent() {
       {/* The Search: light */}
       <section aria-labelledby="search-heading" className="bg-brand-cream py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-            <div>
-              <motion.p
-                {...sectionReveal}
-                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
-              >
-                The Search
-              </motion.p>
-              <motion.h2
-                {...reveal(0.1)}
-                id="search-heading"
-                className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-8"
-              >
-                She went looking for answers, everywhere.
-              </motion.h2>
-              <motion.p
-                {...reveal(0.2)}
-                className="text-brand-ink text-lg font-light leading-relaxed"
-              >
-                What followed was a radical journey through the sciences and
-                traditions of human change, a search for reason and meaning that
-                refused to settle for surface-level fixes. Not just to survive,
-                but to heal and transcend.
-              </motion.p>
-            </div>
-            <motion.ul
-              {...reveal(0.3)}
-              className="grid sm:grid-cols-2 gap-4"
+          <div className="max-w-3xl">
+            <motion.p
+              {...sectionReveal}
+              className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
             >
-              {disciplines.map((discipline, i) => (
-                <motion.li
-                  key={discipline}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-100px' }}
-                  transition={{
-                    duration: 0.6,
-                    delay: i * 0.1,
-                    ease: 'easeOut' as const,
-                  }}
-                  className="border-l-2 border-brand-accent bg-brand-sand px-5 py-4 text-brand-primary font-light shadow-sm"
-                >
-                  {discipline}
-                </motion.li>
-              ))}
-            </motion.ul>
+              The Search
+            </motion.p>
+            <motion.h2
+              {...reveal(0.1)}
+              id="search-heading"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-8"
+            >
+              Most people stop when they find a way to cope. She didn&rsquo;t.
+            </motion.h2>
+            <motion.p
+              {...reveal(0.2)}
+              className="text-brand-ink text-lg font-light leading-relaxed mb-6"
+            >
+              Over more than thirty years, she worked through the sciences and
+              traditions of human change, from the laboratory to the ancient
+              lineages and from the measurable to the mysterious. She
+              wasn&rsquo;t looking for a way to manage the pain. She wanted to
+              understand why people do what they do, and how to change it at the
+              root.
+            </motion.p>
+            <motion.p
+              {...reveal(0.3)}
+              className="text-brand-primary text-xl font-light leading-relaxed mb-6"
+            >
+              She wanted more than survival. She wanted to heal, and then to go
+              further.
+            </motion.p>
+            <motion.p
+              {...reveal(0.4)}
+              className="text-brand-ink text-lg font-light leading-relaxed"
+            >
+              She didn&rsquo;t just learn about it: she qualified in it and
+              through this search for meaning and change so discovered the
+              levers. And these 30+ years are built into this method of change
+              for you to benefit from without having to do it yourself.
+            </motion.p>
           </div>
+
+          <ul
+            aria-label="The search in numbers"
+            className="mt-16 lg:mt-20 grid grid-cols-2 lg:grid-cols-4 gap-6"
+          >
+            {searchStats.map((stat, i) => (
+              <motion.li
+                key={stat.label}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' as const }}
+                className="border-t border-brand-border pt-6"
+              >
+                <p className="text-4xl lg:text-5xl font-semibold tracking-tight text-brand-primary mb-2">
+                  {stat.value}
+                </p>
+                <p className="text-brand-muted text-sm tracking-widest uppercase">
+                  {stat.label}
+                </p>
+              </motion.li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* The seven domains: dark */}
+      <section
+        aria-labelledby="domains-heading"
+        className="bg-brand-primary-900 py-20 lg:py-32"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.p
+            {...sectionReveal}
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
+          >
+            7 Domains of Human Change
+          </motion.p>
+          <motion.h2
+            {...reveal(0.1)}
+            id="domains-heading"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08] max-w-3xl mb-16"
+          >
+            Each discipline held part of the answer. None held all of it.
+          </motion.h2>
+
+          <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {domains.map((domain, i) => (
+              <motion.li
+                key={domain.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.6, delay: (i % 3) * 0.1, ease: 'easeOut' as const }}
+                className="flex flex-col rounded-card bg-brand-primary-700 p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl"
+              >
+                <h3 className="text-2xl font-medium text-white mb-2">{domain.title}</h3>
+                <p className="text-white/80 font-light leading-relaxed mb-5">{domain.tagline}</p>
+                <p className="text-white/70 text-sm font-light leading-relaxed mb-6">
+                  {domain.disciplines}
+                </p>
+                <p className="mt-auto border-t border-white/15 pt-4 text-brand-accent-400 text-sm leading-relaxed">
+                  Drawing on the work of {domain.drawingOn}
+                </p>
+              </motion.li>
+            ))}
+          </ul>
+
+          <motion.p
+            {...reveal(0.2)}
+            className="mt-16 max-w-3xl text-white text-xl lg:text-2xl font-light leading-snug"
+          >
+            So she brought them together, and Rapid Repatterning&reg; &amp;
+            Pattern Intelligence&trade; was born.
+          </motion.p>
         </div>
       </section>
 
@@ -202,16 +321,25 @@ export default function TheStoryContent() {
             </motion.h2>
             <motion.p
               {...reveal(0.2)}
+              className="text-brand-primary text-xl font-light leading-relaxed mb-6"
+            >
+              She discovered that the problem that you see is rarely the
+              problem. The problem is the unseen pattern quietly running the
+              show.
+            </motion.p>
+            <motion.p
+              {...reveal(0.3)}
               className="text-brand-muted text-lg font-light leading-relaxed mb-6"
             >
               Suzanne fused the best of these worlds into a practical methodology
               for lasting transformation: Rapid Repatterning&reg; and
-              Neuro-repatterning&reg;. Through her coaching, keynotes and
-              trainings, she helps people and organisations rewire from the inside
-              out, unlock their potential, and rise.
+              Neuro-repatterning&reg; &amp; Pattern Intelligence&trade;. Through
+              her group &amp; individual transformations, keynotes and trainings,
+              she helps people and organisations rewire from the inside out,
+              unlock their potential, and rise.
             </motion.p>
             <motion.p
-              {...reveal(0.3)}
+              {...reveal(0.4)}
               className="text-brand-muted text-lg font-light leading-relaxed mb-10"
             >
               At its heart is a single insight, proven first in her own life:
@@ -221,7 +349,7 @@ export default function TheStoryContent() {
               Pattern Intelligence&trade;.
             </motion.p>
             <motion.blockquote
-              {...reveal(0.4)}
+              {...reveal(0.5)}
               className="border-l-2 border-brand-accent pl-6 italic text-brand-primary text-2xl lg:text-3xl font-light leading-snug"
             >
               It&rsquo;s not you, it&rsquo;s your pattern.

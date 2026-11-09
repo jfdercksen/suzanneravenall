@@ -244,7 +244,8 @@ export default function TheSystemContent() {
                 We never create anything random again. Every new programme,
                 assessment, keynote, workshop, book, podcast, app, or piece of IP
                 must answer one question: does this strengthen Pattern
-                Intelligence? If it doesn&rsquo;t, we don&rsquo;t build it.
+                Intelligence and move us to shift the pattern fastest and
+                easier? If it doesn&rsquo;t, we don&rsquo;t build it.
               </p>
               <footer className="mt-3 text-brand-muted text-sm tracking-widest uppercase not-italic">
                 Dr. Suzanne Ravenall
@@ -268,6 +269,13 @@ export default function TheSystemContent() {
                 className="text-brand-accent underline underline-offset-4 hover:text-brand-accent-700 transition-colors duration-300"
               >
                 Transformation Pathway
+              </Link>
+              , a{' '}
+              <Link
+                href="/programs#self-paced"
+                className="text-brand-accent underline underline-offset-4 hover:text-brand-accent-700 transition-colors duration-300"
+              >
+                self study programme
               </Link>{' '}
               or a{' '}
               <Link

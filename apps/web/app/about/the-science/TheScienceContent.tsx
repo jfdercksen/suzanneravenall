@@ -35,6 +35,11 @@ const survivalResponses = [
     description:
       'Shutdown, withdrawal, numbness. The system collapses when threat feels inescapable.',
   },
+  {
+    title: 'Fawn',
+    description:
+      'Appease, please, over-accommodate. The system protects itself by keeping others happy, at the cost of its own needs.',
+  },
 ]
 
 const repatterningSteps = [
@@ -64,12 +69,56 @@ const repatterningSteps = [
   },
 ]
 
-const outcomes = [
+// Suzanne's list of 8 Nov 2026. regulatedOutcomes and REGULATED_CLOSING are
+// the one source for this list on the site.
+const regulatedOutcomes = [
   'You feel calm without forcing it',
   'You respond instead of react',
   'You think clearly under pressure',
   'You stop feeling on edge',
   'Your energy stabilises',
+  'You navigate life differently',
+  'You access your full potential',
+]
+
+const REGULATED_CLOSING =
+  'You don’t become a different person. You become yourself, you know yourself at a deeper level without the pattern running you.'
+
+// The real science, Suzanne's attachment of 8 Nov 2026 (Document2).
+const foundations = [
+  {
+    number: '01',
+    title: 'The brain is a prediction machine',
+    body: 'Modern neuroscience shows that the brain doesn’t just react to the world. It predicts it. From past experience it builds models of what will happen next and gets the body ready before conscious thought catches up. When a prediction formed under pressure years ago is still running, it fires faster than reason. That’s why insight alone rarely changes behaviour.',
+  },
+  {
+    number: '02',
+    title: 'The nervous system decides before you do',
+    body: 'Your nervous system constantly scans for safety and threat below awareness, a process neuroscientists call neuroception. When it detects a threat, including a social one like criticism, exclusion or a high-stakes meeting, it triggers fight, flight, freeze or fawn. Performance becomes inconsistent because it depends on the state of the nervous system, not on capability.',
+  },
+  {
+    number: '03',
+    title: 'Patterns are learned, so they can be relearned',
+    body: 'Every pattern was once a smart adaptation: the best strategy available when it formed. The issue is less the pattern than the meaning attached to the experience that created it. Most of us carry a small number of core patterns, and each one produces many surface behaviours.',
+  },
+  {
+    number: '04',
+    title: 'Early experience leaves a measurable mark',
+    body: 'The landmark Adverse Childhood Experiences (ACE) study, run by Kaiser Permanente and the US Centers for Disease Control with about 17,000 mostly middle-class, employed adults, found that difficult early experiences are common and strongly linked to later health, behaviour and life outcomes. This isn’t about a damaged few. It describes how human systems adapt, and it applies to all of us.',
+  },
+  {
+    number: '05',
+    title: 'The brain can change: neuroplasticity',
+    body: 'The brain keeps rewiring itself throughout life. Research on memory reconsolidation shows that when an old emotional learning is reactivated and met with a new, contradicting experience, it can be updated at the root rather than just managed. Rapid Repatterning® & Pattern Intelligence™ is built on this mechanism.',
+  },
+]
+
+const changeHoldsSteps = [
+  { title: 'See the pattern', body: 'make the unconscious prediction visible.' },
+  { title: 'Decode the meaning', body: 'find the belief and need it was formed to protect.' },
+  { title: 'Regulate the system', body: 'build the nervous-system safety that lets change happen.' },
+  { title: 'Repattern', body: 'update the prediction itself through Rapid Repatterning® & Pattern Intelligence™.' },
+  { title: 'Embody', body: 'practise the new response until the body trusts it as real.' },
 ]
 
 export default function TheScienceContent() {
@@ -94,6 +143,108 @@ export default function TheScienceContent() {
           </>
         }
       />
+
+      {/* The Real Science: light. Suzanne's attachment of 8 Nov 2026 */}
+      <section aria-labelledby="real-science-heading" className="bg-brand-cream py-20 lg:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+            <div>
+              <motion.p
+                {...sectionReveal}
+                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+              >
+                The Science
+              </motion.p>
+              <motion.h2
+                {...reveal(0.1)}
+                id="real-science-heading"
+                className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-8"
+              >
+                Behaviour is never the problem. It&rsquo;s the evidence.
+              </motion.h2>
+              <motion.p
+                {...reveal(0.2)}
+                className="text-brand-ink text-lg font-light leading-relaxed mb-6"
+              >
+                Beneath every behaviour sits a prediction: a fast, unconscious
+                forecast your nervous system makes about what will keep you safe.
+                Pattern Intelligence&trade; draws on neuroscience, somatic
+                psychology and behavioural science to find those predictions,
+                measure them and change them.
+              </motion.p>
+              <motion.p
+                {...reveal(0.3)}
+                className="text-brand-primary text-xl font-light leading-relaxed"
+              >
+                People don&rsquo;t repeat behaviours. They repeat predictions.
+                Change the prediction, and the behaviour changes naturally.
+              </motion.p>
+            </div>
+            <motion.div
+              {...reveal(0.3)}
+              className="rounded-card bg-brand-sand p-8 lg:p-10"
+            >
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+                The question behind the work
+              </p>
+              <p className="text-2xl lg:text-3xl font-light text-brand-primary leading-snug mb-6">
+                Why do intelligent, capable people keep producing outcomes they
+                consciously don&rsquo;t want?
+              </p>
+              <p className="text-brand-muted text-lg font-light leading-relaxed">
+                The usual answers are willpower, mindset or skill. None of them
+                explain why a gifted leader freezes in the room that matters, or
+                why a high-performing team falls back into the same conflict
+                every quarter. The real answer is in how the brain is built, and
+                it&rsquo;s both more hopeful and more practical than those
+                explanations.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Five Foundations: dark */}
+      <section
+        aria-labelledby="foundations-heading"
+        className="bg-brand-primary-900 py-20 lg:py-32"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.p
+            {...sectionReveal}
+            className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
+          >
+            Five Foundations
+          </motion.p>
+          <motion.h2
+            {...reveal(0.1)}
+            id="foundations-heading"
+            className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08] max-w-3xl mb-16"
+          >
+            What the science shows.
+          </motion.h2>
+          <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {foundations.map((foundation, i) => (
+              <motion.li
+                key={foundation.number}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.6, delay: (i % 3) * 0.1, ease: 'easeOut' as const }}
+                className="rounded-card bg-brand-primary-700 p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl"
+              >
+                <span className="block text-brand-accent-400 text-2xl font-light mb-4">
+                  {foundation.number}
+                </span>
+                <h3 className="text-xl lg:text-2xl font-medium text-white mb-4">
+                  {foundation.title}
+                </h3>
+                <p className="text-white/80 font-light leading-relaxed">{foundation.body}</p>
+              </motion.li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
       {/* The Premise: light */}
       <section aria-labelledby="premise-heading" className="bg-brand-cream py-20 lg:py-32">
@@ -166,11 +317,11 @@ export default function TheScienceContent() {
             className="text-brand-muted text-lg font-light leading-relaxed max-w-3xl mb-16"
           >
             Your nervous system is designed for survival. When it senses threat,
-            it activates one of three responses, and when repeated over time,
+            it activates one of four responses, and when repeated over time,
             these become default patterns.
           </motion.p>
 
-          <div className="grid sm:grid-cols-3 gap-6 lg:gap-8 mb-16">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-16">
             {survivalResponses.map((response, i) => (
               <motion.div
                 key={response.title}
@@ -292,9 +443,10 @@ export default function TheScienceContent() {
                 {...reveal(0.3)}
                 className="text-brand-muted text-lg font-light leading-relaxed"
               >
-                That is why Rapid Repatterning&reg; works at the level where
-                patterns are formed, not coping strategies layered on top, but a
-                change to the pattern itself.
+                That is why Rapid Repatterning&reg; &amp; Pattern
+                Intelligence&trade; works at the level where patterns are formed,
+                not coping strategies layered on top, but a change to the pattern
+                itself.
               </motion.p>
             </div>
 
@@ -330,10 +482,128 @@ export default function TheScienceContent() {
         </div>
       </section>
 
+      {/* Why the Change Holds: dark */}
+      <section
+        aria-labelledby="change-holds-heading"
+        className="bg-brand-primary-900 py-20 lg:py-32"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+            <div>
+              <motion.p
+                {...sectionReveal}
+                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-6"
+              >
+                Why the Change Holds
+              </motion.p>
+              <motion.h2
+                {...reveal(0.1)}
+                id="change-holds-heading"
+                className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08] mb-8"
+              >
+                Pattern Intelligence&trade; works one layer deeper.
+              </motion.h2>
+              <motion.p
+                {...reveal(0.2)}
+                className="text-white/80 text-lg font-light leading-relaxed mb-6"
+              >
+                Most development approaches add coping strategies on top of the
+                old pattern. Under pressure the pattern wins, and the old
+                behaviour comes back.
+              </motion.p>
+              <motion.p
+                {...reveal(0.3)}
+                className="text-white text-xl font-light leading-relaxed"
+              >
+                The new prediction becomes the default, so there&rsquo;s nothing
+                left to fight against.
+              </motion.p>
+            </div>
+            <ol className="flex flex-col gap-4">
+              {changeHoldsSteps.map((step, i) => (
+                <motion.li
+                  key={step.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-100px' }}
+                  transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' as const }}
+                  className="flex gap-6 rounded-card bg-brand-primary-700 p-6"
+                >
+                  <span aria-hidden="true" className="text-brand-accent-400 text-2xl font-light shrink-0">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <p className="text-white/80 font-light leading-relaxed">
+                    <span className="text-white font-medium">{step.title}:</span>{' '}
+                    {step.body}
+                  </p>
+                </motion.li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      {/* Measured, Not Assumed + Where the Science Comes Together: light */}
+      <section
+        aria-labelledby="measured-heading"
+        className="bg-brand-cream py-20 lg:py-32"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+            <div>
+              <motion.p
+                {...sectionReveal}
+                className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6"
+              >
+                Measured, Not Assumed
+              </motion.p>
+              <motion.h2
+                {...reveal(0.1)}
+                id="measured-heading"
+                className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-[1.08] mb-8"
+              >
+                Most human-development work can&rsquo;t show what it changed.
+              </motion.h2>
+              <motion.p
+                {...reveal(0.2)}
+                className="text-brand-ink text-lg font-light leading-relaxed"
+              >
+                Pattern Intelligence&trade; starts with the Pattern Score&trade;,
+                a scored diagnostic baseline that maps the patterns shaping
+                performance and tracks how they shift over time. It applies to
+                individuals, teams, departments and whole organisations.
+              </motion.p>
+            </div>
+            <motion.div
+              {...reveal(0.3)}
+              className="rounded-card bg-brand-sand p-8 lg:p-10"
+            >
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6">
+                Where the science comes together
+              </p>
+              <p className="text-brand-ink text-lg font-light leading-relaxed mb-6">
+                Leadership development changes the behaviour. Therapy explains
+                it. Coaching motivates it.
+              </p>
+              <p className="text-2xl lg:text-3xl font-medium text-brand-primary leading-snug mb-6">
+                Pattern Intelligence&trade; changes the prediction that creates
+                it.
+              </p>
+              <p className="text-brand-muted text-lg font-light leading-relaxed">
+                No single field has the full picture. Pattern Intelligence&trade;
+                brings neuroscience, somatic psychology, trauma research and
+                behavioural science into one discipline built for real-world
+                performance.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* When the Pattern Changes: light */}
       <section
         aria-labelledby="change-heading"
-        className="bg-brand-cream py-20 lg:py-32"
+        className="bg-brand-sand py-20 lg:py-32"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
@@ -354,12 +624,13 @@ export default function TheScienceContent() {
               {...reveal(0.2)}
               className="text-brand-ink text-lg font-light leading-relaxed mb-10"
             >
-              When your nervous system becomes regulated, the change shows up
-              everywhere at once, because one pattern was driving multiple areas
-              of your life. Coherence returns to the whole system:
+              When your nervous system becomes regulated, the change starts to
+              show up everywhere at once, because one pattern was driving
+              multiple areas of your life. Coherence starts to return to the
+              whole system:
             </motion.p>
             <ul className="mb-12">
-              {outcomes.map((outcome, i) => (
+              {regulatedOutcomes.map((outcome, i) => (
                 <motion.li
                   key={outcome}
                   initial={{ opacity: 0, y: 20 }}
@@ -384,8 +655,7 @@ export default function TheScienceContent() {
               {...reveal(0.3)}
               className="border-l-2 border-brand-accent pl-6 italic text-brand-primary text-xl lg:text-2xl font-light leading-snug"
             >
-              You don&rsquo;t become a different person. You become yourself,
-              without the pattern running you.
+              {REGULATED_CLOSING}
             </motion.blockquote>
           </div>
         </div>
@@ -420,7 +690,7 @@ export default function TheScienceContent() {
             id="science-cta-heading"
             className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-[1.08] mb-8"
           >
-            The science only matters once you know your pattern.
+            Decode the pattern. Unlock the potential.
           </motion.h2>
           <motion.p
             {...reveal(0.2)}
@@ -438,13 +708,13 @@ export default function TheScienceContent() {
               href="/discover-your-pattern"
               className="inline-flex items-center justify-center px-10 py-4 bg-white hover:bg-brand-sand text-brand-primary font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
             >
-              Take the Free Pattern Scan
+              Discover your Pattern Score&trade;
             </Link>
             <Link
               href="/contact#book"
               className="inline-flex items-center justify-center px-10 py-4 border border-white/50 hover:border-white text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300 hover:bg-white/10"
             >
-              Book a Discovery Call
+              Speak to The Ravenall Institute
             </Link>
           </motion.div>
         </div>
