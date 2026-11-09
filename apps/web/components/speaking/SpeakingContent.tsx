@@ -41,33 +41,19 @@ const talks = [
   },
 ]
 
+// "Audiences leave changed", Suzanne's copy of 8 Nov 2026.
 const outcomes = [
   {
-    icon: (
-      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-      </svg>
-    ),
-    heading: 'Immediate Shifts',
-    body: 'Participants experience measurable energetic and mindset shifts during the talk itself.',
+    heading: 'The shift happens in the room',
+    body: 'Suzanne doesn’t just explain patterns. She shows audiences theirs, live. People feel the shift during the talk itself, and the energy in the room changes with it.',
   },
   {
-    icon: (
-      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z" />
-      </svg>
-    ),
-    heading: 'Practical Tools',
-    body: 'Concrete repatterning techniques participants can apply immediately after leaving the room.',
+    heading: 'Tools they use the next day',
+    body: 'Every talk includes practical techniques people can apply straight away: at work, under pressure and in the moments that matter.',
   },
   {
-    icon: (
-      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1 1 .03 2.702-1.316 2.391l-1.558-.39c-.893-.223-1.843-.067-2.614.49l-.16.12a2.96 2.96 0 01-3.507 0l-.16-.12c-.771-.557-1.72-.713-2.614-.49l-1.558.39c-1.344.311-2.316-1.392-1.316-2.391L5 14.5" />
-      </svg>
-    ),
-    heading: 'Lasting Change',
-    body: 'Not just inspiration: actual neural pathway restructuring that sticks long after the event.',
+    heading: 'Insight that lasts',
+    body: 'Instead of a motivational high that fades by Monday, audiences leave with a new understanding of what drives their behaviour, and a way to start changing it.',
   },
 ]
 
@@ -80,20 +66,42 @@ const outcomes = [
 const KEYNOTE_REEL = null as { src: string; poster: string } | null
 
 /**
- * Events Suzanne has spoken at, from the conference posts on
- * ravenallinstitute.com (decision 11 replaces the logo strip with this list).
- * Source: https://ravenallinstitute.com/conference-sr-speaks-at-hr-afica/
- * and sibling conference posts listed at https://ravenallinstitute.com/articles/
+ * Where Suzanne has spoken, in her three groups (Suzanne, 8 Nov 2026; this
+ * replaces the flat list taken from the ravenallinstitute.com conference
+ * posts under decision 11).
  */
-export const SPEAKING_EVENTS = [
-  'Women in Management',
-  'Women in Leadership',
-  'Leadership Summit',
-  'HR Africa',
-  'Effective Leadership Strategies',
-  'African Women in Leadership',
-  "Representing South Africa at the Prince of Wales Trust, St James's Palace",
+export const SPEAKING_EVENT_GROUPS = [
+  {
+    heading: 'Global stages',
+    events: [
+      'Sustainability; The Prince of Wales Trust, St James’s Palace, London',
+      'YPO chapter events',
+      'YPO consciousness events',
+      'Health events',
+    ],
+  },
+  {
+    heading: 'Leadership & business',
+    events: ['Leadership Summits', 'Effective Leadership Strategies', 'HR Africa'],
+  },
+  {
+    heading: 'Women in leadership',
+    events: ['African Women in Leadership', 'Women in Leadership', 'Women in Management'],
+  },
+] as const
+
+// "Why event organisers book Suzanne", Suzanne's copy of 8 Nov 2026.
+export const WHY_BOOK = [
+  'She practises what she speaks about. She’s an entrepreneur and CEO with more than 30 years of building award-winning businesses, so she isn’t a theorist.',
+  'Her credibility comes from experience. She was named one of the Top 11 Women Entrepreneurs in the World by Leading Women of the World, has climbed one of the Seven Summits, and has turned her own trauma into transcendence.',
+  'She speaks to every level. Boardrooms, leadership teams, women’s networks and personal growth audiences all relate to her, because patterns drive everyone.',
+  'Her talks are interactive. Audiences take part rather than sit back, and they talk about it afterwards.',
 ]
+
+/** The speaker pack does not exist yet, so the button asks for it through the
+ *  contact form with the request already written in. Point it at the PDF once
+ *  Suzanne sends one. */
+export const SPEAKER_PACK_HREF = contactHref('speaking', 'Please send me the speaker pack')
 
 const corporateAudiences = [
   'Leadership teams and C-suite',
@@ -238,27 +246,37 @@ export default function SpeakingContent() {
             </p>
             <h2
               id="promise-heading"
-              className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-tight"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-white leading-tight mb-8"
             >
-              Audiences leave different
+              Audiences leave changed
             </h2>
+            <p className="text-xl text-white font-light leading-relaxed mb-6">
+              Most talks inspire for an evening. Suzanne changes how people see
+              themselves, and what they do next.
+            </p>
+            <p className="text-lg text-white/80 font-light leading-relaxed">
+              She doesn&rsquo;t just talk about transformation. She takes the
+              room through it. Audiences experience the shift for themselves,
+              leave with tools they can use the next morning, and understand why
+              they do what they do, often for the first time.
+            </p>
           </motion.div>
 
-          <div className="grid gap-8 sm:grid-cols-3">
+          <ol className="grid gap-8 sm:grid-cols-3">
             {outcomes.map((item, idx) => (
-              <motion.div
+              <motion.li
                 key={item.heading}
                 {...scrollFadeUp(idx * 0.1)}
-                className="group flex flex-col gap-5 p-8 bg-brand-primary-800 border border-white/5 rounded-card hover:border-white/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+                className="flex flex-col gap-4 p-8 bg-brand-primary-800 border border-white/5 rounded-card hover:border-white/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
               >
-                <div className="text-brand-accent-400 group-hover:scale-110 transition-transform duration-300 w-fit">
-                  {item.icon}
-                </div>
+                <span aria-hidden="true" className="text-brand-accent-400 text-2xl font-light">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
                 <h3 className="text-lg font-medium text-white">{item.heading}</h3>
-                <p className="text-sm text-white/60 font-light leading-relaxed">{item.body}</p>
-              </motion.div>
+                <p className="text-sm text-white/70 font-light leading-relaxed">{item.body}</p>
+              </motion.li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
@@ -343,23 +361,29 @@ export default function SpeakingContent() {
             </div>
           )}
 
-          <motion.ul
-            {...scrollFadeUp(0.1)}
-            aria-label="Events Suzanne has spoken at"
-            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-          >
-            {SPEAKING_EVENTS.map((event) => (
-              <li
-                key={event}
-                className="flex items-start gap-3 p-6 bg-white border border-brand-border rounded-card text-brand-ink text-sm leading-relaxed"
+          <div className="grid gap-6 lg:grid-cols-3">
+            {SPEAKING_EVENT_GROUPS.map((group, idx) => (
+              <motion.div
+                key={group.heading}
+                {...scrollFadeUp(0.1 + idx * 0.1)}
+                className="p-8 bg-white border border-brand-border rounded-card"
               >
-                <svg className="w-4 h-4 text-brand-accent shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                </svg>
-                {event}
-              </li>
+                <h3 id={`spoken-group-${idx}`} className="text-xl font-medium text-brand-primary mb-5">
+                  {group.heading}
+                </h3>
+                <ul aria-labelledby={`spoken-group-${idx}`} className="space-y-3">
+                  {group.events.map((event) => (
+                    <li key={event} className="flex items-start gap-3 text-brand-ink text-sm leading-relaxed">
+                      <svg className="w-4 h-4 text-brand-accent shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                      {event}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
             ))}
-          </motion.ul>
+          </div>
         </div>
       </section>
 
@@ -472,7 +496,60 @@ export default function SpeakingContent() {
         </section>
       )}
 
-      {/* ─── 7. Booking CTA: dark, bg-brand-primary-900 ─────────────────── */}
+      {/* ─── 7. Why organisers book Suzanne: light, bg-brand-cream ──────── */}
+      {/* The testimonials band above is hidden, so this cream band follows
+          the dark audience band. If testimonials return (also cream), move
+          one of the two to sand. */}
+      <section
+        aria-labelledby="why-book-heading"
+        className="w-full bg-brand-cream py-20 lg:py-32"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div {...scrollFadeUp(0)} className="max-w-3xl mb-12">
+            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+              For Event Organisers
+            </p>
+            <h2
+              id="why-book-heading"
+              className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary leading-tight"
+            >
+              Why event organisers book Suzanne
+            </h2>
+          </motion.div>
+
+          <ul className="grid gap-6 sm:grid-cols-2 mb-12">
+            {WHY_BOOK.map((reason, idx) => (
+              <motion.li
+                key={reason}
+                {...scrollFadeUp(idx * 0.1)}
+                className="flex items-start gap-4 p-8 bg-brand-sand border border-brand-border rounded-card"
+              >
+                <svg className="w-5 h-5 text-brand-accent shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <p className="text-brand-ink text-lg font-light leading-relaxed">{reason}</p>
+              </motion.li>
+            ))}
+          </ul>
+
+          <motion.div {...scrollFadeUp(0.2)} className="flex flex-col sm:flex-row gap-4">
+            <Link
+              href={contactHref('speaking')}
+              className="inline-flex items-center justify-center px-8 py-4 bg-brand-accent-600 hover:bg-brand-accent-700 text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
+            >
+              Book Suzanne to Speak
+            </Link>
+            <Link
+              href={SPEAKER_PACK_HREF}
+              className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
+            >
+              Download Speaker Pack
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── 8. Booking CTA: dark, bg-brand-primary-900 ─────────────────── */}
       <section
         aria-labelledby="cta-heading"
         className="relative w-full bg-brand-primary-900 py-20 lg:py-32 overflow-hidden"
