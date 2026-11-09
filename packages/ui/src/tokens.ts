@@ -118,9 +118,13 @@ export const fontSize = {
   xl: '1.25rem',     // 20px
   '2xl': '1.5rem',   // 24px
   '3xl': '1.875rem', // 30px
-  '4xl': '2.25rem',  // 36px
-  '5xl': '3rem',     // 48px
-  '6xl': '3.75rem',  // 60px
+  // One step down from 4xl up since 9 Nov 2026 (packages/config/tailwind.config.ts)
+  '4xl': '2rem',     // 32px
+  '5xl': '2.5rem',   // 40px
+  '6xl': '3rem',     // 48px
+  '7xl': '3.5rem',   // 56px
+  '8xl': '4.5rem',   // 72px
+  '9xl': '6rem',     // 96px
 } as const
 
 // ---------------------------------------------------------------------------

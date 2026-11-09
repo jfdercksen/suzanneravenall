@@ -10,7 +10,7 @@ const fadeUp = (delay: number) => ({
 
 // HEADER RULE (.claude/rules/design-rules.md), the inner-page template Johan
 // approved on the 15 Sep design canvas: the picture is the header and the
-// text sits on a black band at its bottom edge. Headline 60px regular, one
+// text sits on a black band at its bottom edge. Headline 48px regular (60px before the 9 Nov 2026 type scale), one
 // line of description, no eyebrow (the old "Meet Dr. Suzanne Ravenall"
 // repeated the logo directly above it). The quote that used to sit here moved
 // out: MediaLogos carries the same quote further down this page.

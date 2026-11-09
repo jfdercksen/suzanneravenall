@@ -44,7 +44,7 @@ export default function Hero() {
   // the picture is the hero, the text sits on top of it. Suzanne's 14 Sep note
   // was that the old 96px semibold headline and three blocks of copy blocked
   // out the photograph. So: content anchored to the bottom-left the way
-  // tonyrobbins.com does it, headline capped at 60px and regular weight, one
+  // tonyrobbins.com does it, headline capped at 48px (60px before the 9 Nov 2026 type scale) and regular weight, one
   // description paragraph, and a black scrim that exists only behind the text
   // band. The top of the frame, where Suzanne's face is, stays clear.
   // Below sm the video is a tight close-up, so no overlay can avoid her face:
@@ -129,7 +129,7 @@ export default function Hero() {
                   canvas. The "Dr. Suzanne Ravenall · Founder of Pattern
                   Intelligence" line repeated the logo directly above it. */}
 
-              {/* Headline — regular weight, 36 / 48 / 60px. The measured
+              {/* Headline — regular weight, 32 / 40 / 48px since the 9 Nov 2026 type scale (was 36 / 48 / 60). The measured
                   reference is 70px at weight 500 in Suisse Intl; Poppins has
                   wider, heavier strokes at the same weight, so 400 in Poppins
                   reads like 500 in Suisse. */}

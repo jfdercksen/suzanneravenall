@@ -130,7 +130,7 @@ From 640px up (tablet and desktop):
 |---|---|
 | Position | content anchored bottom-left; the top of the frame stays clear. The description carries the width cap, so the CTA row can run to one line. When the subject stands on the left of the frame, anchor bottom-right instead, in a right-hand column with the text still left-aligned (the About page, Johan 15 Sep) |
 | Eyebrow | optional: `text-xs uppercase tracking-[0.25em] font-medium text-white/80`. Never one that repeats the name in the logo above it; the homepage hero has none (option B, chosen by Johan on the 15 Sep design canvas) |
-| Headline | `text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.05] text-white` (36 / 48 / 60px). Never above 60px, never semibold or bold over a picture |
+| Headline | `text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.05] text-white` (32 / 40 / 48px since the 9 Nov 2026 type scale; were 36 / 48 / 60). Never above 48px, never semibold or bold over a picture |
 | Description | one paragraph at most, `text-sm sm:text-base lg:text-lg text-white/85 max-w-xl`. Secondary copy moves below the header |
 | Scrim | black only, never a colour tint, and only behind the text band: a fade (`h-24 lg:h-32`) from clear to black at 65%, then 65% to 85% behind the text. Nothing darkens the top of the picture |
 | Primary CTA on a picture | `bg-white text-brand-primary hover:bg-brand-sand` |
@@ -138,7 +138,9 @@ From 640px up (tablet and desktop):
 
 Below 640px (phones): if text over the picture would cover the subject's face, stack instead. The picture takes the top (320px on the homepage), the text sits on black beneath it, and the fade runs to solid black exactly where the picture ends so there is no seam. This is the homepage case: its video is a close-up of Suzanne.
 
-Section headlines on flat grounds (not over a picture): `text-4xl lg:text-6xl font-medium tracking-tight`. Weight 500 is the measured reference weight; it replaces the 600 used since 20 Aug.
+Section headlines on flat grounds (not over a picture): `text-4xl lg:text-6xl font-medium tracking-tight` (32 / 48px since 9 Nov 2026). Weight 500 is the measured reference weight; it replaces the 600 used since 20 Aug.
+
+**Type scale, 9 Nov 2026.** After Suzanne's 8 Nov note that the writing was too big and a section could not be read without scrolling, every display size from `text-4xl` up was taken one step below Tailwind's default in the shared preset (`packages/config/tailwind.config.ts`): 4xl 32px, 5xl 40px, 6xl 48px, 7xl 56px, 8xl 72px, 9xl 96px. This now sits below the reference's measured 70.4px hero and 57.6px section headline on purpose: the client asked for smaller. The shared PageHeader drops to 480px / 560px tall (sm / lg).
 
 ---
 

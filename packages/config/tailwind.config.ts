@@ -109,6 +109,19 @@ const config = {
       },
       fontSize: {
         '2xs': ['0.625rem', { lineHeight: '1rem' }],
+        // TYPE SCALE (9 Nov 2026): Suzanne, 8 Nov: "the writing is way too big
+        // in most places", a section's banner text did not fit on screen
+        // without scrolling. Every display size from 4xl up is one step
+        // smaller than Tailwind's default, here in the preset so all ~400 uses
+        // move together. Page titles are now 32 / 40 / 48px (were 36 / 48 /
+        // 60), section headlines 32 / 48px (were 36 / 60). Sizes up to 3xl
+        // are unchanged. Keep packages/ui/src/tokens.ts in step.
+        '4xl': ['2rem', { lineHeight: '1.125' }], // 32px (default 36)
+        '5xl': ['2.5rem', { lineHeight: '1' }], // 40px (default 48)
+        '6xl': ['3rem', { lineHeight: '1' }], // 48px (default 60)
+        '7xl': ['3.5rem', { lineHeight: '1' }], // 56px (default 72)
+        '8xl': ['4.5rem', { lineHeight: '1' }], // 72px (default 96)
+        '9xl': ['6rem', { lineHeight: '1' }], // 96px (default 128)
       },
       fontWeight: {
         // '200' as string — Tailwind fontWeight extension requires string values.

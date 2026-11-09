@@ -60,7 +60,7 @@ export function PageHeader({
   return (
     <section
       aria-labelledby={id}
-      className="relative flex flex-col justify-end bg-brand-primary-900 sm:min-h-[560px] lg:min-h-[640px] overflow-hidden"
+      className="relative flex flex-col justify-end bg-brand-primary-900 sm:min-h-[480px] lg:min-h-[560px] overflow-hidden"
     >
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-80 sm:h-full">
         {video ? (

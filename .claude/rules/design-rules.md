@@ -60,7 +60,8 @@ From sm (640px) up:
   Never one that repeats the name in the logo directly above it: the homepage hero
   has no eyebrow (Johan chose option B on the 15 Sep design canvas)
 - Headline: `text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.05] text-white`.
-  Never above 60px. Never semibold or bold over a picture
+  That is 32 / 40 / 48px since the 9 Nov 2026 type scale (see Type scale below).
+  Never above 48px. Never semibold or bold over a picture
 - Description: ONE paragraph at most, `text-sm sm:text-base lg:text-lg text-white/85 max-w-xl`.
   Anything more moves below the header
 - Scrim: black only (never a navy/accent tint) and only behind the text band: a fade
@@ -90,7 +91,7 @@ Do NOT "correct" these to font-medium: that is the SECTION headline weight (see
 Typography below), and the two rules are easy to confuse. font-normal is right
 for a page title, font-medium for a section headline inside the page. The
 exception is a heading inside a narrow card, such as "Log In" or "Forgot
-Password" in the 448px auth card, which stays `text-2xl font-medium`; at 60px it
+Password" in the 448px auth card, which stays `text-2xl font-medium`; at 48px it
 would wrap to three lines and swamp the form.
 
 ## Non-negotiable rules
@@ -107,6 +108,17 @@ would wrap to three lines and swamp the form.
 - next/link for internal navigation — never bare <a>
 - "use client" only on components that genuinely need it (animation, state, browser API)
 - No lorem ipsum — all placeholder copy must be realistic for a coaching practice
+
+## Type scale (9 Nov 2026)
+
+Suzanne, 8 Nov: "the writing is way too big in most places"; a section's
+banner text did not fit on one screen. The fix is in the token, not per page:
+`packages/config/tailwind.config.ts` sets every display size from `text-4xl`
+up one step below Tailwind's default (4xl 32px, 5xl 40px, 6xl 48px, 7xl 56px,
+8xl 72px, 9xl 96px; 3xl and below unchanged). So the class strings in these
+rules stay as written and render smaller. Do not "restore" the old sizes with
+arbitrary values such as `text-[60px]`. The shared PageHeader is 480px / 560px
+tall from sm / lg (was 560 / 640).
 
 ## Typography rules
 
