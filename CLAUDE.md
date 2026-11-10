@@ -171,7 +171,8 @@ Docs: https://developers.cloudflare.com/agents/
 | `/about/the-system` | `app/about/the-system/page.tsx` | The System — Pattern Intelligence™ ecosystem |
 | `/about/the-science` | `app/about/the-science/page.tsx` | The Science — how pattern-level change works |
 | `/testimonials` | `app/testimonials/page.tsx` | Client testimonials (video + written) |
-| `/events` | `app/events/page.tsx` | Live events & training dates |
+| `/events` | `app/events/page.tsx` | Live programmes calendar, fed by `data/live-calendar.json` |
+| `/programs/recorded-group-healing` | `app/programs/recorded-group-healing/page.tsx` | Recorded group healing sessions (series recorded live) |
 | `/pattern-coach` | `app/pattern-coach/page.tsx` | Pattern Intelligence Coach™ — 24/7 AI coach (30-day trial → monthly) |
 | `/services` | `app/services/page.tsx` | Services overview |
 | `/shop` | `app/shop/page.tsx` | Product catalogue |
