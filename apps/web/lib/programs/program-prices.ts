@@ -21,6 +21,8 @@ export interface ProgramPriceTexts {
   /** The amounts behind the texts in cents, null for "Price on request" (for "From" prices). */
   zarCents: number | null
   usdCents: number | null
+  /** The one shop variant the price stands for, so a link can preselect it (?variant=). */
+  variantId?: string
 }
 
 function formatRand(amount: number): string {
@@ -60,7 +62,8 @@ export function programPriceTexts(program: Program, variants: ProductVariant[] |
   const zarCents =
     program.priceZar != null ? Math.round(program.priceZar * 100) : lowest(matches.map((v) => amountIn(v, 'zar')))
   const usdCents = lowest(matches.map((v) => amountIn(v, 'usd')))
-  return textsFor(zarCents, usdCents)
+  const texts = textsFor(zarCents, usdCents)
+  return matches.length === 1 && matches[0]?.id ? { ...texts, variantId: matches[0].id } : texts
 }
 
 function textsFor(zarCents: number | null, usdCents: number | null): ProgramPriceTexts {

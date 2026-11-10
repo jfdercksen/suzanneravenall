@@ -198,6 +198,27 @@ describe('ProgramDetailClient price in the visitor currency (L-USD3)', () => {
   })
 })
 
+describe('The Inner Sanctuary and Present: recorded self-study and live series (KI106)', () => {
+  for (const slug of ['meditation', 'mindfulness']) {
+    it(`${slug}: offers the recorded self-study to buy and the live series on register interest`, () => {
+      const program = getProgramBySlug(slug)!
+      render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
+      expect(screen.getByText('The recorded programme')).toBeInTheDocument()
+      expect(screen.getByText('The live series with Suzanne')).toBeInTheDocument()
+      const buys = screen.getAllByRole('link', { name: 'Buy the Recorded Programme' })
+      expect(buys.length).toBeGreaterThanOrEqual(2)
+      for (const link of buys) expect(link.getAttribute('href')).toMatch(new RegExp(`^/shop/${program.shopHandle}`))
+      expect(screen.getAllByRole('link', { name: 'Register Interest' }).length).toBeGreaterThan(0)
+      expect(screen.getByText('Self-study (recorded)')).toBeInTheDocument()
+    })
+  }
+
+  it('a programme without a recorded edition shows no options block', () => {
+    render(<ProgramDetailClient program={getProgramBySlug('energy-clearing-basic')!} relatedPrograms={[]} />)
+    expect(screen.queryByText('The recorded programme')).not.toBeInTheDocument()
+  })
+})
+
 describe('ProgrammeLongForm band count (ground alternation)', () => {
   for (const [slug, copy] of Object.entries(PROGRAMME_COPY)) {
     it(`${slug}: longFormBandCount matches the sections rendered`, () => {

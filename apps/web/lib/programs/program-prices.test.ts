@@ -130,3 +130,20 @@ describe('lowestProgramPrice', () => {
     expect(lowestProgramPrice([])).toMatchObject({ zar: PRICE_ON_REQUEST, usd: PRICE_ON_REQUEST })
   })
 })
+
+describe('programPriceTexts variantId (KI106: link the recorded self-study variant)', () => {
+  const meditation = { slug: 'x', priceZar: 1660 } as Parameters<typeof programPriceTexts>[0]
+  const variants = [
+    { id: 'var_live', title: 'Live via Zoom', prices: [{ currency_code: 'zar', amount: 277000 }, { currency_code: 'usd', amount: 44000 }] },
+    { id: 'var_self', title: 'Self Study', prices: [{ currency_code: 'zar', amount: 166000 }, { currency_code: 'usd', amount: 22000 }] },
+  ]
+
+  it('names the one variant the price stands for', () => {
+    expect(programPriceTexts(meditation, variants).variantId).toBe('var_self')
+    expect(programPriceTexts(meditation, variants).usd).toBe('$220')
+  })
+
+  it('names none when no variant matches', () => {
+    expect(programPriceTexts({ ...meditation, priceZar: 999 }, variants).variantId).toBeUndefined()
+  })
+})

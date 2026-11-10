@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { cookies, headers } from 'next/headers'
 import { notFound } from 'next/navigation'
-import { getBundleForSeries, getProgramBySlug, getRelatedPrograms } from '@/data/programs'
+import type { Program } from '@/data/programs'
+import { getBundleForSeries, getProgramBySlug, getRelatedPrograms, selfStudyEditionOf } from '@/data/programs'
 import { ProgramPricesProvider } from '@/components/programs/ProgramPrices'
 import { getProgramPriceTexts } from '@/lib/programs/fetch-program-prices'
 import { ipCountry } from '@/lib/geoip'
@@ -36,7 +37,7 @@ export default async function ProgramDetailPage({ params }: Props) {
   const bundle = getBundleForSeries(program.series)
 
   const [priceTexts, reqHeaders, reqCookies] = await Promise.all([
-    getProgramPriceTexts(bundle ? [program, bundle] : [program]),
+    getProgramPriceTexts([program, bundle, selfStudyEditionOf(program)].filter((p): p is Program => p !== undefined)),
     headers(),
     cookies(),
   ])

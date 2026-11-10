@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { cookies, headers } from 'next/headers'
-import { BUNDLES, PROGRAMS } from '@/data/programs'
+import { BUNDLES, PROGRAMS, SELF_STUDY_EDITIONS } from '@/data/programs'
 import { membershipsEnabled } from '@/lib/access/memberships'
 import { ProgramPricesProvider } from '@/components/programs/ProgramPrices'
 import { getProgramPriceTexts } from '@/lib/programs/fetch-program-prices'
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 export default async function ProgramsPage() {
   const [priceTexts, reqHeaders, reqCookies] = await Promise.all([
-    getProgramPriceTexts([...PROGRAMS.filter((p) => p.isPublished), ...BUNDLES]),
+    getProgramPriceTexts([...PROGRAMS.filter((p) => p.isPublished), ...BUNDLES, ...SELF_STUDY_EDITIONS]),
     headers(),
     cookies(),
   ])

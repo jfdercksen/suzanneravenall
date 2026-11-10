@@ -4,7 +4,8 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { RichText } from '@/components/shared/RichText'
-import { getBundleForSeries, getProgramBySlug, type Program } from '@/data/programs'
+import { getBundleForSeries, getProgramBySlug, selfStudyEditionOf, type Program } from '@/data/programs'
+import { ProgrammeOptions, recordedSelfStudyHref } from '@/components/programs/ProgrammeOptions'
 import { useProgramPrices } from '@/components/programs/ProgramPrices'
 import { PRICE_ON_REQUEST, programPriceSuffix } from '@/lib/programs/program-prices'
 import { SERIES_PATHS, type ProgrammeCopy } from '@/data/programmeCopy'
@@ -60,7 +61,9 @@ function buildKeys(program: Program, copy: ProgrammeCopy): string[] {
 export function ProgrammeLongForm({ program, copy, price, priceSuffix, cta }: Props) {
   const path = program.series ? SERIES_PATHS[program.series] : undefined
   const bundle = getBundleForSeries(program.series)
-  const { priceOf, currency } = useProgramPrices()
+  const { priceOf, currency, variantOf } = useProgramPrices()
+  // A live programme whose product also sells the recorded self-study (KI106).
+  const edition = selfStudyEditionOf(program)
   const bundlePrice = bundle ? priceOf(bundle.slug) : PRICE_ON_REQUEST
   const bundleSuffix = programPriceSuffix(bundlePrice, currency)
   // One label per page: register-interest programmes use the same words as the header button.
@@ -168,6 +171,8 @@ export function ProgrammeLongForm({ program, copy, price, priceSuffix, cta }: Pr
                     <span className="font-semibold">
                       {price}
                       {priceSuffix && <span className="text-brand-muted font-normal ml-1">{priceSuffix}</span>}
+                      {/* With the recorded option beside it, say which price this is (KI106). */}
+                      {edition && <span className="text-brand-muted font-normal"> live via Zoom</span>}
                     </span>
                   ) : (
                     <RichText line={row.value} />
@@ -192,9 +197,13 @@ export function ProgrammeLongForm({ program, copy, price, priceSuffix, cta }: Pr
                 </ul>
               </>
             )}
-            <Link href={cta.href} className={CTA}>
-              {ctaLabel}
-            </Link>
+            {edition ? (
+              <ProgrammeOptions program={program} />
+            ) : (
+              <Link href={cta.href} className={CTA}>
+                {ctaLabel}
+              </Link>
+            )}
           </div>
         </div>
       ),
@@ -287,9 +296,19 @@ export function ProgrammeLongForm({ program, copy, price, priceSuffix, cta }: Pr
             <RichText line={copy.closingNote} />
           </p>
         )}
-        <Link href={cta.href} className={CTA}>
-          {ctaLabel}
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link href={cta.href} className={CTA}>
+            {ctaLabel}
+          </Link>
+          {edition && (
+            <Link
+              href={recordedSelfStudyHref(program, variantOf(edition.slug))}
+              className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary-300 hover:border-brand-primary text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-brand-sand"
+            >
+              Buy the Recorded Programme
+            </Link>
+          )}
+        </div>
         {copy.scope && (
           <p className="mt-10 text-sm text-brand-muted font-light leading-relaxed">
             {copy.scope.label && <strong className="font-medium text-brand-ink">{copy.scope.label} </strong>}

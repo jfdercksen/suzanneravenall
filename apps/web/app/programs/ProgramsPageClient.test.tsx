@@ -203,6 +203,11 @@ describe('ProgramsPageClient practitioner training (8 Nov)', () => {
     expect(at(order, 1)).toBeLessThan(at(order, 2))
   })
 
+  it('live cards for The Inner Sanctuary and Present also show the recorded self-study price (KI106)', () => {
+    render(<ProgramsPageClient />)
+    expect(screen.getAllByText(/Recorded self-study:/)).toHaveLength(2)
+  })
+
   it('links the recorded group section to its own page', () => {
     render(<ProgramsPageClient />)
     expect(screen.getByRole('link', { name: 'How the recorded sessions work' })).toHaveAttribute(

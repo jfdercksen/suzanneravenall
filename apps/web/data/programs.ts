@@ -37,6 +37,13 @@ export type Program = {
    * register interest (data/programs.test.ts enforces it).
    */
   selfStudyVariant?: boolean
+  /**
+   * A live programme whose product also sells a Self Study variant (the
+   * recorded programme): its rand price. The page then offers both, the
+   * recorded self-study to buy now and the live series on register interest
+   * (Johan 10 Nov, KI106). See selfStudyEditionOf.
+   */
+  selfStudyPriceZar?: number
   /** Suzanne's own card text where she supplied one (8 Nov copy); cards prefer it. */
   cardText?: string
   /** One-line subtitle under the name, from her copy documents. */
@@ -637,7 +644,9 @@ export const PROGRAMS: Program[] = [
     priceZar: 2770,
     shopHandle: 'mindfulness-live',
     // No live dates published since 2022 (report section 9): register interest only.
-    duration: 'Live via Zoom: register your interest',
+    duration: 'Live via Zoom: register your interest. Self-study: the recorded programme, start anytime',
+    // Self Study variant R1,660 / $220 on the same product (Johan 10 Nov: "Yes, sell them").
+    selfStudyPriceZar: 1660,
     registerInterest: true,
     features: [
       'Practical mindfulness meditation techniques',
@@ -668,7 +677,9 @@ export const PROGRAMS: Program[] = [
     priceZar: 2770,
     shopHandle: 'meditation-live-via-zoom',
     // No live dates published since 2022 (report section 9): register interest only.
-    duration: 'Live via Zoom: register your interest',
+    duration: 'Live via Zoom: register your interest. Self-study: the recorded programme, start anytime',
+    // Self Study variant R1,660 / $220 on the same product (Johan 10 Nov: "Yes, sell them").
+    selfStudyPriceZar: 1660,
     registerInterest: true,
     features: [
       'Learn to observe thoughts and feelings without judgement',
@@ -933,6 +944,29 @@ export const BUNDLES: Program[] = [
     isFeatured: false,
   },
 ]
+
+/**
+ * The recorded self-study edition of a live programme (selfStudyPriceZar set):
+ * same product, priced at its Self Study variant so the price reader shows it in
+ * the visitor's currency and the link preselects that variant. Not in PROGRAMS.
+ */
+export function selfStudyEditionOf(program: Program): Program | undefined {
+  if (program.selfStudyPriceZar == null || !program.shopHandle) return undefined
+  return {
+    ...program,
+    slug: `${program.slug}--self-study`,
+    category: 'self-paced',
+    priceZar: program.selfStudyPriceZar,
+    registerInterest: undefined,
+    selfStudyPriceZar: undefined,
+    duration: 'Self-study: the recorded programme, start anytime',
+  }
+}
+
+export const SELF_STUDY_EDITIONS: Program[] = PROGRAMS.flatMap((p) => {
+  const edition = selfStudyEditionOf(p)
+  return edition && p.isPublished ? [edition] : []
+})
 
 /** The bundle of a practitioner series, if it has one. */
 export const getBundleForSeries = (series: ProgramSeries | undefined): Program | undefined =>

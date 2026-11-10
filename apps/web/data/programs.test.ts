@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
   PROGRAMS,
+  SELF_STUDY_EDITIONS,
+  selfStudyEditionOf,
   getProgramBySlug,
   getProgramCta,
   getProgramsByCategory,
@@ -195,18 +197,32 @@ describe('getRelatedPrograms', () => {
 // selfStudyVariant mirrors the review box catalogue (a published Self Study
 // variant on the programme's shopHandle product, read 10 Nov).
 describe('self-study rule (Johan 10 Nov)', () => {
-  // Suzanne's 8 Nov copy defines these as live Zoom programmes (USD 440) although
-  // the old Meditation / Mindfulness products also carry a Self Study variant.
-  // Johan decides; until then they are the only allowed exception.
-  const LIVE_BY_HER_COPY = ['meditation', 'mindfulness']
-
-  it('a programme whose product sells self-study is sold as self-study, never as live-only', () => {
+  it('every programme whose product sells self-study offers it to buy now (no exceptions, Johan 10 Nov)', () => {
     for (const p of PROGRAMS.filter((x) => x.isPublished && x.selfStudyVariant)) {
-      if (LIVE_BY_HER_COPY.includes(p.slug)) continue
+      const edition = selfStudyEditionOf(p)
+      if (edition) {
+        // A live programme with the recorded self-study beside it: same product,
+        // the edition priced at the Self Study variant and sold from the shop.
+        expect(edition.shopHandle, p.slug).toBe(p.shopHandle)
+        expect(edition.registerInterest, p.slug).toBeFalsy()
+        expect(getProgramCta(edition).href, p.slug).toBe(`/shop/${p.shopHandle}`)
+        expect(p.duration, p.slug).toMatch(/Self-study/)
+        continue
+      }
       expect(p.registerInterest, p.slug).toBeFalsy()
       expect(p.category, p.slug).not.toBe('live')
       expect(p.duration, p.slug).toMatch(/^Self-study/)
       expect(getProgramCta(p).href, p.slug).toBe(`/shop/${p.shopHandle}`)
+    }
+  })
+
+  it('The Inner Sanctuary and Present stay live and also sell the recorded self-study (KI106)', () => {
+    for (const slug of ['meditation', 'mindfulness']) {
+      const p = getProgramBySlug(slug)!
+      expect(p.category, slug).toBe('live')
+      expect(p.registerInterest, slug).toBe(true)
+      expect(selfStudyEditionOf(p)?.priceZar, slug).toBe(1660)
+      expect(SELF_STUDY_EDITIONS.map((e) => e.slug)).toContain(`${slug}--self-study`)
     }
   })
 

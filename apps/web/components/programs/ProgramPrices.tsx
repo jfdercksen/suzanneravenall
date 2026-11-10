@@ -25,10 +25,19 @@ export function ProgramPricesProvider({ texts, defaultCurrency, children }: Prog
 }
 
 /** Looks up a programme's price (by slug) in the visitor's currency. */
-export function useProgramPrices(): { priceOf: (slug: string) => string; currency: string } {
+export function useProgramPrices(): {
+  priceOf: (slug: string) => string
+  currency: string
+  /** The shop variant behind the price, when exactly one matches. */
+  variantOf: (slug: string) => string | undefined
+} {
   const { texts, defaultCurrency } = useContext(ProgramPricesContext)
   const { cart } = useCart()
   // Same rule as the shop cards: the cart's currency once there is one.
   const currency = (cart?.currency_code ?? defaultCurrency).toLowerCase()
-  return { priceOf: (slug) => programPriceIn(texts[slug], currency), currency }
+  return {
+    priceOf: (slug) => programPriceIn(texts[slug], currency),
+    currency,
+    variantOf: (slug) => texts[slug]?.variantId,
+  }
 }

@@ -10,6 +10,7 @@ import { programPriceSuffix } from '@/lib/programs/program-prices'
 import {
   getBundleForSeries,
   getProgramsByCategory,
+  selfStudyEditionOf,
   getProgramsBySeries,
   type Program,
 } from '@/data/programs'
@@ -662,7 +663,15 @@ export default function ProgramsPageClient({ membershipsOn = false }: { membersh
                   </p>
                   <p className="text-brand-primary font-semibold text-lg mb-2">
                     {priceOf(program.slug)}
+                    {selfStudyEditionOf(program) && (
+                      <span className="text-brand-muted text-sm font-normal"> live via Zoom</span>
+                    )}
                   </p>
+                  {selfStudyEditionOf(program) && (
+                    <p className="text-sm text-brand-ink mb-2">
+                      Recorded self-study: <span className="font-semibold">{priceOf(selfStudyEditionOf(program)?.slug ?? '')}</span>
+                    </p>
+                  )}
                   {program.duration && (
                     <p className="text-xs text-brand-muted mb-6">
                       {program.duration}

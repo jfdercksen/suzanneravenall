@@ -6,7 +6,8 @@ import { motion } from 'framer-motion'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { useProgramPrices } from '@/components/programs/ProgramPrices'
 import { programPriceSuffix } from '@/lib/programs/program-prices'
-import { getProgramBySlug, getProgramCta, isResonanceRepatterning, type Program } from '@/data/programs'
+import { getProgramBySlug, getProgramCta, isResonanceRepatterning, selfStudyEditionOf, type Program } from '@/data/programs'
+import { recordedSelfStudyHref } from '@/components/programs/ProgrammeOptions'
 import { getProgrammeCopy } from '@/data/programmeCopy'
 import { ProgrammeLongForm, longFormBandCount } from '@/components/programs/ProgrammeLongForm'
 
@@ -172,7 +173,11 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
   const deliveryMethod = getDeliveryMethod(program)
   const categoryLabel = CATEGORY_LABELS[program.category]
   // The visitor's currency only (D021): "R13,950 ZAR", "$2,105 USD" or "Price on request".
-  const { priceOf, currency } = useProgramPrices()
+  const { priceOf, currency, variantOf } = useProgramPrices()
+  // Live programme whose product also sells the recorded self-study (KI106).
+  const edition = selfStudyEditionOf(program)
+  const editionPrice = edition ? priceOf(edition.slug) : null
+  const editionSuffix = editionPrice ? programPriceSuffix(editionPrice, currency) : null
   const price = priceOf(program.slug)
   const priceSuffix = programPriceSuffix(price, currency)
   const prerequisiteProgram = program.prerequisite?.slug
@@ -204,10 +209,10 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
           {cta.label}
         </Link>
         <Link
-          href="/programs"
+          href={edition ? recordedSelfStudyHref(program, variantOf(edition.slug)) : '/programs'}
           className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white hover:bg-white/10 text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
         >
-          View All Programmes
+          {edition ? 'Buy the Recorded Programme' : 'View All Programmes'}
         </Link>
       </PageHeader>
 
@@ -244,12 +249,23 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
               </div>
             )}
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-white/80 mb-1">Investment</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-white/80 mb-1">
+                {edition ? 'Live via Zoom' : 'Investment'}
+              </p>
               <p className="text-sm font-semibold text-white">
                 {price}
                 {priceSuffix && <span className="text-white/80 font-normal ml-1">{priceSuffix}</span>}
               </p>
             </div>
+            {editionPrice && (
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-white/80 mb-1">Self-study (recorded)</p>
+                <p className="text-sm font-semibold text-white">
+                  {editionPrice}
+                  {editionSuffix && <span className="text-white/80 font-normal ml-1">{editionSuffix}</span>}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </section>
