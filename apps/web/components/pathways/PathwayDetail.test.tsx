@@ -48,34 +48,12 @@ describe('PathwayDetail closing CTA (site check C14)', () => {
     })
   }
 
-  it('youth pathways use their CTA line as the heading and drop the adult line', () => {
-    const youth = pathways.find((p) => p.slug === 'emotional-mastery-for-young-minds')!
+  it('youth pathways close on the pathway name and drop the adult line', () => {
+    const youth = pathways.find((p) => p.slug === 'pattern-foundations-teens')!
     render(<PathwayDetail pathway={youth} />)
-    expect(
-      screen.getByRole('heading', { level: 2, name: 'Help them build emotional skills for life.' }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: 'Pattern Foundations: Teens' })).toBeInTheDocument()
     expect(screen.queryByText(ADULT_LINE)).not.toBeInTheDocument()
   })
-
-  // Decision 14 (6 Oct): youth pathways are "register interest" only.
-  for (const youth of pathways.filter((p) => p.category === 'youth')) {
-    it(`${youth.slug}: offers Register Interest instead of booking a discovery session`, () => {
-      render(<PathwayDetail pathway={youth} />)
-      expect(screen.queryByText('Book a Discovery Session')).not.toBeInTheDocument()
-      const links = screen.getAllByRole('link', { name: /Register Interest/ })
-      expect(links.length).toBeGreaterThanOrEqual(2)
-      for (const link of links) {
-        const url = new URL(link.getAttribute('href') ?? '', 'http://localhost')
-        expect(url.pathname).toBe('/contact')
-        expect(url.searchParams.get('enquiry')).toBe('other')
-        expect(url.searchParams.get('topic')).toBe(`Register interest: ${youth.title}`)
-      }
-      expect(
-        screen.getByText('Full details of this transformation pathway will be available soon.'),
-      ).toBeInTheDocument()
-    })
-  }
-
   it('adult pathways keep the discovery session CTA and no register-interest notice', () => {
     const adult = pathways.find((p) => p.slug === 'break-the-loop')!
     render(<PathwayDetail pathway={adult} />)
@@ -93,5 +71,72 @@ describe('PathwayDetail closing CTA (site check C14)', () => {
       }),
     ).toBeInTheDocument()
     expect(screen.getByText(ADULT_LINE)).toBeInTheDocument()
+  })
+})
+
+describe('PathwayDetail: Book button on every pathway (item 7.1)', () => {
+  for (const pathway of pathways) {
+    it(`${pathway.slug}: links Book a Session to the private sessions`, () => {
+      render(<PathwayDetail pathway={pathway} />)
+      const links = screen.getAllByRole('link', { name: 'Book a Session' })
+      expect(links.length).toBeGreaterThanOrEqual(1)
+      for (const link of links) expect(link).toHaveAttribute('href', '/services#private')
+    })
+  }
+})
+
+describe('PathwayDetail: young people pathways (items 7.3, 7.4)', () => {
+  const minors = pathways.filter((p) => p.category === 'youth' && p.slug !== 'the-family-pattern')
+
+  for (const pathway of minors) {
+    it(`${pathway.slug}: shows the safeguarding block with policy, consent, credentials and referral`, () => {
+      render(<PathwayDetail pathway={pathway} />)
+      expect(screen.getByRole('heading', { level: 2, name: /Safeguarding & scope/ })).toBeInTheDocument()
+      expect(screen.getByText('Safeguarding policy')).toBeInTheDocument()
+      expect(screen.getByText('Parental consent')).toBeInTheDocument()
+      expect(screen.getByText(/Certified Family Trauma Specialist/)).toBeInTheDocument()
+      expect(screen.getByText(/not treatment or therapy/)).toBeInTheDocument()
+      expect(screen.getByText(/refer on to a registered health professional/)).toBeInTheDocument()
+    })
+  }
+
+  it('renders the format line as a visible placeholder', () => {
+    const { container } = render(<PathwayDetail pathway={minors[0]!} />)
+    const placeholders = Array.from(container.querySelectorAll('[data-placeholder="true"]')).map((n) => n.textContent)
+    expect(placeholders.some((t) => t?.startsWith('[Format:'))).toBe(true)
+  })
+
+  it('children: her Book a Parent Discovery Call button and the session themes', () => {
+    const children = pathways.find((p) => p.slug === 'pattern-foundations-children')!
+    render(<PathwayDetail pathway={children} />)
+    expect(screen.getAllByRole('link', { name: /Book a Parent Discovery Call/ })[0]).toHaveAttribute('href', '/contact#book')
+    expect(screen.getByText('Foundations for Life · Pattern Foundations')).toBeInTheDocument()
+  })
+
+  it('the parents pathway has no safeguarding block', () => {
+    const family = pathways.find((p) => p.slug === 'the-family-pattern')!
+    render(<PathwayDetail pathway={family} />)
+    expect(screen.queryByText('Parental consent')).not.toBeInTheDocument()
+  })
+})
+
+describe('PathwayDetail: Pattern Mastery (item 7.2)', () => {
+  const mastery = pathways.find((p) => p.slug === 'pattern-mastery')!
+
+  it('closes on "Want to do this work with others?" with the practitioner link', () => {
+    render(<PathwayDetail pathway={mastery} />)
+    expect(screen.getByRole('heading', { level: 2, name: 'Want to do this work with others?' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Practitioner Certification' })).toHaveAttribute('href', '/programs#practitioner')
+  })
+
+  it('shows the foundations pathway name as a placeholder', () => {
+    render(<PathwayDetail pathway={mastery} />)
+    expect(screen.getByText('[Foundations pathway name]')).toBeInTheDocument()
+  })
+
+  it('offers Apply for Pattern Mastery and Book a Discovery Call', () => {
+    render(<PathwayDetail pathway={mastery} />)
+    expect(screen.getAllByRole('link', { name: /Apply for Pattern Mastery/ }).length).toBeGreaterThan(0)
+    expect(screen.getByRole('link', { name: 'Book a Discovery Call' })).toHaveAttribute('href', '/contact#book')
   })
 })

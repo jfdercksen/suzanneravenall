@@ -100,22 +100,43 @@ export default function PathwaysGrid() {
           ))}
         </motion.ul>
 
-        {/* Young People Pathways: 5 cards, lg:grid-cols-3 = 2 rows (3+2) */}
-        <motion.p
+        {/* Young People Pathways: Suzanne's section intro (8 Nov, attachment 02), four cards */}
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px' }}
           transition={{ duration: 0.5 }}
-          className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-6 mt-16"
+          className="mt-20 mb-10 max-w-3xl"
         >
-          Young People Pathways
-        </motion.p>
+          <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
+            Young People Pathways
+          </p>
+          <h3 className="text-3xl lg:text-4xl font-medium tracking-tight text-brand-primary leading-tight mb-6">
+            Patterns start early. So can change.
+          </h3>
+          <div className="space-y-4 text-base lg:text-lg text-brand-muted font-light leading-relaxed">
+            <p>
+              Most of the patterns that shape adult life form in childhood. They come from the moments
+              that taught a child who to be, what to fear and how to stay safe and loved.
+            </p>
+            <p>
+              Our Young People Pathways help children, teenagers and their families see those patterns
+              while they are still forming. Young people build the emotional skills, self-awareness and
+              inner confidence to grow into their potential, rather than spending years later undoing
+              what they learned.
+            </p>
+            <p>
+              Four pathways. One purpose: give young people the foundations most adults wish they had,
+              and the inner compass to use them.
+            </p>
+          </div>
+        </motion.div>
         <motion.ul
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: '0px' }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >
           {youthPathways.map((pathway) => (
             <motion.li key={pathway.slug} variants={cardVariants} className="rounded-card bg-brand-sand">
@@ -126,7 +147,7 @@ export default function PathwaysGrid() {
                 <span
                   className={`inline-flex w-fit items-center rounded-button px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-medium mb-5 ${badgeClasses(pathway.category)}`}
                 >
-                  {categoryLabel(pathway.category)}
+                  {pathway.ageLabel ?? categoryLabel(pathway.category)}
                 </span>
                 <h3 className="text-xl lg:text-2xl font-light text-brand-primary leading-tight mb-3">
                   {pathway.title}

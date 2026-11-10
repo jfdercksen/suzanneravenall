@@ -141,6 +141,14 @@ const nextConfig = {
       { source: '/dates',            destination: '/events', permanent: true },
       { source: '/dates-repository', destination: '/events', permanent: true },
 
+      // ── Young People Pathways reduced to four (Suzanne, 8 Nov 2026) ────────
+      // The old pathway names live on as session themes inside the new pages.
+      // permanent: false until Suzanne has signed the four off.
+      { source: '/transformation-pathways/children-young-people-foundations-for-life', destination: '/transformation-pathways/pattern-foundations-children', permanent: false },
+      { source: '/transformation-pathways/pattern-foundations',                        destination: '/transformation-pathways/pattern-foundations-children', permanent: false },
+      { source: '/transformation-pathways/emotional-mastery-for-young-minds',          destination: '/transformation-pathways/pattern-foundations-teens',    permanent: false },
+      { source: '/transformation-pathways/young-minds-architecture',                   destination: '/transformation-pathways/pattern-foundations-teens',    permanent: false },
+
       // ── Slug-prefix patterns (covers all article/award/conference posts) ────
       { source: '/article-:slug*',    destination: '/blog',  permanent: true },
       { source: '/award-:slug*',      destination: '/about', permanent: true },
@@ -208,10 +216,10 @@ const nextConfig = {
       { source: '/trauma-to-breakthrough',                     destination: '/transformation-pathways/trauma-to-breakthrough',                     permanent: true },
       { source: '/resilience-fortification',                   destination: '/transformation-pathways/resilience-fortification',                   permanent: true },
       { source: '/pattern-mastery',                            destination: '/transformation-pathways/pattern-mastery',                            permanent: true },
-      { source: '/children-young-people-foundations-for-life', destination: '/transformation-pathways/children-young-people-foundations-for-life', permanent: true },
-      { source: '/emotional-mastery-for-young-minds',          destination: '/transformation-pathways/emotional-mastery-for-young-minds',          permanent: true },
-      { source: '/young-minds-architecture',                   destination: '/transformation-pathways/young-minds-architecture',                   permanent: true },
-      { source: '/pattern-foundations',                        destination: '/transformation-pathways/pattern-foundations',                        permanent: true },
+      { source: '/children-young-people-foundations-for-life', destination: '/transformation-pathways/pattern-foundations-children', permanent: false }, // 8 Nov: youth pathways reduced to four
+      { source: '/emotional-mastery-for-young-minds',          destination: '/transformation-pathways/pattern-foundations-teens',    permanent: false },
+      { source: '/young-minds-architecture',                   destination: '/transformation-pathways/pattern-foundations-teens',    permanent: false },
+      { source: '/pattern-foundations',                        destination: '/transformation-pathways/pattern-foundations-children', permanent: false },
       { source: '/inner-compass',                              destination: '/transformation-pathways/inner-compass',                              permanent: true },
       { source: '/emotional-nervous-system-mastery',        destination: '/services', permanent: true },
       { source: '/relationships-attachment-patterns',       destination: '/services', permanent: true },

@@ -1,3 +1,4 @@
+import { placeholdersIn } from '@/lib/content/richLine'
 import { describe, it, expect } from 'vitest'
 import {
   pathways,
@@ -61,8 +62,8 @@ describe('personalPathways', () => {
 })
 
 describe('youthPathways', () => {
-  it('has exactly 5 items', () => {
-    expect(youthPathways).toHaveLength(5)
+  it('has exactly 4 items (Suzanne, 8 Nov)', () => {
+    expect(youthPathways).toHaveLength(4)
   })
 
   it('every item has category "youth"', () => {
@@ -100,18 +101,59 @@ describe('youthPathways', () => {
   it('contains exactly the expected youth slugs', () => {
     const slugs = youthPathways.map((p) => p.slug)
     expect(slugs).toEqual([
-      'children-young-people-foundations-for-life',
-      'emotional-mastery-for-young-minds',
-      'young-minds-architecture',
-      'pattern-foundations',
+      'pattern-foundations-children',
+      'pattern-foundations-teens',
       'inner-compass',
+      'the-family-pattern',
     ])
+  })
+
+  it('every pathway for minors carries the safeguarding line; the parents pathway does not need it', () => {
+    for (const p of youthPathways) {
+      if (p.slug === 'the-family-pattern') continue
+      expect(p.detail?.safeguarding, p.slug).toBeDefined()
+    }
+  })
+
+  it('every young people pathway shows an age band or audience', () => {
+    expect(youthPathways.map((p) => p.ageLabel)).toEqual(['Ages 7–12', 'Ages 13–18', 'Ages 10–18', 'For parents'])
+  })
+
+  it('keeps the old pathway names as session themes', () => {
+    const themes = youthPathways.flatMap((p) => p.detail?.sessionThemes ?? [])
+    for (const old of ['Foundations for Life', 'Pattern Foundations', 'Emotional Mastery for Young Minds', 'Young Minds Architecture']) {
+      expect(themes).toContain(old)
+    }
+  })
+
+  it('leaves the format line a visible placeholder for Suzanne', () => {
+    for (const p of youthPathways) {
+      expect(placeholdersIn(p.detail?.format).map((x) => x.owner), p.slug).toEqual(['Suzanne'])
+    }
+  })
+})
+
+describe('Pattern Mastery (8 Nov copy)', () => {
+  const mastery = pathways.find((p) => p.slug === 'pattern-mastery')
+  it('carries her copy and both her buttons', () => {
+    expect(mastery?.detail?.lead).toMatch(/^Everything repeats until it’s understood/)
+    expect(mastery?.detail?.ctas?.map((c) => c.label)).toEqual(['Apply for Pattern Mastery', 'Book a Discovery Call'])
+  })
+  it('keeps the foundations pathway name and the format as placeholders', () => {
+    expect(placeholdersIn(mastery?.detail?.whoItsForNote)).toHaveLength(1)
+    expect(placeholdersIn(mastery?.detail?.format)).toHaveLength(1)
+  })
+})
+
+describe('copy rule', () => {
+  it('has no em dash anywhere in the pathway copy', () => {
+    expect(JSON.stringify(pathways)).not.toContain('\u2014')
   })
 })
 
 describe('pathways (full array)', () => {
-  it('has exactly 12 total entries', () => {
-    expect(pathways).toHaveLength(12)
+  it('has exactly 11 total entries', () => {
+    expect(pathways).toHaveLength(11)
   })
 
   it('personalPathways and youthPathways together account for all entries', () => {
@@ -135,8 +177,8 @@ describe('pathways (full array)', () => {
     }
   })
 
-  it('all 12 pathways have supplied detail content', () => {
-    expect(pathways.filter((x) => x.hasDetailContent)).toHaveLength(12)
+  it('all 11 pathways have supplied detail content', () => {
+    expect(pathways.filter((x) => x.hasDetailContent)).toHaveLength(11)
   })
 
   it('every entry has a detail object with a heroSubhead and whatThisPathwayIs paragraphs', () => {
@@ -160,16 +202,17 @@ describe('pathways (full array)', () => {
     }
   })
 
-  it('the 7 adult pathways each have a primary hero CTA label and a signature message', () => {
+  it('the 7 adult pathways each have a primary hero CTA label and a closing statement', () => {
     for (const p of personalPathways) {
       expect(typeof p.detail?.heroCtaPrimaryLabel).toBe('string')
       expect(p.detail?.heroCtaPrimaryLabel?.length).toBeGreaterThan(0)
-      expect(Array.isArray(p.detail?.signatureMessage)).toBe(true)
-      expect(p.detail!.signatureMessage!.length).toBeGreaterThan(0)
+      // Pattern Mastery (8 Nov copy) closes its outcomes with one bold line instead
+      const closing = p.detail?.signatureMessage ?? (p.detail?.outcomesClosing ? [p.detail.outcomesClosing] : [])
+      expect(closing.length, p.slug).toBeGreaterThan(0)
     }
   })
 
-  it('the 5 youth pathways have no bespoke primary hero CTA label or signature message', () => {
+  it('the 4 youth pathways have no bespoke primary hero CTA label or signature message', () => {
     for (const p of youthPathways) {
       expect(p.detail?.heroCtaPrimaryLabel).toBeUndefined()
       expect(p.detail?.signatureMessage).toBeUndefined()

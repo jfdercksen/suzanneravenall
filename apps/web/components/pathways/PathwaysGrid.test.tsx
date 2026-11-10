@@ -146,27 +146,18 @@ describe('PathwaysGrid', () => {
     })
   })
 
-  describe('youth pathway cards — 5 items', () => {
-    it('renders "Children & Young People Foundations for Life"', () => {
-      render(<PathwaysGrid />)
-      expect(
-        screen.getByText('Children & Young People Foundations for Life')
-      ).toBeInTheDocument()
-    })
+  describe('youth pathway cards: 4 items (Suzanne, 8 Nov)', () => {
+    for (const title of ['Pattern Foundations: Children', 'Pattern Foundations: Teens', 'The Family Pattern']) {
+      it(`renders "${title}"`, () => {
+        render(<PathwaysGrid />)
+        expect(screen.getByText(title)).toBeInTheDocument()
+      })
+    }
 
-    it('renders "Emotional Mastery for Young Minds"', () => {
+    it('no longer lists the retired pathways', () => {
       render(<PathwaysGrid />)
-      expect(screen.getByText('Emotional Mastery for Young Minds')).toBeInTheDocument()
-    })
-
-    it('renders "Young Minds Architecture"', () => {
-      render(<PathwaysGrid />)
-      expect(screen.getByText('Young Minds Architecture')).toBeInTheDocument()
-    })
-
-    it('renders "Pattern Foundations"', () => {
-      render(<PathwaysGrid />)
-      expect(screen.getByText('Pattern Foundations')).toBeInTheDocument()
+      expect(screen.queryByText('Young Minds Architecture')).not.toBeInTheDocument()
+      expect(screen.queryByText('Children & Young People Foundations for Life')).not.toBeInTheDocument()
     })
 
     it('renders "Inner Compass"', () => {
@@ -188,13 +179,18 @@ describe('PathwaysGrid', () => {
       expect(link).toHaveAttribute('href', '/transformation-pathways/inner-compass')
     })
 
-    it('Young Minds Architecture card links to the correct route', () => {
+    it('Pattern Foundations: Teens card links to the correct route', () => {
       render(<PathwaysGrid />)
-      const link = screen.getByRole('link', { name: /Young Minds Architecture/i })
-      expect(link).toHaveAttribute(
-        'href',
-        '/transformation-pathways/young-minds-architecture'
-      )
+      const link = screen.getByRole('link', { name: /Pattern Foundations: Teens/i })
+      expect(link).toHaveAttribute('href', '/transformation-pathways/pattern-foundations-teens')
+    })
+
+    it('shows the Young People section intro and the four age bands', () => {
+      render(<PathwaysGrid />)
+      expect(screen.getByRole('heading', { name: 'Patterns start early. So can change.' })).toBeInTheDocument()
+      for (const age of ['Ages 7–12', 'Ages 13–18', 'Ages 10–18', 'For parents']) {
+        expect(screen.getByText(age)).toBeInTheDocument()
+      }
     })
   })
 

@@ -1,5 +1,9 @@
 /**
- * Transformation Pathways — typed catalogue.
+ * Transformation Pathways: typed catalogue.
+ *
+ * 8 Nov 2026: Pattern Mastery and the four Young People Pathways carry
+ * Suzanne's own copy verbatim (mail body and attachment 02) in the rich
+ * fields of PathwayDetail; the old youth slugs redirect (next.config.mjs).
  *
  * `description` is the card copy from docs/content-source/pathways-overview-cards.md.
  * `detail` carries the full pathway page content supplied by Suzanne in
@@ -10,6 +14,9 @@
  * currently in development — cards only, no detail pages yet.
  */
 
+import { contactHref } from '@/app/contact/enquiry'
+import { ph, type RichLine } from '@/lib/content/richLine'
+
 export type PathwaySlug =
   | 'break-the-loop'
   | 'reclaim-your-power'
@@ -18,11 +25,10 @@ export type PathwaySlug =
   | 'trauma-to-breakthrough'
   | 'resilience-fortification'
   | 'pattern-mastery'
-  | 'children-young-people-foundations-for-life'
-  | 'emotional-mastery-for-young-minds'
-  | 'young-minds-architecture'
-  | 'pattern-foundations'
+  | 'pattern-foundations-children'
+  | 'pattern-foundations-teens'
   | 'inner-compass'
+  | 'the-family-pattern'
 
 export type PathwayCategory = 'personal' | 'youth'
 
@@ -35,7 +41,7 @@ export interface PathwayDetail {
    * button instead (decision 14, 6 Oct; see components/pathways/PathwayDetail.tsx).
    */
   heroCtaPrimaryLabel?: string
-  /** Where the primary hero CTA links. Defaults to /contact when omitted. */
+  /** Where the primary hero CTA links. Defaults to /discover-your-pattern when omitted. */
   heroCtaPrimaryHref?: string
   /** "What This Pathway Is" paragraphs, in order. */
   whatThisPathwayIs: string[]
@@ -51,11 +57,48 @@ export interface PathwayDetail {
   ctaSectionHeadline?: string
   /** Closing CTA section body copy. */
   ctaSectionBody: string
+
+  // ── Rich copy (Suzanne's 8 Nov documents). All optional: the older
+  //    pathways keep the plain lists above. ───────────────────────────────
+  /** Header eyebrow override (e.g. "Intuition for Young People · Ages 10–18"). */
+  eyebrow?: string
+  /** Bold opening line of "What This Pathway Is". */
+  lead?: string
+  /** Bold closing line of "What This Pathway Is". */
+  whatThisClosing?: string
+  /** Lead-in above the Who It's For list ("This pathway is for you if:"). */
+  whoItsForIntro?: string
+  /** Paragraph after the Who It's For list. */
+  whoItsForNote?: RichLine
+  /** Lead-in above the work items. */
+  workIntro?: string
+  /** Headed items for What We Work On; replace the plain list when present. */
+  workItems?: { title: string; subtitle?: string; body: string }[]
+  /** Line after the work items (Teens: the next step to Inner Compass). */
+  workNote?: RichLine
+  /** Former pathway names that live on as session themes (8 Nov). */
+  sessionThemes?: string[]
+  /** Bold line after the outcomes. */
+  outcomesClosing?: string
+  /** Pathway-specific "How the Work Happens"; the shared text otherwise. */
+  howItHappens?: string[]
+  /** Format line; Suzanne's placeholder until she supplies it. */
+  format?: RichLine
+  /** Pathway-specific "Why This Work Is Different"; the shared text otherwise. */
+  whyDifferent?: string[]
+  /** Pattern Mastery's "Want to do this work with others?" block. */
+  withOthers?: { heading: string; body: RichLine }
+  /** Her own buttons for the closing band. */
+  ctas?: { label: string; href: string }[]
+  /** Minors pages: her "Safeguarding & scope" line. Its presence shows the safeguarding block. */
+  safeguarding?: RichLine
 }
 
 export interface Pathway {
   slug: PathwaySlug
   title: string
+  /** Age band or audience on the card and header ("Ages 7–12", "For parents"). */
+  ageLabel?: string
   description: string
   category: PathwayCategory
   featured: boolean
@@ -353,228 +396,415 @@ export const pathways: Pathway[] = [
     },
   },
   {
+    // Suzanne's 8 Nov copy, verbatim (item 7.2). The foundations pathway name
+    // and the format line are her placeholders.
     slug: 'pattern-mastery',
     title: 'Pattern Mastery',
     description:
-      'Move beyond awareness into mastery by learning to recognise, rewire, and lead your patterns.',
+      'The advanced pathway for people who’ve already done the work.',
     category: 'personal',
     featured: false,
     hasDetailContent: true,
     detail: {
-      heroSubhead:
-        'Pattern Mastery is for those who are ready to go beyond fixing symptoms and learn how patterns truly shape thoughts, emotions, behaviours, relationships, performance, and outcomes.',
-      heroCtaPrimaryLabel: 'Explore Pattern Mastery',
+      heroSubhead: 'The advanced pathway for people who’ve already done the work',
+      heroCtaPrimaryLabel: 'Apply for Pattern Mastery',
+      heroCtaPrimaryHref: contactHref('coaching', 'Apply for Pattern Mastery'),
+      lead: 'Everything repeats until it’s understood. Once it’s mastered, it no longer has to repeat.',
       whatThisPathwayIs: [
-        'Everything repeats until it is understood.',
-        'Pattern Mastery is a deeper level pathway for people who want to understand the architecture beneath their life. It brings awareness to the unconscious structures that organise experience, how you think, choose, relate, protect, perform, collapse, succeed, avoid, and recreate the familiar.',
-        'This pathway is not only about healing. It is about mastery. It is about learning to read your patterns, interrupt them consciously, and create a more intentional internal and external life.',
+        'You’ve done the work. You’ve had the breakthroughs, cleared the obvious blocks and changed a great deal. But you’ve also noticed something: the patterns are subtler now. They show up in new forms, at deeper layers and in places you didn’t expect.',
+        'That isn’t failure. It’s the next level.',
+        'Pattern Mastery is for people ready to go beyond healing a pattern to understanding the whole architecture beneath their life: the unconscious structures that organise how you think, choose, relate, protect, perform, succeed, avoid and recreate the familiar.',
+        'Earlier work changes the patterns that run you. This pathway teaches you to read them yourself, so you’re no longer waiting for the next breakthrough. You become the one who creates it.',
       ],
+      whatThisClosing: 'This isn’t about being fixed. It’s about mastery.',
+      whoItsForIntro: 'This pathway is for you if:',
       whoItsFor: [
-        'You want to understand yourself at a deeper level',
-        'You are ready for advanced inner work and transformation',
-        'You keep noticing repeating emotional, behavioural, or life themes',
-        'You are fascinated by the root causes of human behaviour and change',
-        'You want tools for self-awareness, self-leadership, and lasting transformation',
+        'You’ve already done significant inner work, through Pattern Intelligence™, therapy, coaching or other modalities, and you’re ready for what comes next',
+        'You’ve cleared the surface and are now meeting the deeper layers, the subtler patterns that only appear once the obvious ones have gone',
+        'You recognise your themes but want to see the whole system, how your patterns connect, feed each other and trace back to a common root',
+        'You want independence, not dependence: the ability to catch, decode and shift patterns yourself, in real time',
+        'You’re fascinated by why people do what they do, and you want to understand it at the deepest level, starting with yourself',
       ],
-      whatWeWorkOn: [
-        'Identifying recurring personal patterns and survival strategies',
-        'Understanding childhood adaptations, subconscious beliefs, and emotional coding',
-        'Learning how patterns shape results across relationships, work, health, and purpose',
-        'Developing the ability to catch and shift patterns in real time',
-        'Building mastery, self-awareness, and conscious choice into the way you live',
+      whoItsForNote: [
+        'This isn’t a starting point. If you’re new to this work, begin with ',
+        ph('Foundations pathway name', 'Suzanne'),
+        ' and come back to Pattern Mastery when you’re ready to go deeper.',
+      ],
+      whatWeWorkOn: [],
+      workItems: [
+        {
+          title: 'Mapping your pattern architecture',
+          body: 'Most of us carry a small number of core patterns, and each one creates many sub-patterns. Together we map yours: your core patterns, how they branch and how they connect across your life.',
+        },
+        {
+          title: 'Tracking patterns to the root',
+          body: 'You learn to follow a pattern back through its layers, peeling them away one at a time, to the original moment, meaning and unmet need that created it. When the root is reached and the system feels safe, the whole pattern can let go.',
+        },
+        {
+          title: 'Decoding the meaning',
+          body: 'We’re meaning-making beings. It isn’t the event that wires a pattern in, it’s the meaning we gave it. You learn to find and rewrite the meanings still shaping your choices.',
+        },
+        {
+          title: 'Catching patterns in real time',
+          body: 'You learn to recognise a pattern firing in your body as it happens, and to interrupt it consciously before it runs its course.',
+        },
+        {
+          title: 'Embodying the new pattern',
+          body: 'Insight alone doesn’t hold. We anchor each change in your nervous system and body through state, action and practice, until the new way becomes your natural way.',
+        },
       ],
       outcomes: [
-        'Understand the hidden architecture of your life more clearly',
-        'Notice patterns earlier and shift them faster',
-        'Feel more conscious, empowered, and intentional',
-        'Stop being run by unconscious programming',
-        'Build a life shaped by awareness rather than automatic repetition',
+        'See the hidden architecture of your life, and how your patterns connect into one system',
+        'Catch patterns earlier and shift them faster, often within moments rather than months',
+        'Become your own pattern tracker, able to decode what’s happening without needing someone else to show you',
+        'Live consciously instead of automatically, with real choice where there used to be reaction',
+        'Hold your growth for good, because you’ve mastered the process, not just finished it',
       ],
-      signatureMessage: [
-        'When you master the pattern, you stop living by default.',
-        'You begin living by design.',
+      outcomesClosing: 'When you master the pattern, you stop living by default and start living by design.',
+      howItHappens: [
+        'Pattern Mastery is an advanced, multi-session pathway. It combines deep pattern mapping and Rapid Repatterning™ with nervous system work, embodiment practice and the skills of self-led pattern tracking.',
+        'Each session builds on the one before. You work on your own life while learning the method behind it, and between sessions you practise applying it independently.',
       ],
-      ctaSectionHeadline: 'Ready to go deeper?',
+      format: [ph('Format: number of sessions · duration · 1:1 / small group · investment', 'Suzanne')],
+      whyDifferent: [
+        'Most approaches stop at the problem, or at the breakthrough. Pattern Mastery goes further.',
+        'We don’t just identify the pattern and shift it. We teach you to see the system that creates patterns, so that whatever comes up in the future, you can work with it yourself.',
+        'This is the difference between being helped and being able.',
+      ],
+      withOthers: {
+        heading: 'Want to do this work with others?',
+        body: [
+          'Pattern Mastery teaches you to apply the method to yourself. Using it with clients is a trained profession. If that’s where you’re heading, explore ',
+          { link: 'Practitioner Certification', href: '/programs#practitioner' },
+          '.',
+        ],
+      },
+      ctas: [
+        { label: 'Apply for Pattern Mastery', href: contactHref('coaching', 'Apply for Pattern Mastery') },
+        { label: 'Book a Discovery Call', href: '/contact#book' },
+      ],
+      ctaSectionHeadline: 'Want to do this work with others?',
       ctaSectionBody:
-        'Pattern Mastery helps you decode the hidden architecture of your life and turn awareness into transformation.',
+        'When you master the pattern, you stop living by default and start living by design.',
     },
   },
 
-  // ── Youth pathways ──────────────────────────────────────────────────────
-  // Decision 14 (6 Oct): "register interest" only. Age range, format, session
-  // count, price and who delivers them are not published anywhere; the live
-  // pages end "Full details of this transformation pathway will be available
-  // soon." (https://suzanneravenall.com/children-young-people-foundations-for-life/).
-  // Do not add those details until Suzanne supplies them.
+  // ── Young People Pathways ───────────────────────────────────────────────
+  // Suzanne, 8 Nov 2026: reduced to four. Copy verbatim from her attachment
+  // "Young People Pathways website copy" (02). The old pathway names live on
+  // as session themes. [Format] lines and the safeguarding policy link are
+  // her placeholders and stay visible until she supplies them.
   {
-    slug: 'children-young-people-foundations-for-life',
-    title: 'Children & Young People Foundations for Life',
+    slug: 'pattern-foundations-children',
+    title: 'Pattern Foundations: Children',
+    ageLabel: 'Ages 7–12',
     description:
-      'Support stronger foundations for emotional wellbeing, self-development, and healthy internal growth.',
+      'Help your child understand their feelings, build confidence and develop healthy inner foundations, through play, story and connection.',
     category: 'youth',
     featured: false,
     hasDetailContent: true,
     detail: {
       heroSubhead:
-        'Support young people to build the emotional, mental, and inner foundations they will carry into relationships, school, identity, resilience, and adult life.',
+        'Help your child understand their feelings, build confidence and develop healthy inner foundations, through play, story and connection.',
+      lead: 'The patterns we learn as children become the life we live as adults.',
       whatThisPathwayIs: [
-        'These pathways are designed to help children and young people develop self-awareness, emotional strength, healthy internal patterns, and the life tools so many people only learn much later, after years of struggle.',
-        'The earlier we help young people understand emotions, patterns, identity, boundaries, and inner guidance, the stronger their foundation becomes.',
-        'These pathways are not about pathologising children. They are about equipping them. Helping them understand themselves, regulate emotions, respond to life with greater confidence, and develop the internal architecture for wellbeing, relationships, and growth.',
+        'Between the ages of 7 and 12, children are forming the inner beliefs that will shape their lives: whether they are good enough, whether they are safe, whether their feelings matter, and what they need to do to be loved.',
+        'Pattern Foundations: Children helps your child build healthy foundations during these years. In a way that is playful, gentle and age-appropriate, children learn to understand their feelings, calm their bodies, believe in themselves and notice the "stuck" moments that keep repeating.',
+        'This is not about fixing your child. Nothing is wrong with them. It is about giving them tools that most of us never received.',
       ],
-      whoItsFor: [],
+      whoItsForIntro: 'This pathway is for your child if they:',
+      whoItsFor: [
+        "Have big feelings they don't yet know how to handle: meltdowns, worries, anger or tears that seem out of proportion",
+        'Struggle with confidence: holding back, giving up quickly or saying "I can\'t" before they have tried',
+        'Worry a lot: about school, friends, change or getting things wrong',
+        'Find friendships hard: feeling left out, struggling to fit in or getting caught up in conflict',
+        'Are going through change: a new school, a move, a family separation, a loss or a new sibling',
+        'Are simply wonderful, and you want to give them the strongest possible start',
+      ],
       whatWeWorkOn: [],
-      outcomes: [],
-      ctaSectionBody:
-        'Support them with the foundations they will carry for life.',
+      workItems: [
+        {
+          title: 'Understanding feelings',
+          body: 'Children learn to name what they feel, understand that all feelings are allowed, and see that feelings are messages, not problems.',
+        },
+        {
+          title: 'Calming the body',
+          body: 'Simple, fun tools help them settle their nervous system when they are upset, anxious or overwhelmed. These are skills they can use anywhere, from the classroom to bedtime.',
+        },
+        {
+          title: 'Building inner confidence',
+          body: 'We help them grow a sense of "I can" and "I\'m enough" that doesn\'t depend on being perfect or always getting it right.',
+        },
+        {
+          title: 'Spotting the stuck moments',
+          body: 'Through story and play, children start to notice the patterns that repeat for them, like the moment they always give up, freeze or get cross, and learn they can choose something different.',
+        },
+        {
+          title: 'Listening to their inner voice',
+          body: 'Children learn that their body gives them helpful signals: the calm "yes" feeling and the "uh-oh" feeling. They practise noticing these signals, trusting them, and talking about them with a grown-up they trust.',
+        },
+        {
+          title: 'Parent partnership',
+          body: "Parents join regular sessions so the tools continue at home. You learn your child's patterns, how to support them, and how to respond in ways that strengthen what they are learning.",
+        },
+      ],
+      sessionThemes: ['Foundations for Life', 'Pattern Foundations'],
+      outcomes: [
+        'Fewer meltdowns and calmer recovery when big feelings arrive',
+        'Greater confidence to try, make mistakes and keep going',
+        'Less worry, and the tools to settle it when it comes',
+        'Stronger friendships, built on understanding themselves and others',
+        "Trust in their own inner signals, and the confidence to speak up when something doesn't feel right",
+        'A closer parent–child connection, with a shared language for feelings',
+        'Foundations for life: emotional skills they will carry into adolescence and beyond',
+      ],
+      outcomesClosing: 'Give your child the foundations you wish you had.',
+      howItHappens: [
+        'Sessions are playful, warm and built around how children actually learn: through games, stories, drawing, movement and connection. Your child never needs to explain or analyse. We meet them where they are.',
+        'The pathway combines sessions with your child and sessions with you as a parent, so what your child learns is understood, supported and practised at home.',
+      ],
+      format: [ph('Format: number of child sessions · number of parent sessions · duration · in person / online · investment', 'Suzanne')],
+      whyDifferent: [
+        'Most support for children manages behaviour by rewarding the good and correcting the bad. But behaviour is never the problem. It is the evidence of what a child is feeling and needing underneath.',
+        'We work with what is beneath the behaviour. When a child feels understood and safe, and has tools that fit their age, change happens naturally.',
+      ],
+      safeguarding: [
+        'All work with children is carried out with full parental consent and under our safeguarding policy ',
+        ph('link', 'Suzanne'),
+        '. This pathway is educational and developmental, not a clinical service. Where clinical support may be helpful, we will discuss this with you and refer appropriately.',
+      ],
+      ctas: [{ label: 'Book a Parent Discovery Call', href: '/contact#book' }],
+      ctaSectionBody: 'Give your child the foundations you wish you had.',
     },
   },
   {
-    slug: 'emotional-mastery-for-young-minds',
-    title: 'Emotional Mastery for Young Minds',
-    description:
-      'Develop emotional awareness, self-regulation, and confidence in navigating the inner world.',
+    slug: 'pattern-foundations-teens',
+    title: 'Pattern Foundations: Teens',
+    ageLabel: 'Ages 13–18',
+    description: 'Emotional mastery and a strong sense of identity, for the most formative years of life.',
     category: 'youth',
     featured: false,
     hasDetailContent: true,
     detail: {
-      heroSubhead:
-        'Helping children understand, express, and manage their emotions with confidence.',
+      heroSubhead: 'Emotional mastery and a strong sense of identity, for the most formative years of life.',
+      lead: 'The teenage years are when identity is built, and when patterns lock in.',
       whatThisPathwayIs: [
-        'This pathway helps children and young people build emotional literacy, self-awareness, and healthy ways to understand and express what they feel.',
-        'Rather than becoming overwhelmed, shut down, reactive, or confused by their emotions, they learn how to recognise what is happening inside them and respond in healthier ways.',
+        "Adolescence is one of the most powerful periods of brain development in a person's life. The brain is rewiring at speed. Identity is forming. The pressure of school, friendships, social media, the future and fitting in all arrive at once.",
+        'That makes these years a challenge, and also a huge opportunity. Patterns that form now can last a lifetime, but the teenage brain is also remarkably able to change.',
+        'Pattern Foundations: Teens is a two-stage pathway that helps young people understand their emotions and build a strong sense of who they are. They learn to recognise the patterns forming in their lives and to choose who they want to become.',
       ],
+      whatThisClosing: 'A pathway built for teenagers, not one done to them.',
+      whoItsForIntro: 'This pathway is for teens who:',
       whoItsFor: [
-        'Struggle with emotional outbursts, shutdown, or overwhelm',
-        'Need support understanding and naming what they feel',
-        'Find it hard to express emotions in healthy ways',
-        'Need stronger emotional tools for school, friendships, or home life',
+        'Feel overwhelmed by pressure from school, exams, friendships, family or social media',
+        'Struggle with anxiety, stress or low mood, or switch off to cope',
+        'Doubt themselves, compare themselves constantly or feel they are never enough',
+        'Feel unsure of who they are, or feel they have to be someone else to fit in',
+        'Get caught in repeating patterns like procrastination, people-pleasing, conflict or giving up',
+        'Are capable and driven, and want an edge in self-awareness, focus and confidence',
       ],
-      whatWeWorkOn: [
-        'Emotional awareness and vocabulary',
-        'Recognising feelings in the body',
-        'Understanding triggers and reactions',
-        'Healthy expression of emotions',
-        'Tools for calming, grounding, and self-regulation',
+      whatWeWorkOn: [],
+      workIntro: 'The pathway moves through two stages, each building on the last.',
+      workItems: [
+        {
+          title: 'Stage 1 · Emotional Mastery',
+          subtitle: 'Understanding the inner world',
+          body: 'Teens learn how their brain and nervous system respond to pressure, why emotions can feel so overwhelming, and practical tools to calm their system, think clearly and respond rather than react.',
+        },
+        {
+          title: 'Stage 2 · Identity',
+          subtitle: 'Who am I, really?',
+          body: 'Teens explore the beliefs and stories they have already absorbed about who they are, what they are capable of and what they need to do to fit in. They learn which ones are really theirs, and which are patterns they can let go of.',
+        },
       ],
+      workNote: [
+        'Ready for the next step? ',
+        { link: 'Inner Compass', href: '/transformation-pathways/inner-compass' },
+        ' builds on this pathway, helping teens trust their intuition and find their direction.',
+      ],
+      sessionThemes: ['Emotional Mastery for Young Minds', 'Young Minds Architecture'],
       outcomes: [
-        'Understand their emotions more clearly',
-        'Feel less overwhelmed by big feelings',
-        'Express themselves more safely and confidently',
-        'Build emotional strength and self-awareness',
+        'Calm under pressure: tools for stress, exams and overwhelm that actually work',
+        'Emotional resilience, to bounce back instead of shutting down or blowing up',
+        "A stronger sense of self: confidence that doesn't depend on likes, grades or approval",
+        'Healthier relationships with friends, family and themselves',
+        'Pattern awareness for life: the ability to notice and change patterns, a skill most adults never learn',
       ],
-      ctaSectionBody: 'Help them build emotional skills for life.',
-    },
-  },
-  {
-    slug: 'young-minds-architecture',
-    title: 'Young Minds Architecture',
-    description:
-      'Strengthen the inner structures that support resilience, identity, confidence, and empowered thinking.',
-    category: 'youth',
-    featured: false,
-    hasDetailContent: true,
-    detail: {
-      heroSubhead:
-        'Building the inner structures that support confidence, identity, thinking, and decision-making.',
-      whatThisPathwayIs: [
-        'Young Minds Architecture focuses on the development of a strong inner foundation.',
-        'It helps children and teens understand how thoughts, beliefs, self-image, emotions, and choices begin to form, and how to build healthier internal patterns early.',
+      outcomesClosing: 'Help them become who they are meant to be, not who their patterns say they are.',
+      howItHappens: [
+        "Sessions are interactive, honest and relevant to teenagers' real lives. We use practical tools, real-world scenarios, reflection and body-based techniques, without lectures and without judgement.",
+        "Teens work through both stages over the course of the pathway, with parent check-ins at key points so families stay connected to the journey while respecting the teen's growing independence.",
       ],
-      whoItsFor: [
-        'Need support with confidence, identity, or self-belief',
-        'Struggle with negative self-talk or insecurity',
-        'Feel uncertain, lost, or easily influenced by others',
-        'Need stronger inner foundations as they grow',
+      format: [ph('Format: number of sessions per stage · duration · 1:1 / small group · in person / online · investment', 'Suzanne')],
+      whyDifferent: [
+        'Most support for teens focuses on what they should do: study harder, be more confident, make better choices. But teens usually know what they should do. What gets in the way is the pattern underneath.',
+        'We help young people understand why they do what they do, and give them the tools to change it. That is the most powerful skill they can take into adulthood.',
       ],
-      whatWeWorkOn: [
-        'Self-image and self-worth',
-        'Thought patterns and mindset foundations',
-        'Confidence and identity development',
-        'Healthy decision-making',
-        'Inner safety and self-trust',
+      safeguarding: [
+        'All work with young people under 18 is carried out with parental consent and under our safeguarding policy ',
+        ph('link', 'Suzanne'),
+        '. This pathway is educational and developmental, not a clinical service. Where clinical support may be helpful, we will discuss this with the family and refer appropriately.',
       ],
-      outcomes: [
-        'Build stronger confidence from within',
-        'Understand how their thinking shapes behaviour',
-        'Develop healthier self-belief',
-        'Make more grounded choices',
-      ],
-      ctaSectionBody: 'Give them the architecture for a stronger future.',
-    },
-  },
-  {
-    slug: 'pattern-foundations',
-    title: 'Pattern Foundations',
-    description:
-      'Introduce pattern awareness early so young people can understand how thoughts and beliefs shape behaviour.',
-    category: 'youth',
-    featured: false,
-    hasDetailContent: true,
-    detail: {
-      heroSubhead:
-        'Helping young people understand the patterns that shape behaviour, relationships, and self-worth.',
-      whatThisPathwayIs: [
-        'Pattern Foundations introduces children and teens to the idea that patterns are created early, and that awareness creates choice.',
-        'It gives them language and tools to notice what they repeat, what triggers them, what behaviours they fall into, and how to begin making different choices.',
-      ],
-      whoItsFor: [
-        'Repeat certain reactions, behaviours, or friendship dynamics',
-        'Get stuck in the same emotional loops',
-        'Need support with self-awareness and behaviour change',
-        'Would benefit from understanding how patterns are formed',
-      ],
-      whatWeWorkOn: [
-        'Understanding habits, reactions, and patterns',
-        'Awareness of triggers and repeated responses',
-        'Early foundations of self-reflection',
-        'Building new choices and healthier behaviours',
-        'Relational patterns and social dynamics',
-      ],
-      outcomes: [
-        'Recognise patterns earlier',
-        'Understand why they react the way they do',
-        'Build better choices and behaviours',
-        'Develop stronger self-awareness for life',
-      ],
-      ctaSectionBody: 'Awareness early on can change a lifetime.',
+      ctas: [{ label: 'Book a Discovery Call', href: '/contact#book' }],
+      ctaSectionBody: 'Help them become who they are meant to be, not who their patterns say they are.',
     },
   },
   {
     slug: 'inner-compass',
     title: 'Inner Compass',
+    // Her attachment says 10–18 throughout; her mail body said 8-18. The
+    // attachment is the final copy (listed for Suzanne to confirm).
+    ageLabel: 'Ages 10–18',
     description:
-      'Strengthen self-trust, direction, and the ability to make grounded choices from within.',
+      'Help young people hear, trust and use their intuition, and find a direction that comes from within.',
     category: 'youth',
     featured: false,
     hasDetailContent: true,
     detail: {
       heroSubhead:
-        'Helping young people trust themselves, know themselves, and navigate life with greater clarity.',
+        'Help young people hear, trust and use their intuition, and find a direction that comes from within.',
+      eyebrow: 'Intuition for Young People · Ages 10–18',
+      lead: 'Every young person has an inner compass. Most are never taught how to read it.',
       whatThisPathwayIs: [
-        'Inner Compass helps children and young people connect to their own inner guidance, values, voice, and sense of direction.',
-        'In a world full of pressure, comparison, noise, and influence, this pathway helps them build the confidence to know what feels right for them and make choices that are aligned with who they are.',
+        'Young people are surrounded by noise: opinions from parents, teachers, friends and social media, and the constant pressure to compare, fit in and get it right. In all that noise, the quietest voice gets lost. It is their own inner knowing.',
+        "Intuition isn't magic, and it isn't luck. It is the brain and body processing information faster than conscious thought can follow, a natural intelligence that every young person has. Like any intelligence, it can be developed.",
+        'Inner Compass helps young people hear their intuition, trust it and use it wisely. They learn to tell the difference between fear and inner knowing, to make decisions that feel right as well as look right, and to find a direction that comes from within rather than from pressure.',
       ],
+      whatThisClosing: 'The skill that helps them choose well, long after they have left home.',
+      whoItsForIntro: 'This pathway is for young people who:',
       whoItsFor: [
-        'Need support with confidence, decision-making, or self-trust',
-        'Are easily influenced by peers or external pressure',
-        'Feel disconnected from themselves',
-        'Need help finding their own voice and direction',
+        'Second-guess themselves and look to everyone else before trusting their own sense of things',
+        'Struggle with decisions, big or small, from friendships to subject choices to "what should I do?"',
+        'Are easily swayed by peer pressure, social media or the need to fit in',
+        "Feel things deeply and pick up on more than others, but don't know what to do with it",
+        'Feel lost about direction and want to know what is truly right for them',
+        'Have already built their foundations through Pattern Foundations, and are ready for the next step',
       ],
-      whatWeWorkOn: [
-        'Self-trust and inner guidance',
-        'Values and decision-making',
-        'Boundaries and confidence',
-        'Voice, expression, and identity',
-        'Navigating life from inner alignment',
+      whatWeWorkOn: [],
+      workItems: [
+        {
+          title: 'Understanding intuition',
+          body: 'In language that fits their age, young people learn what intuition is, how the brain and body produce it, and why it is a real form of intelligence that people in high-pressure jobs rely on every day.',
+        },
+        {
+          title: 'Hearing the signal',
+          body: 'They learn to notice how intuition shows up in their own body, the calm "yes" and the quiet "no", and to make space for it in a noisy world.',
+        },
+        {
+          title: 'Fear or intuition?',
+          body: "This is one of the most important skills of all. They learn the difference between the loud, urgent voice of fear and the calm, steady voice of inner knowing, so fear can't pass itself off as wisdom.",
+        },
+        {
+          title: 'Trusting and testing',
+          body: 'Through practical exercises and real-life decisions, they build trust in their intuition step by step, learning when to follow it, when to check it, and how to combine gut feeling with clear thinking.',
+        },
+        {
+          title: 'Finding their direction',
+          body: 'They use their inner compass for what matters to them: friendships, choices, values and the future they want, and set a direction that comes from inside rather than from comparison.',
+        },
+        {
+          title: 'Speaking up',
+          body: "They learn that when something doesn't feel right, their intuition deserves a voice, and that telling a trusted adult is a strength, not a weakness.",
+        },
       ],
       outcomes: [
-        'Trust themselves more deeply',
-        'Make better choices with more confidence',
-        'Feel more connected to who they are',
-        'Develop inner direction and strength',
+        "Trust in their own judgement, instead of relying on everyone else's",
+        'The ability to tell fear from intuition, so they can respond to what is real',
+        'Confident decisions, with less overthinking and fewer regrets',
+        'Resilience to peer pressure, because their compass points to their own values',
+        'A clear sense of direction that feels like theirs',
+        'A lifelong skill: intuition they can draw on in every chapter of their life',
       ],
-      ctaSectionBody: 'Help them build a compass they can carry for life.',
+      outcomesClosing: 'Teach them to trust the voice that knows them best: their own.',
+      howItHappens: [
+        'Sessions are interactive, practical and grounded in real life. We use body-based exercises, guided reflection, real decision-making scenarios and age-appropriate explanations of the science, so intuition feels natural and trustworthy rather than mysterious.',
+        'Sessions are adapted to age, with younger participants (10–12) and teens (13–18) working at different depths. Inner Compass works best after a Pattern Foundations pathway, because intuition comes through most clearly once a young person has the tools to calm their system. It can also be taken on its own.',
+      ],
+      format: [ph('Format: number of sessions · duration · 1:1 / small group · in person / online · investment', 'Suzanne')],
+      whyDifferent: [
+        'Most young people are taught to listen to everyone except themselves. They are told what to think, what to choose and who to become.',
+        'Inner Compass teaches them to listen inward, with intuition grounded in an understanding of how the brain and body work rather than in guesswork. It is one of the most valuable things a young person can carry into adulthood.',
+      ],
+      safeguarding: [
+        'All work with young people under 18 is carried out with parental consent and under our safeguarding policy ',
+        ph('link', 'Suzanne'),
+        '. This pathway is educational and developmental, not a clinical service.',
+      ],
+      ctas: [{ label: 'Book a Discovery Call', href: '/contact#book' }],
+      ctaSectionBody: 'Teach them to trust the voice that knows them best: their own.',
+    },
+  },
+  {
+    slug: 'the-family-pattern',
+    title: 'The Family Pattern',
+    ageLabel: 'For parents',
+    description:
+      'Children learn their patterns at home. Change the family pattern, and you change what your child inherits.',
+    category: 'youth',
+    featured: false,
+    hasDetailContent: true,
+    detail: {
+      heroSubhead:
+        'Children learn their patterns at home. Change the family pattern, and you change what your child inherits.',
+      lead: "Children don't learn who to be from what we tell them. They learn it from what we live.",
+      whatThisPathwayIs: [
+        'Every family has patterns: ways of handling stress, conflict, love, success and failure that are passed down without anyone choosing them. Most of us parent the way we were parented, or spend our energy trying hard not to, and both are driven by patterns we never chose.',
+        'None of us were given a manual. We were handed our own unresolved patterns and asked to raise children anyway.',
+        'The Family Pattern is a pathway for parents who want to understand the patterns shaping their family, so they can stop passing on what hurt them and pass on what they would like their children to inherit.',
+      ],
+      whatThisClosing: 'When a parent changes their pattern, the whole family changes.',
+      whoItsForIntro: 'This pathway is for you if:',
+      whoItsFor: [
+        'You find yourself reacting the way your parents did, and hate it',
+        'The same conflicts keep repeating at home, with your children, your partner or both',
+        'Your child is struggling, and you sense that some of it comes from inside the family system',
+        'You feel exhausted, guilty or out of your depth as a parent',
+        'You are co-parenting through separation or change, and want to protect your children from the fallout',
+        'You want to raise emotionally healthy children, and know it starts with you',
+      ],
+      whatWeWorkOn: [],
+      workItems: [
+        {
+          title: 'Seeing the family pattern',
+          body: 'We map the patterns running through your family: how stress, conflict, love and emotion are handled, and where those patterns came from in your own upbringing.',
+        },
+        {
+          title: 'Your triggers, their behaviour',
+          body: "You learn why certain behaviours in your child set off such strong reactions in you. Often it is an old pattern of yours being touched, not just your child's behaviour.",
+        },
+        {
+          title: 'Regulating yourself first',
+          body: "A calm parent teaches a child's nervous system what calm feels like. You learn practical tools to steady yourself in the hardest moments, so your child can learn from your example.",
+        },
+        {
+          title: "Understanding your child's patterns",
+          body: "You learn to see the need beneath your child's behaviour, and to respond in ways that help them feel safe, understood and able to grow.",
+        },
+        {
+          title: 'Breaking the cycle',
+          body: 'You choose consciously which patterns end with you, and which values, strengths and ways of loving you want to pass on.',
+        },
+      ],
+      outcomes: [
+        'Calmer responses in the moments that used to set you off',
+        'Fewer repeating conflicts, and better repair when they happen',
+        'A deeper connection with your children, built on understanding rather than control',
+        'Less guilt, more confidence as a parent',
+        'A healthier family system, where everyone feels safer to be themselves',
+        'A legacy you choose, not one you simply inherit',
+      ],
+      outcomesClosing: 'The pattern can end with you. And something better can begin.',
+      howItHappens: [
+        'The Family Pattern is a multi-session pathway for one parent, both parents or co-parents. Sessions combine pattern mapping, Rapid Repatterning™ for your own triggers, nervous-system tools and practical parenting strategies you can use straight away.',
+        'It can be taken on its own, or alongside a Pattern Foundations or Inner Compass pathway for your child, so the whole family moves forward together.',
+      ],
+      format: [ph('Format: number of sessions · duration · individual / couple · in person / online · investment', 'Suzanne')],
+      whyDifferent: [
+        'Most parenting support teaches techniques: what to say, how to set consequences, which routine to follow. Those can help, but under stress every parent falls back on their pattern.',
+        'We work at the level of the pattern itself, in you and in your family system. That is why the change lasts, and why your children feel it.',
+      ],
+      ctas: [{ label: 'Book a Discovery Call', href: '/contact#book' }],
+      ctaSectionBody: 'The pattern can end with you. And something better can begin.',
     },
   },
 ]
@@ -615,6 +845,9 @@ export const groupPathways: GroupPathway[] = [
       'A year-long group cohort immersion with sustained live guidance from Suzanne.',
   },
 ]
+
+/** Item 7.1: every pathway page carries a Book button to the private sessions. */
+export const PATHWAY_BOOKING_HREF = '/services#private'
 
 export const personalPathways = pathways.filter((p) => p.category === 'personal')
 export const youthPathways = pathways.filter((p) => p.category === 'youth')
