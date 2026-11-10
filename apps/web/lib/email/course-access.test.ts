@@ -78,8 +78,7 @@ describe('course-access mail: parity with the n8n workflow', () => {
     await sendCourseAccessEmail(data)
     const input = mockSend.mock.calls[0]![0]
     expect(input.to).toEqual([n8n.to[0]!.email])
-    // The retired n8n mail replied to the old contact address; the site's reply-to moved to bookings@ on 27 Oct 2026.
-    expect(parseAddress(input.replyTo)).toEqual({ email: 'bookings@studiobooking.co.za' })
+    expect(parseAddress(input.replyTo)).toEqual(n8n.replyTo)
     // No explicit sender: the site default applies, which (EMAIL_FROM_ADDRESS
     // unset) is the n8n mail's sender.
     expect(input.from).toBeUndefined()

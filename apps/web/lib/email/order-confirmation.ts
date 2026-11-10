@@ -9,7 +9,7 @@ import { DOWNLOAD_LINK_TTL_LABEL } from '../downloads/storage'
 
 export type { OrderEmailData }
 
-const REPLY_TO = 'bookings@studiobooking.co.za'
+const REPLY_TO = 'sravenall@suzanneravenall.com'
 
 /** File name the buyer sees on the attached invoice. */
 export function invoiceFilename(displayId: number): string {
@@ -154,7 +154,7 @@ function buildPlainText(order: OrderEmailData, invoice: InvoiceDelivery): string
     '',
     'QUESTIONS?',
     '==========',
-    'Email: bookings@studiobooking.co.za',
+    'Email: sravenall@suzanneravenall.com',
     `Website: ${siteUrl()}/contact`,
     '',
     '---',

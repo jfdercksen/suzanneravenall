@@ -80,7 +80,7 @@ describe('sendMembershipExpiredEmail', () => {
     await sendMembershipExpiredEmail(baseData)
 
     expect(mockSend).toHaveBeenCalledWith(
-      expect.objectContaining({ replyTo: 'bookings@studiobooking.co.za' }),
+      expect.objectContaining({ replyTo: 'sravenall@suzanneravenall.com' }),
     )
   })
 

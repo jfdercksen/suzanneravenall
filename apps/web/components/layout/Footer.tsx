@@ -91,10 +91,10 @@ export default function Footer() {
                 phone: https://effectivenesscompany.com/contact-us/ */}
             <address className="mt-5 text-sm text-white/70 not-italic leading-relaxed">
               <a
-                href="mailto:bookings@studiobooking.co.za"
+                href="mailto:sravenall@suzanneravenall.com"
                 className="hover:text-white transition-colors duration-150"
               >
-                bookings@studiobooking.co.za
+                sravenall@suzanneravenall.com
               </a>
               <br />
               <a

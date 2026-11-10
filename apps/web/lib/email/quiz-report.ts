@@ -5,7 +5,7 @@ import type { QuizReportEmailData } from './types'
 
 export type { QuizReportEmailData }
 
-const REPLY_TO = 'bookings@studiobooking.co.za'
+const REPLY_TO = 'sravenall@suzanneravenall.com'
 
 export async function sendQuizReportEmail(data: QuizReportEmailData): Promise<string> {
   return sendEmail({

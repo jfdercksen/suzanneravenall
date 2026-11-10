@@ -5,7 +5,7 @@ import type { QuizInviteEmailData } from './types'
 
 export type { QuizInviteEmailData }
 
-const REPLY_TO = 'bookings@studiobooking.co.za'
+const REPLY_TO = 'sravenall@suzanneravenall.com'
 
 /** e.g. "6 Oct 2026, 09:14 (SAST)". */
 export function formatRequestedAt(date: Date): string {
