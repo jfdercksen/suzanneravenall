@@ -1,0 +1,10 @@
+{
+  "programmes": [
+    { "programmeSlug": "meditation", "format": "Live via Zoom", "sessions": [] },
+    { "programmeSlug": "mindfulness", "format": "Live via Zoom", "sessions": [] },
+    { "programmeSlug": "love-and-relationships", "format": "Live via Zoom", "sessions": [] },
+    { "programmeSlug": "intuition-in-my-personal-capacity", "format": "Live via Zoom", "sessions": [] },
+    { "programmeSlug": "become-an-energy-ninja", "format": "Live via Zoom", "sessions": [] },
+    { "programmeSlug": "become-an-energy-ninja-level-2", "format": "Live via Zoom", "sessions": [] }
+  ]
+}

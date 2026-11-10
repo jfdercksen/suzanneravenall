@@ -30,6 +30,10 @@ export type Program = {
   /** Practitioner parent block this programme belongs to (practitioner category only) */
   series?: ProgramSeries
   shortDescription: string
+  /** Suzanne's own card text where she supplied one (8 Nov copy); cards prefer it. */
+  cardText?: string
+  /** One-line subtitle under the name, from her copy documents. */
+  tagline?: string
   description: string
   /** Price in USD (from Thinkific). */
   priceUsd?: number
@@ -343,7 +347,7 @@ export const PROGRAMS: Program[] = [
     slug: 'love-and-relationships',
     image: '/images/products/love-relationships-live.jpeg',
     name: 'Love & Relationships',
-    category: 'self-paced',
+    category: 'live',
     shortDescription:
       'Attract a healthy, loving partner by first becoming your healthiest, most whole self.',
     description:
@@ -353,7 +357,10 @@ export const PROGRAMS: Program[] = [
     priceZar: 995,
     shopHandle: 'love-relationships-live', // merged product; the old standalone copy is unpublished (7 Oct)
     // 4 x 90 min: https://suzanneravenall.com/love-relationships-session/ ("6 x 2 h" had no source)
-    duration: '4 sessions of 90 minutes: study at your own pace',
+    // Suzanne 8 Nov: no self-study exists yet, so this runs as a live programme
+    // with register interest until one does (item 8.2).
+    duration: 'Live via Zoom: 4 sessions of 90 minutes, register your interest',
+    registerInterest: true,
     features: [
       'Learn to accept, value and love yourself and define your own worth',
       'Connect with your inner resource of love, wisdom and strength',
@@ -369,7 +376,7 @@ export const PROGRAMS: Program[] = [
     slug: 'intuition-in-my-personal-capacity',
     image: '/images/products/intuition-in-my-personal-capacity-live.png',
     name: 'Intuition in My Personal Capacity',
-    category: 'self-paced',
+    category: 'live',
     shortDescription:
       'Activate your inner guidance system and use intuition to navigate every area of your personal life.',
     description:
@@ -378,7 +385,10 @@ export const PROGRAMS: Program[] = [
     // Live-shop self-study price; R1,610 is the Live via Zoom price (sourcing report 6 Oct, section 7)
     priceZar: 995,
     shopHandle: 'intuition-in-my-personal-capacity-live',
-    duration: 'Self-study online: start anytime',
+    // Suzanne 8 Nov: no self-study exists yet, so this runs as a live programme
+    // with register interest until one does (item 8.2).
+    duration: 'Live via Zoom: register your interest',
+    registerInterest: true,
     features: [
       'Identify and dissolve limiting beliefs about your potential',
       'Develop practical intuitive skills for everyday decision-making',
@@ -419,7 +429,7 @@ export const PROGRAMS: Program[] = [
     slug: 'become-an-energy-ninja',
     image: '/images/products/be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live.jpeg',
     name: 'Become an Energy Ninja: Level 1',
-    category: 'self-paced',
+    category: 'live',
     shortDescription:
       'Master energy for an abundant life and become an unstoppable force in every area of your world.',
     description:
@@ -428,7 +438,10 @@ export const PROGRAMS: Program[] = [
     // Live-shop self-study price; R4,980 is the Live via Zoom price (sourcing report 6 Oct, section 7)
     priceZar: 3320,
     shopHandle: 'be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live',
-    duration: 'Self-study online: start anytime',
+    // Suzanne 8 Nov: no self-study exists yet, so this runs as a live programme
+    // with register interest until one does (item 8.2).
+    duration: 'Live via Zoom: register your interest',
+    registerInterest: true,
     features: [
       'Understand energy as the foundation of all reality',
       'Techniques for increasing and directing personal energy',
@@ -444,7 +457,7 @@ export const PROGRAMS: Program[] = [
     slug: 'become-an-energy-ninja-level-2',
     image: '/images/products/be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live.png',
     name: 'Become an Energy Ninja: Level 2',
-    category: 'self-paced',
+    category: 'live',
     shortDescription:
       'Energy practices for repatterning your life: the next level of mastering energy for an abundant life.',
     description:
@@ -453,7 +466,10 @@ export const PROGRAMS: Program[] = [
     // No ZAR price: the live shop has no self-study Level 2 and R4,980 has no source
     // (sourcing report 6 Oct, section 7). The shop page shows the Medusa price.
     shopHandle: 'be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live',
-    duration: 'Self-study online: start anytime',
+    // Suzanne 8 Nov: no self-study exists yet, so this runs as a live programme
+    // with register interest until one does (item 8.2).
+    duration: 'Live via Zoom: register your interest',
+    registerInterest: true,
     features: [
       'Daily energy practices for repatterning your life',
       'Deepen the energy mastery foundations from Level 1',
@@ -599,10 +615,14 @@ export const PROGRAMS: Program[] = [
   {
     slug: 'mindfulness',
     image: '/images/products/mindfulness-live.png',
-    name: 'Mindfulness',
+    // Suzanne's 8 Nov copy (attachment 06, "Present"): name, tagline and card text.
+    name: 'Present',
     category: 'live',
+    tagline: 'Mindfulness for everyday life · Live with Suzanne via Zoom',
     shortDescription:
-      'Experience decreased stress, increased focus, and lasting happiness through mindfulness meditation practice.',
+      'Practical mindfulness for real life. Learn to stay calm, focused and present in the moments that matter, and catch your patterns before they run you.',
+    cardText:
+      'Practical mindfulness for real life. Learn to stay calm, focused and present in the moments that matter, and catch your patterns before they run you.',
     description:
       'You may have heard that mindfulness, the ability to be fully present in the moment, can have numerous benefits, everything from decreased stress and sadness to increased levels of focus and happiness. But what exactly is mindfulness? And how can you recognise it and reap its many benefits? Mindfulness meditation practice is one way to truly experience the current moment and integrate that awareness into your everyday life. Suzanne\'s approach blends classical mindfulness with the deeper healing work of repatterning.',
     priceUsd: 440,
@@ -625,10 +645,14 @@ export const PROGRAMS: Program[] = [
   {
     slug: 'meditation',
     image: '/images/products/meditation-live-via-zoom.jpeg',
-    name: 'Meditation',
+    // Suzanne's 8 Nov copy (attachment 05, "The Inner Sanctuary"): name, tagline and card text.
+    name: 'The Inner Sanctuary',
     category: 'live',
+    tagline: 'Meditation for deep healing · Live with Suzanne via Zoom',
     shortDescription:
-      'Train in awareness, gain a healthy sense of perspective, and begin to truly understand your inner world.',
+      'More than mindfulness. Learn to quiet the mind, reach deeper states, and use meditation to heal, through guided practices, inner visualisation and shadow work with Suzanne.',
+    cardText:
+      'More than mindfulness. Learn to quiet the mind, reach deeper states, and use meditation to heal, through guided practices, inner visualisation and shadow work with Suzanne.',
     description:
       'Meditation isn\'t about becoming a different person, a new person, or even a better person. It\'s about training in awareness and getting a healthy sense of perspective. You\'re not trying to turn off your thoughts or feelings. You\'re learning to observe them without judgement. And eventually, you may start to better understand them as well. Suzanne\'s meditation sessions incorporate deep healing practices that go beyond standard mindfulness.',
     priceUsd: 440,
