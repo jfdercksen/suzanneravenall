@@ -46,8 +46,6 @@ export interface SeriesPath {
   heading: string
   steps: { label: string; text: string; slug: string }[]
   note: string
-  /** Both levels bought together: price and product are Johan's to set. */
-  bundle: RichLine
 }
 
 const AADP_CERT_PENDING = ph('AADP board certification is applied for directly with the AADP, and a separate AADP fee applies.', 'Suzanne')
@@ -60,7 +58,6 @@ export const SERIES_PATHS: Partial<Record<ProgramSeries, SeriesPath>> = {
       { label: 'Level 2 · Advanced', text: 'spot, track and clear dense energy for others, as a certified practitioner.', slug: 'energy-clearing-advanced' },
     ],
     note: 'Level 1 is the required foundation for Level 2.',
-    bundle: ['Level 1 and Level 2 together: ', ph('bundle price and product', 'Johan')],
   },
   'akashic-navigator': {
     heading: 'Your Path to Akashic Navigator',
@@ -69,7 +66,6 @@ export const SERIES_PATHS: Partial<Record<ProgramSeries, SeriesPath>> = {
       { label: 'Level 2 · Navigating for Others', text: 'read the Records for clients, as a certified Akashic Navigator.', slug: 'akashic-navigator-advanced' },
     ],
     note: 'Level 1 is the required foundation for Level 2.',
-    bundle: ['Level 1 and Level 2 together: ', ph('bundle price and product', 'Johan')],
   },
 }
 

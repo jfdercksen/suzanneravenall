@@ -6,13 +6,14 @@ import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { useProgramPrices } from '@/components/programs/ProgramPrices'
+import { programPriceSuffix } from '@/lib/programs/program-prices'
 import {
+  getBundleForSeries,
   getProgramsByCategory,
   getProgramsBySeries,
   type Program,
 } from '@/data/programs'
-import { SERIES_PATHS } from '@/data/programmeCopy'
-import { PRACTITIONER_TRACKS, LICENSING } from '@/data/practitionerTracks'
+import { PRACTITIONER_TRACKS, licensingLinks } from '@/data/practitionerTracks'
 import { RichText } from '@/components/shared/RichText'
 import { contactHref } from '@/app/contact/enquiry'
 import liveCalendarFile from '@/data/live-calendar.json'
@@ -24,26 +25,31 @@ const liveRank = (slug: string) => {
   return i === -1 ? LIVE_ORDER.length : i
 }
 
-function BundleCard({ name, series }: { name: string; series: 'energy-clearing' | 'akashic-navigator' }) {
-  const path = SERIES_PATHS[series]
-  if (!path) return null
+function BundleCard({ series }: { series: 'energy-clearing' | 'akashic-navigator' }) {
+  const bundle = getBundleForSeries(series)
+  const { priceOf, currency } = useProgramPrices()
+  const price = priceOf(bundle?.slug ?? '')
+  const suffix = programPriceSuffix(price, currency)
+  if (!bundle?.shopHandle) return null
   return (
     <motion.div
       variants={childVariants}
-      className="bg-white border border-dashed border-brand-primary-300 rounded-card p-8 flex flex-col"
+      className="bg-white border border-brand-border rounded-card p-8 flex flex-col"
     >
       <div className="flex-1">
-        <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">Bundle</p>
-        <h3 className="text-xl font-medium text-brand-ink mb-3 leading-snug">{name}: Level 1 + Level 2</h3>
-        <p className="text-brand-muted text-sm font-light leading-relaxed mb-6">
-          <RichText line={path.bundle} />
+        <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">Both Levels Together</p>
+        <h3 className="text-xl font-medium text-brand-ink mb-3 leading-snug">{bundle.name}</h3>
+        <p className="text-brand-primary font-semibold text-lg mb-2">
+          {price}
+          {suffix && <span className="text-brand-muted text-sm font-normal ml-1">{suffix}</span>}
         </p>
+        {bundle.duration && <p className="text-xs text-brand-muted mb-6">{bundle.duration}</p>}
       </div>
       <Link
-        href={contactHref('practitioner', `${name} Level 1 + Level 2 bundle`)}
-        className="inline-flex items-center justify-center w-full py-3 px-6 border border-brand-primary-300 hover:border-brand-primary text-brand-primary text-sm font-medium rounded-button transition-colors duration-300"
+        href={`/shop/${bundle.shopHandle}`}
+        className="inline-flex items-center justify-center w-full py-3 px-6 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-medium rounded-button transition-colors duration-300"
       >
-        Enquire about the bundle
+        View in Shop
       </Link>
     </motion.div>
   )
@@ -178,7 +184,8 @@ function ChevronIcon({ open }: { open: boolean }) {
   )
 }
 
-export default function ProgramsPageClient() {
+export default function ProgramsPageClient({ membershipsOn = false }: { membershipsOn?: boolean }) {
+  const licensing = licensingLinks(membershipsOn)
   const [activeCategory, setActiveCategory] = useState<string>('practitioner')
   const { priceOf } = useProgramPrices()
   const [rrOpen, setRrOpen] = useState(false)
@@ -422,7 +429,7 @@ export default function ProgramsPageClient() {
                 {energyClearingPrograms.map((program) => (
                   <ProgramCard key={program.slug} program={program} />
                 ))}
-                <BundleCard name="Energy Clearing" series="energy-clearing" />
+                <BundleCard series="energy-clearing" />
               </motion.div>
             </motion.div>
 
@@ -458,7 +465,7 @@ export default function ProgramsPageClient() {
                 {akashicPrograms.map((program) => (
                   <ProgramCard key={program.slug} program={program} />
                 ))}
-                <BundleCard name="Akashic Navigator" series="akashic-navigator" />
+                <BundleCard series="akashic-navigator" />
               </motion.div>
             </motion.div>
 
@@ -515,8 +522,9 @@ export default function ProgramsPageClient() {
               )}
             </motion.div>
 
-            {/* Licensing of the practitioner training (item 8.4). The product
-                and price are Johan's decision; placeholder until then. */}
+            {/* Licensing (item 8.4, Johan 10 Nov): there is no separate licensing
+                product. The licence to practise is certification plus the annual
+                practitioner membership, as on repatterning.com. */}
             <motion.div
               id="licensing"
               variants={sectionVariants}
@@ -525,23 +533,30 @@ export default function ProgramsPageClient() {
               viewport={{ once: true, margin: '0px' }}
               className="bg-brand-primary-900 rounded-card p-8 lg:p-12 scroll-mt-48"
             >
-              <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-                <div className="max-w-2xl">
-                  <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
-                    Licensing
-                  </p>
-                  <h3 className="text-2xl lg:text-4xl font-medium tracking-tight text-white mb-4 leading-snug">
-                    Licensing the practitioner training
-                  </h3>
-                  <p className="text-white/80 font-light leading-relaxed">
-                    <RichText line={LICENSING.detail} tone="dark" />
-                  </p>
-                </div>
+              <div className="max-w-2xl">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
+                  Licence to Practise
+                </p>
+                <h3 className="text-2xl lg:text-4xl font-medium tracking-tight text-white mb-4 leading-snug">
+                  Practising under the Ravenall Institute name
+                </h3>
+                <p className="text-white/80 font-light leading-relaxed mb-8">
+                  To practise under the Ravenall Institute name, you need your certification and a
+                  current annual practitioner membership. That membership is your licence to practise.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Link
-                  href={LICENSING.enquiryHref}
-                  className="flex-shrink-0 inline-flex items-center justify-center py-3 px-8 bg-white hover:bg-brand-sand text-brand-primary text-sm font-medium rounded-button transition-colors duration-300"
+                  href={licensing.membershipHref}
+                  className="inline-flex items-center justify-center py-3 px-8 bg-white hover:bg-brand-sand text-brand-primary text-sm font-medium rounded-button transition-colors duration-300"
                 >
-                  Enquire about licensing
+                  {licensing.membershipLabel}
+                </Link>
+                <Link
+                  href={licensing.observationFeeHref}
+                  className="inline-flex items-center justify-center py-3 px-8 border border-white/50 hover:border-white text-white hover:bg-white/10 text-sm font-medium rounded-button transition-colors duration-300"
+                >
+                  Certification Observation Fee
                 </Link>
               </div>
             </motion.div>

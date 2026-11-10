@@ -84,16 +84,16 @@ const PROGRAMME_NAMES = [
   'Akashic Navigator (Basic & Advanced)',
   'Energy Clearing (Basic & Advanced)',
   'Resonance Repatterning: The Basic Five',
-  // Self-Study column
+  // Self-Study column (Johan 10 Nov: these products sell Self Study)
   'Trauma to Transcendence',
-  'Getting Unstuck',
-  'Intuition in Business',
-  // Live column (8 Nov: Inner Sanctuary and Present, plus three moved from self-study)
-  'The Inner Sanctuary',
-  'Present',
   'Love & Relationships',
   'Intuition in My Personal Capacity',
   'Become an Energy Ninja',
+  'Getting Unstuck',
+  'Intuition in Business',
+  // Live column (8 Nov copy)
+  'The Inner Sanctuary',
+  'Present',
 ] as const
 
 // Resonance Repatterning programmes are self-study only (data/programs.ts),

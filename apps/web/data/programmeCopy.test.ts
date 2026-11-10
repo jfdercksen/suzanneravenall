@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { PROGRAMME_COPY, SERIES_PATHS } from './programmeCopy'
-import { getProgramBySlug } from './programs'
-import { placeholdersIn } from '@/lib/content/richLine'
+import { getBundleForSeries, getProgramBySlug, type ProgramSeries } from './programs'
 
 describe('data/programmeCopy (8 Nov attachments 03-06)', () => {
   it('only describes published programmes', () => {
@@ -23,11 +22,13 @@ describe('data/programmeCopy (8 Nov attachments 03-06)', () => {
     )
   })
 
-  it('every series path step is a published programme and the bundle is a placeholder for Johan', () => {
-    for (const path of Object.values(SERIES_PATHS)) {
+  it('every series path step is a published programme and the series has a bundle product (Johan 10 Nov)', () => {
+    for (const [series, path] of Object.entries(SERIES_PATHS)) {
       if (!path) continue
       for (const step of path.steps) expect(getProgramBySlug(step.slug)?.isPublished, step.slug).toBe(true)
-      expect(placeholdersIn(path.bundle).map((p) => p.owner)).toEqual(['Johan'])
+      const bundle = getBundleForSeries(series as ProgramSeries)
+      expect(bundle?.shopHandle, series).toMatch(/purchased-together/)
+      expect(bundle?.priceZar, series).toBe(7905)
     }
   })
 

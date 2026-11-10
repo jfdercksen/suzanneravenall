@@ -63,6 +63,24 @@ const columns: Column[] = [
           'Breaking the hold of the childhood brain on your adult self. From early experiences of neglect or unmet needs we form beliefs, helpful and harmful, that limit our potential. This programme rewrites the adaptations we forgot we made.',
       },
       {
+        name: 'Love & Relationships',
+        slug: 'love-and-relationships',
+        description:
+          'We attract people at our common level of woundedness. To attract a healthy, loving partner you need to become that healthy person first. This programme shows how to raise the energetic baseline.',
+      },
+      {
+        name: 'Intuition in My Personal Capacity',
+        slug: 'intuition-in-my-personal-capacity',
+        description:
+          'Identify and change the limiting beliefs we have internalised since childhood, even the ones we have accepted as true though they are not, and reconnect to the intuition that was always there.',
+      },
+      {
+        name: 'Become an Energy Ninja',
+        slug: 'become-an-energy-ninja',
+        description:
+          'Mastering energy for an abundant life, Level 1. Everything starts as, and is, energy. Learn how to change your world by using an unseen force, and bring it into every area of your life.',
+      },
+      {
         name: 'Getting Unstuck',
         slug: 'getting-unstuck',
         description:
@@ -95,25 +113,6 @@ const columns: Column[] = [
         slug: 'mindfulness',
         description:
           'Practical mindfulness for real life. Learn to stay calm, focused and present in the moments that matter, and catch your patterns before they run you.',
-      },
-      // Item 8.2: live with register interest until a self-study exists.
-      {
-        name: 'Love & Relationships',
-        slug: 'love-and-relationships',
-        description:
-          'We attract people at our common level of woundedness. To attract a healthy, loving partner you need to become that healthy person first. This programme shows how to raise the energetic baseline.',
-      },
-      {
-        name: 'Intuition in My Personal Capacity',
-        slug: 'intuition-in-my-personal-capacity',
-        description:
-          'Identify and change the limiting beliefs we have internalised since childhood, even the ones we have accepted as true though they are not, and reconnect to the intuition that was always there.',
-      },
-      {
-        name: 'Become an Energy Ninja',
-        slug: 'become-an-energy-ninja',
-        description:
-          'Mastering energy for an abundant life, Level 1. Everything starts as, and is, energy. Learn how to change your world by using an unseen force, and bring it into every area of your life.',
       },
     ],
     ctaLabel: 'See Live Dates',

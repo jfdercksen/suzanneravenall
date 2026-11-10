@@ -34,9 +34,9 @@ const DELIVERY_METHODS: Record<Program['category'], string> = {
 function getDeliveryMethod(program: Program): string {
   // All Resonance Repatterning programmes are currently offered self-study
   if (isResonanceRepatterning(program)) return 'Self-Study Online: Start Anytime'
-  // Energy Clearing links to the self-study product; live runs are register
-  // interest only (sourcing report 6 Oct, decision 5)
-  if (program.series === 'energy-clearing') return 'Self-Study Online: Start Anytime'
+  // Energy Clearing and Akashic Navigator link to the self-study product; live
+  // runs are register interest only (decision 5, 6 Oct; Johan 10 Nov)
+  if (program.series === 'energy-clearing' || program.series === 'akashic-navigator') return 'Self-Study Online: Start Anytime'
   return DELIVERY_METHODS[program.category]
 }
 

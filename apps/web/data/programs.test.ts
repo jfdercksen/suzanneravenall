@@ -132,7 +132,7 @@ describe('getProgramCta', () => {
   })
 
   it('sends live Zoom programmes without dates to a register-interest enquiry', () => {
-    for (const slug of ['mindfulness', 'meditation', 'akashic-navigator-basic', 'akashic-navigator-advanced']) {
+    for (const slug of ['mindfulness', 'meditation', 'become-an-energy-ninja-level-2']) {
       const p = getProgramBySlug(slug)
       expect(p?.registerInterest, slug).toBe(true)
       if (!p) continue
@@ -188,5 +188,37 @@ describe('getRelatedPrograms', () => {
       expect(related.every((p) => p.isPublished)).toBe(true)
       expect(related.length).toBeLessThanOrEqual(3)
     }
+  })
+})
+
+// Johan, 10 Nov 2026: "If it says self-study the product must sell as self-study."
+// selfStudyVariant mirrors the review box catalogue (a published Self Study
+// variant on the programme's shopHandle product, read 10 Nov).
+describe('self-study rule (Johan 10 Nov)', () => {
+  // Suzanne's 8 Nov copy defines these as live Zoom programmes (USD 440) although
+  // the old Meditation / Mindfulness products also carry a Self Study variant.
+  // Johan decides; until then they are the only allowed exception.
+  const LIVE_BY_HER_COPY = ['meditation', 'mindfulness']
+
+  it('a programme whose product sells self-study is sold as self-study, never as live-only', () => {
+    for (const p of PROGRAMS.filter((x) => x.isPublished && x.selfStudyVariant)) {
+      if (LIVE_BY_HER_COPY.includes(p.slug)) continue
+      expect(p.registerInterest, p.slug).toBeFalsy()
+      expect(p.category, p.slug).not.toBe('live')
+      expect(p.duration, p.slug).toMatch(/^Self-study/)
+      expect(getProgramCta(p).href, p.slug).toBe(`/shop/${p.shopHandle}`)
+    }
+  })
+
+  it('covers the four programmes Suzanne listed in item 8.2, as the catalogue sells them', () => {
+    for (const slug of ['love-and-relationships', 'intuition-in-my-personal-capacity', 'become-an-energy-ninja']) {
+      const p = getProgramBySlug(slug)!
+      expect(p.selfStudyVariant, slug).toBe(true)
+      expect(p.duration, slug).toMatch(/Live via Zoom: register your interest$/)
+    }
+    const level2 = getProgramBySlug('become-an-energy-ninja-level-2')!
+    expect(level2.selfStudyVariant).toBeFalsy()
+    expect(level2.category).toBe('live')
+    expect(level2.registerInterest).toBe(true)
   })
 })

@@ -28,8 +28,26 @@ export const PRACTITIONER_TRACKS: PractitionerTrack[] = [
   track('pattern-intelligence', 'Pattern Intelligence™'),
 ]
 
-/** Licensing of the practitioner training (item 8.4): product and price are Johan's. */
-export const LICENSING = {
-  detail: [ph('What is licensed, who it is for, terms and price; shop product to follow', 'Johan')] as RichLine,
-  enquiryHref: contactHref('practitioner', 'Licensing the practitioner training'),
+/**
+ * Licensing (item 8.4, Johan 10 Nov): no separate licensing product exists.
+ * The licence to practise under the Ravenall Institute name is certification
+ * plus a current annual practitioner membership (repatterning.com: "Membership
+ * ~ License to Practice Categories"). The membership levels link goes to the
+ * portal only while memberships are on sale (membershipsEnabled, read on the
+ * server); no membership prices on this page until Suzanne approves the levels.
+ */
+export const OBSERVATION_FEE_HANDLE = 'ravenall-institute-certification-observation-fee'
+
+export function licensingLinks(membershipsOn: boolean): {
+  membershipHref: string
+  membershipLabel: string
+  observationFeeHref: string
+} {
+  return {
+    membershipHref: membershipsOn
+      ? '/portal/upgrade'
+      : contactHref('practitioner', 'Practitioner membership (licence to practise)'),
+    membershipLabel: membershipsOn ? 'See the membership levels' : 'Ask about membership levels',
+    observationFeeHref: `/shop/${OBSERVATION_FEE_HANDLE}`,
+  }
 }

@@ -163,25 +163,44 @@ describe('ProgramsPageClient practitioner training (8 Nov)', () => {
     expect(placeholders.filter((t) => t === '[Programme description, format and price]')).toHaveLength(3)
   })
 
-  it('offers bundle cards for Energy Clearing and Akashic Navigator and a licensing section', () => {
+  it('links both bundle products, priced from the shop (Johan 10 Nov)', () => {
     render(<ProgramsPageClient />)
-    expect(screen.getByText('Energy Clearing: Level 1 + Level 2')).toBeInTheDocument()
-    expect(screen.getByText('Akashic Navigator: Level 1 + Level 2')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Licensing the practitioner training' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Enquire about licensing' }).getAttribute('href')).toContain('enquiry=practitioner')
+    expect(screen.getByRole('heading', { name: 'Deep Energy Clearing Level 1 & 2: Purchased Together' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Akashic Navigator Level 1 & 2: Purchased Together' })).toBeInTheDocument()
+    const hrefs = screen.getAllByRole('link', { name: 'View in Shop' }).map((a) => a.getAttribute('href'))
+    expect(hrefs).toContain('/shop/deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom')
+    expect(hrefs).toContain('/shop/akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom')
+    expect(screen.queryByText('[bundle price and product]')).not.toBeInTheDocument()
   })
 
-  it('lists Love & Relationships, Intuition and Energy Ninja as live, with The Inner Sanctuary and Present first', () => {
+  it('licence to practise: certification plus annual membership, contact while memberships are off', () => {
     render(<ProgramsPageClient />)
-    const order = textOrder(['The Inner Sanctuary', 'Present', 'Love & Relationships'])
-    const [sanctuary, present, love] = [at(order, 0), at(order, 1), at(order, 2)]
-    const live = document.getElementById('live')!
-    expect(live.textContent).toContain('Love & Relationships')
-    expect(live.textContent).toContain('Intuition in My Personal Capacity')
-    expect(live.textContent).toContain('Become an Energy Ninja: Level 1')
-    expect(document.getElementById('self-paced')!.textContent).not.toContain('Love & Relationships')
-    expect(sanctuary).toBeLessThan(love)
-    expect(present).toBeLessThan(love)
+    expect(screen.getByText(/current annual practitioner membership\. That membership is your licence to practise/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Ask about membership levels' }).getAttribute('href')).toContain('/contact?')
+    expect(screen.getByRole('link', { name: 'Certification Observation Fee' })).toHaveAttribute(
+      'href',
+      '/shop/ravenall-institute-certification-observation-fee',
+    )
+  })
+
+  it('licence to practise links the membership levels once memberships are on', () => {
+    render(<ProgramsPageClient membershipsOn />)
+    expect(screen.getByRole('link', { name: 'See the membership levels' })).toHaveAttribute('href', '/portal/upgrade')
+  })
+
+  it('sells Love & Relationships, Intuition and Energy Ninja L1 as self-study, live by register interest (Johan 10 Nov)', () => {
+    render(<ProgramsPageClient />)
+    const selfPaced = document.getElementById('self-paced')!.textContent ?? ''
+    for (const name of ['Love & Relationships', 'Intuition in My Personal Capacity', 'Become an Energy Ninja: Level 1']) {
+      expect(selfPaced, name).toContain(name)
+    }
+    expect(selfPaced).toContain('Live via Zoom: register your interest')
+    const live = document.getElementById('live')!.textContent ?? ''
+    expect(live).toContain('Become an Energy Ninja: Level 2')
+    expect(live).not.toContain('Love & Relationships')
+    const order = textOrder(['The Inner Sanctuary', 'Present', 'Become an Energy Ninja: Level 2'])
+    expect(at(order, 0)).toBeLessThan(at(order, 2))
+    expect(at(order, 1)).toBeLessThan(at(order, 2))
   })
 
   it('links the recorded group section to its own page', () => {

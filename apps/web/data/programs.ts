@@ -30,6 +30,13 @@ export type Program = {
   /** Practitioner parent block this programme belongs to (practitioner category only) */
   series?: ProgramSeries
   shortDescription: string
+  /**
+   * The shop product (shopHandle) has a published Self Study variant, read from
+   * the review box catalogue on 10 Nov 2026. Johan's rule: a page whose product
+   * sells self-study must sell it as self-study, with any live run shown as
+   * register interest (data/programs.test.ts enforces it).
+   */
+  selfStudyVariant?: boolean
   /** Suzanne's own card text where she supplied one (8 Nov copy); cards prefer it. */
   cardText?: string
   /** One-line subtitle under the name, from her copy documents. */
@@ -216,6 +223,7 @@ export const PROGRAMS: Program[] = [
     ],
     // Source: Thinkific Deep Energy Clearing Level 1 key takeaways
     keyTakeaways: ['Clear yourself', 'Live more freely', 'Energise your system'],
+    selfStudyVariant: true,
     isPublished: true,
     isFeatured: false,
   },
@@ -248,6 +256,7 @@ export const PROGRAMS: Program[] = [
     keyTakeaways: ['Clear others', 'Tap into your energetic self', 'Revitalise'],
     // Source: builds on Level 1, as stated in the programme names and copy (report section 8)
     prerequisite: { text: 'Energy Clearing Level 1 (Basic).', slug: 'energy-clearing-basic' },
+    selfStudyVariant: true,
     isPublished: true,
     isFeatured: false,
   },
@@ -264,11 +273,12 @@ export const PROGRAMS: Program[] = [
     description:
       'For a moment, just one moment, imagine you had the ability to alter your relationship with success and everything happening in your life. Imagine having the ability to improve your intuition to such an extent that you receive daily guidance in the direction you are moving in. This is completely possible. The Akashic Records are the energetic records of all souls\' lives, a compendium of all events, thoughts, words, emotions, and intent ever to have occurred. Each soul has its own Akashic Record, like a series of books with each book representing one lifetime. Your problems are not happening in a haphazard manner, and they are not meaningless roadblocks. Your life is working even when you don\'t think so, and you can move through it with less resistance and more expansion when you understand it. In this Fundamentals programme (Clearing Self, Level 1) you learn to access your own records: reading them to receive information, and clearing the blocks, constrictions and ancestral patterns affecting this lifetime.',
     priceUsd: 500,
-    priceZar: 10295,
+    // Live-shop SELF-STUDY price, like Energy Clearing (Live via Zoom is R10,295).
+    priceZar: 4650,
     shopHandle: 'akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom',
-    // No live dates published since 2022 (report section 9): register interest only.
-    duration: 'Live via Zoom: register your interest; self-study also available',
-    registerInterest: true,
+    // No live dates published since 2022: live is register interest, self-study sells now (Johan 10 Nov).
+    duration: 'Self-study: start anytime. Live via Zoom: register your interest',
+    selfStudyVariant: true,
     features: [
       'Learn to access and read your own Akashic Record',
       'Clear blocks, constrictions and ancestral patterns affecting this lifetime',
@@ -291,11 +301,12 @@ export const PROGRAMS: Program[] = [
     description:
       'Learn to read the Akashic Records for others: learn why they are here, their past and much more, and learn how to help others navigate life with much more wisdom and ease, with key answers to critical questions. The Akashic Records are an amazing resource to help you see beyond the veil, to clear disruption in a person\'s path and navigate life, business, career and relationships with much greater ease. Many medical studies now show that ancestral patterns carried through our DNA can disrupt our lives unknowingly, all of which can be addressed through the Akashic Records. Building on the Fundamentals level, this Advanced programme (Clearing Others, Level 2) develops the reading and clearing skills to work with clients.',
     priceUsd: 500,
-    priceZar: 10295,
+    // Live-shop SELF-STUDY price, like Energy Clearing (Live via Zoom is R10,295).
+    priceZar: 4650,
     shopHandle: 'akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom',
-    // No live dates published since 2022 (report section 9): register interest only.
-    duration: 'Live via Zoom: register your interest; self-study also available',
-    registerInterest: true,
+    // No live dates published since 2022: live is register interest, self-study sells now (Johan 10 Nov).
+    duration: 'Self-study: start anytime. Live via Zoom: register your interest',
+    selfStudyVariant: true,
     features: [
       'Learn to read the Akashic Records for others',
       'Discover why clients are here, their past, and answers to critical questions',
@@ -347,7 +358,7 @@ export const PROGRAMS: Program[] = [
     slug: 'love-and-relationships',
     image: '/images/products/love-relationships-live.jpeg',
     name: 'Love & Relationships',
-    category: 'live',
+    category: 'self-paced',
     shortDescription:
       'Attract a healthy, loving partner by first becoming your healthiest, most whole self.',
     description:
@@ -357,10 +368,9 @@ export const PROGRAMS: Program[] = [
     priceZar: 995,
     shopHandle: 'love-relationships-live', // merged product; the old standalone copy is unpublished (7 Oct)
     // 4 x 90 min: https://suzanneravenall.com/love-relationships-session/ ("6 x 2 h" had no source)
-    // Suzanne 8 Nov: no self-study exists yet, so this runs as a live programme
-    // with register interest until one does (item 8.2).
-    duration: 'Live via Zoom: 4 sessions of 90 minutes, register your interest',
-    registerInterest: true,
+    // The product sells Self Study now and Live via Zoom (no dates yet), Johan 10 Nov.
+    duration: 'Self-study: 4 sessions of 90 minutes, start anytime. Live via Zoom: register your interest',
+    selfStudyVariant: true,
     features: [
       'Learn to accept, value and love yourself and define your own worth',
       'Connect with your inner resource of love, wisdom and strength',
@@ -376,7 +386,7 @@ export const PROGRAMS: Program[] = [
     slug: 'intuition-in-my-personal-capacity',
     image: '/images/products/intuition-in-my-personal-capacity-live.png',
     name: 'Intuition in My Personal Capacity',
-    category: 'live',
+    category: 'self-paced',
     shortDescription:
       'Activate your inner guidance system and use intuition to navigate every area of your personal life.',
     description:
@@ -385,10 +395,9 @@ export const PROGRAMS: Program[] = [
     // Live-shop self-study price; R1,610 is the Live via Zoom price (sourcing report 6 Oct, section 7)
     priceZar: 995,
     shopHandle: 'intuition-in-my-personal-capacity-live',
-    // Suzanne 8 Nov: no self-study exists yet, so this runs as a live programme
-    // with register interest until one does (item 8.2).
-    duration: 'Live via Zoom: register your interest',
-    registerInterest: true,
+    // The product sells Self Study now and Live via Zoom (no dates yet), Johan 10 Nov.
+    duration: 'Self-study: start anytime. Live via Zoom: register your interest',
+    selfStudyVariant: true,
     features: [
       'Identify and dissolve limiting beliefs about your potential',
       'Develop practical intuitive skills for everyday decision-making',
@@ -429,7 +438,7 @@ export const PROGRAMS: Program[] = [
     slug: 'become-an-energy-ninja',
     image: '/images/products/be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live.jpeg',
     name: 'Become an Energy Ninja: Level 1',
-    category: 'live',
+    category: 'self-paced',
     shortDescription:
       'Master energy for an abundant life and become an unstoppable force in every area of your world.',
     description:
@@ -438,10 +447,9 @@ export const PROGRAMS: Program[] = [
     // Live-shop self-study price; R4,980 is the Live via Zoom price (sourcing report 6 Oct, section 7)
     priceZar: 3320,
     shopHandle: 'be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live',
-    // Suzanne 8 Nov: no self-study exists yet, so this runs as a live programme
-    // with register interest until one does (item 8.2).
-    duration: 'Live via Zoom: register your interest',
-    registerInterest: true,
+    // The product sells Self Study now and Live via Zoom (no dates yet), Johan 10 Nov.
+    duration: 'Self-study: start anytime. Live via Zoom: register your interest',
+    selfStudyVariant: true,
     features: [
       'Understand energy as the foundation of all reality',
       'Techniques for increasing and directing personal energy',
@@ -466,8 +474,8 @@ export const PROGRAMS: Program[] = [
     // No ZAR price: the live shop has no self-study Level 2 and R4,980 has no source
     // (sourcing report 6 Oct, section 7). The shop page shows the Medusa price.
     shopHandle: 'be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live',
-    // Suzanne 8 Nov: no self-study exists yet, so this runs as a live programme
-    // with register interest until one does (item 8.2).
+    // The product sells Live via Zoom only (no Self Study variant), so live with
+    // register interest while no dates exist (Johan 10 Nov).
     duration: 'Live via Zoom: register your interest',
     registerInterest: true,
     features: [
@@ -639,6 +647,7 @@ export const PROGRAMS: Program[] = [
       'Integrate mindfulness into your existing routines',
       'Live sessions via Zoom with Suzanne',
     ],
+    selfStudyVariant: true,
     isPublished: true,
     isFeatured: false,
   },
@@ -669,6 +678,7 @@ export const PROGRAMS: Program[] = [
       'Facing the shadow: healing through meditation',
       'Live guided sessions with Suzanne via Zoom',
     ],
+    selfStudyVariant: true,
     isPublished: true,
     isFeatured: false,
   },
@@ -880,6 +890,53 @@ export const PROGRAMS: Program[] = [
     isFeatured: false,
   },
 ]
+
+/**
+ * Level 1 + Level 2 bundles (item 8.4: show the price of buying both). Both are
+ * published shop products with Self Study, Live via Zoom and Live Retaker
+ * variants. Not in PROGRAMS (no page of their own): the practitioner cards and
+ * the course pages link straight to the shop. priceZar is the Self Study price,
+ * like every programme, so the price reader picks that variant and shows dollars
+ * to a USD visitor.
+ */
+export const BUNDLES: Program[] = [
+  {
+    slug: 'akashic-navigator-bundle',
+    image: '/images/products/akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom.jpeg',
+    name: 'Akashic Navigator Level 1 & 2: Purchased Together',
+    category: 'practitioner',
+    series: 'akashic-navigator',
+    shortDescription: 'Both levels of the Akashic Navigator training, bought together.',
+    description: 'Both levels of the Akashic Navigator training, bought together.',
+    priceZar: 7905,
+    shopHandle: 'akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom',
+    duration: 'Self-study: start anytime. Live via Zoom: register your interest',
+    selfStudyVariant: true,
+    features: [],
+    isPublished: true,
+    isFeatured: false,
+  },
+  {
+    slug: 'energy-clearing-bundle',
+    image: '/images/products/deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom.png',
+    name: 'Deep Energy Clearing Level 1 & 2: Purchased Together',
+    category: 'practitioner',
+    series: 'energy-clearing',
+    shortDescription: 'Both levels of the Energy Clearing training, bought together.',
+    description: 'Both levels of the Energy Clearing training, bought together.',
+    priceZar: 7905,
+    shopHandle: 'deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom',
+    duration: 'Self-study: start anytime. Live via Zoom: register your interest',
+    selfStudyVariant: true,
+    features: [],
+    isPublished: true,
+    isFeatured: false,
+  },
+]
+
+/** The bundle of a practitioner series, if it has one. */
+export const getBundleForSeries = (series: ProgramSeries | undefined): Program | undefined =>
+  series ? BUNDLES.find((b) => b.series === series) : undefined
 
 /** Self-study cards on the home page, in this order (the rest are on /programs). */
 export const HOME_SELF_STUDY = ['trauma-to-transcendence', 'getting-unstuck', 'finding-my-purpose']

@@ -87,7 +87,7 @@ describe('ProgramDetailClient sourced content (sourcing report 6 Oct)', () => {
   })
 
   it('asks for interest, not a booking, on a live programme with no dates', () => {
-    const program = getProgramBySlug('love-and-relationships')!
+    const program = getProgramBySlug('become-an-energy-ninja-level-2')!
     render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
     expect(screen.getAllByText('Register Interest').length).toBeGreaterThan(0)
     expect(screen.queryByText('View in Shop')).not.toBeInTheDocument()
@@ -97,7 +97,7 @@ describe('ProgramDetailClient sourced content (sourcing report 6 Oct)', () => {
 
 // Suzanne's 8 Nov long-form copy (items 8.4, 8.5, 8.6)
 describe('ProgramDetailClient long-form pages (8 Nov copy)', () => {
-  it('Energy Clearing Level 1: her copy, What is included, AADP and the path to Level 2 with a bundle placeholder', () => {
+  it('Energy Clearing Level 1: her copy, What is included, AADP and the path to Level 2 with the bundle product', () => {
     const program = getProgramBySlug('energy-clearing-basic')!
     render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
     expect(screen.getByText('You are more than a physical body. You are an electrical, energetic system.')).toBeInTheDocument()
@@ -105,16 +105,21 @@ describe('ProgramDetailClient long-form pages (8 Nov copy)', () => {
     expect(screen.getByText('100 lessons, 10 hours of video')).toBeInTheDocument()
     expect(screen.getAllByText(/American Association of Drugless Practitioners/).length).toBeGreaterThan(0)
     expect(screen.getByRole('link', { name: /View Energy Clearing: Clearing Others Level 2/ })).toHaveAttribute('href', '/programs/energy-clearing-advanced')
-    expect(screen.getByText('[bundle price and product]')).toBeInTheDocument()
     expect(screen.getAllByRole('link', { name: 'Enrol in Level 1' }).length).toBeGreaterThan(0)
+    expect(screen.getByRole('link', { name: 'View the Bundle' })).toHaveAttribute(
+      'href',
+      '/shop/deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom',
+    )
   })
 
-  it('Akashic Navigator Basic shows Advanced and a bundle placeholder; register interest while live-only', () => {
+  it('Akashic Navigator Basic shows Advanced and the bundle, and sells the self-study (Johan 10 Nov)', () => {
     const program = getProgramBySlug('akashic-navigator-basic')!
     render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
     expect(screen.getByRole('link', { name: /View Akashic Navigator: Advanced/ })).toHaveAttribute('href', '/programs/akashic-navigator-advanced')
-    expect(screen.getByText('[bundle price and product]')).toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: 'Enrol in Level 1' })).not.toBeInTheDocument()
+    expect(screen.getAllByRole('link', { name: 'Enrol in Level 1' })[0]).toHaveAttribute(
+      'href',
+      '/shop/akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom',
+    )
     expect(screen.getAllByText('[number of lessons · hours of video: get from Shayna]').length).toBeGreaterThan(0)
   })
 

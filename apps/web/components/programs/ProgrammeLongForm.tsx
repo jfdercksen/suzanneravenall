@@ -4,7 +4,9 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { RichText } from '@/components/shared/RichText'
-import { getProgramBySlug, type Program } from '@/data/programs'
+import { getBundleForSeries, getProgramBySlug, type Program } from '@/data/programs'
+import { useProgramPrices } from '@/components/programs/ProgramPrices'
+import { PRICE_ON_REQUEST, programPriceSuffix } from '@/lib/programs/program-prices'
 import { SERIES_PATHS, type ProgrammeCopy } from '@/data/programmeCopy'
 
 const reveal = {
@@ -57,6 +59,10 @@ function buildKeys(program: Program, copy: ProgrammeCopy): string[] {
  */
 export function ProgrammeLongForm({ program, copy, price, priceSuffix, cta }: Props) {
   const path = program.series ? SERIES_PATHS[program.series] : undefined
+  const bundle = getBundleForSeries(program.series)
+  const { priceOf, currency } = useProgramPrices()
+  const bundlePrice = bundle ? priceOf(bundle.slug) : PRICE_ON_REQUEST
+  const bundleSuffix = programPriceSuffix(bundlePrice, currency)
   // One label per page: register-interest programmes use the same words as the header button.
   const ctaLabel = program.registerInterest ? 'Register Interest' : copy.ctaLabel
 
@@ -245,9 +251,28 @@ export function ProgrammeLongForm({ program, copy, price, priceSuffix, cta }: Pr
             })}
           </ol>
           <p className="mt-8 text-base text-brand-ink">{path.note}</p>
-          <p className="mt-3 text-base text-brand-ink">
-            <RichText line={path.bundle} />
-          </p>
+          {bundle?.shopHandle && (
+            <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-card border border-brand-border bg-white p-6 lg:p-8">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] font-medium text-brand-accent mb-2">Both Levels Together</p>
+                <p className="text-lg font-medium text-brand-ink leading-snug">{bundle.name}</p>
+                <p className="mt-1 text-base text-brand-ink">
+                  <span className="font-semibold">{bundlePrice}</span>
+                  {bundlePrice !== PRICE_ON_REQUEST && (
+                    <span className="text-brand-muted">
+                      {bundleSuffix ? ` ${bundleSuffix}` : ''} self-study
+                    </span>
+                  )}
+                </p>
+              </div>
+              <Link
+                href={`/shop/${bundle.shopHandle}`}
+                className="inline-flex shrink-0 items-center justify-center px-6 py-3 border border-brand-primary-300 hover:border-brand-primary text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-brand-sand"
+              >
+                View the Bundle
+              </Link>
+            </div>
+          )}
         </div>
       ),
     })

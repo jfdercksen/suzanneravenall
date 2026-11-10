@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { cookies, headers } from 'next/headers'
 import { notFound } from 'next/navigation'
-import { getProgramBySlug, getRelatedPrograms } from '@/data/programs'
+import { getBundleForSeries, getProgramBySlug, getRelatedPrograms } from '@/data/programs'
 import { ProgramPricesProvider } from '@/components/programs/ProgramPrices'
 import { getProgramPriceTexts } from '@/lib/programs/fetch-program-prices'
 import { ipCountry } from '@/lib/geoip'
@@ -32,9 +32,11 @@ export default async function ProgramDetailPage({ params }: Props) {
   // Related programmes: never cross-promotes Resonance Repatterning from
   // non-RR pages (see getRelatedPrograms in data/programs.ts)
   const related = getRelatedPrograms(program, 3)
+  // The series' Level 1 + 2 bundle is priced on the course page too.
+  const bundle = getBundleForSeries(program.series)
 
   const [priceTexts, reqHeaders, reqCookies] = await Promise.all([
-    getProgramPriceTexts([program]),
+    getProgramPriceTexts(bundle ? [program, bundle] : [program]),
     headers(),
     cookies(),
   ])
