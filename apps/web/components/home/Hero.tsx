@@ -37,7 +37,8 @@ export default function Hero() {
   }, [activeVideo])
 
   const scrollToMedia = () => {
-    document.getElementById('media-logos')?.scrollIntoView({ behavior: 'smooth' })
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    document.getElementById('work-with-suzanne')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })
   }
 
   // HEADER RULE (design standard 2026-09-15, .claude/rules/design-rules.md):
@@ -162,23 +163,18 @@ export default function Hero() {
                 {...fadeUp(0.5)}
                 className="flex flex-col sm:flex-row sm:flex-wrap gap-3"
               >
+                {/* Suzanne, 8 Nov: the Pattern Discovery Hub is the main entry. The
+                    Pattern Intelligence button moved to its own band below. */}
                 <Link
                   href="/discover-your-pattern"
-                  aria-label="Take the free Pattern Scan"
+                  aria-label="Start at the Pattern Discovery Hub: take the free Pattern Scan"
                   className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 bg-white hover:bg-brand-sand text-brand-primary text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300"
                 >
-                  Take the Free Pattern Scan
-                </Link>
-                <Link
-                  href="/explore"
-                  aria-label="Explore Pattern Intelligence"
-                  className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10"
-                >
-                  Explore Pattern Intelligence
+                  Pattern Discovery Hub
                 </Link>
                 <Link
                   href="/contact#book"
-                  aria-label="Book a free discovery call with Dr. Suzanne Ravenall"
+                  aria-label="Book a Discovery Call: free, with Dr. Suzanne Ravenall"
                   className="inline-flex items-center justify-center px-6 py-3 lg:px-7 lg:py-3.5 border border-white/50 hover:border-white text-white text-xs sm:text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-white/10"
                 >
                   Book a Discovery Call

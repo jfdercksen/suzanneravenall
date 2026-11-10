@@ -881,6 +881,9 @@ export const PROGRAMS: Program[] = [
   },
 ]
 
+/** Self-study cards on the home page, in this order (the rest are on /programs). */
+export const HOME_SELF_STUDY = ['trauma-to-transcendence', 'getting-unstuck', 'finding-my-purpose']
+
 export function getProgramBySlug(slug: string): Program | undefined {
   return PROGRAMS.find((p) => p.slug === slug)
 }
