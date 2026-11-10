@@ -7,6 +7,8 @@ import { PageHeader } from '@/components/shared/PageHeader'
 import { useProgramPrices } from '@/components/programs/ProgramPrices'
 import { programPriceSuffix } from '@/lib/programs/program-prices'
 import { getProgramBySlug, getProgramCta, isResonanceRepatterning, type Program } from '@/data/programs'
+import { getProgrammeCopy } from '@/data/programmeCopy'
+import { ProgrammeLongForm, longFormBandCount } from '@/components/programs/ProgrammeLongForm'
 
 type Props = {
   program: Program
@@ -120,7 +122,8 @@ const OUTCOME_ICONS = [SparklesIcon, BoltIcon, ArrowUpIcon]
 const CREDENTIALS = [
   { stat: '30+', label: 'Years of Experience' },
   { stat: '30+', label: 'Awards' },
-  { stat: 'Certified', label: 'RR Practitioner' },
+  // Suzanne, 8 Nov (item 8.4): "certified RR practitioner" becomes "certified Trauma specialist".
+  { stat: 'Certified', label: 'Trauma Specialist' },
   { stat: 'International', label: 'Keynote Speaker' },
 ]
 
@@ -175,6 +178,12 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
   const prerequisiteProgram = program.prerequisite?.slug
     ? getProgramBySlug(program.prerequisite.slug)
     : undefined
+  // Suzanne's 8 Nov long-form copy replaces the generic outcome and detail
+  // sections where it exists (data/programmeCopy.ts).
+  const copy = getProgrammeCopy(program.slug)
+  // Grounds after the content sections continue the cream / sand alternation.
+  const contentBands = copy ? longFormBandCount(program, copy) : 2
+  const groundAt = (i: number) => (i % 2 === 0 ? 'bg-brand-cream' : 'bg-brand-sand')
 
   return (
     <>
@@ -183,7 +192,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
           alignment and centre crop apply to all of them. */}
       <PageHeader
         id="program-hero-heading"
-        eyebrow={categoryLabel}
+        eyebrow={copy?.eyebrow ?? categoryLabel}
         image={program.image ?? '/images/hero-bg-suzanne-ravenall.jpg'}
         title={program.name}
         description={program.shortDescription}
@@ -245,6 +254,10 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         </div>
       </section>
 
+      {copy ? (
+        <ProgrammeLongForm program={program} copy={copy} price={price} priceSuffix={priceSuffix ?? undefined} cta={cta} />
+      ) : (
+        <>
       {/* ── 2. WHAT YOU'LL EXPERIENCE: cream ───────────────────────── */}
       {/* Sourced key takeaways where Thinkific publishes them (sourcing report
           6 Oct, section 8); the generic cards otherwise. */}
@@ -420,6 +433,9 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         </div>
       </motion.section>
 
+        </>
+      )}
+
       {/* ── 4. ABOUT THE FACILITATOR: cream ────────────────────────── */}
       <motion.section
         aria-labelledby="facilitator-heading"
@@ -427,7 +443,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
-        className="relative w-full bg-brand-cream py-20 lg:py-32"
+        className={`relative w-full ${groundAt(contentBands)} py-20 lg:py-32`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-2 items-center">
@@ -464,7 +480,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                 has turned her lived wisdom into a rigorous methodology for conscious healing.
               </p>
               <p className="text-base text-brand-muted font-light leading-relaxed mb-10">
-                She is a certified Resonance Repatterning practitioner, Akashic Navigator, and Energy
+                She is a certified Trauma specialist, Akashic Navigator, and Energy
                 Clearing facilitator, as well as an internationally recognised keynote speaker. Her
                 work weaves neuroscience, energy psychology, and ancient healing traditions into a
                 practical, transformative framework accessible to anyone ready to change.
@@ -493,7 +509,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
           initial="hidden"
           whileInView="visible"
           viewport={viewport}
-          className="relative w-full bg-brand-sand py-20 lg:py-32"
+          className={`relative w-full ${groundAt(contentBands + 1)} py-20 lg:py-32`}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-16">
@@ -534,14 +550,15 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
         </motion.section>
       )}
 
-      {/* ── 6. FINAL CTA: cream ────────────────────────────────────── */}
+      {/* ── 6. FINAL CTA: generic pages only (the long form ends on its own enrol band) */}
+      {!copy && (
       <motion.section
         aria-labelledby="program-cta-heading"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
-        className="relative w-full bg-brand-cream py-20 lg:py-32 overflow-hidden"
+        className={`relative w-full ${groundAt(contentBands + (relatedPrograms.length > 0 ? 2 : 1))} py-20 lg:py-32 overflow-hidden`}
       >
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
@@ -599,6 +616,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
           </motion.div>
         </div>
       </motion.section>
+      )}
     </>
   )
 }

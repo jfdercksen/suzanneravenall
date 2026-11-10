@@ -111,7 +111,7 @@ describe('ProgramsPageClient category chips (site check V4)', () => {
     }
     try {
       render(<ProgramsPageClient />)
-      const bar = chip('Recorded Group').parentElement!
+      const bar = chip('Recorded Group Healing').parentElement!
       bar.scrollTo = scrollTo as unknown as typeof bar.scrollTo
       const { cb, targets } = observers[0]!
       act(() => {
@@ -121,5 +121,74 @@ describe('ProgramsPageClient category chips (site check V4)', () => {
     } finally {
       HTMLElement.prototype.getBoundingClientRect = original
     }
+  })
+})
+
+// Suzanne's 8 Nov list, items 8.1, 8.2 and 8.4
+describe('ProgramsPageClient practitioner training (8 Nov)', () => {
+  const textOrder = (names: string[]): number[] => {
+    const body = document.body.textContent ?? ''
+    return names.map((n) => body.indexOf(n))
+  }
+  const at = (list: number[], i: number): number => list[i] ?? -1
+
+  it('puts Rapid Repatterning at the top and Resonance Repatterning at the bottom of the practitioner group', () => {
+    render(<ProgramsPageClient />)
+    const order = textOrder([
+      'Rapid Repatterning®',
+      'Human Performance Replicator',
+      'Pattern Intelligence™',
+      'Energy Clearing',
+      'Akashic Navigator',
+      'Resonance Repatterning',
+    ])
+    const [rapid, hpr, pi, energy, akashic, resonance] = [0, 1, 2, 3, 4, 5].map((i) => at(order, i)) as [number, number, number, number, number, number]
+    for (const i of [rapid, hpr, pi, energy, akashic, resonance]) expect(i).toBeGreaterThan(-1)
+    expect(rapid).toBeLessThan(hpr)
+    expect(hpr).toBeLessThan(pi)
+    expect(pi).toBeLessThan(energy)
+    expect(energy).toBeLessThan(akashic)
+    expect(akashic).toBeLessThan(resonance)
+  })
+
+  it('frames all training as practitioner training with AADP certification', () => {
+    render(<ProgramsPageClient />)
+    expect(screen.getByText(/use the work for yourself first, and then to do it for others/)).toBeInTheDocument()
+    expect(screen.getByText(/American Association of Drugless\s+Practitioners \(AADP\)/)).toBeInTheDocument()
+  })
+
+  it('shows the three missing programmes with a visible placeholder and register interest', () => {
+    const { container } = render(<ProgramsPageClient />)
+    const placeholders = Array.from(container.querySelectorAll('[data-placeholder="true"]')).map((n) => n.textContent)
+    expect(placeholders.filter((t) => t === '[Programme description, format and price]')).toHaveLength(3)
+  })
+
+  it('offers bundle cards for Energy Clearing and Akashic Navigator and a licensing section', () => {
+    render(<ProgramsPageClient />)
+    expect(screen.getByText('Energy Clearing: Level 1 + Level 2')).toBeInTheDocument()
+    expect(screen.getByText('Akashic Navigator: Level 1 + Level 2')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Licensing the practitioner training' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Enquire about licensing' }).getAttribute('href')).toContain('enquiry=practitioner')
+  })
+
+  it('lists Love & Relationships, Intuition and Energy Ninja as live, with The Inner Sanctuary and Present first', () => {
+    render(<ProgramsPageClient />)
+    const order = textOrder(['The Inner Sanctuary', 'Present', 'Love & Relationships'])
+    const [sanctuary, present, love] = [at(order, 0), at(order, 1), at(order, 2)]
+    const live = document.getElementById('live')!
+    expect(live.textContent).toContain('Love & Relationships')
+    expect(live.textContent).toContain('Intuition in My Personal Capacity')
+    expect(live.textContent).toContain('Become an Energy Ninja: Level 1')
+    expect(document.getElementById('self-paced')!.textContent).not.toContain('Love & Relationships')
+    expect(sanctuary).toBeLessThan(love)
+    expect(present).toBeLessThan(love)
+  })
+
+  it('links the recorded group section to its own page', () => {
+    render(<ProgramsPageClient />)
+    expect(screen.getByRole('link', { name: 'How the recorded sessions work' })).toHaveAttribute(
+      'href',
+      '/programs/recorded-group-healing',
+    )
   })
 })

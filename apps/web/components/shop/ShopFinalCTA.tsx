@@ -78,6 +78,16 @@ export function ShopFinalCTA() {
             Explore Programmes &rarr;
           </Link>
         </motion.div>
+        {/* Item 8.3 (Suzanne, 8 Nov): the recorded group healing series need a home */}
+        <p className="mt-8 text-sm text-white/80">
+          Looking for the recorded group healing sessions?{' '}
+          <Link
+            href="/programs/recorded-group-healing"
+            className="text-white underline underline-offset-4 decoration-white/60 hover:decoration-white"
+          >
+            See how they work
+          </Link>
+        </p>
       </div>
     </section>
   )

@@ -14,7 +14,8 @@ const credentials: string[] = [
   'B.Msc.',
   'M.Msc.',
   'Msc.D.',
-  'Rapid Repatterning\u00ae Practitioner',
+  // Suzanne, 8 Nov (item 8.4): the RR practitioner line becomes Trauma specialist.
+  'Certified Trauma Specialist',
   'Neuro-repatterning\u00ae Practitioner',
   'NLP Practitioner',
   'Energy Psychology',

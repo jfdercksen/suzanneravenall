@@ -11,19 +11,56 @@ import {
   getProgramsBySeries,
   type Program,
 } from '@/data/programs'
+import { SERIES_PATHS } from '@/data/programmeCopy'
+import { PRACTITIONER_TRACKS, LICENSING } from '@/data/practitionerTracks'
+import { RichText } from '@/components/shared/RichText'
+import { contactHref } from '@/app/contact/enquiry'
+import liveCalendarFile from '@/data/live-calendar.json'
+
+/** Live programmes in the calendar's order (The Inner Sanctuary, Present first). */
+const LIVE_ORDER = liveCalendarFile.programmes.map((p) => p.programmeSlug)
+const liveRank = (slug: string) => {
+  const i = LIVE_ORDER.indexOf(slug)
+  return i === -1 ? LIVE_ORDER.length : i
+}
+
+function BundleCard({ name, series }: { name: string; series: 'energy-clearing' | 'akashic-navigator' }) {
+  const path = SERIES_PATHS[series]
+  if (!path) return null
+  return (
+    <motion.div
+      variants={childVariants}
+      className="bg-white border border-dashed border-brand-primary-300 rounded-card p-8 flex flex-col"
+    >
+      <div className="flex-1">
+        <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">Bundle</p>
+        <h3 className="text-xl font-medium text-brand-ink mb-3 leading-snug">{name}: Level 1 + Level 2</h3>
+        <p className="text-brand-muted text-sm font-light leading-relaxed mb-6">
+          <RichText line={path.bundle} />
+        </p>
+      </div>
+      <Link
+        href={contactHref('practitioner', `${name} Level 1 + Level 2 bundle`)}
+        className="inline-flex items-center justify-center w-full py-3 px-6 border border-brand-primary-300 hover:border-brand-primary text-brand-primary text-sm font-medium rounded-button transition-colors duration-300"
+      >
+        Enquire about the bundle
+      </Link>
+    </motion.div>
+  )
+}
 
 const CATEGORIES = [
   { id: 'practitioner', label: 'Practitioner' },
   { id: 'self-paced', label: 'Self-Study' },
   { id: 'live', label: 'Live' },
-  { id: 'group', label: 'Recorded Group' },
+  { id: 'group', label: 'Recorded Group Healing' },
 ] as const
 
 const CARD_CATEGORY_LABELS: Record<Program['category'], string> = {
   practitioner: 'Practitioner',
   'self-paced': 'Self-Study',
   live: 'Live',
-  group: 'Recorded Group',
+  group: 'Recorded Group Healing',
 }
 
 const sectionVariants = {
@@ -153,7 +190,7 @@ export default function ProgramsPageClient() {
   const energyClearingPrograms = getProgramsBySeries('energy-clearing')
   const akashicPrograms = getProgramsBySeries('akashic-navigator')
   const selfStudyPrograms = getProgramsByCategory('self-paced')
-  const livePrograms = getProgramsByCategory('live')
+  const livePrograms = [...getProgramsByCategory('live')].sort((a, b) => liveRank(a.slug) - liveRank(b.slug))
   const groupPrograms = getProgramsByCategory('group')
 
   // Scroll-spy: the sections are 3000-4600px tall on a phone, so a visibility
@@ -298,19 +335,133 @@ export default function ProgramsPageClient() {
             viewport={{ once: true, margin: '0px' }}
           >
             <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
-              Practitioner Programmes
+              Practitioner Training
             </p>
             <h2 className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary mb-4 max-w-2xl">
               Train as a Practitioner
             </h2>
-            <p className="text-lg text-brand-muted font-light mb-12 max-w-2xl leading-relaxed">
-              Become a practitioner in the healing arts and energy psychology.
-              Transform your own life while gaining the tools to transform
-              others.
+            {/* Suzanne, 8 Nov (item 8.4): all training is practitioner training
+                plus certification, used for yourself and then for others, and
+                certified with the AADP. */}
+            <p className="text-lg text-brand-muted font-light mb-4 max-w-2xl leading-relaxed">
+              Every training here is practitioner training with certification: you
+              learn to use the work for yourself first, and then to do it for others.
+            </p>
+            <p className="text-base text-brand-ink font-medium mb-12 max-w-2xl leading-relaxed">
+              All training is certified with the American Association of Drugless
+              Practitioners (AADP).
             </p>
           </motion.div>
 
           <div className="space-y-8">
+            {/* Item 8.1: Rapid Repatterning at the top, then Human Performance
+                Replicator and Pattern Intelligence. No content exists yet:
+                placeholder cards with register interest (data/practitionerTracks.ts). */}
+            <motion.div
+              variants={staggerChildren}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '0px' }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {PRACTITIONER_TRACKS.map((track) => (
+                <motion.div
+                  key={track.id}
+                  variants={childVariants}
+                  className="bg-brand-sand rounded-card p-8 flex flex-col"
+                >
+                  <div className="flex-1">
+                    <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                      Practitioner Training
+                    </p>
+                    <h3 className="text-2xl font-medium tracking-tight text-brand-ink mb-4 leading-snug">
+                      {track.name}
+                    </h3>
+                    <p className="text-brand-muted text-sm font-light leading-relaxed mb-6">
+                      <RichText line={track.description} />
+                    </p>
+                  </div>
+                  <Link
+                    href={track.interestHref}
+                    className="inline-flex items-center justify-center w-full py-3 px-6 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-medium rounded-button transition-colors duration-300"
+                  >
+                    Register Interest
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Energy Clearing: parent block */}
+            <motion.div
+              variants={sectionVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '0px' }}
+              className="bg-brand-sand rounded-card p-8 lg:p-12"
+            >
+              <div className="max-w-2xl mb-10">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                  Practitioner Training
+                </p>
+                <h3 className="text-2xl lg:text-4xl font-medium tracking-tight text-brand-ink mb-4 leading-snug">
+                  Energy Clearing
+                </h3>
+                <p className="text-brand-muted font-light leading-relaxed">
+                  We are physical and energetic beings. Learn to clear your own
+                  energy field at the Basic level, then train to facilitate
+                  clearing for others at the Advanced level.
+                </p>
+              </div>
+              <motion.div
+                variants={staggerChildren}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '0px' }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              >
+                {energyClearingPrograms.map((program) => (
+                  <ProgramCard key={program.slug} program={program} />
+                ))}
+                <BundleCard name="Energy Clearing" series="energy-clearing" />
+              </motion.div>
+            </motion.div>
+
+            {/* Akashic Navigator: parent block */}
+            <motion.div
+              variants={sectionVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '0px' }}
+              className="bg-brand-sand rounded-card p-8 lg:p-12"
+            >
+              <div className="max-w-2xl mb-10">
+                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                  Practitioner Training
+                </p>
+                <h3 className="text-2xl lg:text-4xl font-medium tracking-tight text-brand-ink mb-4 leading-snug">
+                  Akashic Navigator
+                </h3>
+                <p className="text-brand-muted font-light leading-relaxed">
+                  Access and rewrite your life&apos;s blueprint through the
+                  Akashic Records. Begin with reading and clearing your own
+                  records, then advance to reading for others as an Akashic
+                  Navigator &amp; Intuitive Coach.
+                </p>
+              </div>
+              <motion.div
+                variants={staggerChildren}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '0px' }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              >
+                {akashicPrograms.map((program) => (
+                  <ProgramCard key={program.slug} program={program} />
+                ))}
+                <BundleCard name="Akashic Navigator" series="akashic-navigator" />
+              </motion.div>
+            </motion.div>
+
             {/* Resonance Repatterning: expandable parent block */}
             <motion.div
               variants={sectionVariants}
@@ -364,73 +515,35 @@ export default function ProgramsPageClient() {
               )}
             </motion.div>
 
-            {/* Energy Clearing: parent block */}
+            {/* Licensing of the practitioner training (item 8.4). The product
+                and price are Johan's decision; placeholder until then. */}
             <motion.div
+              id="licensing"
               variants={sectionVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: '0px' }}
-              className="bg-brand-sand rounded-card p-8 lg:p-12"
+              className="bg-brand-primary-900 rounded-card p-8 lg:p-12 scroll-mt-48"
             >
-              <div className="max-w-2xl mb-10">
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
-                  Practitioner Training
-                </p>
-                <h3 className="text-2xl lg:text-4xl font-medium tracking-tight text-brand-ink mb-4 leading-snug">
-                  Energy Clearing
-                </h3>
-                <p className="text-brand-muted font-light leading-relaxed">
-                  We are physical and energetic beings. Learn to clear your own
-                  energy field at the Basic level, then train to facilitate
-                  clearing for others at the Advanced level.
-                </p>
+              <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+                <div className="max-w-2xl">
+                  <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
+                    Licensing
+                  </p>
+                  <h3 className="text-2xl lg:text-4xl font-medium tracking-tight text-white mb-4 leading-snug">
+                    Licensing the practitioner training
+                  </h3>
+                  <p className="text-white/80 font-light leading-relaxed">
+                    <RichText line={LICENSING.detail} tone="dark" />
+                  </p>
+                </div>
+                <Link
+                  href={LICENSING.enquiryHref}
+                  className="flex-shrink-0 inline-flex items-center justify-center py-3 px-8 bg-white hover:bg-brand-sand text-brand-primary text-sm font-medium rounded-button transition-colors duration-300"
+                >
+                  Enquire about licensing
+                </Link>
               </div>
-              <motion.div
-                variants={staggerChildren}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '0px' }}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-6"
-              >
-                {energyClearingPrograms.map((program) => (
-                  <ProgramCard key={program.slug} program={program} />
-                ))}
-              </motion.div>
-            </motion.div>
-
-            {/* Akashic Navigator: parent block */}
-            <motion.div
-              variants={sectionVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '0px' }}
-              className="bg-brand-sand rounded-card p-8 lg:p-12"
-            >
-              <div className="max-w-2xl mb-10">
-                <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
-                  Practitioner Training
-                </p>
-                <h3 className="text-2xl lg:text-4xl font-medium tracking-tight text-brand-ink mb-4 leading-snug">
-                  Akashic Navigator
-                </h3>
-                <p className="text-brand-muted font-light leading-relaxed">
-                  Access and rewrite your life&apos;s blueprint through the
-                  Akashic Records. Begin with reading and clearing your own
-                  records, then advance to reading for others as an Akashic
-                  Navigator &amp; Intuitive Coach.
-                </p>
-              </div>
-              <motion.div
-                variants={staggerChildren}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '0px' }}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-6"
-              >
-                {akashicPrograms.map((program) => (
-                  <ProgramCard key={program.slug} program={program} />
-                ))}
-              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -523,11 +636,14 @@ export default function ProgramsPageClient() {
                     </p>
                     {/* TODO: Add UPCOMING badge here once program.nextDate is added to the Program type and real cohort dates are confirmed */}
                   </div>
-                  <h3 className="text-xl font-medium text-brand-ink mb-3 leading-snug">
+                  <h3 className="text-xl font-medium text-brand-ink mb-1 leading-snug">
                     {program.name}
                   </h3>
+                  {program.tagline && (
+                    <p className="text-xs uppercase tracking-[0.15em] text-brand-muted mb-3">{program.tagline}</p>
+                  )}
                   <p className="text-brand-muted text-sm font-light leading-relaxed mb-4">
-                    {program.shortDescription}
+                    {program.cardText ?? program.shortDescription}
                   </p>
                   <p className="text-brand-primary font-semibold text-lg mb-2">
                     {priceOf(program.slug)}
@@ -569,7 +685,7 @@ export default function ProgramsPageClient() {
               Resonance Repatterning
             </p>
             <h2 className="text-4xl lg:text-6xl font-medium tracking-tight text-brand-primary mb-4 max-w-2xl">
-              Recorded Group Sessions
+              Recorded Group Healing Sessions
             </h2>
             <p className="text-lg text-brand-muted font-light mb-4 max-w-2xl leading-relaxed">
               These are recorded Resonance Repatterning group session series.
@@ -579,10 +695,16 @@ export default function ProgramsPageClient() {
               and helping participants go beyond these challenges and into their
               power for inner self mastery.
             </p>
-            <p className="text-brand-muted font-light mb-12 max-w-2xl leading-relaxed">
+            <p className="text-brand-muted font-light mb-6 max-w-2xl leading-relaxed">
               Each series was recorded live and carries the same energetic
               benefit: work through it in your own time.
             </p>
+            <Link
+              href="/programs/recorded-group-healing"
+              className="inline-flex items-center gap-2 mb-12 text-sm font-medium uppercase tracking-[0.2em] text-brand-primary underline underline-offset-4 decoration-brand-primary-300 hover:decoration-brand-primary"
+            >
+              How the recorded sessions work
+            </Link>
           </motion.div>
           <motion.div
             variants={staggerChildren}

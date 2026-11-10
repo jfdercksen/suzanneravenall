@@ -80,19 +80,20 @@ vi.mock('framer-motion', () => ({
 // Helpers — slice of known programme data used as ground-truth for assertions
 // ---------------------------------------------------------------------------
 const PROGRAMME_NAMES = [
-  // Practitioner column
-  'Resonance Repatterning: The Basic Five',
+  // Practitioner column (Resonance Repatterning last, 8 Nov)
   'Akashic Navigator (Basic & Advanced)',
   'Energy Clearing (Basic & Advanced)',
-  // Self-Paced column
+  'Resonance Repatterning: The Basic Five',
+  // Self-Study column
   'Trauma to Transcendence',
+  'Getting Unstuck',
+  'Intuition in Business',
+  // Live column (8 Nov: Inner Sanctuary and Present, plus three moved from self-study)
+  'The Inner Sanctuary',
+  'Present',
   'Love & Relationships',
   'Intuition in My Personal Capacity',
   'Become an Energy Ninja',
-  'Getting Unstuck',
-  // Live column
-  'Mindfulness',
-  'Meditation',
 ] as const
 
 // Resonance Repatterning programmes are self-study only (data/programs.ts),
@@ -183,11 +184,11 @@ describe('Programs', () => {
       expect(cta).toHaveAttribute('href', '/programs#self-paced')
     })
 
-    it('renders "See Live Dates" link pointing to the live programmes on /programs', () => {
+    it('renders "See Live Dates" link pointing to the live calendar on /events', () => {
       render(<Programs />)
       const cta = screen.getByRole('link', { name: 'See Live Dates' })
       expect(cta).toBeInTheDocument()
-      expect(cta).toHaveAttribute('href', '/programs#live')
+      expect(cta).toHaveAttribute('href', '/events')
     })
   })
 

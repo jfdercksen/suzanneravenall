@@ -84,6 +84,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${siteUrl}/programs/recorded-group-healing`,
+      lastModified: BUILD_DATE,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
       url: `${siteUrl}/masterclass`,
       lastModified: BUILD_DATE,
       changeFrequency: 'monthly',

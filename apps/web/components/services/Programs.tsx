@@ -28,12 +28,6 @@ const columns: Column[] = [
       'Considering changing your life and becoming a practitioner in the healing arts or energy psychology? Join these expansive practitioner programmes: not only will your own life be transformed, you will help others transform theirs.',
     programmes: [
       {
-        name: 'Resonance Repatterning: The Basic Five',
-        slug: 'resonance-repatterning-basic-5-series',
-        description:
-          'Ever wondered why you work so hard at something and it simply doesn’t materialise? A major cause is subconscious beliefs, mostly unknown to the conscious mind, that are active every day, interfering with the life you want and deserve.',
-      },
-      {
         name: 'Akashic Navigator (Basic & Advanced)',
         slug: 'akashic-navigator-basic',
         description:
@@ -44,6 +38,13 @@ const columns: Column[] = [
         slug: 'energy-clearing-basic',
         description:
           'We are physical and energetic beings, with many channels that carry information and energy. This practitioner pathway teaches you to see, clear and realign the energy field, for yourself and for others.',
+      },
+      // Suzanne, 8 Nov (items 8.1, 8.4): Resonance Repatterning at the bottom of the group.
+      {
+        name: 'Resonance Repatterning: The Basic Five',
+        slug: 'resonance-repatterning-basic-5-series',
+        description:
+          'Ever wondered why you work so hard at something and it simply doesn’t materialise? A major cause is subconscious beliefs, mostly unknown to the conscious mind, that are active every day, interfering with the life you want and deserve.',
       },
     ],
     ctaLabel: 'Explore Practitioner Programmes',
@@ -62,6 +63,41 @@ const columns: Column[] = [
           'Breaking the hold of the childhood brain on your adult self. From early experiences of neglect or unmet needs we form beliefs, helpful and harmful, that limit our potential. This programme rewrites the adaptations we forgot we made.',
       },
       {
+        name: 'Getting Unstuck',
+        slug: 'getting-unstuck',
+        description:
+          'Have you ever wanted to change (different career, better health, improved body, better relationship) but it escapes you? If you have tried numerous approaches and keep waking up in the same cycle, this is for you.',
+      },
+      {
+        name: 'Intuition in Business',
+        slug: 'intuition-in-business',
+        description: 'Harness intuitive intelligence as a powerful business and leadership tool.',
+      },
+    ],
+    ctaLabel: 'Browse Self-Study',
+    ctaHref: '/programs#self-paced',
+  },
+  {
+    eyebrow: 'Live',
+    title: 'Live programmes, run by Suzanne via Zoom.',
+    intro:
+      'Programmes run live on a range of topics, designed to help you shift gear in life to a new way of being: more of who you are, and who you want to be. Connect from wherever you are in the world.',
+    programmes: [
+      // Suzanne's 8 Nov card text (attachments 05, 06).
+      {
+        name: 'The Inner Sanctuary',
+        slug: 'meditation',
+        description:
+          'More than mindfulness. Learn to quiet the mind, reach deeper states, and use meditation to heal, through guided practices, inner visualisation and shadow work with Suzanne.',
+      },
+      {
+        name: 'Present',
+        slug: 'mindfulness',
+        description:
+          'Practical mindfulness for real life. Learn to stay calm, focused and present in the moments that matter, and catch your patterns before they run you.',
+      },
+      // Item 8.2: live with register interest until a self-study exists.
+      {
         name: 'Love & Relationships',
         slug: 'love-and-relationships',
         description:
@@ -79,37 +115,9 @@ const columns: Column[] = [
         description:
           'Mastering energy for an abundant life, Level 1. Everything starts as, and is, energy. Learn how to change your world by using an unseen force, and bring it into every area of your life.',
       },
-      {
-        name: 'Getting Unstuck',
-        slug: 'getting-unstuck',
-        description:
-          'Have you ever wanted to change (different career, better health, improved body, better relationship) but it escapes you? If you have tried numerous approaches and keep waking up in the same cycle, this is for you.',
-      },
-    ],
-    ctaLabel: 'Browse Self-Study',
-    ctaHref: '/programs#self-paced',
-  },
-  {
-    eyebrow: 'Live',
-    title: 'Live programmes, run by Suzanne via Zoom.',
-    intro:
-      'Programmes run live on a range of topics, designed to help you shift gear in life to a new way of being: more of who you are, and who you want to be. Connect from wherever you are in the world.',
-    programmes: [
-      {
-        name: 'Mindfulness',
-        slug: 'mindfulness',
-        description:
-          'Mindfulness (the ability to be fully present in the moment) is linked to decreased stress and sadness and increased focus and happiness. This programme teaches you to recognise it, practise it, and integrate it into everyday life.',
-      },
-      {
-        name: 'Meditation',
-        slug: 'meditation',
-        description:
-          'Meditation isn’t about becoming a different person. It’s training in awareness: a healthy sense of perspective. You’re not trying to turn off your thoughts, you’re learning to observe them without judgment.',
-      },
     ],
     ctaLabel: 'See Live Dates',
-    ctaHref: '/programs#live',
+    ctaHref: '/events',
   },
 ]
 
