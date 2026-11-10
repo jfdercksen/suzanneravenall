@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Award, ArrowRight } from 'lucide-react'
 
-const awardItems = [
+/** Every award on the old site, once each (its 10 posts repeat three titles). */
+export const awardItems = [
   {
     name: 'Healthcare & Pharmaceutical Excellence Award',
     organisation: 'Healthcare & Pharmaceutical Awards',

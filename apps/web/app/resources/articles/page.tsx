@@ -1,7 +1,4 @@
-import { cookies } from 'next/headers'
 import type { Metadata } from 'next'
-import { createClient } from '@/utils/supabase/server'
-import { requireAccess } from '@/lib/access/check-access'
 import ArticlesContent from '@/components/resources/ArticlesContent'
 
 export function generateMetadata(): Metadata {
@@ -12,13 +9,8 @@ export function generateMetadata(): Metadata {
   }
 }
 
-// Same gate as /resources/media: these are the same press articles, listed in
-// full, so they must not be visible to more tiers than the media page is.
-export default async function ArticlesPage() {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
-
-  await requireAccess(supabase, 'resources_media', '/resources/articles')
-
+// Public since 10 Nov 2026 (Johan: "Move to Public"): press, articles and awards
+// are marketing content. The portal pages keep their access check.
+export default function ArticlesPage() {
   return <ArticlesContent />
 }

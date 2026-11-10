@@ -29,8 +29,7 @@ const categories = [
     title: 'TV, Podcast & Press',
     description:
       'Dr. Ravenall featured in Leadership Magazine, CEO Magazine and Business Excellence Award press. Read the coverage.',
-    // /resources/media is behind the member login (lib/access/tiers.ts).
-    badge: 'Members',
+    badge: null,
   },
   {
     href: '/resources/articles',
@@ -39,11 +38,10 @@ const categories = [
     title: 'Published Articles',
     description:
       'Thought leadership published in major business and leadership publications including CEO Magazine and Leadership Magazine.',
-    // Same member gate as /resources/media.
-    badge: 'Members',
+    badge: null,
   },
   {
-    href: '/resources#awards',
+    href: '/resources/awards',
     icon: Trophy,
     label: 'Awards',
     title: 'Recognition & Honours',

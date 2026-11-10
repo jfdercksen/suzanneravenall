@@ -119,6 +119,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.7,
     },
+    // Public since 10 Nov 2026 (Johan: "Move to Public")
+    ...['media', 'articles', 'awards'].map((page) => ({
+      url: `${siteUrl}/resources/${page}`,
+      lastModified: BUILD_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    })),
     {
       url: `${siteUrl}/contact`,
       lastModified: BUILD_DATE,

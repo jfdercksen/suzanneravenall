@@ -1,7 +1,4 @@
-import { cookies } from 'next/headers'
 import type { Metadata } from 'next'
-import { createClient } from '@/utils/supabase/server'
-import { requireAccess } from '@/lib/access/check-access'
 import AwardsContent from '@/components/resources/AwardsContent'
 
 export function generateMetadata(): Metadata {
@@ -12,11 +9,8 @@ export function generateMetadata(): Metadata {
   }
 }
 
-export default async function AwardsPage() {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
-
-  await requireAccess(supabase, 'resources_awards', '/resources/awards')
-
+// Public since 10 Nov 2026 (Johan: "Move to Public"): press, articles and awards
+// are marketing content. The portal pages keep their access check.
+export default function AwardsPage() {
   return <AwardsContent />
 }
