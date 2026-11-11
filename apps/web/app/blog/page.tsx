@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import BlogListingContent from './BlogListingContent'
-import type { BlogPost, PayloadResponse } from '@/types/payload'
+import { LISTING_FIELDS, fetchAllPublishedPosts } from '@/lib/blog/posts'
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -8,25 +8,11 @@ export const metadata: Metadata = {
     'Science-backed perspectives on transformation, pattern mastery, and the art of lasting change, from Dr. Suzanne Ravenall.',
 }
 
-async function fetchPosts(): Promise<BlogPost[]> {
-  try {
-    const res = await fetch(
-      'http://payload:3001/api/blog-posts?where[isPublished][equals]=true&limit=100&page=1&depth=1',
-      {
-        next: { revalidate: 300 },
-      }
-    )
-    if (!res.ok) return []
-    const data: PayloadResponse<BlogPost> = await res.json()
-    return data.docs ?? []
-  } catch {
-    // Payload CMS may not be running during development — degrade gracefully
-    return []
-  }
-}
+type Props = { searchParams: Promise<{ tag?: string | string[] }> }
 
-export default async function BlogPage() {
-  const posts = await fetchPosts()
-
-  return <BlogListingContent posts={posts} />
+export default async function BlogPage({ searchParams }: Props) {
+  const [posts, { tag }] = await Promise.all([fetchAllPublishedPosts(1, 300, LISTING_FIELDS), searchParams])
+  // /blog?tag=newsletter opens the newsletters (linked from /resources).
+  const initialTag = typeof tag === 'string' ? tag : undefined
+  return <BlogListingContent posts={posts} initialTag={initialTag} />
 }

@@ -50,12 +50,14 @@ const categories = [
     badge: null,
   },
   {
-    href: '/resources#newsletter',
+    // Suzanne, 8 Nov: this tile opened the sign-up, not the past newsletters.
+    // The newsletters are blog posts tagged "newsletter" (WordPress migration).
+    href: '/blog?tag=newsletter',
     icon: Mail,
     label: 'Newsletter',
     title: 'Monthly Insights Newsletter',
     description:
-      'Monthly wisdom on consciousness, healing, inner regulation and transformation delivered directly to your inbox.',
+      'Read the past monthly newsletters: wisdom on consciousness, healing, inner regulation and transformation. Subscribe below to receive the next one.',
     badge: null,
   },
   {

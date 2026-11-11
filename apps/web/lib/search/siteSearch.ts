@@ -15,7 +15,8 @@
 import { topics } from '@/app/explore/topics'
 import { topicCopy, topicCopyText } from '@/app/explore/topicCopy'
 import { allPrivateSessions } from '@/data/privateSessions'
-import type { BlogPost, PayloadResponse } from '@/types/payload'
+import { fetchAllPublishedPosts } from '@/lib/blog/posts'
+import type { BlogPost } from '@/types/payload'
 import type { SearchIndex, SearchResultItem } from './types'
 
 export interface SiteDocument {
@@ -374,15 +375,7 @@ export function blogPostToDocument(post: BlogPost): SiteDocument {
 
 /** Published blog posts, same source and cache window as the /blog page. Never throws. */
 export async function fetchBlogDocuments(): Promise<SiteDocument[]> {
-  try {
-    const res = await fetch(
-      'http://payload:3001/api/blog-posts?where[isPublished][equals]=true&limit=100&page=1&depth=0',
-      { next: { revalidate: 300 } }
-    )
-    if (!res?.ok) return []
-    const data = (await res.json()) as Partial<PayloadResponse<BlogPost>>
-    return Array.isArray(data.docs) ? data.docs.map(blogPostToDocument) : []
-  } catch {
-    return []
-  }
+  // Every published post, paged (lib/blog/posts.ts); empty when Payload is down.
+  const posts = await fetchAllPublishedPosts(0)
+  return posts.map(blogPostToDocument)
 }

@@ -1,14 +1,17 @@
 "use client"
 
-import { useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { PageHeader } from '@/components/shared/PageHeader'
+import { mediaSrc } from '@/lib/blog/media'
 import type { BlogPost } from '@/types/payload'
 
 interface BlogListingContentProps {
   posts: BlogPost[]
+  /** Tag to open on (/blog?tag=newsletter); ignored when no post carries it. */
+  initialTag?: string
 }
 
 const CAL_URL = process.env.NEXT_PUBLIC_CAL_URL ?? 'https://cal.suzanneravenall.com'
@@ -124,8 +127,21 @@ export function ComingSoonSection() {
   )
 }
 
-export default function BlogListingContent({ posts }: BlogListingContentProps) {
-  const [activeTag, setActiveTag] = useState<string>('All')
+/** Cards per page: 158 imported posts would otherwise render at once. */
+export const BLOG_PAGE_SIZE = 12
+
+export default function BlogListingContent({ posts, initialTag }: BlogListingContentProps) {
+  const [activeTag, setActiveTag] = useState<string>(() =>
+    initialTag && posts.some((p) => p.tags?.some((t) => t.tag === initialTag)) ? initialTag : 'All',
+  )
+  const [page, setPage] = useState(1)
+  // A client-side visit to /blog?tag=... re-renders without remounting.
+  useEffect(() => {
+    if (initialTag && posts.some((p) => p.tags?.some((t) => t.tag === initialTag))) {
+      setActiveTag(initialTag)
+      setPage(1)
+    }
+  }, [initialTag, posts])
 
   const allTags = useMemo(
     () => Array.from(new Set(posts.flatMap((p) => (p.tags ?? []).map((t) => t.tag)))).sort(),
@@ -139,6 +155,13 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
         : posts.filter((p) => p.tags?.some((t) => t.tag === activeTag)),
     [posts, activeTag]
   )
+  const pageCount = Math.max(1, Math.ceil(filtered.length / BLOG_PAGE_SIZE))
+  const currentPage = Math.min(page, pageCount)
+  const visible = filtered.slice((currentPage - 1) * BLOG_PAGE_SIZE, currentPage * BLOG_PAGE_SIZE)
+  const goTo = (next: number) => {
+    setPage(next)
+    document.getElementById('blog-posts')?.scrollIntoView?.({ behavior: 'smooth', block: 'start' })
+  }
 
   if (posts.length === 0) {
     return <ComingSoonSection />
@@ -179,7 +202,11 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
               {['All', ...allTags].map((tag) => (
                 <button
                   key={tag}
-                  onClick={() => setActiveTag(tag)}
+                  onClick={() => {
+                    setActiveTag(tag)
+                    setPage(1)
+                  }}
+                  aria-pressed={activeTag === tag}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                     activeTag === tag
                       ? 'bg-white text-brand-primary'
@@ -195,7 +222,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
       )}
 
       {/* Post grid */}
-      <section className="py-20 lg:py-32 bg-brand-cream">
+      <section id="blog-posts" className="py-20 lg:py-32 bg-brand-cream scroll-mt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filtered.length === 0 ? (
             <motion.p
@@ -208,7 +235,7 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
             </motion.p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filtered.map((post, index) => (
+              {visible.map((post, index) => (
                 <motion.article
                   key={post.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -219,10 +246,8 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
                 >
                   {/* Featured image */}
                   <Link href={`/blog/${post.slug}`} className="block relative aspect-[16/9] overflow-hidden">
-                    {/* TODO: Replace placeholder with actual Payload image once payload:3001 is added
-                        to next.config.mjs remotePatterns */}
                     <Image
-                      src="/images/suzanne-ravenall.jpg"
+                      src={mediaSrc(post.featuredImage?.url) ?? '/images/suzanne-ravenall.jpg'}
                       alt={post.featuredImage?.alt ?? post.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -275,6 +300,30 @@ export default function BlogListingContent({ posts }: BlogListingContentProps) {
                 </motion.article>
               ))}
             </div>
+          )}
+
+          {pageCount > 1 && (
+            <nav aria-label="Blog pages" className="mt-16 flex items-center justify-center gap-6">
+              <button
+                type="button"
+                onClick={() => goTo(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-5 py-2.5 rounded-button border border-brand-primary-300 text-sm font-medium text-brand-primary transition-colors duration-300 hover:bg-brand-sand disabled:opacity-40 disabled:hover:bg-transparent"
+              >
+                &larr; Newer
+              </button>
+              <span className="text-sm text-brand-muted" aria-live="polite">
+                Page {currentPage} of {pageCount}
+              </span>
+              <button
+                type="button"
+                onClick={() => goTo(currentPage + 1)}
+                disabled={currentPage === pageCount}
+                className="px-5 py-2.5 rounded-button border border-brand-primary-300 text-sm font-medium text-brand-primary transition-colors duration-300 hover:bg-brand-sand disabled:opacity-40 disabled:hover:bg-transparent"
+              >
+                Older &rarr;
+              </button>
+            </nav>
           )}
         </div>
       </section>

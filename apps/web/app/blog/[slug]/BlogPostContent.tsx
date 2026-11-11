@@ -4,6 +4,9 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { PageHeader } from '@/components/shared/PageHeader'
+import { LexicalContent } from '@/components/blog/LexicalContent'
+import { mediaSrc } from '@/lib/blog/media'
+import { isLexicalRoot } from '@/lib/blog/lexical'
 import type { BlogPost } from '@/types/payload'
 
 interface BlogPostContentProps {
@@ -24,14 +27,12 @@ function formatDate(dateString?: string): string {
 export default function BlogPostContent({ post, relatedPosts }: BlogPostContentProps) {
   return (
     <>
-      {/* Header: shared PageHeader, the header rule. Suzanne stands on the left
-          of this photo, so the text takes the right-hand column. The picture is
-          decorative (the same placeholder on every post), so it carries no alt.
-          TODO: Replace placeholder with actual Payload image once payload:3001 is
-          added to next.config.mjs remotePatterns */}
+      {/* Header: shared PageHeader, the header rule. The post's own featured
+          image when it has one (Payload media); otherwise the site photo, where
+          Suzanne stands on the left, so the text takes the right-hand column. */}
       <PageHeader
         id="blog-post-heading"
-        image="/images/suzanne-ravenall.jpg"
+        image={mediaSrc(post.featuredImage?.url) ?? '/images/suzanne-ravenall.jpg'}
         mobileCrop="object-left"
         align="right"
         title={post.title}
@@ -84,21 +85,15 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
             viewport={{ once: true, margin: '0px' }}
             transition={{ duration: 0.6 }}
           >
-            {/* SEO description teaser: shown until rich text renderer is wired up */}
-            {post.seoDescription && (
-              <p className="text-xl text-brand-ink leading-relaxed mb-8 font-light border-l-4 border-brand-accent pl-6">
-                {post.seoDescription}
-              </p>
+            {/* The post body (Payload Lexical rich text). The description stands in
+                only for a post with no body. */}
+            {isLexicalRoot(post.content) && post.content.root.children.length > 0 ? (
+              <LexicalContent content={post.content} />
+            ) : (
+              post.seoDescription && (
+                <p className="text-xl text-brand-ink leading-relaxed font-light">{post.seoDescription}</p>
+              )
             )}
-
-            {/* TODO: install @payloadcms/richtext-lexical or @payloadcms/next/RichText
-                to render the full Lexical rich text stored in post.content.
-                The raw content object is intentionally not displayed: it is unstructured JSON. */}
-            <div className="text-brand-ink leading-relaxed">
-              <p className="text-brand-muted italic text-sm">
-                Full article content will render here once the Payload Lexical rich text renderer is configured.
-              </p>
-            </div>
           </motion.div>
         </div>
       </section>
@@ -131,9 +126,8 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
                   className="group bg-white rounded-2xl overflow-hidden border border-brand-border hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
                 >
                   <Link href={`/blog/${related.slug}`} className="block relative aspect-[16/9] overflow-hidden">
-                    {/* TODO: Replace placeholder with actual Payload image once remotePatterns is updated */}
                     <Image
-                      src="/images/suzanne-ravenall.jpg"
+                      src={mediaSrc(related.featuredImage?.url) ?? '/images/suzanne-ravenall.jpg'}
                       alt={related.featuredImage?.alt ?? related.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"

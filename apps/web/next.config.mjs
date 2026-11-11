@@ -1,14 +1,26 @@
 // @ts-check
 import { withSentryConfig } from '@sentry/nextjs'
+import { readFileSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+// Old WordPress post URLs (root level) → the migrated blog posts. Written by
+// scripts/migrate-wordpress.ts, so links in her past mailings keep working.
+/** @type {Array<{ source: string, destination: string }>} */
+const wordpressRedirects = (() => {
+  try {
+    return JSON.parse(readFileSync(path.join(__dirname, 'data', 'wordpress-redirects.json'), 'utf8'))
+  } catch {
+    return []
+  }
+})()
+
 // Derive the Medusa upload hostname from NEXT_PUBLIC_SITE_URL (declared as ARG/ENV in
 // the Dockerfile so it is available at build time). Medusa file-local storage uses
 // ${SITE_URL}/uploads as backend_url, so the hostname must be in remotePatterns.
-function buildMedusaUploadPattern() {
+function buildSitePattern(pathname) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
   if (!siteUrl) return null
   try {
@@ -17,13 +29,16 @@ function buildMedusaUploadPattern() {
       protocol: /** @type {'http' | 'https'} */ (protocol.replace(':', '')),
       hostname,
       port: port || '',
-      pathname: '/uploads/**',
+      pathname,
     }
   } catch {
     return null
   }
 }
-const medusaUploadPattern = buildMedusaUploadPattern()
+const medusaUploadPattern = buildSitePattern('/uploads/**')
+// Payload media (blog images): Payload builds absolute URLs from PAYLOAD_URL,
+// which is ${SITE_URL}/cms, so they live under /cms/api/media/file/ on the site host.
+const payloadMediaPattern = buildSitePattern('/cms/api/media/file/**')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -83,6 +98,7 @@ const nextConfig = {
         pathname: '/**',
       },
       ...(medusaUploadPattern ? [medusaUploadPattern] : []),
+      ...(payloadMediaPattern ? [payloadMediaPattern] : []),
       {
         protocol: 'https',
         hostname: 'img.youtube.com',
@@ -100,6 +116,8 @@ const nextConfig = {
 
   async redirects() {
     return [
+      // ── Migrated WordPress posts (newsletters, articles) → /blog/<slug> ─────
+      ...wordpressRedirects.map((r) => ({ ...r, permanent: true })),
       // ── WordPress core ──────────────────────────────────────────────────────
       { source: '/wp-admin',          destination: '/cms/admin', permanent: true },
       { source: '/wp-admin/:path*',   destination: '/cms/admin', permanent: true },
@@ -177,7 +195,7 @@ const nextConfig = {
 
       { source: '/blog-2',       destination: '/blog', permanent: true },
       { source: '/articles',     destination: '/resources#articles',  permanent: true },
-      { source: '/newsletters',  destination: '/resources#newsletter', permanent: true },
+      { source: '/newsletters',  destination: '/blog?tag=newsletter', permanent: true },
       { source: '/notices',      destination: '/blog', permanent: true },
 
       { source: '/programmes',              destination: '/services', permanent: true },
@@ -288,9 +306,6 @@ const nextConfig = {
       { source: '/duplicated-duplicated-programmes-1730-3141', destination: '/services', permanent: true },
 
       // Misc WP posts at root level → /blog
-      { source: '/embracing-our-ascension-journey',        destination: '/blog', permanent: true },
-      { source: '/protecting-your-joy',                    destination: '/blog', permanent: true },
-      { source: '/march-newsletter-the-power-of-letting-go', destination: '/blog', permanent: true },
       { source: '/become-an-energy-ninja',                 destination: '/blog', permanent: true },
       { source: '/getting-unstuck',                        destination: '/blog', permanent: true },
       { source: '/nice-or-not-nice-communication',         destination: '/blog', permanent: true },
@@ -300,27 +315,9 @@ const nextConfig = {
       { source: '/artile-making-things-happen',            destination: '/blog', permanent: true },
       { source: '/women-magazine-2',                       destination: '/blog', permanent: true },
       { source: '/blog-post-1',                            destination: '/blog', permanent: true },
-      { source: '/achieving-work-life-balance-2',          destination: '/blog', permanent: true },
-      { source: '/beyond-outsourcing-2-2',                 destination: '/blog', permanent: true },
       { source: '/recycling-my-soul',                      destination: '/blog', permanent: true },
       { source: '/creative-concepts',                      destination: '/blog', permanent: true },
-      { source: '/conversations-with-my-brain',            destination: '/blog', permanent: true },
 
-      // Newsletter posts with emoji slugs — source uses decoded characters
-      // (Next.js matches against the decoded path)
-      { source: '/november-newsletter-🌟embracing-the-power-within',                                    destination: '/blog', permanent: true },
-      { source: '/april-newsletter-✨-be-a-champion-of-change',                                         destination: '/blog', permanent: true },
-      { source: '/may-newsletter✨a-message-from-your-future-self',                                     destination: '/blog', permanent: true },
-      { source: '/june-newsletter✨navigating-the-threshold-between-striving-and-surrender',            destination: '/blog', permanent: true },
-      { source: '/july-newsletter✨riding-the-waves✨finding-calm-and-clarity-in-the-chaos',            destination: '/blog', permanent: true },
-      { source: '/august-newsletter✨effortless-flow✨from-control-to-co-creation',                     destination: '/blog', permanent: true },
-      { source: '/september-newsletter✨from-wounds-to-wisdom✨healing-family-patterns',                destination: '/blog', permanent: true },
-      { source: '/october-newsletter✨the-art-of-inner-regulation✨neuro-mastery',                      destination: '/blog', permanent: true },
-      { source: '/november-newsletter✨from-survival-to-thriving',                                      destination: '/blog', permanent: true },
-      { source: '/december-newsletter✨a-quiet-threshold✨connection-begins-inside',                    destination: '/blog', permanent: true },
-      { source: '/february-newsletter✨own-your-happiness✨joy-isnt-rented-its-owned',                  destination: '/blog', permanent: true },
-      { source: '/march-newsletter✨conscious-choice-✨attention-shapes-experience',                    destination: '/blog', permanent: true },
-      { source: '/april-newsletter✨not-all-healing-heals',                                             destination: '/blog', permanent: true },
     ]
   },
 
