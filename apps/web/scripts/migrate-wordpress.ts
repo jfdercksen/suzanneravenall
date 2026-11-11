@@ -16,7 +16,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { JSDOM } from 'jsdom'
-import { WP_URL_DEFAULT, migrate } from './wordpress/migrate'
+import { WP_URL_DEFAULT, makeParser, migrate } from './wordpress/migrate'
 
 // Re-exported for the tests.
 export { APP_ROUTES, blogSlug, decide, mediaFilename, redirectSource, redirectSources } from './wordpress/migrate'
@@ -29,7 +29,7 @@ async function main(): Promise<void> {
     wpUrl: (process.env.WP_URL ?? WP_URL_DEFAULT).replace(/\/+$/, ''),
     dryRun: true,
     only: new Set((process.env.ONLY ?? '').split(',').map((s) => s.trim()).filter(Boolean)),
-    parse: (html) => new JSDOM(html).window.document,
+    parse: makeParser(JSDOM),
     media: { find: async () => undefined, create: async (file) => `dry:${file.filename}` },
     posts: { upsert: async () => 'dry-run' },
     log: (line) => console.log(line),

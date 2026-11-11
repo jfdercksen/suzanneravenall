@@ -66,19 +66,15 @@ const asBlogPost = (data: unknown) => data as RequiredDataFromCollectionSlug<'bl
 
 /** Runs the migration. Returns true when every selected post and image made it. */
 export async function run(dryRun: boolean): Promise<boolean> {
-  const { WP_URL_DEFAULT, migrate } = await loadCore()
+  const { WP_URL_DEFAULT, makeParser, migrate } = await loadCore()
   const payload = await getPayload({ config })
 
   const result = await migrate({
     wpUrl: (process.env.WP_URL ?? WP_URL_DEFAULT).replace(/\/+$/, ''),
     dryRun,
     only: new Set((process.env.ONLY ?? '').split(',').map((s) => s.trim()).filter(Boolean)),
-    parse: (html) => {
-      const { window } = new JSDOM(html)
-      // The document is read synchronously by the caller; the window's timers are not needed.
-      queueMicrotask(() => window.close())
-      return window.document
-    },
+    // The shared parser (never closes the window: see makeParser in the core).
+    parse: makeParser(JSDOM),
     media: {
       find: async (filename) => {
         const found = await payload.find({

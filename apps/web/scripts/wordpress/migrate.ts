@@ -192,6 +192,20 @@ async function getJson<T>(url: string): Promise<{ data: T; res: Response }> {
 // ── WordPress ──────────────────────────────────────────────────────────────
 export type ParseHtml = (html: string) => Document
 
+/** The jsdom class, passed in so the core never imports jsdom (it is bundled for payload-tools). */
+export type JsdomClass = new (html?: string) => { readonly window: { readonly document: Document } }
+
+/**
+ * The one HTML parser both runners use (the local dry run and the payload-tools
+ * import), so they cannot drift. It never closes the jsdom window: the converter
+ * reads a document after awaiting the image downloads, and a closed window
+ * empties its document. On 11 Nov the payload side closed it on a microtask and
+ * the three articles converted to 0 words there while the dry run showed them.
+ */
+export function makeParser(JSDOM: JsdomClass): ParseHtml {
+  return (html) => new JSDOM(html).window.document
+}
+
 export async function fetchWordPress(wpUrl: string, parse: ParseHtml): Promise<{ posts: WpPost[]; categories: Map<number, string> }> {
   const posts: WpPost[] = []
   for (let page = 1; page <= 20; page++) {
