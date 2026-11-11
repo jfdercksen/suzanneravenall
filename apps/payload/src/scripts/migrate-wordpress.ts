@@ -7,6 +7,7 @@
  * come from the container env (infra/.env), and uploads land on the shared
  * payload_uploads volume the Payload server reads.
  *
+ * Supported command (from infra/, tsx loader; --use-swc works too):
  *   cd /var/www/suzanneravenall/suzanneravenall/infra
  *   docker compose --profile tools build payload-tools
  *   # dry run (default): reads WordPress and Payload; writes no post and no media.
@@ -20,81 +21,43 @@
  * deterministic filename (never uploaded twice). The core (scope, AWeber
  * extraction, conversion) is shared with the local dry run:
  * apps/web/scripts/wordpress/migrate.ts.
+ *
+ * Loading (fixed 11 Nov after the review box run printed nothing and exited 0):
+ *   - `payload run` imports this file and exits as soon as the import resolves,
+ *     so the run is awaited at the top level (a bare run() was cut off);
+ *   - the run module is imported dynamically inside try/catch, so a load
+ *     failure prints the error and exits 1 instead of passing silently;
+ *   - the shared core is unpacked from its CommonJS default export
+ *     (wordpress/run.ts explains why).
+ * Exit codes: 0 only when every selected post and image made it, 1 otherwise.
  */
 
-import { JSDOM } from 'jsdom'
-import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
-import config from '../../payload.config'
-import { WP_URL_DEFAULT, migrate } from '../../../web/scripts/wordpress/migrate'
+// A module (top-level await below), with nothing to export.
+export {}
 
 const DRY_RUN = process.env.DRY_RUN !== 'false'
 
-/** The core builds plain Lexical JSON; Payload's generated types describe it more loosely. */
-const asBlogPost = (data: unknown) => data as RequiredDataFromCollectionSlug<'blog-posts'>
+// Printed before anything loads, so a run that stops early is never silent.
+console.log(`WordPress → Payload blog migration: ${DRY_RUN ? 'DRY RUN (nothing written)' : 'IMPORT'} with the Local API`)
 
-async function run(): Promise<void> {
-  const payload = await getPayload({ config })
-  console.log(`WordPress → Payload blog migration: ${DRY_RUN ? 'DRY RUN (nothing written)' : 'IMPORT'} with the Local API`)
-
-  const result = await migrate({
-    wpUrl: (process.env.WP_URL ?? WP_URL_DEFAULT).replace(/\/+$/, ''),
-    dryRun: DRY_RUN,
-    only: new Set((process.env.ONLY ?? '').split(',').map((s) => s.trim()).filter(Boolean)),
-    parse: (html) => new JSDOM(html).window.document,
-    media: {
-      find: async (filename) => {
-        const found = await payload.find({
-          collection: 'media',
-          where: { filename: { equals: filename } },
-          limit: 1,
-          depth: 0,
-          overrideAccess: true,
-        })
-        return found.docs[0]?.id
-      },
-      create: async (file, alt) => {
-        if (DRY_RUN) return `dry:${file.filename}`
-        const doc = await payload.create({
-          collection: 'media',
-          data: { alt },
-          file: { data: file.data, mimetype: file.mimetype, name: file.filename, size: file.data.length },
-          overrideAccess: true,
-        })
-        return doc.id
-      },
-    },
-    posts: {
-      upsert: async (slug, data) => {
-        const existing = await payload.find({
-          collection: 'blog-posts',
-          where: { slug: { equals: slug } },
-          limit: 1,
-          depth: 0,
-          overrideAccess: true,
-        })
-        if (DRY_RUN) return 'dry-run'
-        const doc = existing.docs[0]
-        if (doc) {
-          await payload.update({ collection: 'blog-posts', id: doc.id, data: asBlogPost(data), overrideAccess: true })
-          return 'updated'
-        }
-        await payload.create({ collection: 'blog-posts', data: asBlogPost(data), overrideAccess: true })
-        return 'created'
-      },
-    },
-    log: (line) => console.log(line),
-  })
-
-  console.log(JSON.stringify(result.summary, null, 2))
-  for (const post of result.posts) {
-    if (post.images.missing.length > 0) console.log(`missing images in ${post.slug}: ${JSON.stringify(post.images.missing)}`)
-  }
-  // Not green when a post or an image did not make it.
-  const incomplete = (result.summary.notMigrated as unknown[]).length > 0 || result.posts.some((p) => p.images.missing.length > 0)
-  process.exit(incomplete ? 1 : 0)
+/**
+ * Exits once stdout and stderr have drained (`docker compose run` pipes them,
+ * and a bare exit can cut the summary off). Awaited: when this file's import
+ * resolves, the payload CLI exits 0 by itself, so the exit must happen first.
+ */
+async function exitAfterFlush(code: number): Promise<never> {
+  await new Promise<void>((resolve) => process.stdout.write('', () => process.stderr.write('', () => resolve())))
+  process.exit(code)
 }
 
-run().catch((error) => {
+let exitCode = 1
+try {
+  const { run } = await import('./wordpress/run')
+  const complete = await run(DRY_RUN)
+  if (!complete) console.error('WordPress → Payload blog migration INCOMPLETE: see "notMigrated" and "missing images" above')
+  exitCode = complete ? 0 : 1
+} catch (error: unknown) {
+  console.error('WordPress → Payload blog migration FAILED:')
   console.error(error)
-  process.exit(1)
-})
+}
+await exitAfterFlush(exitCode)
