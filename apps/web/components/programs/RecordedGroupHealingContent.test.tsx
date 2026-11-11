@@ -41,10 +41,10 @@ describe('RecordedGroupHealingContent (8 Nov item 8.3)', () => {
     }
   })
 
-  it('shows How It Works 01 to 04 and the access line from her current site', () => {
+  it('shows How It Works 01 to 04 and the access line (lifetime access is an add-on)', () => {
     render(<RecordedGroupHealingContent series={series} />)
     for (const n of ['01', '02', '03', '04']) expect(screen.getByText(n)).toBeInTheDocument()
-    expect(screen.getByText('Access: yours for as long as you need it.')).toBeInTheDocument()
+    expect(screen.getByText('Access: lifetime access is available as the Bonus Lifetime Access add-on.')).toBeInTheDocument()
   })
 
   it('lists every recorded series with a link to its page', () => {

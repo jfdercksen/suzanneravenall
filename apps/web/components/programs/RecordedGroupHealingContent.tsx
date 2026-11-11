@@ -9,10 +9,9 @@ import { RichText } from '@/components/shared/RichText'
 import { type RichLine } from '@/lib/content/richLine'
 import type { Program } from '@/data/programs'
 
-// Suzanne's 8 Nov copy, verbatim (item 8.3). Access length from her current
-// site's Guided Programmes page: "you have access to them for as long as you
-// need and want them" (read 11 Nov 2026).
-export const ACCESS_LINE: RichLine = ['Access: yours for as long as you need it.']
+// Suzanne's 8 Nov copy, verbatim (item 8.3). Suzanne, 11 Nov 2026: lifetime
+// access is a paid add-on on all programmes (shop product Bonus Lifetime Access).
+export const ACCESS_LINE: RichLine = ['Access: lifetime access is available as the Bonus Lifetime Access add-on.']
 
 const reveal = {
   initial: { opacity: 0, y: 50 },

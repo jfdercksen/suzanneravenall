@@ -818,7 +818,7 @@ export default function CheckoutContent() {
                       {isFreeOrder
                         ? 'Your voucher covers the full amount. There is nothing to pay.'
                         : gateway === 'payfast'
-                          ? 'You will be securely redirected to PayFast to complete your payment.'
+                          ? 'You will be securely redirected to PayFast to complete your payment. Apple Pay is available on Apple devices.'
                           : 'You will be securely redirected to PayPal to complete your payment.'}
                     </p>
 
