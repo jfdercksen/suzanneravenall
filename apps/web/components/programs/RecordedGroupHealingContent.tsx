@@ -6,12 +6,13 @@ import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { RichText } from '@/components/shared/RichText'
-import { ph, type RichLine } from '@/lib/content/richLine'
+import { type RichLine } from '@/lib/content/richLine'
 import type { Program } from '@/data/programs'
 
-// Suzanne's 8 Nov copy, verbatim (item 8.3). The access length is her
-// placeholder until Shayna confirms it.
-export const ACCESS_LINE: RichLine = [ph('Access: lifetime / X months, to confirm', 'Shayna')]
+// Suzanne's 8 Nov copy, verbatim (item 8.3). Access length from her current
+// site's Guided Programmes page: "you have access to them for as long as you
+// need and want them" (read 11 Nov 2026).
+export const ACCESS_LINE: RichLine = ['Access: yours for as long as you need it.']
 
 const reveal = {
   initial: { opacity: 0, y: 50 },

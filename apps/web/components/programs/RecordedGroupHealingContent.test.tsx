@@ -41,10 +41,10 @@ describe('RecordedGroupHealingContent (8 Nov item 8.3)', () => {
     }
   })
 
-  it('shows How It Works 01 to 04 and the access placeholder', () => {
+  it('shows How It Works 01 to 04 and the access line from her current site', () => {
     render(<RecordedGroupHealingContent series={series} />)
     for (const n of ['01', '02', '03', '04']) expect(screen.getByText(n)).toBeInTheDocument()
-    expect(screen.getByText('[Access: lifetime / X months, to confirm]')).toBeInTheDocument()
+    expect(screen.getByText('Access: yours for as long as you need it.')).toBeInTheDocument()
   })
 
   it('lists every recorded series with a link to its page', () => {

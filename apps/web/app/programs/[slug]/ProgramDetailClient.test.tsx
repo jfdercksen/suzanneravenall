@@ -120,16 +120,18 @@ describe('ProgramDetailClient long-form pages (8 Nov copy)', () => {
       'href',
       '/shop/akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom',
     )
-    expect(screen.getAllByText('[number of lessons · hours of video: get from Shayna]').length).toBeGreaterThan(0)
+    // Lessons and video hours come from her Thinkific course page (11 Nov 2026), no placeholder.
+    expect(screen.getAllByText(/130 lessons/).length).toBeGreaterThan(0)
+    expect(screen.queryByText(/get from Shayna/)).not.toBeInTheDocument()
   })
 
-  it('The Inner Sanctuary: her copy, placeholders for duration and intake, recordings confirmed, register interest', () => {
+  it('The Inner Sanctuary: her copy, placeholder for duration only, recordings confirmed, register interest', () => {
     const program = getProgramBySlug('meditation')!
     render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
     expect(screen.getByRole('heading', { level: 1, name: 'The Inner Sanctuary' })).toBeInTheDocument()
     expect(screen.getByText("This isn't meditation to escape your life. It's meditation to transform it.")).toBeInTheDocument()
     expect(screen.getByText('[number of sessions · length of each session · over X weeks]')).toBeInTheDocument()
-    expect(screen.getByText('[dates, or register your interest for the next intake]')).toBeInTheDocument()
+    expect(screen.getByText('register your interest and we will let you know when the next intake opens')).toBeInTheDocument()
     // Suzanne, 10 Nov 2026: "Yes recordings available".
     expect(screen.getByText('available if you miss a live session')).toBeInTheDocument()
     expect(screen.queryByText(/To confirm/)).not.toBeInTheDocument()

@@ -112,8 +112,9 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { label: 'Format', value: 'fully self-study, online' },
       { label: 'Content', value: '100 lessons · 10 hours of video' },
       { label: 'Pace', value: 'start any time and learn at your own pace. Lessons are short, so they fit around your life.' },
-      { label: 'Access', value: [ph('lifetime access / X months', 'Shayna')] },
-      { label: 'Includes', value: [ph('workbook / downloadable practices / guided audio, if applicable', 'Shayna')] },
+      // Source: her Thinkific course page (lessons, video hours, materials) and her current site's Guided Programmes page (access), read 11 Nov 2026.
+      { label: 'Access', value: 'yours for as long as you need it' },
+      { label: 'Includes', value: 'workbook, clearing protocol, checklist, energy exercises, glossary and a short quiz after each lesson' },
       { label: 'Accreditation', value: 'accredited by the American Association of Drugless Practitioners (AADP)' },
       { label: 'Investment', value: 'price' },
     ],
@@ -177,8 +178,9 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { title: 'Practise as a certified Energy Clearing Practitioner', body: 'Professionally certified and ready to work with clients, ethically and within your scope.' },
     ],
     details: [
-      { label: 'Format', value: [ph('self-study / live / hybrid', 'Shayna')] },
-      { label: 'Content', value: [ph('number of lessons · hours of video: get from Shayna', 'Shayna')] },
+      // Source: her Thinkific course page (lessons, video hours, materials) and her current site's Guided Programmes page (access), read 11 Nov 2026.
+      { label: 'Format', value: 'self-study, online. A live Zoom intake is offered on register your interest.' },
+      { label: 'Content', value: '39 lessons · 4.5 hours of video' },
       { label: 'Practical component', value: [ph('supervised practice sessions · case studies · assessment', 'Suzanne')] },
       { label: 'Prerequisite', value: 'completion of Level 1' },
       // Suzanne, 10 Nov 2026: the same body (AADP) applies to all practitioner training.
@@ -186,7 +188,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { label: 'Investment', value: 'price' },
     ],
     whatsIncluded: [
-      [ph('number of lessons · hours of video: get from Shayna', 'Shayna')],
+      '39 lessons and 4.5 hours of video',
       'Advanced energy field assessment and clearing',
       'Techniques for clearing others safely and effectively',
       'Working with group and collective energy',
@@ -245,16 +247,17 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { title: 'Be ready for Level 2', body: 'A solid personal practice, ready to learn how to navigate the Records for others.' },
     ],
     details: [
-      { label: 'Format', value: [ph('self-study / live / hybrid: get from Shayna', 'Shayna')] },
-      { label: 'Content', value: [ph('number of lessons · hours of video: get from Shayna', 'Shayna')] },
-      { label: 'Pace', value: [ph('start any time / set intake dates', 'Shayna')] },
-      { label: 'Access', value: [ph('lifetime access / X months', 'Shayna')] },
-      { label: 'Includes', value: [ph('workbook / guided audio / prayer or opening practice / downloadable resources', 'Shayna')] },
+      // Source: her Thinkific course page (lessons, video hours, materials) and her current site's Guided Programmes page (access), read 11 Nov 2026.
+      { label: 'Format', value: 'self-study, online. A live Zoom intake is offered on register your interest.' },
+      { label: 'Content', value: '130 lessons · 12.5 hours of video' },
+      { label: 'Pace', value: 'start any time and learn at your own pace' },
+      { label: 'Access', value: 'yours for as long as you need it' },
+      { label: 'Includes', value: 'guided meditations in video and audio, the channelled sacred prayer, reference guides and a short quiz after each lesson' },
       { label: 'Accreditation', value: 'accredited by the American Association of Drugless Practitioners (AADP)' },
       { label: 'Investment', value: 'price' },
     ],
     whatsIncluded: [
-      [ph('number of lessons · hours of video: get from Shayna', 'Shayna')],
+      '130 lessons and 12.5 hours of video',
       'Learn to access and read your own Akashic Record',
       'Clear blocks, constrictions and ancestral patterns affecting this lifetime',
       'Work on money, finances and abundance',
@@ -306,15 +309,16 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { title: 'Practise as a certified Akashic Navigator', body: 'Certified by The Ravenall Institute and ready to offer professional Akashic readings.' },
     ],
     details: [
-      { label: 'Format', value: [ph('self-study / live / hybrid: get from Shayna', 'Shayna')] },
-      { label: 'Content', value: [ph('number of lessons · hours of video: get from Shayna', 'Shayna')] },
+      // Source: her Thinkific course page (lessons, video hours, materials) and her current site's Guided Programmes page (access), read 11 Nov 2026.
+      { label: 'Format', value: 'self-study, online. A live Zoom intake is offered on register your interest.' },
+      { label: 'Content', value: '39 lessons · 9.5 hours of video' },
       { label: 'Practical component', value: [ph('supervised practice readings · case studies · assessment', 'Suzanne')] },
       { label: 'Prerequisite', value: 'completion of Level 1' },
       { label: 'Accreditation', value: 'accredited by the American Association of Drugless Practitioners (AADP)' },
       { label: 'Investment', value: 'price' },
     ],
     whatsIncluded: [
-      [ph('number of lessons · hours of video: get from Shayna', 'Shayna')],
+      '39 lessons and 9.5 hours of video, including a full demonstration session',
       'Learn to read the Akashic Records for others',
       'Discover why clients are here, their past, and answers to critical questions',
       'Clear blocks, constrictions and ancestral patterns for others',
@@ -373,7 +377,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { label: 'Format', value: 'live group programme' },
       { label: 'Delivery', value: 'live via Zoom with Suzanne' },
       { label: 'Duration', value: [ph('number of sessions · length of each session · over X weeks', 'Suzanne')] },
-      { label: 'Next intake', value: [ph('dates, or register your interest for the next intake', 'Shayna')] },
+      { label: 'Next intake', value: 'register your interest and we will let you know when the next intake opens' },
       // Suzanne, 10 Nov 2026: "Yes recordings available".
       { label: 'Recordings', value: 'available if you miss a live session' },
       { label: 'Investment', value: 'price' },
@@ -430,7 +434,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { label: 'Format', value: 'live group programme' },
       { label: 'Delivery', value: 'live via Zoom with Suzanne' },
       { label: 'Duration', value: [ph('number of sessions · length of each session · over X weeks', 'Suzanne')] },
-      { label: 'Next intake', value: [ph('dates, or register your interest for the next intake', 'Shayna')] },
+      { label: 'Next intake', value: 'register your interest and we will let you know when the next intake opens' },
       // Suzanne, 10 Nov 2026: "Yes recordings available".
       { label: 'Recordings', value: 'available if you miss a live session' },
       { label: 'Investment', value: 'price' },
