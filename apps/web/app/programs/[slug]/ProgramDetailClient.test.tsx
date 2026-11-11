@@ -123,14 +123,16 @@ describe('ProgramDetailClient long-form pages (8 Nov copy)', () => {
     expect(screen.getAllByText('[number of lessons · hours of video: get from Shayna]').length).toBeGreaterThan(0)
   })
 
-  it('The Inner Sanctuary: her copy, placeholders for duration, intake and recordings, register interest', () => {
+  it('The Inner Sanctuary: her copy, placeholders for duration and intake, recordings confirmed, register interest', () => {
     const program = getProgramBySlug('meditation')!
     render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
     expect(screen.getByRole('heading', { level: 1, name: 'The Inner Sanctuary' })).toBeInTheDocument()
     expect(screen.getByText("This isn't meditation to escape your life. It's meditation to transform it.")).toBeInTheDocument()
     expect(screen.getByText('[number of sessions · length of each session · over X weeks]')).toBeInTheDocument()
     expect(screen.getByText('[dates, or register your interest for the next intake]')).toBeInTheDocument()
-    expect(screen.getByText('[available if you miss a live session? To confirm]')).toBeInTheDocument()
+    // Suzanne, 10 Nov 2026: "Yes recordings available".
+    expect(screen.getByText('available if you miss a live session')).toBeInTheDocument()
+    expect(screen.queryByText(/To confirm/)).not.toBeInTheDocument()
     expect(screen.getAllByRole('link', { name: 'Register Interest' }).length).toBeGreaterThanOrEqual(3)
   })
 

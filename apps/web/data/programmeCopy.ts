@@ -181,7 +181,8 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { label: 'Content', value: [ph('number of lessons · hours of video: get from Shayna', 'Shayna')] },
       { label: 'Practical component', value: [ph('supervised practice sessions · case studies · assessment', 'Suzanne')] },
       { label: 'Prerequisite', value: 'completion of Level 1' },
-      { label: 'Accreditation', value: [ph('accredited by the American Association of Drugless Practitioners (AADP): confirm for Level 2', 'Suzanne')] },
+      // Suzanne, 10 Nov 2026: the same body (AADP) applies to all practitioner training.
+      { label: 'Accreditation', value: 'accredited by the American Association of Drugless Practitioners (AADP)' },
       { label: 'Investment', value: 'price' },
     ],
     whatsIncluded: [
@@ -249,7 +250,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { label: 'Pace', value: [ph('start any time / set intake dates', 'Shayna')] },
       { label: 'Access', value: [ph('lifetime access / X months', 'Shayna')] },
       { label: 'Includes', value: [ph('workbook / guided audio / prayer or opening practice / downloadable resources', 'Shayna')] },
-      { label: 'Accreditation', value: [ph('AADP or other accreditation, if applicable: confirm', 'Suzanne')] },
+      { label: 'Accreditation', value: 'accredited by the American Association of Drugless Practitioners (AADP)' },
       { label: 'Investment', value: 'price' },
     ],
     whatsIncluded: [
@@ -309,7 +310,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { label: 'Content', value: [ph('number of lessons · hours of video: get from Shayna', 'Shayna')] },
       { label: 'Practical component', value: [ph('supervised practice readings · case studies · assessment', 'Suzanne')] },
       { label: 'Prerequisite', value: 'completion of Level 1' },
-      { label: 'Accreditation', value: [ph('AADP or other accreditation, if applicable: confirm', 'Suzanne')] },
+      { label: 'Accreditation', value: 'accredited by the American Association of Drugless Practitioners (AADP)' },
       { label: 'Investment', value: 'price' },
     ],
     whatsIncluded: [
@@ -325,7 +326,8 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       heading: 'Certified Akashic Navigator',
       paragraphs: [
         'On successful completion, including your practical assessment, you will be certified as an Akashic Navigator by The Ravenall Institute.',
-        [ph('Add AADP board certification eligibility here if this course is accredited.', 'Suzanne')],
+        // Suzanne, 10 Nov 2026: the same body (AADP) applies to all practitioner training.
+        'You will be eligible to apply for board certification with the American Association of Drugless Practitioners (AADP).',
       ],
     },
     scope: { text: 'Akashic Records work is a spiritual and intuitive practice. It is not a substitute for medical, psychological, legal or financial advice. Certified Navigators are trained to work within their scope and refer clients on where appropriate.' },
@@ -372,7 +374,8 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { label: 'Delivery', value: 'live via Zoom with Suzanne' },
       { label: 'Duration', value: [ph('number of sessions · length of each session · over X weeks', 'Suzanne')] },
       { label: 'Next intake', value: [ph('dates, or register your interest for the next intake', 'Shayna')] },
-      { label: 'Recordings', value: [ph('available if you miss a live session? To confirm', 'Suzanne')] },
+      // Suzanne, 10 Nov 2026: "Yes recordings available".
+      { label: 'Recordings', value: 'available if you miss a live session' },
       { label: 'Investment', value: 'price' },
     ],
     scope: { text: 'Meditation is a complementary practice and is not a substitute for medical or psychological care. If you are currently in treatment for a mental health condition, please speak to your healthcare provider before starting.' },
@@ -428,7 +431,8 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { label: 'Delivery', value: 'live via Zoom with Suzanne' },
       { label: 'Duration', value: [ph('number of sessions · length of each session · over X weeks', 'Suzanne')] },
       { label: 'Next intake', value: [ph('dates, or register your interest for the next intake', 'Shayna')] },
-      { label: 'Recordings', value: [ph('available if you miss a live session? To confirm', 'Suzanne')] },
+      // Suzanne, 10 Nov 2026: "Yes recordings available".
+      { label: 'Recordings', value: 'available if you miss a live session' },
       { label: 'Investment', value: 'price' },
     ],
     closingNote: [
