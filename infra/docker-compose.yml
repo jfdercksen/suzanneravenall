@@ -302,6 +302,10 @@ services:
       DATABASE_URL: ${PAYLOAD_DATABASE_URL}
       PAYLOAD_URL: ${PAYLOAD_URL}
       NODE_ENV: ${NODE_ENV}
+    volumes:
+      # Media uploads (blog images). Without a volume they lived in the
+      # container and vanished at every payload deploy.
+      - payload_uploads:/app/apps/payload/public/uploads
     networks:
       - suzanne_network
     healthcheck:
@@ -315,6 +319,35 @@ services:
         limits:
           memory: 512m
           cpus: "0.5"
+
+  # ---------------------------------------------------------------------------
+  # Payload tools: one-off Payload scripts (Local API), e.g. the WordPress blog
+  # migration. Not started by `up`: only with `--profile tools run`. Same env
+  # and uploads volume as payload, so scripts write where the server reads.
+  # Runs as the payload server's user so uploaded files stay its own.
+  # ---------------------------------------------------------------------------
+  payload-tools:
+    profiles: ["tools"]
+    build:
+      context: ..
+      dockerfile: apps/payload/Dockerfile
+      target: tools
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      DATABASE_URL: ${PAYLOAD_DATABASE_URL}
+      PAYLOAD_URL: ${PAYLOAD_URL}
+      # Always production here: no schema push, no type generation into the image.
+      NODE_ENV: production
+      # uid 1001 has no home in this image; npx and tsx need a writable one.
+      HOME: /tmp
+    user: "1001:1001"
+    volumes:
+      - payload_uploads:/app/apps/payload/public/uploads
+    networks:
+      - suzanne_network
 
   # ---------------------------------------------------------------------------
   # MeiliSearch — internal search engine (never exposed publicly)
@@ -454,6 +487,7 @@ volumes:
   n8n_data:
   medusa_uploads:
   web_static:
+  payload_uploads:
 
 # -----------------------------------------------------------------------------
 # Networks

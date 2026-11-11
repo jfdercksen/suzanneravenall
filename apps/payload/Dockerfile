@@ -34,6 +34,22 @@ ENV PAYLOAD_URL=http://localhost:3001/cms
 RUN npx turbo run build --filter=@suzanne/payload
 ENV NODE_ENV=production
 
+# ── Tools stage: Payload scripts with the Local API ──────────────────────────
+# The runner below is a Next standalone server: no config source, no payload
+# CLI, no TypeScript runner, so `docker compose exec payload ...` cannot run a
+# script. This stage is the builder as built (full node_modules incl. tsx and
+# jsdom, the config and the source), used by the payload-tools service
+# (infra/docker-compose.yml, profile "tools") for one-off jobs such as the
+# WordPress migration:
+#   docker compose --profile tools run --rm payload-tools npx payload run src/scripts/migrate-wordpress.ts
+# It must stay above the runner so the runner remains the default target.
+FROM builder AS tools
+WORKDIR /app/apps/payload
+# Same uploads folder and owner as the runner, so whichever container first
+# mounts the payload_uploads volume creates it writable for uid 1001.
+RUN mkdir -p ./public/uploads && chown -R 1001:1001 ./public
+CMD ["npx", "payload", "--help"]
+
 # ── Runner stage ──────────────────────────────────────────────────────────────
 FROM base AS runner
 WORKDIR /app
@@ -50,8 +66,11 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder --chown=nextjs:nodejs /app/apps/payload/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/payload/.next/static ./apps/payload/.next/static
 
-# Ensure uploads directory exists and is writable
-RUN mkdir -p ./public/uploads && chown -R nextjs:nodejs ./public/uploads
+# Uploads: the standalone server.js changes into apps/payload, so the media
+# collection's staticDir ./public/uploads is /app/apps/payload/public/uploads.
+# Created here owned by nextjs so the payload_uploads volume mounted on it
+# (infra/docker-compose.yml) starts writable and keeps files across deploys.
+RUN mkdir -p ./apps/payload/public/uploads && chown -R nextjs:nodejs ./apps/payload/public
 
 USER nextjs
 
