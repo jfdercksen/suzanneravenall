@@ -35,11 +35,13 @@ const writtenGrid = () => {
 }
 
 describe('TestimonialsContent written testimonials', () => {
-  it('leads with the Austria testimonial and shows it without a name', () => {
+  it('leads with the three-year testimonial and shows it without a name or a country', () => {
     render(<TestimonialsContent />)
     const first = within(writtenGrid()).getAllByRole('figure')[0]!
     expect(first.textContent).toContain('I have been working with Suzanne for the past 3 years now.')
-    expect(first.querySelector('figcaption')?.textContent).toBe('Client, Austria')
+    expect(first.querySelector('figcaption')?.textContent).toBe('Client')
+    // Suzanne, 12 Nov 2026: no mention of Austria anywhere on the page
+    expect(document.body.textContent).not.toContain('Austria')
   })
 
   it('shows no client names on the front of any card', () => {
@@ -49,8 +51,8 @@ describe('TestimonialsContent written testimonials', () => {
     expect(captions.length).toBe(within(grid).getAllByRole('figure').length)
     expect(captions.length).toBeGreaterThan(30)
     for (const caption of captions) {
-      // "Client, <place>" and nothing else: no name, no role
-      expect(caption.textContent).toMatch(/^Client, [A-Za-z ]+$/)
+      // "Client, <place>" (or "Client" alone) and nothing else: no name, no role
+      expect(caption.textContent).toMatch(/^Client(, [A-Za-z ]+)?$/)
     }
     for (const name of ['Matheo', 'Ivana', 'Valanne', 'Jelka', 'Psychotherapist', 'Anonymous']) {
       expect(grid.textContent).not.toContain(name)

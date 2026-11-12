@@ -241,7 +241,7 @@ export default function TheSystemContent() {
               className="border-l-2 border-brand-accent pl-6 italic text-brand-primary text-lg font-light leading-relaxed mb-10"
             >
               <p className="mb-3">
-                We never create anything random again. Every new programme,
+                We never create anything random. Every new programme,
                 assessment, keynote, workshop, book, podcast, app, or piece of IP
                 must answer one question: does this strengthen Pattern
                 Intelligence and move us to shift the pattern fastest and

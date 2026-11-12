@@ -15,13 +15,13 @@ const fadeUp = (delay: number) => ({
 // Real client testimonials harvested from the previous suzanneravenall.com site
 // (homepage carousel + about.md + masterclass.md). Suzanne, 8 Nov 2026: no
 // client names on the cards, so the names are not kept here at all (the old
-// list with names is in git history). The Austria quote leads the grid: the
-// client asked for it to be shown without her name.
-const writtenTestimonials: { quote: string; location: string }[] = [
+// list with names is in git history). The first quote leads the grid: the
+// client asked for it to be shown without her name. Suzanne, 12 Nov 2026: no
+// mention of her country either, so this card carries no location.
+const writtenTestimonials: { quote: string; location?: string }[] = [
   {
     quote:
       'I have been working with Suzanne for the past 3 years now. It has been an intense journey and it has been amazing to see how much I have shifted and grown. I had a huge crisis in which many parts of my life fell apart. Resonance Repatterning combined with my other daily practices saved me from falling into a depression and I started to create a new life from scratch. Thank you Suzanne.',
-    location: 'Austria',
   },
   {
     quote:
@@ -377,7 +377,7 @@ export default function TestimonialsContent() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {writtenTestimonials.map(({ quote, location }, i) => (
               <motion.figure
-                key={`${location}-${i}`}
+                key={`${location ?? 'client'}-${i}`}
                 className="relative flex flex-col bg-white border border-brand-border rounded-card p-8 shadow-sm hover:shadow-2xl hover:border-brand-primary-300 transition-all duration-500 hover:-translate-y-1"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -398,7 +398,7 @@ export default function TestimonialsContent() {
                 </blockquote>
 
                 <figcaption className="mt-6 pt-6 border-t border-brand-border text-brand-muted text-xs uppercase tracking-widest">
-                  Client, {location}
+                  {location ? `Client, ${location}` : 'Client'}
                 </figcaption>
               </motion.figure>
             ))}
