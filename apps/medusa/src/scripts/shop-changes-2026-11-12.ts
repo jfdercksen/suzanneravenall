@@ -17,7 +17,7 @@
  * 2. Creates "Brainwave Club" (partner product, no price, never in a cart) and
  *    "Suzanne Ravenall Coaching App" (once-off R250) if their handles do not
  *    exist yet, under Products & Tools, with the sales channel and shipping
- *    profile of a digital product already on sale.
+ *    profile of a digital product already on sale (none, if it has none).
  *
  * Idempotent: a second run reports everything unchanged. Exits non-zero when
  * something it needs is missing, so a partial run is never silent.
@@ -105,18 +105,19 @@ export default async function shopChanges({ container }: ExecArgs): Promise<void
   const reference = references[0] as
     | { sales_channels?: Array<{ id: string }> | null; shipping_profile?: { id: string } | null }
     | undefined
-  const salesChannelId = reference?.sales_channels?.[0]?.id
+  const salesChannelId = reference?.sales_channels?.[0]?.id ?? null
+  const shippingProfileId = reference?.shipping_profile?.id ?? null
 
-  if (!categoryId || !salesChannelId) {
+  if (!categoryId || !reference) {
     if (!categoryId) log(`MISSING category ${CATEGORY_HANDLE}`)
-    if (!salesChannelId) log(`MISSING sales channel on ${REFERENCE_HANDLE}`)
+    if (!reference) log(`MISSING reference product ${REFERENCE_HANDLE}`)
     problems += 1
   } else {
-    const toCreate = planNewProducts(existingHandles, {
-      categoryId,
-      salesChannelId,
-      shippingProfileId: reference?.shipping_profile?.id ?? null,
-    })
+    // The new products are set up exactly like the reference product. On the
+    // review box the published products have no sales channel and no shipping
+    // profile linked, and they sell; so an absent link is copied as absent.
+    log(`reference ${REFERENCE_HANDLE}: sales channel ${salesChannelId ?? "none"}, shipping profile ${shippingProfileId ?? "none"} (copied as they are)`)
+    const toCreate = planNewProducts(existingHandles, { categoryId, salesChannelId, shippingProfileId })
     for (const handle of existingHandles) log(`${handle}: exists, left as it is`)
     for (const product of toCreate) log(`${product.handle}: ${dryRun ? "would create" : "creating"}`)
     if (!dryRun && toCreate.length > 0) {

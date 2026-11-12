@@ -160,4 +160,12 @@ describe('new products', () => {
     expect('shipping_profile_id' in p).toBe(false)
     expect(JSON.stringify(p)).not.toMatch(/subscription|trial|thinkific/i)
   })
+
+  it('copies the sales channel when the reference product has one, and leaves it out when it has none', () => {
+    expect(coachingAppProduct(ctx).sales_channels).toEqual([{ id: 'sc_1' }])
+    expect(brainwaveProduct(ctx).sales_channels).toEqual([{ id: 'sc_1' }])
+    const bare = { ...ctx, salesChannelId: null, shippingProfileId: null }
+    expect('sales_channels' in coachingAppProduct(bare)).toBe(false)
+    expect('sales_channels' in brainwaveProduct(bare)).toBe(false)
+  })
 })

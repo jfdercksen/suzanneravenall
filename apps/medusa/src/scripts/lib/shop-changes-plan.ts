@@ -99,8 +99,13 @@ export function parseRestore(raw: string | undefined): { handles: Set<string>; u
 export type NewProductContext = {
   /** The "Products & Tools" category (products-tools). */
   categoryId: string
-  /** The sales channel and shipping profile of a published digital product already on sale, copied as they are. */
-  salesChannelId: string
+  /**
+   * The sales channel and shipping profile of a published digital product
+   * already on sale, copied as they are. Either may be absent: on the review
+   * box (12 Nov 2026) the published products carry neither link, and the new
+   * products must be set up the same way as the ones already selling.
+   */
+  salesChannelId: string | null
   shippingProfileId: string | null
 }
 
@@ -117,7 +122,7 @@ export function brainwaveProduct(ctx: NewProductContext) {
     // Served by the web app (apps/web/public/images/products/brainwave-club.png), copied from the old shop.
     thumbnail: "/images/products/brainwave-club.png",
     category_ids: [ctx.categoryId],
-    sales_channels: [{ id: ctx.salesChannelId }],
+    ...(ctx.salesChannelId ? { sales_channels: [{ id: ctx.salesChannelId }] } : {}),
     ...(ctx.shippingProfileId ? { shipping_profile_id: ctx.shippingProfileId } : {}),
     options: [{ title: "Type", values: ["Partner product"] }],
     variants: [
@@ -144,7 +149,7 @@ export function coachingAppProduct(ctx: NewProductContext) {
     handle: COACHING_APP_HANDLE,
     status: "published" as const,
     category_ids: [ctx.categoryId],
-    sales_channels: [{ id: ctx.salesChannelId }],
+    ...(ctx.salesChannelId ? { sales_channels: [{ id: ctx.salesChannelId }] } : {}),
     ...(ctx.shippingProfileId ? { shipping_profile_id: ctx.shippingProfileId } : {}),
     options: [{ title: "Type", values: ["Once-off"] }],
     variants: [
