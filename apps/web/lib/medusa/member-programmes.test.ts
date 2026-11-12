@@ -201,6 +201,37 @@ describe('fetchMemberProgrammes', () => {
     expect((await fetchMemberProgrammes('a@b.c'))[0]?.deliveryMethod).toBe('Self Study')
   })
 
+  it('labels a live seat by the variant bought, not the product default (Suzanne 12 Nov)', async () => {
+    const love = {
+      ...gettingUnstuck,
+      id: 'ordli_love',
+      variant_title: 'Live via Zoom',
+      variant: { product_id: 'prod_love', title: 'Live via Zoom', product: { title: 'Love & Relationships', metadata: null } },
+    }
+    const intuition = {
+      ...gettingUnstuck,
+      id: 'ordli_int',
+      variant_title: null,
+      variant: { product_id: 'prod_int', title: 'Personal Capacity: Live via Zoom', product: { title: 'Intuition', metadata: { delivery_method: 'Self Study' } } },
+    }
+    adminFetch.mockResolvedValue(
+      response(200, { orders: [{ id: 'o', status: 'completed', created_at: 'd', items: [love, intuition] }] }),
+    )
+
+    const programmes = await fetchMemberProgrammes('a@b.c')
+    expect(programmes.map((p) => p.deliveryMethod)).toEqual(['Live via Zoom', 'Personal Capacity: Live via Zoom'])
+  })
+
+  it('keeps the product delivery method when the variant title names no format', async () => {
+    adminFetch.mockResolvedValue(
+      response(200, {
+        orders: [{ id: 'o', status: 'completed', created_at: 'd', items: [{ ...gettingUnstuck, variant_title: 'Default', variant: { ...gettingUnstuck.variant, title: 'Default' } }] }],
+      }),
+    )
+
+    expect((await fetchMemberProgrammes('a@b.c'))[0]?.deliveryMethod).toBe('Self Study')
+  })
+
   it('logs and returns [] when the order lookup fails', async () => {
     adminFetch.mockResolvedValue(response(500))
 

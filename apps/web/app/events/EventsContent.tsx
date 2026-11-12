@@ -31,7 +31,12 @@ export default function EventsContent({ calendar }: { calendar: LiveCalendar }) 
         eyebrow="Events"
         image="/images/generated/session-coaching.webp"
         title="Live Programmes Calendar"
-        description="Live programmes with Dr. Suzanne Ravenall via Zoom. Book a date, or register your interest and be first to hear when the next one is set."
+        // No date is implied while the file has none (Suzanne 12 Nov: no live dates at the moment).
+        description={
+          hasDates
+            ? 'Live programmes with Dr. Suzanne Ravenall via Zoom. Book a date, or register your interest and be first to hear when the next one is set.'
+            : 'Live programmes with Dr. Suzanne Ravenall via Zoom. Register your interest and be first to hear when a date is set.'
+        }
       >
         <a
           href="#calendar"

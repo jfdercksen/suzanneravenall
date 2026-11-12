@@ -63,33 +63,10 @@ const columns: Column[] = [
           'Breaking the hold of the childhood brain on your adult self. From early experiences of neglect or unmet needs we form beliefs, helpful and harmful, that limit our potential. This programme rewrites the adaptations we forgot we made.',
       },
       {
-        name: 'Love & Relationships',
-        slug: 'love-and-relationships',
-        description:
-          'We attract people at our common level of woundedness. To attract a healthy, loving partner you need to become that healthy person first. This programme shows how to raise the energetic baseline.',
-      },
-      {
-        name: 'Intuition in My Personal Capacity',
-        slug: 'intuition-in-my-personal-capacity',
-        description:
-          'Identify and change the limiting beliefs we have internalised since childhood, even the ones we have accepted as true though they are not, and reconnect to the intuition that was always there.',
-      },
-      {
-        name: 'Become an Energy Ninja',
-        slug: 'become-an-energy-ninja',
-        description:
-          'Mastering energy for an abundant life, Level 1. Everything starts as, and is, energy. Learn how to change your world by using an unseen force, and bring it into every area of your life.',
-      },
-      {
         name: 'Getting Unstuck',
         slug: 'getting-unstuck',
         description:
           'Have you ever wanted to change (different career, better health, improved body, better relationship) but it escapes you? If you have tried numerous approaches and keep waking up in the same cycle, this is for you.',
-      },
-      {
-        name: 'Intuition in Business',
-        slug: 'intuition-in-business',
-        description: 'Harness intuitive intelligence as a powerful business and leadership tool.',
       },
     ],
     ctaLabel: 'Browse Self-Study',
@@ -114,8 +91,39 @@ const columns: Column[] = [
         description:
           'Practical mindfulness for real life. Learn to stay calm, focused and present in the moments that matter, and catch your patterns before they run you.',
       },
+      // Live only until each has been run, then self-study (Suzanne 12 Nov).
+      {
+        name: 'Love & Relationships',
+        slug: 'love-and-relationships',
+        description:
+          'We attract people at our common level of woundedness. To attract a healthy, loving partner you need to become that healthy person first. This programme shows how to raise the energetic baseline.',
+      },
+      {
+        name: 'Intuition in My Personal Capacity',
+        slug: 'intuition-in-my-personal-capacity',
+        description:
+          'Identify and change the limiting beliefs we have internalised since childhood, even the ones we have accepted as true though they are not, and reconnect to the intuition that was always there.',
+      },
+      {
+        name: 'Intuition in Business',
+        slug: 'intuition-in-business',
+        description: 'Harness intuitive intelligence as a powerful business and leadership tool.',
+      },
+      {
+        name: 'Become an Energy Ninja',
+        slug: 'become-an-energy-ninja',
+        description:
+          'Mastering energy for an abundant life, Level 1. Everything starts as, and is, energy. Learn how to change your world by using an unseen force, and bring it into every area of your life.',
+      },
+      {
+        name: 'Become an Energy Ninja: Level 2',
+        slug: 'become-an-energy-ninja-level-2',
+        description:
+          'Energy practices for repatterning your life: the next level of mastering energy for an abundant life.',
+      },
     ],
-    ctaLabel: 'See Live Dates',
+    // No live dates are set (Suzanne 12 Nov): the label promises none.
+    ctaLabel: 'See the Live Calendar',
     ctaHref: '/events',
   },
 ]

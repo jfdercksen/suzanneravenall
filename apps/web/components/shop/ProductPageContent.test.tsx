@@ -228,3 +228,48 @@ describe('ProductPageContent buying notes (KI067, KI068)', () => {
     expect(screen.queryByTestId('product-buying-note')).not.toBeInTheDocument()
   })
 })
+
+describe('ProductPageContent offers (Suzanne 12 Nov)', () => {
+  it('a live-only programme offers register interest instead of a variant to buy', () => {
+    selectorProps.length = 0
+    render(
+      <ProductPageContent
+        product={makeProduct({
+          handle: 'mindfulness-live',
+          title: 'Mindfulness',
+          metadata: { thinkific_course_id: 1 },
+          categories: [{ id: 'm', handle: 'meditation-programmes', name: 'Meditation', parent_category_id: null }],
+          variants: [{ id: 'v_live', title: 'Live via Zoom', prices: [{ currency_code: 'zar', amount: 277000 }] }],
+        })}
+      />,
+    )
+    expect(selectorProps).toHaveLength(0)
+    expect(screen.getAllByTestId('register-interest-panel')).toHaveLength(2)
+    expect(screen.queryByText(/instant access to this course/)).not.toBeInTheDocument()
+    expect(screen.getByText(/be the first to hear when a live date is set/)).toBeInTheDocument()
+  })
+
+  it('a partner product links out and never shows the variant selector or the discovery call line', () => {
+    selectorProps.length = 0
+    render(
+      <ProductPageContent
+        product={makeProduct({
+          handle: 'brainwave-club',
+          title: 'Brainwave Club',
+          categories: [{ id: 't', handle: 'products-tools', name: 'Products & Tools', parent_category_id: null }],
+          variants: [{ id: 'v_p', title: 'Partner product', prices: [] }],
+        })}
+      />,
+    )
+    expect(selectorProps).toHaveLength(0)
+    expect(screen.getAllByTestId('partner-product-panel')).toHaveLength(2)
+    expect(screen.queryByText(/Book a free discovery call/)).not.toBeInTheDocument()
+  })
+
+  it('any other product keeps the variant selector', () => {
+    selectorProps.length = 0
+    render(<ProductPageContent product={makeProduct({ handle: 'suzanne-ravenall-coaching-app', variants: [{ id: 'v', title: 'Once-off', prices: [{ currency_code: 'zar', amount: 25000 }] }] })} />)
+    expect(selectorProps.length).toBeGreaterThan(0)
+    expect(screen.queryByTestId('register-interest-panel')).not.toBeInTheDocument()
+  })
+})

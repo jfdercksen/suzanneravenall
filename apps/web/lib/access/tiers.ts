@@ -1,3 +1,5 @@
+import { ph, type RichLine } from '@/lib/content/richLine'
+
 export type TierSlug = 'free' | 'silver' | 'gold' | 'practitioner'
 
 export interface TierPermissions {
@@ -136,7 +138,7 @@ export interface MembershipTier {
 export const MEMBERSHIP_TIERS: MembershipTier[] = [
   { sku: 'S0211', title: 'Guest Membership', handle: 'membership-s0211', track: 'general', level: 'guest', tierType: 'standard', accessLevel: 1, zarPrice: 0, usdPrice: 0, requiresTraining: false, canChargeClients: false, annual: false },
   { sku: 'S0212', title: 'Lifestyle Membership', handle: 'membership-s0212', track: 'general', level: 'lifestyle', tierType: 'standard', accessLevel: 2, zarPrice: 350, usdPrice: 20, requiresTraining: false, canChargeClients: false, annual: true },
-  { sku: 'S0213', title: 'Akashic Student Membership', handle: 'membership-s0213', track: 'akashic', level: 'student', tierType: 'standard', accessLevel: 3, zarPrice: 525, usdPrice: 30, requiresTraining: true, canChargeClients: false, annual: true },
+  { sku: 'S0213', title: 'Akashic Student Membership', handle: 'membership-s0213', track: 'akashic', level: 'student', tierType: 'standard', accessLevel: 3, zarPrice: 525, usdPrice: 30, requiresTraining: false, canChargeClients: false, annual: true },
   { sku: 'S0214', title: 'Akashic Novice Practitioner - Basic Membership', handle: 'membership-s0214', track: 'akashic', level: 'novice', tierType: 'basic', accessLevel: 4, zarPrice: 875, usdPrice: 50, requiresTraining: true, canChargeClients: true, annual: true },
   { sku: 'S0215', title: 'Akashic Novice Practitioner - Premier Membership', handle: 'membership-s0215', track: 'akashic', level: 'novice', tierType: 'premier', accessLevel: 4, zarPrice: 1225, usdPrice: 70, requiresTraining: true, canChargeClients: true, annual: true },
   { sku: 'S0216', title: 'Akashic Practitioner (Prdip) - Basic Membership', handle: 'membership-s0216', track: 'akashic', level: 'practitioner', tierType: 'basic', accessLevel: 5, zarPrice: 1400, usdPrice: 80, requiresTraining: true, canChargeClients: true, annual: true },
@@ -149,7 +151,7 @@ export const MEMBERSHIP_TIERS: MembershipTier[] = [
   { sku: 'S0223', title: 'Akashic Master Practitioner (MasterPrdip) - Premier Membership', handle: 'membership-s0223', track: 'akashic', level: 'master', tierType: 'premier', accessLevel: 9, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
   { sku: 'S0224', title: 'Akashic Instructor (Inst) - Premier Membership', handle: 'membership-s0224', track: 'akashic', level: 'instructor', tierType: 'premier', accessLevel: 9, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
   { sku: 'S0225', title: 'Akashic Certified Master Instructor (CertMasterInst) - Premier Membership', handle: 'membership-s0225', track: 'akashic', level: 'master-instructor', tierType: 'premier', accessLevel: 10, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0226', title: 'Energy Clearing Student Membership', handle: 'membership-s0226', track: 'energy-clearing', level: 'student', tierType: 'standard', accessLevel: 3, zarPrice: 525, usdPrice: 30, requiresTraining: true, canChargeClients: false, annual: true },
+  { sku: 'S0226', title: 'Energy Clearing Student Membership', handle: 'membership-s0226', track: 'energy-clearing', level: 'student', tierType: 'standard', accessLevel: 3, zarPrice: 525, usdPrice: 30, requiresTraining: false, canChargeClients: false, annual: true },
   { sku: 'S0227', title: 'Energy Clearing Novice Practitioner - Basic Membership', handle: 'membership-s0227', track: 'energy-clearing', level: 'novice', tierType: 'basic', accessLevel: 4, zarPrice: 875, usdPrice: 50, requiresTraining: true, canChargeClients: true, annual: true },
   { sku: 'S0228', title: 'Energy Clearing Novice Practitioner - Premier Membership', handle: 'membership-s0228', track: 'energy-clearing', level: 'novice', tierType: 'premier', accessLevel: 4, zarPrice: 1225, usdPrice: 70, requiresTraining: true, canChargeClients: true, annual: true },
   { sku: 'S0229', title: 'Energy Clearing Practitioner (Prdip) - Basic Membership', handle: 'membership-s0229', track: 'energy-clearing', level: 'practitioner', tierType: 'basic', accessLevel: 5, zarPrice: 1400, usdPrice: 80, requiresTraining: true, canChargeClients: true, annual: true },
@@ -163,6 +165,69 @@ export const MEMBERSHIP_TIERS: MembershipTier[] = [
   { sku: 'S0237', title: 'Energy Clearing Certified Master Practitioner (CertMasterPrdip) - Premier Membership', handle: 'membership-s0237', track: 'energy-clearing', level: 'master', tierType: 'premier', accessLevel: 9, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
   { sku: 'S0238', title: 'Energy Clearing Instructor (Inst) - Premier Membership', handle: 'membership-s0238', track: 'energy-clearing', level: 'instructor', tierType: 'premier', accessLevel: 9, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
   { sku: 'S0239', title: 'Energy Clearing Certified Master Instructor (CertMasterInst) - Premier Membership', handle: 'membership-s0239', track: 'energy-clearing', level: 'master-instructor', tierType: 'premier', accessLevel: 10, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
+]
+
+/**
+ * Who may join which level (Suzanne, 12 Nov 2026, correcting "three levels
+ * open without prerequisites"): Lifestyle and Student have no prerequisites.
+ * Novice needs the fundamentals completed (1 programme for Akashic, 1 for
+ * Energy Clearing, 3 for Resonance Repatterning), then sign-off from a
+ * teacher that the person is able to practise as a novice, and then they
+ * upgrade their membership. Akashic and Energy Clearing are two separate
+ * ladders. The levels above Novice keep "requires training" as before.
+ *
+ * Nothing checks the sign-off yet: a Novice membership can be bought by
+ * anyone once memberships are on sale (KI114).
+ */
+export type JoiningRequirement = 'none' | 'fundamentals-and-sign-off' | 'training'
+
+export function joiningRequirement(tier: MembershipTier): JoiningRequirement {
+  if (tier.level === 'guest' || tier.level === 'lifestyle' || tier.level === 'student') return 'none'
+  if (tier.level === 'novice') return 'fundamentals-and-sign-off'
+  return 'training'
+}
+
+/** The short label on a membership card. */
+export function joiningLabel(tier: MembershipTier): string {
+  switch (joiningRequirement(tier)) {
+    case 'none':
+      return 'No prerequisites'
+    case 'fundamentals-and-sign-off':
+      return 'Fundamentals + teacher sign-off'
+    case 'training':
+      return 'Requires training'
+  }
+}
+
+/** The fundamentals a Novice level needs, per ladder (Suzanne 12 Nov). */
+export const NOVICE_FUNDAMENTALS: Record<'akashic' | 'energy-clearing', { programmes: number; text: RichLine }> = {
+  akashic: {
+    programmes: 1,
+    text: [
+      'Complete the Akashic fundamentals (one programme: ',
+      { link: 'Akashic Navigator: Basic', href: '/programs/akashic-navigator-basic' },
+      '), then a teacher signs off that you are able to practise as a novice, and you upgrade your membership.',
+    ],
+  },
+  'energy-clearing': {
+    programmes: 1,
+    text: [
+      'Complete the Energy Clearing fundamentals (one programme: ',
+      { link: 'Energy Clearing Level 1 (Basic)', href: '/programs/energy-clearing-basic' },
+      '), then a teacher signs off that you are able to practise as a novice, and you upgrade your membership.',
+    ],
+  },
+}
+
+/** The whole rule, for the top of the upgrade page. */
+export const MEMBERSHIP_JOINING_RULE: RichLine[] = [
+  'Lifestyle and Student memberships have no prerequisites.',
+  [
+    'Novice Practitioner membership comes after the fundamentals: one programme for Akashic, one for Energy Clearing and three for Resonance Repatterning (',
+    ph('which three Resonance Repatterning programmes count', 'Suzanne'),
+    '). A teacher then signs off that you are able to practise as a novice, and you upgrade your membership.',
+  ],
+  'Akashic and Energy Clearing are separate ladders: you climb each one on its own.',
 ]
 
 export function checkAccessLevel(memberLevel: number, requiredLevel: number): boolean {

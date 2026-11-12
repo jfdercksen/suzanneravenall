@@ -28,6 +28,7 @@ export const PRODUCT_SEARCH_FIELDS = [
   "thumbnail",
   "status",
   "variants.title",
+  "variants.metadata",
   "variants.prices.amount",
   "variants.prices.currency_code",
   "categories.id",

@@ -5,8 +5,10 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 // `slug` is the series' page under /programs/<slug>. Love & Relationships has
-// no group-series page, so it opens the self-study programme page (Johan,
-// 7 Oct, after Shayna found the card did not open).
+// no group-series page, so it opens the Love & Relationships programme page
+// (Johan, 7 Oct, after Shayna found the card did not open). Since Suzanne's
+// 12 Nov note that page is the live programme on register interest; the
+// recorded "Group Session: Love & Relationships" stays on sale in the shop.
 export const groupOfferings: { name: string; slug?: string; image: string; description: string }[] = [
   {
     name: 'Money Mastery',

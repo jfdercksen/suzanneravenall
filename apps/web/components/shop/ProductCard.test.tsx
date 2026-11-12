@@ -223,3 +223,18 @@ describe('ProductCard price per region (D021)', () => {
     expect(screen.queryByText(/R165/)).not.toBeInTheDocument()
   })
 })
+
+describe('ProductCard offers (Suzanne 12 Nov)', () => {
+  it('marks a partner product instead of a price and says Read More', () => {
+    render(<ProductCard product={makeProduct({ handle: 'brainwave-club', title: 'Brainwave Club', variants: [{ id: 'v', title: 'Partner product', prices: [] }] })} index={0} />)
+    expect(screen.getByText('Partner product')).toBeInTheDocument()
+    expect(screen.queryByText('Price on request')).not.toBeInTheDocument()
+    expect(screen.getByText('Read More →')).toBeInTheDocument()
+  })
+
+  it('a live-only programme invites interest, not enrolment', () => {
+    render(<ProductCard product={makeProduct({ handle: 'love-relationships-live', title: 'Love & Relationships', variants: [{ id: 'v', title: 'Live via Zoom', prices: [{ currency_code: 'zar', amount: 161000 }] }] })} index={0} />)
+    expect(screen.getByText('Register Your Interest →')).toBeInTheDocument()
+    expect(screen.queryByText(/Explore & Enrol/)).not.toBeInTheDocument()
+  })
+})

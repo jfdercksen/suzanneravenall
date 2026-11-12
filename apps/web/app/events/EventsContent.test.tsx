@@ -101,4 +101,13 @@ describe('EventsContent: live programme calendar (item 11)', () => {
     expect(screen.queryByText(/Next intake/i)).not.toBeInTheDocument()
     expect(screen.queryByText(/New dates coming soon/i)).not.toBeInTheDocument()
   })
+
+  it('does not invite anyone to book a date while none is set (Suzanne 12 Nov)', () => {
+    const { unmount } = render(<EventsContent calendar={empty} />)
+    expect(screen.queryByText(/Book a date/)).not.toBeInTheDocument()
+    expect(screen.getByText(/Register your interest and be first to hear when a date is set/)).toBeInTheDocument()
+    unmount()
+    render(<EventsContent calendar={dated} />)
+    expect(screen.getByText(/Book a date, or register your interest/)).toBeInTheDocument()
+  })
 })

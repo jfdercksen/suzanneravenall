@@ -119,4 +119,5 @@ export {
   type ProductPage,
   type ReindexResult,
 } from './meili'
+export { SALE_STATUS_KEY, SALE_STATUSES, saleStatusOf, isForSale, notForSaleMessage, type SaleStatus } from './saleStatus'
 export { sendSentryEvent, parseSentryDsn, type SentryEvent, type SentryLevel, type SentryOutcome } from './sentry'

@@ -2,7 +2,16 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { MEMBERSHIP_TIERS, type MembershipTrack, type MembershipTier } from '@/lib/access/tiers'
+import { RichText } from '@/components/shared/RichText'
+import {
+  joiningLabel,
+  joiningRequirement,
+  MEMBERSHIP_JOINING_RULE,
+  MEMBERSHIP_TIERS,
+  NOVICE_FUNDAMENTALS,
+  type MembershipTrack,
+  type MembershipTier,
+} from '@/lib/access/tiers'
 
 const TRACK_LABELS: Record<string, string> = {
   akashic: 'Akashic Track',
@@ -75,12 +84,17 @@ function TierCard({ tier, isCurrentTier, isUpgrade }: TierCardProps) {
             Can charge clients
           </span>
         )}
-        {tier.requiresTraining && (
-          <span className="text-[9px] px-2 py-0.5 border border-white/25 text-white/80 rounded-full font-medium">
-            Requires training
-          </span>
-        )}
+        {/* Who may join (Suzanne 12 Nov): none for Lifestyle and Student, fundamentals and sign-off for Novice. */}
+        <span className="text-[9px] px-2 py-0.5 border border-white/25 text-white/80 rounded-full font-medium">
+          {joiningLabel(tier)}
+        </span>
       </div>
+
+      {joiningRequirement(tier) === 'fundamentals-and-sign-off' && (tier.track === 'akashic' || tier.track === 'energy-clearing') && (
+        <p className="text-xs text-white/70 leading-relaxed mb-4">
+          <RichText line={NOVICE_FUNDAMENTALS[tier.track].text} tone="dark" />
+        </p>
+      )}
 
       {isUpgrade && (
         <Link
@@ -156,10 +170,17 @@ export default function UpgradeContent({
               {trackDisplay && <span className="text-white/60">{trackDisplay}</span>}
               . Choose the next step in your practitioner journey below.
             </p>
-            <p className="text-sm text-white/70 mb-10">
-              Both tracks are independent. You may hold memberships in Akashic and Energy Clearing simultaneously.
-              Basic tiers give core access; Premier tiers include CPD tracking, community access, and extended resources.
-            </p>
+            <div className="text-sm text-white/70 mb-10 space-y-2">
+              {MEMBERSHIP_JOINING_RULE.map((line, i) => (
+                <p key={i}>
+                  <RichText line={line} tone="dark" />
+                </p>
+              ))}
+              <p>
+                You may hold memberships in Akashic and Energy Clearing at the same time. Basic tiers give core access;
+                Premier tiers include CPD tracking, community access, and extended resources.
+              </p>
+            </div>
             <Link
               href="/portal/dashboard"
               className="inline-flex items-center justify-center px-8 py-4 border border-white/40 hover:border-white/60 text-white font-semibold text-sm uppercase tracking-widest rounded-button transition-colors duration-300"
@@ -185,7 +206,7 @@ export default function UpgradeContent({
             </p>
             <h2 className="text-3xl lg:text-4xl font-medium tracking-tight text-white">Starting Point</h2>
             <p className="text-white/70 text-sm mt-2">
-              Entry memberships: no training required.
+              Entry memberships: no prerequisites. The Student level in each track below has none either.
             </p>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

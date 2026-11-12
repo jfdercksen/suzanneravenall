@@ -14,7 +14,10 @@ interface MedusaOrderItem {
   product_id?: string | null
   product_title?: string | null
   product_handle?: string | null
+  /** The format bought, e.g. "Live via Zoom" or "Self Study" (Medusa copies it onto the line item). */
+  variant_title?: string | null
   variant?: {
+    title?: string | null
     product_id?: string | null
     metadata?: Record<string, unknown> | null
     product?: {
@@ -84,7 +87,19 @@ function courseUrlOf(item: MedusaOrderItem): string | null {
   return hasCourse ? THINKIFIC_COURSES_URL : null
 }
 
+/** A variant title that names a delivery format ("Personal Capacity: Live via Zoom", "Self Study"). */
+const FORMAT_TITLE = /live|zoom|self[\s-]?(study|paced)|in[\s-]person|recorded/i
+
+/**
+ * How the member takes the programme. The variant they bought wins: one
+ * product can sell Live via Zoom and Self Study (Suzanne 12 Nov: five
+ * programmes are live only for now), so the product's own delivery_method
+ * cannot tell a live seat from the recording. Then the product's
+ * delivery_method, then Self Study as before.
+ */
 function deliveryMethodOf(item: MedusaOrderItem): string {
+  const variant = item.variant_title ?? item.variant?.title
+  if (typeof variant === 'string' && FORMAT_TITLE.test(variant)) return variant.trim()
   const raw = item.variant?.product?.metadata?.delivery_method
   return typeof raw === 'string' && raw.trim() ? raw : 'Self Study'
 }

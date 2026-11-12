@@ -84,16 +84,16 @@ const PROGRAMME_NAMES = [
   'Akashic Navigator (Basic & Advanced)',
   'Energy Clearing (Basic & Advanced)',
   'Resonance Repatterning: The Basic Five',
-  // Self-Study column (Johan 10 Nov: these products sell Self Study)
+  // Self-Study column
   'Trauma to Transcendence',
-  'Love & Relationships',
-  'Intuition in My Personal Capacity',
-  'Become an Energy Ninja',
   'Getting Unstuck',
-  'Intuition in Business',
-  // Live column (8 Nov copy)
+  // Live column (8 Nov copy; the next four are live only until run, Suzanne 12 Nov)
   'The Inner Sanctuary',
   'Present',
+  'Love & Relationships',
+  'Intuition in My Personal Capacity',
+  'Intuition in Business',
+  'Become an Energy Ninja',
 ] as const
 
 // Resonance Repatterning programmes are self-study only (data/programs.ts),
@@ -184,11 +184,22 @@ describe('Programs', () => {
       expect(cta).toHaveAttribute('href', '/programs#self-paced')
     })
 
-    it('renders "See Live Dates" link pointing to the live calendar on /events', () => {
+    it('renders "See the Live Calendar" pointing to /events, promising no dates (Suzanne 12 Nov)', () => {
       render(<Programs />)
-      const cta = screen.getByRole('link', { name: 'See Live Dates' })
-      expect(cta).toBeInTheDocument()
+      const cta = screen.getByRole('link', { name: 'See the Live Calendar' })
       expect(cta).toHaveAttribute('href', '/events')
+      expect(screen.queryByText(/Live Dates/)).not.toBeInTheDocument()
+    })
+
+    it('lists the live-only programmes in the Live column, not under Self-Study (Suzanne 12 Nov)', () => {
+      const { container } = render(<Programs />)
+      const columns = Array.from(container.querySelectorAll('h3')).map((h) => h.closest('div')?.parentElement?.textContent ?? '')
+      const selfStudy = columns.find((t) => t.includes('Browse Self-Study')) ?? ''
+      const live = columns.find((t) => t.includes('See the Live Calendar')) ?? ''
+      for (const name of ['Love & Relationships', 'Intuition in My Personal Capacity', 'Intuition in Business', 'Become an Energy Ninja']) {
+        expect(selfStudy, name).not.toContain(name)
+        expect(live, name).toContain(name)
+      }
     })
   })
 

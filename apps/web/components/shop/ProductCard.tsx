@@ -9,6 +9,7 @@ import { isCapacityLimitedHandle } from '@/lib/inventory/group-sessions'
 import { getHighlightBadge } from '@/data/shopHighlights'
 import { formatDisplayPrice, getDisplayPrice, shopCategoryLabel } from './shopCatalogue'
 import { getDeliveryBadge } from './productKind'
+import { productOffer } from '@/lib/shop/offer'
 import type { MedusaProduct, ProductVariant } from '@/types/medusa'
 
 const CATEGORY_IMAGE_MAP: Record<string, string> = {
@@ -140,6 +141,10 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
   // Decision-guidance badge (launch audit item 15) — data-driven, renders
   // nothing unless the product is explicitly flagged (see data/shopHighlights.ts).
   const highlight = getHighlightBadge(product)
+  // Register interest or a partner's product: the card says so instead of "Enrol" (Suzanne 12 Nov).
+  const offer = productOffer(product.handle)
+  const cardCta =
+    offer.kind === 'partner' ? 'Read More →' : offer.kind === 'register-interest' ? 'Register Your Interest →' : 'Explore & Enrol →'
   const leafCategory = product.categories[0] ?? null
   const rootCategory = getRootCategory(product.categories, allCategories)
 
@@ -191,7 +196,13 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
             </h3>
 
             <div className="flex items-center justify-between gap-3 mt-1">
-              <PriceDisplay variants={product.variants} currency={currency} />
+              {offer.kind === 'partner' ? (
+                <span className="text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full bg-brand-primary-900 text-white">
+                  Partner product
+                </span>
+              ) : (
+                <PriceDisplay variants={product.variants} currency={currency} />
+              )}
               {badge && (
                 <span className={`text-xs font-medium px-3 py-1 rounded-full whitespace-nowrap ${badge.className}`}>
                   {badge.label}
@@ -201,7 +212,7 @@ export function ProductCard({ product, index, allCategories = [], defaultCurrenc
 
             {/* Change 6: Stronger, action-oriented CTA */}
             <p className="mt-2 text-sm font-medium text-brand-muted group-hover:text-brand-accent transition-colors duration-300">
-              Explore &amp; Enrol →
+              {cardCta}
             </p>
           </div>
         </div>

@@ -3,6 +3,8 @@
 import { useCallback, useState } from 'react'
 import { ProductHero } from './ProductHero'
 import { VariantSelector } from './VariantSelector'
+import { RegisterInterestPanel } from './RegisterInterestPanel'
+import { PartnerProductPanel } from './PartnerProductPanel'
 import { FAQAccordion } from './FAQAccordion'
 import { motion } from 'framer-motion'
 import { Sparkles, Heart, Zap, Check } from 'lucide-react'
@@ -11,6 +13,7 @@ import type { MedusaProduct } from '@/types/medusa'
 import { productTestimonials } from '@/data/testimonials'
 import { supportPackageUnit } from '@/components/cart/cartRules'
 import { isPreorder, PREORDER_NOTE } from '@/lib/shop/lineItem'
+import { productOffer } from '@/lib/shop/offer'
 import {
   defaultVariantId,
   descriptionParagraphs,
@@ -95,10 +98,17 @@ export default function ProductPageContent({ product, initialVariantId, defaultC
     window.history.replaceState(window.history.state, '', url)
   }, [])
 
+  // Register interest (live, no date, no self-study on sale) or a partner's
+  // product instead of a variant to buy (Suzanne 12 Nov, lib/shop/offer.ts).
+  const offer = productOffer(product.handle)
+  const sellsHere = offer.kind === 'cart'
+
   // thinkific_course_id is seeded as a number (e.g. 1284792). It means the
   // order enrols the buyer on the Ravenall Institute; it does not mean the
   // course is self-paced, so the badge comes from the variants instead.
-  const isThinkificCourse = hasThinkificCourse(product)
+  // Nothing is bought here on a register-interest or partner product, so the
+  // "after purchase" note is left out there.
+  const isThinkificCourse = sellsHere && hasThinkificCourse(product)
 
   // What is being sold (book, session, programme...), read from the product's
   // category, variants and metadata (productKind.ts). Generic blocks that do
@@ -123,7 +133,9 @@ export default function ProductPageContent({ product, initialVariantId, defaultC
   // package is bought for a number of months or sessions, paid once (KI068).
   const preorder = isPreorder(product.handle)
   const packageUnit = supportPackageUnit(product.handle)
-  const buyingNote = preorder
+  const buyingNote = !sellsHere
+    ? null
+    : preorder
     ? PREORDER_NOTE
     : packageUnit
       ? `Choose how many ${packageUnit}s you need: add it to your cart, then set the number there (or press Add another). You pay once for the ${packageUnit}s you choose; nothing renews automatically.`
@@ -143,14 +155,20 @@ export default function ProductPageContent({ product, initialVariantId, defaultC
             transition={{ duration: 0.6 }}
             className="max-w-2xl mx-auto"
           >
-            <VariantSelector
-              variants={product.variants}
-              selectedVariantId={selectedVariantId}
-              onSelect={selectVariant}
-              productHandle={product.handle}
-              chooseLabel={variantChooserLabel(kind)}
-              defaultCurrency={defaultCurrency}
-            />
+            {offer.kind === 'register-interest' ? (
+              <RegisterInterestPanel programmes={offer.programmes} />
+            ) : offer.kind === 'partner' ? (
+              <PartnerProductPanel partner={offer.partner} />
+            ) : (
+              <VariantSelector
+                variants={product.variants}
+                selectedVariantId={selectedVariantId}
+                onSelect={selectVariant}
+                productHandle={product.handle}
+                chooseLabel={variantChooserLabel(kind)}
+                defaultCurrency={defaultCurrency}
+              />
+            )}
 
             {buyingNote && (
               <p
@@ -418,7 +436,11 @@ export default function ProductPageContent({ product, initialVariantId, defaultC
               Ready to Transform?
             </h2>
             <p className="text-brand-muted text-lg max-w-xl mx-auto">
-              Choose your {noun} below and take the first step toward permanent change.
+              {offer.kind === 'register-interest'
+                ? 'Register your interest below and be the first to hear when a live date is set.'
+                : offer.kind === 'partner'
+                  ? `Read more on the ${offer.partner.partnerName} site.`
+                  : `Choose your ${noun} below and take the first step toward permanent change.`}
             </p>
           </motion.div>
 
@@ -429,14 +451,20 @@ export default function ProductPageContent({ product, initialVariantId, defaultC
             transition={{ duration: 0.6, delay: 0.2 }}
             className="max-w-2xl mx-auto"
           >
-            <VariantSelector
-              variants={product.variants}
-              selectedVariantId={selectedVariantId}
-              onSelect={selectVariant}
-              productHandle={product.handle}
-              chooseLabel={variantChooserLabel(kind)}
-              defaultCurrency={defaultCurrency}
-            />
+            {offer.kind === 'register-interest' ? (
+              <RegisterInterestPanel programmes={offer.programmes} />
+            ) : offer.kind === 'partner' ? (
+              <PartnerProductPanel partner={offer.partner} />
+            ) : (
+              <VariantSelector
+                variants={product.variants}
+                selectedVariantId={selectedVariantId}
+                onSelect={selectVariant}
+                productHandle={product.handle}
+                chooseLabel={variantChooserLabel(kind)}
+                defaultCurrency={defaultCurrency}
+              />
+            )}
           </motion.div>
 
           <motion.div
@@ -446,6 +474,7 @@ export default function ProductPageContent({ product, initialVariantId, defaultC
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-center mt-12 space-y-3"
           >
+            {offer.kind !== 'partner' && (
             <p className="text-brand-muted text-sm">
               Not sure which {noun} is right for you?{' '}
               <Link
@@ -456,6 +485,7 @@ export default function ProductPageContent({ product, initialVariantId, defaultC
               </Link>{' '}
               with Dr. Ravenall.
             </p>
+            )}
             <p>
               <Link
                 href="/shop"

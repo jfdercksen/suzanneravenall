@@ -188,24 +188,30 @@ describe('ProgramsPageClient practitioner training (8 Nov)', () => {
     expect(screen.getByRole('link', { name: 'See the membership levels' })).toHaveAttribute('href', '/portal/upgrade')
   })
 
-  it('sells Love & Relationships, Intuition and Energy Ninja L1 as self-study, live by register interest (Johan 10 Nov)', () => {
+  it('lists Love & Relationships, Intuition and both Energy Ninja levels as live only, not self-study (Suzanne 12 Nov)', () => {
     render(<ProgramsPageClient />)
     const selfPaced = document.getElementById('self-paced')!.textContent ?? ''
-    for (const name of ['Love & Relationships', 'Intuition in My Personal Capacity', 'Become an Energy Ninja: Level 1']) {
-      expect(selfPaced, name).toContain(name)
-    }
-    expect(selfPaced).toContain('Live via Zoom: register your interest')
     const live = document.getElementById('live')!.textContent ?? ''
-    expect(live).toContain('Become an Energy Ninja: Level 2')
-    expect(live).not.toContain('Love & Relationships')
+    for (const name of [
+      'Love & Relationships',
+      'Intuition in My Personal Capacity',
+      'Intuition in Business',
+      'Become an Energy Ninja: Level 1',
+      'Become an Energy Ninja: Level 2',
+    ]) {
+      expect(selfPaced, name).not.toContain(name)
+      expect(live, name).toContain(name)
+    }
+    expect(live).toContain('Live via Zoom: register your interest')
+    // The Inner Sanctuary and Present lead, in the calendar's order.
     const order = textOrder(['The Inner Sanctuary', 'Present', 'Become an Energy Ninja: Level 2'])
     expect(at(order, 0)).toBeLessThan(at(order, 2))
     expect(at(order, 1)).toBeLessThan(at(order, 2))
   })
 
-  it('live cards for The Inner Sanctuary and Present also show the recorded self-study price (KI106)', () => {
+  it('offers no recorded self-study on any live card (Suzanne 12 Nov)', () => {
     render(<ProgramsPageClient />)
-    expect(screen.getAllByText(/Recorded self-study:/)).toHaveLength(2)
+    expect(screen.queryByText(/Recorded self-study:/)).not.toBeInTheDocument()
   })
 
   it('links the recorded group section to its own page', () => {

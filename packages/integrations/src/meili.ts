@@ -1,5 +1,6 @@
 import { fetchWithRetry, IntegrationError, type FetchLike } from './http'
 import { isDryRun, type Logger } from './dry-run'
+import { saleStatusOf } from './saleStatus'
 
 /**
  * MeiliSearch product index (n8n migration step 7, plan section 3.7).
@@ -31,7 +32,11 @@ export type SearchProductInput = {
   description?: string | null
   thumbnail?: string | null
   status?: string | null
-  variants?: Array<{ title?: string | null; prices?: Array<{ currency_code?: string | null; amount?: number | string | null }> | null }> | null
+  variants?: Array<{
+    title?: string | null
+    metadata?: Record<string, unknown> | null
+    prices?: Array<{ currency_code?: string | null; amount?: number | string | null }> | null
+  }> | null
   categories?: Array<{ id: string; name?: string | null }> | null
   collection?: { id: string; handle?: string | null; title?: string | null } | null
 }
@@ -54,9 +59,18 @@ export type ProductSearchDoc = {
   variant_titles: string
 }
 
+/**
+ * The variants a visitor can be offered: a retired self-study edition
+ * (sale_status "retired", Suzanne 12 Nov) is left out of the price and the
+ * searchable variant titles, so search never shows it as the "from" price.
+ */
+export function offeredVariants(product: SearchProductInput): NonNullable<SearchProductInput['variants']> {
+  return (product.variants ?? []).filter((v) => saleStatusOf(v.metadata) !== 'retired')
+}
+
 /** The lowest variant price in one currency, in cents, or null. Never a converted price. */
 export function lowestPrice(product: SearchProductInput, currency: 'zar' | 'usd'): number | null {
-  const prices = (product.variants ?? [])
+  const prices = offeredVariants(product)
     .flatMap((v) => v.prices ?? [])
     .filter((p) => p.currency_code?.toLowerCase() === currency && p.amount != null && p.amount !== '')
     .map((p) => Number(p.amount))
@@ -69,7 +83,7 @@ export function lowestZarPrice(product: SearchProductInput): number | null {
 }
 
 export function productToSearchDoc(p: SearchProductInput): ProductSearchDoc {
-  const variants = p.variants ?? []
+  const variants = offeredVariants(p)
   const categories = p.categories ?? []
   return {
     id: p.id,

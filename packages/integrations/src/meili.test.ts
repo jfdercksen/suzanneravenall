@@ -105,6 +105,19 @@ describe('productToSearchDoc', () => {
     expect(productToSearchDoc(bare).price_usd).toBe(10)
   })
 
+  it('leaves a retired self-study edition out of the price and the variant titles (Suzanne 12 Nov)', () => {
+    const doc = productToSearchDoc({
+      id: 'p',
+      status: 'published',
+      variants: [
+        { title: 'Live via Zoom', metadata: { sale_status: 'register_interest' }, prices: [{ currency_code: 'zar', amount: 161000 }] },
+        { title: 'Self Study', metadata: { sale_status: 'retired', thinkific_course_id: '1' }, prices: [{ currency_code: 'zar', amount: 99500 }] },
+      ],
+    })
+    expect(doc.price_zar).toBe(161000)
+    expect(doc.variant_titles).toBe('Live via Zoom')
+  })
+
   it('tolerates the missing relations Query can return', () => {
     expect(productToSearchDoc({ id: 'p', status: 'published' })).toMatchObject({ category_ids: [], variant_titles: '', price_zar: null, collection_id: null })
   })

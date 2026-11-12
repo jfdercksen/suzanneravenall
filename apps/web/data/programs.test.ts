@@ -9,7 +9,20 @@ import {
   getProgramsBySeries,
   getRelatedPrograms,
   isResonanceRepatterning,
+  REGISTER_INTEREST_HANDLES,
+  registerInterestProgramsFor,
 } from './programs'
+
+/** Live only until run (Suzanne 12 Nov), plus Energy Ninja Level 2 and Intuition in Business. */
+const LIVE_ONLY = [
+  'love-and-relationships',
+  'intuition-in-my-personal-capacity',
+  'intuition-in-business',
+  'become-an-energy-ninja',
+  'become-an-energy-ninja-level-2',
+  'meditation',
+  'mindfulness',
+]
 
 describe('programme catalogue data', () => {
   it('has a price for every published programme (no "Contact for pricing")', () => {
@@ -31,10 +44,11 @@ describe('programme catalogue data', () => {
     expect(zar('resonance-repatterning-09-energetics-of-relationship')).toBe(4205)
     expect(zar('trauma-to-transcendence')).toBe(3500)
     expect(getProgramBySlug('trauma-to-transcendence')?.priceUsd).toBe(399)
-    expect(zar('love-and-relationships')).toBe(995)
-    expect(zar('intuition-in-my-personal-capacity')).toBe(995)
-    expect(zar('intuition-in-business')).toBe(995)
-    expect(zar('become-an-energy-ninja')).toBe(3320)
+    // Live only since Suzanne's 12 Nov note: the Live via Zoom price (same report, section 7).
+    expect(zar('love-and-relationships')).toBe(1610)
+    expect(zar('intuition-in-my-personal-capacity')).toBe(1610)
+    expect(zar('intuition-in-business')).toBe(1610)
+    expect(zar('become-an-energy-ninja')).toBe(4980)
     expect(zar('become-an-energy-ninja-level-2')).toBeUndefined()
   })
 
@@ -134,7 +148,7 @@ describe('getProgramCta', () => {
   })
 
   it('sends live Zoom programmes without dates to a register-interest enquiry', () => {
-    for (const slug of ['mindfulness', 'meditation', 'become-an-energy-ninja-level-2']) {
+    for (const slug of LIVE_ONLY) {
       const p = getProgramBySlug(slug)
       expect(p?.registerInterest, slug).toBe(true)
       if (!p) continue
@@ -216,25 +230,54 @@ describe('self-study rule (Johan 10 Nov)', () => {
     }
   })
 
-  it('The Inner Sanctuary and Present stay live and also sell the recorded self-study (KI106)', () => {
-    for (const slug of ['meditation', 'mindfulness']) {
+})
+
+// Suzanne, 11 and 12 Nov 2026: "all are live as they have not yet been run -
+// when the live program is sold and run, then it will become available as a
+// self study". Intuition in Business by the same rule, to be confirmed (KI111).
+describe('live only, no self-study on sale (Suzanne 12 Nov)', () => {
+  it('offers the seven programmes live via Zoom on register interest, with no self-study edition', () => {
+    for (const slug of LIVE_ONLY) {
       const p = getProgramBySlug(slug)!
       expect(p.category, slug).toBe('live')
       expect(p.registerInterest, slug).toBe(true)
-      expect(selfStudyEditionOf(p)?.priceZar, slug).toBe(1660)
-      expect(SELF_STUDY_EDITIONS.map((e) => e.slug)).toContain(`${slug}--self-study`)
+      expect(p.selfStudyVariant, slug).toBeFalsy()
+      expect(p.selfStudyPriceZar, slug).toBeUndefined()
+      expect(selfStudyEditionOf(p), slug).toBeUndefined()
+      expect(p.duration, slug).toMatch(/^Live via Zoom/)
+      expect(p.duration, slug).not.toMatch(/self-study/i)
+      expect(getProgramCta(p).label, slug).toBe('Register Interest')
     }
+    expect(SELF_STUDY_EDITIONS).toEqual([])
   })
 
-  it('covers the four programmes Suzanne listed in item 8.2, as the catalogue sells them', () => {
-    for (const slug of ['love-and-relationships', 'intuition-in-my-personal-capacity', 'become-an-energy-ninja']) {
+  it('makes exactly their six shop products register interest only', () => {
+    expect([...REGISTER_INTEREST_HANDLES].sort()).toEqual([
+      'be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live',
+      'be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live',
+      'intuition-in-my-personal-capacity-live',
+      'love-relationships-live',
+      'meditation-live-via-zoom',
+      'mindfulness-live',
+    ])
+    expect(registerInterestProgramsFor('intuition-in-my-personal-capacity-live').map((p) => p.slug)).toEqual([
+      'intuition-in-my-personal-capacity',
+      'intuition-in-business',
+    ])
+    expect(registerInterestProgramsFor('getting-unstuck-self-study')).toEqual([])
+  })
+
+  it('leaves the recorded Love & Relationships group series on sale', () => {
+    expect(REGISTER_INTEREST_HANDLES.has('love-relationships-group-session')).toBe(false)
+    const group = PROGRAMS.find((p) => p.shopHandle === 'love-relationships-group-session')
+    if (group) expect(group.registerInterest).toBeFalsy()
+  })
+
+  it('shows no date for them anywhere in the programme data', () => {
+    for (const slug of LIVE_ONLY) {
       const p = getProgramBySlug(slug)!
-      expect(p.selfStudyVariant, slug).toBe(true)
-      expect(p.duration, slug).toMatch(/Live via Zoom: register your interest$/)
+      const text = [p.duration, p.description, p.shortDescription, p.cardText, p.tagline, ...p.features].join(' ')
+      expect(text, slug).not.toMatch(/\b(19|20)\d{2}\b|\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+\d|starts?\s+on|next intake:/i)
     }
-    const level2 = getProgramBySlug('become-an-energy-ninja-level-2')!
-    expect(level2.selfStudyVariant).toBeFalsy()
-    expect(level2.category).toBe('live')
-    expect(level2.registerInterest).toBe(true)
   })
 })

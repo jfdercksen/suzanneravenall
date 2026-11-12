@@ -31,10 +31,12 @@ export type Program = {
   series?: ProgramSeries
   shortDescription: string
   /**
-   * The shop product (shopHandle) has a published Self Study variant, read from
-   * the review box catalogue on 10 Nov 2026. Johan's rule: a page whose product
+   * The shop product (shopHandle) sells a Self Study variant, read from the
+   * review box catalogue on 10 Nov 2026. Johan's rule: a page whose product
    * sells self-study must sell it as self-study, with any live run shown as
-   * register interest (data/programs.test.ts enforces it).
+   * register interest (data/programs.test.ts enforces it). A live-only
+   * programme (registerInterest with a shopHandle) has its Self Study variant
+   * retired instead and does not set this (Suzanne 12 Nov, see LIVE_ONLY_NOTE).
    */
   selfStudyVariant?: boolean
   /**
@@ -59,7 +61,9 @@ export type Program = {
   features: string[]
   /**
    * Live via Zoom with no published dates: the CTA is a register-interest
-   * enquiry instead of a shop link (decision 5, 6 Oct).
+   * enquiry instead of a shop link (decision 5, 6 Oct). With a shopHandle the
+   * shop product is register interest only too: no variant of it is sold
+   * (REGISTER_INTEREST_HANDLES, the shop page and the store guard).
    */
   registerInterest?: boolean
   /** Sourced key takeaways (Thinkific "Key takeaways"); replaces the generic outcome cards. */
@@ -365,19 +369,20 @@ export const PROGRAMS: Program[] = [
     slug: 'love-and-relationships',
     image: '/images/products/love-relationships-live.jpeg',
     name: 'Love & Relationships',
-    category: 'self-paced',
+    // Live only (Suzanne 12 Nov, LIVE_ONLY_NOTE). Not the recorded "Group
+    // Session: Love & Relationships" series, which stays on sale.
+    category: 'live',
     shortDescription:
       'Attract a healthy, loving partner by first becoming your healthiest, most whole self.',
     description:
       'We attract people at our common level of woundedness or our common level of emotional health. This means that if you want to attract a healthy, loving partner, you need to become that healthy person first. This does not mean attaining some imagined level of perfection. It means the kind of energy you project has everything to do with the kind of person you attract. Through 4 repatterning sessions we explore how to shift from insecure to secure energy, from seeking to giving, from longing to loving.',
     priceUsd: 220,
-    // Live-shop self-study price; R1,610 is the Live via Zoom price (sourcing report 6 Oct, section 7)
-    priceZar: 995,
+    // The Live via Zoom price (sourcing report 6 Oct, section 7; the review box variant, 12 Nov).
+    priceZar: 1610,
     shopHandle: 'love-relationships-live', // merged product; the old standalone copy is unpublished (7 Oct)
     // 4 x 90 min: https://suzanneravenall.com/love-relationships-session/ ("6 x 2 h" had no source)
-    // The product sells Self Study now and Live via Zoom (no dates yet), Johan 10 Nov.
-    duration: 'Self-study: 4 sessions of 90 minutes, start anytime. Live via Zoom: register your interest',
-    selfStudyVariant: true,
+    duration: 'Live via Zoom, 4 sessions of 90 minutes: register your interest',
+    registerInterest: true,
     features: [
       'Learn to accept, value and love yourself and define your own worth',
       'Connect with your inner resource of love, wisdom and strength',
@@ -393,18 +398,17 @@ export const PROGRAMS: Program[] = [
     slug: 'intuition-in-my-personal-capacity',
     image: '/images/products/intuition-in-my-personal-capacity-live.png',
     name: 'Intuition in My Personal Capacity',
-    category: 'self-paced',
+    category: 'live', // live only (Suzanne 12 Nov, LIVE_ONLY_NOTE)
     shortDescription:
       'Activate your inner guidance system and use intuition to navigate every area of your personal life.',
     description:
       'To activate the Law of Attraction in your life, you must identify and change your limiting beliefs, particularly those about what is possible for you. Throughout our lives, since childhood, we\'ve created limiting beliefs that have been internalised over time and accepted as truth, even when they are not. This programme helps you develop and trust your intuition as a practical, daily guidance system for your personal life, relationships, health, and wellbeing.',
     priceUsd: 220,
-    // Live-shop self-study price; R1,610 is the Live via Zoom price (sourcing report 6 Oct, section 7)
-    priceZar: 995,
+    // The Live via Zoom price (sourcing report 6 Oct, section 7; the review box variant, 12 Nov).
+    priceZar: 1610,
     shopHandle: 'intuition-in-my-personal-capacity-live',
-    // The product sells Self Study now and Live via Zoom (no dates yet), Johan 10 Nov.
-    duration: 'Self-study: start anytime. Live via Zoom: register your interest',
-    selfStudyVariant: true,
+    duration: 'Live via Zoom: register your interest',
+    registerInterest: true,
     features: [
       'Identify and dissolve limiting beliefs about your potential',
       'Develop practical intuitive skills for everyday decision-making',
@@ -420,16 +424,20 @@ export const PROGRAMS: Program[] = [
     slug: 'intuition-in-business',
     image: '/images/focus/mindset.webp',
     name: 'Intuition in Business',
-    category: 'self-paced',
+    // Live only by the same rule as Personal Capacity, to be confirmed by
+    // Suzanne (KI111): her 12 Nov note names Personal only, and the Business
+    // self-study course on Thinkific is the same empty shell.
+    category: 'live',
     shortDescription:
       'Harness intuitive intelligence as a powerful business and leadership tool.',
     description:
       'Given the opportunity, pretty much everyone would love to accumulate more wealth, make more money, and live a more abundant life. However, many people have a poor relationship with money and as a result have trouble manifesting wealth. Financial success starts in the mind, and the number one thing holding people back is their belief system concerning wealth and money. This programme integrates intuitive intelligence with practical business application.',
     priceUsd: 220,
-    // Live-shop self-study price; R1,610 is the Live via Zoom price (sourcing report 6 Oct, section 7)
-    priceZar: 995,
+    // The "Business Capacity: Live via Zoom" variant on the same product (review box, 12 Nov).
+    priceZar: 1610,
     shopHandle: 'intuition-in-my-personal-capacity-live',
-    duration: 'Self-study online: start anytime',
+    duration: 'Live via Zoom: register your interest',
+    registerInterest: true,
     features: [
       'Break limiting beliefs about money and business success',
       'Develop intuitive decision-making for business and leadership',
@@ -445,18 +453,17 @@ export const PROGRAMS: Program[] = [
     slug: 'become-an-energy-ninja',
     image: '/images/products/be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live.jpeg',
     name: 'Become an Energy Ninja: Level 1',
-    category: 'self-paced',
+    category: 'live', // live only (Suzanne 12 Nov, LIVE_ONLY_NOTE)
     shortDescription:
       'Master energy for an abundant life and become an unstoppable force in every area of your world.',
     description:
       'Everything starts as energy, and everything is energy. Our body represents our personal reality, our very own "here and now," and if we are not present in it, the impact in the world is weak, even if our mind and ideas are very strong. In this programme, learn how to change your world by using an unseen force. Bring this force into every area of your life, change your world and become an unstoppable force. Mastering energy for an abundant life: Level 1.',
     priceUsd: 220,
-    // Live-shop self-study price; R4,980 is the Live via Zoom price (sourcing report 6 Oct, section 7)
-    priceZar: 3320,
+    // The Live via Zoom price (sourcing report 6 Oct, section 7; the review box variant, 12 Nov).
+    priceZar: 4980,
     shopHandle: 'be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live',
-    // The product sells Self Study now and Live via Zoom (no dates yet), Johan 10 Nov.
-    duration: 'Self-study: start anytime. Live via Zoom: register your interest',
-    selfStudyVariant: true,
+    duration: 'Live via Zoom: register your interest',
+    registerInterest: true,
     features: [
       'Understand energy as the foundation of all reality',
       'Techniques for increasing and directing personal energy',
@@ -491,7 +498,6 @@ export const PROGRAMS: Program[] = [
       'Strengthen your energetic presence in the world',
       'Apply energy work to health, abundance, relationships and purpose',
       'Practical practices you can integrate into everyday routines',
-      'Study at your own pace with ongoing access',
     ],
     isPublished: true,
     isFeatured: false,
@@ -643,10 +649,9 @@ export const PROGRAMS: Program[] = [
     priceUsd: 440,
     priceZar: 2770,
     shopHandle: 'mindfulness-live',
-    // No live dates published since 2022 (report section 9): register interest only.
-    duration: 'Live via Zoom: register your interest. Self-study: the recorded programme, start anytime',
-    // Self Study variant R1,660 / $220 on the same product (Johan 10 Nov: "Yes, sell them").
-    selfStudyPriceZar: 1660,
+    // No live dates (Suzanne 12 Nov): register interest only. The Self Study
+    // variant is retired until the live programme has been run (LIVE_ONLY_NOTE).
+    duration: 'Live via Zoom: register your interest',
     registerInterest: true,
     features: [
       'Practical mindfulness meditation techniques',
@@ -656,7 +661,6 @@ export const PROGRAMS: Program[] = [
       'Integrate mindfulness into your existing routines',
       'Live sessions via Zoom with Suzanne',
     ],
-    selfStudyVariant: true,
     isPublished: true,
     isFeatured: false,
   },
@@ -676,10 +680,9 @@ export const PROGRAMS: Program[] = [
     priceUsd: 440,
     priceZar: 2770,
     shopHandle: 'meditation-live-via-zoom',
-    // No live dates published since 2022 (report section 9): register interest only.
-    duration: 'Live via Zoom: register your interest. Self-study: the recorded programme, start anytime',
-    // Self Study variant R1,660 / $220 on the same product (Johan 10 Nov: "Yes, sell them").
-    selfStudyPriceZar: 1660,
+    // No live dates (Suzanne 12 Nov): register interest only. The Self Study
+    // variant is retired until the live programme has been run (LIVE_ONLY_NOTE).
+    duration: 'Live via Zoom: register your interest',
     registerInterest: true,
     features: [
       'Learn to observe thoughts and feelings without judgement',
@@ -689,7 +692,6 @@ export const PROGRAMS: Program[] = [
       'Facing the shadow: healing through meditation',
       'Live guided sessions with Suzanne via Zoom',
     ],
-    selfStudyVariant: true,
     isPublished: true,
     isFeatured: false,
   },
@@ -967,6 +969,35 @@ export const SELF_STUDY_EDITIONS: Program[] = PROGRAMS.flatMap((p) => {
   const edition = selfStudyEditionOf(p)
   return edition && p.isPublished ? [edition] : []
 })
+
+/**
+ * LIVE ONLY, NO SELF-STUDY ON SALE (Suzanne, 11 and 12 Nov 2026): "all are
+ * live as they have not yet been run - when the live program is sold and
+ * run, then it will become available as a self study". Love & Relationships,
+ * Intuition in My Personal Capacity (and Business, KI111), Be an Energy Ninja
+ * Levels 1 and 2, The Inner Sanctuary and Present are offered live via Zoom on
+ * register interest, with no date until one is set. Their Thinkific
+ * self-study courses are empty shells, so the Self Study variants are retired
+ * (apps/medusa/src/scripts/shop-changes-2026-11-12.ts), not deleted. To bring
+ * one back once it has been run: set selfStudyPriceZar on the programme and
+ * run that script with RESTORE=<product handle>.
+ */
+export const LIVE_ONLY_NOTE = 'Suzanne 12 Nov 2026: live only until run, then self-study'
+
+/**
+ * Shop products sold on register interest only: every product behind a
+ * published register-interest programme. The shop page offers register
+ * interest instead of a variant to buy, and the store refuses its variants.
+ */
+export const REGISTER_INTEREST_HANDLES: ReadonlySet<string> = new Set(
+  PROGRAMS.filter((p) => p.isPublished && p.registerInterest && p.shopHandle).map((p) => p.shopHandle as string),
+)
+
+/** The published programmes a register-interest-only product stands for (Intuition: Personal and Business). */
+export function registerInterestProgramsFor(handle: string): Program[] {
+  if (!REGISTER_INTEREST_HANDLES.has(handle)) return []
+  return PROGRAMS.filter((p) => p.isPublished && p.registerInterest && p.shopHandle === handle)
+}
 
 /** The bundle of a practitioner series, if it has one. */
 export const getBundleForSeries = (series: ProgramSeries | undefined): Program | undefined =>

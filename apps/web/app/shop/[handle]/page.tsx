@@ -5,6 +5,7 @@ import type { MedusaProduct } from '@/types/medusa'
 import { NOT_FOUND_TITLE } from '@/lib/seo/notFoundTitle'
 import ProductPageContent from '@/components/shop/ProductPageContent'
 import { ipCountry } from '@/lib/geoip'
+import { withOfferedVariants } from '@/lib/shop/offer'
 import { CURRENCY_COOKIE, visitorCurrency } from '@/lib/visitor-region'
 
 // Force dynamic rendering — product pages depend on live Medusa data.
@@ -26,7 +27,9 @@ async function getProduct(handle: string): Promise<MedusaProduct | null> {
     )
     if (!res.ok) return null
     const data = (await res.json()) as { products?: MedusaProduct[] }
-    return data.products?.[0] ?? null
+    // A retired self-study edition is never shown (Suzanne 12 Nov, lib/shop/offer.ts).
+    const product = data.products?.[0]
+    return product ? withOfferedVariants(product) : null
   } catch {
     return null
   }

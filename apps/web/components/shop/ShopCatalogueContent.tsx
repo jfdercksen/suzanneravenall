@@ -21,6 +21,7 @@ import {
 } from './shopCatalogue'
 import { isSelfStudyProduct } from './productKind'
 import { useCart } from '@/lib/cart'
+import { withOfferedVariants } from '@/lib/shop/offer'
 import type { MedusaProduct } from '@/types/medusa'
 import type { SearchResultItem } from '@/lib/search/types'
 
@@ -193,11 +194,14 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
       }
 
       if (seq !== fetchSeq.current) return
+      // A retired self-study edition is not offered (Suzanne 12 Nov), so a
+      // live-only programme neither prices nor files as self-study.
+      const offered = all.map(withOfferedVariants)
       // The Self-Study pill used to list the "programmes" collection, which
       // also holds about 20 live courses. It now lists what is actually sold
       // as self-study, from any collection (site check C3, productKind.ts).
       setProducts(
-        filters.collectionHandle === SELF_STUDY_COLLECTION ? all.filter(isSelfStudyProduct) : all
+        filters.collectionHandle === SELF_STUDY_COLLECTION ? offered.filter(isSelfStudyProduct) : offered
       )
     } catch {
       if (seq === fetchSeq.current) setError(true)

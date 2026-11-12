@@ -202,18 +202,29 @@ describe('ProgramDetailClient price in the visitor currency (L-USD3)', () => {
   })
 })
 
-describe('The Inner Sanctuary and Present: recorded self-study and live series (KI106)', () => {
-  for (const slug of ['meditation', 'mindfulness']) {
-    it(`${slug}: offers the recorded self-study to buy and the live series on register interest`, () => {
+describe('live only until run: no self-study on sale (Suzanne 12 Nov)', () => {
+  const LIVE_ONLY = [
+    'meditation',
+    'mindfulness',
+    'love-and-relationships',
+    'intuition-in-my-personal-capacity',
+    'intuition-in-business',
+    'become-an-energy-ninja',
+    'become-an-energy-ninja-level-2',
+  ]
+  for (const slug of LIVE_ONLY) {
+    it(`${slug}: register interest only, no recorded programme to buy, no shop link`, () => {
       const program = getProgramBySlug(slug)!
       render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
-      expect(screen.getByText('The recorded programme')).toBeInTheDocument()
-      expect(screen.getByText('The live series with Suzanne')).toBeInTheDocument()
-      const buys = screen.getAllByRole('link', { name: 'Buy the Recorded Programme' })
-      expect(buys.length).toBeGreaterThanOrEqual(2)
-      for (const link of buys) expect(link.getAttribute('href')).toMatch(new RegExp(`^/shop/${program.shopHandle}`))
-      expect(screen.getAllByRole('link', { name: 'Register Interest' }).length).toBeGreaterThan(0)
-      expect(screen.getByText('Self-study (recorded)')).toBeInTheDocument()
+      expect(screen.queryByText('The recorded programme')).not.toBeInTheDocument()
+      expect(screen.queryByRole('link', { name: 'Buy the Recorded Programme' })).not.toBeInTheDocument()
+      expect(screen.queryByText('Self-study (recorded)')).not.toBeInTheDocument()
+      const interest = screen.getAllByRole('link', { name: /Register (Your )?Interest/ })
+      expect(interest.length).toBeGreaterThan(0)
+      for (const link of interest) expect(link.getAttribute('href')).toMatch(/^\/contact\?/)
+      for (const link of screen.queryAllByRole('link')) {
+        expect(link.getAttribute('href') ?? '', slug).not.toMatch(/^\/shop\//)
+      }
     })
   }
 
