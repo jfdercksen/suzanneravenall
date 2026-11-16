@@ -138,7 +138,7 @@ describe('ProgramsPageClient practitioner training (8 Nov)', () => {
       'Rapid Repatterning®',
       'Human Performance Replicator',
       'Pattern Intelligence™',
-      'Energy Alignment & Optimisation™',
+      'Energy Alignment & Optimisation: Self Clearing',
       'Akashic Navigator',
       'Resonance Repatterning',
     ])
@@ -151,10 +151,13 @@ describe('ProgramsPageClient practitioner training (8 Nov)', () => {
     expect(akashic).toBeLessThan(resonance)
   })
 
-  it('frames all training as practitioner training with AADP certification', () => {
-    render(<ProgramsPageClient />)
+  it('frames all training as practitioner training, names no accreditation and links the three pathways (12 Nov documents)', () => {
+    const { container } = render(<ProgramsPageClient />)
     expect(screen.getByText(/use the work for yourself first, and then to do it for others/)).toBeInTheDocument()
-    expect(screen.getByText(/American Association of Drugless\s+Practitioners \(AADP\)/)).toBeInTheDocument()
+    expect(container.textContent).not.toMatch(/AADP|Drugless|accredit/i)
+    expect(screen.getByRole('link', { name: 'Rapid Repatterning™' })).toHaveAttribute('href', '/programs/certification/rapid-repatterning')
+    expect(screen.getByRole('link', { name: 'Energy Alignment & Optimisation™' })).toHaveAttribute('href', '/programs/certification/energy-alignment-optimisation')
+    expect(screen.getByRole('link', { name: 'Akashic Navigation™' })).toHaveAttribute('href', '/programs/certification/akashic-navigation')
   })
 
   it('shows the three missing programmes with a visible placeholder and register interest', () => {
@@ -163,12 +166,12 @@ describe('ProgramsPageClient practitioner training (8 Nov)', () => {
     expect(placeholders.filter((t) => t === '[Programme description, format and price]')).toHaveLength(3)
   })
 
-  it('heads the Energy Alignment & Optimisation block with the mark once, her strapline and cards without the mark (Suzanne 12 Nov)', () => {
+  it('marks Energy Alignment & Optimisation once (its pathway link), then her strapline, heading and cards without the mark (Suzanne 12 Nov)', () => {
     render(<ProgramsPageClient />)
     const body = document.body.textContent ?? ''
     expect(body).not.toContain('Energy Clearing')
     expect(body.split('Energy Alignment & Optimisation™')).toHaveLength(2)
-    expect(screen.getByRole('heading', { name: 'Energy Alignment & Optimisation™' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Energy Alignment & Optimisation' })).toBeInTheDocument()
     expect(screen.getByText("Aligning the body's energy systems for coherence, capacity and performance.")).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Energy Alignment & Optimisation: Self Clearing Level 1 (Basic)' })).toBeInTheDocument()
     const hrefs = screen.getAllByRole('link').map((a) => a.getAttribute('href'))

@@ -3,6 +3,7 @@ import { topics } from '@/app/explore/topics'
 import { pathways } from '@/data/pathways'
 import { allPrivateSessions } from '@/data/privateSessions'
 import { PROGRAMS } from '@/data/programs'
+import { CERTIFICATION_PATHWAYS, pathwayHref } from '@/data/certificationPathways'
 
 // Built per request: Medusa is not reachable while the image builds, so a
 // prerendered sitemap would ship without the shop products.
@@ -250,6 +251,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   )
 
+  const certificationRoutes: MetadataRoute.Sitemap = CERTIFICATION_PATHWAYS.map((pathway) => ({
+    url: `${siteUrl}${pathwayHref(pathway)}`,
+    lastModified: BUILD_DATE,
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
   const productRoutes: MetadataRoute.Sitemap = (await fetchProducts()).map((product) => ({
     url: `${siteUrl}/shop/${product.handle}`,
     lastModified: product.updatedAt ?? BUILD_DATE,
@@ -263,6 +271,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...pathwayRoutes,
     ...privateSessionRoutes,
     ...programRoutes,
+    ...certificationRoutes,
     ...productRoutes,
   ]
 }

@@ -8,9 +8,10 @@ import {
   NOVICE_FUNDAMENTALS,
 } from './tiers'
 
-// Suzanne, 12 Nov 2026: Lifestyle and Student have no prerequisites. Novice
-// needs the fundamentals (1 programme Akashic, 1 Energy Alignment & Optimisation (was Energy Clearing), 3 Resonance
-// Repatterning), a teacher's sign-off, then the membership upgrade.
+// Lifestyle and Student: no prerequisites (Suzanne, 12 Nov 2026). Novice: her
+// Career & Certification Pathway documents of 12 Nov, used as sent (Johan,
+// 16 Nov): Akashic Novice Navigator AN1 + AN2, Energy Alignment & Optimisation
+// Novice Practitioner EA1 + EA2, Rapid Repatterning Novice Practitioner RP1 + RP2.
 
 const byLevel = (level: string) => MEMBERSHIP_TIERS.filter((t) => t.level === level)
 
@@ -25,36 +26,38 @@ describe('who may join which membership level', () => {
     }
   })
 
-  it('every Novice level needs the fundamentals and a teacher sign-off, on two separate ladders', () => {
+  it('every Novice level needs the two programmes of its ladder and the observation, on two separate ladders', () => {
     const novice = byLevel('novice')
     expect(novice.map((t) => t.sku).sort()).toEqual(['S0214', 'S0215', 'S0227', 'S0228'])
     expect(new Set(novice.map((t) => t.track))).toEqual(new Set(['akashic', 'energy-clearing']))
     for (const tier of novice) {
-      expect(joiningRequirement(tier), tier.sku).toBe('fundamentals-and-sign-off')
+      expect(joiningRequirement(tier), tier.sku).toBe('novice-prerequisites')
       expect(tier.requiresTraining, tier.sku).toBe(true)
-      expect(joiningLabel(tier)).toBe('Fundamentals + teacher sign-off')
+      expect(joiningLabel(tier), tier.sku).toBe(tier.track === 'akashic' ? 'AN1 + AN2 + observation' : 'EA1 + EA2 + observation')
     }
   })
 
-  it('states one fundamentals programme per ladder, a teacher sign-off and the upgrade', () => {
-    for (const track of ['akashic', 'energy-clearing'] as const) {
-      const rule = NOVICE_FUNDAMENTALS[track]
-      expect(rule.programmes).toBe(1)
-      const text = richLineText(rule.text)
-      expect(text).toMatch(/one programme/)
-      expect(text).toMatch(/teacher signs off/)
-      expect(text).toMatch(/upgrade your membership/)
-    }
+  it('states the Novice prerequisite of each ladder as the pathway documents do, with the pathway link', () => {
+    expect(NOVICE_FUNDAMENTALS.akashic).toMatchObject({ prerequisite: 'AN1 + AN2', status: 'Novice Navigator' })
+    expect(NOVICE_FUNDAMENTALS['energy-clearing']).toMatchObject({ prerequisite: 'EA1 + EA2', status: 'Novice Practitioner' })
+    expect(JSON.stringify(NOVICE_FUNDAMENTALS.akashic.text)).toContain('/programs/certification/akashic-navigation')
+    expect(JSON.stringify(NOVICE_FUNDAMENTALS['energy-clearing'].text)).toContain('/programs/certification/energy-alignment-optimisation')
+    for (const rule of Object.values(NOVICE_FUNDAMENTALS)) expect(richLineText(rule.text)).not.toMatch(/teacher|sign/)
   })
 
-  it('the page rule names three Resonance Repatterning programmes and leaves which ones to Suzanne', () => {
+  it('the page rule names all three Novice prerequisites, links the three pathways and says nothing about Resonance Repatterning', () => {
     const text = MEMBERSHIP_JOINING_RULE.map(richLineText).join(' ')
     expect(text).toMatch(/Lifestyle and Student memberships have no prerequisites/)
-    expect(text).toMatch(/one programme for Akashic, one for Energy Alignment & Optimisation™ and three for Resonance Repatterning/)
+    expect(text).toContain('Akashic Navigation™ Novice Navigator completes AN1 + AN2')
+    expect(text).toContain('Energy Alignment & Optimisation™ Novice Practitioner EA1 + EA2')
+    expect(text).toContain('Rapid Repatterning™ Novice Practitioner RP1 + RP2')
     expect(text).toMatch(/separate ladders/)
-    expect(MEMBERSHIP_JOINING_RULE.flatMap((line) => placeholdersIn(line))).toEqual([
-      { placeholder: 'which three Resonance Repatterning programmes count', owner: 'Suzanne' },
-    ])
+    expect(text).not.toMatch(/Resonance Repatterning|teacher signs off|sign-off/)
+    expect(MEMBERSHIP_JOINING_RULE.flatMap((line) => placeholdersIn(line))).toEqual([])
+    const links = JSON.stringify(MEMBERSHIP_JOINING_RULE)
+    for (const slug of ['akashic-navigation', 'energy-alignment-optimisation', 'rapid-repatterning']) {
+      expect(links).toContain(`/programs/certification/${slug}`)
+    }
     expect(text).not.toContain('\u2014')
   })
 

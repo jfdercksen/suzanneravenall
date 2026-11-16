@@ -84,13 +84,13 @@ function TierCard({ tier, isCurrentTier, isUpgrade }: TierCardProps) {
             Can charge clients
           </span>
         )}
-        {/* Who may join (Suzanne 12 Nov): none for Lifestyle and Student, fundamentals and sign-off for Novice. */}
+        {/* Who may join: none for Lifestyle and Student (Suzanne 12 Nov); the pathway documents' prerequisite for Novice. */}
         <span className="text-[9px] px-2 py-0.5 border border-white/25 text-white/80 rounded-full font-medium">
           {joiningLabel(tier)}
         </span>
       </div>
 
-      {joiningRequirement(tier) === 'fundamentals-and-sign-off' && (tier.track === 'akashic' || tier.track === 'energy-clearing') && (
+      {joiningRequirement(tier) === 'novice-prerequisites' && (tier.track === 'akashic' || tier.track === 'energy-clearing') && (
         <p className="text-xs text-white/70 leading-relaxed mb-4">
           <RichText line={NOVICE_FUNDAMENTALS[tier.track].text} tone="dark" />
         </p>

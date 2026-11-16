@@ -15,6 +15,7 @@
 import { topics } from '@/app/explore/topics'
 import { topicCopy, topicCopyText } from '@/app/explore/topicCopy'
 import { allPrivateSessions } from '@/data/privateSessions'
+import { CERTIFICATION_PATHWAYS, pathwayHref, pathwayPlainName } from '@/data/certificationPathways'
 import { fetchAllPublishedPosts } from '@/lib/blog/posts'
 import type { BlogPost } from '@/types/payload'
 import type { SearchIndex, SearchResultItem } from './types'
@@ -341,6 +342,20 @@ export const PAGE_DOCUMENTS: SiteDocument[] = [
     title: s.title,
     description: s.shortDescription,
     body: ['Private session', ...(s.bodyContent ? s.bodyContent.split('\n\n') : [])],
+  })),
+  // The Career & Certification Pathways (Suzanne's documents of 12 Nov 2026).
+  ...CERTIFICATION_PATHWAYS.map((p) => ({
+    type: 'pages' as const,
+    id: `certification-${p.slug}`,
+    url: pathwayHref(p),
+    label: 'Certification',
+    title: `${pathwayPlainName(p)} Career & Certification Pathway`,
+    description: `${p.tagline}. ${p.subtitle}.`,
+    body: [
+      ...p.about,
+      ...p.levelsAtAGlance.map((l) => `${l.status}: ${l.prerequisite}`),
+      ...p.programmeTables.flatMap((t) => t.rows.map((r) => `${r.code} ${r.name}`)),
+    ],
   })),
 ]
 

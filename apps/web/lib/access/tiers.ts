@@ -1,4 +1,4 @@
-import { ph, type RichLine } from '@/lib/content/richLine'
+import type { RichLine } from '@/lib/content/richLine'
 
 export type TierSlug = 'free' | 'silver' | 'gold' | 'practitioner'
 
@@ -169,24 +169,47 @@ export const MEMBERSHIP_TIERS: MembershipTier[] = [
 ]
 
 /**
- * Who may join which level (Suzanne, 12 Nov 2026, correcting "three levels
- * open without prerequisites"): Lifestyle and Student have no prerequisites.
- * Novice needs the fundamentals completed (1 programme for Akashic, 1 for
- * Energy Alignment & Optimisation, 3 for Resonance Repatterning), then
- * sign-off from a teacher that the person is able to practise as a novice,
- * and then they upgrade their membership. Akashic and Energy Alignment &
- * Optimisation (renamed from Energy Clearing, 12 Nov) are two separate
- * ladders. The levels above Novice keep "requires training" as before.
+ * Who may join which level. Lifestyle and Student have no prerequisites
+ * (Suzanne, 12 Nov 2026). Novice follows her Career & Certification Pathway
+ * documents of 12 Nov (Johan, 16 Nov: use them as sent; they replace the
+ * fundamentals-plus-teacher-sign-off rule of her 12 Nov mail): Akashic Novice
+ * Navigator = AN1 + AN2, Energy Alignment & Optimisation Novice Practitioner =
+ * EA1 + EA2, Rapid Repatterning Novice Practitioner = RP1 + RP2, each followed
+ * by the Session Log, practice sessions and the observation the pathway sets
+ * out, after which the Certification & Quality Assurance team confirms the
+ * status. Akashic and Energy Alignment & Optimisation are two separate ladders.
+ * Resonance Repatterning is not covered by those documents, so no Novice rule
+ * is stated for it (KI118). The levels above Novice keep "requires training".
  *
- * Nothing checks the sign-off yet: a Novice membership can be bought by
- * anyone once memberships are on sale (KI114).
+ * Nothing checks the prerequisites or the observation yet: a Novice membership
+ * can be bought by anyone once memberships are on sale (KI114).
  */
-export type JoiningRequirement = 'none' | 'fundamentals-and-sign-off' | 'training'
+export type JoiningRequirement = 'none' | 'novice-prerequisites' | 'training'
 
 export function joiningRequirement(tier: MembershipTier): JoiningRequirement {
   if (tier.level === 'guest' || tier.level === 'lifestyle' || tier.level === 'student') return 'none'
-  if (tier.level === 'novice') return 'fundamentals-and-sign-off'
+  if (tier.level === 'novice') return 'novice-prerequisites'
   return 'training'
+}
+
+const PATHWAY = {
+  akashic: { link: 'Akashic Navigation Career & Certification Pathway', href: '/programs/certification/akashic-navigation' },
+  'energy-clearing': { link: 'Energy Alignment & Optimisation Career & Certification Pathway', href: '/programs/certification/energy-alignment-optimisation' },
+  'rapid-repatterning': { link: 'Rapid Repatterning Career & Certification Pathway', href: '/programs/certification/rapid-repatterning' },
+} as const
+
+/** The Novice prerequisite of each ladder, as the pathway documents' "levels at a glance" state it. */
+export const NOVICE_FUNDAMENTALS: Record<'akashic' | 'energy-clearing', { prerequisite: string; status: string; text: RichLine }> = {
+  akashic: {
+    prerequisite: 'AN1 + AN2',
+    status: 'Novice Navigator',
+    text: ['Novice Navigator: AN1 + AN2, then the Session Log, practice readings and observation set out in the ', PATHWAY.akashic, '.'],
+  },
+  'energy-clearing': {
+    prerequisite: 'EA1 + EA2',
+    status: 'Novice Practitioner',
+    text: ['Novice Practitioner: EA1 + EA2, then the Session Log, practice sessions and observation set out in the ', PATHWAY['energy-clearing'], '.'],
+  },
 }
 
 /** The short label on a membership card. */
@@ -194,41 +217,20 @@ export function joiningLabel(tier: MembershipTier): string {
   switch (joiningRequirement(tier)) {
     case 'none':
       return 'No prerequisites'
-    case 'fundamentals-and-sign-off':
-      return 'Fundamentals + teacher sign-off'
+    case 'novice-prerequisites':
+      return tier.track === 'akashic' || tier.track === 'energy-clearing'
+        ? `${NOVICE_FUNDAMENTALS[tier.track].prerequisite} + observation`
+        : 'Requires training'
     case 'training':
       return 'Requires training'
   }
 }
 
-/** The fundamentals a Novice level needs, per ladder (Suzanne 12 Nov). */
-export const NOVICE_FUNDAMENTALS: Record<'akashic' | 'energy-clearing', { programmes: number; text: RichLine }> = {
-  akashic: {
-    programmes: 1,
-    text: [
-      'Complete the Akashic fundamentals (one programme: ',
-      { link: 'Akashic Navigator: Basic', href: '/programs/akashic-navigator-basic' },
-      '), then a teacher signs off that you are able to practise as a novice, and you upgrade your membership.',
-    ],
-  },
-  'energy-clearing': {
-    programmes: 1,
-    text: [
-      'Complete the Energy Alignment & Optimisation fundamentals (one programme: ',
-      { link: 'Energy Alignment & Optimisation Level 1 (Basic)', href: '/programs/energy-alignment-optimisation-basic' },
-      '), then a teacher signs off that you are able to practise as a novice, and you upgrade your membership.',
-    ],
-  },
-}
-
-/** The whole rule, for the top of the upgrade page. */
+/** The whole rule, for the top of the upgrade page. The trademarks mark the first use on that page. */
 export const MEMBERSHIP_JOINING_RULE: RichLine[] = [
   'Lifestyle and Student memberships have no prerequisites.',
-  [
-    'Novice Practitioner membership comes after the fundamentals: one programme for Akashic, one for Energy Alignment & Optimisation™ and three for Resonance Repatterning (',
-    ph('which three Resonance Repatterning programmes count', 'Suzanne'),
-    '). A teacher then signs off that you are able to practise as a novice, and you upgrade your membership.',
-  ],
+  'Novice: an Akashic Navigation™ Novice Navigator completes AN1 + AN2, an Energy Alignment & Optimisation™ Novice Practitioner EA1 + EA2, and a Rapid Repatterning™ Novice Practitioner RP1 + RP2. The Certification & Quality Assurance team then checks your documents and recordings and confirms your status.',
+  ['The steps, sessions to log and fees for every level are in the ', PATHWAY.akashic, ', the ', PATHWAY['energy-clearing'], ' and the ', PATHWAY['rapid-repatterning'], '.'],
   'Akashic and Energy Alignment & Optimisation are separate ladders: you climb each one on its own.',
 ]
 

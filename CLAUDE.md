@@ -184,6 +184,7 @@ Docs: https://developers.cloudflare.com/agents/
 | `/portal/resources` | `app/portal/resources/page.tsx` | Member resource library |
 | `/portal/videos` | `app/portal/videos/page.tsx` | Gated video content |
 | `/portal/community` | `app/portal/community/page.tsx` | Discourse forum embed |
+| `/programs/certification/[modality]` | `app/programs/certification/[modality]/page.tsx` | Career & Certification Pathway per modality (rapid-repatterning, energy-alignment-optimisation, akashic-navigation), from Suzanne's 12 Nov documents |
 | `/intake/[token]` | `app/intake/[token]/page.tsx` | Client intake form after a private-session purchase (personal link, form from the CMS) |
 
 ---

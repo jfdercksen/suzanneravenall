@@ -77,6 +77,14 @@ describe('sitemap (site check M4)', () => {
     expect(urls.filter((u) => u.includes('/programs/energy-clearing'))).toEqual([])
   })
 
+  it('lists the three Career & Certification Pathway pages', async () => {
+    const sitemap = await loadSitemap()
+    const urls = (await sitemap()).map((e) => e.url)
+    for (const slug of ['rapid-repatterning', 'energy-alignment-optimisation', 'akashic-navigation']) {
+      expect(urls).toContain(`https://example.test/programs/certification/${slug}`)
+    }
+  })
+
   it('lists /pattern-coach', async () => {
     const sitemap = await loadSitemap()
     const entries = await sitemap()

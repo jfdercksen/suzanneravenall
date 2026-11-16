@@ -15,7 +15,8 @@ import {
   type Program,
 } from '@/data/programs'
 import { PRACTITIONER_TRACKS, licensingLinks } from '@/data/practitionerTracks'
-import { EAO_MARKED, EAO_STRAPLINE, withoutTrademark } from '@/data/energyAlignment'
+import { EAO_NAME, EAO_STRAPLINE, withoutTrademark } from '@/data/energyAlignment'
+import { CERTIFICATION_PATHWAYS, pathwayHref } from '@/data/certificationPathways'
 import { RichText } from '@/components/shared/RichText'
 import { contactHref } from '@/app/contact/enquiry'
 import liveCalendarFile from '@/data/live-calendar.json'
@@ -350,16 +351,30 @@ export default function ProgramsPageClient({ membershipsOn = false }: { membersh
               Train as a Practitioner
             </h2>
             {/* Suzanne, 8 Nov (item 8.4): all training is practitioner training
-                plus certification, used for yourself and then for others, and
-                certified with the AADP. */}
-            <p className="text-lg text-brand-muted font-light mb-4 max-w-2xl leading-relaxed">
+                plus certification, used for yourself and then for others. No
+                accreditation is named until it is in writing (her pathway
+                documents of 12 Nov, KI117); the pathway pages set out each level. */}
+            <p className="text-lg text-brand-muted font-light mb-6 max-w-2xl leading-relaxed">
               Every training here is practitioner training with certification: you
               learn to use the work for yourself first, and then to do it for others.
             </p>
-            <p className="text-base text-brand-ink font-medium mb-12 max-w-2xl leading-relaxed">
-              All training is certified with the American Association of Drugless
-              Practitioners (AADP).
-            </p>
+            <div className="mb-12 max-w-3xl">
+              <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
+                Career &amp; Certification Pathways
+              </p>
+              <ul className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
+                {CERTIFICATION_PATHWAYS.map((pathway) => (
+                  <li key={pathway.slug}>
+                    <Link
+                      href={pathwayHref(pathway)}
+                      className="inline-flex items-center px-5 py-2.5 border border-brand-border hover:border-brand-ink text-brand-ink text-sm font-medium rounded-button transition-all duration-300"
+                    >
+                      {pathway.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </motion.div>
 
           <div className="space-y-8">
@@ -400,7 +415,7 @@ export default function ProgramsPageClient({ membershipsOn = false }: { membersh
               ))}
             </motion.div>
 
-            {/* Energy Alignment & Optimisation (was Energy Clearing): parent block. The heading carries the mark, the cards below drop it. */}
+            {/* Energy Alignment & Optimisation (was Energy Clearing): parent block. The pathway link above carries the mark (first use on the page), so the heading and cards drop it. */}
             <motion.div
               variants={sectionVariants}
               initial="hidden"
@@ -413,7 +428,7 @@ export default function ProgramsPageClient({ membershipsOn = false }: { membersh
                   Practitioner Training
                 </p>
                 <h3 className="text-2xl lg:text-4xl font-medium tracking-tight text-brand-ink mb-4 leading-snug">
-                  {EAO_MARKED}
+                  {EAO_NAME}
                 </h3>
                 <p className="text-brand-ink font-medium leading-relaxed mb-3">{EAO_STRAPLINE}</p>
                 <p className="text-brand-muted font-light leading-relaxed">

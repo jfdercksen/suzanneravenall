@@ -11,6 +11,7 @@ import { recordedSelfStudyHref } from '@/components/programs/ProgrammeOptions'
 import { getProgrammeCopy } from '@/data/programmeCopy'
 import { ProgrammeLongForm, longFormBandCount } from '@/components/programs/ProgrammeLongForm'
 import { EAO_MARKED, EAO_NAME, withoutTrademark } from '@/data/energyAlignment'
+import { pathwayForProgramme, pathwayHref } from '@/data/certificationPathways'
 
 type Props = {
   program: Program
@@ -181,6 +182,8 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
   const editionSuffix = editionPrice ? programPriceSuffix(editionPrice, currency) : null
   const price = priceOf(program.slug)
   const priceSuffix = programPriceSuffix(price, currency)
+  // The modality's Career & Certification Pathway (Suzanne's 12 Nov documents), linked from its course pages.
+  const pathway = pathwayForProgramme(program)
   const prerequisiteProgram = program.prerequisite?.slug
     ? getProgramBySlug(program.prerequisite.slug)
     : undefined
@@ -392,6 +395,20 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                           </Link>
                         </>
                       )}
+                    </p>
+                  </div>
+                )}
+                {pathway && (
+                  <div className="col-span-2">
+                    <p className="text-xs uppercase tracking-[0.2em] text-brand-accent mb-2">Certification</p>
+                    <p className="text-brand-muted text-sm font-light">
+                      The levels, requirements and fees are set out in the{' '}
+                      <Link
+                        href={pathwayHref(pathway)}
+                        className="text-brand-accent hover:text-brand-accent-700 underline underline-offset-2"
+                      >
+                        {pathway.name} Career &amp; Certification Pathway
+                      </Link>
                     </p>
                   </div>
                 )}

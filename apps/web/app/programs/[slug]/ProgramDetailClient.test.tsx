@@ -97,13 +97,15 @@ describe('ProgramDetailClient sourced content (sourcing report 6 Oct)', () => {
 
 // Suzanne's 8 Nov long-form copy (items 8.4, 8.5, 8.6)
 describe('ProgramDetailClient long-form pages (8 Nov copy)', () => {
-  it('Energy Alignment & Optimisation Level 1: her copy, What is included, AADP and the path to Level 2 with the bundle product', () => {
+  it('Energy Alignment & Optimisation Level 1: her copy, What is included, the pathway link and the path to Level 2 with the bundle product', () => {
     const program = getProgramBySlug('energy-alignment-optimisation-basic')!
     render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
     expect(screen.getByText('You are more than a physical body. You are an electrical, energetic system.')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: "What's Included" })).toBeInTheDocument()
     expect(screen.getByText('100 lessons, 10 hours of video')).toBeInTheDocument()
-    expect(screen.getAllByText(/American Association of Drugless Practitioners/).length).toBeGreaterThan(0)
+    // No accreditation is named until it is in writing (pathway documents, 12 Nov); the pathway page is linked instead.
+    expect(document.body.textContent).not.toMatch(/AADP|Drugless|accredited|Internationally Recognised/)
+    expect(screen.getAllByRole('link', { name: 'Energy Alignment & Optimisation Career & Certification Pathway' })[0]).toHaveAttribute('href', '/programs/certification/energy-alignment-optimisation')
     expect(screen.getByRole('link', { name: /View Energy Alignment & Optimisation: Clearing Others Level 2/ })).toHaveAttribute('href', '/programs/energy-alignment-optimisation-advanced')
     expect(screen.getAllByRole('link', { name: 'Enrol in Level 1' }).length).toBeGreaterThan(0)
     expect(screen.getByRole('link', { name: 'View the Bundle' })).toHaveAttribute(

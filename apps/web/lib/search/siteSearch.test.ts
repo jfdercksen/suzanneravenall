@@ -124,4 +124,11 @@ describe('resultBadge', () => {
     expect(resultBadge({ type: 'pages', label: 'Article' })).toBe('Article')
     expect(resultBadge({ type: 'explore_topics' })).toBe('Topic')
   })
+
+  it('finds the Career & Certification Pathway pages (Suzanne, 12 Nov documents)', () => {
+    const doc = (slug: string) => PAGE_DOCUMENTS.find((d) => d.id === `certification-${slug}`)
+    expect(doc('rapid-repatterning')?.url).toBe('/programs/certification/rapid-repatterning')
+    expect(doc('energy-alignment-optimisation')?.title).toBe('Energy Alignment & Optimisation Career & Certification Pathway')
+    expect(doc('akashic-navigation')?.body.join(' ')).toContain('Novice Navigator: AN1 + AN2')
+  })
 })

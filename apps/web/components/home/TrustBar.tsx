@@ -15,7 +15,7 @@ interface Stat {
 // until flipped to dark. Both were blank on the live site before 15 Sep.
 const accreditations = [
   { src: '/logos/accreditations/icf-member.png',             alt: 'International Coaching Federation Member',             w: 110 },
-  { src: '/logos/accreditations/aadp.png',                   alt: 'American Association of Drugless Practitioners',        w: 190, invert: true },
+  // The AADP logo is off until Suzanne sends the recognition in writing (her pathway documents of 12 Nov; KI117).
   { src: '/logos/accreditations/ctaa.png',                   alt: 'Complementary Therapists Accredited Association',       w: 295 },
   { src: '/logos/accreditations/ctss.png',                   alt: 'Certified Trauma Support',                              w: 110 }, // caption on https://suzanneravenall.com/ "Our Accreditations"
   { src: '/logos/accreditations/royal-society-medicine.png', alt: 'The Royal Society of Medicine',                         w: 111, invert: true },

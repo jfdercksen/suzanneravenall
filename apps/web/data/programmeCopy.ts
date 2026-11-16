@@ -12,7 +12,7 @@ import type { ProgramSeries } from '@/data/programs'
  */
 
 export interface ProgrammeCopy {
-  /** Header eyebrow from her document, e.g. "Self-Study · AADP Accredited". */
+  /** Header eyebrow from her document, e.g. "Practitioner Certification". */
   eyebrow: string
   /** Level name shown above the programme name, e.g. "Level 1 · Foundations". */
   level?: string
@@ -49,7 +49,19 @@ export interface SeriesPath {
   note: string
 }
 
-const AADP_CERT_PENDING = ph('AADP board certification is applied for directly with the AADP, and a separate AADP fee applies.', 'Suzanne')
+/**
+ * No accreditation is referenced (Suzanne's pathway documents of 12 Nov: "Do
+ * not reference any accreditation until it is in writing"). The accreditation
+ * lines are removed until she sends the recognition in writing (KI117).
+ * Certification levels, sessions to log, observation and fees live on the
+ * modality's Career & Certification Pathway page; the course pages link to it
+ * rather than map a course level to a certification level.
+ */
+const pathwayLink = (slug: string, name: string) => ({ link: `${name} Career & Certification Pathway`, href: `/programs/certification/${slug}` })
+const EAO_PATHWAY = pathwayLink('energy-alignment-optimisation', 'Energy Alignment & Optimisation')
+const AKASHIC_PATHWAY = pathwayLink('akashic-navigation', 'Akashic Navigation')
+const certificationRow = (link: { link: string; href: string }): RichLine => ['the levels, requirements and fees are set out in the ', link]
+const practiceLine = (link: { link: string; href: string }): RichLine => ['The sessions to log and the observation process are set out in the ', link, '.']
 
 export const SERIES_PATHS: Partial<Record<ProgramSeries, SeriesPath>> = {
   'energy-clearing': {
@@ -73,7 +85,7 @@ export const SERIES_PATHS: Partial<Record<ProgramSeries, SeriesPath>> = {
 export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
   // ── 03 Energy Alignment & Optimisation, Level 1 ────────────────────────────
   'energy-alignment-optimisation-basic': {
-    eyebrow: 'Self-Study · AADP Accredited',
+    eyebrow: 'Self-Study',
     level: 'Level 1 · Foundations',
     lead: 'You are more than a physical body. You are an electrical, energetic system.',
     whatItIs: [
@@ -117,7 +129,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       // Suzanne, 11 Nov 2026: lifetime access is a paid add-on on all programmes (shop product Bonus Lifetime Access).
       { label: 'Access', value: 'lifetime access is available as the Bonus Lifetime Access add-on' },
       { label: 'Includes', value: 'workbook, clearing protocol, checklist, energy exercises, glossary and a short quiz after each lesson' },
-      { label: 'Accreditation', value: 'accredited by the American Association of Drugless Practitioners (AADP)' },
+      { label: 'Certification', value: certificationRow(EAO_PATHWAY) },
       { label: 'Investment', value: 'price' },
     ],
     whatsIncluded: [
@@ -130,12 +142,10 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       'Foundation for the Advanced level',
     ],
     certification: {
-      heading: 'Internationally Recognised Certification',
-      lead: 'Your training, independently accredited.',
+      heading: 'Certification',
       paragraphs: [
-        'This programme is accredited by the American Association of Drugless Practitioners (AADP), an international professional body that offers board certification and professional membership to holistic health practitioners around the world.',
-        'On successful completion, you will receive your Level 1 Energy Alignment & Optimisation certificate from The Ravenall Institute, and you will be eligible to apply for board certification with the AADP.',
-        [AADP_CERT_PENDING],
+        'On successful completion, you will receive your Level 1 Energy Alignment & Optimisation certificate from The Ravenall Institute.',
+        ['Each certification level, its requirements and its fees are set out in the ', EAO_PATHWAY, '.'],
       ],
     },
     scope: { label: 'Scope of practice:', text: 'Energy clearing is a complementary practice. It is not a medical or psychological treatment and does not replace professional healthcare.' },
@@ -144,7 +154,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
 
   // ── 03 Energy Alignment & Optimisation, Level 2 ────────────────────────────
   'energy-alignment-optimisation-advanced': {
-    eyebrow: 'Practitioner Certification · AADP Accredited',
+    eyebrow: 'Practitioner Certification',
     level: 'Level 2 · Advanced',
     lead: "You've cleared your own system. Now learn to clear it for others.",
     whatItIs: [
@@ -169,7 +179,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { title: 'Structuring a session', body: 'How to run a professional clearing session from start to finish: preparing, opening, reading, tracking, clearing, closing and aftercare.' },
       { title: 'Protecting yourself', body: "Advanced grounding and protection so you can do this work without absorbing your clients' energy, which is essential for a sustainable practice." },
       { title: 'Ethics, consent and scope', body: 'How to work safely and professionally: informed consent, boundaries, confidentiality, knowing your limits and when to refer a client to medical or psychological care.' },
-      { title: 'Supervised practice', body: [ph('Practice sessions with clients or peers, reviewed and assessed: details to confirm.', 'Suzanne')] },
+      { title: 'Supervised practice', body: practiceLine(EAO_PATHWAY) },
     ],
     after: [
       { title: 'Read energy in others', body: "Sense where dense and dark energy is held in another person's system, and know what is theirs and what is yours." },
@@ -183,10 +193,9 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       // Source: her Thinkific course page (lessons, video hours, materials) and her current site's public pages, read 11 Nov 2026.
       { label: 'Format', value: 'self-study, online. A live Zoom intake is offered on register your interest.' },
       { label: 'Content', value: '39 lessons · 4.5 hours of video' },
-      { label: 'Practical component', value: [ph('supervised practice sessions · case studies · assessment', 'Suzanne')] },
+      { label: 'Practical component', value: ['the sessions to log and the observation process are set out in the ', EAO_PATHWAY] },
       { label: 'Prerequisite', value: 'completion of Level 1' },
-      // Suzanne, 10 Nov 2026: the same body (AADP) applies to all practitioner training.
-      { label: 'Accreditation', value: 'accredited by the American Association of Drugless Practitioners (AADP)' },
+      { label: 'Certification', value: certificationRow(EAO_PATHWAY) },
       { label: 'Investment', value: 'price' },
     ],
     whatsIncluded: [
@@ -201,8 +210,8 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
     certification: {
       heading: 'Certified Practitioner Status',
       paragraphs: [
-        'On successful completion, including your practical assessment, you will be certified as an Energy Alignment & Optimisation Practitioner by The Ravenall Institute, and you will be eligible to apply for board certification with the AADP.',
-        [AADP_CERT_PENDING],
+        'On successful completion, including your practical assessment, you will be certified as an Energy Alignment & Optimisation Practitioner by The Ravenall Institute.',
+        ['Each certification level, its requirements and its fees are set out in the ', EAO_PATHWAY, '.'],
       ],
     },
     scope: { label: 'Scope of practice:', text: 'Energy clearing is a complementary practice. It is not a medical or psychological treatment and does not replace professional healthcare. Certified practitioners are trained to work within their scope and refer clients on where appropriate.' },
@@ -256,7 +265,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       // Suzanne, 11 Nov 2026: lifetime access is a paid add-on on all programmes (shop product Bonus Lifetime Access).
       { label: 'Access', value: 'lifetime access is available as the Bonus Lifetime Access add-on' },
       { label: 'Includes', value: 'guided meditations in video and audio, the channelled sacred prayer, reference guides and a short quiz after each lesson' },
-      { label: 'Accreditation', value: 'accredited by the American Association of Drugless Practitioners (AADP)' },
+      { label: 'Certification', value: certificationRow(AKASHIC_PATHWAY) },
       { label: 'Investment', value: 'price' },
     ],
     whatsIncluded: [
@@ -301,7 +310,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { title: 'Structuring a professional reading', body: 'How to run a reading from start to finish: preparation, consent, opening, questions, guidance, closing and integration.' },
       { title: 'Ethics, consent and boundaries', body: 'How to work responsibly: permission, confidentiality, empowering rather than creating dependence, knowing your limits and when to refer a client to medical, psychological or other professional support.' },
       { title: 'Protecting your energy', body: 'Grounding and clearing practices so you can read for others without taking on their energy.' },
-      { title: 'Supervised practice', body: [ph('Practice readings with clients or peers, reviewed and assessed: details to confirm.', 'Suzanne')] },
+      { title: 'Supervised practice', body: practiceLine(AKASHIC_PATHWAY) },
     ],
     after: [
       { title: 'Open the Records for others', body: "Access another person's Akashic Records safely, with permission and with confidence." },
@@ -315,9 +324,9 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       // Source: her Thinkific course page (lessons, video hours, materials) and her current site's public pages, read 11 Nov 2026.
       { label: 'Format', value: 'self-study, online. A live Zoom intake is offered on register your interest.' },
       { label: 'Content', value: '39 lessons · 9.5 hours of video' },
-      { label: 'Practical component', value: [ph('supervised practice readings · case studies · assessment', 'Suzanne')] },
+      { label: 'Practical component', value: ['the sessions to log and the observation process are set out in the ', AKASHIC_PATHWAY] },
       { label: 'Prerequisite', value: 'completion of Level 1' },
-      { label: 'Accreditation', value: 'accredited by the American Association of Drugless Practitioners (AADP)' },
+      { label: 'Certification', value: certificationRow(AKASHIC_PATHWAY) },
       { label: 'Investment', value: 'price' },
     ],
     whatsIncluded: [
@@ -333,8 +342,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       heading: 'Certified Akashic Navigator',
       paragraphs: [
         'On successful completion, including your practical assessment, you will be certified as an Akashic Navigator by The Ravenall Institute.',
-        // Suzanne, 10 Nov 2026: the same body (AADP) applies to all practitioner training.
-        'You will be eligible to apply for board certification with the American Association of Drugless Practitioners (AADP).',
+        ['Each certification level, its requirements and its fees are set out in the ', AKASHIC_PATHWAY, '.'],
       ],
     },
     scope: { text: 'Akashic Records work is a spiritual and intuitive practice. It is not a substitute for medical, psychological, legal or financial advice. Certified Navigators are trained to work within their scope and refer clients on where appropriate.' },

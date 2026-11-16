@@ -77,14 +77,10 @@ describe('Energy Alignment & Optimisation (was Energy Clearing)', () => {
     expect(MEMBERSHIP_TIERS.map((t) => t.title).join(' ')).not.toContain(OLD)
   })
 
-  it('renames the ladder in the joining rule without changing the rest of the wording', () => {
+  it('renames the ladder in the joining rule', () => {
     const rule = MEMBERSHIP_JOINING_RULE.map(richLineText).join(' ')
     expect(rule).not.toContain(OLD)
     expect(rule).toContain('Akashic and Energy Alignment & Optimisation are separate ladders: you climb each one on its own.')
-    const fundamentals = richLineText(NOVICE_FUNDAMENTALS['energy-clearing'].text)
-    expect(fundamentals).toBe(
-      'Complete the Energy Alignment & Optimisation fundamentals (one programme: Energy Alignment & Optimisation Level 1 (Basic)), then a teacher signs off that you are able to practise as a novice, and you upgrade your membership.',
-    )
-    expect(JSON.stringify(NOVICE_FUNDAMENTALS['energy-clearing'].text)).toContain('/programs/energy-alignment-optimisation-basic')
+    expect(richLineText(NOVICE_FUNDAMENTALS['energy-clearing'].text)).not.toContain(OLD)
   })
 })
