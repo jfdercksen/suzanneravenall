@@ -9,7 +9,7 @@ import {
 } from './tiers'
 
 // Suzanne, 12 Nov 2026: Lifestyle and Student have no prerequisites. Novice
-// needs the fundamentals (1 programme Akashic, 1 Energy Clearing, 3 Resonance
+// needs the fundamentals (1 programme Akashic, 1 Energy Alignment & Optimisation (was Energy Clearing), 3 Resonance
 // Repatterning), a teacher's sign-off, then the membership upgrade.
 
 const byLevel = (level: string) => MEMBERSHIP_TIERS.filter((t) => t.level === level)
@@ -50,7 +50,7 @@ describe('who may join which membership level', () => {
   it('the page rule names three Resonance Repatterning programmes and leaves which ones to Suzanne', () => {
     const text = MEMBERSHIP_JOINING_RULE.map(richLineText).join(' ')
     expect(text).toMatch(/Lifestyle and Student memberships have no prerequisites/)
-    expect(text).toMatch(/one programme for Akashic, one for Energy Clearing and three for Resonance Repatterning/)
+    expect(text).toMatch(/one programme for Akashic, one for Energy Alignment & Optimisation™ and three for Resonance Repatterning/)
     expect(text).toMatch(/separate ladders/)
     expect(MEMBERSHIP_JOINING_RULE.flatMap((line) => placeholdersIn(line))).toEqual([
       { placeholder: 'which three Resonance Repatterning programmes count', owner: 'Suzanne' },

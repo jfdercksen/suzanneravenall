@@ -34,8 +34,8 @@ const columns: Column[] = [
           'Access and rewrite your life’s blueprint through the Akashic Records. Create the past, present and future that you desire, and improve your intuition to receive daily guidance.',
       },
       {
-        name: 'Energy Clearing (Basic & Advanced)',
-        slug: 'energy-clearing-basic',
+        name: 'Energy Alignment & Optimisation™ (Basic & Advanced)',
+        slug: 'energy-alignment-optimisation-basic',
         description:
           'We are physical and energetic beings, with many channels that carry information and energy. This practitioner pathway teaches you to see, clear and realign the energy field, for yourself and for others.',
       },

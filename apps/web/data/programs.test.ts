@@ -38,8 +38,8 @@ describe('programme catalogue data', () => {
 
   it('uses the live-shop self-study prices (sourcing report 6 Oct, decision 4)', () => {
     const zar = (slug: string) => getProgramBySlug(slug)?.priceZar
-    expect(zar('energy-clearing-basic')).toBe(4650)
-    expect(zar('energy-clearing-advanced')).toBe(4650)
+    expect(zar('energy-alignment-optimisation-basic')).toBe(4650)
+    expect(zar('energy-alignment-optimisation-advanced')).toBe(4650)
     expect(zar('resonance-repatterning-08-principles-of-relationship')).toBe(4205)
     expect(zar('resonance-repatterning-09-energetics-of-relationship')).toBe(4205)
     expect(zar('trauma-to-transcendence')).toBe(3500)
@@ -100,7 +100,7 @@ describe('programme catalogue data', () => {
     }
   })
 
-  it('keeps Energy Clearing and Akashic Navigator as Basic/Advanced pairs', () => {
+  it('keeps Energy Alignment & Optimisation (series id energy-clearing) and Akashic Navigator as Basic/Advanced pairs', () => {
     expect(getProgramsBySeries('energy-clearing')).toHaveLength(2)
     expect(getProgramsBySeries('akashic-navigator')).toHaveLength(2)
   })

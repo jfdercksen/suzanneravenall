@@ -69,6 +69,14 @@ describe('sitemap (site check M4)', () => {
     expect(home?.lastModified).toBeUndefined()
   })
 
+  it('lists the Energy Alignment & Optimisation pages under their new slugs, not the old ones (Suzanne 12 Nov)', async () => {
+    const sitemap = await loadSitemap()
+    const urls = (await sitemap()).map((e) => e.url)
+    expect(urls).toContain('https://example.test/programs/energy-alignment-optimisation-basic')
+    expect(urls).toContain('https://example.test/programs/energy-alignment-optimisation-advanced')
+    expect(urls.filter((u) => u.includes('/programs/energy-clearing'))).toEqual([])
+  })
+
   it('lists /pattern-coach', async () => {
     const sitemap = await loadSitemap()
     const entries = await sitemap()

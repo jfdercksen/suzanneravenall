@@ -47,7 +47,7 @@ vi.mock('framer-motion', () => {
 
 describe('ProgramDetailClient facilitator credentials', () => {
   it('keeps the credentials strip at two columns so "International" fits its cell', () => {
-    const program = getProgramBySlug('energy-clearing-basic')!
+    const program = getProgramBySlug('energy-alignment-optimisation-basic')!
     render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
     const grid = screen.getByText('International').closest('.grid') as HTMLElement
     expect(grid.className).toMatch(/\bgrid-cols-2\b/)
@@ -79,8 +79,8 @@ describe('ProgramDetailClient sourced content (sourcing report 6 Oct)', () => {
     )
   })
 
-  it('labels Energy Clearing as self-study, not live training', () => {
-    const program = getProgramBySlug('energy-clearing-advanced')!
+  it('labels Energy Alignment & Optimisation as self-study, not live training', () => {
+    const program = getProgramBySlug('energy-alignment-optimisation-advanced')!
     render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
     expect(screen.getAllByText('Self-Study Online: Start Anytime').length).toBeGreaterThan(0)
     expect(screen.queryByText('Live Training via Zoom')).not.toBeInTheDocument()
@@ -97,19 +97,44 @@ describe('ProgramDetailClient sourced content (sourcing report 6 Oct)', () => {
 
 // Suzanne's 8 Nov long-form copy (items 8.4, 8.5, 8.6)
 describe('ProgramDetailClient long-form pages (8 Nov copy)', () => {
-  it('Energy Clearing Level 1: her copy, What is included, AADP and the path to Level 2 with the bundle product', () => {
-    const program = getProgramBySlug('energy-clearing-basic')!
+  it('Energy Alignment & Optimisation Level 1: her copy, What is included, AADP and the path to Level 2 with the bundle product', () => {
+    const program = getProgramBySlug('energy-alignment-optimisation-basic')!
     render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
     expect(screen.getByText('You are more than a physical body. You are an electrical, energetic system.')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: "What's Included" })).toBeInTheDocument()
     expect(screen.getByText('100 lessons, 10 hours of video')).toBeInTheDocument()
     expect(screen.getAllByText(/American Association of Drugless Practitioners/).length).toBeGreaterThan(0)
-    expect(screen.getByRole('link', { name: /View Energy Clearing: Clearing Others Level 2/ })).toHaveAttribute('href', '/programs/energy-clearing-advanced')
+    expect(screen.getByRole('link', { name: /View Energy Alignment & Optimisation: Clearing Others Level 2/ })).toHaveAttribute('href', '/programs/energy-alignment-optimisation-advanced')
     expect(screen.getAllByRole('link', { name: 'Enrol in Level 1' }).length).toBeGreaterThan(0)
     expect(screen.getByRole('link', { name: 'View the Bundle' })).toHaveAttribute(
       'href',
       '/shop/deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom',
     )
+  })
+
+  it('Energy Alignment & Optimisation pages carry the mark on first use only and never the old name (Suzanne 12 Nov)', () => {
+    for (const slug of ['energy-alignment-optimisation-basic', 'energy-alignment-optimisation-advanced']) {
+      const { unmount } = render(<ProgramDetailClient program={getProgramBySlug(slug)!} relatedPrograms={[]} />)
+      const body = document.body.textContent ?? ''
+      expect(body, slug).not.toContain('Energy Clearing')
+      expect(body.split('Energy Alignment & Optimisation™').length - 1, slug).toBe(1)
+      unmount()
+    }
+    // Other programme pages name it once in the facilitator bio, with the mark.
+    render(<ProgramDetailClient program={getProgramBySlug('akashic-navigator-basic')!} relatedPrograms={[]} />)
+    const other = document.body.textContent ?? ''
+    expect(other).not.toContain('Energy Clearing')
+    expect(other).toContain('Akashic Navigator, and Energy Alignment & Optimisation™ facilitator')
+  })
+
+  it('The Inner Sanctuary and Present show only the Duration placeholder and the recordings line (check, 16 Nov)', () => {
+    for (const slug of ['meditation', 'mindfulness']) {
+      const { container, unmount } = render(<ProgramDetailClient program={getProgramBySlug(slug)!} relatedPrograms={[]} />)
+      const placeholders = Array.from(container.querySelectorAll('[data-placeholder="true"]')).map((n) => n.textContent)
+      expect(placeholders, slug).toEqual(['[number of sessions · length of each session · over X weeks]'])
+      expect(container.textContent, slug).toContain('available if you miss a live session')
+      unmount()
+    }
   })
 
   it('Akashic Navigator Basic shows Advanced and the bundle, and sells the self-study (Johan 10 Nov)', () => {
@@ -229,7 +254,7 @@ describe('live only until run: no self-study on sale (Suzanne 12 Nov)', () => {
   }
 
   it('a programme without a recorded edition shows no options block', () => {
-    render(<ProgramDetailClient program={getProgramBySlug('energy-clearing-basic')!} relatedPrograms={[]} />)
+    render(<ProgramDetailClient program={getProgramBySlug('energy-alignment-optimisation-basic')!} relatedPrograms={[]} />)
     expect(screen.queryByText('The recorded programme')).not.toBeInTheDocument()
   })
 })

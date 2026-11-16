@@ -9,6 +9,7 @@ import { ProgrammeOptions, recordedSelfStudyHref } from '@/components/programs/P
 import { useProgramPrices } from '@/components/programs/ProgramPrices'
 import { PRICE_ON_REQUEST, programPriceSuffix } from '@/lib/programs/program-prices'
 import { SERIES_PATHS, type ProgrammeCopy } from '@/data/programmeCopy'
+import { withoutTrademark } from '@/data/energyAlignment'
 
 const reveal = {
   initial: { opacity: 0, y: 50 },
@@ -252,7 +253,7 @@ export function ProgrammeLongForm({ program, copy, price, priceSuffix, cta }: Pr
                       href={`/programs/${step.slug}`}
                       className="text-sm font-medium text-brand-primary underline underline-offset-4 decoration-brand-primary-300 hover:decoration-brand-primary"
                     >
-                      View {stepProgram.name}
+                      View {withoutTrademark(stepProgram.name)}
                     </Link>
                   )}
                 </li>

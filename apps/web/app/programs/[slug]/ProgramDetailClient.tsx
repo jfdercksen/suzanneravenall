@@ -10,6 +10,7 @@ import { getProgramBySlug, getProgramCta, isResonanceRepatterning, selfStudyEdit
 import { recordedSelfStudyHref } from '@/components/programs/ProgrammeOptions'
 import { getProgrammeCopy } from '@/data/programmeCopy'
 import { ProgrammeLongForm, longFormBandCount } from '@/components/programs/ProgrammeLongForm'
+import { EAO_MARKED, EAO_NAME, withoutTrademark } from '@/data/energyAlignment'
 
 type Props = {
   program: Program
@@ -35,7 +36,7 @@ const DELIVERY_METHODS: Record<Program['category'], string> = {
 function getDeliveryMethod(program: Program): string {
   // All Resonance Repatterning programmes are currently offered self-study
   if (isResonanceRepatterning(program)) return 'Self-Study Online: Start Anytime'
-  // Energy Clearing and Akashic Navigator link to the self-study product; live
+  // Energy Alignment & Optimisation and Akashic Navigator link to the self-study product; live
   // runs are register interest only (decision 5, 6 Oct; Johan 10 Nov)
   if (program.series === 'energy-clearing' || program.series === 'akashic-navigator') return 'Self-Study Online: Start Anytime'
   return DELIVERY_METHODS[program.category]
@@ -387,7 +388,7 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                             href={`/programs/${prerequisiteProgram.slug}`}
                             className="text-brand-accent hover:text-brand-accent-700 underline underline-offset-2"
                           >
-                            View {prerequisiteProgram.name}
+                            View {withoutTrademark(prerequisiteProgram.name)}
                           </Link>
                         </>
                       )}
@@ -496,8 +497,9 @@ export default function ProgramDetailClient({ program, relatedPrograms }: Props)
                 has turned her lived wisdom into a rigorous methodology for conscious healing.
               </p>
               <p className="text-base text-brand-muted font-light leading-relaxed mb-10">
-                She is a certified Trauma specialist, Akashic Navigator, and Energy
-                Clearing facilitator, as well as an internationally recognised keynote speaker. Her
+                {/* Energy Clearing is Energy Alignment & Optimisation (Suzanne 12 Nov): marked here unless the page title already carries it. */}
+                She is a certified Trauma specialist, Akashic Navigator, and{' '}
+                {program.series === 'energy-clearing' ? EAO_NAME : EAO_MARKED} facilitator, as well as an internationally recognised keynote speaker. Her
                 work weaves neuroscience, energy psychology, and ancient healing traditions into a
                 practical, transformative framework accessible to anyone ready to change.
               </p>

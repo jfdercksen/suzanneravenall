@@ -114,6 +114,7 @@ export const TIER_BADGE_STYLES: Record<TierSlug, string> = {
 
 // ─── 29-tier membership system (Wild Apricot / real structure) ────────────────
 
+/** 'energy-clearing' is the Energy Alignment & Optimisation ladder: the id keeps the old name, it is stored on members (KI116). */
 export type MembershipTrack = 'akashic' | 'energy-clearing' | 'general'
 export type MembershipLevel =
   | 'guest' | 'lifestyle' | 'student' | 'novice' | 'practitioner'
@@ -151,29 +152,30 @@ export const MEMBERSHIP_TIERS: MembershipTier[] = [
   { sku: 'S0223', title: 'Akashic Master Practitioner (MasterPrdip) - Premier Membership', handle: 'membership-s0223', track: 'akashic', level: 'master', tierType: 'premier', accessLevel: 9, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
   { sku: 'S0224', title: 'Akashic Instructor (Inst) - Premier Membership', handle: 'membership-s0224', track: 'akashic', level: 'instructor', tierType: 'premier', accessLevel: 9, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
   { sku: 'S0225', title: 'Akashic Certified Master Instructor (CertMasterInst) - Premier Membership', handle: 'membership-s0225', track: 'akashic', level: 'master-instructor', tierType: 'premier', accessLevel: 10, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0226', title: 'Energy Clearing Student Membership', handle: 'membership-s0226', track: 'energy-clearing', level: 'student', tierType: 'standard', accessLevel: 3, zarPrice: 525, usdPrice: 30, requiresTraining: false, canChargeClients: false, annual: true },
-  { sku: 'S0227', title: 'Energy Clearing Novice Practitioner - Basic Membership', handle: 'membership-s0227', track: 'energy-clearing', level: 'novice', tierType: 'basic', accessLevel: 4, zarPrice: 875, usdPrice: 50, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0228', title: 'Energy Clearing Novice Practitioner - Premier Membership', handle: 'membership-s0228', track: 'energy-clearing', level: 'novice', tierType: 'premier', accessLevel: 4, zarPrice: 1225, usdPrice: 70, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0229', title: 'Energy Clearing Practitioner (Prdip) - Basic Membership', handle: 'membership-s0229', track: 'energy-clearing', level: 'practitioner', tierType: 'basic', accessLevel: 5, zarPrice: 1400, usdPrice: 80, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0230', title: 'Energy Clearing Practitioner (Prdip) - Premier Membership', handle: 'membership-s0230', track: 'energy-clearing', level: 'practitioner', tierType: 'premier', accessLevel: 5, zarPrice: 1750, usdPrice: 100, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0231', title: 'Energy Clearing Certified Practitioner (CertPrdip) - Basic Membership', handle: 'membership-s0231', track: 'energy-clearing', level: 'certified', tierType: 'basic', accessLevel: 6, zarPrice: 1750, usdPrice: 100, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0232', title: 'Energy Clearing Certified Practitioner (CertPrdip) - Premier Membership', handle: 'membership-s0232', track: 'energy-clearing', level: 'certified', tierType: 'premier', accessLevel: 6, zarPrice: 2100, usdPrice: 120, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0233', title: 'Energy Clearing Certified Advanced Practitioner (CertAdvPrdip) - Basic Membership', handle: 'membership-s0233', track: 'energy-clearing', level: 'advanced', tierType: 'basic', accessLevel: 7, zarPrice: 1750, usdPrice: 100, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0234', title: 'Energy Clearing Certified Advanced Practitioner (CertAdvPrdip) - Premier Membership', handle: 'membership-s0234', track: 'energy-clearing', level: 'advanced', tierType: 'premier', accessLevel: 7, zarPrice: 2100, usdPrice: 120, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0235', title: 'Energy Clearing Mentor (MentorPrdip) - Premier Membership', handle: 'membership-s0235', track: 'energy-clearing', level: 'mentor', tierType: 'premier', accessLevel: 8, zarPrice: 1750, usdPrice: 100, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0236', title: 'Energy Clearing Master Practitioner (MasterPrdip) - Premier Membership', handle: 'membership-s0236', track: 'energy-clearing', level: 'master', tierType: 'premier', accessLevel: 9, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0237', title: 'Energy Clearing Certified Master Practitioner (CertMasterPrdip) - Premier Membership', handle: 'membership-s0237', track: 'energy-clearing', level: 'master', tierType: 'premier', accessLevel: 9, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0238', title: 'Energy Clearing Instructor (Inst) - Premier Membership', handle: 'membership-s0238', track: 'energy-clearing', level: 'instructor', tierType: 'premier', accessLevel: 9, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
-  { sku: 'S0239', title: 'Energy Clearing Certified Master Instructor (CertMasterInst) - Premier Membership', handle: 'membership-s0239', track: 'energy-clearing', level: 'master-instructor', tierType: 'premier', accessLevel: 10, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0226', title: 'Energy Alignment & Optimisation Student Membership', handle: 'membership-s0226', track: 'energy-clearing', level: 'student', tierType: 'standard', accessLevel: 3, zarPrice: 525, usdPrice: 30, requiresTraining: false, canChargeClients: false, annual: true },
+  { sku: 'S0227', title: 'Energy Alignment & Optimisation Novice Practitioner - Basic Membership', handle: 'membership-s0227', track: 'energy-clearing', level: 'novice', tierType: 'basic', accessLevel: 4, zarPrice: 875, usdPrice: 50, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0228', title: 'Energy Alignment & Optimisation Novice Practitioner - Premier Membership', handle: 'membership-s0228', track: 'energy-clearing', level: 'novice', tierType: 'premier', accessLevel: 4, zarPrice: 1225, usdPrice: 70, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0229', title: 'Energy Alignment & Optimisation Practitioner (Prdip) - Basic Membership', handle: 'membership-s0229', track: 'energy-clearing', level: 'practitioner', tierType: 'basic', accessLevel: 5, zarPrice: 1400, usdPrice: 80, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0230', title: 'Energy Alignment & Optimisation Practitioner (Prdip) - Premier Membership', handle: 'membership-s0230', track: 'energy-clearing', level: 'practitioner', tierType: 'premier', accessLevel: 5, zarPrice: 1750, usdPrice: 100, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0231', title: 'Energy Alignment & Optimisation Certified Practitioner (CertPrdip) - Basic Membership', handle: 'membership-s0231', track: 'energy-clearing', level: 'certified', tierType: 'basic', accessLevel: 6, zarPrice: 1750, usdPrice: 100, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0232', title: 'Energy Alignment & Optimisation Certified Practitioner (CertPrdip) - Premier Membership', handle: 'membership-s0232', track: 'energy-clearing', level: 'certified', tierType: 'premier', accessLevel: 6, zarPrice: 2100, usdPrice: 120, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0233', title: 'Energy Alignment & Optimisation Certified Advanced Practitioner (CertAdvPrdip) - Basic Membership', handle: 'membership-s0233', track: 'energy-clearing', level: 'advanced', tierType: 'basic', accessLevel: 7, zarPrice: 1750, usdPrice: 100, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0234', title: 'Energy Alignment & Optimisation Certified Advanced Practitioner (CertAdvPrdip) - Premier Membership', handle: 'membership-s0234', track: 'energy-clearing', level: 'advanced', tierType: 'premier', accessLevel: 7, zarPrice: 2100, usdPrice: 120, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0235', title: 'Energy Alignment & Optimisation Mentor (MentorPrdip) - Premier Membership', handle: 'membership-s0235', track: 'energy-clearing', level: 'mentor', tierType: 'premier', accessLevel: 8, zarPrice: 1750, usdPrice: 100, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0236', title: 'Energy Alignment & Optimisation Master Practitioner (MasterPrdip) - Premier Membership', handle: 'membership-s0236', track: 'energy-clearing', level: 'master', tierType: 'premier', accessLevel: 9, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0237', title: 'Energy Alignment & Optimisation Certified Master Practitioner (CertMasterPrdip) - Premier Membership', handle: 'membership-s0237', track: 'energy-clearing', level: 'master', tierType: 'premier', accessLevel: 9, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0238', title: 'Energy Alignment & Optimisation Instructor (Inst) - Premier Membership', handle: 'membership-s0238', track: 'energy-clearing', level: 'instructor', tierType: 'premier', accessLevel: 9, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
+  { sku: 'S0239', title: 'Energy Alignment & Optimisation Certified Master Instructor (CertMasterInst) - Premier Membership', handle: 'membership-s0239', track: 'energy-clearing', level: 'master-instructor', tierType: 'premier', accessLevel: 10, zarPrice: 2625, usdPrice: 150, requiresTraining: true, canChargeClients: true, annual: true },
 ]
 
 /**
  * Who may join which level (Suzanne, 12 Nov 2026, correcting "three levels
  * open without prerequisites"): Lifestyle and Student have no prerequisites.
  * Novice needs the fundamentals completed (1 programme for Akashic, 1 for
- * Energy Clearing, 3 for Resonance Repatterning), then sign-off from a
- * teacher that the person is able to practise as a novice, and then they
- * upgrade their membership. Akashic and Energy Clearing are two separate
+ * Energy Alignment & Optimisation, 3 for Resonance Repatterning), then
+ * sign-off from a teacher that the person is able to practise as a novice,
+ * and then they upgrade their membership. Akashic and Energy Alignment &
+ * Optimisation (renamed from Energy Clearing, 12 Nov) are two separate
  * ladders. The levels above Novice keep "requires training" as before.
  *
  * Nothing checks the sign-off yet: a Novice membership can be bought by
@@ -212,8 +214,8 @@ export const NOVICE_FUNDAMENTALS: Record<'akashic' | 'energy-clearing', { progra
   'energy-clearing': {
     programmes: 1,
     text: [
-      'Complete the Energy Clearing fundamentals (one programme: ',
-      { link: 'Energy Clearing Level 1 (Basic)', href: '/programs/energy-clearing-basic' },
+      'Complete the Energy Alignment & Optimisation fundamentals (one programme: ',
+      { link: 'Energy Alignment & Optimisation Level 1 (Basic)', href: '/programs/energy-alignment-optimisation-basic' },
       '), then a teacher signs off that you are able to practise as a novice, and you upgrade your membership.',
     ],
   },
@@ -223,11 +225,11 @@ export const NOVICE_FUNDAMENTALS: Record<'akashic' | 'energy-clearing', { progra
 export const MEMBERSHIP_JOINING_RULE: RichLine[] = [
   'Lifestyle and Student memberships have no prerequisites.',
   [
-    'Novice Practitioner membership comes after the fundamentals: one programme for Akashic, one for Energy Clearing and three for Resonance Repatterning (',
+    'Novice Practitioner membership comes after the fundamentals: one programme for Akashic, one for Energy Alignment & Optimisation™ and three for Resonance Repatterning (',
     ph('which three Resonance Repatterning programmes count', 'Suzanne'),
     '). A teacher then signs off that you are able to practise as a novice, and you upgrade your membership.',
   ],
-  'Akashic and Energy Clearing are separate ladders: you climb each one on its own.',
+  'Akashic and Energy Alignment & Optimisation are separate ladders: you climb each one on its own.',
 ]
 
 export function checkAccessLevel(memberLevel: number, requiredLevel: number): boolean {

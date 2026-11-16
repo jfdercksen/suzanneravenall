@@ -225,6 +225,10 @@ const nextConfig = {
 
       // Renamed programmes: the old slug keeps working (Shayna, 16 Oct 2026)
       { source: '/programs/nice-or-not-nice-communication', destination: '/programs/coherent-communication', permanent: true },
+      // Energy Clearing is Energy Alignment & Optimisation (Suzanne, 12 Nov 2026). The old-site
+      // /energy-clearing* paths above go straight to /services, so nothing chains through these.
+      { source: '/programs/energy-clearing-basic',    destination: '/programs/energy-alignment-optimisation-basic',    permanent: true },
+      { source: '/programs/energy-clearing-advanced', destination: '/programs/energy-alignment-optimisation-advanced', permanent: true },
 
       // Transformation Pathways — old flat WP URLs → new nested routes
       { source: '/break-the-loop',                             destination: '/transformation-pathways/break-the-loop',                             permanent: true },

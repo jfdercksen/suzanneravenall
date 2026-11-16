@@ -138,7 +138,7 @@ describe('ProgramsPageClient practitioner training (8 Nov)', () => {
       'Rapid Repatterning®',
       'Human Performance Replicator',
       'Pattern Intelligence™',
-      'Energy Clearing',
+      'Energy Alignment & Optimisation™',
       'Akashic Navigator',
       'Resonance Repatterning',
     ])
@@ -163,9 +163,22 @@ describe('ProgramsPageClient practitioner training (8 Nov)', () => {
     expect(placeholders.filter((t) => t === '[Programme description, format and price]')).toHaveLength(3)
   })
 
+  it('heads the Energy Alignment & Optimisation block with the mark once, her strapline and cards without the mark (Suzanne 12 Nov)', () => {
+    render(<ProgramsPageClient />)
+    const body = document.body.textContent ?? ''
+    expect(body).not.toContain('Energy Clearing')
+    expect(body.split('Energy Alignment & Optimisation™')).toHaveLength(2)
+    expect(screen.getByRole('heading', { name: 'Energy Alignment & Optimisation™' })).toBeInTheDocument()
+    expect(screen.getByText("Aligning the body's energy systems for coherence, capacity and performance.")).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Energy Alignment & Optimisation: Self Clearing Level 1 (Basic)' })).toBeInTheDocument()
+    const hrefs = screen.getAllByRole('link').map((a) => a.getAttribute('href'))
+    expect(hrefs).toContain('/programs/energy-alignment-optimisation-advanced')
+    expect(hrefs.filter((h) => h?.startsWith('/programs/energy-clearing'))).toEqual([])
+  })
+
   it('links both bundle products, priced from the shop (Johan 10 Nov)', () => {
     render(<ProgramsPageClient />)
-    expect(screen.getByRole('heading', { name: 'Deep Energy Clearing Level 1 & 2: Purchased Together' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Energy Alignment & Optimisation Level 1 & 2: Purchased Together' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Akashic Navigator Level 1 & 2: Purchased Together' })).toBeInTheDocument()
     const hrefs = screen.getAllByRole('link', { name: 'View in Shop' }).map((a) => a.getAttribute('href'))
     expect(hrefs).toContain('/shop/deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom')

@@ -15,6 +15,7 @@ import {
   type Program,
 } from '@/data/programs'
 import { PRACTITIONER_TRACKS, licensingLinks } from '@/data/practitionerTracks'
+import { EAO_MARKED, EAO_STRAPLINE, withoutTrademark } from '@/data/energyAlignment'
 import { RichText } from '@/components/shared/RichText'
 import { contactHref } from '@/app/contact/enquiry'
 import liveCalendarFile from '@/data/live-calendar.json'
@@ -399,7 +400,7 @@ export default function ProgramsPageClient({ membershipsOn = false }: { membersh
               ))}
             </motion.div>
 
-            {/* Energy Clearing: parent block */}
+            {/* Energy Alignment & Optimisation (was Energy Clearing): parent block. The heading carries the mark, the cards below drop it. */}
             <motion.div
               variants={sectionVariants}
               initial="hidden"
@@ -412,8 +413,9 @@ export default function ProgramsPageClient({ membershipsOn = false }: { membersh
                   Practitioner Training
                 </p>
                 <h3 className="text-2xl lg:text-4xl font-medium tracking-tight text-brand-ink mb-4 leading-snug">
-                  Energy Clearing
+                  {EAO_MARKED}
                 </h3>
+                <p className="text-brand-ink font-medium leading-relaxed mb-3">{EAO_STRAPLINE}</p>
                 <p className="text-brand-muted font-light leading-relaxed">
                   We are physical and energetic beings. Learn to clear your own
                   energy field at the Basic level, then train to facilitate
@@ -428,7 +430,7 @@ export default function ProgramsPageClient({ membershipsOn = false }: { membersh
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
               >
                 {energyClearingPrograms.map((program) => (
-                  <ProgramCard key={program.slug} program={program} />
+                  <ProgramCard key={program.slug} program={{ ...program, name: withoutTrademark(program.name) }} />
                 ))}
                 <BundleCard series="energy-clearing" />
               </motion.div>

@@ -39,7 +39,7 @@ describe('data/live-calendar.json', () => {
     const slugs = [...rows.map((r) => r.programme.slug), ...toBeAnnounced.map((p) => p.slug)]
     expect(slugs).not.toContain('money-mastery')
     expect(slugs).not.toContain('trauma-to-transcendence')
-    expect(slugs).not.toContain('energy-clearing-basic')
+    expect(slugs).not.toContain('energy-alignment-optimisation-basic')
   })
 })
 

@@ -13,6 +13,8 @@ import type { LiveCalendar } from '@/lib/events/calendarFormat'
 // file). Recorded series and self-study moved out: they stay in the shop and
 // on /programs. No date is ever invented: while the file has none, every
 // programme shows "Dates to be announced" with a register-interest button.
+// The "Prefer Your Own Pace?" band (self-study and recorded series links) is
+// gone too: Events is live programmes only (Suzanne; Shayna's 12 Nov checklist).
 
 const sectionMotion = {
   initial: { opacity: 0, y: 50 },
@@ -77,50 +79,6 @@ export default function EventsContent({ calendar }: { calendar: LiveCalendar }) 
           </motion.div>
           <LiveCalendarList calendar={calendar} />
         </div>
-      </section>
-
-      {/* Own pace: sand */}
-      <section aria-labelledby="own-pace-heading" className="w-full bg-brand-sand py-20 lg:py-32">
-        <motion.div
-          {...sectionMotion}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-16 items-start"
-        >
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-4">
-              Prefer Your Own Pace?
-            </p>
-            <h2
-              id="own-pace-heading"
-              className="text-4xl lg:text-5xl font-medium tracking-tight text-brand-primary leading-tight"
-            >
-              Start now, in your own time
-            </h2>
-          </div>
-          <div>
-            <h3 className="text-xl font-medium text-brand-primary mb-3">Self-study programmes</h3>
-            <p className="text-brand-muted text-sm font-light leading-relaxed mb-6">
-              Recorded programmes you can start anytime and work through at your own pace.
-            </p>
-            <Link
-              href="/programs#self-paced"
-              className="text-sm font-medium text-brand-accent hover:text-brand-accent-700 underline underline-offset-4 transition-colors duration-300"
-            >
-              Browse self-study
-            </Link>
-          </div>
-          <div>
-            <h3 className="text-xl font-medium text-brand-primary mb-3">Recorded group healing sessions</h3>
-            <p className="text-brand-muted text-sm font-light leading-relaxed mb-6">
-              Group healing, in your own time: series recorded live with Suzanne.
-            </p>
-            <Link
-              href="/programs/recorded-group-healing"
-              className="text-sm font-medium text-brand-accent hover:text-brand-accent-700 underline underline-offset-4 transition-colors duration-300"
-            >
-              See the recorded series
-            </Link>
-          </div>
-        </motion.div>
       </section>
 
       {/* Final CTA: dark, photo-backed */}

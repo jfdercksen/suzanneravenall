@@ -3,7 +3,8 @@ import type { ProgramSeries } from '@/data/programs'
 
 /**
  * Long-form programme pages from Suzanne's 8 Nov copy documents, verbatim:
- * 03 Energy Clearing Certification (Level 1, Level 2), 04 Akashic Navigator
+ * 03 Energy Clearing Certification (Level 1, Level 2; renamed Energy Alignment &
+ * Optimisation by Suzanne on 12 Nov 2026, only the name changed), 04 Akashic Navigator
  * Certification (Level 1, Level 2), 05 The Inner Sanctuary, 06 Present.
  * Her [square bracket] placeholders stay visible (ph(...)) with the person
  * who fills them. A programme with an entry here renders the long-form page
@@ -54,8 +55,8 @@ export const SERIES_PATHS: Partial<Record<ProgramSeries, SeriesPath>> = {
   'energy-clearing': {
     heading: 'Your Path to Practitioner',
     steps: [
-      { label: 'Level 1 · Foundations', text: 'spot, track and clear dense energy in your own system.', slug: 'energy-clearing-basic' },
-      { label: 'Level 2 · Advanced', text: 'spot, track and clear dense energy for others, as a certified practitioner.', slug: 'energy-clearing-advanced' },
+      { label: 'Level 1 · Foundations', text: 'spot, track and clear dense energy in your own system.', slug: 'energy-alignment-optimisation-basic' },
+      { label: 'Level 2 · Advanced', text: 'spot, track and clear dense energy for others, as a certified practitioner.', slug: 'energy-alignment-optimisation-advanced' },
     ],
     note: 'Level 1 is the required foundation for Level 2.',
   },
@@ -70,8 +71,8 @@ export const SERIES_PATHS: Partial<Record<ProgramSeries, SeriesPath>> = {
 }
 
 export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
-  // ── 03 Energy Clearing, Level 1 ───────────────────────────────────────────
-  'energy-clearing-basic': {
+  // ── 03 Energy Alignment & Optimisation, Level 1 ────────────────────────────
+  'energy-alignment-optimisation-basic': {
     eyebrow: 'Self-Study · AADP Accredited',
     level: 'Level 1 · Foundations',
     lead: 'You are more than a physical body. You are an electrical, energetic system.',
@@ -133,7 +134,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       lead: 'Your training, independently accredited.',
       paragraphs: [
         'This programme is accredited by the American Association of Drugless Practitioners (AADP), an international professional body that offers board certification and professional membership to holistic health practitioners around the world.',
-        'On successful completion, you will receive your Level 1 Energy Clearing certificate from The Ravenall Institute, and you will be eligible to apply for board certification with the AADP.',
+        'On successful completion, you will receive your Level 1 Energy Alignment & Optimisation certificate from The Ravenall Institute, and you will be eligible to apply for board certification with the AADP.',
         [AADP_CERT_PENDING],
       ],
     },
@@ -141,8 +142,8 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
     ctaLabel: 'Enrol in Level 1',
   },
 
-  // ── 03 Energy Clearing, Level 2 ───────────────────────────────────────────
-  'energy-clearing-advanced': {
+  // ── 03 Energy Alignment & Optimisation, Level 2 ────────────────────────────
+  'energy-alignment-optimisation-advanced': {
     eyebrow: 'Practitioner Certification · AADP Accredited',
     level: 'Level 2 · Advanced',
     lead: "You've cleared your own system. Now learn to clear it for others.",
@@ -150,7 +151,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       "In Level 1 you learned to spot, track and clear dense and dark energy in yourself. You've felt the difference: the lightness, the clarity, the energy coming back.",
       "Level 2 is where you turn that personal practice into a professional skill. You will learn to read another person's energy field, find where dense energy is held and where it came from, and clear it safely and effectively, while staying grounded and protected yourself.",
       "Working on someone else's energy is very different from working on your own. It takes deeper sensitivity, a reliable method, clear ethics and strong energetic boundaries. This programme gives you all four.",
-      'Level 2 is your path to becoming a certified Energy Clearing Practitioner.',
+      'Level 2 is your path to becoming a certified Energy Alignment & Optimisation Practitioner.',
     ],
     whoHeading: "Who It's For",
     whoIntro: 'This programme is for you if you:',
@@ -176,7 +177,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
       { title: 'Clear energy for others', body: "Use advanced techniques to clear dense energy safely and effectively, and restore your client's flow." },
       { title: 'Run a professional session', body: 'Lead clients through a structured clearing session with confidence, from opening to aftercare.' },
       { title: 'Work without taking it on', body: 'Stay grounded, clear and protected, however heavy the energy you work with.' },
-      { title: 'Practise as a certified Energy Clearing Practitioner', body: 'Professionally certified and ready to work with clients, ethically and within your scope.' },
+      { title: 'Practise as a certified Energy Alignment & Optimisation Practitioner', body: 'Professionally certified and ready to work with clients, ethically and within your scope.' },
     ],
     details: [
       // Source: her Thinkific course page (lessons, video hours, materials) and her current site's public pages, read 11 Nov 2026.
@@ -200,7 +201,7 @@ export const PROGRAMME_COPY: Record<string, ProgrammeCopy> = {
     certification: {
       heading: 'Certified Practitioner Status',
       paragraphs: [
-        'On successful completion, including your practical assessment, you will be certified as an Energy Clearing Practitioner by The Ravenall Institute, and you will be eligible to apply for board certification with the AADP.',
+        'On successful completion, including your practical assessment, you will be certified as an Energy Alignment & Optimisation Practitioner by The Ravenall Institute, and you will be eligible to apply for board certification with the AADP.',
         [AADP_CERT_PENDING],
       ],
     },

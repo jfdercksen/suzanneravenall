@@ -25,9 +25,9 @@ function formatDate(dateStr: string | null): string {
 
 function formatTrack(track: string | null): string {
   if (!track || track === 'general') return ''
-  if (track === 'energy-clearing') return 'Energy Clearing'
+  if (track === 'energy-clearing') return 'Energy Alignment & Optimisation'
   if (track === 'akashic') return 'Akashic'
-  if (track === 'both') return 'Akashic & Energy Clearing'
+  if (track === 'both') return 'Akashic and Energy Alignment & Optimisation'
   return track
 }
 

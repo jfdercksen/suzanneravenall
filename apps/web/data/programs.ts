@@ -19,6 +19,7 @@
 
 export type ProgramSeries =
   | 'resonance-repatterning'
+  /** Energy Alignment & Optimisation (was Energy Clearing): the id keeps the old name on purpose (KI116). */
   | 'energy-clearing'
   | 'akashic-navigator'
 
@@ -206,11 +207,11 @@ export const PROGRAMS: Program[] = [
     isFeatured: false,
   },
 
-  // ── PRACTITIONER — Energy Clearing ──
+  // ── PRACTITIONER: Energy Alignment & Optimisation (was Energy Clearing; Suzanne 12 Nov 2026) ──
   {
-    slug: 'energy-clearing-basic',
+    slug: 'energy-alignment-optimisation-basic',
     image: '/images/products/deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom.png',
-    name: 'Energy Clearing: Self Clearing Level 1 (Basic)',
+    name: 'Energy Alignment & Optimisation™: Self Clearing Level 1 (Basic)',
     category: 'practitioner',
     series: 'energy-clearing',
     shortDescription:
@@ -239,9 +240,9 @@ export const PROGRAMS: Program[] = [
     isFeatured: false,
   },
   {
-    slug: 'energy-clearing-advanced',
+    slug: 'energy-alignment-optimisation-advanced',
     image: '/images/products/deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom.png',
-    name: 'Energy Clearing: Clearing Others Level 2 (Advanced)',
+    name: 'Energy Alignment & Optimisation™: Clearing Others Level 2 (Advanced)',
     category: 'practitioner',
     series: 'energy-clearing',
     shortDescription:
@@ -266,7 +267,7 @@ export const PROGRAMS: Program[] = [
     // Source: Thinkific Deep Energy Clearing Level 2 key takeaways
     keyTakeaways: ['Clear others', 'Tap into your energetic self', 'Revitalise'],
     // Source: builds on Level 1, as stated in the programme names and copy (report section 8)
-    prerequisite: { text: 'Energy Clearing Level 1 (Basic).', slug: 'energy-clearing-basic' },
+    prerequisite: { text: 'Energy Alignment & Optimisation Level 1 (Basic).', slug: 'energy-alignment-optimisation-basic' },
     selfStudyVariant: true,
     isPublished: true,
     isFeatured: false,
@@ -284,7 +285,7 @@ export const PROGRAMS: Program[] = [
     description:
       'For a moment, just one moment, imagine you had the ability to alter your relationship with success and everything happening in your life. Imagine having the ability to improve your intuition to such an extent that you receive daily guidance in the direction you are moving in. This is completely possible. The Akashic Records are the energetic records of all souls\' lives, a compendium of all events, thoughts, words, emotions, and intent ever to have occurred. Each soul has its own Akashic Record, like a series of books with each book representing one lifetime. Your problems are not happening in a haphazard manner, and they are not meaningless roadblocks. Your life is working even when you don\'t think so, and you can move through it with less resistance and more expansion when you understand it. In this Fundamentals programme (Clearing Self, Level 1) you learn to access your own records: reading them to receive information, and clearing the blocks, constrictions and ancestral patterns affecting this lifetime.',
     priceUsd: 500,
-    // Live-shop SELF-STUDY price, like Energy Clearing (Live via Zoom is R10,295).
+    // Live-shop SELF-STUDY price, like Energy Alignment & Optimisation (Live via Zoom is R10,295).
     priceZar: 4650,
     shopHandle: 'akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom',
     // No live dates published since 2022: live is register interest, self-study sells now (Johan 10 Nov).
@@ -312,7 +313,7 @@ export const PROGRAMS: Program[] = [
     description:
       'Learn to read the Akashic Records for others: learn why they are here, their past and much more, and learn how to help others navigate life with much more wisdom and ease, with key answers to critical questions. The Akashic Records are an amazing resource to help you see beyond the veil, to clear disruption in a person\'s path and navigate life, business, career and relationships with much greater ease. Many medical studies now show that ancestral patterns carried through our DNA can disrupt our lives unknowingly, all of which can be addressed through the Akashic Records. Building on the Fundamentals level, this Advanced programme (Clearing Others, Level 2) develops the reading and clearing skills to work with clients.',
     priceUsd: 500,
-    // Live-shop SELF-STUDY price, like Energy Clearing (Live via Zoom is R10,295).
+    // Live-shop SELF-STUDY price, like Energy Alignment & Optimisation (Live via Zoom is R10,295).
     priceZar: 4650,
     shopHandle: 'akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom',
     // No live dates published since 2022: live is register interest, self-study sells now (Johan 10 Nov).
@@ -932,11 +933,11 @@ export const BUNDLES: Program[] = [
   {
     slug: 'energy-clearing-bundle',
     image: '/images/products/deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom.png',
-    name: 'Deep Energy Clearing Level 1 & 2: Purchased Together',
+    name: 'Energy Alignment & Optimisation Level 1 & 2: Purchased Together',
     category: 'practitioner',
     series: 'energy-clearing',
-    shortDescription: 'Both levels of the Energy Clearing training, bought together.',
-    description: 'Both levels of the Energy Clearing training, bought together.',
+    shortDescription: 'Both levels of the Energy Alignment & Optimisation training, bought together.',
+    description: 'Both levels of the Energy Alignment & Optimisation training, bought together.',
     priceZar: 7905,
     shopHandle: 'deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom',
     duration: 'Self-study: start anytime. Live via Zoom: register your interest',

@@ -67,6 +67,15 @@ describe('next.config.mjs redirects — repointed slug destinations', () => {
       source: '/programs/nice-or-not-nice-communication',
       destination: '/programs/coherent-communication',
     },
+    // Energy Clearing renamed Energy Alignment & Optimisation (Suzanne, 12 Nov 2026)
+    {
+      source: '/programs/energy-clearing-basic',
+      destination: '/programs/energy-alignment-optimisation-basic',
+    },
+    {
+      source: '/programs/energy-clearing-advanced',
+      destination: '/programs/energy-alignment-optimisation-advanced',
+    },
   ]
 
   for (const { source, destination } of EXPECTED_REDIRECTS) {
@@ -85,5 +94,22 @@ describe('next.config.mjs redirects — /basket still present', () => {
     expect(match).toBeDefined()
     expect(match?.destination).toBe('/cart')
     expect(match?.permanent).toBe(true)
+  })
+})
+
+describe('next.config.mjs redirects: Energy Clearing paths never chain (Suzanne, 12 Nov 2026)', () => {
+  const sources = new Set(redirects.map((r) => r.source))
+
+  it('no redirect lands on an old energy-clearing programme path', () => {
+    expect(redirects.filter((r) => r.destination.startsWith('/programs/energy-clearing'))).toEqual([])
+  })
+
+  it('every energy-clearing source ends on a page that is not itself redirected', () => {
+    const ec = redirects.filter((r) => r.source.includes('energy-clearing'))
+    expect(ec.length).toBeGreaterThanOrEqual(5)
+    for (const r of ec) {
+      expect(r.permanent, r.source).toBe(true)
+      expect(sources.has(r.destination), `${r.source} -> ${r.destination}`).toBe(false)
+    }
   })
 })

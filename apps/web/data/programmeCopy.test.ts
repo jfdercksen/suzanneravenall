@@ -9,13 +9,13 @@ describe('data/programmeCopy (8 Nov attachments 03-06)', () => {
     }
   })
 
-  it('covers both levels of Energy Clearing and Akashic Navigator, The Inner Sanctuary and Present', () => {
+  it('covers both levels of Energy Alignment & Optimisation and Akashic Navigator, The Inner Sanctuary and Present', () => {
     expect(Object.keys(PROGRAMME_COPY).sort()).toEqual(
       [
         'akashic-navigator-advanced',
         'akashic-navigator-basic',
-        'energy-clearing-advanced',
-        'energy-clearing-basic',
+        'energy-alignment-optimisation-advanced',
+        'energy-alignment-optimisation-basic',
         'meditation',
         'mindfulness',
       ].sort(),

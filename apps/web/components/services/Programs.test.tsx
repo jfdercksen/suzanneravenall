@@ -82,7 +82,7 @@ vi.mock('framer-motion', () => ({
 const PROGRAMME_NAMES = [
   // Practitioner column (Resonance Repatterning last, 8 Nov)
   'Akashic Navigator (Basic & Advanced)',
-  'Energy Clearing (Basic & Advanced)',
+  'Energy Alignment & Optimisation™ (Basic & Advanced)',
   'Resonance Repatterning: The Basic Five',
   // Self-Study column
   'Trauma to Transcendence',

@@ -31,7 +31,7 @@ const GROUP_SESSION_HANDLE_SET = new Set<string>(GROUP_SESSION_HANDLES)
  * Deliberately an explicit handle allowlist, NOT a title/regex match on the
  * variant ("Live", "Live via Zoom", etc.) — many unrelated self-paced course
  * products also have variants titled "Live via Zoom" / "Live Retaker"
- * (Resonance Repatterning, Akashic Navigator, Energy Clearing levels — see
+ * (Resonance Repatterning, Akashic Navigator, Energy Alignment & Optimisation levels — see
  * migrate-woocommerce.ts), and a title heuristic would show a fabricated
  * spots-left/sold-out badge on all of them. Callers (ProductCard,
  * VariantSelector) MUST gate on this before trusting `inventory_quantity` /

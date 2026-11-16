@@ -83,17 +83,25 @@ describe('EventsContent: live programme calendar (item 11)', () => {
   it('no longer lists recorded group series or self-study programmes as events', () => {
     render(<EventsContent calendar={empty} />)
     expect(screen.queryByText('Money Mastery')).not.toBeInTheDocument()
-    expect(screen.queryByText(/Energy Clearing/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Energy Alignment/)).not.toBeInTheDocument()
     expect(screen.queryByText(/Akashic/)).not.toBeInTheDocument()
   })
 
-  it('points own-pace visitors to self-study and the recorded group healing page', () => {
+  it('has no own-pace band: Events is live programmes only (Shayna, 12 Nov checklist)', () => {
     render(<EventsContent calendar={empty} />)
-    expect(screen.getByRole('link', { name: 'Browse self-study' })).toHaveAttribute('href', '/programs#self-paced')
-    expect(screen.getByRole('link', { name: 'See the recorded series' })).toHaveAttribute(
-      'href',
-      '/programs/recorded-group-healing',
-    )
+    expect(screen.queryByText('Prefer Your Own Pace?')).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Start now, in your own time' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Self-study programmes' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Browse self-study' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'See the recorded series' })).not.toBeInTheDocument()
+    expect(document.querySelector('a[href="/programs#self-paced"]')).toBeNull()
+  })
+
+  it('keeps the calendar, the header buttons and the discovery call', () => {
+    render(<EventsContent calendar={empty} />)
+    expect(screen.getByRole('heading', { name: 'Live dates to be announced' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'See the Calendar' })).toHaveAttribute('href', '#calendar')
+    expect(screen.getAllByRole('link', { name: 'Book a Discovery Call' })[0]).toHaveAttribute('href', '/contact#book')
   })
 
   it('makes no intake promise it cannot keep', () => {

@@ -15,7 +15,7 @@ import {
 
 const TRACK_LABELS: Record<string, string> = {
   akashic: 'Akashic Track',
-  'energy-clearing': 'Energy Clearing Track',
+  'energy-clearing': 'Energy Alignment & Optimisation Track',
   general: 'General',
   both: 'Both Tracks',
 }
@@ -177,7 +177,7 @@ export default function UpgradeContent({
                 </p>
               ))}
               <p>
-                You may hold memberships in Akashic and Energy Clearing at the same time. Basic tiers give core access;
+                You may hold memberships in Akashic and Energy Alignment & Optimisation at the same time. Basic tiers give core access;
                 Premier tiers include CPD tracking, community access, and extended resources.
               </p>
             </div>
@@ -264,7 +264,7 @@ export default function UpgradeContent({
               </div>
             </div>
 
-            {/* Energy Clearing */}
+            {/* Energy Alignment & Optimisation (track id energy-clearing) */}
             <div>
               <motion.h3
                 initial={{ opacity: 0, x: 20 }}
@@ -273,7 +273,7 @@ export default function UpgradeContent({
                 transition={{ duration: 0.4 }}
                 className="text-xl font-semibold text-white mb-6 pb-4 border-b border-white/15"
               >
-                Energy Clearing Track
+                Energy Alignment & Optimisation Track
                 <span className="ml-2 text-xs font-normal text-white/60 uppercase tracking-widest">S0226 – S0239</span>
               </motion.h3>
               <div className="space-y-4">
