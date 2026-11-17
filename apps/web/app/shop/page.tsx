@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { cookies, headers } from 'next/headers'
 import { ShopCatalogueContent } from '@/components/shop/ShopCatalogueContent'
 import { ipCountry } from '@/lib/geoip'
+import { fetchAddOnProducts } from '@/lib/shop/addons'
 import { CURRENCY_COOKIE, visitorCurrency } from '@/lib/visitor-region'
 
 export const metadata: Metadata = {
@@ -68,9 +69,10 @@ interface ShopPageProps {
 }
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
-  const [categories, catalogueCount, reqHeaders, reqCookies, params] = await Promise.all([
+  const [categories, catalogueCount, addOns, reqHeaders, reqCookies, params] = await Promise.all([
     fetchCategories(),
     fetchCatalogueCount(),
+    fetchAddOnProducts(),
     headers(),
     cookies(),
     searchParams,
@@ -92,5 +94,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       initialCategories={categories}
       defaultCurrency={defaultCurrency}
       catalogueCount={catalogueCount}
+      addOns={addOns}
     />
 }

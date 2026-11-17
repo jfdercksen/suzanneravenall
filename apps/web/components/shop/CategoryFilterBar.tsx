@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { shopCategoryLabel } from './shopCatalogue'
@@ -21,9 +22,11 @@ interface CategoryFilterBarProps {
   categories: MedusaCategory[]
   filters: FilterState
   onFiltersChange: (filters: FilterState) => void
+  /** Show the Add-ons link, which jumps to the Add-ons band below the catalogue. */
+  hasAddOns?: boolean
 }
 
-export function CategoryFilterBar({ categories, filters, onFiltersChange }: CategoryFilterBarProps) {
+export function CategoryFilterBar({ categories, filters, onFiltersChange, hasAddOns = false }: CategoryFilterBarProps) {
   const barRef = useRef<HTMLElement>(null)
   const [isSticky, setIsSticky] = useState(false)
 
@@ -108,6 +111,15 @@ export function CategoryFilterBar({ categories, filters, onFiltersChange }: Cate
             active={isOnlineCourses}
             onClick={() => setCollectionHandle(isOnlineCourses ? '' : 'programmes')}
           />
+          {/* Not a filter: the add-ons have their own band under the catalogue (17 Nov). */}
+          {hasAddOns && (
+            <Link
+              href="#add-ons"
+              className="flex-shrink-0 px-4 py-2 lg:px-5 lg:py-2.5 rounded-full text-sm font-medium whitespace-nowrap border border-brand-primary-300 text-brand-muted hover:border-brand-accent hover:text-brand-primary hover:bg-brand-sand transition-all duration-200"
+            >
+              Add-ons
+            </Link>
+          )}
         </div>
 
         {activeSubCategory && (

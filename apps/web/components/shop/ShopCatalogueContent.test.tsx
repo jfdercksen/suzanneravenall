@@ -241,3 +241,39 @@ describe('ShopCatalogueContent', () => {
     expect(screen.getByRole('button', { name: /next page/i })).toBeDisabled()
   })
 })
+
+// Suzanne approved an Add-ons section, 17 Nov 2026.
+describe('ShopCatalogueContent add-ons', () => {
+  const addOn = (handle: string, title: string): MedusaProduct => ({
+    ...product(handle, 20000, 'none'),
+    handle,
+    title,
+    categories: [],
+  })
+
+  it('shows the add-ons in their own section and links to it from the filter bar', async () => {
+    render(
+      <main>
+        <ShopCatalogueContent
+          initialCategories={categories}
+          addOns={[addOn('bonus-lifetime-access-self-study-online', 'Bonus Lifetime Access'), addOn('vip-package', 'VIP Package')]}
+        />
+      </main>,
+    )
+    await waitFor(() => expect(cards().length).toBeGreaterThan(2))
+    const section = screen.getByRole('region', { name: 'Add to Your Journey' })
+    expect(within(section).getAllByTestId('card').map((a) => a.getAttribute('href'))).toEqual([
+      '/shop/bonus-lifetime-access-self-study-online',
+      '/shop/vip-package',
+    ])
+    const nav = screen.getByRole('navigation', { name: 'Shop categories' })
+    expect(within(nav).getByRole('link', { name: 'Add-ons' })).toHaveAttribute('href', '#add-ons')
+  })
+
+  it('shows neither the section nor the link when there are no add-ons', async () => {
+    render(<main><ShopCatalogueContent initialCategories={categories} /></main>)
+    await waitFor(() => expect(cards().length).toBeGreaterThan(2))
+    expect(screen.queryByRole('region', { name: 'Add to Your Journey' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Add-ons' })).not.toBeInTheDocument()
+  })
+})

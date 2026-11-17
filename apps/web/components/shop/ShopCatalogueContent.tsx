@@ -10,6 +10,7 @@ import { ProductGridSkeleton } from './ProductGridSkeleton'
 import { ShopHeroBanner } from './ShopHeroBanner'
 import { ShopPagination } from './ShopPagination'
 import { ShopFinalCTA } from './ShopFinalCTA'
+import { ShopAddOns } from './ShopAddOns'
 import {
   catalogueCountNoun,
   orderBySearchHits,
@@ -67,9 +68,16 @@ interface ShopCatalogueContentProps {
   defaultCurrency?: string
   /** Live catalogue size for the hero line (KI063); null when Medusa did not answer */
   catalogueCount?: number | null
+  /** The add-on products for their own band (lib/shop/addons.ts); empty hides it. */
+  addOns?: MedusaProduct[]
 }
 
-export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar', catalogueCount = null }: ShopCatalogueContentProps) {
+export function ShopCatalogueContent({
+  initialCategories,
+  defaultCurrency = 'zar',
+  catalogueCount = null,
+  addOns = [],
+}: ShopCatalogueContentProps) {
   const searchParams = useSearchParams()
   const { cart } = useCart()
   // The currency the cards render prices in (ProductCard resolves it the same
@@ -272,6 +280,7 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
         categories={initialCategories}
         filters={filters}
         onFiltersChange={handleFiltersChange}
+        hasAddOns={addOns.length > 0}
       />
 
       {/* 3: Light product grid (sand so white cards read as cards) */}
@@ -369,7 +378,10 @@ export function ShopCatalogueContent({ initialCategories, defaultCurrency = 'zar
         </div>
       </section>
 
-      {/* 4: Photo-backed final CTA (dark, allowed as CTA band) */}
+      {/* 4: Add-ons (cream), their own band so they are easy to find (17 Nov) */}
+      <ShopAddOns products={addOns} defaultCurrency={defaultCurrency} />
+
+      {/* 5: Photo-backed final CTA (dark, allowed as CTA band) */}
       <ShopFinalCTA />
     </div>
   )
