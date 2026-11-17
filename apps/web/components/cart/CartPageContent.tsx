@@ -8,6 +8,7 @@ import { Minus, Plus, Trash2, ShoppingBag, Lock, ShieldCheck, RefreshCw, Tag, X 
 import { useCart, formatPrice } from '@/lib/cart'
 import { variantLabel, isPreorder } from '@/lib/shop/lineItem'
 import { isSubscriptionLine, maxQuantity } from './cartRules'
+import { CartAddOns } from './CartAddOns'
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -177,6 +178,9 @@ export default function CartPageContent() {
                     />
                   ))}
                 </motion.ul>
+
+                {/* Add-ons that go with these items (Johan's pairings, 17 Nov). The buyer clicks to add. */}
+                <CartAddOns />
 
                 <div className="mt-8">
                   <Link
