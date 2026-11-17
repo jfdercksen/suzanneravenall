@@ -6,6 +6,7 @@ import { getMemberAccessLevel } from '@/lib/access/check-access'
 import type { MembershipTrack } from '@/lib/access/tiers'
 import { membershipsEnabled } from '@/lib/access/memberships'
 import { NOT_FOUND_TITLE } from '@/lib/seo/notFoundTitle'
+import { fetchAvailableMembershipHandles } from '@/lib/medusa/membership-availability'
 import UpgradeContent from './UpgradeContent'
 
 // While memberships are off the page is the 404 page, tab title included (KI071).
@@ -63,6 +64,10 @@ export default async function UpgradePage({
     if (tierData?.name) currentTierName = tierData.name
   }
 
+  // Only membership products the store returns get an Upgrade Now link (KI071):
+  // drafts are not returned, and a failed read counts as none available.
+  const availableHandles = await fetchAvailableMembershipHandles()
+
   const { from } = await searchParams
   const safePath = from && from.startsWith('/') ? decodeURIComponent(from) : null
   const fromLabel = safePath ? (FROM_LABELS[safePath] ?? null) : null
@@ -74,6 +79,7 @@ export default async function UpgradePage({
       currentSku={currentSku}
       currentTierName={currentTierName}
       fromLabel={fromLabel}
+      availableHandles={availableHandles}
     />
   )
 }

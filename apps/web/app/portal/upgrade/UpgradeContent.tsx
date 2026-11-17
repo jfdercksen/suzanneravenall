@@ -29,9 +29,11 @@ interface TierCardProps {
   tier: MembershipTier
   isCurrentTier: boolean
   isUpgrade: boolean
+  /** The store returns this tier's product, so /shop/<handle> exists (KI071). */
+  isAvailable: boolean
 }
 
-function TierCard({ tier, isCurrentTier, isUpgrade }: TierCardProps) {
+function TierCard({ tier, isCurrentTier, isUpgrade, isAvailable }: TierCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -96,13 +98,19 @@ function TierCard({ tier, isCurrentTier, isUpgrade }: TierCardProps) {
         </p>
       )}
 
-      {isUpgrade && (
+      {isUpgrade && isAvailable && (
         <Link
           href={`/shop/${tier.handle}`}
           className="mt-auto w-full text-center py-2.5 px-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold text-xs uppercase tracking-widest rounded-xl transition-colors duration-300"
         >
           Upgrade Now
         </Link>
+      )}
+      {/* A draft or missing product would be a 404: no link until it is on sale (KI071). */}
+      {isUpgrade && !isAvailable && (
+        <div className="mt-auto w-full text-center py-2.5 px-4 bg-white/10 text-white/70 font-semibold text-xs uppercase tracking-widest rounded-xl cursor-default">
+          Opens at launch
+        </div>
       )}
       {isCurrentTier && (
         <div className="mt-auto w-full text-center py-2.5 px-4 bg-white/10 text-white/70 font-semibold text-xs uppercase tracking-widest rounded-xl cursor-default">
@@ -119,6 +127,8 @@ export interface UpgradeContentProps {
   currentSku: string | null
   currentTierName: string
   fromLabel: string | null
+  /** Membership handles the store API returns; the rest show "Opens at launch" (KI071). */
+  availableHandles?: string[]
 }
 
 export default function UpgradeContent({
@@ -127,7 +137,9 @@ export default function UpgradeContent({
   currentSku,
   currentTierName,
   fromLabel,
+  availableHandles = [],
 }: UpgradeContentProps) {
+  const available = new Set(availableHandles)
   const generalTiers = MEMBERSHIP_TIERS.filter((t) => t.track === 'general')
   const akashicTiers = MEMBERSHIP_TIERS.filter((t) => t.track === 'akashic')
   const energyClearingTiers = MEMBERSHIP_TIERS.filter((t) => t.track === 'energy-clearing')
@@ -216,6 +228,7 @@ export default function UpgradeContent({
                 tier={tier}
                 isCurrentTier={isCurrentTier(tier)}
                 isUpgrade={isUpgrade(tier)}
+                isAvailable={available.has(tier.handle)}
               />
             ))}
           </div>
@@ -259,6 +272,7 @@ export default function UpgradeContent({
                     tier={tier}
                     isCurrentTier={isCurrentTier(tier)}
                     isUpgrade={isUpgrade(tier)}
+                    isAvailable={available.has(tier.handle)}
                   />
                 ))}
               </div>
@@ -283,6 +297,7 @@ export default function UpgradeContent({
                     tier={tier}
                     isCurrentTier={isCurrentTier(tier)}
                     isUpgrade={isUpgrade(tier)}
+                    isAvailable={available.has(tier.handle)}
                   />
                 ))}
               </div>
