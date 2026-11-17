@@ -7,7 +7,7 @@ import { PageHeader } from '@/components/shared/PageHeader'
 import { useProgramPrices } from '@/components/programs/ProgramPrices'
 import { programPriceSuffix } from '@/lib/programs/program-prices'
 import { getProgramBySlug, getProgramCta, isResonanceRepatterning, selfStudyEditionOf, type Program } from '@/data/programs'
-import { recordedSelfStudyHref } from '@/components/programs/ProgrammeOptions'
+import { recordedSelfStudyHref, withPriceVariant } from '@/components/programs/ProgrammeOptions'
 import { getProgrammeCopy } from '@/data/programmeCopy'
 import { ProgrammeLongForm, longFormBandCount } from '@/components/programs/ProgrammeLongForm'
 import { EAO_MARKED, EAO_NAME, withoutTrademark } from '@/data/energyAlignment'
@@ -171,11 +171,13 @@ function RelatedProgramCard({ program }: { program: Program }) {
 // -- main component --
 
 export default function ProgramDetailClient({ program, relatedPrograms }: Props) {
-  const cta = getProgramCta(program)
   const deliveryMethod = getDeliveryMethod(program)
   const categoryLabel = CATEGORY_LABELS[program.category]
   // The visitor's currency only (D021): "R13,950 ZAR", "$2,105 USD" or "Price on request".
   const { priceOf, currency, variantOf } = useProgramPrices()
+  // The enrol button opens the variant whose price the page shows (the
+  // self-study price on Akashic and EAO pages), not the product's default.
+  const cta = withPriceVariant(getProgramCta(program), variantOf(program.slug))
   // Live programme whose product also sells the recorded self-study (KI106).
   const edition = selfStudyEditionOf(program)
   const editionPrice = edition ? priceOf(edition.slug) : null

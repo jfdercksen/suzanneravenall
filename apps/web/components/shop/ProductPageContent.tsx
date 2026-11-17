@@ -18,12 +18,13 @@ import {
   defaultVariantId,
   descriptionParagraphs,
   detailsEyebrow,
-  getDeliveryBadge,
   getProductKind,
   hasThinkificCourse,
   metadataFaq,
   metadataList,
   productNoun,
+  productTopicCategory,
+  selectedFormatBadge,
   variantChooserLabel,
   type FaqItem,
 } from './productKind'
@@ -114,7 +115,9 @@ export default function ProductPageContent({ product, initialVariantId, defaultC
   // category, variants and metadata (productKind.ts). Generic blocks that do
   // not fit are hidden rather than shown with the wrong wording.
   const kind = getProductKind(product)
-  const badge = getDeliveryBadge(product)
+  // The format follows the selected variant (Self Study is self-paced, Live
+  // and Live Retaker are live), not the product's category (Shayna, 17 Nov).
+  const badge = selectedFormatBadge(product, selectedVariantId)
   const noun = productNoun(kind)
   const isCoaching = kind === 'session' || kind === 'group' || kind === 'programme'
 
@@ -127,7 +130,8 @@ export default function ProductPageContent({ product, initialVariantId, defaultC
   const faqItems = productFaq.length > 0 ? productFaq : isCoaching ? [DISCOVERY_FAQ] : []
   const aboutParagraphs = descriptionParagraphs(product.description)
 
-  const primaryCategory = product.categories[0]
+  // A format category ("Live") is named by its topic; the badge says the format.
+  const primaryCategory = productTopicCategory(product)
 
   // Buying notes under the price: a pre-order ships later (KI067); a support
   // package is bought for a number of months or sessions, paid once (KI068).
@@ -278,6 +282,7 @@ export default function ProductPageContent({ product, initialVariantId, defaultC
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
                     <span
+                      data-testid="product-format-badge"
                       className={`text-xs font-medium px-3 py-1 rounded-full ${badge.className}`}
                     >
                       {badge.label}

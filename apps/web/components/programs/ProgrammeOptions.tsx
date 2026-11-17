@@ -12,6 +12,18 @@ export function recordedSelfStudyHref(program: Program, variantId: string | unde
 }
 
 /**
+ * A shop link with the variant behind the price shown beside it preselected
+ * (?variant=). Shayna, 17 Nov: Akashic Navigator Advanced showed the
+ * self-study price next to "Enrol in Level 2", and the button opened the
+ * product on Live via Zoom. Links that are not plain shop links (contact,
+ * register interest) and prices with no single variant are left alone.
+ */
+export function withPriceVariant<T extends { href: string }>(link: T, variantId: string | undefined): T {
+  if (!variantId || !link.href.startsWith('/shop/') || link.href.includes('?')) return link
+  return { ...link, href: `${link.href}?variant=${encodeURIComponent(variantId)}` }
+}
+
+/**
  * The two ways to take a live programme whose product also sells Self Study
  * (Johan 10 Nov, KI106): the recorded self-study to buy now, and the live Zoom
  * series with Suzanne on register interest. Only short labels are ours; the

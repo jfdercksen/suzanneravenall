@@ -5,7 +5,7 @@ import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { RichText } from '@/components/shared/RichText'
 import { getBundleForSeries, getProgramBySlug, selfStudyEditionOf, type Program } from '@/data/programs'
-import { ProgrammeOptions, recordedSelfStudyHref } from '@/components/programs/ProgrammeOptions'
+import { ProgrammeOptions, recordedSelfStudyHref, withPriceVariant } from '@/components/programs/ProgrammeOptions'
 import { useProgramPrices } from '@/components/programs/ProgramPrices'
 import { PRICE_ON_REQUEST, programPriceSuffix } from '@/lib/programs/program-prices'
 import { SERIES_PATHS, type ProgrammeCopy } from '@/data/programmeCopy'
@@ -276,7 +276,8 @@ export function ProgrammeLongForm({ program, copy, price, priceSuffix, cta }: Pr
                 </p>
               </div>
               <Link
-                href={`/shop/${bundle.shopHandle}`}
+                // The bundle price shown is the self-study one: open that variant.
+                href={withPriceVariant({ href: `/shop/${bundle.shopHandle}` }, variantOf(bundle.slug)).href}
                 className="inline-flex shrink-0 items-center justify-center px-6 py-3 border border-brand-primary-300 hover:border-brand-primary text-brand-primary text-sm uppercase tracking-widest font-medium rounded-button transition-all duration-300 hover:bg-brand-sand"
               >
                 View the Bundle

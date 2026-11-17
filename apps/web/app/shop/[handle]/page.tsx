@@ -20,7 +20,7 @@ const MEDUSA_PUB_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? ''
 async function getProduct(handle: string): Promise<MedusaProduct | null> {
   try {
     const res = await fetch(
-      `${MEDUSA_URL}/store/products?handle=${handle}&fields=id,handle,title,description,thumbnail,metadata,*variants,*variants.prices,+variants.inventory_quantity,*categories,*collection`,
+      `${MEDUSA_URL}/store/products?handle=${handle}&fields=id,handle,title,description,thumbnail,metadata,*variants,*variants.prices,+variants.inventory_quantity,*categories,*categories.parent_category,*collection`,
       {
         headers: { 'x-publishable-api-key': MEDUSA_PUB_KEY },
       }

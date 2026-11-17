@@ -199,6 +199,71 @@ export function getDeliveryBadge(
   return null
 }
 
+const FORMAT_BADGES: Record<DeliveryFormat, Badge> = {
+  live: { label: 'Live', className: BADGE_LIVE },
+  'self-study': { label: 'Self-Paced', className: BADGE_NEUTRAL },
+  recorded: { label: 'Recorded', className: BADGE_RECORDED },
+  'in-person': { label: 'In-Person', className: BADGE_IN_PERSON },
+}
+
+/**
+ * The one format a variant title names ("Self Study", "Live Retaker", "Live
+ * (booked as series)", "Recorded series", "Single Session (Self Study)"), or
+ * null when it names none or more than one.
+ */
+export function variantFormat(title: string | null | undefined): DeliveryFormat | null {
+  const found = formatsIn(title ?? '')
+  return found.length === 1 ? (found[0] ?? null) : null
+}
+
+/** The product sells its formats as separate variants (Self Study / Live via Zoom / Live Retaker). */
+export function hasFormatChoice(product: Pick<MedusaProduct, 'variants'>): boolean {
+  const formats = new Set(product.variants.map((v) => variantFormat(v.title)).filter((f) => f !== null))
+  return formats.size > 1
+}
+
+/**
+ * The format badge for the product page, following the variant the buyer has
+ * selected (Shayna, 17 Nov: with Self Study selected the page still said
+ * "Live"). Only a product that sells its formats as variants changes with the
+ * selection; anything else keeps the product's own badge.
+ */
+export function selectedFormatBadge(
+  product: Pick<MedusaProduct, 'handle' | 'title' | 'variants' | 'categories' | 'metadata'>,
+  selectedVariantId: string
+): Badge | null {
+  const productBadge = getDeliveryBadge(product)
+  if (!hasFormatChoice(product) || isComingSoonProduct(product)) return productBadge
+  const kind = getProductKind(product)
+  if (kind === 'session' || kind === 'book' || kind === 'download') return productBadge
+  const selected = product.variants.find((v) => v.id === selectedVariantId)
+  const format = variantFormat(selected?.title)
+  return format ? FORMAT_BADGES[format] : productBadge
+}
+
+/** Store categories that name a format ("Live", "Self Paced", "Recorded") under a topic. */
+const FORMAT_CATEGORY_RE = /-(live|self-paced|recorded)$/
+
+export function isFormatCategory(handle: string): boolean {
+  return FORMAT_CATEGORY_RE.test(handle)
+}
+
+/**
+ * The category the product page names (breadcrumb, details block). A format
+ * category such as "Live" (akashic-live) is replaced by its topic ("Akashic
+ * Navigator"): the format is the badge's job, and it follows the selected
+ * variant, while the category does not. Without the parent in the data the
+ * category is shown as it is.
+ */
+export function productTopicCategory(
+  product: Pick<MedusaProduct, 'categories'>
+): { handle: string; name: string } | undefined {
+  const primary = product.categories[0]
+  if (!primary) return undefined
+  if (isFormatCategory(primary.handle) && primary.parent_category) return primary.parent_category
+  return primary
+}
+
 /**
  * Whether a product belongs under the "Self-Study" shop filter: it sells a
  * self-study format, or it is a course on the Ravenall Institute with nothing

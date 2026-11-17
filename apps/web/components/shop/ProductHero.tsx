@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { MedusaProduct } from '@/types/medusa'
-import { firstSentence } from './productKind'
+import { firstSentence, productTopicCategory } from './productKind'
 
 interface ProductHeroProps {
   product: MedusaProduct
@@ -16,7 +16,9 @@ interface ProductHeroProps {
 // top 320px and the text sits on black beneath it. Kept inline rather than on
 // PageHeader because the breadcrumb has no slot there.
 export function ProductHero({ product }: ProductHeroProps) {
-  const primaryCategory = product.categories[0]
+  // The topic, not a format category such as "Live": the product may sell
+  // Self Study too, and the hero does not know the selected variant.
+  const primaryCategory = productTopicCategory(product)
 
   // First sentence of the description's first paragraph as the promise line;
   // the full description is shown further down the page.

@@ -1,7 +1,7 @@
 import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { getProgramBySlug } from '@/data/programs'
+import { getBundleForSeries, getProgramBySlug } from '@/data/programs'
 import { ProgramPricesProvider } from '@/components/programs/ProgramPrices'
 import { programPriceTexts } from '@/lib/programs/program-prices'
 import ProgramDetailClient from './ProgramDetailClient'
@@ -271,4 +271,56 @@ describe('ProgrammeLongForm band count (ground alternation)', () => {
       expect(container.querySelectorAll('section')).toHaveLength(longFormBandCount(program, copy))
     })
   }
+})
+
+// Shayna, 17 Nov: Akashic Navigator Advanced shows the self-study price (R4,650)
+// beside "Enrol in Level 2", and the button opened the product on Live via
+// Zoom at R10,295. The button now opens the variant whose price is shown.
+describe('enrol links open the variant whose price the page shows (17 Nov)', () => {
+  const zarUsd = (zar: number, usd: number) => [
+    { currency_code: 'zar', amount: zar },
+    { currency_code: 'usd', amount: usd },
+  ]
+  // The review box's variants and prices for the two products (read 17 Nov).
+  const level2 = [
+    { id: 'v_live', title: 'Live via Zoom', prices: zarUsd(1029500, 50000) },
+    { id: 'v_retaker', title: 'Live Retaker', prices: zarUsd(221500, 27500) },
+    { id: 'v_self', title: 'Self Study', prices: zarUsd(465000, 30000) },
+  ]
+  const together = [
+    { id: 'b_self', title: 'Self Study', prices: zarUsd(790500, 47500) },
+    { id: 'b_live', title: 'Live via Zoom', prices: zarUsd(1336000, 66000) },
+    { id: 'b_retaker', title: 'Live Retaker', prices: zarUsd(166000, 55500) },
+  ]
+  const program = getProgramBySlug('akashic-navigator-advanced')!
+  const bundle = getBundleForSeries('akashic-navigator')!
+
+  it('Enrol in Level 2 and the header button preselect Self Study, the price shown', () => {
+    render(
+      <ProgramPricesProvider
+        texts={{ [program.slug]: programPriceTexts(program, level2), [bundle.slug]: programPriceTexts(bundle, together) }}
+        defaultCurrency="zar"
+      >
+        <ProgramDetailClient program={program} relatedPrograms={[]} />
+      </ProgramPricesProvider>,
+    )
+    expect(screen.getAllByText('R4,650').length).toBeGreaterThan(0)
+    const enrol = screen.getAllByRole('link', { name: 'Enrol in Level 2' })
+    expect(enrol.length).toBeGreaterThan(0)
+    for (const link of enrol) expect(link).toHaveAttribute('href', `/shop/${program.shopHandle}?variant=v_self`)
+    const header = screen.getAllByRole('link').filter((a) => a.getAttribute('href')?.startsWith(`/shop/${program.shopHandle}`))
+    expect(header.every((a) => a.getAttribute('href') === `/shop/${program.shopHandle}?variant=v_self`)).toBe(true)
+    // The bundle line says "R7,905 ZAR self-study": its button opens the Self Study variant too.
+    expect(screen.getByRole('link', { name: 'View the Bundle' })).toHaveAttribute(
+      'href',
+      `/shop/${bundle.shopHandle}?variant=b_self`,
+    )
+  })
+
+  it('keeps the plain shop link when no single variant carries the price', () => {
+    render(<ProgramDetailClient program={program} relatedPrograms={[]} />)
+    for (const link of screen.getAllByRole('link', { name: 'Enrol in Level 2' })) {
+      expect(link).toHaveAttribute('href', `/shop/${program.shopHandle}`)
+    }
+  })
 })

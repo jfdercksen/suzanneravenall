@@ -36,7 +36,14 @@ export interface MedusaProduct {
   thumbnail: string | null
   metadata?: Record<string, unknown> | null
   variants: ProductVariant[]
-  categories: Array<{ id: string; handle: string; name: string; parent_category_id: string | null }>
+  categories: Array<{
+    id: string
+    handle: string
+    name: string
+    parent_category_id: string | null
+    /** Present when the fetch asks for *categories.parent_category (the product page does). */
+    parent_category?: { id: string; handle: string; name: string } | null
+  }>
   collection: { id: string; handle: string; title: string } | null
 }
 

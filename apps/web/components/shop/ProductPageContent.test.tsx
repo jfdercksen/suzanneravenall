@@ -273,3 +273,78 @@ describe('ProductPageContent offers (Suzanne 12 Nov)', () => {
     expect(screen.queryByTestId('register-interest-panel')).not.toBeInTheDocument()
   })
 })
+
+// Shayna, 17 Nov: on Akashic Navigator Level 2 with Self Study selected, the
+// details block still said "Category: Live" beside a "Live or Self-Paced"
+// badge. The format now follows the selected variant, and a format category
+// is named by its topic.
+describe('ProductPageContent format follows the selected variant (17 Nov)', () => {
+  const akashicLevel2 = makeProduct({
+    handle: 'akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom',
+    title: 'Akashic Navigator & Intuitive Coaching: Advanced, Clearing Others (Level 2) (Live via Zoom)',
+    categories: [
+      {
+        id: 'c_live',
+        handle: 'akashic-live',
+        name: 'Live',
+        parent_category_id: 'c_topic',
+        parent_category: { id: 'c_topic', handle: 'akashic-navigator', name: 'Akashic Navigator' },
+      },
+    ],
+    variants: [
+      { id: 'v_live', title: 'Live via Zoom', prices: [{ currency_code: 'zar', amount: 1029500 }] },
+      { id: 'v_retaker', title: 'Live Retaker', prices: [{ currency_code: 'zar', amount: 221500 }] },
+      { id: 'v_self', title: 'Self Study', prices: [{ currency_code: 'zar', amount: 465000 }] },
+    ],
+  })
+
+  const badgeText = () => screen.getByTestId('product-format-badge').textContent
+
+  it('says Self-Paced when Self Study is selected, and names the topic, not "Live"', () => {
+    render(<ProductPageContent product={akashicLevel2} initialVariantId="v_self" />)
+    expect(badgeText()).toBe('Self-Paced')
+    expect(screen.getByText('Akashic Navigator')).toBeInTheDocument()
+    expect(screen.queryByText('Live')).not.toBeInTheDocument()
+  })
+
+  it('says Live for Live via Zoom and for the Live Retaker seat', () => {
+    const { unmount } = render(<ProductPageContent product={akashicLevel2} initialVariantId="v_live" />)
+    expect(badgeText()).toBe('Live')
+    unmount()
+    render(<ProductPageContent product={akashicLevel2} initialVariantId="v_retaker" />)
+    expect(badgeText()).toBe('Live')
+  })
+
+  it('changes when the buyer picks another format', async () => {
+    const { act } = await import('@testing-library/react')
+    selectorProps.length = 0
+    render(<ProductPageContent product={akashicLevel2} />)
+    expect(badgeText()).toBe('Live')
+    const onSelect = selectorProps[0]?.onSelect as (id: string) => void
+    act(() => onSelect('v_self'))
+    expect(badgeText()).toBe('Self-Paced')
+  })
+
+  it('a group session with a recorded series says Recorded when that is selected', () => {
+    const group = makeProduct({
+      handle: 'money-mastery-group-session',
+      title: 'Money Mastery Group Session',
+      categories: [
+        {
+          id: 'g',
+          handle: 'group-sessions-live',
+          name: 'Live',
+          parent_category_id: 'gs',
+          parent_category: { id: 'gs', handle: 'group-sessions', name: 'Group Sessions' },
+        },
+      ],
+      variants: [
+        { id: 'g_live', title: 'Live (booked as series)', prices: [] },
+        { id: 'g_rec', title: 'Recorded series', prices: [] },
+      ],
+    })
+    render(<ProductPageContent product={group} initialVariantId="g_rec" />)
+    expect(badgeText()).toBe('Recorded')
+    expect(screen.getByText('Group Sessions')).toBeInTheDocument()
+  })
+})
