@@ -182,7 +182,7 @@ describe('Footer', () => {
 
     it('renders Legal column links', () => {
       render(<Footer />)
-      expect(screen.getByRole('link', { name: 'Privacy Policy' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Privacy Notice' })).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Terms of Service' })).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Cookie Policy' })).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Disclaimer' })).toHaveAttribute('href', '/legal/disclaimer')

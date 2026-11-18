@@ -190,8 +190,13 @@ curl http://localhost:3001/admin    # from inside VPS
 
 ## Supabase Auth Setup
 
-These settings must be configured manually in the Supabase dashboard at
-**https://supabase.com/dashboard/project/mjhwonoekokxyisfljtj/auth/providers**
+Supabase is SELF-HOSTED on our own server aimate-db1 at **https://suzanne.db.aimate.co.za**
+(migrated 23 Jul 2026), not on hosted supabase.com. The old hosted project
+(mjhwonoekokxyisfljtj) is a frozen rollback only: change nothing there. The server has no
+Studio dashboard, so the settings below live in the auth server's environment on aimate-db1
+(`SITE_URL` for the Site URL, `URI_ALLOW_LIST` for the redirect URLs); the runbook is
+`~/supabase-selfhost/README.md` on that server. The menu names below are the hosted
+dashboard's, kept as a description of each setting.
 
 ### Required settings
 
@@ -229,7 +234,7 @@ The `{{ .ConfirmationURL }}` variable already contains the correct redirect URL 
 
 ### After DNS cutover
 
-Update Site URL to `https://suzanneravenall.com` in the Supabase dashboard.
+Update `SITE_URL` to `https://suzanneravenall.com` in the auth server's environment on aimate-db1.
 No code changes required — the redirect URL is already in the allow-list.
 
 ---

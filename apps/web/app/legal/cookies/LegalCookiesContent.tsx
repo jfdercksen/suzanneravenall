@@ -229,7 +229,7 @@ export default function LegalCookiesContent() {
                 most recent revision. We recommend checking back periodically. If you have questions
                 about our use of cookies, please contact us via our{' '}
                 <Link href="/legal/privacy" className="text-brand-accent underline hover:no-underline">
-                  Privacy Policy
+                  Privacy Notice
                 </Link>{' '}
                 contact details.
               </p>

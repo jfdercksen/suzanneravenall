@@ -21,7 +21,7 @@ export default function LegalPrivacyContent() {
               Legal
             </p>
             <h1 className="text-4xl lg:text-6xl font-medium tracking-tight text-white mb-6">
-              Privacy Policy
+              Privacy Notice
             </h1>
             <p className="text-white/70 text-sm">Last updated: {LAST_UPDATED}</p>
             <p className="text-white/70 text-sm mt-1">
@@ -55,7 +55,7 @@ export default function LegalPrivacyContent() {
                 defined under the Protection of Personal Information Act 4 of 2013 (&ldquo;POPIA&rdquo;).
               </p>
               <p className="text-brand-ink leading-relaxed">
-                This Privacy Policy explains how we collect, use, share, and protect personal information
+                This Privacy Notice explains how we collect, use, share, and protect personal information
                 you provide to us, and outlines your rights as a data subject.
               </p>
             </div>
@@ -122,29 +122,55 @@ export default function LegalPrivacyContent() {
                 where necessary:
               </p>
               <ul className="list-disc list-outside pl-6 space-y-2 text-brand-ink">
+                {/* The providers the code uses (audit 18 Nov 2026). A hosting country is named only where the
+                    repo proves it: the website server is cloud.co.za, South Africa (infra/DEPLOYMENT.md), and the
+                    self-hosted tools below run on it (infra/docker-compose.yml). Every other country is for
+                    Johan to confirm (KNOWN_ISSUES KI122). */}
                 <li>
-                  <strong>Supabase</strong>: database and authentication hosting
+                  <strong>cloud.co.za</strong>: hosts our website server in South Africa, where the shop
+                  (Medusa), website content and intake forms (Payload), site search (Meilisearch) and our
+                  workflow automation (n8n, being retired) run
+                </li>
+                <li>
+                  <strong>Supabase</strong> (run on our own database server): member accounts and sign-in,
+                  form submissions, quiz answers and intake forms
                 </li>
                 <li>
                   <strong>PayFast / PayPal</strong>: payment processing
                 </li>
                 <li>
-                  <strong>Resend</strong>: transactional email delivery
+                  <strong>Brevo</strong>: email delivery
                 </li>
                 <li>
-                  <strong>Bunny CDN / Bunny Stream</strong>: video content delivery
+                  <strong>Thinkific</strong>: online courses
                 </li>
                 <li>
-                  <strong>Google Analytics 4 &amp; Microsoft Clarity</strong>: website analytics
+                  <strong>Bunny Stream</strong>: video content delivery
                 </li>
                 <li>
-                  <strong>Sage Business Cloud</strong>: accounting and invoicing
+                  <strong>Cal.com</strong>: appointment scheduling
+                </li>
+                <li>
+                  <strong>Zoom</strong>: online sessions
                 </li>
                 <li>
                   <strong>Vtiger CRM</strong>: client relationship management
                 </li>
                 <li>
-                  <strong>Cal.com</strong>: appointment scheduling
+                  <strong>Sage Business Cloud</strong>: accounting and invoicing
+                </li>
+                <li>
+                  <strong>Vibe Marketing</strong> (Ai Dynamic Advisory): marketing, only for people who
+                  opt in to it
+                </li>
+                <li>
+                  <strong>Google Analytics 4 &amp; Microsoft Clarity</strong>: website analytics
+                </li>
+                <li>
+                  <strong>Sentry</strong>: error monitoring
+                </li>
+                <li>
+                  <strong>Backblaze B2</strong>: database backups
                 </li>
                 <li>
                   <strong>DB-IP</strong>: a country database we keep on our own server to show
@@ -249,10 +275,9 @@ export default function LegalPrivacyContent() {
               </p>
               <div className="mt-4 bg-brand-sand rounded-xl p-6 border border-brand-border">
                 <p className="text-brand-ink font-medium">Information Officer</p>
-                {/* No Information Officer is published on the live sites. Suzanne Ravenall is the Director
-                    (https://suzanneravenall.com/terms-and-conditions/) and so the default Information Officer
-                    under POPIA. TODO: confirm with Suzanne whether someone else is designated. */}
-                <p className="text-brand-ink mt-1">Dr. Suzanne Ravenall, Director</p>
+                {/* Confirmed by Suzanne, as Information Officer of The Ravenall Institute (Pty) Ltd, in her
+                    mail to the website developers of 8 Nov 2026. */}
+                <p className="text-brand-ink mt-1">Dr. Suzanne Ravenall, Information Officer</p>
                 <p className="text-brand-ink">The Ravenall Institute Pty Ltd</p>
                 <p className="text-brand-ink">
                   Email:{' '}
@@ -299,7 +324,7 @@ export default function LegalPrivacyContent() {
                 11. Changes to this Policy
               </h2>
               <p className="text-brand-ink leading-relaxed">
-                We may update this Privacy Policy from time to time to reflect changes in our practices
+                We may update this Privacy Notice from time to time to reflect changes in our practices
                 or applicable law. When we make material changes we will update the &ldquo;Last updated&rdquo; date
                 at the top of this page. We encourage you to review this policy periodically. Continued
                 use of our website after changes are published constitutes acceptance of the revised policy.
