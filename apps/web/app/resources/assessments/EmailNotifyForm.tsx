@@ -1,15 +1,22 @@
 'use client'
 
 import { useState } from 'react'
+import { MarketingOptIn } from '@/components/forms/MarketingOptIn'
+import { marketingChoiceError, NO_MARKETING, type MarketingChoice } from '@/lib/consent/marketing'
 
 export default function EmailNotifyForm() {
   const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [marketing, setMarketing] = useState<MarketingChoice>(NO_MARKETING)
+  const [marketingError, setMarketingError] = useState<string | undefined>()
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    const marketingInvalid = marketingChoiceError(marketing)
+    setMarketingError(marketingInvalid)
+    if (marketingInvalid) return
     setStatus('loading')
     setErrorMessage(null)
 
@@ -17,7 +24,7 @@ export default function EmailNotifyForm() {
       const res = await fetch('/api/lead-magnet', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstName, email, source: 'assessments-notify' }),
+        body: JSON.stringify({ firstName, email, source: 'assessments-notify', marketing }),
       })
 
       if (!res.ok) {
@@ -80,6 +87,17 @@ export default function EmailNotifyForm() {
           {status === 'loading' ? 'Sending…' : 'Notify Me'}
         </button>
       </form>
+      <MarketingOptIn
+        idPrefix="assessments-notify"
+        value={marketing}
+        onChange={(next) => {
+          setMarketing(next)
+          if (marketingError) setMarketingError(marketingChoiceError(next))
+        }}
+        error={marketingError}
+        disabled={status === 'loading'}
+        className="mt-4"
+      />
       {status === 'error' && errorMessage && (
         <p role="alert" className="mt-3 text-red-600 text-sm text-center">
           {errorMessage}

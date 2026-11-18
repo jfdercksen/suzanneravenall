@@ -37,6 +37,7 @@ describe('EmailNotifyForm (site check B12)', () => {
       firstName: 'Thandi',
       email: 'thandi@example.com',
       source: 'assessments-notify',
+      marketing: { optIn: false, channels: [] },
     })
   })
 

@@ -94,6 +94,7 @@ describe('IntakeFormContent', () => {
       token: TOKEN,
       acknowledged: true,
       answers: { name: { value: 'Johan QA Test', detail: '' }, feel: { value: ['Sad'], detail: '' }, ready: { value: '8', detail: '' } },
+      marketing: { optIn: false, channels: [] },
     })
   })
 

@@ -8,6 +8,7 @@ import { firstReminderAt, linkExpiresAt, nextReminderAt, reminderDelays } from '
 import * as store from './store'
 import { validateSubmission, type IntakeSubmission } from './validate'
 import type { IntakeForm, IntakeRecord } from './types'
+import { marketingRecord } from '@/lib/consent/marketing'
 
 /**
  * Intake forms (H-12), the three moments:
@@ -391,7 +392,10 @@ export async function submitIntake(token: string, submission: IntakeSubmission, 
   const checked = validateSubmission(form, submission)
   if (!checked.ok) return { status: 'invalid', errors: checked.errors }
 
-  const completed = await deps.store.completeIntake(token, checked.answers, now)
+  const completed = await deps.store.completeIntake(token, checked.answers, now, {
+    marketing: marketingRecord(submission.marketing, now),
+    formVersion: form.version ?? null,
+  })
   if (!completed) return { status: 'already_completed' }
 
   // The answers are saved; the team mail is best effort here and retried by the hourly run.

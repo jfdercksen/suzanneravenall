@@ -9,11 +9,13 @@ import { orderVtigerMode, thinkificMode } from '../automations/config'
 import { dispatchOrderAutomations } from '../automations/dispatch'
 import { buildOrderSnapshot, ORDER_GRAPH_FIELDS } from '../automations/order-snapshot'
 import { createDryRunQueue, getAutomationQueue, staffAlerter } from '../automations/runtime'
+import { orderMarketingOptIn } from './order-marketing-opt-in'
 
 const N8N_BASE_URL = (process.env.N8N_WEBHOOK_URL ?? 'http://n8n:5678').replace(/\/$/, '')
 const N8N_WEBHOOK_SECRET = process.env.N8N_WEBHOOK_SECRET ?? ''
 const WEB_BASE_URL = (process.env.WEB_BASE_URL ?? 'http://web:3000').replace(/\/$/, '')
 const VIBE_MARKETING_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
+
 // docker-compose passes unset variables as empty strings, so || not ??.
 const CAL_BASE_URL = (process.env.NEXT_PUBLIC_CAL_URL || 'https://cal.suzanneravenall.com').replace(/\/$/, '')
 // The Cal.com user page the session event types hang off (session-30, -45,
@@ -845,8 +847,10 @@ export default async function orderPlacedHandler({
       console.error(`[order-placed] portal access grant error for order ${orderId}: ${message}`)
     })
 
-    // 5. Vibe Marketing — first-time non-membership customers
-    if (!isMembershipOrder(items) && VIBE_MARKETING_WEBHOOK_URL) {
+    // 5. Vibe Marketing: first-time non-membership customers who ticked the
+    // marketing box at checkout (POPIA, KI122). Vibe is a marketing system, so a
+    // buyer who did not opt in, or an order from before the opt-in, is not sent.
+    if (!isMembershipOrder(items) && VIBE_MARKETING_WEBHOOK_URL && orderMarketingOptIn(order.metadata)) {
       void (async () => {
         try {
           const customerOrders = await orderService.listOrders(

@@ -1,3 +1,5 @@
+import type { MarketingChannel } from '@/lib/consent/marketing'
+
 /**
  * Intake forms (H-12): the shapes shared by the page, the routes and the
  * mails. A form comes from the Payload intake-forms collection; the answers
@@ -45,6 +47,8 @@ export interface IntakeForm {
   acknowledgement: string | null
   fields: IntakeField[]
   recipientEmail: string | null
+  /** "<formKey>@<Payload updatedAt>": stored with each submission (POPIA). Null when Payload sent no updatedAt. */
+  version?: string | null
 }
 
 /** One answered question, with the question's wording as it was when answered. */
@@ -93,4 +97,9 @@ export interface IntakeRecord {
   team_notified_at: string | null
   send_failures: number
   created_at: string
+  // POPIA (migration 20261118090000); absent on rows read before it.
+  marketing_opt_in?: boolean
+  marketing_channels?: MarketingChannel[]
+  marketing_choice_at?: string | null
+  form_version?: string | null
 }

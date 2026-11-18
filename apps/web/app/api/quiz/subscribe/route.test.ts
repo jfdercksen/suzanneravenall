@@ -113,6 +113,28 @@ describe('POST /api/quiz/subscribe', () => {
     expect(mockMarkEmailSent).toHaveBeenCalledWith(expect.anything(), 'sub-1')
   })
 
+  it('stores the gate marketing opt-in with the subscriber (POPIA)', async () => {
+    await POST(makeRequest({ ...validBody(), marketing: { optIn: true, channels: ['email'] } }) as never)
+    expect(mockUpsertSubscriber).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        marketing: expect.objectContaining({
+          marketing_opt_in: true,
+          marketing_channels: ['email'],
+          marketing_form_version: 'marketing-opt-in-v1-2026-11-18',
+        }),
+      }),
+    )
+  })
+
+  it('keeps the stored choice when none is sent, and refuses a ticked box with no channel', async () => {
+    // No choice sent (a cached page): the stored choice is left as it is.
+    await POST(makeRequest(validBody()) as never)
+    expect(mockUpsertSubscriber.mock.calls[0]![1].marketing).toBeUndefined()
+    const res = await POST(makeRequest({ ...validBody(), marketing: { optIn: true, channels: [] } }) as never)
+    expect(res.status).toBe(422)
+  })
+
   it('includes the access token in the emailed link', async () => {
     await POST(makeRequest(validBody()) as never)
     const call = mockSendQuizInviteEmail.mock.calls[0][0] as { link: string }

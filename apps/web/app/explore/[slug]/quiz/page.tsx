@@ -13,6 +13,7 @@ import {
   type QuizSubscriberRow,
 } from '@/lib/quiz/subscriber'
 import { createRateLimiter, getClientIp } from '@/lib/rate-limit'
+import { normaliseMarketingChoice } from '@/lib/consent/marketing'
 
 // KI028: every tokened GET here costs a Supabase service-role lookup, and
 // /explore/* falls outside the Cloudflare WAF rule scoped to /api/*, so this
@@ -84,6 +85,11 @@ export default async function QuizPage({ params, searchParams }: PageProps) {
 
     if (!subscriber) return <QuizGate quiz={quiz} initialMode="invalid" topicTitle={topicTitle} />
 
+    const marketing = normaliseMarketingChoice({
+      optIn: subscriber.marketing_opt_in === true,
+      channels: subscriber.marketing_channels ?? [],
+    })
+
     if (subscriber.status === 'completed') {
       const total = quiz.questions.length
       // JSONB round-trips object keys as strings — convert back to the
@@ -101,6 +107,7 @@ export default async function QuizPage({ params, searchParams }: PageProps) {
             email: subscriber.email,
             initialAnswers,
             initialStep: total + 1,
+            marketing,
           }}
         />
       )
@@ -120,7 +127,7 @@ export default async function QuizPage({ params, searchParams }: PageProps) {
       <QuizGate
         quiz={quiz}
         initialMode="quiz"
-        subscriber={{ id: subscriber.id, accessToken: token, email: subscriber.email }}
+        subscriber={{ id: subscriber.id, accessToken: token, email: subscriber.email, marketing }}
       />
     )
   }

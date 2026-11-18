@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { getServiceRoleClient } from '@/lib/quiz/subscriber'
 import { isMissingTableError } from '@/lib/leads/store'
+import type { MarketingRecord } from '@/lib/consent/marketing'
 import type { IntakeAnswers, IntakeRecord } from './types'
 
 /**
@@ -253,10 +254,23 @@ export async function releaseReminder(id: string, n: number, dueAt: string | nul
  * Saves the answers and closes the form. Matches only a pending, unexpired
  * row, so a double submit saves once; null means it was already in or expired.
  */
-export async function completeIntake(token: string, answers: IntakeAnswers, now: Date): Promise<IntakeRecord | null> {
+export async function completeIntake(
+  token: string,
+  answers: IntakeAnswers,
+  now: Date,
+  consent: { marketing: MarketingRecord; formVersion: string | null },
+): Promise<IntakeRecord | null> {
   const { data, error } = await client()
     .from(INTAKE_TABLE)
-    .update({ status: 'completed', answers, completed_at: now.toISOString(), next_reminder_at: null })
+    .update({
+      status: 'completed',
+      answers,
+      completed_at: now.toISOString(),
+      next_reminder_at: null,
+      // POPIA: each submission dated (completed_at) and tied to its form version.
+      form_version: consent.formVersion,
+      ...consent.marketing,
+    })
     .eq('token', token)
     .eq('status', 'pending')
     .gt('expires_at', now.toISOString())

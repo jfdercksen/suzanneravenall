@@ -28,6 +28,7 @@ vi.mock('@/lib/email/quiz-completion-notification', () => ({
 }))
 
 import { POST } from './route'
+import { CONSENT_FORM_VERSION } from '@/lib/consent/quiz'
 
 const QUIZ = {
   slug: 'emotional-nervous-system-mastery',
@@ -86,6 +87,7 @@ function validBody(accessToken = `tok${String(++tokenCounter).padStart(29, '0')}
     quizSlug: 'emotional-nervous-system-mastery',
     accessToken,
     answers: { '1': 4, '2': 0 },
+    consent: true,
   }
 }
 
@@ -131,6 +133,7 @@ describe('POST /api/quiz/complete', () => {
       'sub-1',
       { '1': 4, '2': 0 },
       expect.any(String),
+      expect.objectContaining({ consent_form_version: CONSENT_FORM_VERSION }),
     )
   })
 
@@ -163,23 +166,41 @@ describe('POST /api/quiz/complete', () => {
       'sub-1',
       validBody().answers,
       'fight',
+      expect.anything(),
     )
   })
 
-  it('sends the completion notification with mapped answer labels', async () => {
+  it('tells staff who completed which quiz and the result, never the answers (POPIA)', async () => {
     await POST(makeRequest(validBody()) as never)
-    expect(mockSendQuizCompletionNotificationEmail).toHaveBeenCalledWith(
-      expect.objectContaining({
-        firstName: 'Alice',
-        lastName: 'Smith',
-        email: 'alice@example.com',
-        resultTitle: 'The Hyper-Alert Achiever',
-        questions: [
-          { text: 'I feel on edge', answerLabel: 'Almost Always' },
-          { text: 'I overthink', answerLabel: 'Never' },
-        ],
-      }),
-    )
+    expect(mockSendQuizCompletionNotificationEmail).toHaveBeenCalledWith({
+      firstName: 'Alice',
+      lastName: 'Smith',
+      email: 'alice@example.com',
+      quizTitle: expect.any(String),
+      resultTitle: 'The Hyper-Alert Achiever',
+      resultSubtitle: expect.any(String),
+    })
+    const sent = JSON.stringify(mockSendQuizCompletionNotificationEmail.mock.calls[0])
+    expect(sent).not.toContain('I feel on edge')
+    expect(sent).not.toContain('Almost Always')
+  })
+
+  it('refuses a submission without the consent tick and stores nothing', async () => {
+    for (const consent of [undefined, false, 'yes']) {
+      const res = await POST(makeRequest({ ...validBody(), consent }) as never)
+      expect(res.status).toBe(422)
+    }
+    expect(mockMarkCompleted).not.toHaveBeenCalled()
+    expect(mockSendQuizCompletionNotificationEmail).not.toHaveBeenCalled()
+  })
+
+  it('stores the consent time and the interim consent version with the answers', async () => {
+    const before = Date.now()
+    await POST(makeRequest(validBody()) as never)
+    const consent = mockMarkCompleted.mock.calls[0]![4] as { consented_at: string; consent_form_version: string }
+    expect(consent.consent_form_version).toBe(CONSENT_FORM_VERSION)
+    expect(consent.consent_form_version).toMatch(/interim/)
+    expect(Date.parse(consent.consented_at)).toBeGreaterThanOrEqual(before - 1000)
   })
 
   it('still returns success even if the notification email fails (fire-and-forget)', async () => {

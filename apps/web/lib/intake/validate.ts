@@ -1,4 +1,5 @@
 import type { IntakeAnswer, IntakeAnswers, IntakeField, IntakeForm } from './types'
+import type { MarketingChoice } from '@/lib/consent/marketing'
 
 /**
  * Checks a submitted intake form against the form definition. Used by the
@@ -18,6 +19,8 @@ export interface RawAnswer {
 export interface IntakeSubmission {
   acknowledged?: unknown
   answers?: Record<string, RawAnswer | undefined>
+  /** The POPIA marketing opt-in, already checked by the route; absent = not opted in. */
+  marketing?: MarketingChoice
 }
 
 export type ValidationResult =
@@ -108,7 +111,10 @@ export function validateSubmission(form: IntakeForm, submission: IntakeSubmissio
   return { ok: true, answers: { acknowledged: Boolean(form.acknowledgement) && acknowledged, items } }
 }
 
-/** An answer as one line of text, for the team mail. */
+/**
+ * An answer as one line of text, for a staff view behind a login. Never in an
+ * email: intake answers hold health information (POPIA, KI122).
+ */
 export function answerText(answer: IntakeAnswer): string {
   const main = Array.isArray(answer.value) ? answer.value.join(', ') : answer.value
   if (answer.type === 'scale' && main) return `${main} / 10`

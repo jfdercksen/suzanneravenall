@@ -10,6 +10,8 @@ import {
   sanitisePhone,
   useFieldErrors,
 } from '@/lib/forms/validation'
+import { MarketingOptIn } from '@/components/forms/MarketingOptIn'
+import { marketingChoiceError, NO_MARKETING, type MarketingChoice } from '@/lib/consent/marketing'
 import { ENQUIRY_OPTIONS, type EnquiryOption } from './enquiry'
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error'
@@ -35,6 +37,8 @@ export default function ContactForm({ light = false, enquiry, topic }: ContactFo
   const [formState, setFormState] = useState<FormState>('idle')
   const [errorMessage, setErrorMessage] = useState('')
   const { errors, setError, setErrors } = useFieldErrors<Field>()
+  const [marketing, setMarketing] = useState<MarketingChoice>(NO_MARKETING)
+  const [marketingError, setMarketingError] = useState<string | undefined>()
 
   const fieldProps = (field: Field) => ({
     onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -64,7 +68,9 @@ export default function ContactForm({ light = false, enquiry, topic }: ContactFo
         VALIDATORS[field]((form.elements.namedItem(field) as HTMLInputElement).value),
       ]),
     ) as Record<Field, string | undefined>
-    if (hasErrors(fieldErrors)) {
+    const marketingInvalid = marketingChoiceError(marketing)
+    setMarketingError(marketingInvalid)
+    if (hasErrors(fieldErrors) || marketingInvalid) {
       setErrors(fieldErrors)
       return
     }
@@ -78,6 +84,7 @@ export default function ContactForm({ light = false, enquiry, topic }: ContactFo
       phone: (form.elements.namedItem('phone') as HTMLInputElement).value.trim(),
       enquiry: (form.elements.namedItem('enquiry') as HTMLSelectElement).value,
       message: (form.elements.namedItem('message') as HTMLTextAreaElement).value.trim(),
+      marketing,
     }
 
     try {
@@ -214,6 +221,18 @@ export default function ContactForm({ light = false, enquiry, topic }: ContactFo
         />
         {fieldMessage('message')}
       </div>
+
+      <MarketingOptIn
+        idPrefix="contact"
+        tone={light ? 'light' : 'dark'}
+        value={marketing}
+        onChange={(next) => {
+          setMarketing(next)
+          if (marketingError) setMarketingError(marketingChoiceError(next))
+        }}
+        error={marketingError}
+        disabled={isSubmitting}
+      />
 
       {formState === 'error' && (
         <p role="alert" className={`text-sm ${light ? 'text-red-600' : 'text-red-400'}`}>

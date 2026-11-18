@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { MarketingOptIn } from '@/components/forms/MarketingOptIn'
+import { marketingChoiceError, NO_MARKETING, type MarketingChoice } from '@/lib/consent/marketing'
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -10,9 +12,14 @@ export default function ResourcesNewsletterCTA() {
   const [email, setEmail] = useState('')
   const [state, setState] = useState<FormState>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const [marketing, setMarketing] = useState<MarketingChoice>(NO_MARKETING)
+  const [marketingError, setMarketingError] = useState<string | undefined>()
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    const marketingInvalid = marketingChoiceError(marketing)
+    setMarketingError(marketingInvalid)
+    if (marketingInvalid) return
     setState('submitting')
     setErrorMessage('')
 
@@ -20,7 +27,7 @@ export default function ResourcesNewsletterCTA() {
       const res = await fetch('/api/lead-magnet', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstName, email, source: 'newsletter' }),
+        body: JSON.stringify({ firstName, email, source: 'newsletter', marketing }),
       })
 
       if (!res.ok) {
@@ -129,6 +136,20 @@ export default function ResourcesNewsletterCTA() {
                 {state === 'submitting' ? 'Subscribing…' : 'Subscribe'}
               </button>
             </motion.form>
+          )}
+
+          {state !== 'success' && (
+            <MarketingOptIn
+              idPrefix="newsletter"
+              value={marketing}
+              onChange={(next) => {
+                setMarketing(next)
+                if (marketingError) setMarketingError(marketingChoiceError(next))
+              }}
+              error={marketingError}
+              disabled={state === 'submitting'}
+              className="mt-4"
+            />
           )}
 
           {state === 'error' && errorMessage && (

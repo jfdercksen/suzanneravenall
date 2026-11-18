@@ -14,6 +14,9 @@ vi.mock('@/lib/email/send', () => ({
 
 vi.mock('@/lib/log', () => ({ logError: mockLogError }))
 
+const { mockSaveLead } = vi.hoisted(() => ({ mockSaveLead: vi.fn() }))
+vi.mock('@/lib/leads/store', () => ({ getLeadsClient: () => ({}), saveLead: mockSaveLead }))
+
 // The real helpers (first name, enquiry label), only the send is replaced.
 vi.mock('@/lib/email/contact-acknowledgement', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/email/contact-acknowledgement')>()),
@@ -195,6 +198,38 @@ describe('POST /api/contact', () => {
 
       expect(res.status).toBe(500)
       expect(mockSendAck).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('marketing opt-in (POPIA)', () => {
+    it('puts the choice in the team mail and keeps an opted-in sender in leads', async () => {
+      mockSaveLead.mockResolvedValue({ ok: true, id: 'lead-9' })
+      const res = await POST(makeRequest({ ...validBody, marketing: { optIn: true, channels: ['email', 'whatsapp'] } }) as never)
+      expect(res.status).toBe(200)
+      expect(mockSendEmail.mock.calls[0]![0].html).toContain('Opted in: Email, WhatsApp')
+      expect(mockSaveLead).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          email: 'alice@example.com',
+          source: 'contact',
+          marketing: expect.objectContaining({ marketing_opt_in: true, marketing_channels: ['email', 'whatsapp'] }),
+        }),
+        'skipped',
+      )
+    })
+
+    it('says "Not opted in" and stores nothing for an unticked box', async () => {
+      const res = await POST(makeRequest({ ...validBody, marketing: { optIn: false, channels: [] } }) as never)
+      expect(res.status).toBe(200)
+      expect(mockSendEmail.mock.calls[0]![0].html).toContain('Not opted in')
+      expect(mockSaveLead).not.toHaveBeenCalled()
+    })
+
+    it('refuses a ticked box with no channel', async () => {
+      const res = await POST(makeRequest({ ...validBody, marketing: { optIn: true, channels: [] } }) as never)
+      expect(res.status).toBe(400)
+      expect((await res.json()).error).toContain('Choose at least one')
+      expect(mockSendEmail).not.toHaveBeenCalled()
     })
   })
 })

@@ -4,7 +4,7 @@ import { siteUrl } from './site-url'
 import IntakeRequest from './templates/IntakeRequest'
 import { isRapidRepatterning, RR_INTRO_COUPON, RR_INTRO_COURSE_URL, ZOOM_URL } from './intake-content'
 import IntakeCompleted from './templates/IntakeCompleted'
-import { answerText } from '../intake/validate'
+import { marketingSummary } from '../consent/marketing'
 import type { IntakeForm, IntakeRecord } from '../intake/types'
 
 /**
@@ -124,21 +124,27 @@ function completedText(record: IntakeRecord, formTitle: string): string {
     `Service: ${record.service_name}`,
     `Form: ${formTitle}`,
     `Completed: ${formatCompletedAt(record.completed_at)}`,
+    `Acknowledgement: ${record.answers?.acknowledged ? 'Ticked' : 'Not on this form'}`,
+    `Marketing: ${recordMarketing(record)}`,
     '',
+    'The answers are not in this email. They hold personal and health information, so they stay in the website database and are never sent by email.',
+    '',
+    'Reply to this mail to write to the client.',
   ]
-  let section: string | undefined
-  for (const item of record.answers?.items ?? []) {
-    if (item.section && item.section !== section) {
-      section = item.section
-      lines.push('', section.toUpperCase())
-    }
-    lines.push(`${item.label}: ${answerText(item) || 'Not answered'}`)
-    if (item.detail) lines.push(`  Details: ${item.detail}`)
-  }
   return lines.join('\n')
 }
 
-/** The completed form to the team. Reply-to is the client. Throws on failure. */
+function recordMarketing(record: IntakeRecord): string {
+  // A row from before the opt-in, or a form sent without one, is not a "no".
+  if (!record.marketing_choice_at) return 'No choice recorded'
+  return marketingSummary({ optIn: record.marketing_opt_in === true, channels: record.marketing_channels ?? [] })
+}
+
+/**
+ * The completed form to the team: who, which order and form, and when. Never
+ * the answers (POPIA: health information is not sent by plain email); they
+ * stay in intake_submissions. Reply-to is the client. Throws on failure.
+ */
 export async function sendIntakeCompletedEmail(record: IntakeRecord, form: IntakeForm | null): Promise<string> {
   const formTitle = form?.title ?? record.form_key ?? 'Intake form'
   return sendEmail({
@@ -153,7 +159,7 @@ export async function sendIntakeCompletedEmail(record: IntakeRecord, form: Intak
       formTitle,
       completedAt: formatCompletedAt(record.completed_at),
       acknowledged: record.answers?.acknowledged ?? false,
-      items: record.answers?.items ?? [],
+      marketing: recordMarketing(record),
     }),
     text: completedText(record, formTitle),
   })

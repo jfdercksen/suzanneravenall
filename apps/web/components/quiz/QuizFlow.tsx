@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import type { Quiz } from '@/app/explore/quizzes/types'
 import { SCALE } from '@/lib/quiz/scale'
 import { computeResult } from '@/lib/quiz/scoring'
+import { QUIZ_CONSENT_REQUIRED, QUIZ_CONSENT_TEXT } from '@/lib/consent/quiz'
+import type { MarketingChoice } from '@/lib/consent/marketing'
 
 const slideVariants = {
   enter: (dir: number) => ({ x: dir > 0 ? 80 : -80, opacity: 0 }),
@@ -25,6 +27,8 @@ interface QuizFlowProps {
   /** Replays a previously-completed attempt (e.g. revisiting the emailed link). */
   initialAnswers?: Record<number, number>
   initialStep?: number
+  /** The marketing choice made at the gate, carried to the CRM lead with the report request. */
+  marketing?: MarketingChoice
 }
 
 export default function QuizFlow({
@@ -34,6 +38,7 @@ export default function QuizFlow({
   subscriberEmail,
   initialAnswers,
   initialStep,
+  marketing,
 }: QuizFlowProps) {
   const total = quiz.questions.length
 
@@ -41,6 +46,11 @@ export default function QuizFlow({
   const [step, setStep] = useState(initialStep ?? 0)
   const [direction, setDirection] = useState(1)
   const [answers, setAnswers] = useState<Record<number, number>>(initialAnswers ?? {})
+
+  // POPIA: the answers can hold health information, so the taker agrees
+  // before the first question. A replayed completed attempt already has it.
+  const [consented, setConsented] = useState(false)
+  const [consentError, setConsentError] = useState<string | null>(null)
 
   const [status, setStatus] = useState<SubmitStatus>('idle')
   const [message, setMessage] = useState('')
@@ -56,6 +66,10 @@ export default function QuizFlow({
   const result = quiz.results[resultKey]
 
   const start = () => {
+    if (!consented) {
+      setConsentError(QUIZ_CONSENT_REQUIRED)
+      return
+    }
     setDirection(1)
     setStep(1)
   }
@@ -93,7 +107,7 @@ export default function QuizFlow({
     void fetch('/api/quiz/complete', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quizSlug: quiz.slug, accessToken, answers }),
+      body: JSON.stringify({ quizSlug: quiz.slug, accessToken, answers, consent: true }),
     }).catch(() => {
       // Non-blocking — the result is already shown; nothing to surface here.
     })
@@ -127,6 +141,7 @@ export default function QuizFlow({
           email: subscriberEmail,
           source: quiz.slug,
           quizResult: resultKey,
+          ...(marketing ? { marketing } : {}),
         }),
       }).catch(() => {})
 
@@ -199,6 +214,35 @@ export default function QuizFlow({
               </p>
               <div className="text-left text-base text-brand-muted font-light leading-relaxed whitespace-pre-line mb-10">
                 {quiz.intro}
+              </div>
+              <div className="max-w-xl mx-auto mb-8 text-left">
+                <label htmlFor="quiz-consent" className="flex items-start gap-3 text-sm text-brand-ink leading-relaxed cursor-pointer">
+                  <input
+                    id="quiz-consent"
+                    type="checkbox"
+                    checked={consented}
+                    onChange={(e) => {
+                      setConsented(e.target.checked)
+                      if (e.target.checked) setConsentError(null)
+                    }}
+                    required
+                    aria-invalid={consentError ? true : undefined}
+                    aria-describedby={consentError ? 'quiz-consent-error' : undefined}
+                    className="mt-1 w-4 h-4 flex-shrink-0 accent-brand-accent-600"
+                  />
+                  <span>
+                    {QUIZ_CONSENT_TEXT} See our{' '}
+                    <Link href="/legal/privacy" className="underline underline-offset-2 hover:text-brand-primary">
+                      Privacy Notice
+                    </Link>
+                    .
+                  </span>
+                </label>
+                {consentError && (
+                  <p id="quiz-consent-error" role="alert" className="mt-2 ml-7 text-sm text-red-600">
+                    {consentError}
+                  </p>
+                )}
               </div>
               <button
                 type="button"

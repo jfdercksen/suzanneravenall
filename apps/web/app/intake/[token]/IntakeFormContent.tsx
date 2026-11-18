@@ -5,6 +5,8 @@ import { motion } from 'framer-motion'
 import IntakeQuestion, { type QuestionValue } from './IntakeQuestion'
 import { ACKNOWLEDGEMENT_KEY, validateSubmission } from '@/lib/intake/validate'
 import type { IntakeForm } from '@/lib/intake/types'
+import { MarketingOptIn } from '@/components/forms/MarketingOptIn'
+import { marketingChoiceError, NO_MARKETING, type MarketingChoice } from '@/lib/consent/marketing'
 
 /**
  * The open intake form: header on black, questions on white, the thank-you
@@ -49,6 +51,8 @@ export default function IntakeFormContent({ token, form, serviceName, firstName,
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [phase, setPhase] = useState<Phase>('editing')
   const [failure, setFailure] = useState<string | null>(null)
+  const [marketing, setMarketing] = useState<MarketingChoice>(NO_MARKETING)
+  const [marketingError, setMarketingError] = useState<string | undefined>()
 
   const answerFor = (id: string): QuestionValue => answers[id] ?? { value: '', detail: '' }
   const errorCount = Object.keys(errors).length
@@ -79,16 +83,19 @@ export default function IntakeFormContent({ token, form, serviceName, firstName,
     setFailure(null)
     const submission = { acknowledged, answers }
     const checked = validateSubmission(form, submission)
+    const marketingInvalid = marketingChoiceError(marketing)
+    setMarketingError(marketingInvalid)
     if (!checked.ok) {
       showErrors(checked.errors)
       return
     }
+    if (marketingInvalid) return
     setPhase('sending')
     try {
       const res = await fetch('/api/intake/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, ...submission }),
+        body: JSON.stringify({ token, ...submission, marketing }),
       })
       const body = (await res.json().catch(() => ({}))) as { status?: string; errors?: Record<string, string> }
       if (res.ok) {
@@ -208,6 +215,18 @@ export default function IntakeFormContent({ token, form, serviceName, firstName,
                 ) : null}
               </div>
             ) : null}
+
+            <MarketingOptIn
+              idPrefix="intake"
+              value={marketing}
+              onChange={(next) => {
+                setMarketing(next)
+                if (marketingError) setMarketingError(marketingChoiceError(next))
+              }}
+              error={marketingError}
+              disabled={phase === 'sending'}
+              className="text-sm"
+            />
 
             <div className="border-t border-brand-border pt-8">
               {errorCount > 0 ? (

@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { emailError } from '@/lib/forms/validation'
+import { MarketingOptIn } from '@/components/forms/MarketingOptIn'
+import { marketingChoiceError, NO_MARKETING, type MarketingChoice } from '@/lib/consent/marketing'
 
 // TODO: Wire to real PDF delivery once Suzanne provides the chapter PDF.
 // Currently captures email only — no asset is sent on submit.
@@ -16,14 +18,19 @@ export default function LeadMagnet() {
   const [error, setError] = useState('')
   // Shown when the field loses focus or on submit, not only after a round trip (site check M5).
   const [fieldError, setFieldError] = useState<string | undefined>()
+  const [marketing, setMarketing] = useState<MarketingChoice>(NO_MARKETING)
+  const [marketingError, setMarketingError] = useState<string | undefined>()
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const invalid = emailError(email)
+    const marketingInvalid = marketingChoiceError(marketing)
+    setMarketingError(marketingInvalid)
     if (invalid) {
       setFieldError(invalid)
       return
     }
+    if (marketingInvalid) return
     setStatus('loading')
     setError('')
 
@@ -31,7 +38,7 @@ export default function LeadMagnet() {
       const res = await fetch('/api/lead-magnet', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, marketing }),
       })
 
       if (!res.ok && res.status !== 202) {
@@ -123,6 +130,21 @@ export default function LeadMagnet() {
                 {status === 'loading' ? 'Sending…' : 'Notify Me'}
               </button>
             </form>
+          )}
+
+          {status !== 'success' && (
+            <MarketingOptIn
+              idPrefix="lead-magnet"
+              tone="dark"
+              value={marketing}
+              onChange={(next) => {
+                setMarketing(next)
+                if (marketingError) setMarketingError(marketingChoiceError(next))
+              }}
+              error={marketingError}
+              disabled={status === 'loading'}
+              className="mt-4 max-w-md mx-auto"
+            />
           )}
 
           {fieldError && status !== 'success' && (

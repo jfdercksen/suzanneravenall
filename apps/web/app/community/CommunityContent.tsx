@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { MarketingOptIn } from '@/components/forms/MarketingOptIn'
+import { marketingChoiceError, NO_MARKETING, type MarketingChoice } from '@/lib/consent/marketing'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 
@@ -60,9 +62,14 @@ export default function CommunityContent() {
   const [email, setEmail] = useState('')
   const [state, setState] = useState<FormState>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const [marketing, setMarketing] = useState<MarketingChoice>(NO_MARKETING)
+  const [marketingError, setMarketingError] = useState<string | undefined>()
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    const marketingInvalid = marketingChoiceError(marketing)
+    setMarketingError(marketingInvalid)
+    if (marketingInvalid) return
     setState('loading')
     setErrorMessage('')
 
@@ -70,7 +77,7 @@ export default function CommunityContent() {
       const res = await fetch('/api/lead-magnet', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source: 'community' }),
+        body: JSON.stringify({ email, source: 'community', marketing }),
       })
 
       if (res.ok || res.status === 202) {
@@ -153,6 +160,20 @@ export default function CommunityContent() {
                     {state === 'loading' ? 'Sending…' : 'Notify me'}
                   </button>
                 </form>
+              )}
+
+              {state !== 'success' && (
+                <MarketingOptIn
+                  idPrefix="community"
+                  value={marketing}
+                  onChange={(next) => {
+                    setMarketing(next)
+                    if (marketingError) setMarketingError(marketingChoiceError(next))
+                  }}
+                  error={marketingError}
+                  disabled={state === 'loading'}
+                  className="mt-3 max-w-md"
+                />
               )}
 
               {state === 'error' && errorMessage && (

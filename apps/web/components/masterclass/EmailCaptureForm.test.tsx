@@ -56,6 +56,7 @@ describe('EmailCaptureForm', () => {
       firstName: 'Thandi',
       email: 'thandi@example.com',
       source: 'masterclass',
+      marketing: { optIn: false, channels: [] },
       watchDate: date,
       watchTime: '10:00',
     })

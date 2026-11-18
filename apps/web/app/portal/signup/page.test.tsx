@@ -32,14 +32,37 @@ describe('SignupPage phone number (KI077)', () => {
   it('saves the phone number on the new account', async () => {
     await fillAndSubmit('+27 82 555 1234')
     expect(signUp).toHaveBeenCalledWith(
-      expect.objectContaining({ options: expect.objectContaining({ data: { full_name: 'Ann van Wyk', phone: '+27 82 555 1234' } }) })
+      expect.objectContaining({ options: expect.objectContaining({ data: expect.objectContaining({ full_name: 'Ann van Wyk', phone: '+27 82 555 1234', marketing_opt_in: false }) }) })
     )
   })
 
   it('treats the phone number as optional', async () => {
     await fillAndSubmit('')
     expect(signUp).toHaveBeenCalledWith(
-      expect.objectContaining({ options: expect.objectContaining({ data: { full_name: 'Ann van Wyk', phone: null } }) })
+      expect.objectContaining({ options: expect.objectContaining({ data: expect.objectContaining({ full_name: 'Ann van Wyk', phone: null }) }) })
+    )
+  })
+
+  it('saves the marketing opt-in on the new account when ticked (POPIA)', async () => {
+    const user = userEvent.setup()
+    render(<SignupPage />)
+    await user.type(screen.getByLabelText('Full name'), 'Ann van Wyk')
+    await user.type(screen.getByLabelText('Email address'), 'ann@example.com')
+    await user.type(screen.getByLabelText(/^Password/), 'longenough1')
+    await user.type(screen.getByLabelText('Confirm password'), 'longenough1')
+    await user.click(screen.getByRole('checkbox', { name: /news, programmes and offers/ }))
+    await user.click(screen.getByRole('checkbox', { name: 'Email' }))
+    await user.click(screen.getByRole('button', { name: 'Create Account' }))
+    expect(signUp).toHaveBeenCalledWith(
+      expect.objectContaining({
+        options: expect.objectContaining({
+          data: expect.objectContaining({
+            marketing_opt_in: true,
+            marketing_channels: ['email'],
+            marketing_form_version: 'marketing-opt-in-v1-2026-11-18',
+          }),
+        }),
+      }),
     )
   })
 

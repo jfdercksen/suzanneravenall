@@ -73,6 +73,7 @@ export function toIntakeForm(raw: unknown): IntakeForm | null {
     acknowledgement: str(doc.acknowledgement),
     fields: usable,
     recipientEmail: str(doc.recipientEmail),
+    version: str(doc.updatedAt) ? `${formKey}@${str(doc.updatedAt)}` : null,
   }
 }
 

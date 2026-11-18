@@ -1,11 +1,10 @@
 import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Text } from '@react-email/components'
-import type { IntakeAnswer } from '../../intake/types'
-import { answerText } from '../../intake/validate'
 
 /**
- * A completed intake form for the team (H-12): who, which order and service,
- * then every question with its answer, grouped under the form's headings.
- * Skipped questions show as "Not answered" so the team sees the whole form.
+ * A completed intake form, for the team (H-12): who, which order, service and
+ * form, and when. The answers are NOT in this mail: they hold personal and
+ * health information, which is never sent by plain email (POPIA, Suzanne's
+ * rules of 8 Nov 2026). They stay in intake_submissions.
  */
 
 const INK = '#0A0A0A'
@@ -21,18 +20,8 @@ export interface IntakeCompletedProps {
   formTitle: string
   completedAt: string
   acknowledged: boolean
-  items: IntakeAnswer[]
-}
-
-function groups(items: IntakeAnswer[]): { section: string | null; items: IntakeAnswer[] }[] {
-  const out: { section: string | null; items: IntakeAnswer[] }[] = []
-  for (const item of items) {
-    const section = item.section ?? null
-    const last = out[out.length - 1]
-    if (last && last.section === section) last.items.push(item)
-    else out.push({ section, items: [item] })
-  }
-  return out
+  /** "Opted in: Email, SMS" or "Not opted in". */
+  marketing: string
 }
 
 export default function IntakeCompleted({
@@ -43,7 +32,7 @@ export default function IntakeCompleted({
   formTitle,
   completedAt,
   acknowledged,
-  items,
+  marketing,
 }: IntakeCompletedProps) {
   return (
     <Html lang="en">
@@ -63,53 +52,20 @@ export default function IntakeCompleted({
               ['Form', formTitle],
               ['Completed', completedAt],
               ['Acknowledgement', acknowledged ? 'Ticked' : 'Not on this form'],
+              ['Marketing', marketing],
             ].map(([k, v]) => (
               <Text key={k} style={{ color: INK, fontSize: '14px', lineHeight: '1.5', margin: '0 0 4px' }}>
                 <strong>{k}:</strong> {v}
               </Text>
             ))}
           </Section>
-
-          {groups(items).map((group, gi) => (
-            <Section key={`${group.section ?? 'none'}-${gi}`} style={{ marginBottom: '16px' }}>
-              {group.section ? (
-                <Text
-                  style={{
-                    color: INK,
-                    fontSize: '13px',
-                    fontWeight: '700',
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                    margin: '0 0 8px',
-                    borderBottom: `1px solid ${BORDER}`,
-                    paddingBottom: '6px',
-                  }}
-                >
-                  {group.section}
-                </Text>
-              ) : null}
-              {group.items.map((item) => {
-                const answer = answerText(item)
-                return (
-                  <Section key={item.fieldId} style={{ marginBottom: '12px' }}>
-                    <Text style={{ color: MUTED, fontSize: '13px', lineHeight: '1.5', margin: '0 0 2px' }}>{item.label}</Text>
-                    <Text style={{ color: INK, fontSize: '15px', lineHeight: '1.6', margin: 0, whiteSpace: 'pre-wrap' }}>
-                      {answer || 'Not answered'}
-                    </Text>
-                    {item.detail ? (
-                      <Text style={{ color: INK, fontSize: '15px', lineHeight: '1.6', margin: '2px 0 0', whiteSpace: 'pre-wrap' }}>
-                        Details: {item.detail}
-                      </Text>
-                    ) : null}
-                  </Section>
-                )
-              })}
-            </Section>
-          ))}
-
+          <Text style={{ color: INK, fontSize: '14px', lineHeight: '1.6', margin: '0 0 16px' }}>
+            The answers are not in this email. They hold personal and health information, so they stay in the website
+            database and are never sent by email.
+          </Text>
           <Hr style={{ borderColor: BORDER, margin: '24px 0 12px' }} />
           <Text style={{ color: MUTED, fontSize: '12px', lineHeight: '1.5', margin: 0 }}>
-            Personal and health information: keep this mail within the team. Reply to this mail to write to the client.
+            Reply to this mail to write to the client.
           </Text>
         </Container>
       </Body>

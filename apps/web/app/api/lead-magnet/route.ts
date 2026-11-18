@@ -5,6 +5,8 @@ import { captureLead } from '@/lib/leads/capture'
 import { sendLeadWelcomeIfDue } from '@/lib/leads/welcome'
 import { createRateLimiter, getClientIp, rateLimitResponse } from '@/lib/rate-limit'
 import { formatWatchAt } from '@/lib/masterclass'
+import { marketingRecord } from '@/lib/consent/marketing'
+import { MarketingChoiceSchema } from '@/lib/consent/schema'
 
 const VIBE_WEBHOOK_URL = (process.env.VIBE_MARKETING_WEBHOOK_URL ?? '').replace(/\/$/, '')
 const DELIVERY_FAILED =
@@ -22,6 +24,9 @@ const LeadMagnetSchema = z.object({
   // and time, echoed in the welcome email.
   watchDate: z.string().max(10).optional(),
   watchTime: z.string().max(5).optional(),
+  // POPIA marketing opt-in (unticked by default). Absent from pages cached
+  // before it existed: stored as not opted in.
+  marketing: MarketingChoiceSchema.optional(),
 })
 
 // Each submission can send a welcome email to the typed address.
@@ -43,7 +48,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 422 })
   }
 
-  const { email, firstName, source, quizResult, watchDate, watchTime } = parsed.data
+  const { email, firstName, source, quizResult, watchDate, watchTime, marketing } = parsed.data
   let watchAt: string | null = null
   if (watchDate || watchTime) {
     watchAt = formatWatchAt(watchDate ?? '', watchTime ?? '')
@@ -51,7 +56,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Please choose a valid date and time to watch.' }, { status: 422 })
     }
   }
-  const timestamp = new Date().toISOString()
+  const now = new Date()
+  const timestamp = now.toISOString()
+  const marketingChoice = marketingRecord(marketing, now)
 
   // B13: tell the visitor "we have your details" only when the lead is really
   // stored somewhere. captureLead saves our own copy in Supabase first, then
@@ -65,6 +72,7 @@ export async function POST(request: Request) {
     firstName: firstName ?? email.split('@')[0] ?? email,
     source: storedSource,
     quizResult: quizResult ?? null,
+    marketing: marketingChoice,
   })
 
   if (!outcome.stored) {
@@ -72,7 +80,9 @@ export async function POST(request: Request) {
   }
 
   // Welcome email for the form they used - fire-and-forget, never blocks the
-  // response. sendLeadWelcomeIfDue never throws: it skips sources without
+  // response. It is what the visitor asked for (the download, the watch
+  // link, the release notice), so it goes whether or not they opted in.
+  // Anything after it is marketing and goes to opted-in leads only (POPIA). sendLeadWelcomeIfDue never throws: it skips sources without
   // welcome copy, unsubscribed addresses and repeats within 24h, and logs
   // its own failures.
   void sendLeadWelcomeIfDue({
@@ -86,7 +96,11 @@ export async function POST(request: Request) {
   // Forward to Vibe Marketing - fire-and-forget, never blocks the response.
   // Secondary copy only: the lead is already stored above.
   // Only fires when VIBE_MARKETING_WEBHOOK_URL is configured (graceful degradation).
-  if (VIBE_WEBHOOK_URL) {
+  // Vibe Marketing is a marketing system, so only opted-in leads go there
+  // (POPIA, Suzanne's rules of 8 Nov 2026), with the channels they chose.
+  // Only once our own leads row (the proof of the opt-in) is saved: a lead
+  // that reached Vtiger alone is not sent.
+  if (VIBE_WEBHOOK_URL && marketingChoice.marketing_opt_in && outcome.leadId) {
     void fetch(VIBE_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -97,6 +111,9 @@ export async function POST(request: Request) {
         quizResult: quizResult ?? null,
         timestamp,
         platform: 'suzanneravenall',
+        marketingOptIn: true,
+        marketingChannels: marketingChoice.marketing_channels,
+        marketingChoiceAt: marketingChoice.marketing_choice_at,
       }),
     }).catch((err: unknown) => {
       const message = err instanceof Error ? err.message : String(err)

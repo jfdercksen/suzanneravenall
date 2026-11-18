@@ -29,15 +29,10 @@ function buildPlainText(data: QuizCompletionEmailData): string {
     data.resultTitle,
     data.resultSubtitle,
     '',
-    'FULL ANSWERS',
-    '============',
+    'The answers are not in this email. They can include health and wellbeing information, so they stay in the website database and are never sent by email.',
+    '',
+    `Reply to this email to respond to ${data.firstName}.`,
   ]
-
-  data.questions.forEach((question, index) => {
-    lines.push(`${index + 1}. ${question.text}`, `   ${question.answerLabel}`)
-  })
-
-  lines.push('', `Reply to this email to respond to ${data.firstName}.`)
 
   return lines.join('\n')
 }

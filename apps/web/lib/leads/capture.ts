@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/nextjs'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { automationMode, syncLeadToVtiger, type AutomationMode } from '@suzanne/integrations'
 import { getVtigerClient } from '@/lib/integrations/vtiger'
+import type { MarketingRecord } from '@/lib/consent/marketing'
 import { sendStaffAlert } from '@/lib/integrations/staff-alert'
 import { logError } from '@/lib/log'
 import {
@@ -34,6 +35,8 @@ export type LeadCaptureInput = {
   firstName: string
   source: string
   quizResult: string | null
+  /** The marketing opt-in as stored on the leads row. */
+  marketing?: MarketingRecord
 }
 
 export type LeadCaptureOutcome = {
@@ -60,7 +63,13 @@ export async function captureLead(input: LeadCaptureInput): Promise<LeadCaptureO
 
   const saved = await saveLead(
     supabase,
-    { email: input.email, firstName: input.firstName, source: input.source, quizResult: input.quizResult },
+    {
+      email: input.email,
+      firstName: input.firstName,
+      source: input.source,
+      quizResult: input.quizResult,
+      marketing: input.marketing,
+    },
     initialStatus(mode),
   )
   if (!saved.ok) {

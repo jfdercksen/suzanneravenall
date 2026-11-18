@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { ensureMembership } from '@/lib/access/ensure-membership'
 import { emailError, hasErrors, PHONE_PATTERN, phoneError, requiredError, useFieldErrors } from '@/lib/forms/validation'
+import { MarketingOptIn } from '@/components/forms/MarketingOptIn'
+import { marketingChoiceError, marketingRecord, NO_MARKETING, type MarketingChoice } from '@/lib/consent/marketing'
 
 type Field = 'name' | 'email' | 'phone' | 'password' | 'confirmPassword'
 
@@ -30,6 +32,8 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [marketing, setMarketing] = useState<MarketingChoice>(NO_MARKETING)
+  const [marketingError, setMarketingError] = useState<string | undefined>()
   // The address already has an account: GoTrue sends nothing and keeps the old password.
   const [existing, setExisting] = useState(false)
   // Site check M5: field messages on blur, before anything is sent.
@@ -80,7 +84,9 @@ export default function SignupPage() {
       password: validate('password', password),
       confirmPassword: validate('confirmPassword', confirmPassword),
     }
-    if (hasErrors(fieldErrors)) {
+    const marketingInvalid = marketingChoiceError(marketing)
+    setMarketingError(marketingInvalid)
+    if (hasErrors(fieldErrors) || marketingInvalid) {
       setFieldErrors(fieldErrors)
       return
     }
@@ -94,7 +100,9 @@ export default function SignupPage() {
       options: {
         // phone is optional; it lands where the account page and the
         // checkout prefill read it (KI077).
-        data: { full_name: name, phone: phone.trim() || null },
+        // The POPIA marketing choice (unticked by default) rides on the
+        // user metadata: the account has no other table of its own.
+        data: { full_name: name, phone: phone.trim() || null, ...marketingRecord(marketing, new Date()) },
         emailRedirectTo: `${window.location.origin}/portal/callback${
           redirectQuery ? `?next=${encodeURIComponent(redirect)}` : ''
         }`,
@@ -320,6 +328,18 @@ export default function SignupPage() {
               />
               {fieldMessage('confirmPassword')}
             </div>
+
+            <MarketingOptIn
+              idPrefix="signup"
+              tone="dark"
+              value={marketing}
+              onChange={(next) => {
+                setMarketing(next)
+                if (marketingError) setMarketingError(marketingChoiceError(next))
+              }}
+              error={marketingError}
+              disabled={loading}
+            />
 
             {error && <p className="text-red-400 text-sm">{error}</p>}
 

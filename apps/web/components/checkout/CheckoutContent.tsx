@@ -19,6 +19,8 @@ import {
   type BusinessDetails,
   type BusinessErrors,
 } from '@/lib/checkout/business'
+import { MarketingOptIn } from '@/components/forms/MarketingOptIn'
+import { marketingCartMetadata, marketingChoiceError, NO_MARKETING, type MarketingChoice } from '@/lib/consent/marketing'
 
 type Step = 1 | 2 | 3
 
@@ -301,6 +303,8 @@ export default function CheckoutContent() {
   // Every order needs the Terms accepted before payment (Suzanne, 24 Oct).
   const [termsAccepted, setTermsAccepted] = useState(false)
   const [termsError, setTermsError] = useState<string | null>(null)
+  const [marketing, setMarketing] = useState<MarketingChoice>(NO_MARKETING)
+  const [marketingError, setMarketingError] = useState<string | undefined>()
   const [voucherInput, setVoucherInput] = useState('')
   const [voucherBusy, setVoucherBusy] = useState(false)
   const [voucherError, setVoucherError] = useState<string | null>(null)
@@ -375,7 +379,14 @@ export default function CheckoutContent() {
     const businessValidation = isBusiness ? validateBusiness(business, contact.country) : {}
     const termsMissing = termsAccepted ? null : TERMS_REQUIRED_MESSAGE
     setTermsError(termsMissing)
-    if (Object.keys(validation).length > 0 || Object.keys(businessValidation).length > 0 || termsMissing) {
+    const marketingInvalid = marketingChoiceError(marketing)
+    setMarketingError(marketingInvalid)
+    if (
+      Object.keys(validation).length > 0 ||
+      Object.keys(businessValidation).length > 0 ||
+      termsMissing ||
+      marketingInvalid
+    ) {
       setErrors(validation)
       setBusinessErrors(businessValidation)
       return
@@ -395,7 +406,12 @@ export default function CheckoutContent() {
       // then switched off never reach the order.
       company: businessDetails?.companyName ?? '',
       // When the buyer ticked the Terms box; it reaches the order with the cart.
-      metadata: { ...businessMetadata(businessDetails), terms_accepted_at: new Date().toISOString() },
+      // The POPIA marketing choice too (unticked by default), with its time and wording version.
+      metadata: {
+        ...businessMetadata(businessDetails),
+        terms_accepted_at: new Date().toISOString(),
+        ...marketingCartMetadata(marketing, new Date()),
+      },
     })
     setIsSubmitting(false)
     if (!saved) {
@@ -640,7 +656,7 @@ export default function CheckoutContent() {
                         paying, we may email you up to three reminders about the items in this
                         cart. Every reminder has an unsubscribe link. See our{' '}
                         <Link href="/legal/privacy" className="underline hover:text-brand-ink">
-                          Privacy Policy
+                          Privacy Notice
                         </Link>
                         .
                       </p>
@@ -793,6 +809,19 @@ export default function CheckoutContent() {
                           </p>
                         )}
                       </div>
+
+                      {/* The Privacy Notice is linked under the email field above. */}
+                      <MarketingOptIn
+                        idPrefix="checkout"
+                        value={marketing}
+                        onChange={(next) => {
+                          setMarketing(next)
+                          if (marketingError) setMarketingError(marketingChoiceError(next))
+                        }}
+                        error={marketingError}
+                        showPrivacyLink={false}
+                        disabled={isSubmitting}
+                      />
 
                       <div className="pt-2">
                         <button

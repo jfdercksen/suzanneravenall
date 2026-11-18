@@ -1,6 +1,7 @@
 import { randomBytes } from 'crypto'
 import { createServerClient } from '@supabase/ssr'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { MarketingChannel, MarketingRecord } from '@/lib/consent/marketing'
 
 export interface QuizSubscriberRow {
   id: string
@@ -15,6 +16,17 @@ export interface QuizSubscriberRow {
   email_sent_at: string | null
   created_at: string
   updated_at: string
+  // POPIA (migration 20261118090000).
+  marketing_opt_in?: boolean
+  marketing_channels?: MarketingChannel[]
+  consented_at?: string | null
+  consent_form_version?: string | null
+}
+
+/** The consent to process the answers, stored with them. */
+export interface QuizConsentRecord {
+  consented_at: string
+  consent_form_version: string
 }
 
 // Access tokens are the sole credential for this table (no auth.uid()) — cap
@@ -60,7 +72,14 @@ function generateAccessToken(): string {
  */
 export async function upsertSubscriber(
   supabase: SupabaseClient,
-  input: { quizSlug: string; firstName: string; lastName: string; email: string }
+  input: {
+    quizSlug: string
+    firstName: string
+    lastName: string
+    email: string
+    /** The gate's marketing opt-in; a retake's choice replaces it. Undefined (no choice sent) keeps what is stored. */
+    marketing: MarketingRecord | undefined
+  }
 ): Promise<{ id: string; accessToken: string }> {
   const accessToken =
     (await findReusableToken(supabase, input.quizSlug, input.email)) ?? generateAccessToken()
@@ -80,6 +99,9 @@ export async function upsertSubscriber(
         email_sent_at: null,
         started_at: null,
         completed_at: null,
+        consented_at: null,
+        consent_form_version: null,
+        ...(input.marketing ?? {}),
       },
       { onConflict: 'email,quiz_slug' }
     )
@@ -166,7 +188,8 @@ export async function markCompleted(
   supabase: SupabaseClient,
   id: string,
   answers: Record<string, number>,
-  resultKey: string
+  resultKey: string,
+  consent: QuizConsentRecord
 ): Promise<void> {
   const { error } = await supabase
     .from('quiz_subscribers')
@@ -175,6 +198,8 @@ export async function markCompleted(
       answers,
       result_key: resultKey,
       completed_at: new Date().toISOString(),
+      consented_at: consent.consented_at,
+      consent_form_version: consent.consent_form_version,
     })
     .eq('id', id)
 

@@ -140,11 +140,10 @@ export interface QuizReportEmailData {
   ctaLink: string
 }
 
-export interface QuizAnsweredQuestion {
-  text: string
-  answerLabel: string
-}
-
+/**
+ * The staff notice of a completed diagnostic: who, which quiz, which result.
+ * Never the answers (POPIA: they can hold health information).
+ */
 export interface QuizCompletionEmailData {
   firstName: string
   lastName: string
@@ -152,7 +151,6 @@ export interface QuizCompletionEmailData {
   quizTitle: string
   resultTitle: string
   resultSubtitle: string
-  questions: QuizAnsweredQuestion[]
 }
 
 /** Auto-reply to a /contact form submission. */

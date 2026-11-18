@@ -4,6 +4,8 @@ import { useId, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { emailError, hasErrors, requiredError, useFieldErrors } from '@/lib/forms/validation'
 import { MASTERCLASS_WATCH_PATH, formatWatchAt } from '@/lib/masterclass'
+import { MarketingOptIn } from '@/components/forms/MarketingOptIn'
+import { marketingChoiceError, NO_MARKETING, type MarketingChoice } from '@/lib/consent/marketing'
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error'
 type Field = 'firstName' | 'email' | 'watchDate' | 'watchTime'
@@ -34,6 +36,8 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
   const [state, setState] = useState<FormState>('idle')
   const [errorMessage, setErrorMessage] = useState('')
   const { errors, setError, setErrors } = useFieldErrors<Field>()
+  const [marketing, setMarketing] = useState<MarketingChoice>(NO_MARKETING)
+  const [marketingError, setMarketingError] = useState<string | undefined>()
   // useId keeps the ids unique if the form is ever placed on a page twice.
   const id = useId()
   const firstNameId = `${id}-first-name`
@@ -49,7 +53,9 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
       watchDate: schedule === 'later' ? requiredError(watchDate, DATE_REQUIRED) : undefined,
       watchTime: schedule === 'later' ? requiredError(watchTime, TIME_REQUIRED) : undefined,
     }
-    if (hasErrors(fieldErrors)) {
+    const marketingInvalid = marketingChoiceError(marketing)
+    setMarketingError(marketingInvalid)
+    if (hasErrors(fieldErrors) || marketingInvalid) {
       setErrors(fieldErrors)
       return
     }
@@ -64,6 +70,7 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
           firstName,
           email,
           source: 'masterclass',
+          marketing,
           ...(schedule === 'later' ? { watchDate, watchTime } : {}),
         }),
       })
@@ -228,6 +235,19 @@ export default function EmailCaptureForm({ variant = 'dark' }: EmailCaptureFormP
           </div>
         )}
       </fieldset>
+
+      <MarketingOptIn
+        idPrefix={`${id}-masterclass`}
+        tone={variant === 'light' ? 'light' : 'dark'}
+        value={marketing}
+        onChange={(next) => {
+          setMarketing(next)
+          if (marketingError) setMarketingError(marketingChoiceError(next))
+        }}
+        error={marketingError}
+        disabled={state === 'submitting'}
+        className="mt-3"
+      />
 
       {state === 'error' && (
         <p role="alert" className={`mt-2 text-xs ${errorClass}`}>{errorMessage}</p>

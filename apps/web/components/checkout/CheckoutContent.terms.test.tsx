@@ -74,6 +74,22 @@ describe('CheckoutContent terms tick box', () => {
     await waitFor(() => expect(setContact).toHaveBeenCalledTimes(1))
     const metadata = (setContact.mock.calls[0]![0] as { metadata: Record<string, string> }).metadata
     expect(Number.isNaN(Date.parse(metadata.terms_accepted_at ?? ''))).toBe(false)
+    // POPIA: the marketing box starts unticked and its "no" is recorded with the cart.
+    expect(metadata).toMatchObject({ marketing_opt_in: 'false', marketing_channels: '', marketing_form_version: 'marketing-opt-in-v1-2026-11-18' })
     expect(await screen.findByRole('heading', { name: 'Payment' })).toBeInTheDocument()
+  })
+
+  it('records the chosen marketing channels with the cart when the buyer opts in', async () => {
+    const user = userEvent.setup()
+    render(<CheckoutContent />)
+    await fillPerson(user)
+    await user.click(screen.getByLabelText(/I have read and accept/))
+    await user.click(screen.getByRole('checkbox', { name: /news, programmes and offers/ }))
+    await user.click(screen.getByRole('checkbox', { name: 'SMS' }))
+    await user.click(screen.getByRole('button', { name: /Continue to Payment/ }))
+    await waitFor(() => expect(setContact).toHaveBeenCalledTimes(1))
+    const metadata = (setContact.mock.calls[0]![0] as { metadata: Record<string, string> }).metadata
+    expect(metadata).toMatchObject({ marketing_opt_in: 'true', marketing_channels: 'sms' })
+    expect(Number.isNaN(Date.parse(metadata.marketing_choice_at ?? ''))).toBe(false)
   })
 })

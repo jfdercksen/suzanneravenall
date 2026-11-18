@@ -104,7 +104,7 @@ describe('CheckoutContent contact step', () => {
     const notice = screen.getByText(/up to three reminders about the items in this/)
     expect(notice).toHaveTextContent('Every reminder has an unsubscribe link')
     expect(screen.getByLabelText(/Email address/)).toHaveAttribute('aria-describedby', 'email-consent')
-    expect(screen.getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute('href', '/legal/privacy')
+    expect(screen.getByRole('link', { name: 'Privacy Notice' })).toHaveAttribute('href', '/legal/privacy')
   })
 
   it('leaves the contact step empty for a guest', async () => {

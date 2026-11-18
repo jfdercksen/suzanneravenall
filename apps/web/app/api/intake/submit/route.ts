@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { z } from 'zod'
 import { submitIntake, TOKEN_RE } from '@/lib/intake/service'
 import { logError } from '@/lib/log'
+import { MarketingChoiceSchema } from '@/lib/consent/schema'
 
 /**
  * POST /api/intake/submit - public, from the /intake/<token> page. The token
@@ -27,6 +28,8 @@ const bodySchema = z.object({
   token: z.string().regex(TOKEN_RE),
   acknowledged: z.boolean().optional(),
   answers: z.record(z.string().max(100), answerSchema),
+  // POPIA marketing opt-in, unticked by default; absent = not opted in.
+  marketing: MarketingChoiceSchema.optional(),
 })
 
 const STATUS_CODE = { not_found: 404, already_completed: 409, expired: 410, unavailable: 503 } as const
@@ -50,6 +53,7 @@ export async function POST(request: NextRequest) {
     const result = await submitIntake(parsed.data.token, {
       acknowledged: parsed.data.acknowledged,
       answers: parsed.data.answers,
+      marketing: parsed.data.marketing,
     })
     if (result.status === 'completed') return NextResponse.json({ status: 'completed' })
     if (result.status === 'invalid') return NextResponse.json({ status: 'invalid', errors: result.errors }, { status: 422 })

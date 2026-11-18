@@ -4,6 +4,8 @@ import { useRef, useState } from 'react'
 import Link from 'next/link'
 import type { Quiz } from '@/app/explore/quizzes/types'
 import { emailError, hasErrors, requiredError, useFieldErrors } from '@/lib/forms/validation'
+import { MarketingOptIn } from '@/components/forms/MarketingOptIn'
+import { marketingChoiceError, NO_MARKETING, type MarketingChoice } from '@/lib/consent/marketing'
 import QuizFlow from './QuizFlow'
 
 type Field = 'firstName' | 'lastName' | 'email'
@@ -24,6 +26,8 @@ interface QuizSubscriberSeed {
   email: string
   initialAnswers?: Record<number, number>
   initialStep?: number
+  /** The marketing choice stored at the gate. */
+  marketing?: MarketingChoice
 }
 
 interface QuizGateProps {
@@ -44,6 +48,8 @@ export default function QuizGate({ quiz, initialMode, subscriber, topicTitle }: 
   const [status, setStatus] = useState<SubmitStatus>('idle')
   const [errorMessage, setErrorMessage] = useState('')
   const [sentTo, setSentTo] = useState('')
+  const [marketing, setMarketing] = useState<MarketingChoice>(NO_MARKETING)
+  const [marketingError, setMarketingError] = useState<string | undefined>()
   const { errors, setError, setErrors } = useFieldErrors<Field>()
   const values: Record<Field, string> = { firstName, lastName, email }
   const setters: Record<Field, (v: string) => void> = {
@@ -106,7 +112,9 @@ export default function QuizGate({ quiz, initialMode, subscriber, topicTitle }: 
       lastName: fieldError('lastName', lastName),
       email: fieldError('email', email),
     }
-    if (hasErrors(fieldErrors)) {
+    const marketingInvalid = marketingChoiceError(marketing)
+    setMarketingError(marketingInvalid)
+    if (hasErrors(fieldErrors) || marketingInvalid) {
       setErrors(fieldErrors)
       return
     }
@@ -117,7 +125,7 @@ export default function QuizGate({ quiz, initialMode, subscriber, topicTitle }: 
       const res = await fetch('/api/quiz/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ quizSlug: quiz.slug, firstName, lastName, email }),
+        body: JSON.stringify({ quizSlug: quiz.slug, firstName, lastName, email, marketing }),
       })
       const data = (await res.json().catch(() => ({}))) as { error?: string }
       if (!res.ok) {
@@ -150,6 +158,7 @@ export default function QuizGate({ quiz, initialMode, subscriber, topicTitle }: 
         subscriberEmail={subscriber.email}
         initialAnswers={subscriber.initialAnswers}
         initialStep={subscriber.initialStep}
+        marketing={subscriber.marketing}
       />
     )
   }
@@ -218,6 +227,18 @@ export default function QuizGate({ quiz, initialMode, subscriber, topicTitle }: 
                 />
                 {fieldMessage('email')}
               </div>
+
+              <MarketingOptIn
+                idPrefix="quiz-gate"
+                value={marketing}
+                onChange={(next) => {
+                  setMarketing(next)
+                  if (marketingError) setMarketingError(marketingChoiceError(next))
+                }}
+                error={marketingError}
+                disabled={status === 'submitting'}
+                className="pt-1"
+              />
 
               {status === 'error' && (
                 <p className="text-sm text-red-600" role="alert">

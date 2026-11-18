@@ -6,8 +6,7 @@ vi.mock('./send', () => ({
   sendEmail: mockSend,
 }))
 
-vi.mock('./templates/QuizCompletionNotification', () => ({ default: () => null }))
-
+import { render } from '@react-email/components'
 import { sendQuizCompletionNotificationEmail } from './quiz-completion-notification'
 import type { QuizCompletionEmailData } from './types'
 
@@ -18,10 +17,6 @@ const baseData: QuizCompletionEmailData = {
   quizTitle: 'Nervous System Pattern',
   resultTitle: 'The Hyper-Alert Achiever',
   resultSubtitle: 'Your Pattern: The Hyper-Alert Achiever',
-  questions: [
-    { text: 'I feel "on edge" or alert even when nothing is wrong', answerLabel: 'Often' },
-    { text: 'I find it difficult to switch off or relax fully', answerLabel: 'Almost Always' },
-  ],
 }
 
 describe('sendQuizCompletionNotificationEmail', () => {
@@ -58,6 +53,27 @@ describe('sendQuizCompletionNotificationEmail', () => {
   // `?? fallback` chains - the env-var-override path can't be exercised
   // without module re-loading (same reasoning as membership-welcome.test.ts's
   // FROM constant) and is covered by source code review instead.
+
+  it('names who, the quiz and the result, and never carries the answers (POPIA)', async () => {
+    mockSend.mockResolvedValue('email_notify_003')
+    // A caller that still passes answers must not get them into the mail.
+    await sendQuizCompletionNotificationEmail({
+      ...baseData,
+      questions: [{ text: 'I feel "on edge" even when nothing is wrong', answerLabel: 'Often' }],
+    } as QuizCompletionEmailData)
+    const call = mockSend.mock.calls[0]![0] as { text: string; react: Parameters<typeof render>[0] }
+    const html = await render(call.react)
+    for (const part of [call.text, html]) {
+      expect(part).toContain('Alice Smith')
+      expect(part).toContain('lead@example.com')
+      expect(part).toContain('Nervous System Pattern')
+      expect(part).toContain('The Hyper-Alert Achiever')
+      expect(part).toContain('The answers are not in this email')
+      expect(part).not.toContain('on edge')
+      expect(part).not.toContain('Often')
+      expect(part).not.toContain('\u2014')
+    }
+  })
 
   it('propagates a provider error', async () => {
     mockSend.mockRejectedValue(new Error(`Brevo error: ${'rate limited'}`))

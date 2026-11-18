@@ -14,6 +14,7 @@ import {
 import { reminderDelays } from './schedule'
 import type * as storeModule from './store'
 import type { IntakeForm, IntakeRecord } from './types'
+import type { MarketingRecord } from '@/lib/consent/marketing'
 
 const MIN = 60_000
 const DAY = 86_400_000
@@ -128,10 +129,22 @@ function memoryStore() {
       for (const r of open) Object.assign(r, { status: 'cancelled', cancelled_at: now.toISOString(), next_reminder_at: null })
       return open.length
     },
-    completeIntake: async (token: string, answers: IntakeRecord['answers'], now: Date) => {
+    completeIntake: async (
+      token: string,
+      answers: IntakeRecord['answers'],
+      now: Date,
+      consent: { marketing: MarketingRecord; formVersion: string | null },
+    ) => {
       const r = rows.find((x) => x.token === token && x.status === 'pending' && new Date(x.expires_at) > now)
       if (!r) return null
-      Object.assign(r, { status: 'completed', answers, completed_at: now.toISOString(), next_reminder_at: null })
+      Object.assign(r, {
+        status: 'completed',
+        answers,
+        completed_at: now.toISOString(),
+        next_reminder_at: null,
+        form_version: consent.formVersion,
+        ...consent.marketing,
+      })
       return { ...r }
     },
     listTeamPending: async (olderThan: Date) =>
@@ -431,6 +444,26 @@ describe('runIntakeReminders', () => {
     })
     for (let d = 5; d <= 20; d += 1) await at(d * DAY)
     expect(sendRequest.mock.calls.map(([, n]) => n)).toEqual([1, 2])
+  })
+
+  it('stores the marketing opt-in and the form version with the submission (POPIA)', async () => {
+    deps.loadForm = async () => ({ ...STANDARD, version: 'standard@2026-11-01T10:00:00.000Z' })
+    await createIntakesForOrder({ ...ORDER, lines: [ORDER.lines[0]!] }, deps)
+    clock.now = new Date(T0.getTime() + DAY)
+    const result = await submitIntake(
+      mem.rows[0]!.token,
+      { acknowledged: true, answers: { name: { value: 'Johan' } }, marketing: { optIn: true, channels: ['sms'] } },
+      deps,
+    )
+    expect(result).toEqual({ status: 'completed' })
+    expect(mem.rows[0]).toMatchObject({
+      status: 'completed',
+      completed_at: clock.now.toISOString(),
+      form_version: 'standard@2026-11-01T10:00:00.000Z',
+      marketing_opt_in: true,
+      marketing_channels: ['sms'],
+      marketing_choice_at: clock.now.toISOString(),
+    })
   })
 
   it('never sends the same reminder twice when two runs overlap', async () => {

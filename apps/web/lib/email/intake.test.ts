@@ -111,7 +111,7 @@ describe('completed form mail to the team', () => {
     expect(intakeCompletedSubject(RECORD)).toBe('Intake form: Johan QA Test, order #512 (Rapid Repatterning Session)')
   })
 
-  it('renders every answer under its section, skipped ones as Not answered, escaped', async () => {
+  it('names who, which order, form and when, and leaves every answer out (POPIA)', async () => {
     const html = await render(
       createElement(IntakeCompleted, {
         clientName: 'Johan QA Test',
@@ -121,27 +121,44 @@ describe('completed form mail to the team', () => {
         formTitle: 'Client intake form',
         completedAt: '21 Oct 2026, 11:30',
         acknowledged: true,
-        items: RECORD.answers?.items ?? [],
+        marketing: 'Opted in: Email, SMS',
       }),
     )
-    expect(html).toContain('Personal details')
-    expect(html).toContain('Health information')
-    expect(html).toContain('Panic, Sad')
-    expect(html).toContain('9 / 10')
-    expect(html).toContain('Not answered')
-    expect(html).toContain('See notes &lt;b&gt;x&lt;/b&gt;')
-    expect(html).not.toContain('<b>x</b>')
-    expect(html).not.toContain('—')
+    expect(html).toContain('Johan QA Test')
+    expect(html).toContain('#512')
+    expect(html).toContain('Client intake form')
+    expect(html).toContain('Opted in: Email, SMS')
+    expect(html).toContain('The answers are not in this email')
+    for (const leaked of ['Health information', 'Panic', 'Feelings', 'phobias', 'Mental disorders', 'See notes']) {
+      expect(html).not.toContain(leaked)
+    }
+    expect(html).not.toContain('\u2014')
   })
 
-  it('goes to the team address with the client as reply-to', async () => {
+  it('goes to the team address with the client as reply-to, and the text part has no answers either', async () => {
     process.env.CONTACT_NOTIFY_EMAIL = 'johan@aiautomations.co.za'
-    await sendIntakeCompletedEmail(RECORD, null)
+    await sendIntakeCompletedEmail(
+      { ...RECORD, marketing_opt_in: true, marketing_channels: ['whatsapp'], marketing_choice_at: '2026-11-18T08:00:00Z' },
+      null,
+    )
     const call = vi.mocked(sendEmail).mock.calls[0]![0]
     expect(call.to).toEqual(['johan@aiautomations.co.za'])
     expect(call.replyTo).toBe(RECORD.customer_email)
-    expect(call.text).toContain('Feelings: Panic, Sad')
-    expect(call.text).toContain('Fears or phobias: Not answered')
+    expect(call.text).toContain('Client: Johan QA Test')
+    expect(call.text).toContain('Order: #512')
+    expect(call.text).toContain('Marketing: Opted in: WhatsApp')
+    for (const leaked of ['Panic', 'Feelings', 'phobias', 'Mental disorders', 'See notes']) {
+      expect(call.text).not.toContain(leaked)
+    }
+    const html = await render(call.react as Parameters<typeof render>[0])
+    expect(html).not.toContain('Panic')
+  })
+
+  it('says no choice was recorded for a row from before the opt-in, and Not opted in for a dated no', async () => {
+    await sendIntakeCompletedEmail(RECORD, null)
+    expect(vi.mocked(sendEmail).mock.calls[0]![0].text).toContain('Marketing: No choice recorded')
+    await sendIntakeCompletedEmail({ ...RECORD, marketing_opt_in: false, marketing_choice_at: '2026-11-18T08:00:00Z' }, null)
+    expect(vi.mocked(sendEmail).mock.calls[1]![0].text).toContain('Marketing: Not opted in')
   })
 
   it('picks the team address: form override, then INTAKE_NOTIFY_EMAIL, then CONTACT_NOTIFY_EMAIL, then support', () => {

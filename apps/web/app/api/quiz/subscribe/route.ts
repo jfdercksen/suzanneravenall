@@ -5,6 +5,8 @@ import { quizBySlug } from '@/app/explore/quizzes'
 import { getServiceRoleClient, markEmailSent, upsertSubscriber } from '@/lib/quiz/subscriber'
 import { sendQuizInviteEmail } from '@/lib/email/quiz-invite'
 import { createRateLimiter, getClientIp, rateLimitResponse } from '@/lib/rate-limit'
+import { marketingRecord } from '@/lib/consent/marketing'
+import { MarketingChoiceSchema } from '@/lib/consent/schema'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://suzanneravenall.com'
 
@@ -13,6 +15,8 @@ const SubscribeSchema = z.object({
   firstName: z.string().trim().min(1).max(100),
   lastName: z.string().trim().min(1).max(100),
   email: z.string().trim().email().max(255),
+  // POPIA marketing opt-in, unticked by default; absent = not opted in.
+  marketing: MarketingChoiceSchema.optional(),
 })
 
 // Every hit sends an email (KI028), so one address can be sent at most 5
@@ -41,7 +45,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const { quizSlug, firstName, lastName, email } = parsed.data
+  const { quizSlug, firstName, lastName, email, marketing } = parsed.data
 
   const recipientCheck = recipientLimiter.check(`${email.toLowerCase()}|${quizSlug}`)
   if (recipientCheck.limited) return rateLimitResponse(recipientCheck.retryAfterSeconds)
@@ -59,7 +63,15 @@ export async function POST(request: NextRequest) {
   let subscriberId: string
   let accessToken: string
   try {
-    const result = await upsertSubscriber(supabase, { quizSlug, firstName, lastName, email })
+    const result = await upsertSubscriber(supabase, {
+      quizSlug,
+      firstName,
+      lastName,
+      email,
+      // A page cached from before the opt-in sends no choice: keep whatever
+      // was stored. A choice sent, ticked or not, replaces it.
+      marketing: marketing ? marketingRecord(marketing, new Date()) : undefined,
+    })
     subscriberId = result.id
     accessToken = result.accessToken
   } catch (err) {

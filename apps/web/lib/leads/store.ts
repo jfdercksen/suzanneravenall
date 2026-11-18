@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { maskEmails } from '@suzanne/integrations'
 import { getServiceRoleClient } from '@/lib/quiz/subscriber'
+import type { MarketingRecord } from '@/lib/consent/marketing'
 
 /**
  * Our own copy of every website lead (table public.leads, migration
@@ -54,7 +55,15 @@ export function getLeadsClient(): SupabaseClient | null {
 
 export async function saveLead(
   supabase: SupabaseClient | null,
-  lead: { email: string; firstName: string | null; lastName?: string | null; source: string; quizResult: string | null },
+  lead: {
+    email: string
+    firstName: string | null
+    lastName?: string | null
+    source: string
+    quizResult: string | null
+    /** The POPIA marketing choice (migration 20261118090000); left out, the columns keep their defaults. */
+    marketing?: MarketingRecord
+  },
   status: LeadSyncStatus,
 ): Promise<SaveLeadResult> {
   if (!supabase) {
@@ -70,6 +79,7 @@ export async function saveLead(
         source: lead.source,
         quiz_result: lead.quizResult,
         vtiger_status: status,
+        ...(lead.marketing ?? {}),
       })
       .select('id')
       .single()

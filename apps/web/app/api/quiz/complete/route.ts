@@ -4,9 +4,9 @@ import * as Sentry from '@sentry/nextjs'
 import { quizBySlug } from '@/app/explore/quizzes'
 import { getServiceRoleClient, getSubscriberByToken, markCompleted } from '@/lib/quiz/subscriber'
 import { computeResult } from '@/lib/quiz/scoring'
-import { labelForValue } from '@/lib/quiz/scale'
 import { sendQuizCompletionNotificationEmail } from '@/lib/email/quiz-completion-notification'
 import { createRateLimiter, getClientIp, rateLimitResponse } from '@/lib/rate-limit'
+import { CONSENT_FORM_VERSION } from '@/lib/consent/quiz'
 
 const CompleteSchema = z.object({
   quizSlug: z.string().trim().min(1).max(200),
@@ -18,6 +18,9 @@ const CompleteSchema = z.object({
     .refine((val) => Object.keys(val).length <= 60, {
       message: 'Too many answers submitted.',
     }),
+  // The required consent tick before the first question (POPIA: the answers
+  // can hold health and wellbeing information). Stored with the answers.
+  consent: z.literal(true),
 })
 
 // Every successful call writes to the DB and sends Suzanne a notification
@@ -86,7 +89,10 @@ export async function POST(request: NextRequest) {
   const resultKey = computeResult(quiz, numericAnswers)
 
   try {
-    await markCompleted(supabase, subscriber.id, filteredAnswers, resultKey)
+    await markCompleted(supabase, subscriber.id, filteredAnswers, resultKey, {
+      consented_at: new Date().toISOString(),
+      consent_form_version: CONSENT_FORM_VERSION,
+    })
   } catch (err) {
     console.error('[quiz/complete] markCompleted failed:', err instanceof Error ? err.message : err)
     Sentry.captureException(err)
@@ -96,7 +102,9 @@ export async function POST(request: NextRequest) {
   const result = quiz.results[resultKey]
 
   // Fire-and-forget: the user's result is already rendered client-side from
-  // local state regardless of this call's outcome.
+  // local state regardless of this call's outcome. Who and which result only:
+  // the answers can hold health information and are never sent by email
+  // (POPIA, Suzanne's rules of 8 Nov 2026). They stay in quiz_subscribers.
   void sendQuizCompletionNotificationEmail({
     firstName: subscriber.first_name,
     lastName: subscriber.last_name,
@@ -104,10 +112,6 @@ export async function POST(request: NextRequest) {
     quizTitle: quiz.title,
     resultTitle: result.title,
     resultSubtitle: result.subtitle,
-    questions: quiz.questions.map((question) => ({
-      text: question.text,
-      answerLabel: labelForValue(filteredAnswers[String(question.id)] ?? 0),
-    })),
   }).catch((err: unknown) => {
     console.error(
       '[quiz/complete] notification email failed:',

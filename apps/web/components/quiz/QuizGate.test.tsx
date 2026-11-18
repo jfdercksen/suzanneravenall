@@ -75,6 +75,39 @@ describe('QuizGate', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 
+  it('starts with the marketing box unticked and sends that "no" with the request (POPIA)', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: true }), { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+    const user = userEvent.setup()
+    render(<QuizGate quiz={QUIZ} initialMode="gate" />)
+    expect(screen.getByRole('link', { name: 'Privacy Notice' })).toHaveAttribute('href', '/legal/privacy')
+    expect(screen.getByRole('checkbox', { name: /news, programmes and offers/ })).not.toBeChecked()
+    await user.type(screen.getByLabelText('First name'), 'Ann')
+    await user.type(screen.getByLabelText('Last name'), 'Dlamini')
+    await user.type(screen.getByLabelText('Email'), 'ann@example.com')
+    await user.click(screen.getByRole('button', { name: 'Send Me the Diagnostic' }))
+    await screen.findByRole('heading', { name: 'Your quiz link is on its way' })
+    expect(JSON.parse(fetchMock.mock.calls[0]![1].body as string).marketing).toEqual({ optIn: false, channels: [] })
+  })
+
+  it('needs a channel once the box is ticked, then sends the choice', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: true }), { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+    const user = userEvent.setup()
+    render(<QuizGate quiz={QUIZ} initialMode="gate" />)
+    await user.type(screen.getByLabelText('First name'), 'Ann')
+    await user.type(screen.getByLabelText('Last name'), 'Dlamini')
+    await user.type(screen.getByLabelText('Email'), 'ann@example.com')
+    await user.click(screen.getByRole('checkbox', { name: /news, programmes and offers/ }))
+    await user.click(screen.getByRole('button', { name: 'Send Me the Diagnostic' }))
+    expect(screen.getByRole('alert')).toHaveTextContent('Choose at least one: email, WhatsApp or SMS.')
+    expect(fetchMock).not.toHaveBeenCalled()
+    await user.click(screen.getByRole('checkbox', { name: 'WhatsApp' }))
+    await user.click(screen.getByRole('button', { name: 'Send Me the Diagnostic' }))
+    await screen.findByRole('heading', { name: 'Your quiz link is on its way' })
+    expect(JSON.parse(fetchMock.mock.calls[0]![1].body as string).marketing).toEqual({ optIn: true, channels: ['whatsapp'] })
+  })
+
   // Site check M9.
   it('links back to its topic', () => {
     render(<QuizGate quiz={QUIZ} initialMode="gate" topicTitle="Emotional & Nervous System Mastery" />)

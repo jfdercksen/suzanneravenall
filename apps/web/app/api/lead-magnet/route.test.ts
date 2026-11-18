@@ -161,7 +161,19 @@ describe('POST /api/lead-magnet - code path (default)', () => {
     expect(res.status).toBe(200)
     expect((await res.json()).success).toBe(true)
     expect(db.inserts).toEqual([
-      { email: 'user@example.com', first_name: 'Alice', last_name: null, source: 'masterclass', quiz_result: null, vtiger_status: 'pending' },
+      {
+        email: 'user@example.com',
+        first_name: 'Alice',
+        last_name: null,
+        source: 'masterclass',
+        quiz_result: null,
+        vtiger_status: 'pending',
+        // No choice sent (a page cached from before the opt-in): not opted in, no time, no version.
+        marketing_opt_in: false,
+        marketing_channels: [],
+        marketing_choice_at: null,
+        marketing_form_version: null,
+      },
     ])
     expect(crm.created.map((c) => c.elementType)).toEqual(['Contacts', 'Events'])
     expect(crm.created[0]!.element).toMatchObject({ email: 'user@example.com', firstname: 'Alice', leadsource: 'Lead Magnet', cf_pipeline_stage: 'New Lead' })
@@ -169,6 +181,35 @@ describe('POST /api/lead-magnet - code path (default)', () => {
     expect(db.rows[0]!.vtiger_contact_id).toMatch(/^12x/)
     expect(db.rows[0]!.vtiger_event_id).toMatch(/^18x/)
     expect(h.sendEmail).not.toHaveBeenCalled()
+  })
+
+  it('stores the marketing opt-in with its channels, time and wording version (POPIA)', async () => {
+    const before = Date.now()
+    const res = await POST(
+      makeRequest({ email: 'user@example.com', source: 'newsletter', marketing: { optIn: true, channels: ['sms', 'email'] } }),
+    )
+    expect(res.status).toBe(200)
+    const row = db.inserts[0]!
+    expect(row).toMatchObject({
+      marketing_opt_in: true,
+      marketing_channels: ['email', 'sms'],
+      marketing_form_version: 'marketing-opt-in-v1-2026-11-18',
+    })
+    expect(Date.parse(String(row.marketing_choice_at))).toBeGreaterThanOrEqual(before - 1000)
+  })
+
+  it('stores an unticked box as a dated "no"', async () => {
+    await POST(makeRequest({ email: 'user@example.com', marketing: { optIn: false, channels: [] } }))
+    expect(db.inserts[0]).toMatchObject({ marketing_opt_in: false, marketing_channels: [], marketing_form_version: 'marketing-opt-in-v1-2026-11-18' })
+    expect(db.inserts[0]!.marketing_choice_at).toEqual(expect.any(String))
+  })
+
+  it('refuses a ticked box with no channel, and unknown channels', async () => {
+    for (const marketing of [{ optIn: true, channels: [] }, { optIn: true, channels: ['fax'] }, { optIn: 'yes', channels: ['email'] }]) {
+      const res = await POST(makeRequest({ email: 'user@example.com', marketing }))
+      expect(res.status).toBe(422)
+    }
+    expect(db.inserts).toHaveLength(0)
   })
 
   it('does not call n8n when the flag is code (never both)', async () => {
@@ -475,6 +516,8 @@ describe('POST /api/lead-magnet - validation', () => {
 // Group E - VIBE_MARKETING_WEBHOOK_URL set (secondary, fire-and-forget copy)
 // ---------------------------------------------------------------------------
 describe('POST /api/lead-magnet - Vibe Marketing forwarding', () => {
+  // Vibe Marketing is a marketing system: only opted-in leads go there (POPIA).
+  const OPTED_IN = { optIn: true, channels: ['email', 'whatsapp'] }
   let POST: (req: Request) => Promise<Response>
   beforeEach(async () => {
     process.env.VIBE_MARKETING_WEBHOOK_URL = `${VIBE_URL}/`
@@ -484,12 +527,21 @@ describe('POST /api/lead-magnet - Vibe Marketing forwarding', () => {
   it('does NOT call Vibe when VIBE_MARKETING_WEBHOOK_URL is not set', async () => {
     delete process.env.VIBE_MARKETING_WEBHOOK_URL
     const route = await loadRoute()
-    await route(makeRequest({ email: 'user@example.com' }))
+    await route(makeRequest({ email: 'user@example.com', marketing: OPTED_IN }))
     expect(fetchSpy).not.toHaveBeenCalled()
   })
 
+  it('does NOT send a lead that did not opt in, or sent no choice, to Vibe', async () => {
+    const notTicked = await POST(makeRequest({ email: 'user@example.com', marketing: { optIn: false, channels: [] } }))
+    const noChoice = await POST(makeRequest({ email: 'other@example.com' }))
+    expect(notTicked.status).toBe(200)
+    expect(noChoice.status).toBe(200)
+    await new Promise((resolve) => setTimeout(resolve, 20))
+    expect(callsTo(fetchSpy, VIBE_URL)).toHaveLength(0)
+  })
+
   it('sends the lead to Vibe (trailing slash stripped) with the expected payload', async () => {
-    const res = await POST(makeRequest({ email: 'user@example.com', firstName: 'Alice', source: 'homepage' }))
+    const res = await POST(makeRequest({ email: 'user@example.com', firstName: 'Alice', source: 'homepage', marketing: OPTED_IN }))
 
     expect(res.status).toBe(200)
     await vi.waitFor(() => expect(callsTo(fetchSpy, VIBE_URL)).toHaveLength(1))
@@ -497,12 +549,19 @@ describe('POST /api/lead-magnet - Vibe Marketing forwarding', () => {
     expect(call[1].method).toBe('POST')
     expect(call[1].headers).toMatchObject({ 'Content-Type': 'application/json' })
     const body = sentBody(call)
-    expect(body).toMatchObject({ email: 'user@example.com', firstName: 'Alice', source: 'homepage', platform: 'suzanneravenall' })
+    expect(body).toMatchObject({
+      email: 'user@example.com',
+      firstName: 'Alice',
+      source: 'homepage',
+      platform: 'suzanneravenall',
+      marketingOptIn: true,
+      marketingChannels: ['email', 'whatsapp'],
+    })
     expect(typeof body.timestamp).toBe('string')
   })
 
   it('sends null firstName and source to Vibe when they are not provided', async () => {
-    await POST(makeRequest({ email: 'user@example.com' }))
+    await POST(makeRequest({ email: 'user@example.com', marketing: OPTED_IN }))
     await vi.waitFor(() => expect(callsTo(fetchSpy, VIBE_URL)).toHaveLength(1))
     const body = sentBody(onlyCallTo(fetchSpy, VIBE_URL))
     expect(body.firstName).toBeNull()
@@ -511,7 +570,7 @@ describe('POST /api/lead-magnet - Vibe Marketing forwarding', () => {
 
   it('still calls Vibe when Vtiger is down but the lead is saved', async () => {
     setup({ crm: downVtiger() })
-    const res = await POST(makeRequest({ email: 'user@example.com' }))
+    const res = await POST(makeRequest({ email: 'user@example.com', marketing: OPTED_IN }))
     expect(res.status).toBe(200)
     await vi.waitFor(() => expect(callsTo(fetchSpy, VIBE_URL)).toHaveLength(1))
   })
@@ -520,16 +579,24 @@ describe('POST /api/lead-magnet - Vibe Marketing forwarding', () => {
     const vibeError = new Error('timeout')
     fetchSpy.mockImplementation(async (url) => (String(url) === VIBE_URL ? Promise.reject(vibeError) : okResponse()))
 
-    const res = await POST(makeRequest({ email: 'user@example.com', source: 'footer' }))
+    const res = await POST(makeRequest({ email: 'user@example.com', source: 'footer', marketing: OPTED_IN }))
 
     expect(res.status).toBe(200)
     await vi.waitFor(() => expect(h.mockCaptureException).toHaveBeenCalledWith(vibeError, { extra: { source: 'footer' } }))
     expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('[lead-magnet] Vibe Marketing webhook failed: timeout'))
   })
 
+  it('does not call Vibe when only Vtiger holds the lead (no leads row to prove the opt-in)', async () => {
+    setup({ supabase: makeFakeSupabase({ insertError: MISSING_TABLE_ERROR }) })
+    const res = await POST(makeRequest({ email: 'user@example.com', marketing: OPTED_IN }))
+    expect(res.status).toBe(200)
+    await new Promise((resolve) => setTimeout(resolve, 20))
+    expect(callsTo(fetchSpy, VIBE_URL)).toHaveLength(0)
+  })
+
   it('does not call Vibe when the lead could not be stored anywhere', async () => {
     setup({ supabase: makeFakeSupabase({ insertError: MISSING_TABLE_ERROR }), crm: downVtiger() })
-    const res = await POST(makeRequest({ email: 'user@example.com' }))
+    const res = await POST(makeRequest({ email: 'user@example.com', marketing: OPTED_IN }))
     expect(res.status).toBe(502)
     expect(callsTo(fetchSpy, VIBE_URL)).toHaveLength(0)
   })
@@ -542,6 +609,12 @@ describe('POST /api/lead-magnet - welcome email', () => {
   let POST: (req: Request) => Promise<Response>
   beforeEach(async () => {
     POST = await loadRoute()
+  })
+
+  it('still sends the welcome (what was asked for) when the marketing box is unticked', async () => {
+    const res = await POST(makeRequest({ email: 'user@example.com', source: 'masterclass', marketing: { optIn: false, channels: [] } }))
+    expect(res.status).toBe(200)
+    expect(h.welcome).toHaveBeenCalledTimes(1)
   })
 
   it('hands the stored lead to the welcome email once, with the row id', async () => {

@@ -7,6 +7,9 @@ import {
   firstNameOf,
   sendContactAcknowledgementEmail,
 } from '@/lib/email/contact-acknowledgement'
+import { marketingRecord, marketingSummary, type MarketingChoice } from '@/lib/consent/marketing'
+import { MarketingChoiceSchema } from '@/lib/consent/schema'
+import { getLeadsClient, saveLead } from '@/lib/leads/store'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 // Public contact address: https://suzanneravenall.com/contact/ (Johan's decision 10, 6 Oct).
@@ -19,6 +22,8 @@ type ContactBody = {
   phone?: string
   enquiry?: string
   message: string
+  /** POPIA marketing opt-in; absent from pages cached before it existed. */
+  marketing?: MarketingChoice
 }
 
 function isValidBody(value: unknown): value is ContactBody {
@@ -65,7 +70,11 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const { name, email, phone, enquiry, message } = body
+  const { name, email, phone, enquiry, message, marketing } = body
+  if (marketing !== undefined && !MarketingChoiceSchema.safeParse(marketing).success) {
+    return NextResponse.json({ error: 'Choose at least one: email, WhatsApp or SMS, or untick the box.' }, { status: 400 })
+  }
+  const marketingChoice = marketingRecord(marketing, new Date())
 
   const recipientCheck = recipientLimiter.check(email.toLowerCase().trim())
   if (recipientCheck.limited) return rateLimitResponse(recipientCheck.retryAfterSeconds)
@@ -85,6 +94,7 @@ export async function POST(request: NextRequest) {
         <tr><td style="font-weight:bold">Email</td><td><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></td></tr>
         ${phone ? `<tr><td style="font-weight:bold">Phone</td><td>${escapeHtml(phone)}</td></tr>` : ''}
         ${enquiry ? `<tr><td style="font-weight:bold">Enquiry</td><td>${escapeHtml(enquiry)}</td></tr>` : ''}
+        <tr><td style="font-weight:bold">Marketing</td><td>${escapeHtml(marketing ? marketingSummary(marketing) : 'No choice recorded')}</td></tr>
       </table>
       <hr style="margin:16px 0;border:none;border-top:1px solid #e5e5e5" />
       <p style="font-weight:bold;margin-bottom:8px">Message</p>
@@ -107,6 +117,19 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     logError('[contact] delivery error:', err)
     return NextResponse.json({ error: DELIVERY_FAILED }, { status: 500 })
+  }
+
+  // The form stores nothing else, so a sender who opted in to marketing is
+  // kept in leads with their choice (POPIA, Johan 18 Nov). 'skipped': the
+  // enquiry itself is not a CRM lead, so the Vtiger retry leaves the row
+  // alone. saveLead never throws; a failure only loses the opt-in row.
+  if (marketingChoice.marketing_opt_in) {
+    const saved = await saveLead(
+      getLeadsClient(),
+      { email, firstName: firstNameOf(name), source: 'contact', quizResult: null, marketing: marketingChoice },
+      'skipped',
+    )
+    if (!saved.ok) logError('[contact] marketing opt-in not saved to leads', new Error(saved.message), { reason: saved.reason })
   }
 
   // Acknowledge the visitor only once staff really have the message. Not
