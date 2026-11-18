@@ -7,8 +7,10 @@ import { motion } from 'framer-motion'
 import { Minus, Plus, Trash2, ShoppingBag, Lock, ShieldCheck, RefreshCw, Tag, X } from 'lucide-react'
 import { useCart, formatPrice } from '@/lib/cart'
 import { variantLabel, isPreorder } from '@/lib/shop/lineItem'
-import { isSubscriptionLine, maxQuantity } from './cartRules'
+import { lifetimeAccessCap } from '@/lib/shop/addons'
+import { isSubscriptionLine, lifetimeOverCapNote, maxQuantity } from './cartRules'
 import { CartAddOns } from './CartAddOns'
+import { useCartProductFacts } from './useCartProductFacts'
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -85,6 +87,9 @@ function EmptyCart() {
 
 export default function CartPageContent() {
   const { cart, isLoading, updateItem, removeItem, droppedOnSwitch } = useCart()
+  // Store facts for the add-on offer and the Bonus Lifetime Access cap (one
+  // per qualifying programme, Johan 18 Nov). Read before any early return.
+  const facts = useCartProductFacts(cart?.items)
 
   // KI064: the first load used to show only grey bars with no title and no
   // words for as long as the stored cart took to fetch. The page title and a
@@ -122,6 +127,7 @@ export default function CartPageContent() {
   }
 
   const hasItems = cart && cart.items.length > 0
+  const limits = { lifetimeAccessCap: lifetimeAccessCap(cart?.items ?? [], facts) }
 
   return (
     <div className="min-h-screen bg-brand-cream">
@@ -172,6 +178,8 @@ export default function CartPageContent() {
                       key={item.id}
                       item={item}
                       currencyCode={cart.currency_code}
+                      max={maxQuantity(item, limits)}
+                      overCapNote={facts !== null ? lifetimeOverCapNote(item, limits.lifetimeAccessCap) : null}
                       onIncrease={() => updateItem(item.id, item.quantity + 1)}
                       onDecrease={() => updateItem(item.id, item.quantity - 1)}
                       onRemove={() => removeItem(item.id)}
@@ -180,7 +188,7 @@ export default function CartPageContent() {
                 </motion.ul>
 
                 {/* Add-ons that go with these items (Johan's pairings, 17 Nov). The buyer clicks to add. */}
-                <CartAddOns />
+                <CartAddOns facts={facts} />
 
                 <div className="mt-8">
                   <Link
@@ -207,12 +215,17 @@ export default function CartPageContent() {
 function CartItemRow({
   item,
   currencyCode,
+  max,
+  overCapNote,
   onIncrease,
   onDecrease,
   onRemove,
 }: {
   item: import('@/lib/cart').CartItem
   currencyCode: string
+  /** maxQuantity for this line, with the limits that depend on the rest of the cart. */
+  max: number
+  overCapNote: string | null
   onIncrease: () => void
   onDecrease: () => void
   onRemove: () => void
@@ -263,7 +276,7 @@ function CartItemRow({
         <div className="flex items-center gap-4 mt-3">
           <QuantityControl
             quantity={item.quantity}
-            max={maxQuantity(item)}
+            max={max}
             onIncrease={() => wrap(onIncrease)}
             onDecrease={() => wrap(onDecrease)}
             isUpdating={isUpdating}
@@ -276,6 +289,11 @@ function CartItemRow({
             <Trash2 className="w-4 h-4" />
           </button>
         </div>
+        {overCapNote && (
+          <p role="status" className="mt-2 text-xs text-brand-ink">
+            {overCapNote}
+          </p>
+        )}
       </div>
 
       {/* Line total */}

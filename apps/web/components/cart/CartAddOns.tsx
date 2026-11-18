@@ -1,72 +1,29 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Plus } from 'lucide-react'
 import { useCart, formatPrice } from '@/lib/cart'
-import {
-  CART_ADDON_HANDLES,
-  cartAddOnOffers,
-  cartAddOnPairings,
-  type CartProductFacts,
-} from '@/lib/shop/addons'
+import { cartAddOnOffers, cartAddOnPairings, type CartProductFacts } from '@/lib/shop/addons'
 
-const MEDUSA_URL = process.env.NEXT_PUBLIC_MEDUSA_URL ?? ''
-const MEDUSA_PUB_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? ''
-
-/**
- * Reads the cart's products and the add-on products in one store call, so
- * the pairing rules see categories and every variant of what is in the cart
- * (a cart line carries only its own variant).
- */
-async function fetchFacts(handles: string[]): Promise<Map<string, CartProductFacts>> {
-  const params = new URLSearchParams({
-    fields: 'id,handle,title,metadata,*variants,*variants.prices,*categories',
-    limit: String(handles.length),
-  })
-  handles.forEach((h) => params.append('handle[]', h))
-  const res = await fetch(`${MEDUSA_URL}/store/products?${params.toString()}`, {
-    headers: { 'x-publishable-api-key': MEDUSA_PUB_KEY },
-  })
-  if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  const data = (await res.json()) as { products?: CartProductFacts[] }
-  return new Map((data.products ?? []).map((p) => [p.handle, p]))
+interface CartAddOnsProps {
+  /** The store facts the cart page read (useCartProductFacts); null while reading. */
+  facts: ReadonlyMap<string, CartProductFacts> | null
 }
 
 /**
  * Add-ons that go with what is in the cart (Johan's pairings, 17 Nov 2026,
  * lib/shop/addons.ts). Nothing is added for the buyer: each add-on has its
- * own Add button. An add-on already in the cart is not offered, and the block
- * is left out when the store cannot be read.
+ * own Add button. An add-on already in the cart is not offered, except Bonus
+ * Lifetime Access until there is one per qualifying programme (18 Nov); its
+ * Add then raises the quantity of the line already there, since Medusa merges
+ * the same variant into one line. The block is left out when the store cannot
+ * be read.
  */
-export function CartAddOns() {
+export function CartAddOns({ facts }: CartAddOnsProps) {
   const { cart, addItem } = useCart()
-  const [facts, setFacts] = useState<Map<string, CartProductFacts> | null>(null)
   const [adding, setAdding] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-
-  const cartHandles = useMemo(
-    () => Array.from(new Set((cart?.items ?? []).map((i) => i.product_handle).filter((h): h is string => Boolean(h)))).sort(),
-    [cart?.items],
-  )
-  const handlesKey = cartHandles.join(',')
-
-  useEffect(() => {
-    if (cartHandles.length === 0) return
-    let cancelled = false
-    fetchFacts(Array.from(new Set([...cartHandles, ...CART_ADDON_HANDLES])))
-      .then((map) => {
-        if (!cancelled) setFacts(map)
-      })
-      .catch(() => {
-        if (!cancelled) setFacts(new Map())
-      })
-    return () => {
-      cancelled = true
-    }
-    // handlesKey stands for cartHandles: refetch only when the products change.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handlesKey])
 
   if (!cart || !facts) return null
   const offers = cartAddOnOffers(cartAddOnPairings(cart.items, facts), facts, cart.currency_code)

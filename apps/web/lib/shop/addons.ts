@@ -115,6 +115,7 @@ export interface CartLineFacts {
   title?: string | null
   variant_title?: string | null
   subtitle?: string | null
+  quantity?: number
 }
 
 export function isVariantForSale(variant: Pick<VariantFacts, 'metadata'>): boolean {
@@ -141,6 +142,41 @@ export function isCoachingProduct(handle: string, product: CartProductFacts | un
   return (product?.categories ?? []).some((c) => COACHING_CATEGORY_HANDLES.has(c.handle))
 }
 
+/**
+ * The cart lines Bonus Lifetime Access covers: programme lines (not add-ons)
+ * that sell a self-study format. Its one variant is "Per programme level", so
+ * Johan (18 Nov) allows one per such line.
+ */
+export function lifetimeAccessLines(
+  lines: CartLineFacts[],
+  products: ReadonlyMap<string, CartProductFacts> | null,
+): CartLineFacts[] {
+  if (!products) return []
+  return lines.filter((line) => {
+    const handle = line.product_handle
+    if (!handle || isAddOnHandle(handle)) return false
+    const product = products.get(handle)
+    return product !== undefined && hasSelfStudyFormat(product)
+  })
+}
+
+/**
+ * How many Bonus Lifetime Access the cart allows: one per qualifying
+ * programme line, and 1 when none qualifies (or the products are not read
+ * yet), the same as any other one-per-order item (Johan, 18 Nov).
+ */
+export function lifetimeAccessCap(
+  lines: CartLineFacts[],
+  products: ReadonlyMap<string, CartProductFacts> | null,
+): number {
+  return Math.max(1, lifetimeAccessLines(lines, products).length)
+}
+
+/** The quantity of an add-on already in the cart (0 when it is not). */
+function quantityInCart(lines: CartLineFacts[], handle: string): number {
+  return lines.filter((l) => l.product_handle === handle).reduce((sum, l) => sum + (l.quantity ?? 1), 0)
+}
+
 function lineVariant(line: CartLineFacts): string {
   return (line.variant_title ?? line.subtitle ?? '').trim()
 }
@@ -156,7 +192,10 @@ export interface AddOnPairing {
  * (17 Nov): Bonus Lifetime Access with every programme that has a self-study
  * format; Email Support and the Coaching Support Package with coaching
  * sessions and packages; the VIP Package with coaching packages. An add-on
- * already in the cart is not offered again. Order follows CART_ADDON_HANDLES.
+ * already in the cart is not offered again, except Bonus Lifetime Access,
+ * which is offered until there is one per qualifying programme (Johan,
+ * 18 Nov); its "Goes with" names every qualifying programme. Order follows
+ * CART_ADDON_HANDLES.
  */
 export function cartAddOnPairings(
   lines: CartLineFacts[],
@@ -171,11 +210,17 @@ export function cartAddOnPairings(
     goesWith.set(addOn, list)
   }
 
+  const lifetimeLines = lifetimeAccessLines(lines, products)
+  for (const line of lifetimeLines) add(LIFETIME_ACCESS_HANDLE, line)
+  // Bonus Lifetime Access is one per programme level (Johan, 18 Nov): it stays
+  // on offer while the cart holds fewer than one per qualifying programme.
+  const lifetimeCovered = quantityInCart(lines, LIFETIME_ACCESS_HANDLE) >= lifetimeLines.length
+  const isOffered = (h: string) => (h === LIFETIME_ACCESS_HANDLE ? !lifetimeCovered : !inCart.has(h))
+
   for (const line of lines) {
     const handle = line.product_handle
     if (!handle || isAddOnHandle(handle)) continue
     const product = products.get(handle)
-    if (product && hasSelfStudyFormat(product)) add(LIFETIME_ACCESS_HANDLE, line)
     if (isCoachingProduct(handle, product)) {
       add('email-support', line)
       add('coaching-support-package', line)
@@ -184,7 +229,7 @@ export function cartAddOnPairings(
   }
 
   return CART_ADDON_HANDLES.flatMap((h) =>
-    goesWith.has(h) && !inCart.has(h) ? [{ handle: h, goesWith: goesWith.get(h) ?? [] }] : [],
+    goesWith.has(h) && isOffered(h) ? [{ handle: h, goesWith: goesWith.get(h) ?? [] }] : [],
   )
 }
 

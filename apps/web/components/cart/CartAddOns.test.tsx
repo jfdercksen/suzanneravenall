@@ -16,7 +16,16 @@ vi.mock('framer-motion', () => ({
   },
 }))
 
+import { useCart } from '@/lib/cart'
 import { CartAddOns } from './CartAddOns'
+import { useCartProductFacts } from './useCartProductFacts'
+
+/** The cart page reads the facts and hands them to the offer; so does this. */
+function OnCartPage() {
+  const { cart } = useCart()
+  const facts = useCartProductFacts(cart?.items as Array<{ product_handle?: string | null }> | undefined)
+  return <CartAddOns facts={facts} />
+}
 
 const priced = (handle: string, title: string, variant: string, zar: number) => ({
   handle,
@@ -35,6 +44,26 @@ const storeProducts = [
     variants: [
       { id: 'tc_60', title: '60 min', metadata: null, prices: [] },
       { id: 'tc_p8', title: 'Package of 08', metadata: null, prices: [] },
+    ],
+  },
+  {
+    handle: 'akashic-navigator-level-1-live-via-zoom',
+    title: 'Akashic Navigator Level 1',
+    metadata: null,
+    categories: [{ handle: 'akashic-live' }],
+    variants: [
+      { id: 'an1_live', title: 'Live via Zoom', metadata: null, prices: [] },
+      { id: 'an1_self', title: 'Self Study', metadata: null, prices: [] },
+    ],
+  },
+  {
+    handle: 'akashic-navigator-level-2-live-via-zoom',
+    title: 'Akashic Navigator Level 2',
+    metadata: null,
+    categories: [{ handle: 'akashic-live' }],
+    variants: [
+      { id: 'an2_live', title: 'Live via Zoom', metadata: null, prices: [] },
+      { id: 'an2_self', title: 'Self Study', metadata: null, prices: [] },
     ],
   },
   priced('bonus-lifetime-access-self-study-online', 'Bonus Lifetime Access', 'Per programme level', 206000),
@@ -65,7 +94,7 @@ afterEach(() => vi.unstubAllGlobals())
 describe('CartAddOns (Johan, 17 Nov)', () => {
   it('offers the coaching add-ons for a coaching package and adds nothing until the buyer clicks', async () => {
     cartState.cart = { currency_code: 'zar', items: [item('transformation-coaching-60-mins', 'Transformation Coaching', 'Package of 08')] }
-    render(<CartAddOns />)
+    render(<OnCartPage />)
     await waitFor(() => expect(screen.getByRole('heading', { name: 'Goes with your order' })).toBeInTheDocument())
     expect(screen.getByText('Email Support')).toBeInTheDocument()
     expect(screen.getByText('Coaching Support Package')).toBeInTheDocument()
@@ -87,22 +116,52 @@ describe('CartAddOns (Johan, 17 Nov)', () => {
         item('email-support', 'Email Support', 'Per month'),
       ],
     }
-    render(<CartAddOns />)
+    render(<OnCartPage />)
     await waitFor(() => expect(screen.getByText('Coaching Support Package')).toBeInTheDocument())
     expect(screen.queryByRole('button', { name: 'Add Email Support to your cart' })).not.toBeInTheDocument()
     expect(screen.queryByText('VIP Package')).not.toBeInTheDocument()
   })
 
+  it('offers Lifetime Access again for a second programme level and adds the same variant, which Medusa merges into the line', async () => {
+    cartState.cart = {
+      currency_code: 'zar',
+      items: [
+        item('akashic-navigator-level-1-live-via-zoom', 'Akashic Navigator Level 1', 'Self Study'),
+        item('akashic-navigator-level-2-live-via-zoom', 'Akashic Navigator Level 2', 'Live via Zoom'),
+        item('bonus-lifetime-access-self-study-online', 'Bonus Lifetime Access', 'Per programme level'),
+      ],
+    }
+    render(<OnCartPage />)
+    await waitFor(() => expect(screen.getByText('Bonus Lifetime Access')).toBeInTheDocument())
+    expect(screen.getByText(/Goes with Akashic Navigator Level 1, Akashic Navigator Level 2/)).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Add Bonus Lifetime Access to your cart' }))
+    expect(addItem).toHaveBeenCalledWith('bonus-lifetime-access-self-study-online_v', 1)
+  })
+
+  it('stops offering Lifetime Access once there is one per programme level', async () => {
+    cartState.cart = {
+      currency_code: 'zar',
+      items: [
+        item('akashic-navigator-level-1-live-via-zoom', 'Akashic Navigator Level 1', 'Self Study'),
+        { ...item('bonus-lifetime-access-self-study-online', 'Bonus Lifetime Access', 'Per programme level'), quantity: 1 },
+      ],
+    }
+    const { container } = render(<OnCartPage />)
+    await waitFor(() => expect(fetch).toHaveBeenCalled())
+    await new Promise((r) => setTimeout(r, 0))
+    expect(container).toBeEmptyDOMElement()
+  })
+
   it('shows nothing when nothing in the cart has an add-on, or the store cannot be read', async () => {
     cartState.cart = { currency_code: 'zar', items: [item('the-latest-book-by-suzanne', 'The Latest Book', 'Pre-order')] }
-    const { container, unmount } = render(<CartAddOns />)
+    const { container, unmount } = render(<OnCartPage />)
     await waitFor(() => expect(fetch).toHaveBeenCalled())
     expect(container).toBeEmptyDOMElement()
     unmount()
 
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, json: async () => ({}) })))
     cartState.cart = { currency_code: 'zar', items: [item('transformation-coaching-60-mins', 'Transformation Coaching', '60 min')] }
-    const second = render(<CartAddOns />)
+    const second = render(<OnCartPage />)
     await waitFor(() => expect(fetch).toHaveBeenCalled())
     expect(second.container).toBeEmptyDOMElement()
   })

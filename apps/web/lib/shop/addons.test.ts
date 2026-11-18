@@ -6,6 +6,7 @@ import {
   cartAddOnPairings,
   fetchAddOnProducts,
   isAddOnHandle,
+  lifetimeAccessCap,
   type CartLineFacts,
   type CartProductFacts,
 } from './addons'
@@ -211,5 +212,56 @@ describe('cart add-on offers', () => {
     const map = new Map([['vip-package', zarOnly]])
     expect(cartAddOnOffers(pairings, map, 'usd')).toEqual([])
     expect(cartAddOnOffers(pairings, map, 'zar').map((o) => o.handle)).toEqual(['vip-package'])
+  })
+})
+
+// ── Bonus Lifetime Access per programme level: Johan, 18 Nov 2026 ──────────
+
+describe('Bonus Lifetime Access, one per programme level (Johan, 18 Nov)', () => {
+  const akashicL1 = facts('akashic-navigator-level-1-live-via-zoom', ['akashic-live'], [
+    { title: 'Live via Zoom' },
+    { title: 'Self Study' },
+  ])
+  const map = new Map([...products, [akashicL1.handle, akashicL1]])
+  const lifetime = (quantity: number): CartLineFacts => ({
+    product_handle: 'bonus-lifetime-access-self-study-online',
+    title: 'Bonus Lifetime Access',
+    variant_title: 'Per programme level',
+    quantity,
+  })
+  const l1 = line(akashicL1.handle, 'Self Study', 'Akashic Navigator Level 1')
+  const l2 = line(akashicL2.handle, 'Live via Zoom', 'Akashic Navigator Level 2')
+
+  it('allows one per programme line that sells self-study', () => {
+    expect(lifetimeAccessCap([l1, l2], map)).toBe(2)
+    expect(lifetimeAccessCap([l1, l2, lifetime(1)], map)).toBe(2)
+  })
+
+  it('counts neither add-ons, programmes without self-study, nor sessions, and is 1 when nothing qualifies', () => {
+    expect(lifetimeAccessCap([l1, line(liveOnly.handle, 'Live via Zoom'), line(transformation.handle, '60 min')], map)).toBe(1)
+    expect(lifetimeAccessCap([line(liveOnly.handle, 'Live via Zoom')], map)).toBe(1)
+    expect(lifetimeAccessCap([lifetime(2)], map)).toBe(1)
+    expect(lifetimeAccessCap([], map)).toBe(1)
+  })
+
+  it('is 1 while the products are not read yet', () => {
+    expect(lifetimeAccessCap([l1, l2], null)).toBe(1)
+  })
+
+  it('keeps offering it while the cart has fewer than one per qualifying programme, naming them all', () => {
+    const [offer] = cartAddOnPairings([l1, l2, lifetime(1)], map)
+    expect(offer?.handle).toBe('bonus-lifetime-access-self-study-online')
+    expect(offer?.goesWith).toEqual(['Akashic Navigator Level 1', 'Akashic Navigator Level 2'])
+  })
+
+  it('stops offering it once there is one per qualifying programme, or more', () => {
+    expect(handles([l1, l2, lifetime(2)], map)).toEqual([])
+    expect(handles([l1, lifetime(3)], map)).toEqual([])
+  })
+
+  it('still offers the other add-ons only once', () => {
+    expect(handles([line(transformation.handle, '60 min'), { ...line('email-support', 'Per month'), quantity: 1 }], map)).toEqual([
+      'coaching-support-package',
+    ])
   })
 })
