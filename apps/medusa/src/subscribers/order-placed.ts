@@ -9,7 +9,7 @@ import { orderVtigerMode, thinkificMode } from '../automations/config'
 import { dispatchOrderAutomations } from '../automations/dispatch'
 import { buildOrderSnapshot, ORDER_GRAPH_FIELDS } from '../automations/order-snapshot'
 import { createDryRunQueue, getAutomationQueue, staffAlerter } from '../automations/runtime'
-import { orderMarketingOptIn } from './order-marketing-opt-in'
+import { orderMarketingOptIn } from '../lib/order-marketing-opt-in'
 
 const N8N_BASE_URL = (process.env.N8N_WEBHOOK_URL ?? 'http://n8n:5678').replace(/\/$/, '')
 const N8N_WEBHOOK_SECRET = process.env.N8N_WEBHOOK_SECRET ?? ''

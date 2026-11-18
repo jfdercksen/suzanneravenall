@@ -1,10 +1,11 @@
-import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Text } from '@react-email/components'
+import { Body, Container, Head, Heading, Hr, Html, Link, Preview, Section, Text } from '@react-email/components'
 
 /**
  * A completed intake form, for the team (H-12): who, which order, service and
  * form, and when. The answers are NOT in this mail: they hold personal and
  * health information, which is never sent by plain email (POPIA, Suzanne's
- * rules of 8 Nov 2026). They stay in intake_submissions.
+ * rules of 8 Nov 2026). They stay in intake_submissions; the mail links to
+ * the staff page that shows them behind the CMS login (KI125).
  */
 
 const INK = '#0A0A0A'
@@ -22,6 +23,8 @@ export interface IntakeCompletedProps {
   acknowledged: boolean
   /** "Opted in: Email, SMS" or "Not opted in". */
   marketing: string
+  /** /staff/submissions/intake/<id> on the site. */
+  answersUrl: string
 }
 
 export default function IntakeCompleted({
@@ -33,6 +36,7 @@ export default function IntakeCompleted({
   completedAt,
   acknowledged,
   marketing,
+  answersUrl,
 }: IntakeCompletedProps) {
   return (
     <Html lang="en">
@@ -62,6 +66,12 @@ export default function IntakeCompleted({
           <Text style={{ color: INK, fontSize: '14px', lineHeight: '1.6', margin: '0 0 16px' }}>
             The answers are not in this email. They hold personal and health information, so they stay in the website
             database and are never sent by email.
+          </Text>
+          <Text style={{ color: INK, fontSize: '14px', lineHeight: '1.6', margin: '0 0 16px' }}>
+            <Link href={answersUrl} style={{ color: INK, textDecoration: 'underline' }}>
+              Read the answers on the staff page
+            </Link>{' '}
+            (log in with your staff CMS account).
           </Text>
           <Hr style={{ borderColor: BORDER, margin: '24px 0 12px' }} />
           <Text style={{ color: MUTED, fontSize: '12px', lineHeight: '1.5', margin: 0 }}>

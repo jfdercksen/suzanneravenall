@@ -122,9 +122,11 @@ describe('completed form mail to the team', () => {
         completedAt: '21 Oct 2026, 11:30',
         acknowledged: true,
         marketing: 'Opted in: Email, SMS',
+        answersUrl: 'http://169.239.180.49/staff/submissions/intake/id1',
       }),
     )
     expect(html).toContain('Johan QA Test')
+    expect(html).toContain('href="http://169.239.180.49/staff/submissions/intake/id1"')
     expect(html).toContain('#512')
     expect(html).toContain('Client intake form')
     expect(html).toContain('Opted in: Email, SMS')
@@ -152,6 +154,17 @@ describe('completed form mail to the team', () => {
     }
     const html = await render(call.react as Parameters<typeof render>[0])
     expect(html).not.toContain('Panic')
+  })
+
+  it('links both parts straight to the staff page for this submission (KI125)', async () => {
+    await sendIntakeCompletedEmail(RECORD, null)
+    const call = vi.mocked(sendEmail).mock.calls[0]![0]
+    expect(call.text).toContain('Read them on the staff page (log in with your staff CMS account):\nhttp://169.239.180.49/staff/submissions/intake/id1')
+    const html = await render(call.react as Parameters<typeof render>[0])
+    expect(html).toContain('href="http://169.239.180.49/staff/submissions/intake/id1"')
+    expect(html).toContain('Read the answers on the staff page')
+    expect(call.text).not.toContain(RECORD.token)
+    expect(html).not.toContain(RECORD.token)
   })
 
   it('says no choice was recorded for a row from before the opt-in, and Not opted in for a dated no', async () => {

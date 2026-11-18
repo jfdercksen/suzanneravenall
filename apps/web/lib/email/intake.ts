@@ -5,6 +5,7 @@ import IntakeRequest from './templates/IntakeRequest'
 import { isRapidRepatterning, RR_INTRO_COUPON, RR_INTRO_COURSE_URL, ZOOM_URL } from './intake-content'
 import IntakeCompleted from './templates/IntakeCompleted'
 import { marketingSummary } from '../consent/marketing'
+import { staffSubmissionUrl } from '../staff/links'
 import type { IntakeForm, IntakeRecord } from '../intake/types'
 
 /**
@@ -129,6 +130,9 @@ function completedText(record: IntakeRecord, formTitle: string): string {
     '',
     'The answers are not in this email. They hold personal and health information, so they stay in the website database and are never sent by email.',
     '',
+    'Read them on the staff page (log in with your staff CMS account):',
+    staffSubmissionUrl('intake', record.id),
+    '',
     'Reply to this mail to write to the client.',
   ]
   return lines.join('\n')
@@ -160,6 +164,7 @@ export async function sendIntakeCompletedEmail(record: IntakeRecord, form: Intak
       completedAt: formatCompletedAt(record.completed_at),
       acknowledged: record.answers?.acknowledged ?? false,
       marketing: recordMarketing(record),
+      answersUrl: staffSubmissionUrl('intake', record.id),
     }),
     text: completedText(record, formTitle),
   })

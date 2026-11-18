@@ -186,6 +186,7 @@ Docs: https://developers.cloudflare.com/agents/
 | `/portal/community` | `app/portal/community/page.tsx` | Discourse forum embed |
 | `/programs/certification/[modality]` | `app/programs/certification/[modality]/page.tsx` | Career & Certification Pathway per modality (rapid-repatterning, energy-alignment-optimisation, akashic-navigation), from Suzanne's 12 Nov documents |
 | `/intake/[token]` | `app/intake/[token]/page.tsx` | Client intake form after a private-session purchase (personal link, form from the CMS) |
+| `/staff/submissions/[type]` and `/[type]/[id]` | `app/staff/submissions/[type]/page.tsx`, `[id]/page.tsx` | Read-only quiz and intake answers for staff (Payload login, Staff role only, every view logged), KI125 |
 
 ---
 

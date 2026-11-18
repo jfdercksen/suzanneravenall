@@ -11,6 +11,7 @@ import { sendQuizCompletionNotificationEmail } from './quiz-completion-notificat
 import type { QuizCompletionEmailData } from './types'
 
 const baseData: QuizCompletionEmailData = {
+  submissionId: '6f1c2a4e-1b2c-4d3e-8f90-123456789abc',
   firstName: 'Alice',
   lastName: 'Smith',
   email: 'lead@example.com',
@@ -73,6 +74,19 @@ describe('sendQuizCompletionNotificationEmail', () => {
       expect(part).not.toContain('Often')
       expect(part).not.toContain('\u2014')
     }
+  })
+
+  it('links both parts straight to the staff page for this submission (KI125)', async () => {
+    vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'http://169.239.180.49')
+    mockSend.mockResolvedValue('email_notify_004')
+    await sendQuizCompletionNotificationEmail(baseData)
+    const call = mockSend.mock.calls[0]![0] as { text: string; react: Parameters<typeof render>[0] }
+    const url = 'http://169.239.180.49/staff/submissions/quiz/6f1c2a4e-1b2c-4d3e-8f90-123456789abc'
+    expect(call.text).toContain(`Read them on the staff page (log in with your staff CMS account):\n${url}`)
+    const html = await render(call.react)
+    expect(html).toContain(`href="${url}"`)
+    expect(html).toContain('Read the answers on the staff page')
+    vi.unstubAllEnvs()
   })
 
   it('propagates a provider error', async () => {

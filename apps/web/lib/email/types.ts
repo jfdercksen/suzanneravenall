@@ -145,6 +145,8 @@ export interface QuizReportEmailData {
  * Never the answers (POPIA: they can hold health information).
  */
 export interface QuizCompletionEmailData {
+  /** quiz_subscribers.id: the mail links to /staff/submissions/quiz/<id>. */
+  submissionId: string
   firstName: string
   lastName: string
   email: string

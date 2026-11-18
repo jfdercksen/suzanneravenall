@@ -104,8 +104,10 @@ export async function POST(request: NextRequest) {
   // Fire-and-forget: the user's result is already rendered client-side from
   // local state regardless of this call's outcome. Who and which result only:
   // the answers can hold health information and are never sent by email
-  // (POPIA, Suzanne's rules of 8 Nov 2026). They stay in quiz_subscribers.
+  // (POPIA, Suzanne's rules of 8 Nov 2026). They stay in quiz_subscribers;
+  // the mail links to the staff page (KI125).
   void sendQuizCompletionNotificationEmail({
+    submissionId: subscriber.id,
     firstName: subscriber.first_name,
     lastName: subscriber.last_name,
     email: subscriber.email,

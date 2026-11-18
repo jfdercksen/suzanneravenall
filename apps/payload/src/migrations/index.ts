@@ -1,5 +1,6 @@
 import * as migration_20260421_104933 from './20260421_104933';
 import * as migration_20261021_025305_intake_forms from './20261021_025305_intake_forms';
+import * as migration_20261118_140000_staff_role from './20261118_140000_staff_role';
 
 export const migrations = [
   {
@@ -11,5 +12,10 @@ export const migrations = [
     up: migration_20261021_025305_intake_forms.up,
     down: migration_20261021_025305_intake_forms.down,
     name: '20261021_025305_intake_forms'
+  },
+  {
+    up: migration_20261118_140000_staff_role.up,
+    down: migration_20261118_140000_staff_role.down,
+    name: '20261118_140000_staff_role'
   },
 ];

@@ -173,6 +173,8 @@ describe('POST /api/quiz/complete', () => {
   it('tells staff who completed which quiz and the result, never the answers (POPIA)', async () => {
     await POST(makeRequest(validBody()) as never)
     expect(mockSendQuizCompletionNotificationEmail).toHaveBeenCalledWith({
+      // The row id: the mail links to /staff/submissions/quiz/<id> (KI125).
+      submissionId: 'sub-1',
       firstName: 'Alice',
       lastName: 'Smith',
       email: 'alice@example.com',

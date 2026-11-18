@@ -69,6 +69,11 @@ describe('sanitiseAnalyticsUrl on the booking link (J-07)', () => {
     expect(sanitiseAnalyticsUrl('http://169.239.180.49/staff/booking/AbC123secret?done=restored')).toBe('http://169.239.180.49/staff/booking/redacted')
   })
 
+  it('drops the submission id and the name or email searched on the staff pages (KI125)', () => {
+    expect(sanitiseAnalyticsUrl('https://suzanneravenall.com/staff/submissions/quiz/6f1c2a4e-1b2c-4d3e-8f90-123456789abc')).toBe('https://suzanneravenall.com/staff/submissions/redacted')
+    expect(sanitiseAnalyticsUrl('/staff/submissions/intake?q=jane%40example.com')).toBe('/staff/submissions/redacted')
+  })
+
   it('drops the email from the portal invite links (H-13)', () => {
     expect(sanitiseAnalyticsUrl('http://169.239.180.49/portal/signup?email=a%40b.c')).toBe('http://169.239.180.49/portal/signup')
     expect(sanitiseAnalyticsUrl('/portal/login?redirect=%2Fportal&email=a%40b.c')).toBe('/portal/login')

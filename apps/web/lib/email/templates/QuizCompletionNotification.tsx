@@ -1,12 +1,18 @@
-import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Text } from '@react-email/components'
+import { Body, Container, Head, Heading, Hr, Html, Link, Preview, Section, Text } from '@react-email/components'
 import type { QuizCompletionEmailData } from '../types'
 
 /**
  * Staff notice that someone completed a diagnostic: who, which quiz and the
  * result title. The answers are NOT in this mail: they can hold health and
  * wellbeing information, which is never sent by plain email (POPIA,
- * Suzanne's rules of 8 Nov 2026). They stay in quiz_subscribers.
+ * Suzanne's rules of 8 Nov 2026). They stay in quiz_subscribers; the mail
+ * links to the staff page that shows them behind the CMS login (KI125).
  */
+
+export type QuizCompletionNotificationProps = QuizCompletionEmailData & {
+  /** /staff/submissions/quiz/<id> on the site. */
+  answersUrl: string
+}
 
 const INK = '#0A0A0A'
 const MUTED = '#696969'
@@ -20,7 +26,8 @@ export default function QuizCompletionNotification({
   quizTitle,
   resultTitle,
   resultSubtitle,
-}: QuizCompletionEmailData) {
+  answersUrl,
+}: QuizCompletionNotificationProps) {
   return (
     <Html lang="en">
       <Head />
@@ -45,6 +52,12 @@ export default function QuizCompletionNotification({
           <Text style={{ color: INK, fontSize: '14px', lineHeight: '1.6', margin: '0 0 16px' }}>
             The answers are not in this email. They can include health and wellbeing information, so they stay in the
             website database and are never sent by email.
+          </Text>
+          <Text style={{ color: INK, fontSize: '14px', lineHeight: '1.6', margin: '0 0 16px' }}>
+            <Link href={answersUrl} style={{ color: INK, textDecoration: 'underline' }}>
+              Read the answers on the staff page
+            </Link>{' '}
+            (log in with your staff CMS account).
           </Text>
           <Hr style={{ borderColor: BORDER, margin: '24px 0 12px' }} />
           <Text style={{ color: MUTED, fontSize: '12px', lineHeight: '1.5', margin: 0 }}>
