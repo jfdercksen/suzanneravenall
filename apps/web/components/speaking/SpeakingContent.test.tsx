@@ -1,4 +1,6 @@
 import React from 'react'
+import { readFileSync } from 'fs'
+import { join } from 'path'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import SpeakingContent, {
@@ -100,9 +102,14 @@ describe('SpeakingContent', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Why event organisers book Suzanne' })).toBeInTheDocument()
     for (const reason of WHY_BOOK) expect(screen.getByText(reason)).toBeInTheDocument()
     const pack = screen.getByRole('link', { name: 'Download Speaker Pack' })
-    // No pack file yet: the button asks for it through the contact form
-    expect(pack).toHaveAttribute('href', SPEAKER_PACK_HREF)
-    expect(SPEAKER_PACK_HREF).toMatch(/^\/contact\?enquiry=speaking&topic=.*speaker\+pack#message$/i)
+    // The PDF in public/downloads, downloaded rather than opened as a page
+    expect(pack).toHaveAttribute('href', '/downloads/Dr-Suzanne-Ravenall-Speaker-Pack.pdf')
+    expect(pack).toHaveAttribute('download')
+    expect(SPEAKER_PACK_HREF).toBe('/downloads/Dr-Suzanne-Ravenall-Speaker-Pack.pdf')
+    // The file is in the repo and is a real PDF, so the link never 404s
+    const file = readFileSync(join(__dirname, '..', '..', 'public', SPEAKER_PACK_HREF))
+    expect(file.subarray(0, 5).toString('latin1')).toBe('%PDF-')
+    expect(file.length).toBeGreaterThan(100_000)
     expect(screen.getAllByRole('link', { name: 'Book Suzanne to Speak' }).length).toBeGreaterThan(0)
   })
 })

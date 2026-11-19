@@ -98,10 +98,10 @@ export const WHY_BOOK = [
   'Her talks are interactive. Audiences take part rather than sit back, and they talk about it afterwards.',
 ]
 
-/** The speaker pack does not exist yet, so the button asks for it through the
- *  contact form with the request already written in. Point it at the PDF once
- *  Suzanne sends one. */
-export const SPEAKER_PACK_HREF = contactHref('speaking', 'Please send me the speaker pack')
+/** Suzanne's speaker pack (PDF from her mail of 18 Nov), served as a static
+ *  file from public/downloads. A plain <a download>, not next/link: it is a
+ *  file, not a page. To update it, replace the PDF under the same name. */
+export const SPEAKER_PACK_HREF = '/downloads/Dr-Suzanne-Ravenall-Speaker-Pack.pdf'
 
 const corporateAudiences = [
   'Leadership teams and C-suite',
@@ -539,12 +539,13 @@ export default function SpeakingContent() {
             >
               Book Suzanne to Speak
             </Link>
-            <Link
+            <a
               href={SPEAKER_PACK_HREF}
+              download
               className="inline-flex items-center justify-center px-8 py-4 border border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white font-medium text-sm uppercase tracking-widest rounded-button transition-all duration-300"
             >
               Download Speaker Pack
-            </Link>
+            </a>
           </motion.div>
         </div>
       </section>
