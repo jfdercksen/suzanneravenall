@@ -17,7 +17,7 @@ import {
 import { PRACTITIONER_TRACKS, licensingLinks } from '@/data/practitionerTracks'
 import { EAO_NAME, EAO_STRAPLINE, withoutTrademark } from '@/data/energyAlignment'
 import { CERTIFICATION_PATHWAYS, pathwayHref } from '@/data/certificationPathways'
-import { RichText } from '@/components/shared/RichText'
+import { SignatureProgrammeCard } from '@/components/programs/SignatureProgrammeCard'
 import { contactHref } from '@/app/contact/enquiry'
 import liveCalendarFile from '@/data/live-calendar.json'
 
@@ -379,39 +379,17 @@ export default function ProgramsPageClient({ membershipsOn = false }: { membersh
 
           <div className="space-y-8">
             {/* Item 8.1: Rapid Repatterning at the top, then Human Performance
-                Replicator and Pattern Intelligence. No content exists yet:
-                placeholder cards with register interest (data/practitionerTracks.ts). */}
+                Replicator and Pattern Intelligence, with Suzanne's copy of 18 Nov
+                (data/practitionerTracks.ts). */}
             <motion.div
               variants={staggerChildren}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: '0px' }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="space-y-6"
             >
-              {PRACTITIONER_TRACKS.map((track) => (
-                <motion.div
-                  key={track.id}
-                  variants={childVariants}
-                  className="bg-brand-sand rounded-card p-8 flex flex-col"
-                >
-                  <div className="flex-1">
-                    <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent mb-3">
-                      Practitioner Training
-                    </p>
-                    <h3 className="text-2xl font-medium tracking-tight text-brand-ink mb-4 leading-snug">
-                      {track.name}
-                    </h3>
-                    <p className="text-brand-muted text-sm font-light leading-relaxed mb-6">
-                      <RichText line={track.description} />
-                    </p>
-                  </div>
-                  <Link
-                    href={track.interestHref}
-                    className="inline-flex items-center justify-center w-full py-3 px-6 bg-brand-accent-600 hover:bg-brand-accent-700 text-white text-sm font-medium rounded-button transition-colors duration-300"
-                  >
-                    Register Interest
-                  </Link>
-                </motion.div>
+              {PRACTITIONER_TRACKS.map((programme) => (
+                <SignatureProgrammeCard key={programme.id} programme={programme} variants={childVariants} />
               ))}
             </motion.div>
 

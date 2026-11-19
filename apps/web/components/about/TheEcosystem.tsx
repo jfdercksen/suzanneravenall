@@ -13,8 +13,7 @@ const sectionReveal = {
 }
 
 // Card copy: Rapid Repatterning from her methodology language; Human Performance
-// Replicator sourced 6 Oct from HPR's own homepage (https://humanperformancereplicator.com/)
-// and the HPR blurb on Suzanne's homepage (https://suzanneravenall.com/).
+// Replicator from Suzanne's programme copy of 18 Nov (was HPR's own homepage, 6 Oct).
 const cards: {
   label: string
   title: string
@@ -32,7 +31,9 @@ const cards: {
     label: 'Scalable transformation',
     title: 'Human Performance Replicator',
     description:
-      'World-class behavioural modelling for the boardroom. HPR replicates the performance, skills, behaviours and attributes of the top ten percent into the average 80%, with lasting change in a matter of weeks, through a proprietary methodology and a licensed practice.',
+      // Suzanne's copy of 18 Nov (docs/content/suzanne-2026-11-18-three-programmes.md):
+      // an engagement runs 3–6 months, so the old "in a matter of weeks" went.
+      'Every organisation has a top 10% whose results seem effortless and impossible to copy. The Human Performance Replicator studies your top performers, works out the unconscious patterns behind their results, and turns those patterns into training your wider team can learn.',
     // HPR is a separate brand with its own site, as linked from the old homepage.
     href: 'https://humanperformancereplicator.com/',
   },

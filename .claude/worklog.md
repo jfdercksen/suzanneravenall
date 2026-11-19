@@ -776,3 +776,13 @@ Johan's brief of 18 Nov: a read-only staff page for quiz and intake answers behi
 - **Review (code-reviewer):** no data exposure found. Fixed: TRUNCATE trigger, page past the end falls back to page 1, Clarity and GA on client navigation. Left: Staff users can edit CMS content; list views unlogged; MFA (KI126).
 - **Tests:** web vitest full suite green; Medusa opt-in and order-placed tests green; web tsc 184 (baseline, react-pdf and pre-existing files).
 
+
+## 2026-11-19 Suzanne's three programmes on /programs (side session for the EA)
+
+Her mail of 18 Nov, copy in docs/content/suzanne-2026-11-18-three-programmes.md.
+
+- **Done:** the three "Register Interest" placeholders at the top of the practitioner group on /programs are now full-width cards (components/programs/SignatureProgrammeCard.tsx, data in data/practitionerTracks.ts): her headline, description, format facts (HPR phases and the PI journey as numbered lists), and her own next step. Rapid Repatterning: Book a discovery call -> /contact#book. HPR: Request a scoping conversation -> /contact?enquiry=other&topic=Scoping conversation: Human Performance Replicator#message. Pattern Intelligence: Take the pattern scan -> /discover-your-pattern. RR and HPR end with Visit rapidrepatterning.com / humanperformancereplicator.com, new tab.
+- **Rules kept:** bracketed values published without brackets (KI127); her marks as written, none on HPR; no one-session claim; tests check all three.
+- **Checked:** Footer links Rapid Repatterning to repatterning.com; rapidrepatterning.com 301s there, so it stays. TheEcosystem's HPR blurb said "lasting change in a matter of weeks", against her 3–6 months: replaced with her own sentences. The rest of the site still writes Rapid Repatterning® while her copy writes ™ (noted in KI127, not changed).
+- **Speaker pack:** not done, the PDF is not yet at C:\Johan Brain\Clients\Suzanne Ravenall\.
+- **Tests:** web vitest 2646/2646; web tsc 184 (baseline). Seen in the dev server at 1024px and 375px.

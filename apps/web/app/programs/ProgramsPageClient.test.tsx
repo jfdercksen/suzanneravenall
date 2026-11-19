@@ -135,9 +135,9 @@ describe('ProgramsPageClient practitioner training (8 Nov)', () => {
   it('puts Rapid Repatterning at the top and Resonance Repatterning at the bottom of the practitioner group', () => {
     render(<ProgramsPageClient />)
     const order = textOrder([
-      'Rapid Repatterning®',
-      'Human Performance Replicator',
-      'Pattern Intelligence™',
+      'Change the pattern at its source.',
+      'Your best people already know how. We make it repeatable.',
+      'Decode the pattern. Unlock the potential.',
       'Energy Alignment & Optimisation: Self Clearing',
       'Akashic Navigator',
       'Resonance Repatterning',
@@ -160,10 +160,54 @@ describe('ProgramsPageClient practitioner training (8 Nov)', () => {
     expect(screen.getByRole('link', { name: 'Akashic Navigation™' })).toHaveAttribute('href', '/programs/certification/akashic-navigation')
   })
 
-  it('shows the three missing programmes with a visible placeholder and register interest', () => {
+  it("shows Suzanne's three programmes (18 Nov) with her next step, pointed at real pages", () => {
+    render(<ProgramsPageClient />)
+    for (const name of ['Rapid Repatterning™', 'Human Performance Replicator', 'The Pattern Intelligence™ Programme']) {
+      expect(screen.getByRole('heading', { level: 3, name })).toBeInTheDocument()
+    }
+    expect(screen.getByRole('link', { name: 'Book a discovery call' })).toHaveAttribute('href', '/contact#book')
+    const scoping = screen.getByRole('link', { name: 'Request a scoping conversation' }).getAttribute('href') ?? ''
+    expect(scoping.startsWith('/contact?')).toBe(true)
+    expect(new URLSearchParams(scoping.slice('/contact?'.length).split('#')[0]).get('topic')).toBe(
+      'Scoping conversation: Human Performance Replicator',
+    )
+    expect(screen.getByRole('link', { name: 'Take the pattern scan' })).toHaveAttribute('href', '/discover-your-pattern')
+    expect(screen.queryByText('Register Interest')).not.toBeInTheDocument()
+    expect(screen.queryByText('[Programme description, format and price]')).not.toBeInTheDocument()
+  })
+
+  it('ends Rapid Repatterning and HPR with their own sites, in a new tab', () => {
+    render(<ProgramsPageClient />)
+    const rr = screen.getByRole('link', { name: /Visit rapidrepatterning\.com/ })
+    expect(rr).toHaveAttribute('href', 'https://rapidrepatterning.com')
+    const hpr = screen.getByRole('link', { name: /Visit humanperformancereplicator\.com/ })
+    expect(hpr).toHaveAttribute('href', 'https://humanperformancereplicator.com')
+    for (const link of [rr, hpr]) {
+      expect(link).toHaveAttribute('target', '_blank')
+      expect(link.getAttribute('rel')).toContain('noopener')
+    }
+  })
+
+  it('publishes her bracketed values without the brackets, her marks as written, and no one-session claim', () => {
     const { container } = render(<ProgramsPageClient />)
-    const placeholders = Array.from(container.querySelectorAll('[data-placeholder="true"]')).map((n) => n.textContent)
-    expect(placeholders.filter((t) => t === '[Programme description, format and price]')).toHaveLength(3)
+    const body = container.textContent ?? ''
+    for (const value of [
+      'A series of 3–6 sessions, each 60–90 minutes',
+      '3–6 months, depending on scope',
+      'Online cohort or one-to-one, with in-house versions',
+      '8–12 weeks, with live sessions',
+      'A Pattern Signature™ assessment at the start or the short pattern scan until the full assessment is ready',
+    ]) {
+      expect(body).toContain(value)
+    }
+    const programmes = Array.from(container.querySelectorAll('article[aria-labelledby^="programme-"]'))
+    expect(programmes).toHaveLength(3)
+    const programmeText = programmes.map((a) => a.textContent ?? '').join(' ')
+    expect(programmeText).not.toMatch(/\[|\]/)
+    expect(programmeText).not.toMatch(/Human Performance Replicator(™|®)/)
+    expect(programmeText).not.toMatch(/\bone session\b|single session/i)
+    expect(programmeText).not.toContain('\u2014')
+    expect(programmeText).toContain("It's not you. It's your pattern.")
   })
 
   it('marks Energy Alignment & Optimisation once (its pathway link), then her strapline, heading and cards without the mark (Suzanne 12 Nov)', () => {
