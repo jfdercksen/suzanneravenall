@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
 import { getMemberAccessLevel } from '@/lib/access/check-access'
 import { membershipsEnabled } from '@/lib/access/memberships'
+import { memberTierName } from '@/lib/access/tiers'
 import ProfileForm from './ProfileForm'
 import PasswordForm from './PasswordForm'
 import styles from './account.module.css'
@@ -65,7 +66,7 @@ export default async function AccountPage() {
   const subscriptionData = subscriptionResult.data as SubRow | null | undefined
 
   const tier = subscriptionData?.membership_tiers
-  const tierName = tier?.name ?? 'Guest Membership'
+  const tierName = memberTierName(tier)
   const memberUntil = subscriptionData?.annual_renewal_date ?? subscriptionData?.end_date ?? null
   const memberSince = subscriptionData?.start_date ?? user.created_at ?? null
 

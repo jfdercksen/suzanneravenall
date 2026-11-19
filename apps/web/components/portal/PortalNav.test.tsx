@@ -48,8 +48,8 @@ describe('PortalNav', () => {
 
   it('hides the tier badge while memberships are off (KI072)', () => {
     const { container, rerender } = render(<PortalNav tier="free" showTier={false} />)
-    expect(container.textContent).not.toMatch(/Free Member/)
+    expect(container.textContent).not.toMatch(/Guest Member/)
     rerender(<PortalNav tier="free" showTier />)
-    expect(container.textContent).toMatch(/Free Member/)
+    expect(container.textContent).toMatch(/Guest Member/)
   })
 })

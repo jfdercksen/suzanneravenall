@@ -14,6 +14,11 @@ describe('membership availability (KI071)', () => {
     expect(membershipHandlesIn([{ handle: 'getting-unstuck' }, { handle: 'membership-s0213' }, { handle: null }])).toEqual(['membership-s0213'])
   })
 
+  it('never reports a Guest or Novice product, even when it is published (KI114)', () => {
+    const published = ['membership-s0211', 'membership-s0214', 'membership-s0215', 'membership-s0227', 'membership-s0228', 'membership-s0216']
+    expect(membershipHandlesIn(published.map((handle) => ({ handle })))).toEqual(['membership-s0216'])
+  })
+
   it('reads every page of the store and returns the published membership handles', async () => {
     const page1 = Array.from({ length: 100 }, (_, i) => ({ handle: i === 7 ? 'membership-s0212' : `p${i}` }))
     const page2 = [{ handle: 'membership-s0226' }, { handle: 'book' }]

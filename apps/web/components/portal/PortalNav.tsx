@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { TIER_BADGE_STYLES, type TierSlug } from '@/lib/access/tiers'
 
 const TIER_LABELS: Record<TierSlug, string> = {
-  free: 'Free',
+  free: 'Guest',
   silver: 'Silver',
   gold: 'Gold',
   practitioner: 'Practitioner',

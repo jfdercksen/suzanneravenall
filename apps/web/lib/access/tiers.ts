@@ -75,7 +75,8 @@ export function hasAccess(tier: string, resource: ResourceKey): boolean {
 
 export function tierLabel(tier: TierSlug): string {
   const labels: Record<TierSlug, string> = {
-    free: 'Free Member',
+    // The free level is the store's S0211 Guest Membership (KI072, 19 Nov 2026).
+    free: 'Guest Member',
     silver: 'Silver Member',
     gold: 'Gold Member',
     practitioner: 'Practitioner',
@@ -181,8 +182,8 @@ export const MEMBERSHIP_TIERS: MembershipTier[] = [
  * Resonance Repatterning is not covered by those documents, so no Novice rule
  * is stated for it (KI118). The levels above Novice keep "requires training".
  *
- * Nothing checks the prerequisites or the observation yet: a Novice membership
- * can be bought by anyone once memberships are on sale (KI114).
+ * Nothing checks the prerequisites or the observation yet (KI114), so a Novice
+ * membership is never offered for sale: see isDirectlyBuyable.
  */
 export type JoiningRequirement = 'none' | 'novice-prerequisites' | 'training'
 
@@ -190,6 +191,23 @@ export function joiningRequirement(tier: MembershipTier): JoiningRequirement {
   if (tier.level === 'guest' || tier.level === 'lifestyle' || tier.level === 'student') return 'none'
   if (tier.level === 'novice') return 'novice-prerequisites'
   return 'training'
+}
+
+/**
+ * May this tier be bought straight from /portal/upgrade? Not Guest (the free
+ * base level every member already has) and not Novice: the Certification &
+ * Quality Assurance team confirms a Novice, and no sign-off gate exists yet
+ * (KI114). Even when its store product is published, a Novice card gets no
+ * Upgrade Now link (KI071 switch-on, 19 Nov 2026).
+ */
+export function isDirectlyBuyable(tier: MembershipTier): boolean {
+  return tier.level !== 'guest' && joiningRequirement(tier) !== 'novice-prerequisites'
+}
+
+/** The member's tier name for display: the free base row reads as the store's Guest Membership (KI072). */
+export function memberTierName(tier: { name?: string | null; slug?: string | null } | null | undefined): string {
+  if (!tier || !tier.slug || tier.slug === 'free' || !tier.name) return 'Guest Membership'
+  return tier.name
 }
 
 const PATHWAY = {

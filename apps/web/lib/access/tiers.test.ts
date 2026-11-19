@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import {
+  isDirectlyBuyable,
+  memberTierName,
+  MEMBERSHIP_TIERS,
   hasAccess,
   tierLabel,
   minimumTierFor,
@@ -90,8 +93,8 @@ describe('hasAccess', () => {
 })
 
 describe('tierLabel', () => {
-  it('returns "Free Member" for free', () => {
-    expect(tierLabel('free')).toBe('Free Member')
+  it('returns "Guest Member" for free, the Guest Membership level (KI072)', () => {
+    expect(tierLabel('free')).toBe('Guest Member')
   })
 
   it('returns "Silver Member" for silver', () => {
@@ -171,5 +174,26 @@ describe('upgradeHref (site check M15)', () => {
 
   it('carries the gated path as an encoded from param', () => {
     expect(upgradeHref('/portal/videos')).toBe('/portal/upgrade?from=%2Fportal%2Fvideos')
+  })
+})
+
+// KI071 switch-on (19 Nov 2026): Guest and Novice are never sold from /portal/upgrade (KI114).
+describe('isDirectlyBuyable', () => {
+  it('leaves out Guest and the four Novice tiers, and nothing else', () => {
+    const notBuyable = MEMBERSHIP_TIERS.filter((t) => !isDirectlyBuyable(t)).map((t) => t.sku)
+    expect(notBuyable).toEqual(['S0211', 'S0214', 'S0215', 'S0227', 'S0228'])
+    expect(MEMBERSHIP_TIERS.filter(isDirectlyBuyable)).toHaveLength(24)
+  })
+})
+
+describe('memberTierName', () => {
+  it('reads the free base row and a missing row as Guest Membership', () => {
+    expect(memberTierName({ name: 'Free Member', slug: 'free' })).toBe('Guest Membership')
+    expect(memberTierName(null)).toBe('Guest Membership')
+    expect(memberTierName(undefined)).toBe('Guest Membership')
+  })
+
+  it('keeps the stored name of any other tier', () => {
+    expect(memberTierName({ name: 'Lifestyle Membership', slug: 'lifestyle' })).toBe('Lifestyle Membership')
   })
 })

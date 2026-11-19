@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { createClient } from '@/utils/supabase/server'
 import { getMemberAccessLevel } from '@/lib/access/check-access'
-import type { MembershipTrack } from '@/lib/access/tiers'
+import { memberTierName, type MembershipTrack } from '@/lib/access/tiers'
 import { membershipsEnabled } from '@/lib/access/memberships'
 import { NOT_FOUND_TITLE } from '@/lib/seo/notFoundTitle'
 import { fetchAvailableMembershipHandles } from '@/lib/medusa/membership-availability'
@@ -52,16 +52,16 @@ export default async function UpgradePage({
     // Resolve display name from membership_tiers relation
     const { data: sub } = await supabase
       .from('member_subscriptions')
-      .select('membership_tiers(name)')
+      .select('membership_tiers(name, slug)')
       .eq('user_id', user.id)
       .eq('status', 'active')
       .order('start_date', { ascending: false })
       .limit(1)
       .maybeSingle()
 
-    const tierData = (sub as { membership_tiers: { name: string } | null } | null)
+    const tierData = (sub as { membership_tiers: { name: string; slug: string } | null } | null)
       ?.membership_tiers
-    if (tierData?.name) currentTierName = tierData.name
+    currentTierName = memberTierName(tierData)
   }
 
   // Only membership products the store returns get an Upgrade Now link (KI071):

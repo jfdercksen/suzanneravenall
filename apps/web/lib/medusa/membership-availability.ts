@@ -1,4 +1,4 @@
-import { MEMBERSHIP_TIERS } from '@/lib/access/tiers'
+import { isDirectlyBuyable, MEMBERSHIP_TIERS } from '@/lib/access/tiers'
 
 /**
  * Which membership products the store API actually returns (KI071, reopened
@@ -11,9 +11,11 @@ import { MEMBERSHIP_TIERS } from '@/lib/access/tiers'
 const PAGE = 100
 const MAX_PAGES = 20
 
-const MEMBERSHIP_HANDLES = new Set(MEMBERSHIP_TIERS.map((t) => t.handle))
+// Only tiers that may be bought directly: a published Guest or Novice product
+// still gets no Upgrade Now link (KI114).
+const MEMBERSHIP_HANDLES = new Set(MEMBERSHIP_TIERS.filter(isDirectlyBuyable).map((t) => t.handle))
 
-/** The membership handles among the products the store returned. */
+/** The directly buyable membership handles among the products the store returned. */
 export function membershipHandlesIn(products: Array<{ handle?: string | null }>): string[] {
   return products.map((p) => p.handle ?? '').filter((h) => MEMBERSHIP_HANDLES.has(h))
 }

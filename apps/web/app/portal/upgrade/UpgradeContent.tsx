@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { RichText } from '@/components/shared/RichText'
 import {
+  isDirectlyBuyable,
   joiningLabel,
   joiningRequirement,
   MEMBERSHIP_JOINING_RULE,
@@ -98,7 +99,13 @@ function TierCard({ tier, isCurrentTier, isUpgrade, isAvailable }: TierCardProps
         </p>
       )}
 
-      {isUpgrade && isAvailable && (
+      {/* Novice is confirmed by the Certification & Quality Assurance team, never bought here (KI114). */}
+      {isUpgrade && joiningRequirement(tier) === 'novice-prerequisites' && (
+        <div className="mt-auto w-full text-center py-2.5 px-4 bg-white/10 text-white/70 font-semibold text-xs uppercase tracking-widest rounded-xl cursor-default">
+          Confirmed by the team
+        </div>
+      )}
+      {isUpgrade && isDirectlyBuyable(tier) && isAvailable && (
         <Link
           href={`/shop/${tier.handle}`}
           className="mt-auto w-full text-center py-2.5 px-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold text-xs uppercase tracking-widest rounded-xl transition-colors duration-300"
@@ -107,7 +114,7 @@ function TierCard({ tier, isCurrentTier, isUpgrade, isAvailable }: TierCardProps
         </Link>
       )}
       {/* A draft or missing product would be a 404: no link until it is on sale (KI071). */}
-      {isUpgrade && !isAvailable && (
+      {isUpgrade && isDirectlyBuyable(tier) && !isAvailable && (
         <div className="mt-auto w-full text-center py-2.5 px-4 bg-white/10 text-white/70 font-semibold text-xs uppercase tracking-widest rounded-xl cursor-default">
           Opens at launch
         </div>

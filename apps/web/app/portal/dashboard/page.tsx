@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server'
 import { getMemberTier } from '@/lib/access/check-access'
 import { fetchMemberProgrammes } from '@/lib/medusa/member-programmes'
 import { membershipsEnabled } from '@/lib/access/memberships'
+import { memberTierName } from '@/lib/access/tiers'
 import { isFirstSession } from '@/lib/portal/welcome'
 import { loadNextAppointment } from '@/lib/portal/load-appointments'
 import DashboardContent from './DashboardContent'
@@ -38,7 +39,7 @@ export default async function DashboardPage() {
     | null
     | undefined
   const tier = subscriptionData?.membership_tiers
-  const tierName = tier?.name ?? 'Free Member'
+  const tierName = memberTierName(tier)
   const tierSlug = (tier?.slug ?? 'free') as 'free' | 'silver' | 'gold' | 'practitioner'
   const memberSince = subscriptionData?.start_date ?? user.created_at ?? null
 
