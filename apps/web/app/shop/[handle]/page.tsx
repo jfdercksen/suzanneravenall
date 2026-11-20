@@ -1,6 +1,7 @@
 import { cookies, headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { isMembershipProductHandle } from '@/lib/access/tiers'
 import type { MedusaProduct } from '@/types/medusa'
 import { NOT_FOUND_TITLE } from '@/lib/seo/notFoundTitle'
 import ProductPageContent from '@/components/shop/ProductPageContent'
@@ -65,6 +66,8 @@ export async function generateMetadata({
     description:
       product.description?.slice(0, 155) ??
       'Transform your life with Dr. Suzanne Ravenall.',
+    // A membership's page is where Upgrade Now lands, never a listing (KI129).
+    ...(isMembershipProductHandle(product.handle) ? { robots: { index: false, follow: false } } : {}),
   }
 }
 

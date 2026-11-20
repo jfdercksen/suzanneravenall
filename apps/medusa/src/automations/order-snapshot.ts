@@ -12,6 +12,7 @@ import { orderBusiness, toOrderSnapshot, type OrderSnapshot } from "@suzanne/int
 export const ORDER_GRAPH_FIELDS = [
   "id",
   "display_id",
+  "created_at",
   "customer_id",
   "email",
   "currency_code",

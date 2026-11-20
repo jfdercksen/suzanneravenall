@@ -1,7 +1,19 @@
 import type { SubscriberArgs, SubscriberConfig } from '@medusajs/framework'
 import { ContainerRegistrationKeys } from '@medusajs/framework/utils'
 import { createClient } from '@supabase/supabase-js'
-import { bookerName, orderHasCourses, sessionBookingUrl } from '@suzanne/integrations'
+import {
+  bookerName,
+  isNoviceLevel,
+  isSellableLevel,
+  membershipAccessFields,
+  membershipBySku,
+  membershipTermEnd,
+  membershipTierSlug,
+  orderHasCourses,
+  sessionBookingUrl,
+  type MembershipAccessFields,
+  type MembershipLevel,
+} from '@suzanne/integrations'
 import ws from 'ws'
 import { MEMBERSHIPS_MODULE } from '../modules/memberships'
 import type MembershipsModuleService from '../modules/memberships/service'
@@ -242,10 +254,12 @@ function buildSupabaseAdmin(): ReturnType<typeof createClient> | null {
 
 async function lookupSupabaseUserId(
   supabase: ReturnType<typeof createClient>,
-  email: string
+  email: string,
+  /** Memberships: only an account that has confirmed this email (someone may sign up with another person's address). */
+  confirmedOnly = false
 ): Promise<string | null> {
   const normalised = email.toLowerCase()
-  type AuthUserMinimal = { id: string; email?: string | null }
+  type AuthUserMinimal = { id: string; email?: string | null; email_confirmed_at?: string | null }
   const PER_PAGE = 1000
   let page = 1
 
@@ -260,7 +274,7 @@ async function lookupSupabaseUserId(
 
     const users = data.users as AuthUserMinimal[]
     const user = users.find((u) => u.email?.toLowerCase() === normalised)
-    if (user) return user.id
+    if (user) return confirmedOnly && !user.email_confirmed_at ? null : user.id
 
     if (users.length < PER_PAGE) return null // Last page reached — not found
     page++
@@ -302,13 +316,17 @@ interface MembershipRow {
 
 interface MembershipSelectQuery {
   eq(col: string, val: string): MembershipSelectQuery
-  maybeSingle(): Promise<{ data: { id: string } | null; error: SupabaseError | null }>
+  order(col: string, opts: { ascending: boolean }): MembershipSelectQuery
+  limit(n: number): MembershipSelectQuery
+  maybeSingle(): Promise<{ data: { id: string; start_date?: string | null } | null; error: SupabaseError | null }>
 }
+
+type LevelRow = { user_id: string; tier_id: string } & MembershipAccessFields
 
 interface MembershipTable {
   select(cols: string): MembershipSelectQuery
-  insert(values: MembershipRow): AwaitableWrite
-  update(values: Pick<MembershipRow, 'status' | 'start_date' | 'end_date'>): { eq(col: string, val: string): AwaitableWrite }
+  insert(values: LevelRow): AwaitableWrite
+  update(values: MembershipAccessFields): { eq(col: string, val: string): AwaitableWrite }
 }
 
 // Minimal builder interfaces to bypass Supabase's strict generics when the
@@ -413,62 +431,74 @@ async function resolveTierId(
 }
 
 /**
- * Makes the buyer active on the purchased tier: the (user_id, tier_id) row is
- * re-activated with fresh dates when one exists (a lapsed renewal), otherwise
- * a new row is inserted beside any other rows the user has.
+ * Makes the buyer active on the level they bought (KI128): the membership_tiers
+ * row of that level (slug = the SKU in lower case, migration
+ * 20261120090000_membership_levels) carries the 365-day term, access level,
+ * programme and SKU. The (user_id, tier_id) row is re-activated with fresh
+ * dates when one exists (a lapsed member buying again), otherwise a new row
+ * is inserted beside the member's other rows. The term starts at the order's
+ * own time, so a replayed order event finds the row already on that start and
+ * changes nothing ('already'). Returns 'failed' when nothing was written
+ * (already reported to staff).
  */
 async function syncSupabaseMembership(
   supabase: ReturnType<typeof createClient>,
   supabaseUserId: string,
-  tier: string,
-  orderId: string
-): Promise<void> {
-  const tierId = await resolveTierId(supabase, tier, orderId)
-  if (!tierId) return // resolveTierId has already reported it
+  level: MembershipLevel,
+  orderId: string,
+  start: Date
+): Promise<'written' | 'already' | 'failed'> {
+  const slug = membershipTierSlug(level)
+  const tierId = await resolveTierId(supabase, slug, orderId)
+  if (!tierId) return 'failed' // resolveTierId has already reported it
 
-  const isFree = tier === 'free'
-  const endDate = isFree
-    ? null
-    : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-
+  const fields = membershipAccessFields(level, start)
   const table = supabase.from('member_subscriptions') as unknown as MembershipTable
 
+  // user_id + tier_id is not unique in the schema: take the newest row.
   const { data: existing, error: fetchError } = await table
-    .select('id')
+    .select('id, start_date')
     .eq('user_id', supabaseUserId)
     .eq('tier_id', tierId)
+    .order('start_date', { ascending: false })
+    .limit(1)
     .maybeSingle()
 
   if (fetchError) {
     reportPortalFailure('membership-sync', 'Membership row lookup failed', [
       `Order: ${orderId}`,
       `Supabase user: ${supabaseUserId}`,
-      `Tier: ${tier}`,
+      `Level: ${level.sku}`,
       `Error: ${fetchError.message}`,
     ])
-    return
+    return 'failed'
   }
 
-  const dates = { status: 'active', start_date: new Date().toISOString(), end_date: endDate }
+  if (existing?.start_date && Date.parse(existing.start_date) === start.getTime()) {
+    console.log(`[order-placed] ${level.sku} already active from order ${orderId} for user ${supabaseUserId}; replay ignored`)
+    return 'already'
+  }
+
   const { error } = existing
-    ? await table.update(dates).eq('id', existing.id)
-    : await table.insert({ user_id: supabaseUserId, tier_id: tierId, ...dates })
+    ? await table.update(fields).eq('id', existing.id)
+    : await table.insert({ user_id: supabaseUserId, tier_id: tierId, ...fields })
 
   if (error) {
-    evictTierIdOnForeignKeyViolation(tier, error)
+    evictTierIdOnForeignKeyViolation(slug, error)
     reportPortalFailure('membership-sync', `Membership row ${existing ? 'update' : 'insert'} failed`, [
       `Order: ${orderId}`,
       `Supabase user: ${supabaseUserId}`,
-      `Tier: ${tier}`,
+      `Level: ${level.sku}`,
       `Error: ${error.message}`,
-      'The buyer is not active on this tier in the portal.',
+      'The buyer is not active on this level in the portal.',
     ])
-    return
+    return 'failed'
   }
 
   console.log(
-    `[order-placed] Supabase member_subscriptions ${existing ? 'reactivated' : 'created'} for user ${supabaseUserId} → tier=${tier}`
+    `[order-placed] Supabase member_subscriptions ${existing ? 'reactivated' : 'created'} for user ${supabaseUserId} → ${level.sku} until ${fields.end_date}`
   )
+  return 'written'
 }
 
 /**
@@ -562,6 +592,87 @@ async function syncPortalAccess(
 
 // ── Membership activation ─────────────────────────────────────────────────────
 
+interface NoviceApplicationTable {
+  insert(values: {
+    email: string
+    first_name: string | null
+    user_id: string | null
+    sku: string
+    medusa_order_id: string
+    status: 'awaiting_documents'
+  }): { select(cols: string): { single(): Promise<{ data: { id: string } | null; error: SupabaseError | null }> } }
+}
+
+interface NoviceEventTable {
+  insert(values: { application_id: string; actor_type: 'system'; actor_id: string; action: 'created'; detail: string }): AwaitableWrite
+}
+
+const PG_UNIQUE_VIOLATION = '23505'
+
+function postInternalEmail(path: string, body: Record<string, unknown>, orderId: string): void {
+  void fetch(`${WEB_BASE_URL}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...(N8N_WEBHOOK_SECRET ? { 'x-webhook-secret': N8N_WEBHOOK_SECRET } : {}) },
+    body: JSON.stringify(body),
+  })
+    .then((res) => {
+      if (!res.ok) reportPortalFailure('membership-email', 'Membership email failed', [`Order: ${orderId}`, `Route: ${path}`, `Status: ${res.status}`])
+    })
+    .catch((err: unknown) => {
+      const msg = err instanceof Error ? err.message : String(err)
+      reportPortalFailure('membership-email', 'Membership email failed', [`Order: ${orderId}`, `Route: ${path}`, `Error: ${msg}`])
+    })
+}
+
+/**
+ * A paid Novice order (Suzanne, 19 Nov 2026): no access yet. The order opens a
+ * novice_applications row and the member is emailed the list of what to
+ * upload at /portal/novice; access starts when the team approves it at
+ * /staff/novice (the web app activates the level then). A replayed order
+ * event hits the unique medusa_order_id and sends nothing twice.
+ */
+async function openNoviceApplication(
+  supabase: ReturnType<typeof createClient>,
+  order: RetrievedOrder,
+  level: MembershipLevel,
+  supabaseUserId: string | null,
+  email: string,
+  firstName: string | null
+): Promise<void> {
+  const table = supabase.from('novice_applications') as unknown as NoviceApplicationTable
+  const { data, error } = await table
+    .insert({ email, first_name: firstName, user_id: supabaseUserId, sku: level.sku, medusa_order_id: order.id, status: 'awaiting_documents' })
+    .select('id')
+    .single()
+
+  if (error?.code === PG_UNIQUE_VIOLATION) {
+    console.log(`[order-placed] Novice application for order ${order.id} already exists; nothing sent again`)
+    return
+  }
+  if (error || !data) {
+    reportPortalFailure('novice-application', 'Novice application could not be opened', [
+      `Order: ${order.id}`,
+      `Level: ${level.sku}`,
+      `Error: ${error?.message ?? 'no row returned'}`,
+      'The member paid for Novice and has no application to upload to.',
+    ])
+    return
+  }
+
+  const events = supabase.from('novice_application_events') as unknown as NoviceEventTable
+  const { error: eventError } = await events.insert({
+    application_id: data.id,
+    actor_type: 'system',
+    actor_id: 'order-placed',
+    action: 'created',
+    detail: `Order ${order.id}, ${level.sku}`,
+  })
+  if (eventError) console.error(`[order-placed] Novice application event not written for order ${order.id}: ${eventError.message}`)
+
+  console.log(`[order-placed] Novice application ${data.id} opened for order ${order.id} (${level.sku})`)
+  postInternalEmail('/api/email/novice-documents', { email, firstName, sku: level.sku }, order.id)
+}
+
 async function handleMembershipActivation(
   order: RetrievedOrder,
   container: SubscriberArgs<unknown>['container']
@@ -577,74 +688,84 @@ async function handleMembershipActivation(
     return
   }
 
-  const meta = membershipItem.variant?.product?.metadata as Record<string, unknown>
-  const tier = typeof meta.tier === 'string' ? meta.tier : null
+  const membershipLines = items.filter((item) => (item?.variant?.product?.metadata as Record<string, unknown> | undefined)?.product_type === 'membership')
+  if (membershipLines.length > 1) {
+    reportPortalFailure('membership-multiple', 'Order holds more than one membership', [
+      `Order: ${order.id}`,
+      `Lines: ${membershipLines.length}`,
+      'Only the first is applied automatically. Apply the others by hand.',
+    ])
+  }
 
-  if (!tier) {
-    console.warn(
-      `[order-placed] Membership product found in order ${order.id} but metadata.tier is missing — skipping activation`
-    )
+  // Every membership product carries its level's SKU in metadata.tier (KI128).
+  const meta = membershipItem.variant?.product?.metadata as Record<string, unknown>
+  const level = membershipBySku(typeof meta.tier === 'string' ? meta.tier : null)
+
+  if (!level || !isSellableLevel(level)) {
+    reportPortalFailure('membership-level-unknown', 'Membership product has no valid level', [
+      `Order: ${order.id}`,
+      `metadata.tier: ${typeof meta.tier === 'string' ? meta.tier : '(missing)'}`,
+      'The buyer paid and has no membership. Set metadata.tier on the product (set-membership-metadata script) and activate the member by hand.',
+    ])
     return
   }
 
-  console.log(
-    `[order-placed] Activating membership tier="${tier}" for customer ${order.customer_id} (order ${order.id})`
-  )
+  const email = order.customer?.email ?? null
+  const customerAny = (order.customer ?? {}) as Record<string, unknown>
+  const firstName = typeof customerAny.first_name === 'string' && customerAny.first_name.trim() !== '' ? customerAny.first_name.trim() : null
 
-  const membershipsService = container.resolve<MembershipsModuleService>(MEMBERSHIPS_MODULE)
-
+  const supabase = buildSupabaseAdmin()
   let supabaseUserId: string | null = null
-
   try {
-    const supabase = buildSupabaseAdmin()
-
-    if (supabase) {
-      const email = order.customer?.email
-      if (email) {
-        supabaseUserId = await lookupSupabaseUserId(supabase, email)
-      }
-
-      if (supabaseUserId) {
-        void syncSupabaseMembership(supabase, supabaseUserId, tier, order.id).catch(
-          (err: unknown) => {
-            const message = err instanceof Error ? err.message : String(err)
-            console.error(`[order-placed] Supabase sync error for order ${order.id}: ${message}`)
-          }
-        )
-      } else {
-        console.warn(
-          `[order-placed] No Supabase user found for email ${order.customer?.email ?? '(unknown)'} — Supabase sync skipped`
-        )
-      }
-    }
+    if (supabase && email) supabaseUserId = await lookupSupabaseUserId(supabase, email, true)
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err)
-    console.error(`[order-placed] Supabase setup error for order ${order.id}: ${message}`)
+    console.error(`[order-placed] Supabase user lookup error for order ${order.id}: ${message}`)
   }
 
-  await membershipsService.activateMembership(
-    order.customer_id,
-    tier,
-    order.id,
-    supabaseUserId ?? undefined
-  )
+  if (isNoviceLevel(level)) {
+    if (!supabase || !email) {
+      reportPortalFailure('novice-application', 'Novice application could not be opened', [
+        `Order: ${order.id}`,
+        `Level: ${level.sku}`,
+        !email ? 'The order has no email.' : 'Supabase is not configured on the store.',
+      ])
+      return
+    }
+    await openNoviceApplication(supabase, order, level, supabaseUserId, email, firstName)
+    return
+  }
 
-  console.log(
-    `[order-placed] Membership activated in Medusa for customer ${order.customer_id} → tier=${tier}`
-  )
+  // The year runs from the order's own time, so a replayed event writes the same dates.
+  const placedAt = typeof order.created_at === 'string' ? new Date(order.created_at) : null
+  const start = placedAt && !Number.isNaN(placedAt.getTime()) ? placedAt : new Date()
+  const end = membershipTermEnd(start)
+  console.log(`[order-placed] Activating ${level.sku} for customer ${order.customer_id} (order ${order.id}) until ${end.toISOString()}`)
 
-  const email = order.customer?.email
-  if (email) {
-    const customerAny = order.customer as Record<string, unknown>
-    const firstName = typeof customerAny.first_name === 'string' ? customerAny.first_name : null
-    void fetch(`${WEB_BASE_URL}/api/email/membership-welcome`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...(N8N_WEBHOOK_SECRET ? { 'x-webhook-secret': N8N_WEBHOOK_SECRET } : {}) },
-      body: JSON.stringify({ email, firstName, tier }),
-    }).catch((err: unknown) => {
-      const msg = err instanceof Error ? err.message : String(err)
-      console.error(`[order-placed] membership welcome email failed for order ${order.id}: ${msg}`)
-    })
+  // The Medusa record is the commerce copy; a failure there must not cost the member their portal access.
+  try {
+    const membershipsService = container.resolve<MembershipsModuleService>(MEMBERSHIPS_MODULE)
+    await membershipsService.activateMembership(order.customer_id, level.sku, order.id, supabaseUserId ?? undefined, end)
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err)
+    reportPortalFailure('membership-module', 'Membership record in the store failed', [`Order: ${order.id}`, `Level: ${level.sku}`, `Error: ${message}`])
+  }
+
+  let portalActive = false
+  if (supabase && supabaseUserId) {
+    // 'already' = a replay: access stands and the welcome email went the first time.
+    portalActive = (await syncSupabaseMembership(supabase, supabaseUserId, level, order.id, start)) === 'written'
+  } else {
+    reportPortalFailure('membership-no-account', 'Membership bought without a portal account', [
+      `Order: ${order.id}`,
+      `Level: ${level.sku}`,
+      'The buyer has no portal account under the order email, so the portal does not show the level yet. Activate it by hand once they sign up.',
+    ])
+  }
+
+  // The welcome email says access has started, so only when it has.
+  if (email && portalActive) {
+    postInternalEmail('/api/email/membership-welcome', { email, firstName, sku: level.sku, renewalDate: end.toISOString() }, order.id)
   }
 }
 

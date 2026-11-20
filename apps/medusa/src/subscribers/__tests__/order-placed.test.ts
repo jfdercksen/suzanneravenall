@@ -141,12 +141,25 @@ describe('order-placed cutover flags', () => {
  * rather than an upsert on a key the table does not have.
  */
 const FREE_TIER_ID = '6a906895-e0b7-48e0-a451-caf2affa27d3'
+// membership_tiers row of S0216 Akashic Practitioner (Prdip) - Basic (migration 20261120090000).
 const SILVER_ID = 'bf4d1e22-1ad6-4dfc-9cec-786d56485def'
 
-type SubRow = { id: string; user_id: string; tier_id: string; status: string; access_level: number; track: string }
+type SubRow = { id: string; user_id: string; tier_id: string; status: string; access_level: number; track: string; start_date?: string }
 type DbError = { message: string; code?: string } | null
 
-function supabaseFake(opts: { tierRow: { id: string } | null; rows?: SubRow[]; insertError?: DbError; updateError?: DbError; selectError?: DbError }) {
+function supabaseFake(opts: {
+  tierRow: { id: string } | null
+  rows?: SubRow[]
+  insertError?: DbError
+  updateError?: DbError
+  selectError?: DbError
+  users?: Array<{ id: string; email: string; email_confirmed_at?: string | null }>
+  noviceError?: DbError
+}) {
+  const noviceInsert = vi.fn((_row: Record<string, unknown>) => ({
+    select: () => ({ single: async () => (opts.noviceError ? { data: null, error: opts.noviceError } : { data: { id: 'app_1' }, error: null }) }),
+  }))
+  const eventInsert = vi.fn((_row: Record<string, unknown>) => Promise.resolve({ error: null }))
   const rows = opts.rows ?? []
   const insert = vi.fn((_row: Record<string, unknown>) => Promise.resolve({ error: opts.insertError ?? null }))
   const updateWhere = vi.fn((_col: string, _val: string) => ({
@@ -176,15 +189,17 @@ function supabaseFake(opts: { tierRow: { id: string } | null; rows?: SubRow[]; i
     return q
   }
   const client = {
-    auth: { admin: { listUsers: async () => ({ data: { users: [{ id: 'user_qa', email: 'qa.buyer@example.com' }] }, error: null }) } },
+    auth: { admin: { listUsers: async () => ({ data: { users: opts.users ?? [{ id: 'user_qa', email: 'qa.buyer@example.com', email_confirmed_at: '2026-10-01T00:00:00Z' }] }, error: null }) } },
     from: (table: string) => {
       if (table === 'membership_tiers') return { select: tierSelect }
       // No upsert on purpose: the table has no unique key an upsert could use.
       if (table === 'member_subscriptions') return { select: subSelect, insert, update }
+      if (table === 'novice_applications') return { insert: noviceInsert }
+      if (table === 'novice_application_events') return { insert: eventInsert }
       throw new Error(`unexpected table ${table}`)
     },
   }
-  return { client, insert, update, updateWhere, tierSelect, tierEq }
+  return { client, insert, update, updateWhere, tierSelect, tierEq, noviceInsert, eventInsert }
 }
 
 const programmeOrder = {
@@ -200,11 +215,16 @@ const programmeOrder = {
 
 const membershipOrder = {
   ...programmeOrder,
-  items: [{ title: 'Silver', variant: { title: 'Membership', product: { title: 'Silver', metadata: { product_type: 'membership', tier: 'silver' }, categories: [] } } }],
+  items: [{ title: 'Akashic Practitioner', variant: { title: 'Annual', product: { title: 'Akashic Practitioner (Prdip) - Basic Membership', metadata: { product_type: 'membership', tier: 'S0216' }, categories: [] } } }],
 }
 
+const membershipItem = (tier: unknown) => ({
+  ...programmeOrder,
+  items: [{ title: 'Membership', variant: { title: 'Annual', product: { title: 'Membership', metadata: { product_type: 'membership', tier }, categories: [] } } }],
+})
+
 /** Loads the subscriber once against the fake; the returned function places orders on that same module (same tier id cache). */
-async function loadSubscriber(fake: ReturnType<typeof supabaseFake>) {
+async function loadSubscriber(fake: ReturnType<typeof supabaseFake>, activateMembership = vi.fn(async () => undefined)) {
   vi.doMock('@supabase/supabase-js', () => ({ createClient: vi.fn(() => fake.client) }))
   vi.stubEnv('SUPABASE_URL', 'http://supabase.test')
   vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'service-role-test')
@@ -215,7 +235,7 @@ async function loadSubscriber(fake: ReturnType<typeof supabaseFake>) {
       resolve: (key: string) => {
         if (key === 'query') return { graph: vi.fn(async () => ({ data: [{ ...structuredClone(placed), id: orderId }] })) }
         if (key === 'order') return { listOrders: vi.fn(async () => []) }
-        if (key === 'membershipsModule') return { activateMembership: vi.fn(async () => undefined) }
+        if (key === 'membershipsModule') return { activateMembership }
         throw new Error(`unexpected resolve ${key}`)
       },
     }
@@ -349,7 +369,7 @@ describe('order-placed membership row (user_id is not unique)', () => {
   it('inserts a new active row on the tier uuid looked up by the product tier slug when the user has no row on that tier', async () => {
     const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
     await placeProgrammeOrder(fake, membershipOrder)
-    expect(fake.tierEq).toHaveBeenCalledWith('slug', 'silver')
+    expect(fake.tierEq).toHaveBeenCalledWith('slug', 's0216')
     expect(fake.insert).toHaveBeenCalledTimes(1)
     const row = fake.insert.mock.calls[0][0]
     expect(row).toMatchObject({ user_id: 'user_qa', tier_id: SILVER_ID, status: 'active' })
@@ -396,5 +416,135 @@ describe('order-placed membership row (user_id is not unique)', () => {
     await place(membershipOrder, 'order_02')
     expect(alertKeys()).toEqual(['membership-sync', 'membership-sync'])
     expect(fake.tierEq).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe('order-placed membership levels (KI128, 20 Nov 2026)', () => {
+  let errorSpy: ReturnType<typeof vi.spyOn>
+  let posts: ReturnType<typeof vi.fn>
+  beforeEach(() => {
+    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    staffAlertSend.mockClear()
+    posts = vi.fn(async () => ({ ok: true, status: 200 }))
+    vi.stubGlobal('fetch', posts)
+    vi.stubEnv('N8N_WEBHOOK_SECRET', 'internal-secret')
+  })
+  afterEach(() => {
+    errorSpy.mockRestore()
+    vi.unstubAllGlobals()
+    vi.unstubAllEnvs()
+    vi.doUnmock('@supabase/supabase-js')
+  })
+
+  const emailCalls = (path: string) =>
+    posts.mock.calls.filter((c) => String(c[0]).endsWith(path)).map((c) => JSON.parse(String((c[1] as RequestInit).body)))
+
+  it('gives the bought level for 365 days with its access level, programme and SKU, then sends the welcome email', async () => {
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
+    const before = Date.now()
+    await placeProgrammeOrder(fake, membershipOrder)
+    const row = fake.insert.mock.calls[0][0] as Record<string, string | number>
+    expect(row).toMatchObject({ tier_id: SILVER_ID, status: 'active', access_level: 5, track: 'akashic', sku: 'S0216' })
+    const days = (Date.parse(String(row.end_date)) - Date.parse(String(row.start_date))) / 86_400_000
+    expect(days).toBe(365)
+    expect(row.annual_renewal_date).toBe(row.end_date)
+    expect(Date.parse(String(row.start_date))).toBeGreaterThanOrEqual(before)
+    expect(emailCalls('/api/email/membership-welcome')).toEqual([
+      { email: 'qa.buyer@example.com', firstName: null, sku: 'S0216', renewalDate: row.end_date },
+    ])
+  })
+
+  it('alerts staff and grants nothing when the product has no valid level (missing tier, old slug or Guest)', async () => {
+    for (const tier of [undefined, 'silver', 'S0211']) {
+      staffAlertSend.mockClear()
+      const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
+      await placeProgrammeOrder(fake, membershipItem(tier))
+      expect(fake.insert).not.toHaveBeenCalled()
+      expect(fake.noviceInsert).not.toHaveBeenCalled()
+      expect(alertKeys()).toEqual(['membership-level-unknown'])
+    }
+    expect(emailCalls('/api/email/membership-welcome')).toEqual([])
+  })
+
+  it('opens a Novice application and emails the upload list instead of giving access', async () => {
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
+    await placeProgrammeOrder(fake, membershipItem('S0227'))
+    expect(fake.insert).not.toHaveBeenCalled()
+    expect(fake.update).not.toHaveBeenCalled()
+    expect(fake.noviceInsert.mock.calls[0][0]).toEqual({
+      email: 'qa.buyer@example.com',
+      first_name: null,
+      user_id: 'user_qa',
+      sku: 'S0227',
+      medusa_order_id: 'order_01QA',
+      status: 'awaiting_documents',
+    })
+    expect(fake.eventInsert.mock.calls[0][0]).toMatchObject({ application_id: 'app_1', actor_type: 'system', action: 'created' })
+    expect(emailCalls('/api/email/novice-documents')).toEqual([{ email: 'qa.buyer@example.com', firstName: null, sku: 'S0227' }])
+    expect(emailCalls('/api/email/membership-welcome')).toEqual([])
+    expect(staffAlertSend).not.toHaveBeenCalled()
+  })
+
+  it('opens the Novice application for a buyer with no account yet (claimed later by email)', async () => {
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID }, users: [] })
+    await placeProgrammeOrder(fake, membershipItem('S0214'))
+    expect(fake.noviceInsert.mock.calls[0][0]).toMatchObject({ user_id: null, sku: 'S0214' })
+  })
+
+  it('sends nothing twice when the order event is replayed for a Novice order', async () => {
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID }, noviceError: { message: 'duplicate key', code: '23505' } })
+    await placeProgrammeOrder(fake, membershipItem('S0215'))
+    expect(emailCalls('/api/email/novice-documents')).toEqual([])
+    expect(staffAlertSend).not.toHaveBeenCalled()
+  })
+
+  it('alerts staff and sends no welcome email when the buyer has no portal account', async () => {
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID }, users: [] })
+    await placeProgrammeOrder(fake, membershipOrder)
+    expect(fake.insert).not.toHaveBeenCalled()
+    expect(alertKeys()).toEqual(['membership-no-account'])
+    expect(emailCalls('/api/email/membership-welcome')).toEqual([])
+  })
+
+  it('starts the year at the order time, and a replayed order event changes nothing and sends no second welcome', async () => {
+    const placedAt = '2026-11-20T08:15:00.000Z'
+    const fake = supabaseFake({
+      tierRow: { id: SILVER_ID },
+      rows: [{ id: 'sub_1', user_id: 'user_qa', tier_id: SILVER_ID, status: 'active', access_level: 5, track: 'akashic', start_date: placedAt }],
+    })
+    await placeProgrammeOrder(fake, { ...membershipOrder, created_at: placedAt })
+    expect(fake.update).not.toHaveBeenCalled()
+    expect(fake.insert).not.toHaveBeenCalled()
+    expect(emailCalls('/api/email/membership-welcome')).toEqual([])
+  })
+
+  it('uses the order time as the start of a new year', async () => {
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
+    await placeProgrammeOrder(fake, { ...membershipOrder, created_at: '2026-11-20T08:15:00.000Z' })
+    expect(fake.insert.mock.calls[0]?.[0]).toMatchObject({ start_date: '2026-11-20T08:15:00.000Z', end_date: '2027-11-20T08:15:00.000Z' })
+  })
+
+  it('still gives portal access and alerts staff when the store membership record fails', async () => {
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
+    const place = await loadSubscriber(fake, vi.fn(async () => { throw new Error('db down') }))
+    await place(membershipOrder)
+    expect(fake.insert).toHaveBeenCalledTimes(1)
+    expect(alertKeys()).toEqual(['membership-module'])
+    expect(emailCalls('/api/email/membership-welcome')).toHaveLength(1)
+  })
+
+  it('never gives a level to an account that has not confirmed the order email', async () => {
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID }, users: [{ id: 'user_squatter', email: 'qa.buyer@example.com', email_confirmed_at: null }] })
+    await placeProgrammeOrder(fake, membershipOrder)
+    expect(fake.insert).not.toHaveBeenCalled()
+    expect(alertKeys()).toEqual(['membership-no-account'])
+  })
+
+  it('alerts staff when one order holds two membership lines', async () => {
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
+    const two = { ...membershipOrder, items: [...membershipOrder.items, ...membershipItem('S0226').items] }
+    await placeProgrammeOrder(fake, two)
+    expect(alertKeys()).toEqual(['membership-multiple'])
+    expect(fake.insert).toHaveBeenCalledTimes(1)
   })
 })

@@ -1,4 +1,5 @@
 import { fetchWithRetry, IntegrationError, type FetchLike } from './http'
+import { isMembershipHandle } from './memberships'
 import { isDryRun, type Logger } from './dry-run'
 import { saleStatusOf } from './saleStatus'
 
@@ -103,8 +104,9 @@ export function productToSearchDoc(p: SearchProductInput): ProductSearchDoc {
   }
 }
 
+/** Published, and not a membership: memberships are sold only from /portal/upgrade (KI129). */
 export function isSearchable(p: SearchProductInput | null | undefined): p is SearchProductInput {
-  return !!p && p.status === 'published'
+  return !!p && p.status === 'published' && !isMembershipHandle(p.handle)
 }
 
 export type MeiliClientOptions = {

@@ -121,3 +121,21 @@ export {
 } from './meili'
 export { SALE_STATUS_KEY, SALE_STATUSES, saleStatusOf, isForSale, notForSaleMessage, type SaleStatus } from './saleStatus'
 export { sendSentryEvent, parseSentryDsn, type SentryEvent, type SentryLevel, type SentryOutcome } from './sentry'
+export {
+  MEMBERSHIP_LEVELS,
+  MEMBERSHIP_TERM_DAYS,
+  membershipBySku,
+  membershipHandle,
+  isMembershipHandle,
+  membershipTierSlug,
+  isNoviceLevel,
+  isSellableLevel,
+  membershipTermEnd,
+  membershipAccessFields,
+  membershipProgrammeName,
+  type MembershipLevel,
+  type MembershipLevelKey,
+  type MembershipProgramme,
+  type MembershipTierType,
+  type MembershipAccessFields,
+} from './memberships'

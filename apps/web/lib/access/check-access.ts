@@ -15,6 +15,8 @@ export async function getMemberTier(supabase: SupabaseClient): Promise<TierSlug>
     .select('membership_tiers(slug)')
     .eq('user_id', user.id)
     .eq('status', 'active')
+    // A year past its end counts for nothing, whether or not a job has marked it expired yet (KI128).
+    .or(`end_date.is.null,end_date.gt.${new Date().toISOString()}`)
     .order('start_date', { ascending: false })
     .limit(1)
     .maybeSingle()
@@ -61,6 +63,11 @@ export async function getMemberAccessLevel(supabase: SupabaseClient): Promise<Me
     .select('access_level, track, sku, annual_renewal_date')
     .eq('user_id', user.id)
     .eq('status', 'active')
+    // A year past its end counts for nothing, whether or not a job has marked it expired yet (KI128).
+    .or(`end_date.is.null,end_date.gt.${new Date().toISOString()}`)
+    // A member can hold several levels (a base row, an Akashic and an Energy
+    // Alignment & Optimisation level): the highest one counts (KI128).
+    .order('access_level', { ascending: false })
     .order('start_date', { ascending: false })
     .limit(1)
     .maybeSingle()

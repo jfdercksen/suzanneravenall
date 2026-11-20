@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { cookies, headers } from 'next/headers'
+import { MEMBERSHIP_TIERS } from '@/lib/access/tiers'
 import { ShopCatalogueContent } from '@/components/shop/ShopCatalogueContent'
 import { ipCountry } from '@/lib/geoip'
 import { fetchAddOnProducts } from '@/lib/shop/addons'
@@ -58,7 +59,17 @@ async function fetchCatalogueCount(): Promise<number | null> {
     })
     if (!res.ok) return null
     const data = (await res.json()) as { count?: unknown }
-    return typeof data.count === 'number' ? data.count : null
+    if (typeof data.count !== 'number') return null
+    // The list leaves memberships out (KI129), so the hero count does too.
+    const memberships = new URLSearchParams({ limit: '1', fields: 'id' })
+    for (const t of MEMBERSHIP_TIERS) memberships.append('handle[]', t.handle)
+    const mres = await fetch(`${medusaUrl}/store/products?${memberships.toString()}`, {
+      headers: { 'x-publishable-api-key': pubKey },
+      cache: 'no-store',
+    })
+    if (!mres.ok) return null
+    const mdata = (await mres.json()) as { count?: unknown }
+    return typeof mdata.count === 'number' ? Math.max(0, data.count - mdata.count) : null
   } catch {
     return null
   }

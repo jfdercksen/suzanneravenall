@@ -32,7 +32,7 @@ const TOKEN_PARAM_PATTERN = /[?&](token|email)=/i
 // the booking link /book/<token>, the staff link /staff/booking/<token>, the
 // staff submission pages /staff/submissions/<type>/<id>?q=<name or email>): the
 // token is replaced, whatever follows it is dropped. The bare /book page (the book) carries none and is left alone.
-const TOKEN_PATH_PATTERN = /^([a-z][a-z0-9+.-]*:\/\/[^/]*)?\/(intake|book|staff\/booking|staff\/submissions)\/[^?#]+/i
+const TOKEN_PATH_PATTERN = /^([a-z][a-z0-9+.-]*:\/\/[^/]*)?\/(intake|book|staff\/booking|staff\/submissions|staff\/novice)\/[^?#]+/i
 
 // Returns the URL with its query string and fragment removed when it belongs
 // to a private page or carries a token param; otherwise returns it unchanged.

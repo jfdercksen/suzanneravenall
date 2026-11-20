@@ -4,6 +4,7 @@ import { pathways } from '@/data/pathways'
 import { allPrivateSessions } from '@/data/privateSessions'
 import { PROGRAMS } from '@/data/programs'
 import { CERTIFICATION_PATHWAYS, pathwayHref } from '@/data/certificationPathways'
+import { isMembershipProductHandle } from '@/lib/access/tiers'
 
 // Built per request: Medusa is not reachable while the image builds, so a
 // prerendered sitemap would ship without the shop products.
@@ -39,7 +40,8 @@ async function fetchProducts(): Promise<ProductEntry[]> {
       }
       const page = Array.isArray(data.products) ? data.products : []
       for (const p of page) {
-        if (p.handle) products.push({ handle: p.handle, updatedAt: p.updated_at || undefined })
+        // Memberships are sold from /portal/upgrade only, never listed (KI129).
+        if (p.handle && !isMembershipProductHandle(p.handle)) products.push({ handle: p.handle, updatedAt: p.updated_at || undefined })
       }
       if (page.length < 100 || products.length >= (data.count ?? 0)) break
     }

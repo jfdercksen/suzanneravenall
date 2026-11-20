@@ -7,11 +7,13 @@
  */
 
 import { MedusaService } from "@medusajs/framework/utils"
+import { MEMBERSHIP_TERM_DAYS } from "@suzanne/integrations"
 import { InferEntityType } from "@medusajs/types"
 import MembershipSubscription from "./models/membership-subscription"
 
 const FREE_TIER = "free"
-const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
+// A paid membership runs a year (KI128, Johan 20 Nov 2026); tier_id holds the level SKU.
+const DAY_MS = 24 * 60 * 60 * 1000
 
 type MembershipRecord = InferEntityType<typeof MembershipSubscription>
 
@@ -21,18 +23,20 @@ class MembershipsModuleService extends MedusaService({
   /**
    * Creates or updates the membership record for a customer.
    * Free-tier subscriptions never expire (expires_at = null).
-   * Paid-tier subscriptions expire in 30 days from activation.
+   * Paid-tier subscriptions expire 365 days from activation.
    */
   async activateMembership(
     customerId: string,
     tier: string,
     orderId: string,
-    supabaseUserId?: string
+    supabaseUserId?: string,
+    /** When the paid term ends; order-placed passes 365 days from payment (KI128). */
+    expiresAtOverride?: Date
   ): Promise<MembershipRecord> {
     const expiresAt =
       tier === FREE_TIER
         ? null
-        : new Date(Date.now() + THIRTY_DAYS_MS)
+        : expiresAtOverride ?? new Date(Date.now() + MEMBERSHIP_TERM_DAYS * DAY_MS)
 
     const existing = await this.listMembershipSubscriptions({
       customer_id: customerId,

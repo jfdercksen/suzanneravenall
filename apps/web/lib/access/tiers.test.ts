@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   isDirectlyBuyable,
+  startsOnApproval,
   memberTierName,
   MEMBERSHIP_TIERS,
   hasAccess,
@@ -179,10 +180,11 @@ describe('upgradeHref (site check M15)', () => {
 
 // KI071 switch-on (19 Nov 2026): Guest and Novice are never sold from /portal/upgrade (KI114).
 describe('isDirectlyBuyable', () => {
-  it('leaves out Guest and the four Novice tiers, and nothing else', () => {
+  it('leaves out Guest only; Novice is bought and starts on approval (Suzanne, 19 Nov)', () => {
     const notBuyable = MEMBERSHIP_TIERS.filter((t) => !isDirectlyBuyable(t)).map((t) => t.sku)
-    expect(notBuyable).toEqual(['S0211', 'S0214', 'S0215', 'S0227', 'S0228'])
-    expect(MEMBERSHIP_TIERS.filter(isDirectlyBuyable)).toHaveLength(24)
+    expect(notBuyable).toEqual(['S0211'])
+    expect(MEMBERSHIP_TIERS.filter(isDirectlyBuyable)).toHaveLength(28)
+    expect(MEMBERSHIP_TIERS.filter(startsOnApproval).map((t) => t.sku)).toEqual(['S0214', 'S0215', 'S0227', 'S0228'])
   })
 })
 
@@ -195,5 +197,25 @@ describe('memberTierName', () => {
 
   it('keeps the stored name of any other tier', () => {
     expect(memberTierName({ name: 'Lifestyle Membership', slug: 'lifestyle' })).toBe('Lifestyle Membership')
+  })
+})
+
+// One catalogue (KI128): the site's tiers must equal packages/integrations memberships.ts,
+// which the store's order flow and scripts read.
+describe('MEMBERSHIP_TIERS against the shared catalogue', () => {
+  it('has the same SKU, title, programme, level, access level and prices for all 29', async () => {
+    const { MEMBERSHIP_LEVELS } = await import('@suzanne/integrations')
+    expect(MEMBERSHIP_TIERS.map((t) => [t.sku, t.title, t.track, t.level, t.tierType, t.accessLevel, t.zarPrice, t.usdPrice, t.annual])).toEqual(
+      MEMBERSHIP_LEVELS.map((l) => [l.sku, l.title, l.programme, l.level, l.tierType, l.accessLevel, l.zar, l.usd, l.annual]),
+    )
+  })
+})
+
+describe('isMembershipProductHandle (KI129)', () => {
+  it('matches the 29 membership handles only', async () => {
+    const { isMembershipProductHandle } = await import('./tiers')
+    expect(MEMBERSHIP_TIERS.every((t) => isMembershipProductHandle(t.handle))).toBe(true)
+    expect(isMembershipProductHandle('getting-unstuck')).toBe(false)
+    expect(isMembershipProductHandle(undefined)).toBe(false)
   })
 })

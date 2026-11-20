@@ -182,8 +182,10 @@ export const MEMBERSHIP_TIERS: MembershipTier[] = [
  * Resonance Repatterning is not covered by those documents, so no Novice rule
  * is stated for it (KI118). The levels above Novice keep "requires training".
  *
- * Nothing checks the prerequisites or the observation yet (KI114), so a Novice
- * membership is never offered for sale: see isDirectlyBuyable.
+ * Novice is bought, then checked (Suzanne, 19 Nov 2026): the member pays, the
+ * site emails what to upload, they upload it at /portal/novice, the team
+ * approves it at /staff/novice, and only then does Novice access start
+ * (lib/novice/applications.ts). See isDirectlyBuyable.
  */
 export type JoiningRequirement = 'none' | 'novice-prerequisites' | 'training'
 
@@ -194,14 +196,18 @@ export function joiningRequirement(tier: MembershipTier): JoiningRequirement {
 }
 
 /**
- * May this tier be bought straight from /portal/upgrade? Not Guest (the free
- * base level every member already has) and not Novice: the Certification &
- * Quality Assurance team confirms a Novice, and no sign-off gate exists yet
- * (KI114). Even when its store product is published, a Novice card gets no
- * Upgrade Now link (KI071 switch-on, 19 Nov 2026).
+ * May this tier be bought from /portal/upgrade? Every level but Guest, the
+ * free base level every member already has. Novice is bought too (Suzanne,
+ * 19 Nov 2026), but its access starts only when the team approves the
+ * member's documents (startsOnApproval).
  */
 export function isDirectlyBuyable(tier: MembershipTier): boolean {
-  return tier.level !== 'guest' && joiningRequirement(tier) !== 'novice-prerequisites'
+  return tier.level !== 'guest'
+}
+
+/** Novice access starts on the team's approval, not on payment. */
+export function startsOnApproval(tier: MembershipTier): boolean {
+  return joiningRequirement(tier) === 'novice-prerequisites'
 }
 
 /** The member's tier name for display: the free base row reads as the store's Guest Membership (KI072). */
@@ -262,4 +268,16 @@ export function tierBySku(sku: string): MembershipTier | undefined {
 
 export function tierByHandle(handle: string): MembershipTier | undefined {
   return MEMBERSHIP_TIERS.find((t) => t.handle === handle)
+}
+
+const MEMBERSHIP_PRODUCT_HANDLES = new Set(MEMBERSHIP_TIERS.map((t) => t.handle))
+
+/**
+ * Is this store handle a membership product? Memberships are sold only from
+ * /portal/upgrade (KI129, Johan 20 Nov 2026): the shop listing, its count,
+ * search and the sitemap leave them out even when published, and their
+ * product page (the Upgrade Now target) is not indexed. Client-safe.
+ */
+export function isMembershipProductHandle(handle: string | null | undefined): boolean {
+  return typeof handle === 'string' && MEMBERSHIP_PRODUCT_HANDLES.has(handle)
 }

@@ -1,38 +1,27 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { createHash, timingSafeEqual } from 'crypto'
 import { z } from 'zod'
-import { sendMembershipWelcomeEmail } from '@/lib/email/membership-welcome'
-import { tierLabel } from '@/lib/access/tiers'
+import { isNoviceLevel, isSellableLevel, membershipBySku, membershipProgrammeName } from '@suzanne/integrations'
+import { formatRenewalDate, sendMembershipWelcomeEmail } from '@/lib/email/membership-welcome'
+import { siteUrl } from '@/lib/email/site-url'
+import { rejectUnlessInternal } from '@/lib/intake/internal-auth'
 import { logError } from '@/lib/log'
 
+/**
+ * POST /api/email/membership-welcome (Medusa order-placed only): the welcome
+ * email when a paid level starts (KI128). Body: the member's email and first
+ * name, the level's SKU and the end of the year. A Novice's welcome is sent
+ * by the staff approval instead, so a Novice SKU is refused here.
+ */
 const bodySchema = z.object({
   email: z.string().email(),
   firstName: z.string().max(100).nullable().optional(),
-  tier: z.enum(['free', 'silver', 'gold', 'practitioner']),
+  sku: z.string().regex(/^S0\d{3}$/i),
+  renewalDate: z.string().datetime(),
 })
 
-// Hash both values to equal-length digests before comparing so that the
-// timingSafeEqual call cannot leak the length of the expected secret.
-function secretsMatch(a: string, b: string): boolean {
-  try {
-    const hashA = createHash('sha256').update(a).digest()
-    const hashB = createHash('sha256').update(b).digest()
-    return timingSafeEqual(hashA, hashB)
-  } catch {
-    return false
-  }
-}
-
 export async function POST(request: NextRequest) {
-  const webhookSecret = process.env.N8N_WEBHOOK_SECRET
-  if (!webhookSecret) {
-    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
-  }
-
-  const incomingSecret = request.headers.get('x-webhook-secret') ?? ''
-  if (!secretsMatch(incomingSecret, webhookSecret)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const rejected = rejectUnlessInternal(request)
+  if (rejected) return rejected
 
   let body: unknown
   try {
@@ -42,22 +31,22 @@ export async function POST(request: NextRequest) {
   }
 
   const parsed = bodySchema.safeParse(body)
-  if (!parsed.success) {
-    return NextResponse.json({ error: 'Invalid request body', details: parsed.error.flatten() }, { status: 422 })
-  }
+  if (!parsed.success) return NextResponse.json({ error: 'Invalid request body' }, { status: 422 })
 
-  const { email, firstName, tier } = parsed.data
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://suzanneravenall.com'
+  const level = membershipBySku(parsed.data.sku)
+  if (!level || !isSellableLevel(level) || isNoviceLevel(level)) {
+    return NextResponse.json({ error: 'Not a paid level' }, { status: 422 })
+  }
 
   try {
     const emailId = await sendMembershipWelcomeEmail({
-      email,
-      firstName: firstName ?? null,
-      tier,
-      tierLabel: tierLabel(tier),
-      siteUrl,
+      email: parsed.data.email,
+      firstName: parsed.data.firstName ?? null,
+      levelTitle: level.title,
+      programmeName: membershipProgrammeName(level),
+      renewalDate: formatRenewalDate(parsed.data.renewalDate),
+      siteUrl: siteUrl(),
     })
-
     return NextResponse.json({ emailId })
   } catch (err: unknown) {
     logError('[membership-welcome] Failed to send email:', err)

@@ -55,6 +55,7 @@ export default async function UpgradePage({
       .select('membership_tiers(name, slug)')
       .eq('user_id', user.id)
       .eq('status', 'active')
+      .order('access_level', { ascending: false })
       .order('start_date', { ascending: false })
       .limit(1)
       .maybeSingle()

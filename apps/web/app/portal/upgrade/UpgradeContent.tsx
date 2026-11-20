@@ -6,6 +6,7 @@ import { RichText } from '@/components/shared/RichText'
 import {
   isDirectlyBuyable,
   joiningLabel,
+  startsOnApproval,
   joiningRequirement,
   MEMBERSHIP_JOINING_RULE,
   MEMBERSHIP_TIERS,
@@ -99,11 +100,11 @@ function TierCard({ tier, isCurrentTier, isUpgrade, isAvailable }: TierCardProps
         </p>
       )}
 
-      {/* Novice is confirmed by the Certification & Quality Assurance team, never bought here (KI114). */}
-      {isUpgrade && joiningRequirement(tier) === 'novice-prerequisites' && (
-        <div className="mt-auto w-full text-center py-2.5 px-4 bg-white/10 text-white/70 font-semibold text-xs uppercase tracking-widest rounded-xl cursor-default">
-          Confirmed by the team
-        </div>
+      {/* Novice is bought, then the team approves the member's documents (Suzanne, 19 Nov 2026). */}
+      {isUpgrade && startsOnApproval(tier) && (
+        <p className="text-xs text-white/70 leading-relaxed mb-4">
+          After you pay, upload your documents in your portal. Your Novice access starts once your team approves them.
+        </p>
       )}
       {isUpgrade && isDirectlyBuyable(tier) && isAvailable && (
         <Link

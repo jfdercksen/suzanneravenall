@@ -186,6 +186,8 @@ Docs: https://developers.cloudflare.com/agents/
 | `/portal/community` | `app/portal/community/page.tsx` | Discourse forum embed |
 | `/programs/certification/[modality]` | `app/programs/certification/[modality]/page.tsx` | Career & Certification Pathway per modality (rapid-repatterning, energy-alignment-optimisation, akashic-navigation), from Suzanne's 12 Nov documents |
 | `/intake/[token]` | `app/intake/[token]/page.tsx` | Client intake form after a private-session purchase (personal link, form from the CMS) |
+| `/portal/novice` | `app/portal/novice/page.tsx` | Member uploads Novice documents and sends them to the team (access starts on approval) |
+| `/staff/novice` and `/staff/novice/[id]` | `app/staff/novice/page.tsx`, `[id]/page.tsx` | Team reviews and approves Novice applications (Staff role, every view and decision logged) |
 | `/staff/submissions/[type]` and `/[type]/[id]` | `app/staff/submissions/[type]/page.tsx`, `[id]/page.tsx` | Read-only quiz and intake answers for staff (Payload login, Staff role only, every view logged), KI125 |
 
 ---

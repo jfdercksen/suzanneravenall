@@ -12,7 +12,7 @@ import ContactAcknowledgement from './ContactAcknowledgement'
 import LeadWelcome from './LeadWelcome'
 import { LEAD_WELCOME_CONTENT } from '../lead-welcome-content'
 import OrderConfirmation from '../../../emails/OrderConfirmation'
-import type { CartEmailProps, LeadWelcomeSource, MembershipEmailProps } from '../types'
+import type { CartEmailProps, LeadWelcomeSource, MembershipEmailProps, MembershipWelcomeProps } from '../types'
 
 /**
  * Render smoke tests for the POPIA footer requirements:
@@ -45,6 +45,16 @@ const membershipProps: MembershipEmailProps = {
   unsubscribeUrl: UNSUB_URL,
 }
 
+const welcomeProps: MembershipWelcomeProps = {
+  email: 'member@example.com',
+  firstName: 'Alice',
+  levelTitle: 'Lifestyle Membership',
+  programmeName: null,
+  renewalDate: '20 November 2027',
+  siteUrl: 'https://suzanneravenall.com',
+  unsubscribeUrl: UNSUB_URL,
+}
+
 describe('email template rendering (POPIA footer)', () => {
   beforeEach(() => {
     vi.stubEnv('COMPANY_PHYSICAL_ADDRESS', ADDRESS)
@@ -58,7 +68,7 @@ describe('email template rendering (POPIA footer)', () => {
     ['CartAbandonment1', () => renderToStaticMarkup(createElement(CartAbandonment1, cartProps))],
     ['CartAbandonment2', () => renderToStaticMarkup(createElement(CartAbandonment2, cartProps))],
     ['CartAbandonment3', () => renderToStaticMarkup(createElement(CartAbandonment3, cartProps))],
-    ['MembershipWelcome', () => renderToStaticMarkup(createElement(MembershipWelcome, membershipProps))],
+    ['MembershipWelcome', () => renderToStaticMarkup(createElement(MembershipWelcome, welcomeProps))],
     ['MembershipRenewalReminder', () => renderToStaticMarkup(createElement(MembershipRenewalReminder, membershipProps))],
     ['MembershipExpired', () => renderToStaticMarkup(createElement(MembershipExpired, membershipProps))],
   ]

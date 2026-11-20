@@ -2,16 +2,21 @@ import { createElement } from 'react'
 import { sendEmail } from './send'
 import MembershipWelcome from './templates/MembershipWelcome'
 import { buildListUnsubscribeHeaders, buildUnsubscribeUrl } from './unsubscribe'
-import type { MembershipEmailData } from './types'
+import type { MembershipWelcomeData } from './types'
 
-export type { MembershipEmailData }
+export type { MembershipWelcomeData }
 
 const REPLY_TO = 'sravenall@suzanneravenall.com'
 
-export async function sendMembershipWelcomeEmail(data: MembershipEmailData): Promise<string> {
+/** "20 November 2027" in South African time, the way the member reads a date. */
+export function formatRenewalDate(iso: string): string {
+  return new Intl.DateTimeFormat('en-ZA', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Africa/Johannesburg' }).format(new Date(iso))
+}
+
+export async function sendMembershipWelcomeEmail(data: MembershipWelcomeData): Promise<string> {
   const subject = data.firstName
-    ? `Welcome to your ${data.tierLabel} membership, ${data.firstName}!`
-    : `Welcome to your ${data.tierLabel} membership!`
+    ? `${data.firstName}, your ${data.levelTitle} is active`
+    : `Your ${data.levelTitle} is active`
 
   return sendEmail({
     to: [data.email],

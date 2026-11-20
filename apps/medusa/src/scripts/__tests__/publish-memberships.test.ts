@@ -32,16 +32,18 @@ function seeded(handle: string, overrides: Partial<MembershipRow> = {}): Members
   }
 }
 
-const ready = (handle: string) => seeded(handle, { metadata: { product_type: 'membership', tier: 'silver' }, description: 'About it' })
+const skuOf = (handle: string) => handle.replace('membership-', '').toUpperCase()
+const ready = (handle: string) => seeded(handle, { metadata: { product_type: 'membership', tier: skuOf(handle) }, description: 'About it' })
 
 describe('membership publish plan (KI071 switch-on)', () => {
-  it('covers 24 tiers and holds back Guest and the four Novice tiers (KI114)', () => {
-    expect(PUBLISH_TIERS).toHaveLength(24)
-    expect(Object.keys(HELD_BACK).sort()).toEqual(['membership-s0211', 'membership-s0214', 'membership-s0215', 'membership-s0227', 'membership-s0228'])
+  it('covers the 28 sellable levels, Novice included, and holds back Guest only', () => {
+    expect(PUBLISH_TIERS).toHaveLength(28)
+    expect(PUBLISH_TIERS.map((t) => t.sku)).toEqual(expect.arrayContaining(['S0214', 'S0215', 'S0227', 'S0228']))
+    expect(Object.keys(HELD_BACK)).toEqual(['membership-s0211'])
     for (const handle of Object.keys(HELD_BACK)) expect(PUBLISH_TIERS.some((t) => t.handle === handle)).toBe(false)
   })
 
-  it('gives every tier exactly the title and price in apps/web/lib/access/tiers.ts', () => {
+  it('gives every level exactly the title and price in apps/web/lib/access/tiers.ts', () => {
     const tiers = readFileSync(join(__dirname, '../../../../web/lib/access/tiers.ts'), 'utf8')
     for (const spec of PUBLISH_TIERS) {
       const line = tiers.split('\n').find((l) => l.includes(`sku: '${spec.sku}'`)) ?? ''
@@ -52,12 +54,22 @@ describe('membership publish plan (KI071 switch-on)', () => {
     }
   })
 
-  it('blocks a seeded tier: no metadata.tier means a paid order activates nothing (KI128)', () => {
+  it('writes metadata.tier = the SKU on a seeded product, keeping its other metadata (KI128)', () => {
     const plan = planPublish([seeded('membership-s0212')], SC)
     const s0212 = plan.tiers.find((p) => p.spec.sku === 'S0212')!
-    expect(s0212.blockers.join(' ')).toMatch(/metadata\.tier missing/)
-    expect(s0212.update).toEqual({ status: 'published', sales_channels: [{ id: SC }] })
-    expect(plan.ready).toBe(false)
+    expect(s0212.blockers).toEqual([])
+    expect(s0212.update).toEqual({
+      status: 'published',
+      sales_channels: [{ id: SC }],
+      metadata: { product_type: 'membership', sku: 'S0212', tier: 'S0212' },
+    })
+  })
+
+  it('blocks a level that is set to something else, and never overwrites it', () => {
+    const row = seeded('membership-s0216', { metadata: { product_type: 'membership', tier: 'silver' } })
+    const p = planPublish([row], SC).tiers.find((x) => x.spec.sku === 'S0216')!
+    expect(p.blockers.join(' ')).toMatch(/metadata\.tier is "silver", not S0216/)
+    expect(p.update?.metadata).toBeUndefined()
   })
 
   it('blocks an old "Energy Clearing" title and a wrong rand price', () => {
@@ -71,7 +83,7 @@ describe('membership publish plan (KI071 switch-on)', () => {
   })
 
   it('reads prices in cents, warns on an empty description, keeps existing channels', () => {
-    const row = seeded('membership-s0213', { metadata: { product_type: 'membership', tier: 'silver' }, sales_channels: [{ id: 'sc_other' }] })
+    const row = seeded('membership-s0213', { metadata: { product_type: 'membership', tier: 'S0213' }, sales_channels: [{ id: 'sc_other' }] })
     const p = planPublish([row], SC).tiers.find((x) => x.spec.sku === 'S0213')!
     expect(p.blockers).toEqual([])
     expect(p.warnings).toEqual(['no description: the shop page shows the title and price only'])
@@ -98,9 +110,9 @@ describe('membership publish plan (KI071 switch-on)', () => {
   })
 
   it('reports a missing product and a held-back product that is published', () => {
-    const plan = planPublish([seeded('membership-s0214', { status: 'published' })], SC)
+    const plan = planPublish([seeded('membership-s0211', { status: 'published' })], SC)
     expect(plan.tiers.every((p) => p.blockers.includes('product missing from the store'))).toBe(true)
-    expect(plan.heldBackPublished).toEqual(['membership-s0214'])
+    expect(plan.heldBackPublished).toEqual(['membership-s0211'])
   })
 })
 
@@ -127,51 +139,69 @@ describe('publish-memberships-2026-11-19', () => {
     process.exitCode = undefined
   })
 
-  it('writes nothing on a dry run and exits 1 on the seeded box state', async () => {
+  it('writes nothing on a dry run, and plans status, channel and level for every seeded product', async () => {
     await exec(PUBLISH_TIERS.map((t) => seeded(t.handle)))
     expect(runs.products).toHaveLength(0)
     expect(logs.join('\n')).toMatch(/DRY RUN/)
-    expect(logs.filter((l) => l.includes('BLOCKER metadata.tier missing'))).toHaveLength(24)
-    expect(process.exitCode).toBe(1)
+    expect(logs.filter((l) => l.includes('status + metadata + sales_channels'))).toHaveLength(28)
+    expect(process.exitCode).toBeUndefined()
   })
 
   it('refuses to apply while a blocker stands', async () => {
     vi.stubEnv('DRY_RUN', 'false')
-    await exec(PUBLISH_TIERS.map((t) => seeded(t.handle)))
+    const rows = PUBLISH_TIERS.map((t) => seeded(t.handle))
+    rows[3] = seeded(PUBLISH_TIERS[3]!.handle, { metadata: { product_type: 'membership', tier: 'gold' } })
+    await exec(rows)
     expect(runs.products).toHaveLength(0)
     expect(logs.join('\n')).toMatch(/REFUSED/)
-  })
-
-  it('applies all 24 by id once every tier is ready, and never touches a held-back product', async () => {
-    vi.stubEnv('DRY_RUN', 'false')
-    await exec([...PUBLISH_TIERS.map((t) => ready(t.handle)), seeded('membership-s0214')])
-    expect(runs.products).toHaveLength(24)
-    expect(runs.products[0]).toEqual({ input: { selector: { id: 'prod_membership-s0212' }, update: { status: 'published', sales_channels: [{ id: SC }] } } })
-    expect(JSON.stringify(runs.products)).not.toMatch(/s0214|s0211|s0215|s0227|s0228/)
-    expect(process.exitCode).toBeUndefined()
-  })
-
-  it('refuses to apply while a held-back product is published, even when the 24 are ready', async () => {
-    vi.stubEnv('DRY_RUN', 'false')
-    await exec([...PUBLISH_TIERS.map((t) => ready(t.handle)), seeded('membership-s0227', { status: 'published' })])
-    expect(runs.products).toHaveLength(0)
-    expect(logs.join('\n')).toMatch(/membership-s0227 is published although it is held back/)
     expect(process.exitCode).toBe(1)
   })
 
-  it('ONLY publishes one tier for the proof purchase, judged on that tier alone', async () => {
+  it('applies all 28 by id, Novice included, sets the level, and never touches Guest', async () => {
+    vi.stubEnv('DRY_RUN', 'false')
+    await exec([...PUBLISH_TIERS.map((t) => seeded(t.handle)), seeded('membership-s0211')])
+    expect(runs.products).toHaveLength(28)
+    expect(runs.products[0]).toEqual({
+      input: {
+        selector: { id: 'prod_membership-s0212' },
+        update: { status: 'published', sales_channels: [{ id: SC }], metadata: { product_type: 'membership', sku: 'S0212', tier: 'S0212' } },
+      },
+    })
+    expect(JSON.stringify(runs.products)).toMatch(/membership-s0227/)
+    expect(JSON.stringify(runs.products)).not.toMatch(/s0211/)
+    expect(process.exitCode).toBeUndefined()
+  })
+
+  it('plans nothing on a second run once every level is published, linked and set', async () => {
+    vi.stubEnv('DRY_RUN', 'false')
+    await exec(PUBLISH_TIERS.map((t) => ({ ...ready(t.handle), status: 'published', sales_channels: [{ id: SC }] })))
+    expect(runs.products).toHaveLength(0)
+    expect(logs.join('\n')).toMatch(/0 product\(s\) published or linked/)
+  })
+
+  it('refuses to apply while Guest is published', async () => {
+    vi.stubEnv('DRY_RUN', 'false')
+    await exec([...PUBLISH_TIERS.map((t) => ready(t.handle)), seeded('membership-s0211', { status: 'published' })])
+    expect(runs.products).toHaveLength(0)
+    expect(logs.join('\n')).toMatch(/membership-s0211 is published although it is held back/)
+    expect(process.exitCode).toBe(1)
+  })
+
+  it('ONLY publishes one level for the proof purchase, judged on that level alone', async () => {
     vi.stubEnv('DRY_RUN', 'false')
     vi.stubEnv('ONLY', 'membership-s0212')
-    await exec([ready('membership-s0212'), ...PUBLISH_TIERS.slice(1).map((t) => seeded(t.handle))])
+    const rows = PUBLISH_TIERS.map((t) => seeded(t.handle))
+    rows[5] = seeded(PUBLISH_TIERS[5]!.handle, { metadata: { tier: 'gold' } })
+    await exec(rows)
     expect(runs.products).toHaveLength(1)
   })
 
-  it('refuses ONLY for a held-back tier', async () => {
+  it('refuses ONLY for Guest', async () => {
     vi.stubEnv('DRY_RUN', 'false')
-    vi.stubEnv('ONLY', 'membership-s0214')
+    vi.stubEnv('ONLY', 'membership-s0211')
     await exec([ready('membership-s0212')])
     expect(runs.products).toHaveLength(0)
-    expect(logs.join('\n')).toMatch(/not one of the 24 buyable tiers \(Novice/)
+    expect(logs.join('\n')).toMatch(/not one of the 28 sellable levels \(Guest/)
     expect(process.exitCode).toBe(1)
   })
 })

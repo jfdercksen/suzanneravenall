@@ -11,12 +11,13 @@
  *   One tier only, for the proof purchase (same rules, that tier's blockers only):
  *     docker compose exec -e DRY_RUN=false -e ONLY=membership-s0212 medusa npx medusa exec ./src/scripts/publish-memberships-2026-11-19.ts
  *
- * Publishes the 24 directly buyable tiers and adds each to the store's default
- * sales channel (the publishable key's channel, so the store API returns it and
- * /portal/upgrade shows Upgrade Now). Guest and the four Novice tiers are never
- * published (lib/membership-publish-plan.ts HELD_BACK, KI114). Nothing else is
- * written: no title, price, description or metadata. To undo: set the product
- * back to draft in the admin (the dry-run output lists every id).
+ * Publishes the 28 sellable levels (Novice included, KI114 as decided on 19
+ * Nov), adds each to the store's default sales channel (the publishable key's
+ * channel, so the store API returns it and /portal/upgrade shows Upgrade Now)
+ * and sets metadata.tier = the SKU where it is missing, merged into the other
+ * metadata (KI128). Guest is never published. No title, price or description
+ * is written. To undo: set the product back to draft in the admin (the dry-run
+ * output lists every id); metadata.tier can stay.
  *
  * Idempotent: a second run plans nothing. Exits non-zero when a blocker is
  * found, so a partial run is never silent.
@@ -58,7 +59,7 @@ export default async function publishMemberships({ container }: ExecArgs): Promi
 
   log(dryRun ? "DRY RUN: nothing is written (DRY_RUN=false to apply)" : "APPLYING")
   if (only && !PUBLISH_TIERS.some((t) => t.handle === only)) {
-    log(`ONLY=${only} is not one of the 24 buyable tiers${HELD_BACK[only] ? ` (${HELD_BACK[only]})` : ""}`)
+    log(`ONLY=${only} is not one of the 28 sellable levels${HELD_BACK[only] ? ` (${HELD_BACK[only]})` : ""}`)
     process.exitCode = 1
     return
   }

@@ -35,6 +35,8 @@ const guest = {
   fromLabel: null,
 }
 
+const NOVICE_NOTE = 'After you pay, upload your documents in your portal. Your Novice access starts once your team approves them.'
+
 const shopLinks = () =>
   Array.from(document.querySelectorAll('a[href^="/shop/membership-"]')).map((a) => a.getAttribute('href'))
 
@@ -46,29 +48,30 @@ describe('UpgradeContent: Upgrade Now only for products the store returns', () =
     expect(shopLinks()).toEqual([])
     expect(screen.queryAllByRole('link', { name: 'Upgrade Now' })).toHaveLength(0)
     // Every tier above Guest is an upgrade for a guest: S0212 to S0239, 28 in
-    // all; the four Novice tiers read "Confirmed by the team" instead (KI114).
-    expect(screen.getAllByText('Opens at launch')).toHaveLength(24)
-    expect(screen.getAllByText('Confirmed by the team')).toHaveLength(4)
+    // all, the four Novice tiers included (bought, then approved: Suzanne 19 Nov).
+    expect(screen.getAllByText('Opens at launch')).toHaveLength(28)
+    expect(screen.getAllByText(NOVICE_NOTE)).toHaveLength(4)
   })
 
   it('keeps Upgrade Now on an available tier and shows "Opens at launch" on a draft or missing one', () => {
     render(<UpgradeContent {...guest} availableHandles={['membership-s0212', 'membership-s0226']} />)
     expect(shopLinks().sort()).toEqual(['/shop/membership-s0212', '/shop/membership-s0226'])
     expect(screen.getAllByRole('link', { name: 'Upgrade Now' })).toHaveLength(2)
-    expect(screen.getAllByText('Opens at launch')).toHaveLength(22)
+    expect(screen.getAllByText('Opens at launch')).toHaveLength(26)
   })
 
   // Switch-on (19 Nov 2026): every directly buyable tier published = every
   // card a real Upgrade Now, and still no way to buy a Novice level (KI114).
-  it('links all 24 buyable tiers when they are all published, and never a Novice or Guest product', () => {
+  it('links all 28 sellable levels when they are all published, Novice included, and never Guest', () => {
     const everyHandle = Array.from({ length: 29 }, (_, i) => `membership-s0${211 + i}`)
     render(<UpgradeContent {...guest} availableHandles={everyHandle} />)
-    expect(screen.getAllByRole('link', { name: 'Upgrade Now' })).toHaveLength(24)
+    expect(screen.getAllByRole('link', { name: 'Upgrade Now' })).toHaveLength(28)
     expect(screen.queryAllByText('Opens at launch')).toHaveLength(0)
-    expect(screen.getAllByText('Confirmed by the team')).toHaveLength(4)
-    for (const novice of ['s0211', 's0214', 's0215', 's0227', 's0228']) {
-      expect(shopLinks()).not.toContain(`/shop/membership-${novice}`)
+    expect(screen.getAllByText(NOVICE_NOTE)).toHaveLength(4)
+    for (const novice of ['s0214', 's0215', 's0227', 's0228']) {
+      expect(shopLinks()).toContain(`/shop/membership-${novice}`)
     }
+    expect(shopLinks()).not.toContain('/shop/membership-s0211')
   })
 
   it('defaults to none available when the page passes nothing', () => {
@@ -90,9 +93,9 @@ describe('UpgradeContent: Upgrade Now only for products the store returns', () =
     expect(shopLinks()).toEqual([])
   })
 
-  it('gives Guest no action at all, never "Confirmed by the team", when a member has no level yet', () => {
+  it('gives Guest no action at all when a member has no level yet', () => {
     render(<UpgradeContent {...guest} currentAccessLevel={0} availableHandles={['membership-s0211']} />)
-    expect(screen.getAllByText('Confirmed by the team')).toHaveLength(4)
+    expect(screen.getAllByText(NOVICE_NOTE)).toHaveLength(4)
     expect(shopLinks()).not.toContain('/shop/membership-s0211')
   })
 })

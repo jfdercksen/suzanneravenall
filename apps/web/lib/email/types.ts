@@ -48,6 +48,26 @@ export interface MembershipEmailProps extends MembershipEmailData {
   unsubscribeUrl: string
 }
 
+/**
+ * The welcome email of the 29-level model (KI128): the level the member
+ * bought, its programme (none for Guest and Lifestyle) and the date the year
+ * ends. The renewal reminder and expiry emails above still use the old
+ * four-tier MembershipEmailData; nothing sends them until renewal is built.
+ */
+export interface MembershipWelcomeData {
+  email: string
+  firstName: string | null
+  levelTitle: string
+  programmeName: string | null
+  /** Already formatted for the reader, e.g. "20 November 2027". */
+  renewalDate: string
+  siteUrl: string
+}
+
+export interface MembershipWelcomeProps extends MembershipWelcomeData {
+  unsubscribeUrl: string
+}
+
 /** 'live-course': a live programme whose seat also enrols a Thinkific course (materials now, Zoom details later). */
 export type OrderProductType = 'session' | 'self-paced' | 'live' | 'live-course' | 'group' | 'mentorship' | 'download' | 'other'
 

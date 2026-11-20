@@ -11,6 +11,7 @@ import { ShopHeroBanner } from './ShopHeroBanner'
 import { ShopPagination } from './ShopPagination'
 import { ShopFinalCTA } from './ShopFinalCTA'
 import { ShopAddOns } from './ShopAddOns'
+import { isMembershipProductHandle } from '@/lib/access/tiers'
 import {
   catalogueCountNoun,
   orderBySearchHits,
@@ -204,7 +205,8 @@ export function ShopCatalogueContent({
       if (seq !== fetchSeq.current) return
       // A retired self-study edition is not offered (Suzanne 12 Nov), so a
       // live-only programme neither prices nor files as self-study.
-      const offered = all.map(withOfferedVariants)
+      // Memberships are sold from /portal/upgrade only (KI129).
+      const offered = all.filter((p) => !isMembershipProductHandle(p.handle)).map(withOfferedVariants)
       // The Self-Study pill used to list the "programmes" collection, which
       // also holds about 20 live courses. It now lists what is actually sold
       // as self-study, from any collection (site check C3, productKind.ts).

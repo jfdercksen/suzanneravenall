@@ -197,6 +197,8 @@ async function seedTiers(auth, collectionId) {
         },
       ],
       metadata: {
+        // order-placed reads the level from metadata.tier (KI128, 20 Nov 2026).
+        tier: tier.sku,
         sku: tier.sku,
         track: tier.track,
         level: tier.level,
