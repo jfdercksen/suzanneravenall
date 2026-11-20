@@ -1,5 +1,5 @@
 import { ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
-import { notForSaleMessage, saleStatusOf, type SaleStatus } from "@suzanne/integrations"
+import { isOnSale, membershipByHandle, notForSaleMessage, notOpenForPurchaseMessage, saleStatusOf, type SaleStatus } from "@suzanne/integrations"
 
 /**
  * The store-side guard for variants that are not on sale (Suzanne, 11 and 12
@@ -16,7 +16,7 @@ type VariantRow = {
   id: string
   title?: string | null
   metadata?: Record<string, unknown> | null
-  product?: { title?: string | null } | null
+  product?: { title?: string | null; handle?: string | null } | null
 }
 
 type Query = {
@@ -51,17 +51,36 @@ export function itemName(row: VariantRow): string {
   return product || variant || "This item"
 }
 
+/**
+ * The first variant of a membership level that is not open for purchase
+ * (KI133: only Lifestyle, Student and Novice at launch), or null. The
+ * storefront shows no buy button for those levels; this refuses them in the
+ * cart too, so no direct store API call can buy a training level and skip the
+ * Novice approval.
+ */
+export function firstClosedMembership(rows: VariantRow[], env: Record<string, string | undefined> = process.env): VariantRow | null {
+  for (const row of rows) {
+    const level = membershipByHandle(row.product?.handle)
+    if (level && !isOnSale(level, env)) return row
+  }
+  return null
+}
+
 /** Throws NOT_ALLOWED (HTTP 400) when any of the variants is not on sale. */
 export async function refuseNotForSale(container: Container, variantIds: string[]): Promise<void> {
   if (variantIds.length === 0) return
   const query = container.resolve(ContainerRegistrationKeys.QUERY) as Query
   const { data } = await query.graph({
     entity: "product_variant",
-    fields: ["id", "title", "metadata", "product.title"],
+    fields: ["id", "title", "metadata", "product.title", "product.handle"],
     filters: { id: variantIds },
   })
   const blocked = firstNotForSale(data as VariantRow[])
   if (blocked) {
     throw new MedusaError(MedusaError.Types.NOT_ALLOWED, notForSaleMessage(blocked.status, itemName(blocked.row)))
+  }
+  const closed = firstClosedMembership(data as VariantRow[])
+  if (closed) {
+    throw new MedusaError(MedusaError.Types.NOT_ALLOWED, notOpenForPurchaseMessage(closed.product?.title?.trim() || "This membership"))
   }
 }

@@ -141,7 +141,7 @@ describe('order-placed cutover flags', () => {
  * rather than an upsert on a key the table does not have.
  */
 const FREE_TIER_ID = '6a906895-e0b7-48e0-a451-caf2affa27d3'
-// membership_tiers row of S0216 Akashic Practitioner (Prdip) - Basic (migration 20261120090000).
+// membership_tiers row of S0213 Akashic Student Membership (migration 20261120090000).
 const SILVER_ID = 'bf4d1e22-1ad6-4dfc-9cec-786d56485def'
 
 type SubRow = { id: string; user_id: string; tier_id: string; status: string; access_level: number; track: string; start_date?: string }
@@ -215,7 +215,7 @@ const programmeOrder = {
 
 const membershipOrder = {
   ...programmeOrder,
-  items: [{ title: 'Akashic Practitioner', variant: { title: 'Annual', product: { title: 'Akashic Practitioner (Prdip) - Basic Membership', metadata: { product_type: 'membership', tier: 'S0216' }, categories: [] } } }],
+  items: [{ title: 'Akashic Student', variant: { title: 'Annual', product: { title: 'Akashic Student Membership', metadata: { product_type: 'membership', tier: 'S0213' }, categories: [] } } }],
 }
 
 const membershipItem = (tier: unknown) => ({
@@ -369,7 +369,7 @@ describe('order-placed membership row (user_id is not unique)', () => {
   it('inserts a new active row on the tier uuid looked up by the product tier slug when the user has no row on that tier', async () => {
     const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
     await placeProgrammeOrder(fake, membershipOrder)
-    expect(fake.tierEq).toHaveBeenCalledWith('slug', 's0216')
+    expect(fake.tierEq).toHaveBeenCalledWith('slug', 's0213')
     expect(fake.insert).toHaveBeenCalledTimes(1)
     const row = fake.insert.mock.calls[0][0]
     expect(row).toMatchObject({ user_id: 'user_qa', tier_id: SILVER_ID, status: 'active' })
@@ -444,13 +444,13 @@ describe('order-placed membership levels (KI128, 20 Nov 2026)', () => {
     const before = Date.now()
     await placeProgrammeOrder(fake, membershipOrder)
     const row = fake.insert.mock.calls[0][0] as Record<string, string | number>
-    expect(row).toMatchObject({ tier_id: SILVER_ID, status: 'active', access_level: 5, track: 'akashic', sku: 'S0216' })
+    expect(row).toMatchObject({ tier_id: SILVER_ID, status: 'active', access_level: 3, track: 'akashic', sku: 'S0213' })
     const days = (Date.parse(String(row.end_date)) - Date.parse(String(row.start_date))) / 86_400_000
     expect(days).toBe(365)
     expect(row.annual_renewal_date).toBe(row.end_date)
     expect(Date.parse(String(row.start_date))).toBeGreaterThanOrEqual(before)
     expect(emailCalls('/api/email/membership-welcome')).toEqual([
-      { email: 'qa.buyer@example.com', firstName: null, sku: 'S0216', renewalDate: row.end_date },
+      { email: 'qa.buyer@example.com', firstName: null, sku: 'S0213', renewalDate: row.end_date },
     ])
   })
 
@@ -510,7 +510,7 @@ describe('order-placed membership levels (KI128, 20 Nov 2026)', () => {
     const placedAt = '2026-11-20T08:15:00.000Z'
     const fake = supabaseFake({
       tierRow: { id: SILVER_ID },
-      rows: [{ id: 'sub_1', user_id: 'user_qa', tier_id: SILVER_ID, status: 'active', access_level: 5, track: 'akashic', start_date: placedAt }],
+      rows: [{ id: 'sub_1', user_id: 'user_qa', tier_id: SILVER_ID, status: 'active', access_level: 3, track: 'akashic', start_date: placedAt }],
     })
     await placeProgrammeOrder(fake, { ...membershipOrder, created_at: placedAt })
     expect(fake.update).not.toHaveBeenCalled()
@@ -546,5 +546,20 @@ describe('order-placed membership levels (KI128, 20 Nov 2026)', () => {
     await placeProgrammeOrder(fake, two)
     expect(alertKeys()).toEqual(['membership-multiple'])
     expect(fake.insert).toHaveBeenCalledTimes(1)
+  })
+
+  it('gives no access for a training level bought while they are not on sale, and alerts staff (KI133)', async () => {
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
+    await placeProgrammeOrder(fake, membershipItem('S0216'))
+    expect(fake.insert).not.toHaveBeenCalled()
+    expect(alertKeys()).toEqual(['membership-not-on-sale'])
+    expect(emailCalls('/api/email/membership-welcome')).toEqual([])
+  })
+
+  it('gives a training level once MEMBERSHIP_TRAINING_LEVELS=on', async () => {
+    vi.stubEnv('MEMBERSHIP_TRAINING_LEVELS', 'on')
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
+    await placeProgrammeOrder(fake, membershipItem('S0216'))
+    expect(fake.insert.mock.calls[0]?.[0]).toMatchObject({ sku: 'S0216', access_level: 5 })
   })
 })

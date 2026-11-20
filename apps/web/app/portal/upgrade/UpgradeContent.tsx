@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { RichText } from '@/components/shared/RichText'
 import {
   isDirectlyBuyable,
+  isOnSaleNow,
   joiningLabel,
   startsOnApproval,
   joiningRequirement,
@@ -33,9 +34,11 @@ interface TierCardProps {
   isUpgrade: boolean
   /** The store returns this tier's product, so /shop/<handle> exists (KI071). */
   isAvailable: boolean
+  /** Lifestyle, Student and Novice; the training levels only once they are opened (KI133). */
+  isOnSale: boolean
 }
 
-function TierCard({ tier, isCurrentTier, isUpgrade, isAvailable }: TierCardProps) {
+function TierCard({ tier, isCurrentTier, isUpgrade, isAvailable, isOnSale }: TierCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -106,7 +109,19 @@ function TierCard({ tier, isCurrentTier, isUpgrade, isAvailable }: TierCardProps
           After you pay, upload your documents in your portal. Your Novice access starts once your team approves them.
         </p>
       )}
-      {isUpgrade && isDirectlyBuyable(tier) && isAvailable && (
+      {/* Training levels are not sold at launch (KI133): no buy button, the team instead. */}
+      {isUpgrade && isDirectlyBuyable(tier) && !isOnSale && (
+        <div className="mt-auto">
+          <p className="text-xs text-white/70 leading-relaxed mb-3">This level is not open for purchase yet. Please contact your team.</p>
+          <Link
+            href="/contact"
+            className="block w-full text-center py-2.5 px-4 border border-white/50 text-white font-semibold text-xs uppercase tracking-widest rounded-xl transition-colors duration-300 hover:bg-white/10"
+          >
+            Contact your team
+          </Link>
+        </div>
+      )}
+      {isUpgrade && isOnSale && isAvailable && (
         <Link
           href={`/shop/${tier.handle}`}
           className="mt-auto w-full text-center py-2.5 px-4 bg-white hover:bg-brand-sand text-brand-primary font-semibold text-xs uppercase tracking-widest rounded-xl transition-colors duration-300"
@@ -115,7 +130,7 @@ function TierCard({ tier, isCurrentTier, isUpgrade, isAvailable }: TierCardProps
         </Link>
       )}
       {/* A draft or missing product would be a 404: no link until it is on sale (KI071). */}
-      {isUpgrade && isDirectlyBuyable(tier) && !isAvailable && (
+      {isUpgrade && isOnSale && !isAvailable && (
         <div className="mt-auto w-full text-center py-2.5 px-4 bg-white/10 text-white/70 font-semibold text-xs uppercase tracking-widest rounded-xl cursor-default">
           Opens at launch
         </div>
@@ -137,6 +152,8 @@ export interface UpgradeContentProps {
   fromLabel: string | null
   /** Membership handles the store API returns; the rest show "Opens at launch" (KI071). */
   availableHandles?: string[]
+  /** MEMBERSHIP_TRAINING_LEVELS=on, read by the server page (KI133). Off: training levels show "not open for purchase yet". */
+  trainingLevelsOnSale?: boolean
 }
 
 export default function UpgradeContent({
@@ -146,6 +163,7 @@ export default function UpgradeContent({
   currentTierName,
   fromLabel,
   availableHandles = [],
+  trainingLevelsOnSale = false,
 }: UpgradeContentProps) {
   const available = new Set(availableHandles)
   const generalTiers = MEMBERSHIP_TIERS.filter((t) => t.track === 'general')
@@ -237,6 +255,7 @@ export default function UpgradeContent({
                 isCurrentTier={isCurrentTier(tier)}
                 isUpgrade={isUpgrade(tier)}
                 isAvailable={available.has(tier.handle)}
+                isOnSale={isOnSaleNow(tier, trainingLevelsOnSale)}
               />
             ))}
           </div>
@@ -281,6 +300,7 @@ export default function UpgradeContent({
                     isCurrentTier={isCurrentTier(tier)}
                     isUpgrade={isUpgrade(tier)}
                     isAvailable={available.has(tier.handle)}
+                isOnSale={isOnSaleNow(tier, trainingLevelsOnSale)}
                   />
                 ))}
               </div>
@@ -306,6 +326,7 @@ export default function UpgradeContent({
                     isCurrentTier={isCurrentTier(tier)}
                     isUpgrade={isUpgrade(tier)}
                     isAvailable={available.has(tier.handle)}
+                isOnSale={isOnSaleNow(tier, trainingLevelsOnSale)}
                   />
                 ))}
               </div>

@@ -219,3 +219,16 @@ describe('isMembershipProductHandle (KI129)', () => {
     expect(isMembershipProductHandle(undefined)).toBe(false)
   })
 })
+
+describe('isOnSaleNow (KI133, Johan 20 Nov 2026)', () => {
+  it('sells Lifestyle, both Students and the four Novice levels at launch, and matches the store rule', async () => {
+    const { isOnSaleNow } = await import('./tiers')
+    const { isOnSale, membershipBySku } = await import('@suzanne/integrations')
+    expect(MEMBERSHIP_TIERS.filter((t) => isOnSaleNow(t, false)).map((t) => t.sku)).toEqual(['S0212', 'S0213', 'S0214', 'S0215', 'S0226', 'S0227', 'S0228'])
+    expect(MEMBERSHIP_TIERS.filter((t) => isOnSaleNow(t, true))).toHaveLength(28)
+    for (const t of MEMBERSHIP_TIERS) {
+      expect(isOnSaleNow(t, false)).toBe(isOnSale(membershipBySku(t.sku)!, {}))
+      expect(isOnSaleNow(t, true)).toBe(isOnSale(membershipBySku(t.sku)!, { MEMBERSHIP_TRAINING_LEVELS: 'on' }))
+    }
+  })
+})

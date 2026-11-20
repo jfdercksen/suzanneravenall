@@ -72,3 +72,17 @@ describe('memberships stay out of the shop and search (KI129)', () => {
     expect(isSearchable({ id: 'p2', handle: 'getting-unstuck', status: 'published' })).toBe(true)
   })
 })
+
+describe('on sale at launch (KI133, Johan 20 Nov 2026)', () => {
+  it('sells Lifestyle, both Students and the four Novice levels; training levels only with the switch on', async () => {
+    const { isOnSale, isTrainingLevel, membershipByHandle, notOpenForPurchaseMessage, trainingLevelsOnSale } = await import('./memberships')
+    expect(MEMBERSHIP_LEVELS.filter((l) => isOnSale(l, {})).map((l) => l.sku)).toEqual(['S0212', 'S0213', 'S0214', 'S0215', 'S0226', 'S0227', 'S0228'])
+    expect(MEMBERSHIP_LEVELS.filter(isTrainingLevel)).toHaveLength(21)
+    expect(MEMBERSHIP_LEVELS.filter((l) => isOnSale(l, { MEMBERSHIP_TRAINING_LEVELS: 'on' }))).toHaveLength(28)
+    expect(isOnSale(membershipBySku('S0211')!, { MEMBERSHIP_TRAINING_LEVELS: 'on' })).toBe(false)
+    expect(trainingLevelsOnSale({ MEMBERSHIP_TRAINING_LEVELS: 'true' })).toBe(false)
+    expect(membershipByHandle('membership-s0216')?.sku).toBe('S0216')
+    expect(membershipByHandle('getting-unstuck')).toBeUndefined()
+    expect(notOpenForPurchaseMessage('X')).toBe('X is not open for purchase yet. Please contact the team.')
+  })
+})

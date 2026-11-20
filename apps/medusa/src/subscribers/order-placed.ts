@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import {
   bookerName,
   isNoviceLevel,
+  isOnSale,
   isSellableLevel,
   membershipAccessFields,
   membershipBySku,
@@ -706,6 +707,17 @@ async function handleMembershipActivation(
       `Order: ${order.id}`,
       `metadata.tier: ${typeof meta.tier === 'string' ? meta.tier : '(missing)'}`,
       'The buyer paid and has no membership. Set metadata.tier on the product (set-membership-metadata script) and activate the member by hand.',
+    ])
+    return
+  }
+
+  // The cart refuses a level that is not open for purchase (KI133); one that
+  // still arrives (an older cart) gets no access, and staff refund or apply it.
+  if (!isOnSale(level)) {
+    reportPortalFailure('membership-not-on-sale', 'Membership level bought that is not on sale', [
+      `Order: ${order.id}`,
+      `Level: ${level.sku}`,
+      'No access was given. Refund the order, or apply the level by hand if the team agrees.',
     ])
     return
   }

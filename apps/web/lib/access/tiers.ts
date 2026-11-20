@@ -205,6 +205,20 @@ export function isDirectlyBuyable(tier: MembershipTier): boolean {
   return tier.level !== 'guest'
 }
 
+const LAUNCH_LEVELS: ReadonlySet<MembershipLevel> = new Set<MembershipLevel>(['lifestyle', 'student', 'novice'])
+
+/**
+ * Is this level on sale now (KI133, Johan 20 Nov 2026)? Memberships open with
+ * Lifestyle, Student and Novice only; the training levels (Practitioner up to
+ * Certified Master Instructor) only once MEMBERSHIP_TRAINING_LEVELS=on, which
+ * the server page reads and passes in. The store's cart refuses the same
+ * levels (packages/integrations memberships.ts isOnSale), so a hidden button
+ * is not the only guard.
+ */
+export function isOnSaleNow(tier: MembershipTier, trainingLevelsOnSale: boolean): boolean {
+  return isDirectlyBuyable(tier) && (LAUNCH_LEVELS.has(tier.level) || trainingLevelsOnSale)
+}
+
 /** Novice access starts on the team's approval, not on payment. */
 export function startsOnApproval(tier: MembershipTier): boolean {
   return joiningRequirement(tier) === 'novice-prerequisites'

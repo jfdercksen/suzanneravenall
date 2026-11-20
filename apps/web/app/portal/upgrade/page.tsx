@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { trainingLevelsOnSale } from '@suzanne/integrations'
 import { createClient } from '@/utils/supabase/server'
 import { getMemberAccessLevel } from '@/lib/access/check-access'
 import { memberTierName, type MembershipTrack } from '@/lib/access/tiers'
@@ -81,6 +82,7 @@ export default async function UpgradePage({
       currentTierName={currentTierName}
       fromLabel={fromLabel}
       availableHandles={availableHandles}
+      trainingLevelsOnSale={trainingLevelsOnSale()}
     />
   )
 }

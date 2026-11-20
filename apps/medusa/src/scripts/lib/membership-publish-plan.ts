@@ -18,7 +18,7 @@
  * "Energy Clearing ..." means the KI116 rename script has not run yet.
  */
 
-import { isSellableLevel, MEMBERSHIP_LEVELS, membershipHandle } from '@suzanne/integrations'
+import { isSellableLevel, isTrainingLevel, MEMBERSHIP_LEVELS, membershipHandle } from '@suzanne/integrations'
 
 export type MembershipRow = {
   id: string
@@ -35,21 +35,38 @@ export type MembershipRow = {
   } | null> | null
 }
 
-export type TierSpec = { sku: string; handle: string; title: string; zar: number; usd: number }
+export type TierSpec = { sku: string; handle: string; title: string; zar: number; usd: number; training: boolean }
 
-/** The 28 sellable levels, in SKU order, with the site's title and price (rand / dollars). */
-export const PUBLISH_TIERS: TierSpec[] = MEMBERSHIP_LEVELS.filter(isSellableLevel).map((l) => ({
+const toSpec = (l: (typeof MEMBERSHIP_LEVELS)[number]): TierSpec => ({
   sku: l.sku,
   handle: membershipHandle(l),
   title: l.title,
   zar: l.zar,
   usd: l.usd,
-}))
+  training: isTrainingLevel(l),
+})
+
+/** The 28 sellable levels, in SKU order, with the site's title and price (rand / dollars). */
+export const SELLABLE_TIERS: TierSpec[] = MEMBERSHIP_LEVELS.filter(isSellableLevel).map(toSpec)
+
+/**
+ * What a run publishes (KI133, Johan 20 Nov 2026): the 7 launch levels
+ * (Lifestyle, both Students, the four Novice levels) unless the training
+ * levels are switched on (MEMBERSHIP_TRAINING_LEVELS=on), then all 28.
+ */
+export function publishTiers(includeTraining: boolean): TierSpec[] {
+  return SELLABLE_TIERS.filter((t) => includeTraining || !t.training)
+}
+
+/** Kept for the tests and the ONLY check: the launch set. */
+export const PUBLISH_TIERS: TierSpec[] = publishTiers(false)
 
 /** Never published by this script, with why. */
 export const HELD_BACK: Record<string, string> = {
   'membership-s0211': 'Guest: the free base level, nothing to buy',
 }
+
+export const TRAINING_HELD = 'held, not on sale at launch'
 
 export type TierPlan = {
   spec: TierSpec
@@ -67,6 +84,10 @@ export type PublishPlan = {
   tiers: TierPlan[]
   /** Held-back products the store has published anyway: unpublish them by hand. */
   heldBackPublished: string[]
+  /** Training levels left out of this run (not on sale at launch). */
+  trainingHeld: TierSpec[]
+  /** Training levels that are published although the switch is off: set them to draft. */
+  trainingPublished: string[]
   ready: boolean
 }
 
@@ -84,9 +105,9 @@ function priceMatches(amount: number | null, expected: number): boolean {
   return amount === expected * 100
 }
 
-export function planPublish(rows: MembershipRow[], defaultSalesChannelId: string | null): PublishPlan {
+export function planPublish(rows: MembershipRow[], defaultSalesChannelId: string | null, includeTraining = false): PublishPlan {
   const byHandle = new Map(rows.map((r) => [r.handle, r]))
-  const tiers: TierPlan[] = PUBLISH_TIERS.map((spec) => {
+  const tiers: TierPlan[] = publishTiers(includeTraining).map((spec) => {
     const row = byHandle.get(spec.handle)
     const blockers: string[] = []
     const warnings: string[] = []
@@ -131,5 +152,13 @@ export function planPublish(rows: MembershipRow[], defaultSalesChannelId: string
   })
 
   const heldBackPublished = Object.keys(HELD_BACK).filter((h) => byHandle.get(h)?.status === 'published')
-  return { tiers, heldBackPublished, ready: tiers.every((p) => p.blockers.length === 0) && heldBackPublished.length === 0 }
+  const trainingHeld = includeTraining ? [] : SELLABLE_TIERS.filter((t) => t.training)
+  const trainingPublished = trainingHeld.filter((t) => byHandle.get(t.handle)?.status === 'published').map((t) => t.handle)
+  return {
+    tiers,
+    heldBackPublished,
+    trainingHeld,
+    trainingPublished,
+    ready: tiers.every((p) => p.blockers.length === 0) && heldBackPublished.length === 0 && trainingPublished.length === 0,
+  }
 }

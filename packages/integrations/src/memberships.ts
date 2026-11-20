@@ -166,3 +166,47 @@ const PROGRAMME_NAMES: Record<MembershipProgramme, string | null> = {
 export function membershipProgrammeName(level: MembershipLevel): string | null {
   return PROGRAMME_NAMES[level.programme]
 }
+
+// ── What is on sale (KI133, Johan 20 Nov 2026) ───────────────────────────────
+
+/**
+ * Memberships open with Lifestyle, Student and Novice only (both programmes
+ * where they apply). The training levels, Practitioner up to Certified Master
+ * Instructor, are not for sale at launch: buying one would give its access at
+ * once and skip the Novice approval. The rule for selling them later is open.
+ */
+const LAUNCH_LEVELS: ReadonlySet<MembershipLevelKey> = new Set(['lifestyle', 'student', 'novice'])
+
+export function isLaunchLevel(level: MembershipLevel): boolean {
+  return LAUNCH_LEVELS.has(level.level)
+}
+
+/** The training levels (Practitioner and up). */
+export function isTrainingLevel(level: MembershipLevel): boolean {
+  return isSellableLevel(level) && !isLaunchLevel(level)
+}
+
+/**
+ * The one switch that puts the training levels on sale: MEMBERSHIP_TRAINING_LEVELS=on
+ * (server env of web and medusa; the publish script reads it too). Off by default.
+ */
+export function trainingLevelsOnSale(env: Record<string, string | undefined> = process.env): boolean {
+  return env.MEMBERSHIP_TRAINING_LEVELS === 'on'
+}
+
+/** May this level be bought now? Never Guest; training levels only with the switch on. */
+export function isOnSale(level: MembershipLevel, env: Record<string, string | undefined> = process.env): boolean {
+  return isSellableLevel(level) && (isLaunchLevel(level) || trainingLevelsOnSale(env))
+}
+
+/** The level whose product has this store handle, or undefined. */
+export function membershipByHandle(handle: string | null | undefined): MembershipLevel | undefined {
+  if (!isMembershipHandle(handle)) return undefined
+  return membershipBySku(String(handle).replace(/^membership-/, ''))
+}
+
+/** What the store says when a level is not open for purchase. */
+export function notOpenForPurchaseMessage(title: string): string {
+  return `${title} is not open for purchase yet. Please contact the team.`
+}
+

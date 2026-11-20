@@ -2,7 +2,7 @@ import { readFileSync } from 'fs'
 import { join } from 'path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import publishMemberships from '../publish-memberships-2026-11-19'
-import { HELD_BACK, planPublish, PUBLISH_TIERS, type MembershipRow } from '../lib/membership-publish-plan'
+import { HELD_BACK, planPublish, PUBLISH_TIERS, SELLABLE_TIERS, type MembershipRow } from '../lib/membership-publish-plan'
 
 vi.mock('@medusajs/framework/utils', () => ({ ContainerRegistrationKeys: { QUERY: 'query' } }))
 
@@ -15,7 +15,7 @@ const SC = 'sc_default'
 
 /** A tier as the 2026 seed left it on the box: draft, no channel, no metadata.tier. */
 function seeded(handle: string, overrides: Partial<MembershipRow> = {}): MembershipRow {
-  const spec = PUBLISH_TIERS.find((t) => t.handle === handle)
+  const spec = SELLABLE_TIERS.find((t) => t.handle === handle)
   return {
     id: `prod_${handle}`,
     handle,
@@ -36,9 +36,14 @@ const skuOf = (handle: string) => handle.replace('membership-', '').toUpperCase(
 const ready = (handle: string) => seeded(handle, { metadata: { product_type: 'membership', tier: skuOf(handle) }, description: 'About it' })
 
 describe('membership publish plan (KI071 switch-on)', () => {
-  it('covers the 28 sellable levels, Novice included, and holds back Guest only', () => {
-    expect(PUBLISH_TIERS).toHaveLength(28)
-    expect(PUBLISH_TIERS.map((t) => t.sku)).toEqual(expect.arrayContaining(['S0214', 'S0215', 'S0227', 'S0228']))
+  it('publishes the 7 launch levels by default and holds the 21 training levels and Guest (KI133)', () => {
+    expect(PUBLISH_TIERS.map((t) => t.sku)).toEqual(['S0212', 'S0213', 'S0214', 'S0215', 'S0226', 'S0227', 'S0228'])
+    expect(SELLABLE_TIERS).toHaveLength(28)
+    expect(SELLABLE_TIERS.filter((t) => t.training)).toHaveLength(21)
+    const plan = planPublish([], 'sc')
+    expect(plan.tiers).toHaveLength(7)
+    expect(plan.trainingHeld).toHaveLength(21)
+    expect(planPublish([], 'sc', true).tiers).toHaveLength(28)
     expect(Object.keys(HELD_BACK)).toEqual(['membership-s0211'])
     for (const handle of Object.keys(HELD_BACK)) expect(PUBLISH_TIERS.some((t) => t.handle === handle)).toBe(false)
   })
@@ -66,9 +71,9 @@ describe('membership publish plan (KI071 switch-on)', () => {
   })
 
   it('blocks a level that is set to something else, and never overwrites it', () => {
-    const row = seeded('membership-s0216', { metadata: { product_type: 'membership', tier: 'silver' } })
-    const p = planPublish([row], SC).tiers.find((x) => x.spec.sku === 'S0216')!
-    expect(p.blockers.join(' ')).toMatch(/metadata\.tier is "silver", not S0216/)
+    const row = seeded('membership-s0213', { metadata: { product_type: 'membership', tier: 'silver' } })
+    const p = planPublish([row], SC).tiers.find((x) => x.spec.sku === 'S0213')!
+    expect(p.blockers.join(' ')).toMatch(/metadata\.tier is "silver", not S0213/)
     expect(p.update?.metadata).toBeUndefined()
   })
 
@@ -143,7 +148,8 @@ describe('publish-memberships-2026-11-19', () => {
     await exec(PUBLISH_TIERS.map((t) => seeded(t.handle)))
     expect(runs.products).toHaveLength(0)
     expect(logs.join('\n')).toMatch(/DRY RUN/)
-    expect(logs.filter((l) => l.includes('status + metadata + sales_channels'))).toHaveLength(28)
+    expect(logs.filter((l) => l.includes('status + metadata + sales_channels'))).toHaveLength(7)
+    expect(logs.filter((l) => l.includes('held, not on sale at launch'))).toHaveLength(21)
     expect(process.exitCode).toBeUndefined()
   })
 
@@ -157,10 +163,11 @@ describe('publish-memberships-2026-11-19', () => {
     expect(process.exitCode).toBe(1)
   })
 
-  it('applies all 28 by id, Novice included, sets the level, and never touches Guest', async () => {
+  it('applies the 7 launch levels by id, Novice included, sets the level, and never touches Guest or a training level', async () => {
     vi.stubEnv('DRY_RUN', 'false')
-    await exec([...PUBLISH_TIERS.map((t) => seeded(t.handle)), seeded('membership-s0211')])
-    expect(runs.products).toHaveLength(28)
+    await exec([...SELLABLE_TIERS.map((t) => seeded(t.handle)), seeded('membership-s0211')])
+    expect(runs.products).toHaveLength(7)
+    expect(JSON.stringify(runs.products)).not.toMatch(/s0216|s0239/)
     expect(runs.products[0]).toEqual({
       input: {
         selector: { id: 'prod_membership-s0212' },
@@ -196,12 +203,35 @@ describe('publish-memberships-2026-11-19', () => {
     expect(runs.products).toHaveLength(1)
   })
 
+  it('publishes the training levels only with MEMBERSHIP_TRAINING_LEVELS=on', async () => {
+    vi.stubEnv('DRY_RUN', 'false')
+    vi.stubEnv('MEMBERSHIP_TRAINING_LEVELS', 'on')
+    await exec(SELLABLE_TIERS.map((t) => seeded(t.handle)))
+    expect(runs.products).toHaveLength(28)
+  })
+
+  it('refuses to apply while a training level is published and the switch is off', async () => {
+    vi.stubEnv('DRY_RUN', 'false')
+    await exec([...PUBLISH_TIERS.map((t) => seeded(t.handle)), seeded('membership-s0216', { status: 'published' })])
+    expect(runs.products).toHaveLength(0)
+    expect(logs.join('\n')).toMatch(/membership-s0216 is published although it is held, not on sale at launch/)
+    expect(process.exitCode).toBe(1)
+  })
+
+  it('refuses ONLY for a training level while they are held', async () => {
+    vi.stubEnv('DRY_RUN', 'false')
+    vi.stubEnv('ONLY', 'membership-s0216')
+    await exec([seeded('membership-s0216')])
+    expect(runs.products).toHaveLength(0)
+    expect(logs.join('\n')).toMatch(/not one of the levels on sale \(held, not on sale at launch\)/)
+  })
+
   it('refuses ONLY for Guest', async () => {
     vi.stubEnv('DRY_RUN', 'false')
     vi.stubEnv('ONLY', 'membership-s0211')
     await exec([ready('membership-s0212')])
     expect(runs.products).toHaveLength(0)
-    expect(logs.join('\n')).toMatch(/not one of the 28 sellable levels \(Guest/)
+    expect(logs.join('\n')).toMatch(/not one of the levels on sale \(Guest/)
     expect(process.exitCode).toBe(1)
   })
 })

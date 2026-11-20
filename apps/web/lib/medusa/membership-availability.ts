@@ -1,4 +1,5 @@
-import { isDirectlyBuyable, MEMBERSHIP_TIERS } from '@/lib/access/tiers'
+import { trainingLevelsOnSale } from '@suzanne/integrations'
+import { isOnSaleNow, MEMBERSHIP_TIERS } from '@/lib/access/tiers'
 
 /**
  * Which membership products the store API actually returns (KI071, reopened
@@ -11,13 +12,14 @@ import { isDirectlyBuyable, MEMBERSHIP_TIERS } from '@/lib/access/tiers'
 const PAGE = 100
 const MAX_PAGES = 20
 
-// Only tiers that may be bought directly: a published Guest or Novice product
-// still gets no Upgrade Now link (KI114).
-const MEMBERSHIP_HANDLES = new Set(MEMBERSHIP_TIERS.filter(isDirectlyBuyable).map((t) => t.handle))
-
-/** The directly buyable membership handles among the products the store returned. */
-export function membershipHandlesIn(products: Array<{ handle?: string | null }>): string[] {
-  return products.map((p) => p.handle ?? '').filter((h) => MEMBERSHIP_HANDLES.has(h))
+/**
+ * The handles of levels on sale now among the products the store returned:
+ * never Guest, and a training level only with MEMBERSHIP_TRAINING_LEVELS=on
+ * (KI133), even when its product is published.
+ */
+export function membershipHandlesIn(products: Array<{ handle?: string | null }>, trainingOpen: boolean = trainingLevelsOnSale()): string[] {
+  const onSale = new Set(MEMBERSHIP_TIERS.filter((t) => isOnSaleNow(t, trainingOpen)).map((t) => t.handle))
+  return products.map((p) => p.handle ?? '').filter((h) => onSale.has(h))
 }
 
 type StorePage = { products?: Array<{ handle?: string | null }>; count?: number }

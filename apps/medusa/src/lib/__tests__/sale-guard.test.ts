@@ -106,3 +106,29 @@ describe('the cart hooks', () => {
     await expect(handlers.createCart[0]({ input: { region_id: 'r' } }, { container })).resolves.toBeUndefined()
   })
 })
+
+// KI133 (Johan, 20 Nov 2026): only Lifestyle, Student and Novice are on sale at launch.
+describe('membership levels not open for purchase', () => {
+  const training = { id: 'v_prac', title: 'Annual', metadata: {}, product: { title: 'Akashic Practitioner (Prdip) - Basic Membership', handle: 'membership-s0216' } }
+  const novice = { id: 'v_nov', title: 'Annual', metadata: {}, product: { title: 'Akashic Novice Practitioner - Basic Membership', handle: 'membership-s0214' } }
+
+  it('refuses a training level in the cart, so nobody can skip the Novice approval by paying more', async () => {
+    const { container } = containerReturning([training])
+    await expect(refuseNotForSale(container as never, ['v_prac'])).rejects.toThrow(
+      'Akashic Practitioner (Prdip) - Basic Membership is not open for purchase yet. Please contact the team.',
+    )
+  })
+
+  it('lets Lifestyle, Student and Novice through', async () => {
+    const { container } = containerReturning([novice, { ...novice, id: 'v_life', product: { title: 'Lifestyle Membership', handle: 'membership-s0212' } }])
+    await expect(refuseNotForSale(container as never, ['v_nov', 'v_life'])).resolves.toBeUndefined()
+  })
+
+  it('opens the training levels only with MEMBERSHIP_TRAINING_LEVELS=on', async () => {
+    vi.stubEnv('MEMBERSHIP_TRAINING_LEVELS', 'on')
+    const { container, graph } = containerReturning([training])
+    await expect(refuseNotForSale(container as never, ['v_prac'])).resolves.toBeUndefined()
+    expect((graph.mock.calls[0] as unknown as [{ fields: string[] }])[0].fields).toContain('product.handle')
+    vi.unstubAllEnvs()
+  })
+})

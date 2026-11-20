@@ -90,6 +90,9 @@ services:
       NODE_ENV: production
       # KI090: V8 defaults to a 524 MB heap here and idle Medusa sits near it; leave headroom inside the 1g limit
       NODE_OPTIONS: --max-old-space-size=768
+      # Training membership levels on sale (KI133). Off at launch: only Lifestyle,
+      # Student and Novice can be bought. "on" opens them in the cart and the publish script.
+      MEMBERSHIP_TRAINING_LEVELS: ${MEMBERSHIP_TRAINING_LEVELS:-off}
       MEDUSA_ADMIN_ONBOARDING_TYPE: ${MEDUSA_ADMIN_ONBOARDING_TYPE}
       JWT_SECRET: ${JWT_SECRET}
       COOKIE_SECRET: ${COOKIE_SECRET}
@@ -228,6 +231,8 @@ services:
       LEADS_AUTOMATION: ${LEADS_AUTOMATION:-code}
       # Memberships on sale (KI071/KI072). Off for launch; see infra/.env.example.
       MEMBERSHIPS_ENABLED: ${MEMBERSHIPS_ENABLED:-false}
+      # Training levels on the upgrade page (KI133), same switch as medusa.
+      MEMBERSHIP_TRAINING_LEVELS: ${MEMBERSHIP_TRAINING_LEVELS:-off}
       AUTOMATION_ALERT_EMAIL: ${AUTOMATION_ALERT_EMAIL:-}
       # Session rules (D024): who gets the late-change alerts (blank = the
       # AUTOMATION_ALERT_EMAIL address), whose Cal.com changes are staff changes,

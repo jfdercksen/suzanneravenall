@@ -11,8 +11,10 @@
  *   One tier only, for the proof purchase (same rules, that tier's blockers only):
  *     docker compose exec -e DRY_RUN=false -e ONLY=membership-s0212 medusa npx medusa exec ./src/scripts/publish-memberships-2026-11-19.ts
  *
- * Publishes the 28 sellable levels (Novice included, KI114 as decided on 19
- * Nov), adds each to the store's default sales channel (the publishable key's
+ * Publishes the 7 launch levels (KI133, Johan 20 Nov 2026: Lifestyle S0212,
+ * Student S0213 / S0226, Novice S0214 / S0215 / S0227 / S0228); the 21
+ * training levels only with -e MEMBERSHIP_TRAINING_LEVELS=on, and the dry run
+ * lists them as held, not on sale at launch. It adds each to the store's default sales channel (the publishable key's
  * channel, so the store API returns it and /portal/upgrade shows Upgrade Now)
  * and sets metadata.tier = the SKU where it is missing, merged into the other
  * metadata (KI128). Guest is never published. No title, price or description
@@ -26,7 +28,8 @@
 import type { ExecArgs } from "@medusajs/framework/types"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { updateProductsWorkflow } from "@medusajs/medusa/core-flows"
-import { HELD_BACK, planPublish, PUBLISH_TIERS, type MembershipRow } from "./lib/membership-publish-plan"
+import { trainingLevelsOnSale } from "@suzanne/integrations"
+import { HELD_BACK, planPublish, publishTiers, SELLABLE_TIERS, TRAINING_HELD, type MembershipRow } from "./lib/membership-publish-plan"
 
 type Query = {
   graph(input: {
@@ -54,17 +57,20 @@ const PRODUCT_FIELDS = [
 export default async function publishMemberships({ container }: ExecArgs): Promise<void> {
   const dryRun = process.env.DRY_RUN !== "false"
   const only = (process.env.ONLY ?? "").trim()
+  // KI133: the training levels only with MEMBERSHIP_TRAINING_LEVELS=on, the same switch the cart reads.
+  const includeTraining = trainingLevelsOnSale()
   const query = container.resolve(ContainerRegistrationKeys.QUERY) as Query
   const log = (line: string) => console.log(`[publish-memberships] ${line}`)
 
   log(dryRun ? "DRY RUN: nothing is written (DRY_RUN=false to apply)" : "APPLYING")
-  if (only && !PUBLISH_TIERS.some((t) => t.handle === only)) {
-    log(`ONLY=${only} is not one of the 28 sellable levels${HELD_BACK[only] ? ` (${HELD_BACK[only]})` : ""}`)
+  if (only && !publishTiers(includeTraining).some((t) => t.handle === only)) {
+    const training = SELLABLE_TIERS.some((t) => t.handle === only && t.training)
+    log(`ONLY=${only} is not one of the levels on sale${HELD_BACK[only] ? ` (${HELD_BACK[only]})` : training ? ` (${TRAINING_HELD})` : ""}`)
     process.exitCode = 1
     return
   }
 
-  const handles = [...PUBLISH_TIERS.map((t) => t.handle), ...Object.keys(HELD_BACK)]
+  const handles = [...SELLABLE_TIERS.map((t) => t.handle), ...Object.keys(HELD_BACK)]
   // An explicit page: the default page size would cut the 29 rows short.
   const { data: products } = await query.graph({
     entity: "product",
@@ -77,7 +83,8 @@ export default async function publishMemberships({ container }: ExecArgs): Promi
   log(`read ${products.length} membership product(s); default sales channel ${defaultChannel ?? "NONE"}`)
   if (products.length < handles.length) log(`warning: expected ${handles.length} membership products, read ${products.length}`)
 
-  const plan = planPublish(products as MembershipRow[], defaultChannel)
+  log(includeTraining ? "training levels INCLUDED (MEMBERSHIP_TRAINING_LEVELS=on)" : "launch levels only: Lifestyle, Student, Novice")
+  const plan = planPublish(products as MembershipRow[], defaultChannel, includeTraining)
   const tiers = only ? plan.tiers.filter((p) => p.spec.handle === only) : plan.tiers
 
   for (const p of tiers) {
@@ -87,9 +94,11 @@ export default async function publishMemberships({ container }: ExecArgs): Promi
     for (const w of p.warnings) log(`  warning ${w}`)
   }
   for (const [handle, why] of Object.entries(HELD_BACK)) log(`HELD BACK ${handle}: ${why}`)
+  for (const t of plan.trainingHeld) log(`HELD ${t.sku} ${t.handle}: ${TRAINING_HELD}`)
+  for (const handle of plan.trainingPublished) log(`BLOCKER ${handle} is published although it is ${TRAINING_HELD}: set it to draft in the admin`)
   for (const handle of plan.heldBackPublished) log(`BLOCKER ${handle} is published although it is held back: set it to draft in the admin`)
 
-  const blocked = tiers.some((p) => p.blockers.length > 0) || plan.heldBackPublished.length > 0
+  const blocked = tiers.some((p) => p.blockers.length > 0) || plan.heldBackPublished.length > 0 || plan.trainingPublished.length > 0
   const toWrite = tiers.filter((p) => p.update && p.id)
 
   if (!dryRun && blocked) {
