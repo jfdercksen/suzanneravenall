@@ -56,6 +56,9 @@ export default async function StaffNoviceDetail({ params, searchParams }: PagePr
 
   const supabase = getServiceRoleClient()
   const back = (
+    // A full page load on purpose, like /staff/submissions: the analytics
+    // sanitiser runs on load and Clarity never starts on staff pages.
+    // eslint-disable-next-line @next/next/no-html-link-for-pages
     <a href="/staff/novice" className="inline-block mb-8 text-sm underline underline-offset-2 text-brand-ink hover:text-brand-primary">
       All Novice applications
     </a>
