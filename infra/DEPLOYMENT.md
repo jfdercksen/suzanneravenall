@@ -295,6 +295,12 @@ Book a test meeting in Cal.com and confirm:
 - Payload: `PAYLOAD_URL` must match the actual access URL — mismatch causes server/client URL divergence
 - Medusa: Check `/auth` Nginx location has `proxy_cookie_flags connect.sid nosecure` during HTTP testing phase
 
+### CMS admin bounces to the login page after a successful login (KI135)
+- Cause: Payload accepts its `payload-token` cookie only from an Origin in its `csrf` list, or (no Origin) with a `Sec-Fetch-Site` header. The list used to hold `PAYLOAD_URL` with its `/cms` path, which no browser Origin matches; and on plain http (the review box IP) browsers send no `Sec-Fetch-Site`.
+- Fix: `apps/payload/payload.config.ts` sets `csrf` and `cors` to the bare origins of `PAYLOAD_URL` (`src/lib/cmsOrigins.ts`); the review box nginx (`conf.d/ip-testing.conf`, `/cms` only) gives a request without an Origin the server's own origin. Production over https needs no nginx change.
+- Verify after a payload + nginx deploy: in a private browser window open `/cms/admin/login`, log in, and the dashboard must stay open after a reload and after opening Users. Without a browser, on the box: `curl -s -o /dev/null -w '%{http_code}' http://localhost/cms/admin/login` is 200 and `docker compose exec nginx nginx -T | grep -c cms_request_origin` is 2 (the map and the /cms line).
+- Note: the CMS has no email adapter, so "Forgot password" mails are never sent; reset passwords on the box instead (see CMS Admin Accounts).
+
 ### NEXT_PUBLIC_MEDUSA_URL baked as wrong value
 - This requires a full `docker compose build web` — env-only restart is not enough
 - Verify the value was correct at build time: check `docker inspect` on the web container's build args
@@ -306,6 +312,10 @@ Book a test meeting in Cal.com and confirm:
 Payload admin users for the Suzanne Ravenall CMS (`/cms/admin`). Passwords are
 **never** committed to git — store them in the agency password manager and share
 with the account owner out-of-band.
+
+> **Staff account without the admin screen** (KI125, KI135): the tools image has the CLI. From `infra/`, interactively, the person types the password at a hidden prompt (never an argument or env var):
+> `docker compose --profile tools run --rm -it -e STAFF_EMAIL=<email> -e STAFF_NAME="<name>" payload-tools npx payload run src/scripts/create-staff-user.ts`
+> Needs the Staff role in the database first (`infra/scripts/migrations/payload-20261118-staff-role.sql`).
 
 > The standalone Payload Docker image does **not** include the `payload` CLI
 > (`npx payload create-user` is unavailable). Create/reset/delete admin users

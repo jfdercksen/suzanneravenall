@@ -31,6 +31,7 @@ import { Pages } from './src/collections/Pages'
 import { Media } from './src/collections/Media'
 import { IntakeForms } from './src/collections/IntakeForms'
 import { seedIntakeForms } from './src/seed/seedIntakeForms'
+import { cmsOrigins } from './src/lib/cmsOrigins'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -38,10 +39,10 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   serverURL: process.env.PAYLOAD_URL ?? '',
 
-  cors: [
-    process.env.PAYLOAD_URL ?? '',
-    process.env.PAYLOAD_PUBLIC_SERVER_URL ?? '',
-  ].filter(Boolean),
+  // Bare origins, never the /cms path: a browser Origin has no path, so the
+  // path form made Payload refuse the login cookie on every request (KI135).
+  cors: cmsOrigins(process.env),
+  csrf: cmsOrigins(process.env),
 
   admin: {
     user: 'users',
