@@ -518,6 +518,15 @@ describe('order-placed membership levels (KI128, 20 Nov 2026)', () => {
     expect(emailCalls('/api/email/membership-welcome')).toEqual([])
   })
 
+  it('reads the order time when Query returns it as a Date object, so a replay of a real order is a no-op (#452, 23 Nov)', async () => {
+    const placedAt = '2026-11-23T07:41:59.366Z'
+    const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
+    const place = await loadSubscriber(fake)
+    // structuredClone keeps a Date a Date, as Query hands it over.
+    await place({ ...membershipOrder, created_at: new Date(placedAt) })
+    expect(fake.insert.mock.calls[0]?.[0]).toMatchObject({ start_date: placedAt, end_date: '2027-11-23T07:41:59.366Z' })
+  })
+
   it('uses the order time as the start of a new year', async () => {
     const fake = supabaseFake({ tierRow: { id: SILVER_ID } })
     await placeProgrammeOrder(fake, { ...membershipOrder, created_at: '2026-11-20T08:15:00.000Z' })

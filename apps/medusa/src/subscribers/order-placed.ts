@@ -749,7 +749,11 @@ async function handleMembershipActivation(
   }
 
   // The year runs from the order's own time, so a replayed event writes the same dates.
-  const placedAt = typeof order.created_at === 'string' ? new Date(order.created_at) : null
+  // Query returns created_at as a Date object (a string only in JSON fixtures):
+  // order #452 on 23 Nov fell back to "now" when only a string was accepted.
+  const rawCreatedAt: unknown = order.created_at
+  const placedAt =
+    rawCreatedAt instanceof Date ? rawCreatedAt : typeof rawCreatedAt === 'string' ? new Date(rawCreatedAt) : null
   const start = placedAt && !Number.isNaN(placedAt.getTime()) ? placedAt : new Date()
   const end = membershipTermEnd(start)
   console.log(`[order-placed] Activating ${level.sku} for customer ${order.customer_id} (order ${order.id}) until ${end.toISOString()}`)
