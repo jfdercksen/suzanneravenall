@@ -277,6 +277,8 @@ Book a test meeting in Cal.com and confirm:
 ## Troubleshooting
 
 ### Payload admin loads unstyled
+- First check the served admin CSS holds Payload's base rules (KI004, fixed 23 Nov 2026: the `(payload)` layout must `import '@payloadcms/next/css'`). From anywhere:
+  `B=http://169.239.180.49; for c in $(curl -s $B/cms/admin/login | grep -o '/cms/_next/static/[^"]*\.css' | sort -u); do curl -s $B$c; done | grep -c -- '--theme-bg'` must be 1 or more (0 = unstyled admin). In a browser, the computed body font must not be Times New Roman.
 - Check `PAYLOAD_URL` in `.env` matches the URL you're accessing `/cms` at
 - Check `basePath: '/cms'` is in `apps/payload/next.config.mjs` (committed, not just working copy)
 - Rebuild payload container after fixing
