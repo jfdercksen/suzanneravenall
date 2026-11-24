@@ -318,6 +318,7 @@ with the account owner out-of-band.
 > **Staff account without the admin screen** (KI125, KI135): the tools image has the CLI. From `infra/`, interactively, the person types the password at a hidden prompt (never an argument or env var):
 > `docker compose --profile tools run --rm -it -e STAFF_EMAIL=<email> -e STAFF_NAME="<name>" payload-tools npx payload run src/scripts/create-staff-user.ts`
 > Needs the Staff role in the database first (`infra/scripts/migrations/payload-20261118-staff-role.sql`).
+> **Rebuild the tools image first** when a script was added or changed: `payload-tools` is its own image (Dockerfile target `tools`), and a deploy of `payload` does not rebuild it, so a new script fails with ERR_MODULE_NOT_FOUND (create-staff-user.ts, 24 Nov). From `infra/`: `docker compose --profile tools build payload-tools`, then run the script.
 > Check who holds the role (read only; D025 says exactly Suzanne and Shayna):
 > `docker compose --profile tools run --rm -e EXPECT_STAFF="sravenall@effectivenesscompany.com,support@ravenallinstitute.com" payload-tools npx payload run src/scripts/list-staff-users.ts` (prints MATCH, else names the missing and the extra accounts, exit 1).
 
