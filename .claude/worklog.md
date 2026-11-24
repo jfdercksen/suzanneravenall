@@ -878,3 +878,8 @@ Under Johan's "Yes, go ahead" of 23 Nov in this session (sign-in as the test mem
 - **Staff step:** no record that infra/scripts/migrations/payload-20261118-staff-role.sql ran on the payload database or that a Staff account exists; the payload database is on the box, which this session cannot reach.
 - **Staff role (later, 24 Nov):** Johan checked on the box, read only: payload.enum_users_role holds admin, editor, staff, so payload-20261118-staff-role.sql is already applied. Still open: a Staff user (one of our own test addresses for the Novice approval test).
 - **Test records added:** a second free member_subscriptions row for the test member (08:13:23), the uploaded file in the novice-applications bucket and its event, one login-link mail. Nothing deleted.
+
+## 2026-11-24 Novice staff approval on the review box (side session for the EA)
+- **Staff user:** johan@z-group.co.za ("Jo Black", our test account), created by Johan; Staff role enum already on the box.
+- **FAIL approve:** Johan clicked Approve at about 08:45 UTC; database: application still submitted, events only two staff "viewed" (08:44:38, 08:45:02, no file opened), no s0214 row, no welcome mail. Cause KI138: the page's referrer no-referrer makes the browser send Origin: null on the form post, and the decision route refused it with 403 (probe: Origin null 403, real Origin without login 401). The access insert and the status update were replayed in a rolled-back transaction on aimate-db1 and both work.
+- **Fix on the branch:** referrer same-origin on /staff/novice and /staff/novice/<id>, test referrer.test.ts, pattern added. Not deployed. After a web deploy Johan approves again; nothing to undo.

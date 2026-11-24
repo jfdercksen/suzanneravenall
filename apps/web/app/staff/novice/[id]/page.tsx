@@ -19,7 +19,11 @@ import { isApplicationId, levelOf, logEvent, STATUS_LABEL, staffApplication } fr
 export const metadata: Metadata = {
   title: 'Novice application',
   robots: { index: false, follow: false },
-  referrer: 'no-referrer',
+  // same-origin, not no-referrer: no referrer leaves for another site, and the
+  // browser still sends this site's Origin on the Approve form post. Under
+  // no-referrer it sends Origin: null and the decision route refused every
+  // approval with 403 (KI138, 24 Nov 2026).
+  referrer: 'same-origin',
 }
 
 export const dynamic = 'force-dynamic'
