@@ -1,12 +1,13 @@
 import { Body, Container, Head, Heading, Hr, Html, Link, Preview, Section, Text } from '@react-email/components'
 import type { QuizCompletionEmailData } from '../types'
+import { AnswerList } from './AnswerList'
 
 /**
- * Staff notice that someone completed a diagnostic: who, which quiz and the
- * result title. The answers are NOT in this mail: they can hold health and
- * wellbeing information, which is never sent by plain email (POPIA,
- * Suzanne's rules of 8 Nov 2026). They stay in quiz_subscribers; the mail
- * links to the staff page that shows them behind the CMS login (KI125).
+ * Staff notice that someone completed a diagnostic: who, which quiz, the
+ * result and every answer. The answers are in the mail by Suzanne's decision
+ * of 20 Nov 2026 ("we do allow email", DECISIONS.md D025). The
+ * website keeps its copy in quiz_subscribers, readable on the staff page
+ * behind the CMS login (KI125); the mail links to it as the backup.
  */
 
 export type QuizCompletionNotificationProps = QuizCompletionEmailData & {
@@ -26,6 +27,7 @@ export default function QuizCompletionNotification({
   quizTitle,
   resultTitle,
   resultSubtitle,
+  answers,
   answersUrl,
 }: QuizCompletionNotificationProps) {
   return (
@@ -49,19 +51,21 @@ export default function QuizCompletionNotification({
               </Text>
             ))}
           </Section>
-          <Text style={{ color: INK, fontSize: '14px', lineHeight: '1.6', margin: '0 0 16px' }}>
-            The answers are not in this email. They can include health and wellbeing information, so they stay in the
-            website database and are never sent by email.
+          <Text style={{ color: MUTED, fontSize: '12px', lineHeight: '1.5', margin: '0 0 12px' }}>
+            Answers. Scale: Never (0) to Almost Always (4).
           </Text>
-          <Text style={{ color: INK, fontSize: '14px', lineHeight: '1.6', margin: '0 0 16px' }}>
+          <AnswerList groups={[{ section: null, items: answers }]} />
+          <Text style={{ color: INK, fontSize: '14px', lineHeight: '1.6', margin: '16px 0 0' }}>
+            The website keeps a copy:{' '}
             <Link href={answersUrl} style={{ color: INK, textDecoration: 'underline' }}>
-              Read the answers on the staff page
+              open it on the staff page
             </Link>{' '}
             (log in with your staff CMS account).
           </Text>
           <Hr style={{ borderColor: BORDER, margin: '24px 0 12px' }} />
           <Text style={{ color: MUTED, fontSize: '12px', lineHeight: '1.5', margin: 0 }}>
-            Reply to this email to respond to {firstName}.
+            These answers can include health and wellbeing information: keep this mail within the team. Reply to this
+            email to respond to {firstName}.
           </Text>
         </Container>
       </Body>

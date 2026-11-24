@@ -170,10 +170,10 @@ describe('POST /api/quiz/complete', () => {
     )
   })
 
-  it('tells staff who completed which quiz and the result, never the answers (POPIA)', async () => {
+  it('tells staff who completed which quiz, the result and every answer (Suzanne, 20 Nov: "we do allow email")', async () => {
     await POST(makeRequest(validBody()) as never)
     expect(mockSendQuizCompletionNotificationEmail).toHaveBeenCalledWith({
-      // The row id: the mail links to /staff/submissions/quiz/<id> (KI125).
+      // The row id: the mail links to /staff/submissions/quiz/<id> (KI125), the backup copy.
       submissionId: 'sub-1',
       firstName: 'Alice',
       lastName: 'Smith',
@@ -181,10 +181,11 @@ describe('POST /api/quiz/complete', () => {
       quizTitle: expect.any(String),
       resultTitle: 'The Hyper-Alert Achiever',
       resultSubtitle: expect.any(String),
+      answers: [
+        { question: 'I feel on edge', answer: 'Almost Always (4 of 4)' },
+        { question: 'I overthink', answer: 'Never (0 of 4)' },
+      ],
     })
-    const sent = JSON.stringify(mockSendQuizCompletionNotificationEmail.mock.calls[0])
-    expect(sent).not.toContain('I feel on edge')
-    expect(sent).not.toContain('Almost Always')
   })
 
   it('refuses a submission without the consent tick and stores nothing', async () => {

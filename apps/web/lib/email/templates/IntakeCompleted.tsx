@@ -1,11 +1,14 @@
 import { Body, Container, Head, Heading, Hr, Html, Link, Preview, Section, Text } from '@react-email/components'
+import type { AnswerGroup } from '../../staff/present'
+import { AnswerList } from './AnswerList'
 
 /**
  * A completed intake form, for the team (H-12): who, which order, service and
- * form, and when. The answers are NOT in this mail: they hold personal and
- * health information, which is never sent by plain email (POPIA, Suzanne's
- * rules of 8 Nov 2026). They stay in intake_submissions; the mail links to
- * the staff page that shows them behind the CMS login (KI125).
+ * form, when, then every question with its answer under the form's headings.
+ * The answers are in the mail by Suzanne's decision of 20 Nov 2026 ("we do
+ * allow email", DECISIONS.md D025). The website keeps its copy in
+ * intake_submissions, readable on the staff page behind the CMS login
+ * (KI125); the mail links to it as the backup.
  */
 
 const INK = '#0A0A0A'
@@ -23,6 +26,8 @@ export interface IntakeCompletedProps {
   acknowledged: boolean
   /** "Opted in: Email, SMS" or "Not opted in". */
   marketing: string
+  /** Every question with its answer, grouped as the staff page shows them. */
+  answers: AnswerGroup[]
   /** /staff/submissions/intake/<id> on the site. */
   answersUrl: string
 }
@@ -36,6 +41,7 @@ export default function IntakeCompleted({
   completedAt,
   acknowledged,
   marketing,
+  answers,
   answersUrl,
 }: IntakeCompletedProps) {
   return (
@@ -63,19 +69,17 @@ export default function IntakeCompleted({
               </Text>
             ))}
           </Section>
-          <Text style={{ color: INK, fontSize: '14px', lineHeight: '1.6', margin: '0 0 16px' }}>
-            The answers are not in this email. They hold personal and health information, so they stay in the website
-            database and are never sent by email.
-          </Text>
-          <Text style={{ color: INK, fontSize: '14px', lineHeight: '1.6', margin: '0 0 16px' }}>
+          <AnswerList groups={answers} />
+          <Text style={{ color: INK, fontSize: '14px', lineHeight: '1.6', margin: '16px 0 0' }}>
+            The website keeps a copy:{' '}
             <Link href={answersUrl} style={{ color: INK, textDecoration: 'underline' }}>
-              Read the answers on the staff page
+              open it on the staff page
             </Link>{' '}
             (log in with your staff CMS account).
           </Text>
           <Hr style={{ borderColor: BORDER, margin: '24px 0 12px' }} />
           <Text style={{ color: MUTED, fontSize: '12px', lineHeight: '1.5', margin: 0 }}>
-            Reply to this mail to write to the client.
+            Personal and health information: keep this mail within the team. Reply to this mail to write to the client.
           </Text>
         </Container>
       </Body>

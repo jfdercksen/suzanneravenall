@@ -7,6 +7,7 @@ import { computeResult } from '@/lib/quiz/scoring'
 import { sendQuizCompletionNotificationEmail } from '@/lib/email/quiz-completion-notification'
 import { createRateLimiter, getClientIp, rateLimitResponse } from '@/lib/rate-limit'
 import { CONSENT_FORM_VERSION } from '@/lib/consent/quiz'
+import { quizAnswerRows } from '@/lib/staff/present'
 
 const CompleteSchema = z.object({
   quizSlug: z.string().trim().min(1).max(200),
@@ -102,10 +103,9 @@ export async function POST(request: NextRequest) {
   const result = quiz.results[resultKey]
 
   // Fire-and-forget: the user's result is already rendered client-side from
-  // local state regardless of this call's outcome. Who and which result only:
-  // the answers can hold health information and are never sent by email
-  // (POPIA, Suzanne's rules of 8 Nov 2026). They stay in quiz_subscribers;
-  // the mail links to the staff page (KI125).
+  // local state regardless of this call's outcome. The mail carries the
+  // answers (Suzanne, 20 Nov 2026: "we do allow email"); the copy stays in
+  // quiz_subscribers and the mail links to the staff page (KI125).
   void sendQuizCompletionNotificationEmail({
     submissionId: subscriber.id,
     firstName: subscriber.first_name,
@@ -114,6 +114,7 @@ export async function POST(request: NextRequest) {
     quizTitle: quiz.title,
     resultTitle: result.title,
     resultSubtitle: result.subtitle,
+    answers: quizAnswerRows(quiz, filteredAnswers),
   }).catch((err: unknown) => {
     console.error(
       '[quiz/complete] notification email failed:',

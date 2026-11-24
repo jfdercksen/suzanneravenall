@@ -895,3 +895,10 @@ Under Johan's "Yes, go ahead" of 23 Nov in this session (sign-in as the test mem
 ## 2026-11-24 Wording fixes before the client test (Johan: "Yes, fix first")
 - Dashboard upgrade prompt: eyebrow Membership, text "See the membership levels, what each one is for and how to join." (was Silver or Gold with benefits). Upgrade page: the Premier sentence removed. Sign-in and sign-up link messages (KI140). Proposed only, not changed: the dashboard Continue Learning card and the welcome mail reminder line. Portal tests 52/52. Not deployed.
 - Records: both team Staff logins exist (Johan's read-back, payload.users 5 rows: sravenall@effectivenesscompany.com and support@ravenallinstitute.com staff; Shayna's second run worked).
+
+## 2026-11-24 Quiz and intake answers back in the team mails (D025, side session for the EA)
+Brief from the EA (Johan's plan for 24 Nov): Suzanne, 20 Nov, "we do allow email"; Johan confirmed to her 23 Nov 14:38. Branch claude/form-answers-email from feature/design-standard 19e29b8, not merged, not deployed.
+- **Mails:** QuizCompletionNotification and IntakeCompleted carry every question and answer again, built with lib/staff/present.ts (the staff page's own rows) through the new lib/email/templates/AnswerList.tsx, text part included; footer "keep this mail within the team"; the staff page link stays as the backup copy.
+- **Recipients checked:** quiz QUIZ_NOTIFY_EMAIL, else CONTACT_NOTIFY_EMAIL, else hello@suzanneravenall.com; intake the form override, else INTAKE_NOTIFY_EMAIL, else CONTACT_NOTIFY_EMAIL, else support@ravenallinstitute.com. The form override (any signed-in CMS user can set it) is now used only on ravenallinstitute.com, suzanneravenall.com and effectivenesscompany.com, else ignored and logged.
+- **Wording:** quiz consent tick names the team email, new CONSENT_FORM_VERSION; Privacy Notice Brevo line names the answers email; KNOWN_ISSUES KI122 item 3 and KI125 marked superseded; DECISIONS.md D025.
+- **Logins:** apps/payload/src/scripts/list-staff-users.ts (read only, EXPECT_STAFF check) next to create-staff-user.ts; DEPLOYMENT.md has both commands. No account created, nothing sent.
