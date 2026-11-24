@@ -61,7 +61,10 @@ describe('POST /api/staff/novice/<id>/decision', () => {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded', origin },
         body: new URLSearchParams({ decision: 'approve' }),
       })
-    expect((await POST(proxied('http://169.239.180.49'), ctx)).status).toBe(303)
+    const res = await POST(proxied('http://169.239.180.49'), ctx)
+    expect(res.status).toBe(303)
+    // Back to the public page, never the internal bind address (KI139).
+    expect(res.headers.get('location')).toBe(`http://169.239.180.49/staff/novice/${ID}?done=not-submitted`)
     expect(h.decide).toHaveBeenCalledTimes(1)
     // What a browser sends on a form post from a no-referrer page (the KI138 cause): refused.
     expect((await POST(proxied('null'), ctx)).status).toBe(403)

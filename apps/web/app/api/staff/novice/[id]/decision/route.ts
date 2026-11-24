@@ -20,8 +20,11 @@ const formSchema = z.object({
   note: z.string().max(4000).default(''),
 })
 
-function back(request: Request, id: string, done: string): NextResponse {
-  return NextResponse.redirect(new URL(`/staff/novice/${id}?done=${done}`, request.url), 303)
+// The public site address, not request.url: behind nginx Next sees its own
+// bind address (http://0.0.0.0:3000), and the browser was sent there after
+// Approve (KI139, 24 Nov 2026).
+function back(id: string, done: string): NextResponse {
+  return NextResponse.redirect(`${siteUrl()}/staff/novice/${id}?done=${done}`, 303)
 }
 
 function sameOrigin(request: Request): boolean {
@@ -58,7 +61,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const result = await decideApplication(admin, app, parsed.data.decision, parsed.data.note, access.viewer.email)
     if (!result.ok) {
       if (result.reason === 'activation' || result.reason === 'write') logError(`[staff/novice] decision failed: ${result.detail ?? result.reason}`, undefined, { id })
-      return back(request, id, result.reason === 'write' || result.reason === 'unknown-level' ? 'error' : result.reason)
+      return back(id, result.reason === 'write' || result.reason === 'unknown-level' ? 'error' : result.reason)
     }
 
     await logEvent(admin, {
@@ -88,9 +91,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       // The decision stands; the member also sees it in the portal.
       logError('[staff/novice] member email failed', err, { id })
     }
-    return back(request, id, result.status)
+    return back(id, result.status)
   } catch (err) {
     logError('[staff/novice] decision error', err, { id })
-    return back(request, id, 'error')
+    return back(id, 'error')
   }
 }
