@@ -12,16 +12,17 @@
  * accounts are exactly those addresses (any order, any case).
  */
 
+import { createScriptResult, installScriptResult } from './lib/scriptResult'
+
 // A module (top-level await below), with nothing to export.
 export {}
 
-async function exitAfterFlush(code: number): Promise<never> {
-  await new Promise<void>((resolve) => process.stdout.write('', () => process.stderr.write('', () => resolve())))
-  process.exit(code)
-}
+// Lines written synchronously, with a fallback if the run ends without a result (lib/scriptResult.ts).
+const result = createScriptResult('Could not list: no result was reported')
+installScriptResult(result, 'Could not list:')
 
-let exitCode = 1
 try {
+  result.step('Connecting to the CMS database...')
   const { getPayload } = await import('payload')
   const { default: config } = await import('../../payload.config')
   const payload = await getPayload({ config })
@@ -34,9 +35,9 @@ try {
   })
   if (found.hasNextPage) throw new Error('more than 100 Staff accounts; this check reads only the first 100')
   const rows = found.docs as Array<{ email?: string; name?: string; createdAt?: string }>
-  console.log(`Staff accounts: ${rows.length}`)
+  result.step(`Staff accounts: ${rows.length}`)
   for (const row of rows) {
-    console.log(`  ${row.email ?? '(no email)'} | ${row.name ?? ''} | created ${row.createdAt ?? 'unknown'}`)
+    result.step(`  ${row.email ?? '(no email)'} | ${row.name ?? ''} | created ${row.createdAt ?? 'unknown'}`)
   }
 
   const expected = (process.env.EXPECT_STAFF ?? '')
@@ -44,20 +45,19 @@ try {
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean)
   if (expected.length === 0) {
-    exitCode = 0
+    result.ok('Listed.')
   } else {
     const actual = rows.map((r) => (r.email ?? '').toLowerCase())
     const missing = expected.filter((e) => !actual.includes(e))
     const extra = actual.filter((e) => !expected.includes(e))
     if (missing.length === 0 && extra.length === 0) {
-      console.log('MATCH: the Staff accounts are exactly the expected addresses.')
-      exitCode = 0
+      result.ok('MATCH: the Staff accounts are exactly the expected addresses.')
     } else {
-      if (missing.length) console.error(`Missing: ${missing.join(', ')}`)
-      if (extra.length) console.error(`Not expected (change their Role in the CMS, Users): ${extra.join(', ')}`)
+      const parts = [missing.length ? `Missing: ${missing.join(', ')}` : '', extra.length ? `Not expected (change their Role in the CMS, Users): ${extra.join(', ')}` : ''].filter(Boolean)
+      result.fail(`NO MATCH. ${parts.join('. ')}`)
     }
   }
 } catch (error: unknown) {
-  console.error('Could not list:', error instanceof Error ? error.message : 'unknown error')
+  result.fail(`Could not list: ${error instanceof Error ? error.message : 'unknown error'}`)
 }
-await exitAfterFlush(exitCode)
+process.exit(result.code())
