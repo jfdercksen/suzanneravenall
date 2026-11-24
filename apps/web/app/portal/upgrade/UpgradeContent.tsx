@@ -215,8 +215,7 @@ export default function UpgradeContent({
                 </p>
               ))}
               <p>
-                You may hold memberships in Akashic and Energy Alignment & Optimisation at the same time. Basic tiers give core access;
-                Premier tiers include CPD tracking, community access, and extended resources.
+                You may hold memberships in Akashic and Energy Alignment & Optimisation at the same time.
               </p>
             </div>
             <Link

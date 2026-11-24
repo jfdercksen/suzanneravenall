@@ -56,6 +56,14 @@ describe('GET /portal/callback', () => {
     expect(res.headers.get('location')).toBe('http://site/portal/dashboard')
   })
 
+  it('a failed exchange from a sign-up link says the email is confirmed; any other says use the same browser (KI140)', async () => {
+    exchange.mockResolvedValue({ data: { session: null }, error: { message: 'code verifier missing' } })
+    const signup = await call('http://site/portal/callback?code=abc&from=signup')
+    expect(signup.headers.get('location')).toBe('http://site/portal/login?error=signup-other-browser')
+    const signin = await call('http://site/portal/callback?code=abc&next=/portal/novice')
+    expect(signin.headers.get('location')).toBe('http://site/portal/login?error=auth-callback-failed')
+  })
+
   describe('Guest row on sign-in (KI137)', () => {
     const insert = vi.fn()
     function tables(rows: { data: unknown; error: unknown }) {

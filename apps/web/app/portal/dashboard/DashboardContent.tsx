@@ -365,14 +365,13 @@ export default function DashboardContent({
             <div className="relative flex flex-col lg:flex-row lg:items-center gap-8">
               <div className="flex-1">
                 <p className="text-xs uppercase tracking-[0.3em] font-medium text-brand-accent-400 mb-3">
-                  Unlock More
+                  Membership
                 </p>
                 <h2 className="text-2xl lg:text-3xl font-medium tracking-tight text-white mb-3">
                   Ready to go deeper?
                 </h2>
                 <p className="text-white/60 max-w-xl">
-                  Upgrade to Silver or Gold membership for access to the full resource library,
-                  group coaching sessions, self-assessment workbooks, and the practitioner community.
+                  See the membership levels, what each one is for and how to join.
                 </p>
               </div>
               <div className="flex-shrink-0 flex flex-col sm:flex-row gap-3">

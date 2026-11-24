@@ -44,6 +44,15 @@ const shopLinks = () =>
 
 // KI071, reopened 17 Nov 2026 (Shayna's check): the 29 membership products are
 // drafts, the store API does not return them, so "Upgrade Now" was a 404.
+describe('UpgradeContent wording (24 Nov)', () => {
+  it('claims no Premier extras that Suzanne has not given us', () => {
+    const { container } = render(<UpgradeContent {...guest} availableHandles={[]} />)
+    for (const gone of ['CPD tracking', 'extended resources', 'core access']) {
+      expect(container.textContent).not.toContain(gone)
+    }
+  })
+})
+
 describe('UpgradeContent: Upgrade Now only for products the store returns', () => {
   it('shows "Opens at launch" and no shop link for every tier when none is on sale (drafts, or the read failed)', () => {
     render(<UpgradeContent {...guest} availableHandles={[]} />)

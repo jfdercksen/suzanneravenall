@@ -52,6 +52,14 @@ describe('DashboardContent', () => {
     expect(screen.getByRole('link', { name: 'View Membership Plans' })).toHaveAttribute('href', '/portal/upgrade')
   })
 
+  it('names no level or benefit that is not on sale in the upgrade prompt (24 Nov wording)', () => {
+    const { container } = render(<DashboardContent {...base} showMemberships />)
+    expect(screen.getByText('See the membership levels, what each one is for and how to join.')).toBeInTheDocument()
+    for (const gone of ['Silver', 'Gold', 'group coaching', 'workbooks', 'Unlock More']) {
+      expect(container.textContent).not.toContain(gone)
+    }
+  })
+
   it('shows the next appointment with a link to the appointments page (I-13)', () => {
     const next = { service: 'Session (60 min)', dateLabel: 'Tue, 3 November 2026', timeLabel: '10:00 - 11:00 SAST' }
     const { rerender } = render(<DashboardContent {...base} nextAppointment={next} showMemberships={false} />)

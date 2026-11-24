@@ -36,6 +36,13 @@ describe('SignupPage phone number (KI077)', () => {
     )
   })
 
+  it('marks its confirmation link as a sign-up, so a link opened in another browser gets the right message (KI140)', async () => {
+    await fillAndSubmit('')
+    const options = (signUp.mock.calls[0]![0] as { options: { emailRedirectTo: string } }).options
+    expect(new URL(options.emailRedirectTo).pathname).toBe('/portal/callback')
+    expect(new URL(options.emailRedirectTo).searchParams.get('from')).toBe('signup')
+  })
+
   it('treats the phone number as optional', async () => {
     await fillAndSubmit('')
     expect(signUp).toHaveBeenCalledWith(

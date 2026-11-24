@@ -25,6 +25,21 @@ beforeEach(() => {
   signInWithPassword.mockReset()
 })
 
+describe('LoginPage messages after a link that could not be used (KI140)', () => {
+  it('tells a member to open the link in the same browser or use the password', () => {
+    search = 'error=auth-callback-failed'
+    render(<LoginPage />)
+    expect(screen.getByText(/A link works once, in the same browser where you asked for it/)).toBeInTheDocument()
+    expect(screen.queryByText(/has expired or is invalid/)).not.toBeInTheDocument()
+  })
+
+  it('tells a new member the email is confirmed and to log in with the password', () => {
+    search = 'error=signup-other-browser'
+    render(<LoginPage />)
+    expect(screen.getByText(/Your email address is confirmed/)).toBeInTheDocument()
+  })
+})
+
 describe('LoginPage (site check M5 / M6)', () => {
   it('carries ?redirect= on to the Sign up and Forgot password links', () => {
     search = `redirect=${encodeURIComponent('/portal/programmes?tab=a&b=1')}`

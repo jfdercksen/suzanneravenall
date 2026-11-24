@@ -103,8 +103,11 @@ export default function SignupPage() {
         // The POPIA marketing choice (unticked by default) rides on the
         // user metadata: the account has no other table of its own.
         data: { full_name: name, phone: phone.trim() || null, ...marketingRecord(marketing, new Date()) },
-        emailRedirectTo: `${window.location.origin}/portal/callback${
-          redirectQuery ? `?next=${encodeURIComponent(redirect)}` : ''
+        // from=signup: if the link is opened in another browser the code
+        // exchange fails, but the email is already confirmed, and the login
+        // page says so (KI140).
+        emailRedirectTo: `${window.location.origin}/portal/callback?from=signup${
+          redirectQuery ? `&next=${encodeURIComponent(redirect)}` : ''
         }`,
       },
     })

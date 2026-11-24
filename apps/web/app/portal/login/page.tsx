@@ -16,7 +16,11 @@ const VALIDATORS: Record<Field, (value: string) => string | undefined> = {
 }
 
 const ERROR_MESSAGES: Record<string, string> = {
-  'auth-callback-failed': 'The sign-in link has expired or is invalid. Please request a new one.',
+  // KI140: the exchange fails mostly because the link was opened in another browser.
+  'auth-callback-failed':
+    'This sign-in link could not be used here. A link works once, in the same browser where you asked for it. Open it there, log in with your password below, or request a new link.',
+  'signup-other-browser':
+    'Your email address is confirmed. The link was opened in a different browser from the one you signed up in, so you are not logged in yet. Log in below with your email and password.',
   'missing-code': 'Something went wrong with the sign-in link. Please try again.',
 }
 

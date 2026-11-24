@@ -55,8 +55,13 @@ export async function GET(request: NextRequest) {
     await supabase.auth.exchangeCodeForSession(code)
 
   if (error || !exchangeData.session) {
+    // A code reaches this route only after the login server accepted the
+    // link (and, on a sign-up, confirmed the email). The usual reason the
+    // exchange fails is that the link was opened in another browser than the
+    // one that asked for it, which lacks the one-time check (KI140).
+    const fromSignup = searchParams.get('from') === 'signup'
     return NextResponse.redirect(
-      `${origin}/portal/login?error=auth-callback-failed`
+      `${origin}/portal/login?error=${fromSignup ? 'signup-other-browser' : 'auth-callback-failed'}`
     )
   }
 
