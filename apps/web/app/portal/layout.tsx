@@ -47,22 +47,29 @@ export default async function PortalLayout({ children }: { children: React.React
   // Inline the tier fetch to reuse the confirmed user — avoids a second getUser() round-trip
   const { data: subscription } = await supabase
     .from('member_subscriptions')
-    .select('membership_tiers(slug)')
+    .select('membership_tiers(name, slug)')
     .eq('user_id', user.id)
     .eq('status', 'active')
+    // Highest level first, as access is decided (KI136): a newer Guest row
+    // must not hide a paid level.
+    .order('access_level', { ascending: false })
     .order('start_date', { ascending: false })
     .limit(1)
     .maybeSingle()
 
-  const tierSlug = (subscription?.membership_tiers as { slug: string } | null)?.slug
+  const tierRow = subscription?.membership_tiers as { name: string; slug: string } | null
+  const tierSlug = tierRow?.slug
   const tier: TierSlug =
     tierSlug === 'silver' || tierSlug === 'gold' || tierSlug === 'practitioner'
       ? tierSlug
       : 'free'
+  // The 29 levels (S0212 Lifestyle and up) carry their own name; without it a
+  // Lifestyle member's badge read "Guest Member" (KI136).
+  const tierName = tierSlug && tierSlug !== 'free' && tier === 'free' ? tierRow?.name : undefined
 
   return (
     <>
-      <PortalNav tier={tier} showTier={membershipsEnabled()} />
+      <PortalNav tier={tier} tierName={tierName} showTier={membershipsEnabled()} />
       {/* Content offset: right of sidebar on lg, above mobile bottom nav */}
       <div className="lg:pl-64 pb-20 lg:pb-0">
         {children}

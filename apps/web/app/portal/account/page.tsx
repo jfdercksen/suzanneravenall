@@ -51,6 +51,8 @@ export default async function AccountPage() {
       .select('start_date, end_date, annual_renewal_date, membership_tiers(name, slug)')
       .eq('user_id', user.id)
       .eq('status', 'active')
+      // Highest level first, as access is decided (KI136).
+      .order('access_level', { ascending: false })
       .order('start_date', { ascending: false })
       .limit(1)
       .maybeSingle(),

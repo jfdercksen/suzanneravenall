@@ -52,4 +52,10 @@ describe('PortalNav', () => {
     rerender(<PortalNav tier="free" showTier />)
     expect(container.textContent).toMatch(/Guest Member/)
   })
+
+  it('shows the level name for a Lifestyle member, not Guest (KI136)', () => {
+    const { container } = render(<PortalNav tier="free" tierName="Lifestyle Membership" />)
+    expect(container.textContent).toMatch(/Lifestyle Membership/)
+    expect(container.textContent).not.toMatch(/Guest Member/)
+  })
 })

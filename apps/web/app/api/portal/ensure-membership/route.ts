@@ -84,13 +84,20 @@ export async function POST(request: Request) {
   }
 
   // Idempotent — return existing record if already created
-  const { data: existing } = await adminSupabase
+  // limit(1), not maybeSingle(): two Guest rows made maybeSingle() error and
+  // a third was inserted (KI137).
+  const { data: existingRows, error: existingError } = await adminSupabase
     .from('member_subscriptions')
     .select('id')
     .eq('user_id', userId)
     .eq('tier_id', freeTier.id)
-    .maybeSingle()
+    .limit(1)
 
+  if (existingError) {
+    logError('[ensure-membership] lookup error:', existingError)
+    return NextResponse.json({ error: 'Could not check membership' }, { status: 500 })
+  }
+  const existing = (existingRows ?? [])[0] as { id: string } | undefined
   if (existing) {
     return NextResponse.json({ subscriptionId: existing.id }, { status: 200 })
   }

@@ -98,12 +98,15 @@ const MOBILE_NAV_LINKS: readonly NavLink[] = NAV_LINKS
 
 interface PortalNavProps {
   tier: TierSlug
+  /** The level's own name (e.g. "Lifestyle Membership") for levels outside the four badge slugs */
+  tierName?: string
   /** Off while memberships are not on sale: no tier names anywhere (KI072) */
   showTier?: boolean
 }
 
-export default function PortalNav({ tier, showTier = true }: PortalNavProps) {
+export default function PortalNav({ tier, tierName, showTier = true }: PortalNavProps) {
   const pathname = usePathname()
+  const tierLabel = tierName ?? `${TIER_LABELS[tier]} Member`
   const router = useRouter()
   const badgeClass = TIER_BADGE_STYLES[tier] ?? TIER_BADGE_STYLES.free
 
@@ -147,7 +150,7 @@ export default function PortalNav({ tier, showTier = true }: PortalNavProps) {
           {showTier && (
             <div className="mb-6 px-2">
               <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest ${badgeClass}`}>
-                {TIER_LABELS[tier]} Member
+                {tierLabel}
               </span>
             </div>
           )}

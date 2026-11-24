@@ -80,13 +80,16 @@ export async function GET(request: NextRequest) {
       cookies: { getAll: () => [], setAll: () => {} },
     })
 
-    const { data: existing } = await adminSupabase
+    // limit(1), not maybeSingle(): with two or more rows (Guest plus a paid
+    // level) maybeSingle() errors, data is null, and a Guest row was added on
+    // every sign-in (KI137). On a read error, write nothing.
+    const { data: existingRows, error: existingError } = await adminSupabase
       .from('member_subscriptions')
       .select('id')
       .eq('user_id', session.user.id)
-      .maybeSingle()
+      .limit(1)
 
-    if (!existing) {
+    if (!existingError && (existingRows ?? []).length === 0) {
       const { data: freeTier } = await adminSupabase
         .from('membership_tiers')
         .select('id')

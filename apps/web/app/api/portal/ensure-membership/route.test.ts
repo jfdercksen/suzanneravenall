@@ -110,7 +110,8 @@ function setupHappyPath({
       const chain: Record<string, unknown> = {
         select: vi.fn().mockReturnThis(),
         eq: vi.fn().mockReturnThis(),
-        maybeSingle: vi.fn().mockResolvedValue({ data: existingSubData, error: null }),
+        // limit(1) returns rows (KI137); existingSubData null means none
+        limit: vi.fn().mockResolvedValue({ data: existingSubData ? [existingSubData] : [], error: null }),
         insert: vi.fn().mockReturnThis(),
         single: vi.fn().mockResolvedValue({ data: insertData, error: insertError }),
       }

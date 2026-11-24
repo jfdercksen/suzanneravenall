@@ -30,6 +30,9 @@ export default async function DashboardPage() {
     .select('tier_id, status, start_date, membership_tiers(name, slug)')
     .eq('user_id', user.id)
     .eq('status', 'active')
+    // Highest level first, as access is decided (KI136): a newer Guest row
+    // must not hide a paid level.
+    .order('access_level', { ascending: false })
     .order('start_date', { ascending: false })
     .limit(1)
     .maybeSingle()

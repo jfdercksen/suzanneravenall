@@ -3,6 +3,9 @@ import { render, screen } from '@testing-library/react'
 
 const getUser = vi.fn()
 let pathname = ''
+let tierRow: { name: string; slug: string } | null = null
+const orders: string[] = []
+const navProps = vi.fn()
 
 vi.mock('next/headers', () => ({
   cookies: async () => ({}),
@@ -12,13 +15,18 @@ vi.mock('@/utils/supabase/server', () => ({
   createClient: () => ({
     auth: { getUser },
     from: () => {
-      const chain = { select: () => chain, eq: () => chain, order: () => chain, limit: () => chain, maybeSingle: async () => ({ data: null }) }
+      const chain = { select: () => chain, eq: () => chain, order: (col: string) => { orders.push(col); return chain }, limit: () => chain, maybeSingle: async () => ({ data: tierRow ? { membership_tiers: tierRow } : null }) }
       return chain
     },
   }),
 }))
 vi.mock('@/lib/access/memberships', () => ({ membershipsEnabled: () => false }))
-vi.mock('@/components/portal/PortalNav', () => ({ default: () => <nav aria-label="Portal sidebar" /> }))
+vi.mock('@/components/portal/PortalNav', () => ({
+  default: (props: Record<string, unknown>) => {
+    navProps(props)
+    return <nav aria-label="Portal sidebar" />
+  },
+}))
 vi.mock('@/components/portal/AuthOverlay', () => ({
   default: ({ children }: { children: React.ReactNode }) => <div data-testid="auth-overlay">{children}</div>,
 }))
@@ -65,5 +73,16 @@ describe('PortalLayout (KI084)', () => {
     getUser.mockResolvedValue({ data: { user: { id: 'u1' } } })
     await renderAt('')
     expect(screen.getByRole('navigation', { name: 'Portal sidebar' })).toBeInTheDocument()
+  })
+
+  it('reads the highest level first and passes its name, so Lifestyle is not shown as Guest (KI136)', async () => {
+    getUser.mockResolvedValue({ data: { user: { id: 'u1' } } })
+    tierRow = { name: 'Lifestyle Membership', slug: 's0212' }
+    orders.length = 0
+    navProps.mockClear()
+    await renderAt('/portal/dashboard')
+    expect(orders[0]).toBe('access_level')
+    expect(navProps).toHaveBeenCalledWith(expect.objectContaining({ tier: 'free', tierName: 'Lifestyle Membership' }))
+    tierRow = null
   })
 })
