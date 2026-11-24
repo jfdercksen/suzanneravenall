@@ -2,6 +2,7 @@ import { createElement } from 'react'
 import { sendEmail } from './send'
 import { staffSubmissionUrl } from '@/lib/staff/links'
 import QuizCompletionNotification from './templates/QuizCompletionNotification'
+import { answerListText } from './templates/AnswerList'
 import type { QuizCompletionEmailData } from './types'
 
 export type { QuizCompletionEmailData }
@@ -33,11 +34,14 @@ function buildPlainText(data: QuizCompletionEmailData): string {
     data.resultTitle,
     data.resultSubtitle,
     '',
-    'The answers are not in this email. They can include health and wellbeing information, so they stay in the website database and are never sent by email.',
+    'ANSWERS (scale: Never 0 to Almost Always 4)',
+    '===========================================',
+    ...answerListText([{ section: null, items: data.answers }]),
     '',
-    'Read them on the staff page (log in with your staff CMS account):',
+    'The website keeps a copy on the staff page (log in with your staff CMS account):',
     staffSubmissionUrl('quiz', data.submissionId),
     '',
+    'These answers can include health and wellbeing information: keep this mail within the team.',
     `Reply to this email to respond to ${data.firstName}.`,
   ]
 

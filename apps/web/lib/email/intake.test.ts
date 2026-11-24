@@ -16,6 +16,8 @@ import {
   sendIntakeRequestEmail,
 } from './intake'
 import type { IntakeRecord } from '../intake/types'
+import { intakeAnswerGroups } from '../staff/present'
+import { answerListText } from './templates/AnswerList'
 
 const RECORD: IntakeRecord = {
   id: 'id1',
@@ -111,7 +113,7 @@ describe('completed form mail to the team', () => {
     expect(intakeCompletedSubject(RECORD)).toBe('Intake form: Johan QA Test, order #512 (Rapid Repatterning Session)')
   })
 
-  it('names who, which order, form and when, and leaves every answer out (POPIA)', async () => {
+  it('names who, which order, form and when, then every answer under its heading (Suzanne, 20 Nov)', async () => {
     const html = await render(
       createElement(IntakeCompleted, {
         clientName: 'Johan QA Test',
@@ -122,6 +124,7 @@ describe('completed form mail to the team', () => {
         completedAt: '21 Oct 2026, 11:30',
         acknowledged: true,
         marketing: 'Opted in: Email, SMS',
+        answers: intakeAnswerGroups(RECORD.answers),
         answersUrl: 'http://169.239.180.49/staff/submissions/intake/id1',
       }),
     )
@@ -130,14 +133,16 @@ describe('completed form mail to the team', () => {
     expect(html).toContain('#512')
     expect(html).toContain('Client intake form')
     expect(html).toContain('Opted in: Email, SMS')
-    expect(html).toContain('The answers are not in this email')
-    for (const leaked of ['Health information', 'Panic', 'Feelings', 'phobias', 'Mental disorders', 'See notes']) {
-      expect(html).not.toContain(leaked)
+    for (const shown of ['Personal details', 'Health information', 'Feelings', 'Panic, Sad', 'Fears or phobias', 'Not answered', 'Mental disorders?', 'Details: ', 'See notes &lt;b&gt;x&lt;/b&gt;']) {
+      expect(html).toContain(shown)
     }
+    expect(html).not.toContain('<b>x</b>')
+    expect(html).toContain('keep this mail within the team')
+    expect(html).not.toContain('The answers are not in this email')
     expect(html).not.toContain('\u2014')
   })
 
-  it('goes to the team address with the client as reply-to, and the text part has no answers either', async () => {
+  it('goes to the team address with the client as reply-to, with the answers in the text part too', async () => {
     process.env.CONTACT_NOTIFY_EMAIL = 'johan@aiautomations.co.za'
     await sendIntakeCompletedEmail(
       { ...RECORD, marketing_opt_in: true, marketing_channels: ['whatsapp'], marketing_choice_at: '2026-11-18T08:00:00Z' },
@@ -149,20 +154,21 @@ describe('completed form mail to the team', () => {
     expect(call.text).toContain('Client: Johan QA Test')
     expect(call.text).toContain('Order: #512')
     expect(call.text).toContain('Marketing: Opted in: WhatsApp')
-    for (const leaked of ['Panic', 'Feelings', 'phobias', 'Mental disorders', 'See notes']) {
-      expect(call.text).not.toContain(leaked)
-    }
+    expect(call.text).toContain('PERSONAL DETAILS\n1. Full name\n   Johan QA Test')
+    expect(call.text).toContain('2. Feelings\n   Panic, Sad')
+    expect(call.text).toContain('4. Fears or phobias\n   Not answered')
+    expect(call.text).toContain('   Details: See notes <b>x</b>')
     const html = await render(call.react as Parameters<typeof render>[0])
-    expect(html).not.toContain('Panic')
+    expect(html).toContain('Panic, Sad')
   })
 
   it('links both parts straight to the staff page for this submission (KI125)', async () => {
     await sendIntakeCompletedEmail(RECORD, null)
     const call = vi.mocked(sendEmail).mock.calls[0]![0]
-    expect(call.text).toContain('Read them on the staff page (log in with your staff CMS account):\nhttp://169.239.180.49/staff/submissions/intake/id1')
+    expect(call.text).toContain('The website keeps a copy on the staff page (log in with your staff CMS account):\nhttp://169.239.180.49/staff/submissions/intake/id1')
     const html = await render(call.react as Parameters<typeof render>[0])
     expect(html).toContain('href="http://169.239.180.49/staff/submissions/intake/id1"')
-    expect(html).toContain('Read the answers on the staff page')
+    expect(html).toContain('open it on the staff page')
     expect(call.text).not.toContain(RECORD.token)
     expect(html).not.toContain(RECORD.token)
   })
@@ -180,7 +186,17 @@ describe('completed form mail to the team', () => {
     expect(intakeTeamAddress(null)).toBe('contact@x.com')
     process.env.INTAKE_NOTIFY_EMAIL = 'intake@x.com'
     expect(intakeTeamAddress({ recipientEmail: null })).toBe('intake@x.com')
-    expect(intakeTeamAddress({ recipientEmail: 'form@x.com' })).toBe('form@x.com')
+    expect(intakeTeamAddress({ recipientEmail: 'shayna@ravenallinstitute.com' })).toBe('shayna@ravenallinstitute.com')
+  })
+
+  it('ignores a form override outside the team domains, so answers never go to an address set by mistake', () => {
+    process.env.CONTACT_NOTIFY_EMAIL = 'johan@aiautomations.co.za'
+    for (const outside of ['form@x.com', 'someone@gmail.com', 'a@ravenallinstitute.com.evil.example', 'no-at-sign', 'x@ravenallinstitute.com@evil.com', 'a@ravenallinstitute.com,', 'a@mail.ravenallinstitute.com', 'Shayna <a@ravenallinstitute.com>']) {
+      expect(intakeTeamAddress({ recipientEmail: outside })).toBe('johan@aiautomations.co.za')
+    }
+    for (const team of ['A@RavenallInstitute.com', 'hello@suzanneravenall.com', 'x@effectivenesscompany.com']) {
+      expect(intakeTeamAddress({ recipientEmail: team })).toBe(team)
+    }
   })
 })
 
@@ -248,5 +264,16 @@ describe('Shayna\'s template: Rapid Repatterning steps and Zoom by service and m
       expect(call.text).not.toContain('\u2014')
       expect(await render(call.react!)).not.toContain('\u2014')
     }
+  })
+})
+
+describe('answers in the text part', () => {
+  it('indents every line of a multi-line answer, so it cannot read as a new numbered question', () => {
+    const lines = answerListText([
+      { section: null, items: [{ question: 'Notes', answer: 'line one\n2. Forged question\nline three', detail: 'a\nb' }] },
+    ])
+    const text = lines.join('\n')
+    expect(text).toBe('1. Notes\n   line one\n   2. Forged question\n   line three\n   Details: a\n   b')
+    expect(text).not.toMatch(/\n2\. Forged/)
   })
 })

@@ -6,6 +6,9 @@ import { isRapidRepatterning, RR_INTRO_COUPON, RR_INTRO_COURSE_URL, ZOOM_URL } f
 import IntakeCompleted from './templates/IntakeCompleted'
 import { marketingSummary } from '../consent/marketing'
 import { staffSubmissionUrl } from '../staff/links'
+import { intakeAnswerGroups } from '../staff/present'
+import { answerListText } from './templates/AnswerList'
+import { logError } from '../log'
 import type { IntakeForm, IntakeRecord } from '../intake/types'
 
 /**
@@ -18,13 +21,30 @@ import type { IntakeForm, IntakeRecord } from '../intake/types'
 export const INTAKE_SUPPORT_EMAIL = 'support@ravenallinstitute.com'
 
 /**
- * The team inbox for completed forms: the form's own override, else
- * INTAKE_NOTIFY_EMAIL, else CONTACT_NOTIFY_EMAIL (on the review box both point
- * at our own inbox), else support.
+ * Domains a form's own recipient override may use. The completed-form mail
+ * carries the client's answers (health information), and any signed-in CMS
+ * user can edit the override, so an address elsewhere is ignored and logged.
+ */
+export const TEAM_EMAIL_DOMAINS = ['ravenallinstitute.com', 'suzanneravenall.com', 'effectivenesscompany.com'] as const
+
+/** One plain address (no second @, spaces, commas or display name) on a team domain. */
+export function isTeamAddress(address: string): boolean {
+  const match = /^[^\s@,;<>"]+@([^\s@,;<>"]+)$/.exec(address.trim().toLowerCase())
+  return match !== null && (TEAM_EMAIL_DOMAINS as readonly string[]).includes(match[1]!)
+}
+
+/**
+ * The team inbox for completed forms: the form's own override (team domains
+ * only), else INTAKE_NOTIFY_EMAIL, else CONTACT_NOTIFY_EMAIL (on the review
+ * box both point at our own inbox), else support.
  */
 export function intakeTeamAddress(form: Pick<IntakeForm, 'recipientEmail'> | null): string {
+  const override = form?.recipientEmail?.trim()
+  if (override && !isTeamAddress(override)) {
+    logError('[intake] recipient override ignored: not a team domain', new Error('override outside team domains'))
+  }
   return (
-    form?.recipientEmail ||
+    (override && isTeamAddress(override) ? override : '') ||
     process.env.INTAKE_NOTIFY_EMAIL?.trim() ||
     process.env.CONTACT_NOTIFY_EMAIL?.trim() ||
     INTAKE_SUPPORT_EMAIL
@@ -128,11 +148,14 @@ function completedText(record: IntakeRecord, formTitle: string): string {
     `Acknowledgement: ${record.answers?.acknowledged ? 'Ticked' : 'Not on this form'}`,
     `Marketing: ${recordMarketing(record)}`,
     '',
-    'The answers are not in this email. They hold personal and health information, so they stay in the website database and are never sent by email.',
+    'ANSWERS',
+    '=======',
+    ...answerListText(intakeAnswerGroups(record.answers)),
     '',
-    'Read them on the staff page (log in with your staff CMS account):',
+    'The website keeps a copy on the staff page (log in with your staff CMS account):',
     staffSubmissionUrl('intake', record.id),
     '',
+    'Personal and health information: keep this mail within the team.',
     'Reply to this mail to write to the client.',
   ]
   return lines.join('\n')
@@ -145,9 +168,9 @@ function recordMarketing(record: IntakeRecord): string {
 }
 
 /**
- * The completed form to the team: who, which order and form, and when. Never
- * the answers (POPIA: health information is not sent by plain email); they
- * stay in intake_submissions. Reply-to is the client. Throws on failure.
+ * The completed form to the team: who, which order and form, when, and every
+ * answer (Suzanne, 20 Nov 2026: "we do allow email"). The copy stays in
+ * intake_submissions behind the staff page. Reply-to is the client. Throws on failure.
  */
 export async function sendIntakeCompletedEmail(record: IntakeRecord, form: IntakeForm | null): Promise<string> {
   const formTitle = form?.title ?? record.form_key ?? 'Intake form'
@@ -164,6 +187,7 @@ export async function sendIntakeCompletedEmail(record: IntakeRecord, form: Intak
       completedAt: formatCompletedAt(record.completed_at),
       acknowledged: record.answers?.acknowledged ?? false,
       marketing: recordMarketing(record),
+      answers: intakeAnswerGroups(record.answers),
       answersUrl: staffSubmissionUrl('intake', record.id),
     }),
     text: completedText(record, formTitle),

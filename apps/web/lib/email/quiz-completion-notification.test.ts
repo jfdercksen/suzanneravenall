@@ -18,6 +18,10 @@ const baseData: QuizCompletionEmailData = {
   quizTitle: 'Nervous System Pattern',
   resultTitle: 'The Hyper-Alert Achiever',
   resultSubtitle: 'Your Pattern: The Hyper-Alert Achiever',
+  answers: [
+    { question: 'I feel "on edge" even when nothing is wrong', answer: 'Often (3 of 4)' },
+    { question: 'I replay conversations <at night>', answer: 'Never (0 of 4)' },
+  ],
 }
 
 describe('sendQuizCompletionNotificationEmail', () => {
@@ -55,13 +59,9 @@ describe('sendQuizCompletionNotificationEmail', () => {
   // without module re-loading (same reasoning as membership-welcome.test.ts's
   // FROM constant) and is covered by source code review instead.
 
-  it('names who, the quiz and the result, and never carries the answers (POPIA)', async () => {
+  it('names who, the quiz, the result and every answer with its question (Suzanne, 20 Nov)', async () => {
     mockSend.mockResolvedValue('email_notify_003')
-    // A caller that still passes answers must not get them into the mail.
-    await sendQuizCompletionNotificationEmail({
-      ...baseData,
-      questions: [{ text: 'I feel "on edge" even when nothing is wrong', answerLabel: 'Often' }],
-    } as QuizCompletionEmailData)
+    await sendQuizCompletionNotificationEmail(baseData)
     const call = mockSend.mock.calls[0]![0] as { text: string; react: Parameters<typeof render>[0] }
     const html = await render(call.react)
     for (const part of [call.text, html]) {
@@ -69,11 +69,16 @@ describe('sendQuizCompletionNotificationEmail', () => {
       expect(part).toContain('lead@example.com')
       expect(part).toContain('Nervous System Pattern')
       expect(part).toContain('The Hyper-Alert Achiever')
-      expect(part).toContain('The answers are not in this email')
-      expect(part).not.toContain('on edge')
-      expect(part).not.toContain('Often')
+      expect(part).toContain('Often (3 of 4)')
+      expect(part).toContain('Never (0 of 4)')
+      expect(part).toContain('keep this mail within the team')
+      expect(part).not.toContain('The answers are not in this email')
       expect(part).not.toContain('\u2014')
     }
+    expect(call.text).toContain('1. I feel "on edge" even when nothing is wrong\n   Often (3 of 4)')
+    // React escapes the question text in the HTML part.
+    expect(html).toContain('I replay conversations &lt;at night&gt;')
+    expect(html).not.toContain('<at night>')
   })
 
   it('links both parts straight to the staff page for this submission (KI125)', async () => {
@@ -82,10 +87,10 @@ describe('sendQuizCompletionNotificationEmail', () => {
     await sendQuizCompletionNotificationEmail(baseData)
     const call = mockSend.mock.calls[0]![0] as { text: string; react: Parameters<typeof render>[0] }
     const url = 'http://169.239.180.49/staff/submissions/quiz/6f1c2a4e-1b2c-4d3e-8f90-123456789abc'
-    expect(call.text).toContain(`Read them on the staff page (log in with your staff CMS account):\n${url}`)
+    expect(call.text).toContain(`The website keeps a copy on the staff page (log in with your staff CMS account):\n${url}`)
     const html = await render(call.react)
     expect(html).toContain(`href="${url}"`)
-    expect(html).toContain('Read the answers on the staff page')
+    expect(html).toContain('open it on the staff page')
     vi.unstubAllEnvs()
   })
 

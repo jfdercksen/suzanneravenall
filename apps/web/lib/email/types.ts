@@ -1,3 +1,5 @@
+import type { AnswerRow } from '../staff/present'
+
 export interface CartItem {
   id: string
   title: string
@@ -161,8 +163,8 @@ export interface QuizReportEmailData {
 }
 
 /**
- * The staff notice of a completed diagnostic: who, which quiz, which result.
- * Never the answers (POPIA: they can hold health information).
+ * The staff notice of a completed diagnostic: who, which quiz, which result
+ * and every answer (Suzanne, 20 Nov 2026: "we do allow email", DECISIONS.md D025).
  */
 export interface QuizCompletionEmailData {
   /** quiz_subscribers.id: the mail links to /staff/submissions/quiz/<id>. */
@@ -173,6 +175,8 @@ export interface QuizCompletionEmailData {
   quizTitle: string
   resultTitle: string
   resultSubtitle: string
+  /** Every question with its scale answer, as the staff page shows them (Suzanne, 20 Nov: "we do allow email"). */
+  answers: AnswerRow[]
 }
 
 /** Auto-reply to a /contact form submission. */

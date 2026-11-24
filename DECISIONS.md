@@ -184,3 +184,16 @@ This is the decision log. Every significant architectural choice is recorded her
 
 **Not covered (follow-ups):** restoring a credit does not mail the client; the Cal.com mails themselves do not mention the rule; the staff page needs no login (Johan asked for a no-login way for Shayna; the link is the key); a cancel of the old booking that arrives before its reschedule is labelled a late cancel, not a late move (credit sums still right); two no-show deliveries out of order are not ordered by time; the terms tick is checked in the browser only (Medusa does not refuse an order without `terms_accepted_at`); Sentry session replay can still record a token page's URL.
 **Date:** 26 Oct 2026 | **Decided by:** Suzanne (rules, 24 Oct), Johan (automatic with Shayna's undo, terms approval first, 26 Oct); working hours definition proposed by the build for Suzanne to confirm
+
+## D025 - Quiz and intake answers go to the team by email again; the website keeps the copy
+
+**Decision:** Suzanne, 20 Nov 2026, in reply to the 19 Nov change that took the answers out of the team mails: "we do allow email". The answers must not only sit behind the login. Johan confirmed this to her in his mail of 23 Nov 2026 14:38.
+
+- **Email:** the team mail for a completed diagnostic or client intake form carries every question with its answer again (as before 19 Nov), so Suzanne and Shayna read it in the mail itself, no login needed. It closes with "keep this mail within the team".
+- **Backup:** the website keeps every completed form (quiz_subscribers, intake_submissions). The staff pages /staff/submissions/quiz and /intake and their view log stay; the mail links to them as the backup copy.
+- **Logins:** exactly two Staff accounts, Suzanne (sravenall@effectivenesscompany.com) and Shayna (support@ravenallinstitute.com). Each gets her login separately, never in a mail thread.
+- **Recipients:** unchanged and from configuration only: quiz mails to QUIZ_NOTIFY_EMAIL, else CONTACT_NOTIFY_EMAIL, else hello@suzanneravenall.com; intake mails to the form's own override, else INTAKE_NOTIFY_EMAIL, else CONTACT_NOTIFY_EMAIL, else support@ravenallinstitute.com. New: a form's override is used only on the team domains (ravenallinstitute.com, suzanneravenall.com, effectivenesscompany.com), because any signed-in CMS user can edit it and the mail now carries health answers.
+- **Consent wording:** the quiz tick now says the answers are "sent to Dr Suzanne Ravenall's team by email"; new CONSENT_FORM_VERSION quiz-consent-interim-2026-11-24-team-email-pending-RI-F-POPIA-09-part-B, so earlier ticks stay tied to the earlier wording. The Privacy Notice's Brevo line names that email.
+
+**Overrides:** on this point, her POPIA procedure of 8 Nov 2026 (answers holding health information not sent by plain email, applied in KI122 item 3 on 18 Nov). The client's own later decision; everything else in KI122 stands.
+**Date:** 20 Nov 2026 (decision), 24 Nov 2026 (built) | **Decided by:** Suzanne; confirmed by Johan 23 Nov

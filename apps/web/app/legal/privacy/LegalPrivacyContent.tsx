@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
-const LAST_UPDATED = '6 October 2026'
+const LAST_UPDATED = '24 November 2026'
 
 export default function LegalPrivacyContent() {
   return (
@@ -139,7 +139,8 @@ export default function LegalPrivacyContent() {
                   <strong>PayFast / PayPal</strong>: payment processing
                 </li>
                 <li>
-                  <strong>Brevo</strong>: email delivery
+                  <strong>Brevo</strong>: email delivery, including the email that sends your completed
+                  diagnostic or intake form answers to our team
                 </li>
                 <li>
                   <strong>Thinkific</strong>: online courses
