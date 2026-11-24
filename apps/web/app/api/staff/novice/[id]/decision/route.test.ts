@@ -52,6 +52,25 @@ describe('POST /api/staff/novice/<id>/decision', () => {
     expect(h.decide).not.toHaveBeenCalled()
   })
 
+  it('behind the review box nginx: accepts the public site Origin although Next sees an internal URL, still refuses null and other sites (KI138)', async () => {
+    vi.stubEnv('NEXT_PUBLIC_SITE_URL', 'http://169.239.180.49')
+    h.decide.mockResolvedValue({ ok: false, reason: 'not-submitted' })
+    const proxied = (origin: string) =>
+      new Request(`http://0.0.0.0:3000/api/staff/novice/${ID}/decision`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', origin },
+        body: new URLSearchParams({ decision: 'approve' }),
+      })
+    expect((await POST(proxied('http://169.239.180.49'), ctx)).status).toBe(303)
+    expect(h.decide).toHaveBeenCalledTimes(1)
+    // What a browser sends on a form post from a no-referrer page (the KI138 cause): refused.
+    expect((await POST(proxied('null'), ctx)).status).toBe(403)
+    expect((await POST(proxied('http://169.239.180.49.evil.example'), ctx)).status).toBe(403)
+    expect((await POST(proxied('https://169.239.180.49'), ctx)).status).toBe(403)
+    expect(h.decide).toHaveBeenCalledTimes(1)
+    vi.unstubAllEnvs()
+  })
+
   it('refuses anyone without the Staff role', async () => {
     h.access.mockResolvedValue({ status: 'forbidden', viewer: { ...viewer, role: 'editor' } })
     expect((await POST(req({ decision: 'approve' }), ctx)).status).toBe(401)
