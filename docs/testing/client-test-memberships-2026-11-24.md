@@ -115,6 +115,7 @@ The full cutover list is in infra/DEPLOYMENT.md (DNS Cutover Checklist). From to
 
 **Accounts and vouchers:**
 - Test Staff user johan@z-group.co.za ("Jo Black").
+- CMS admin sravenall@suzanneravenall.com: an older admin login for Suzanne next to her new Staff login. Decide who uses it and whether it stays admin. An admin can edit content and settings, but cannot open the staff answer pages, which are for Staff only.
 - Vouchers: QA-SELFTEST-100, RI-TEAM-TEST-100 (ended 16 Oct, still to remove), and the client code if created.
 
 **Settings to change:**
