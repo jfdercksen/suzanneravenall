@@ -582,8 +582,9 @@ export default function ProgramsPageClient({ membershipsOn = false }: { membersh
               Learn at Your Own Pace
             </h2>
             <p className="text-lg text-brand-muted font-light mb-12 max-w-2xl leading-relaxed">
-              All programmes are recorded and you have access for as long as you
-              need. Let your journey unfold in a time that is right for you.
+              {/* Suzanne, 24 Nov 2026: "They get 12 months and can pay for lifetime access - that is an add on" */}
+              All programmes are recorded and you have access for 12 months, with lifetime access
+              available as a paid add-on. Let your journey unfold in a time that is right for you.
             </p>
           </motion.div>
           <motion.div

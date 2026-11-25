@@ -49,7 +49,9 @@ describe('CheckoutContent terms tick box', () => {
     render(<CheckoutContent />)
     const box = screen.getByLabelText(/I have read and accept the Terms and Conditions/)
     expect(box).not.toBeChecked()
-    expect(screen.getByRole('link', { name: 'Terms and Conditions' })).toHaveAttribute('href', '/legal/terms')
+    expect(screen.getAllByRole('link', { name: 'Terms and Conditions' })[0]).toHaveAttribute('href', '/legal/terms')
+    // Suzanne 24 Nov: the booking terms can be expanded before ticking (A3).
+    expect(screen.getByText('Read the booking terms')).toBeInTheDocument()
   })
 
   it('refuses to continue to payment without the tick', async () => {

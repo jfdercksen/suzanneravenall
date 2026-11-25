@@ -2,8 +2,9 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { LIVE_TRAINING_PRIVACY } from '@/lib/legal/booking-terms'
 
-const LAST_UPDATED = '24 November 2026'
+const LAST_UPDATED = '25 November 2026'
 
 export default function LegalPrivacyContent() {
   return (
@@ -54,9 +55,16 @@ export default function LegalPrivacyContent() {
                 <strong>suzanneravenall.com</strong>, one of its brands, and is the Responsible Party as
                 defined under the Protection of Personal Information Act 4 of 2013 (&ldquo;POPIA&rdquo;).
               </p>
-              <p className="text-brand-ink leading-relaxed">
+              <p className="text-brand-ink leading-relaxed mb-3">
                 This Privacy Notice explains how we collect, use, share, and protect personal information
                 you provide to us, and outlines your rights as a data subject.
+              </p>
+              {/* Her current Privacy Policy, opening paragraph (A4, 25 Nov 2026) */}
+              <p className="text-brand-ink leading-relaxed">
+                Across all Ravenall Institute platforms and associated websites, including the
+                Effectiveness Company, NCCBM Global, Human Performance Replicator, Repatterning and
+                SuzanneRavenall.com, we are committed to protecting your privacy and to ensure that your
+                personal information is collected and used properly, lawfully and transparently.
               </p>
             </div>
 
@@ -98,8 +106,19 @@ export default function LegalPrivacyContent() {
                 3. Purpose of Processing (POPIA Section 13 Basis)
               </h2>
               {/* TODO (legal review): Verify each processing purpose against POPIA Section 11 grounds: ensure consent, legitimate interest, or contract basis is documented for each */}
+              {/* Her current Privacy Policy, "How we use your information" (A4, 25 Nov 2026) */}
+              <p className="text-brand-ink leading-relaxed mb-3">
+                We will use your personal information only for the purposes for which it was collected.
+                In addition, where necessary your information may be retained for legal or research purposes.
+              </p>
               <p className="text-brand-ink leading-relaxed mb-3">We process personal information for the following purposes:</p>
               <ul className="list-disc list-outside pl-6 space-y-2 text-brand-ink">
+                <li>To gather contact information</li>
+                <li>To confirm and verify your identity or to verify that you are an authorized user for security purposes</li>
+                <li>For the detection and prevention of fraud, crime, money laundering or other malpractice</li>
+                <li>To conduct market or customer satisfaction research or for statistical analysis</li>
+                <li>For audit and record keeping purposes</li>
+                <li>In connection with legal proceedings</li>
                 <li>To create and manage your member account</li>
                 <li>To process payments for programmes, products, and memberships</li>
                 <li>To deliver digital content, resources, and coaching services you have purchased</li>
@@ -107,7 +126,6 @@ export default function LegalPrivacyContent() {
                 <li>To send marketing communications, only with your explicit consent</li>
                 <li>To comply with legal obligations (tax, accounting, regulatory requirements)</li>
                 <li>To improve our website and services through analytics</li>
-                <li>To protect against fraud and unauthorised access</li>
               </ul>
             </div>
 
@@ -183,6 +201,13 @@ export default function LegalPrivacyContent() {
                 </li>
                 <li>Regulatory authorities, where required by law</li>
               </ul>
+              {/* Her current Privacy Policy, "Disclosure of information" (A4, 25 Nov 2026). Her sentence that
+                  agreements are in place with every service provider is held back until Johan confirms it. */}
+              <p className="text-brand-ink leading-relaxed mt-4 mb-3">We may also disclose your information:</p>
+              <ul className="list-disc list-outside pl-6 space-y-2 text-brand-ink">
+                <li>Where we have a duty or a right to disclose in terms of law or industry codes;</li>
+                <li>Where we believe it is necessary to protect our rights.</li>
+              </ul>
             </div>
 
             {/* 5. Your Rights */}
@@ -209,13 +234,20 @@ export default function LegalPrivacyContent() {
                   <strong>Withdraw consent</strong>: where processing is based on consent, withdraw it at any time without affecting the lawfulness of prior processing
                 </li>
               </ul>
+              {/* Her current Privacy Policy, "Your Rights" and "How to contact us" (A4, 25 Nov 2026): support@ */}
               <p className="text-brand-ink leading-relaxed mt-4">
                 To exercise any of these rights, contact us at{' '}
-                {/* Legal and privacy mailbox, as on https://suzanneravenall.com/privacy-policy/ (approved by Johan 6 Oct) */}
-                <a href="mailto:admin@ravenallinstitute.com" className="text-brand-accent underline hover:no-underline">
-                  admin@ravenallinstitute.com
+                <a href="mailto:support@ravenallinstitute.com" className="text-brand-accent underline hover:no-underline">
+                  support@ravenallinstitute.com
                 </a>
                 . We will respond within 30 days.
+              </p>
+              <p className="text-brand-ink leading-relaxed mt-3">
+                We will need a copy of your ID document to confirm your identity before providing details
+                of your personal information, or before making changes to personal information we may hold
+                about you. Please note that any such access request may be subject to a payment of a
+                legally allowable fee. We would appreciate it if you would keep your personal information
+                accurate.
               </p>
             </div>
 
@@ -246,6 +278,41 @@ export default function LegalPrivacyContent() {
                 include TLS encryption for data in transit, encrypted storage, role-based access controls,
                 and regular security reviews. No transmission over the internet is 100% secure. If you
                 believe your information has been compromised, please contact us immediately.
+              </p>
+              {/* Her current Privacy Policy, "Information Security" (A4, 25 Nov 2026) */}
+              <p className="text-brand-ink leading-relaxed mt-3 mb-3">Our security policies and procedures cover:</p>
+              <ul className="list-disc list-outside pl-6 space-y-1 text-brand-ink">
+                <li>Physical security</li>
+                <li>Computer and network security</li>
+                <li>Access to personal information</li>
+                <li>Secure communications</li>
+                <li>Security in contracting out activities or functions</li>
+                <li>Retention and disposal of information</li>
+                <li>Acceptable usage of personal information</li>
+                <li>Governance and regulatory issues</li>
+                <li>Monitoring access and usage of private information</li>
+                <li>Investigating and reacting to security incidents</li>
+              </ul>
+              <p className="text-brand-ink leading-relaxed mt-3">
+                When we contract with third parties, we impose appropriate security, privacy and
+                confidentiality obligations on them to ensure that personal information that we remain
+                responsible for, is kept secure. We will ensure that anyone to whom we pass your personal
+                information agrees to treat your information with the same level of protection as we are
+                obliged to.
+              </p>
+            </div>
+
+            {/* 7A. Live training programmes: her current Privacy Policy, word for word (A4, 25 Nov 2026) */}
+            <div id="live-training">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">
+                7A. Live Training Programmes
+              </h2>
+              <p className="text-brand-ink leading-relaxed">
+                {LIVE_TRAINING_PRIVACY} See also our{' '}
+                <Link href="/legal/terms#live-programs" className="text-brand-accent underline hover:no-underline">
+                  Terms and Conditions
+                </Link>
+                .
               </p>
             </div>
 
@@ -286,9 +353,8 @@ export default function LegalPrivacyContent() {
                     admin@ravenallinstitute.com
                   </a>
                 </p>
-                {/* Addresses: https://suzanneravenall.com/terms-and-conditions/ (no street number is published) */}
-                <p className="text-brand-ink">Physical address: Oxmoor Street, Kyalami Estates, Johannesburg, 1684</p>
-                <p className="text-brand-ink">Postal address: PO Box 910, Kyalami, 1684</p>
+                {/* Suzanne, 24 Nov 2026: "use the box address". As in her mail signature (A2). */}
+                <p className="text-brand-ink">Postal address: PO Box 910, Kyalami, Midrand, Johannesburg, South Africa, 1685</p>
               </div>
             </div>
 

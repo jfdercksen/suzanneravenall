@@ -21,6 +21,7 @@ import {
 } from '@/lib/checkout/business'
 import { MarketingOptIn } from '@/components/forms/MarketingOptIn'
 import { marketingCartMetadata, marketingChoiceError, NO_MARKETING, type MarketingChoice } from '@/lib/consent/marketing'
+import { CheckoutTermsDetails } from './CheckoutTermsDetails'
 
 type Step = 1 | 2 | 3
 
@@ -803,6 +804,7 @@ export default function CheckoutContent() {
                             </Link>
                           </span>
                         </label>
+                        <CheckoutTermsDetails />
                         {termsError && (
                           <p id="acceptTerms-error" className="mt-1 ml-7 text-xs text-red-600" role="alert">
                             {termsError}

@@ -347,7 +347,8 @@ export const PROGRAMS: Program[] = [
     priceUsd: 399,
     priceZar: 3500,
     shopHandle: 'trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live',
-    duration: 'Self-study online: access for as long as you need',
+    // Suzanne, 24 Nov 2026: 12 months, lifetime access is a paid add-on.
+    duration: 'Self-study online: 12 months access, lifetime access as a paid add-on',
     features: [
       // Source: Thinkific Trauma to Transcendence (self-study), "About this course"
       '120 lessons, 21 hours of video',
@@ -357,7 +358,7 @@ export const PROGRAMS: Program[] = [
       'Understand how your thoughts create your reality and learn to change them',
       'How to reprogramme your mind and nervous system',
       'Understand why you are here and replan what you want from your life',
-      'Lifetime access to all recordings and materials',
+      'Access to all recordings and materials for 12 months (lifetime access as a paid add-on)',
     ],
     // Source: https://suzanneravenall.com/trauma-to-transcendence/
     whoFor:

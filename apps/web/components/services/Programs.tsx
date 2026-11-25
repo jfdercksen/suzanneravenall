@@ -54,7 +54,8 @@ const columns: Column[] = [
     eyebrow: 'Self-Study',
     title: 'Learn and grow at your own pace.',
     intro:
-      'All programmes are recorded and you have access to them for as long as you need and want them. Let your journey unfold in a time that is right for you.',
+      // Suzanne, 24 Nov 2026: 12 months, lifetime access is a paid add-on.
+      'All programmes are recorded and you have access to them for 12 months, with lifetime access available as a paid add-on. Let your journey unfold in a time that is right for you.',
     programmes: [
       {
         name: 'Trauma to Transcendence',

@@ -2,8 +2,17 @@
 
 import { motion } from 'framer-motion'
 import { SESSION_TERMS, SESSION_TERMS_TITLE, type SessionTermsMode } from '@/lib/legal/session-terms'
+import {
+  LIVE_TERMS,
+  LIVE_TERMS_INTRO,
+  LIVE_TERMS_TITLE,
+  MEDIA_TERMS,
+  MEDIA_TERMS_TITLE,
+  REFUND_TERMS,
+  REFUND_TERMS_TITLE,
+} from '@/lib/legal/booking-terms'
 
-const LAST_UPDATED = '6 October 2026'
+const LAST_UPDATED = '25 November 2026'
 
 interface LegalTermsContentProps {
   /** The session rules section (D024): hidden until Suzanne approves it */
@@ -125,16 +134,14 @@ export default function LegalTermsContent({ sessionTerms = 'hidden' }: LegalTerm
                 Payment is processed via PayFast (South Africa) or PayPal (international). We do not
                 store your payment card details.
               </p>
-              {/* Refund rule and delivery times from the live Terms: https://suzanneravenall.com/terms-and-conditions/
-                  Johan's decision 6 Oct: the Terms rule applies; there is no 7-day satisfaction refund. */}
+              {/* Delivery times and the refund clause from her current Terms and Conditions & Waiver
+                  (https://suzanneravenall.com/terms-and-conditions/), her wording (A3, 25 Nov 2026). */}
               <p className="text-brand-ink leading-relaxed mb-3">
                 Online services are processed and confirmed within 24 hours of payment. Physical goods
                 are delivered by the courier you choose at checkout.
               </p>
               <p className="text-brand-ink leading-relaxed">
-                If a service you have paid for is unavailable, we will refund you in full within 30 days.
-                If you cancel after purchase, a 3% administration fee applies, plus courier costs where
-                goods have already been dispatched. Apart from these cases, payments are not refundable.
+                <span className="font-medium">{REFUND_TERMS_TITLE}:</span> {REFUND_TERMS}
               </p>
             </div>
 
@@ -157,6 +164,22 @@ export default function LegalTermsContent({ sessionTerms = 'hidden' }: LegalTerm
                 ))}
               </div>
             )}
+
+            {/* 4B and 4C: her event media licence and live-programme terms (A3, 25 Nov 2026) */}
+            <div id="recordings">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">4B. {MEDIA_TERMS_TITLE}</h2>
+              <p className="text-brand-ink leading-relaxed">{MEDIA_TERMS}</p>
+            </div>
+
+            <div id="live-programs">
+              <h2 className="text-2xl font-medium text-brand-primary mb-4">4C. {LIVE_TERMS_TITLE}</h2>
+              <p className="text-brand-ink leading-relaxed mb-3">{LIVE_TERMS_INTRO}</p>
+              <ul className="list-disc list-outside pl-6 space-y-2 text-brand-ink">
+                {LIVE_TERMS.map((term) => (
+                  <li key={term}>{term}</li>
+                ))}
+              </ul>
+            </div>
 
             {/* 5. IP */}
             <div>
