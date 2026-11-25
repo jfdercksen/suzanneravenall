@@ -11,8 +11,12 @@ export const CERTIFICATION_PATHWAYS: CertificationPathway[] = [
   AKASHIC_NAVIGATION_PATHWAY,
 ]
 
-export const MEMBER_SUPPORT_EMAIL = 'membersupport@ravenallinstitute.com'
-export const CERTIFICATION_EMAIL = 'certification@ravenallinstitute.com'
+/**
+ * The one address for membership and certification questions. Her pathway
+ * documents name membersupport@ and certification@, which do not exist:
+ * "no at the moment just use support@" (Suzanne, 24 Nov 2026).
+ */
+export const MEMBER_SUPPORT_EMAIL = 'support@ravenallinstitute.com'
 
 export function pathwayHref(pathway: CertificationPathway): string {
   return `/programs/certification/${pathway.slug}`

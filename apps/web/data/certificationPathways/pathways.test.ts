@@ -45,8 +45,9 @@ describe('certification pathway data', () => {
     expect(text).not.toMatch(/DRAFT|For review|working titles|insert the external body|Accreditation:|Appendix B|attorney|\u2014/)
     expect(text).not.toMatch(/\[[^\]]*\]/)
     expect(p.nb).toMatch(/^NB: Certification requirements change from time to time\./)
-    expect(text).toContain('membersupport@ravenallinstitute.com')
-    expect(text).toContain('certification@ravenallinstitute.com')
+    expect(text).toContain('support@ravenallinstitute.com')
+    // Suzanne 24 Nov: "just use support@"; membersupport@ and certification@ do not exist.
+    expect(text).not.toMatch(/membersupport@|certification@/)
   })
 
   it('links each modality to its course pages (Rapid Repatterning has no published page)', () => {

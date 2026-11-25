@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { EmailText } from '@/components/pathways/EmailText'
 import { PathwayLevelDetails } from '@/components/pathways/PathwayLevelDetails'
-import { CERTIFICATION_EMAIL, MEMBER_SUPPORT_EMAIL, pathwayPlainName } from '@/data/certificationPathways'
+import { MEMBER_SUPPORT_EMAIL, pathwayPlainName } from '@/data/certificationPathways'
 import type { CertificationPathway } from '@/data/certificationPathways/types'
 
 // Suzanne's Career & Certification Pathway documents of 12 Nov 2026, used as
@@ -248,12 +248,6 @@ export default function PathwayContent({ pathway, image }: { pathway: Certificat
               className="inline-flex items-center justify-center py-4 px-8 bg-white hover:bg-brand-sand text-brand-primary text-sm font-medium rounded-button transition-all duration-300 break-all"
             >
               {MEMBER_SUPPORT_EMAIL}
-            </a>
-            <a
-              href={`mailto:${CERTIFICATION_EMAIL}`}
-              className="inline-flex items-center justify-center py-4 px-8 border border-white/50 hover:bg-white/10 text-white text-sm font-medium rounded-button transition-all duration-300 break-all"
-            >
-              {CERTIFICATION_EMAIL}
             </a>
           </div>
           <Link

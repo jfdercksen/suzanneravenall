@@ -10,8 +10,8 @@ import { noviceChecklistFor } from '../novice/checklist'
  * follow a purchase), so no unsubscribe link, like the intake mails.
  */
 
-/** Where members write with questions about their membership (her pathway documents). */
-export const MEMBER_SUPPORT_EMAIL = 'membersupport@ravenallinstitute.com'
+/** Where members write with questions: "just use support@" (Suzanne, 24 Nov 2026). */
+export const MEMBER_SUPPORT_EMAIL = 'support@ravenallinstitute.com'
 
 /**
  * The team inbox for "an application is waiting": CONTACT_NOTIFY_EMAIL (on the

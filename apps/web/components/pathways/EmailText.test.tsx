@@ -9,14 +9,12 @@ describe('EmailText', () => {
     expect(container.querySelector('a')).toBeNull()
   })
 
-  it('links both Institute addresses, wherever they sit in the sentence', () => {
-    const text =
-      'membersupport@ravenallinstitute.com for membership, resubmissions to certification@ravenallinstitute.com'
+  it('links the support address wherever it sits in the sentence', () => {
+    const text = 'Membership and resubmissions: support@ravenallinstitute.com, or ask your instructor.'
     const { container } = render(<p><EmailText text={text} /></p>)
     expect(container.textContent).toBe(text)
     expect(Array.from(container.querySelectorAll('a')).map((a) => a.getAttribute('href'))).toEqual([
-      'mailto:membersupport@ravenallinstitute.com',
-      'mailto:certification@ravenallinstitute.com',
+      'mailto:support@ravenallinstitute.com',
     ])
   })
 

@@ -23,7 +23,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
   ],
   "howItWorks": [
     "Certification is administered by the Certification & Quality Assurance team of The Ravenall Institute (Pty) Ltd. All requirements are uploaded into a designated online folder provided by member support.",
-    "General enquiries and membership: membersupport@ravenallinstitute.com. Resubmissions after feedback: certification@ravenallinstitute.com.",
+    "General enquiries, membership and resubmissions after feedback: support@ravenallinstitute.com.",
     "Each level carries an annual licence and membership fee. You may use the title and mark of a level only while your licence is current.",
     "To renew each year, complete 12 hours of continuing professional development and 2 supervision or mentoring sessions, and confirm you have read the current Code of Ethics.",
     "Each level allows two attempts at observation (three at Instructor level and above). After that, further training with an Instructor and a new observation fee are required.",
@@ -152,13 +152,13 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
           "heading": "High-level overview of process steps to achieve Novice Navigator",
           "items": [
             {
-              "text": "If you are not yet a member of the Akashic Navigation™ community, write to membersupport@ravenallinstitute.com and take out membership at Student level."
+              "text": "If you are not yet a member of the Akashic Navigation™ community, write to support@ravenallinstitute.com and take out membership at Student level."
             },
             {
-              "text": "Write to membersupport@ravenallinstitute.com advising that you wish to attain Novice Navigator status, and send verification of the Akashic Navigation™ programmes you have taken or your certificates of attendance."
+              "text": "Write to support@ravenallinstitute.com advising that you wish to attain Novice Navigator status, and send verification of the Akashic Navigation™ programmes you have taken or your certificates of attendance."
             },
             {
-              "text": "If the requirements are uploaded within three months of the end of your AN2 training, no observation fee is charged. If they are uploaded more than three months afterwards, pay the observation fee of USD 250 and notify membersupport@ravenallinstitute.com."
+              "text": "If the requirements are uploaded within three months of the end of your AN2 training, no observation fee is charged. If they are uploaded more than three months afterwards, pay the observation fee of USD 250 and notify support@ravenallinstitute.com."
             },
             {
               "text": "Upload the requirements listed in section B and the recordings described in section C into the designated online folder provided by member support."
@@ -167,10 +167,10 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "The Certification & Quality Assurance team will check your documents and recordings, provide written feedback and confirm your status as Novice Navigator. Feedback is typically provided within 15 working days."
             },
             {
-              "text": "Pay your Novice Navigator licence and annual membership fee and notify membersupport@ravenallinstitute.com."
+              "text": "Pay your Novice Navigator licence and annual membership fee and notify support@ravenallinstitute.com."
             },
             {
-              "text": "You will receive confirmation of your achievement, an electronic certificate and the Novice Navigator mark for use in line with the Brand Guidelines. For a printed certificate, write to membersupport@ravenallinstitute.com; it will be printed and couriered to you for an additional USD 25 plus courier."
+              "text": "You will receive confirmation of your achievement, an electronic certificate and the Novice Navigator mark for use in line with the Brand Guidelines. For a printed certificate, write to support@ravenallinstitute.com; it will be printed and couriered to you for an additional USD 25 plus courier."
             },
             {
               "text": "You may then practise at Novice Navigator level and charge for services in line with the status achieved and your licence agreement."
@@ -179,7 +179,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "If further work is needed, the Certification & Quality Assurance team will give you written feedback. It is your responsibility to make the corrections; you are invited to use the Mentorship Programme and/or work with your Instructor."
             },
             {
-              "text": "Once the corrections are made, write to certification@ravenallinstitute.com and the process is repeated."
+              "text": "Once the corrections are made, write to support@ravenallinstitute.com and the process is repeated."
             },
             {
               "text": "After the second attempt, further training with an Instructor and a new observation fee are required to repeat the process."
@@ -304,13 +304,13 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
           "heading": "High-level overview of process steps to achieve Practitioner",
           "items": [
             {
-              "text": "If you are not yet a member of the Akashic Navigation™ community, write to membersupport@ravenallinstitute.com and take out membership at Student level."
+              "text": "If you are not yet a member of the Akashic Navigation™ community, write to support@ravenallinstitute.com and take out membership at Student level."
             },
             {
-              "text": "Write to membersupport@ravenallinstitute.com advising that you wish to attain Akashic Navigation™ Practitioner status, and send verification of the Akashic Navigation™ programmes you have taken or your certificates of attendance."
+              "text": "Write to support@ravenallinstitute.com advising that you wish to attain Akashic Navigation™ Practitioner status, and send verification of the Akashic Navigation™ programmes you have taken or your certificates of attendance."
             },
             {
-              "text": "Pay the observation fee of USD 250 and notify membersupport@ravenallinstitute.com."
+              "text": "Pay the observation fee of USD 250 and notify support@ravenallinstitute.com."
             },
             {
               "text": "Upload the requirements listed in section B and the recordings described in section C into the designated online folder provided by member support."
@@ -319,10 +319,10 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "The Certification & Quality Assurance team will check your documents and recordings, provide written feedback and confirm your status as Akashic Navigation™ Practitioner. Feedback is typically provided within 15 working days."
             },
             {
-              "text": "Pay your Akashic Navigation™ Practitioner licence and annual membership fee and notify membersupport@ravenallinstitute.com."
+              "text": "Pay your Akashic Navigation™ Practitioner licence and annual membership fee and notify support@ravenallinstitute.com."
             },
             {
-              "text": "You will receive confirmation of your achievement, an electronic certificate and the Akashic Navigation™ Practitioner mark for use in line with the Brand Guidelines. For a printed certificate, write to membersupport@ravenallinstitute.com; it will be printed and couriered to you for an additional USD 25 plus courier."
+              "text": "You will receive confirmation of your achievement, an electronic certificate and the Akashic Navigation™ Practitioner mark for use in line with the Brand Guidelines. For a printed certificate, write to support@ravenallinstitute.com; it will be printed and couriered to you for an additional USD 25 plus courier."
             },
             {
               "text": "You may then practise at Akashic Navigation™ Practitioner level and charge for services in line with the status achieved and your licence agreement."
@@ -331,7 +331,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "If further work is needed, the Certification & Quality Assurance team will give you written feedback. It is your responsibility to make the corrections; you are invited to use the Mentorship Programme and/or work with your Instructor."
             },
             {
-              "text": "Once the corrections are made, write to certification@ravenallinstitute.com and the process is repeated."
+              "text": "Once the corrections are made, write to support@ravenallinstitute.com and the process is repeated."
             },
             {
               "text": "After the second attempt, further training with an Instructor and a new observation fee are required to repeat the process."
@@ -450,10 +450,10 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
           "heading": "High-level overview of process steps to achieve Certified Practitioner",
           "items": [
             {
-              "text": "Write to membersupport@ravenallinstitute.com advising that you wish to attain Certified Akashic Navigation™ Practitioner status, and send verification of the Akashic Navigation™ programmes you have taken or your certificates of attendance."
+              "text": "Write to support@ravenallinstitute.com advising that you wish to attain Certified Akashic Navigation™ Practitioner status, and send verification of the Akashic Navigation™ programmes you have taken or your certificates of attendance."
             },
             {
-              "text": "Pay the observation fee of USD 350 and notify membersupport@ravenallinstitute.com."
+              "text": "Pay the observation fee of USD 350 and notify support@ravenallinstitute.com."
             },
             {
               "text": "Upload the requirements listed in section B and the recordings described in section C into the designated online folder provided by member support."
@@ -462,10 +462,10 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "The Certification & Quality Assurance team will check your documents and recordings, provide written feedback and confirm your status as Certified Akashic Navigation™ Practitioner. Feedback is typically provided within 15 working days."
             },
             {
-              "text": "Pay your Certified Akashic Navigation™ Practitioner licence and annual membership fee and notify membersupport@ravenallinstitute.com."
+              "text": "Pay your Certified Akashic Navigation™ Practitioner licence and annual membership fee and notify support@ravenallinstitute.com."
             },
             {
-              "text": "You will receive confirmation of your achievement, an electronic certificate and the Certified Akashic Navigation™ Practitioner mark for use in line with the Brand Guidelines. For a printed certificate, write to membersupport@ravenallinstitute.com; it will be printed and couriered to you for an additional USD 25 plus courier."
+              "text": "You will receive confirmation of your achievement, an electronic certificate and the Certified Akashic Navigation™ Practitioner mark for use in line with the Brand Guidelines. For a printed certificate, write to support@ravenallinstitute.com; it will be printed and couriered to you for an additional USD 25 plus courier."
             },
             {
               "text": "You may then practise at Certified Akashic Navigation™ Practitioner level and charge for services in line with the status achieved and your licence agreement."
@@ -474,7 +474,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "If further work is needed, the Certification & Quality Assurance team will give you written feedback. It is your responsibility to make the corrections; you are invited to use the Mentorship Programme and/or work with your Instructor."
             },
             {
-              "text": "Once the corrections are made, write to certification@ravenallinstitute.com and the process is repeated."
+              "text": "Once the corrections are made, write to support@ravenallinstitute.com and the process is repeated."
             },
             {
               "text": "After the second attempt, further training with an Instructor and a new observation fee are required to repeat the process."
@@ -594,10 +594,10 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
           "heading": "High-level overview of process steps to achieve Certified Advanced Practitioner",
           "items": [
             {
-              "text": "Write to membersupport@ravenallinstitute.com advising that you wish to attain Certified Advanced Practitioner status, and send verification of the Akashic Navigation™ programmes you have taken or your certificates of attendance."
+              "text": "Write to support@ravenallinstitute.com advising that you wish to attain Certified Advanced Practitioner status, and send verification of the Akashic Navigation™ programmes you have taken or your certificates of attendance."
             },
             {
-              "text": "Pay the observation fee of USD 350 and notify membersupport@ravenallinstitute.com."
+              "text": "Pay the observation fee of USD 350 and notify support@ravenallinstitute.com."
             },
             {
               "text": "Upload the requirements listed in section B and the recordings described in section C into the designated online folder provided by member support."
@@ -606,10 +606,10 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "The Certification & Quality Assurance team will check your documents and recordings, provide written feedback and confirm your status as Certified Advanced Practitioner. Feedback is typically provided within 15 working days."
             },
             {
-              "text": "Pay your Certified Advanced Practitioner licence and annual membership fee and notify membersupport@ravenallinstitute.com."
+              "text": "Pay your Certified Advanced Practitioner licence and annual membership fee and notify support@ravenallinstitute.com."
             },
             {
-              "text": "You will receive confirmation of your achievement, an electronic certificate and the Certified Advanced Practitioner mark for use in line with the Brand Guidelines. For a printed certificate, write to membersupport@ravenallinstitute.com; it will be printed and couriered to you for an additional USD 25 plus courier."
+              "text": "You will receive confirmation of your achievement, an electronic certificate and the Certified Advanced Practitioner mark for use in line with the Brand Guidelines. For a printed certificate, write to support@ravenallinstitute.com; it will be printed and couriered to you for an additional USD 25 plus courier."
             },
             {
               "text": "You may then practise at Certified Advanced Practitioner level and charge for services in line with the status achieved and your licence agreement."
@@ -618,7 +618,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "If further work is needed, the Certification & Quality Assurance team will give you written feedback. It is your responsibility to make the corrections; you are invited to use the Mentorship Programme and/or work with your Instructor."
             },
             {
-              "text": "Once the corrections are made, write to certification@ravenallinstitute.com and the process is repeated."
+              "text": "Once the corrections are made, write to support@ravenallinstitute.com and the process is repeated."
             },
             {
               "text": "After the second attempt, further training with an Instructor and a new observation fee are required to repeat the process."
@@ -743,7 +743,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
           "heading": "High-level overview of process steps to achieve Mentor",
           "items": [
             {
-              "text": "Contact membersupport@ravenallinstitute.com for an application form. Complete it and return it with your CV, supporting documents and a video describing why you want to take on the role of mentorship, why it matters to you and how you would make a difference to students and practitioners. Feedback is typically provided within one week."
+              "text": "Contact support@ravenallinstitute.com for an application form. Complete it and return it with your CV, supporting documents and a video describing why you want to take on the role of mentorship, why it matters to you and how you would make a difference to students and practitioners. Feedback is typically provided within one week."
             },
             {
               "text": "The mentorship team will review your video and paperwork. They may ask you to attend a meeting or interview to discuss your skills."
@@ -770,7 +770,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "Complete the Basic Series and attain Practitioner status first (not Novice Navigator)."
             },
             {
-              "text": "Fill out the application form obtained from membersupport@ravenallinstitute.com."
+              "text": "Fill out the application form obtained from support@ravenallinstitute.com."
             },
             {
               "text": "Record a video on Zoom about why you want to be a Mentor, what you plan to do with it and how you will add value. Also provide an up-to-date CV of your career history."
@@ -813,10 +813,10 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
           "heading": "High-level overview of process steps to achieve Instructor",
           "items": [
             {
-              "text": "A Qualified Teaching Instructor in good standing gives you written approval, or you apply directly to membersupport@ravenallinstitute.com, confirming that you have completed the requirements and can practise as an Instructor at the first level (AN1 and AN2)."
+              "text": "A Qualified Teaching Instructor in good standing gives you written approval, or you apply directly to support@ravenallinstitute.com, confirming that you have completed the requirements and can practise as an Instructor at the first level (AN1 and AN2)."
             },
             {
-              "text": "Pay the observation fee of USD 350 and notify membersupport@ravenallinstitute.com."
+              "text": "Pay the observation fee of USD 350 and notify support@ravenallinstitute.com."
             },
             {
               "text": "Upload the requirements listed in section B and the recordings described in section C into the designated online folder provided by member support."
@@ -825,10 +825,10 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "The Certification & Quality Assurance team will check your documents and recordings, provide written feedback and confirm your status as Instructor. Feedback is typically provided within 15 working days."
             },
             {
-              "text": "Pay your Instructor licence and annual membership fee and notify membersupport@ravenallinstitute.com."
+              "text": "Pay your Instructor licence and annual membership fee and notify support@ravenallinstitute.com."
             },
             {
-              "text": "You will receive confirmation of your achievement, an electronic certificate and the Instructor mark for use in line with the Brand Guidelines. For a printed certificate, write to membersupport@ravenallinstitute.com; it will be printed and couriered to you for an additional USD 25 plus courier."
+              "text": "You will receive confirmation of your achievement, an electronic certificate and the Instructor mark for use in line with the Brand Guidelines. For a printed certificate, write to support@ravenallinstitute.com; it will be printed and couriered to you for an additional USD 25 plus courier."
             },
             {
               "text": "You may then practise at Instructor level and charge for services in line with the status achieved and your licence agreement."
@@ -837,7 +837,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "If further work is needed, the Certification & Quality Assurance team will give you written feedback. It is your responsibility to make the corrections; you are invited to use the Mentorship Programme and/or work with your Instructor."
             },
             {
-              "text": "Once the corrections are made, write to certification@ravenallinstitute.com and the process is repeated."
+              "text": "Once the corrections are made, write to support@ravenallinstitute.com and the process is repeated."
             },
             {
               "text": "After the third attempt, further training from an Instructor, more practice or self-study, and a new observation fee are required."
@@ -927,7 +927,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "Once you have run at least one (1) AN1/AN2 training programme, you may apply to teach the next level."
             },
             {
-              "text": "Contact membersupport@ravenallinstitute.com to apply to train the next programme."
+              "text": "Contact support@ravenallinstitute.com to apply to train the next programme."
             },
             {
               "text": "Demonstrate, through a recorded one-hour live spontaneous session, coaching at the level being taught with a class of no fewer than five (5) people."
@@ -965,7 +965,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
           "heading": "High-level overview of process steps to achieve Master Instructor",
           "items": [
             {
-              "text": "Contact membersupport@ravenallinstitute.com for an application form. Complete it and return it with all supporting documents and a video describing why you want to take on the role of Master Instructor, how you would market your teaching to attract students, and how you would help develop the Akashic Navigation™ community. Feedback is typically provided within one week."
+              "text": "Contact support@ravenallinstitute.com for an application form. Complete it and return it with all supporting documents and a video describing why you want to take on the role of Master Instructor, how you would market your teaching to attract students, and how you would help develop the Akashic Navigation™ community. Feedback is typically provided within one week."
             },
             {
               "text": "The QA team will review your video and paperwork and may ask you to attend an interview and demonstrate your training skill before approving the application."
@@ -977,7 +977,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "If you have not completed it during your journey, book and pay for the Train the Trainer programme (attended once). The current cost is USD 500; it runs over three days or four short scheduled 4-hour sessions."
             },
             {
-              "text": "Pay the observation fee of USD 350 and notify membersupport@ravenallinstitute.com."
+              "text": "Pay the observation fee of USD 350 and notify support@ravenallinstitute.com."
             },
             {
               "text": "Upload the requirements listed in section B and the recordings described in section C into the designated online folder provided by member support."
@@ -986,7 +986,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "The Certification & Quality Assurance team will check your documents and recordings, provide written feedback and confirm your status as Master Instructor. Feedback is typically provided within 15 working days."
             },
             {
-              "text": "You will receive confirmation of your achievement, an electronic certificate and the Master Instructor mark for use in line with the Brand Guidelines. For a printed certificate, write to membersupport@ravenallinstitute.com; it will be printed and couriered to you for an additional USD 25 plus courier."
+              "text": "You will receive confirmation of your achievement, an electronic certificate and the Master Instructor mark for use in line with the Brand Guidelines. For a printed certificate, write to support@ravenallinstitute.com; it will be printed and couriered to you for an additional USD 25 plus courier."
             },
             {
               "text": "You may then practise at Master Instructor level and charge for services in line with the status achieved and your licence agreement."
@@ -995,7 +995,7 @@ export const AKASHIC_NAVIGATION_PATHWAY: CertificationPathway = {
               "text": "If further work is needed, the Certification & Quality Assurance team will give you written feedback. It is your responsibility to make the corrections; you are invited to use the Mentorship Programme and/or work with your Instructor."
             },
             {
-              "text": "Once the corrections are made, write to certification@ravenallinstitute.com and the process is repeated."
+              "text": "Once the corrections are made, write to support@ravenallinstitute.com and the process is repeated."
             },
             {
               "text": "After the second attempt, further training with an Instructor and a new observation fee are required to repeat the process."

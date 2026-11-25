@@ -88,8 +88,9 @@ describe('Career & Certification Pathway pages', () => {
         expect(container.textContent).toContain('USD 250')
         expect(container.textContent).toContain('USD 350 + Train the Trainer USD 500')
         const hrefs = Array.from(container.querySelectorAll('a')).map((a) => a.getAttribute('href'))
-        expect(hrefs).toContain('mailto:membersupport@ravenallinstitute.com')
-        expect(hrefs).toContain('mailto:certification@ravenallinstitute.com')
+        expect(hrefs).toContain('mailto:support@ravenallinstitute.com')
+        // Suzanne 24 Nov: the two old addresses do not exist.
+        expect(hrefs.some((h) => /membersupport@|certification@/.test(h ?? ''))).toBe(false)
       })
     })
   }

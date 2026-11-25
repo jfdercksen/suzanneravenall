@@ -1,9 +1,9 @@
-import { CERTIFICATION_EMAIL, MEMBER_SUPPORT_EMAIL } from '@/data/certificationPathways'
+import { MEMBER_SUPPORT_EMAIL } from '@/data/certificationPathways'
 
-const EMAILS = [MEMBER_SUPPORT_EMAIL, CERTIFICATION_EMAIL]
+const EMAILS = [MEMBER_SUPPORT_EMAIL]
 const SPLIT = new RegExp(`(${EMAILS.map((e) => e.replace(/[.]/g, '\\.')).join('|')})`)
 
-/** Text from a pathway document, with the Institute's two addresses as mailto links. */
+/** Text from a pathway document, with the Institute's support address as a mailto link. */
 export function EmailText({ text }: { text: string }) {
   return (
     <>
