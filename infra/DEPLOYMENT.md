@@ -152,7 +152,8 @@ When pointing `suzanneravenall.com` DNS to the VPS:
 
 5. Verify:
    ```bash
-   curl -sf https://suzanneravenall.com/api/store/health
+   # /api/store/* needs a publishable key (400 without one), so check health and the CMS instead (go-live R5)
+   curl -sf https://suzanneravenall.com/api/health
    curl -sf https://suzanneravenall.com/cms/admin | head -20
    ```
 

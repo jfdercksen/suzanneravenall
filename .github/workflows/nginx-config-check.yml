@@ -1,0 +1,22 @@
+name: nginx config check
+
+# Runs infra/nginx/test-config.sh: nginx -t on the review and production confs in the
+# real nginx image, plus the ACME path, http->https, www->apex and HSTS checks the
+# go-live switch depends on (runbook R1 to R4). No server is touched.
+on:
+  push:
+    paths:
+      - 'infra/nginx/**'
+      - '.github/workflows/nginx-config-check.yml'
+  workflow_dispatch:
+
+jobs:
+  nginx-config:
+    name: nginx -t and switch-day behaviour
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check the nginx confs
+        run: bash infra/nginx/test-config.sh

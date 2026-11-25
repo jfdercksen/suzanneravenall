@@ -306,6 +306,9 @@ services:
       PAYLOAD_SECRET: ${PAYLOAD_SECRET}
       DATABASE_URL: ${PAYLOAD_DATABASE_URL}
       PAYLOAD_URL: ${PAYLOAD_URL}
+      # Read by apps/payload/src/lib/cmsOrigins.ts for the CMS csrf/cors list (go-live R5);
+      # empty is fine, PAYLOAD_URL alone is enough.
+      PAYLOAD_PUBLIC_SERVER_URL: ${PAYLOAD_PUBLIC_SERVER_URL:-}
       NODE_ENV: ${NODE_ENV}
     volumes:
       # Media uploads (blog images). Without a volume they lived in the

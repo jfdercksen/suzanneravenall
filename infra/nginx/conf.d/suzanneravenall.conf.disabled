@@ -1,15 +1,19 @@
-# suzanneravenall.com — main domain
-# HTTP redirects to HTTPS. HTTPS block handles:
+# suzanneravenall.com: main domain (production, active from the DNS switch).
+# HTTP redirects to HTTPS; https://www redirects to the apex. The HTTPS block serves:
 #   - Next.js frontend (catch-all /)
-#   - Medusa storefront API (/api/store)
-#   - Medusa admin API (/api/admin)
+#   - Medusa storefront API (/api/store), admin API (/api/admin), auth (/api/auth, /auth)
+#   - Medusa admin dashboard (/medusa) and its direct calls (/admin)
+#   - Medusa file uploads (/uploads/)
 #   - Payload CMS (/cms)
+# Brought level with ip-testing.conf on 25 Nov 2026 (go-live runbook R1,
+# docs/golive/A9-switch-runbook.md). The Docker DNS resolver for the
+# variable-based proxy_pass lines is in nginx.conf (http level).
 
 server {
     listen 80;
     server_name suzanneravenall.com www.suzanneravenall.com;
 
-    # Certbot webroot challenge — must be reachable over HTTP before certs exist
+    # Certbot webroot challenge: must be reachable over HTTP before certs exist
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;
     }
@@ -19,9 +23,23 @@ server {
     }
 }
 
+# https://www answers 301 to the apex: one canonical host.
 server {
     listen 443 ssl;
-    server_name suzanneravenall.com www.suzanneravenall.com;
+    server_name www.suzanneravenall.com;
+
+    ssl_certificate     /etc/letsencrypt/live/suzanneravenall.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/suzanneravenall.com/privkey.pem;
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
+    return 301 https://suzanneravenall.com$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name suzanneravenall.com;
 
     ssl_certificate     /etc/letsencrypt/live/suzanneravenall.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/suzanneravenall.com/privkey.pem;
@@ -34,9 +52,21 @@ server {
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
     add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    # No includeSubDomains at launch: mail., staging. and ftp. still live on the old
+    # host over plain http, and a browser that saw includeSubDomains would refuse them
+    # for a year. Add it once every subdomain serves https.
+    add_header Strict-Transport-Security "max-age=31536000" always;
 
-    # Medusa storefront API — rewrite /api/store/* → /store/* (Medusa routes live at /store/*)
+    # Medusa file-local uploads, served from the shared Docker volume (as ip-testing.conf).
+    # Its own add_header means it does not inherit the server-level headers (nginx rule);
+    # acceptable for static files, same as the review box.
+    location /uploads/ {
+        alias /app/uploads/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Medusa storefront API: rewrite /api/store/* to /store/* (Medusa routes live at /store/*)
     location /api/store {
         rewrite ^/api/store/?(.*)$ /store/$1 break;
         set $upstream_medusa http://medusa:9000;
@@ -48,8 +78,8 @@ server {
         proxy_http_version 1.1;
     }
 
-    # Medusa admin API — rewrite /api/admin/* → /admin/* (Medusa routes live at /admin/*)
-    # TODO: restrict by IP or add auth_basic before DNS cutover goes live
+    # Medusa admin API: rewrite /api/admin/* to /admin/* (Medusa routes live at /admin/*)
+    # Admin protection (go-live A10) is Johan's decision; see the runbook, step F12.
     location /api/admin {
         rewrite ^/api/admin/?(.*)$ /admin/$1 break;
         set $upstream_medusa http://medusa:9000;
@@ -61,7 +91,20 @@ server {
         proxy_http_version 1.1;
     }
 
-    # Medusa admin dashboard UI — served at admin.path ("/medusa") in medusa-config.js
+    # Medusa auth: /api/auth/* to /auth/* (as ip-testing.conf). Real TLS here, so no
+    # forced X-Forwarded-Proto and no cookie flag rewriting.
+    location /api/auth {
+        set $upstream_medusa http://medusa:9000;
+        rewrite ^/api/auth/?(.*)$ /auth/$1 break;
+        proxy_pass $upstream_medusa;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+    }
+
+    # Medusa admin dashboard UI: served at admin.path ("/medusa") in medusa-config.js
     location /medusa {
         set $upstream_medusa http://medusa:9000;
         proxy_pass $upstream_medusa;
@@ -72,7 +115,7 @@ server {
         proxy_http_version 1.1;
     }
 
-    # Medusa auth API — login flow calls /auth/user/emailpass
+    # Medusa auth API: the login flow calls /auth/user/emailpass
     location /auth {
         set $upstream_medusa http://medusa:9000;
         proxy_pass $upstream_medusa;
@@ -83,7 +126,7 @@ server {
         proxy_http_version 1.1;
     }
 
-    # Medusa admin API direct calls from admin SPA
+    # Medusa admin API direct calls from the admin SPA
     location /admin {
         set $upstream_medusa http://medusa:9000;
         proxy_pass $upstream_medusa;
@@ -94,7 +137,8 @@ server {
         proxy_http_version 1.1;
     }
 
-    # Payload CMS
+    # Payload CMS. No Origin map here: over https browsers send Sec-Fetch-Site, which
+    # Payload accepts (KI135; the map is only in ip-testing.conf for plain http).
     location /cms {
         set $upstream_payload http://payload:3001;
         proxy_pass $upstream_payload;
@@ -102,6 +146,9 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
     }
 
     # Next.js JS/CSS chunks straight from disk (KI092). Hashed names, so they
@@ -122,7 +169,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    # Next.js frontend — catch-all, must be last
+    # Next.js frontend: catch-all, must be last
     location / {
         set $upstream_web http://web:3000;
         proxy_pass $upstream_web;
@@ -130,5 +177,10 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port 443;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
     }
 }
