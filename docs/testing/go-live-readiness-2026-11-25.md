@@ -81,19 +81,18 @@ Other points:
 
 ## 2. Memberships vs Wild Apricot
 
-**What we hold from Wild Apricot:** nothing.
-- No export, no member list and no member count in the repo.
-- The 29 levels came from the 1 Jun build "implement 29 real membership tiers (Wild Apricot structure)". It cites no source for names or prices.
-- D003 planned a member migration; KI012 has it on hold, waiting for credentials.
-- Shayna wrote on 23 Nov that the Wild Apricot directory holds "just us admins ... The only one on the directory is Suzanne". So there may be no paying members to move.
+Corrected 25 Nov 2026. An earlier version of this section said we hold nothing from Wild Apricot. That was wrong. Our own research of 9 Nov (C:/Johan Brain/Clients/Suzanne Ravenall/2026-11-09 - Membership model (old site + Wild Apricot) and mapping.md) settles it:
 
-**One-page table for Carla (proposal: "this is what the website sells; correct anything that differs from Wild Apricot").**
+- **Levels and prices:** the 29 memberships on the site match her live store on repatterning.com price for price: Guest R0, Lifestyle R350 / USD 20, Student R525 / USD 30, Novice R875 / R1,225 (USD 50 / 70), and up.
+- **What each level gives:** her published benefits list and comparison PDF on repatterning.com (/membership-benefits/ and the June 2023 levels PDF) are the source for what a paid level unlocks (KI130).
+- **Wild Apricot:** the only public Wild Apricot site is RRII's (the Resonance Repatterning licence), a different organisation and ladder.
+- **Members to move:** none. Shayna wrote on 23 Nov that Wild Apricot holds only the admins, and only Suzanne is on the directory.
 
-**On sale at launch:**
+So Carla gets one table to confirm, the 7 launch memberships below, and one line confirming no paying member needs moving. No open questions.
 
-| SKU | Membership | Price | How it starts |
+| SKU | Membership | Price a year | How it starts |
 |---|---|---|---|
-| S0212 | Lifestyle | R350 / USD 20 a year | On payment |
+| S0212 | Lifestyle | R350 / USD 20 | On payment |
 | S0213 | Akashic Student | R525 / USD 30 | On payment |
 | S0226 | Energy Alignment & Optimisation Student | R525 / USD 30 | On payment |
 | S0214 | Akashic Novice Practitioner Basic | R875 / USD 50 | On approval of the documents |
@@ -101,28 +100,7 @@ Other points:
 | S0227 | EAO Novice Practitioner Basic | R875 / USD 50 | On approval of the documents |
 | S0228 | EAO Novice Practitioner Premier | R1,225 / USD 70 | On approval of the documents |
 
-**Held back** (not on sale), per track Akashic / EAO:
-- Practitioner Basic / Premier: R1,400 / R1,750.
-- Certified Practitioner Basic / Premier: R1,750 / R2,100.
-- Certified Advanced Practitioner Basic / Premier: R1,750 / R2,100.
-- Mentor Premier: R1,750.
-- Master Practitioner Premier: R2,625. EAO also has a Certified Master Practitioner, which Akashic does not.
-- Instructor Premier: R2,625.
-- Certified Master Instructor Premier: R2,625.
-
-**Rules on the site:**
-- One payment a year; it does not renew by itself; it runs 365 days.
-- Lifestyle and Student have no prerequisites.
-- Novice needs AN1+AN2 or EA1+EA2 and the documents.
-- Guest is the free level.
-
-**Questions for Carla, flagged in the table:**
-- Is a Mentor cheaper than a Certified Premier (R1,750 against R2,100) correct?
-- Does Akashic have a Certified Master Practitioner level?
-- Is there a Rapid Repatterning membership track? The pathways cover Rapid Repatterning; the levels do not.
-- What does Premier give over Basic?
-- What does Lifestyle give? (This is KI130: no level opens any content yet.)
-- Are there current paying members, with renewal dates, to carry over?
+Training levels (Practitioner and up) are held back until they open.
 
 ## 3. Suzanne's Staff login
 
@@ -144,7 +122,7 @@ What exists:
 
 | Gate | State | Who acts | Effort |
 |---|---|---|---|
-| **Live payments:** PayFast and PayPal sandbox off (both `true` on the box), live merchant and PayPal credentials in place, one real low-value payment each | OPEN. No record of live credentials (KI018, PRECONDITIONS P4) | Suzanne/Johan supply credentials; we switch and test | 1-2 h after credentials |
+| **Live payments:** PayFast and PayPal sandbox off (both `true` on the box), live keys in, one real low-value payment each | OPEN, not a blocker: the live details are in the vault (Johan, 25 Nov); he pulls them at the point of use | Johan (keys), us (switch and test) | 30 min |
 | SSL: certbot for suzanneravenall.com + www | OPEN. ssl-init.sh still has EMAIL="YOUR_EMAIL" and asks for staging, n8n, cal and community subdomains that have no DNS; no renewal timer in the repo | Us, right after DNS points at the box | 1 h |
 | Production nginx conf | OPEN. Has drifted from ip-testing.conf: lacks /uploads/ and /api/auth | Us | 1-2 h with a test |
 | Env to https | OPEN. NEXT_PUBLIC_SITE_URL, PAYLOAD_URL, PAYLOAD_PUBLIC_SERVER_URL, NEXT_PUBLIC_MEDUSA_URL, CORS, Cal.com URL and webhook; the web build bakes NEXT_PUBLIC values in, so web and payload are rebuilt. The checklist misses NEXT_PUBLIC_SITE_URL and PAYLOAD_PUBLIC_SERVER_URL | Us (Johan on the box) | 1 h + rebuild |
@@ -166,7 +144,7 @@ What exists:
 ## 5. Honest read
 
 **Smallest set to switch DNS before Friday 27 Nov without losing orders, mail or members, or embarrassing her:**
-1. **Payments live** (credentials plus one real test each). Without them every order fails. This is the one item we cannot do alone; it needs her merchant and PayPal details today or tomorrow.
+1. **Payments live:** Johan pulls the live keys from the vault, switches sandbox off, and makes one real low-value test payment with each provider.
 2. **The switch mechanics:** SSL, production nginx, env to https and rebuild, login server URL, notify addresses to her team inbox, test vouchers and test records removed. About half a day of our time plus Johan on the box, best done Thursday morning with Friday as the buffer.
 3. **Her wording items:**
    - support@ everywhere (#12);
@@ -190,11 +168,11 @@ What exists:
 - MFA.
 
 **Is Friday realistic?** Yes, for the website itself, if two things are true by Thursday morning:
-- the live PayFast and PayPal credentials are in hand, and she accepts that Sage (accounting) and memberships follow next week;
+- Johan has the live payment keys in from the vault (not a blocker), and she accepts that Sage (accounting) and memberships follow next week;
 - Johan has decided the coaching app and admin protection.
 
 **Not realistic by Friday:**
-- **Memberships "confirmed with Carla" and Wild Apricot shut.** That needs Carla's reply and the content mapping (KI130), which nobody has given us.
+- **Memberships open and Wild Apricot shut.** Carla confirms the table once; then we map what each level unlocks from her own benefits list on repatterning.com (KI130) and publish the five drafts. That is 1 to 2 days of our work, so it follows next week.
 - **Sage**, without credentials.
 
 Say so to her now rather than on Thursday.
@@ -202,11 +180,9 @@ Say so to her now rather than on Thursday.
 ## Who answers what
 
 **Only Suzanne, Shayna or Carla:**
-- live PayFast and PayPal credentials;
 - the team inbox for form and quiz mails;
 - Sage credentials and the USD rule;
-- Wild Apricot levels and members (Carla);
-- what Lifestyle and Premier give;
+- Carla: one confirmation of the memberships table (no questions);
 - which add-ons the five sessions get;
 - the safeguarding policy approval;
 - the sixth video made public on YouTube;
