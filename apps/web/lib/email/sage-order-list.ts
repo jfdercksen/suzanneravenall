@@ -57,8 +57,10 @@ export const sageOrderListSchema = z.object({
   /** First and last day covered, YYYY-MM-DD (SAST). */
   fromDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   toDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  orders: z.array(orderSchema).max(1000),
+  orders: z.array(orderSchema).max(2000),
   refunds: z.array(refundSchema).max(500).default([]),
+  /** The window held more orders than the list can carry (Medusa's cap, 2000). */
+  incomplete: z.boolean().default(false),
   excluded: z
     .object({ canceled: z.number().int().min(0), qaVoucher: z.number().int().min(0), draft: z.number().int().min(0) })
     .optional(),
@@ -70,6 +72,8 @@ export type SageRefundRow = SageOrderListData['refunds'][number]
 
 export const SAGE_LIST_INSTRUCTION =
   'Type the SR number in the Sage invoice reference field, so the automatic link later skips the order.'
+export const INCOMPLETE_TEXT =
+  'This list is incomplete: the day held more orders than fit. Check the Medusa admin for the rest.'
 export const SAGE_LIST_FOOTER = 'This list holds customer details: keep it within the team.'
 export const NO_CODE_TEXT = 'no code, check'
 
@@ -144,10 +148,11 @@ export function sageCsvFilename(data: Pick<SageOrderListData, 'toDate'>): string
 /* ------------------------------- plain text ------------------------------ */
 
 export function sageOrderListText(data: SageOrderListData): string {
-  if (data.orders.length === 0 && data.refunds.length === 0) {
+  if (data.orders.length === 0 && data.refunds.length === 0 && !data.incomplete) {
     return [`No orders on ${data.windowLabel}.`, '', SAGE_LIST_FOOTER].join('\n')
   }
-  const lines: string[] = [SAGE_LIST_INSTRUCTION, '']
+  const lines: string[] = data.incomplete ? [INCOMPLETE_TEXT, ''] : []
+  lines.push(SAGE_LIST_INSTRUCTION, '')
   if (data.orders.length === 0) lines.push(`No orders on ${data.windowLabel}.`, '')
   for (const o of data.orders) {
     lines.push(`${o.reference}  ${o.createdAtLabel}`)

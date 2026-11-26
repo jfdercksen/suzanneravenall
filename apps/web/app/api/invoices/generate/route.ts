@@ -268,7 +268,21 @@ export async function POST(req: NextRequest) {
   //    keys written by earlier steps (Sage, PayFast, PayPal).
   //    invoice_path is the permanent storage reference; invoice_url is the 7-day email link.
   try {
-    const existingMeta = order.metadata ?? {}
+    // Re-read the metadata now: the copy from step 1 is stale by the PDF render
+    // and upload, and the Sage job may have written its keys meanwhile. Only
+    // our own two keys go onto the fresh copy.
+    let existingMeta: Record<string, unknown> = order.metadata ?? {}
+    try {
+      const fresh = await fetch(`${medusaBase}/admin/orders/${orderId}?fields=${encodeURIComponent('id,metadata')}`, {
+        headers: { Authorization: medusaAdminAuthHeader(medusaToken), 'Content-Type': 'application/json' },
+      })
+      if (fresh.ok) {
+        const freshData = (await fresh.json()) as { order?: { metadata?: Record<string, unknown> | null } }
+        existingMeta = freshData.order?.metadata ?? {}
+      }
+    } catch {
+      // Fall back to the step 1 copy; a failed re-read must not lose the invoice link.
+    }
     const res = await fetch(`${medusaBase}/admin/orders/${orderId}`, {
       method: 'POST',
       headers: {

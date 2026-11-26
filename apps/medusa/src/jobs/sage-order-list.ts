@@ -3,12 +3,16 @@
  * (src/automations/sage-order-list.ts). Runs only when
  * AUTOMATION_SAGE_ORDER_LIST=code (default off); AUTOMATION_DRY_RUN logs
  * counts and sends nothing.
+ *
+ * The cron is in the container's clock: "0 5 * * 1-5" is 07:00 SAST only when
+ * that clock is UTC. The run warns in the log when it is not (checkRunHour).
  */
 
 import type { MedusaContainer } from "@medusajs/framework/types"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { staffAlerter } from "../automations/runtime"
 import {
+  ORDER_CAP,
   SAGE_ORDER_FIELDS,
   findRefunds,
   runSageOrderList,
@@ -18,7 +22,6 @@ import {
 import type { RawSql } from "../modules/automations/pg-store"
 
 const PAGE = 100
-const MAX_ORDERS = 2000
 
 type QueryGraph = { graph(input: Record<string, unknown>): Promise<{ data: unknown[] }> }
 
@@ -33,7 +36,7 @@ export default async function sageOrderList(container: MedusaContainer): Promise
       alert: (a) => staffAlerter().send(a),
       loadOrders: async (window) => {
         const all: unknown[] = []
-        for (let skip = 0; skip < MAX_ORDERS; skip += PAGE) {
+        for (let skip = 0; skip <= ORDER_CAP; skip += PAGE) {
           const { data } = await query.graph({
             entity: "order",
             fields: SAGE_ORDER_FIELDS,
@@ -41,7 +44,8 @@ export default async function sageOrderList(container: MedusaContainer): Promise
             pagination: { skip, take: PAGE, order: { created_at: "ASC" } },
           })
           all.push(...data)
-          if (data.length < PAGE) break
+          // One more than the cap, so the run can tell the list is incomplete.
+          if (data.length < PAGE || all.length > ORDER_CAP) break
         }
         return all
       },

@@ -140,6 +140,21 @@ describe('POST /api/email/sage-order-list', () => {
     expect(sent.text).toContain('SR-00007  2026-11-23 11:00  ZAR 500.00  Customer request')
   })
 
+  it('accepts 2000 orders and refuses 2001', async () => {
+    mockSend.mockResolvedValue('m')
+    expect((await POST(req({ ...valid, orders: Array.from({ length: 2000 }, () => order) }))).status).toBe(200)
+    expect((await POST(req({ ...valid, orders: Array.from({ length: 2001 }, () => order) }))).status).toBe(400)
+  })
+
+  it('says so in the mail when the list is incomplete', async () => {
+    mockSend.mockResolvedValue('m')
+    await POST(req({ ...valid, incomplete: true }))
+    expect((mockSend.mock.calls[0]![0] as Sent).text).toContain('This list is incomplete')
+    mockSend.mockClear()
+    await POST(req(valid))
+    expect((mockSend.mock.calls[0]![0] as Sent).text).not.toContain('incomplete')
+  })
+
   it('500 when the mail provider refuses', async () => {
     mockSend.mockRejectedValue(new Error('Brevo error'))
     expect((await POST(req(valid))).status).toBe(500)

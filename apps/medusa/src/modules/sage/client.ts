@@ -93,7 +93,9 @@ export class SageClient {
       const rows = data.Results ?? []
       const hit = rows.find(s.match)
       if (hit) return hit
-      if (rows.length === 0 || skip + PAGE >= (data.TotalResults ?? 0)) return null
+      // Stop at the end: by TotalResults when Sage sends it, else on a short (not full) page.
+      const total = data.TotalResults
+      if (rows.length === 0 || (typeof total === "number" ? skip + PAGE >= total : rows.length < PAGE)) return null
     }
     throw new Error(`Sage ${s.what} search stopped after ${s.maxPages} pages without finishing; check the trial company supports $filter`)
   }

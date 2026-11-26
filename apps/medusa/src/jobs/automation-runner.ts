@@ -15,10 +15,10 @@ import type { MedusaContainer } from "@medusajs/framework/types"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import type { OrderSnapshot } from "@suzanne/integrations"
 import { dryRun } from "../automations/config"
-import { dispatchOrderAutomations } from "../automations/dispatch"
+import { dispatchOrderAutomations, dispatchSageInvoice } from "../automations/dispatch"
 import { buildOrderSnapshot, ORDER_GRAPH_FIELDS } from "../automations/order-snapshot"
 import { createDryRunQueue, getAutomationQueue } from "../automations/runtime"
-import { sweepRecentOrders } from "../automations/sweep"
+import { sweepRecentOrders, sweepSageInvoices } from "../automations/sweep"
 
 const PROCESS_STARTED_AT = new Date()
 
@@ -53,6 +53,26 @@ export default async function automationRunner(container: MedusaContainer): Prom
     })
   } catch (err) {
     console.error(`[automation-runner] sweep failed: ${err instanceof Error ? err.message : String(err)}`)
+  }
+
+  try {
+    const query = container.resolve(ContainerRegistrationKeys.QUERY) as unknown as QueryGraph
+    await sweepSageInvoices({
+      store: queue.storeRef,
+      processStartedAt: PROCESS_STARTED_AT,
+      listOrdersSince: async (since) => {
+        const { data } = await query.graph({
+          entity: "order",
+          fields: [...ORDER_GRAPH_FIELDS, "created_at"],
+          filters: { created_at: { $gt: since.toISOString() } },
+          pagination: { skip: 0, take: 200, order: { created_at: "ASC" } },
+        })
+        return data as Array<{ id: string; created_at?: string | Date | null }>
+      },
+      enqueueOrder: (order) => dispatchSageInvoice(order, { queue: () => queue, dryRunQueue: createDryRunQueue, kick: false }),
+    })
+  } catch (err) {
+    console.error(`[automation-runner] sage sweep failed: ${err instanceof Error ? err.message : String(err)}`)
   }
 
   if (dryRun()) return

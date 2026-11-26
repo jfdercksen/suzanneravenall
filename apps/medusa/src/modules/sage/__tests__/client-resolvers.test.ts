@@ -95,6 +95,21 @@ describe('find by $filter with paging fallback', () => {
     expect((await f.client.findCustomerByEmail('target@x.co'))?.ID).toBe(2)
   })
 
+  it('without TotalResults keeps paging while pages come back full and stops on a short page (L1)', async () => {
+    const noTotal = (rows: unknown[]) => new Response(JSON.stringify({ Results: rows }), { status: 200 })
+    const f = fake((c) => {
+      if (c.params.has('$filter')) return new Response('x', { status: 400 })
+      const skip = Number(c.params.get('$skip'))
+      if (skip === 0) return noTotal(Array.from({ length: 100 }, (_, i) => cust(i + 1, `u${i}@x.co`)))
+      if (skip === 100) return noTotal([cust(101, 'a@x.co'), cust(102, 'target@x.co')])
+      throw new Error('paged past the short page')
+    })
+    expect((await f.client.findCustomerByEmail('target@x.co'))?.ID).toBe(102)
+    const g = fake((c) => (c.params.has('$filter') ? new Response('x', { status: 400 }) : noTotal([cust(1, 'a@x.co')])))
+    expect(await g.client.findCustomerByEmail('b@x.co')).toBeNull()
+    expect(g.calls).toHaveLength(2)
+  })
+
   it('returns null at the end of the pages', async () => {
     const f = fake((c) => (c.params.has('$filter') ? new Response('x', { status: 400 }) : page([cust(1, 'a@x.co')], 1)))
     expect(await f.client.findCustomerByEmail('b@x.co')).toBeNull()

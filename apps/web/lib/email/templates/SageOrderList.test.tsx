@@ -30,6 +30,7 @@ const base: SageOrderListData = {
       paymentReference: 'PF1',
     },
   ],
+  incomplete: false,
   refunds: [{ reference: 'SR-00007', refundedAt: '2026-11-23T09:00:00.000Z', refundedAtLabel: '2026-11-23 11:00', amount: 5, currency: 'ZAR', note: null }],
 }
 
@@ -47,5 +48,10 @@ describe('SageOrderList template', () => {
     const html = await render(createElement(SageOrderList, { data: { ...base, orders: [], refunds: [] } }))
     expect(html).toContain('No orders on Mon 23 Nov 2026.')
     expect(html).not.toContain('Type the SR number')
+  })
+
+  it('shows the incomplete notice when the list was cut', async () => {
+    const html = await render(createElement(SageOrderList, { data: { ...base, incomplete: true } }))
+    expect(html).toContain('This list is incomplete')
   })
 })

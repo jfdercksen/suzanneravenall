@@ -11,6 +11,7 @@ import { MemoryCustomerMapStore, MemoryItemCacheStore } from '../../modules/sage
 import { buildSageOrderSnapshot } from '../../modules/sage/invoice'
 import { mergeOrderMetadata, sageInvoiceHandler, type SageDeps } from '../sage'
 import { dispatchSageInvoice } from '../dispatch'
+import { sweepSageInvoices, SWEEP_GRACE_MS } from '../sweep'
 import { modeFor, sageMode, SAGE_INVOICE } from '../config'
 
 const quiet = { info: vi.fn(), warn: vi.fn(), error: vi.fn() }
@@ -34,10 +35,11 @@ const graphOrder = (over: Record<string, unknown> = {}) => ({
 type Sage = { invoices: Array<{ ID: number; DocumentNumber: string; Reference: string }>; customers: Array<{ ID: number; Email: string }>; items: Array<{ ID: number; Code: string }> }
 
 // Sage answers shape to be replaced by a recorded sandbox answer.
-function setup(opts: { env?: Record<string, string>; sage?: Partial<Sage>; failPostTimes?: number; postStatus?: number } = {}) {
+function setup(opts: { env?: Record<string, string>; sage?: Partial<Sage>; failPostTimes?: number; postStatus?: number; clock?: () => number; invoiceAppearsAfterFirstLookup?: boolean } = {}) {
   const env = { SAGE_TAX_TYPE_ID: '4', SAGE_INCOME_ACCOUNT_ID: '300', SAGE_API_KEY: 'K', SAGE_COMPANY_ID: '1', SAGE_EMAIL: 'e@x.co', SAGE_PASSWORD: 'p', ...(opts.env ?? {}) }
   const sage: Sage = { invoices: [], customers: [], items: [{ ID: 31, Code: 'RC-1' }], ...(opts.sage ?? {}) }
   let postFailures = opts.failPostTimes ?? 0
+  let invoiceLookups = 0
   const posted: unknown[] = []
   const sageCalls: string[] = []
   const list = <T,>(rows: T[]) => new Response(JSON.stringify({ TotalResults: rows.length, ReturnedResults: rows.length, Results: rows }), { status: 200 })
@@ -45,6 +47,7 @@ function setup(opts: { env?: Record<string, string>; sage?: Partial<Sage>; failP
     const u = new URL(input)
     const path = u.pathname.replace('/api/2.0.0', '')
     sageCalls.push(`${init?.method ?? 'GET'} ${path}`)
+    if (path === '/TaxInvoice/Get' && opts.invoiceAppearsAfterFirstLookup && ++invoiceLookups >= 2) return list([{ ID: 888, DocumentNumber: 'INV0888', Reference: 'SR-00412' }])
     if (path === '/TaxInvoice/Get') return list(sage.invoices.filter((i) => u.searchParams.get('$filter')?.includes(`'${i.Reference}'`)))
     if (path === '/Customer/Get') return list(sage.customers.filter((c) => u.searchParams.get('$filter')?.includes(`'${c.Email}'`)))
     if (path === '/Item/Get') return list(sage.items.filter((i) => u.searchParams.get('$filter')?.includes(`'${i.Code}'`)))
@@ -67,7 +70,7 @@ function setup(opts: { env?: Record<string, string>; sage?: Partial<Sage>; failP
   })
   const deps = (shadow = false): SageDeps => ({
     shadow, config: () => config, client: () => client, customers: () => customers,
-    items: () => new ItemResolver(client, itemCache), writeMetadata, now: () => T0, logger: quiet,
+    items: () => new ItemResolver(client, itemCache), writeMetadata, now: () => T0, clock: opts.clock, logger: quiet,
   })
   const alerts: StaffAlert[] = []
   const store = new MemoryJobStore(() => T0)
@@ -273,5 +276,85 @@ describe('AUTOMATION_SAGE flag and dispatch', () => {
     expect(await dispatchSageInvoice(graphOrder(), q.deps({ AUTOMATION_SAGE: 'code', AUTOMATION_DRY_RUN: 'true' }))).toBe('dry-run')
     expect(q.dry.runJob).toHaveBeenCalledTimes(2)
     expect(q.durable.enqueueAndKick).not.toHaveBeenCalled()
+  })
+})
+
+describe('lease budget and late lookup (M2)', () => {
+  it('throws a retryable error instead of posting when the run used the lease up', async () => {
+    let t = 0
+    const s = setup({ clock: () => (t += 8 * 60_000) }) // 8 min per reading: over lease minus 3 min at the post check
+    const { outcome, job } = await run(s)
+    expect(outcome).toBe('retry')
+    expect(job.last_error).toMatch(/time budget/)
+    expect(s.posted).toHaveLength(0)
+    expect(s.alerts).toEqual([])
+  })
+
+  it('looks the reference up again right before posting and stops if it appeared', async () => {
+    const s = setup({ invoiceAppearsAfterFirstLookup: true })
+    const { job } = await run(s)
+    expect(job.result).toMatchObject({ outcome: 'already-in-sage', documentNumber: 'INV0888' })
+    expect(s.posted).toHaveLength(0)
+    expect(s.metadata.order_01QA).toMatchObject({ sage_invoice_id: '888' })
+  })
+})
+
+describe('mergeOrderMetadata race (M1)', () => {
+  it('writes again once when the read back shows our keys were overwritten, merging onto a fresh read', async () => {
+    let stored: Record<string, unknown> = { a: 1 }
+    let writes = 0
+    const orders = {
+      retrieveOrder: vi.fn(async () => ({ metadata: { ...stored } })),
+      updateOrders: vi.fn(async (_id: string, data: Record<string, unknown>) => {
+        writes += 1
+        // A concurrent writer (invoice step) replaces the metadata right after our first write.
+        stored = writes === 1 ? { a: 1, invoice_path: 'p.pdf' } : (data.metadata as Record<string, unknown>)
+      }),
+    }
+    await mergeOrderMetadata(orders, 'o', { sage_invoice_id: '9' })
+    expect(writes).toBe(2)
+    expect(stored).toEqual({ a: 1, invoice_path: 'p.pdf', sage_invoice_id: '9' })
+  })
+
+  it('is bounded: two attempts at most', async () => {
+    const orders = { retrieveOrder: vi.fn(async () => ({ metadata: {} })), updateOrders: vi.fn(async () => undefined) }
+    await mergeOrderMetadata(orders, 'o', { k: 1 })
+    expect(orders.updateOrders).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe('sweepSageInvoices (M3)', () => {
+  const START = new Date('2026-11-26T09:00:00Z')
+  const NOW = new Date('2026-11-26T12:00:00Z')
+  const old = (min: number) => new Date(NOW.getTime() - min * 60_000).toISOString()
+  const mk = (env: Record<string, string>, orders: Array<{ id: string; created_at: string }>) => {
+    const store = new MemoryJobStore(() => NOW)
+    const enqueueOrder = vi.fn(async () => 'enqueued')
+    return { store, enqueueOrder, run: () => sweepSageInvoices({ store, env, now: () => NOW, processStartedAt: START, listOrdersSince: async () => orders, enqueueOrder, logger: quiet }) }
+  }
+
+  it('off and shadow do nothing', async () => {
+    for (const env of [{}, { AUTOMATION_SAGE: 'shadow' }]) {
+      const m = mk(env, [{ id: 'o1', created_at: old(30) }])
+      expect(await m.run()).toEqual({ checked: 0, recovered: 0 })
+      expect(m.enqueueOrder).not.toHaveBeenCalled()
+    }
+  })
+
+  it('code: enqueues orders placed after code mode began, past the grace period, not newer or older ones', async () => {
+    const m = mk({ AUTOMATION_SAGE: 'code' }, [
+      { id: 'before', created_at: '2026-11-26T08:00:00Z' },
+      { id: 'recent', created_at: new Date(NOW.getTime() - SWEEP_GRACE_MS + 1000).toISOString() },
+      { id: 'lost', created_at: old(30) },
+    ])
+    expect(await m.run()).toEqual({ checked: 1, recovered: 1 })
+    expect(m.enqueueOrder).toHaveBeenCalledTimes(1)
+    expect((m.enqueueOrder.mock.calls as unknown as Array<[{ id: string }]>)[0][0].id).toBe('lost')
+  })
+
+  it('a duplicate (the subscriber already queued it) is not counted as recovered', async () => {
+    const m = mk({ AUTOMATION_SAGE: 'code' }, [{ id: 'lost', created_at: old(30) }])
+    m.enqueueOrder.mockResolvedValue('duplicate')
+    expect(await m.run()).toEqual({ checked: 1, recovered: 0 })
   })
 })

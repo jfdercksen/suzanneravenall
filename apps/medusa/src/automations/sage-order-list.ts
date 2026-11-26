@@ -10,6 +10,10 @@
  * Pure and dependency-injected: the job (src/jobs/sage-order-list.ts) wires the
  * Query graph, raw SQL for refunds and the web route.
  *
+ * Schedule: the job's cron is "0 5 * * 1-5", which is 07:00 SAST ONLY when the
+ * container clock is UTC (South Africa has no DST). runSageOrderList warns in
+ * the log when the SAST hour at run time is not 7 (see checkRunHour).
+ *
  * Flag AUTOMATION_SAGE_ORDER_LIST: "off" (default) | "code".
  * AUTOMATION_DRY_RUN=true builds the list and logs counts only.
  */
@@ -32,6 +36,9 @@ import type { RawSql } from "../modules/automations/pg-store"
 type Env = Record<string, string | undefined>
 
 export const QA_VOUCHER = "QA-SELFTEST-100"
+/** Most orders one list holds; the web schema allows the same. More: the list is sent marked incomplete. */
+export const ORDER_CAP = 2000
+export const SEND_TIMEOUT_MS = 120_000
 const SAST_OFFSET_MS = 2 * 60 * 60 * 1000
 const DAY_MS = 24 * 60 * 60 * 1000
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -149,6 +156,8 @@ export type SageOrderListPayload = {
   orders: SageOrderRow[]
   refunds: SageRefundRow[]
   excluded: { canceled: number; qaVoucher: number; draft: number }
+  /** True when the window held more than ORDER_CAP orders: the list shows the first ORDER_CAP only. */
+  incomplete: boolean
 }
 
 type Raw = Record<string, unknown>
@@ -348,11 +357,24 @@ export type SageRunResult =
   | { status: "sent"; orders: number; refunds: number }
   | { status: "failed"; reason: string }
 
+/** Warns (does not stop) when the run is not at 07:00 SAST, i.e. the container clock is not UTC. */
+export function checkRunHour(now: Date, logger: Logger, env: Env = process.env): boolean {
+  const hour = sast(now).getUTCHours()
+  if (hour === 7) return true
+  const tz = env.TZ || Intl.DateTimeFormat().resolvedOptions().timeZone || "unknown"
+  logger.warn(
+    `[sage-order-list] running at ${String(hour).padStart(2, "0")}:xx SAST, not 07:00: the container timezone is ${tz}, but the cron "0 5 * * 1-5" assumes UTC. Set TZ=UTC on the medusa service or change the schedule.`,
+  )
+  return false
+}
+
 export type SageOrderListDeps = {
   now(): Date
   env?: Env
   /** Orders created in the window, raw graph rows. */
   loadOrders(window: ListWindow): Promise<unknown[]>
+  /** Defaults to ORDER_CAP. Tests only. */
+  orderCap?: number
   loadRefunds(window: ListWindow): Promise<SageRefundRow[]>
   /** Throws when the mail was not accepted. */
   send(payload: SageOrderListPayload): Promise<void>
@@ -377,9 +399,15 @@ export async function runSageOrderList(deps: SageOrderListDeps): Promise<SageRun
     return { status: "no-recipient" }
   }
 
-  const window = windowFor(deps.now())
+  const now = deps.now()
+  checkRunHour(now, deps.logger, env)
+  const window = windowFor(now)
+  const cap = deps.orderCap ?? ORDER_CAP
+  let payload: SageOrderListPayload
   try {
-    const raw = await deps.loadOrders(window)
+    const loaded = await deps.loadOrders(window)
+    const incomplete = loaded.length > cap
+    const raw = incomplete ? loaded.slice(0, cap) : loaded
     const refunds = await deps.loadRefunds(window)
     const excluded = { canceled: 0, qaVoucher: 0, draft: 0 }
     const orders: SageOrderRow[] = []
@@ -394,7 +422,7 @@ export async function runSageOrderList(deps: SageOrderListDeps): Promise<SageRun
     }
     orders.sort((a, b) => a.createdAt.localeCompare(b.createdAt))
 
-    const payload: SageOrderListPayload = {
+    payload = {
       to,
       cc,
       windowLabel: window.label,
@@ -403,17 +431,15 @@ export async function runSageOrderList(deps: SageOrderListDeps): Promise<SageRun
       orders,
       refunds,
       excluded,
+      incomplete,
     }
 
-    const summary = `${window.label}: ${orders.length} order(s), ${refunds.length} refund(s), excluded canceled=${excluded.canceled} qa=${excluded.qaVoucher} draft=${excluded.draft}`
+    const summary = `${window.label}: ${orders.length} order(s), ${refunds.length} refund(s), excluded canceled=${excluded.canceled} qa=${excluded.qaVoucher} draft=${excluded.draft}${incomplete ? ", INCOMPLETE (order cap reached)" : ""}`
     if (isDryRun(env)) {
       deps.logger.info(`[sage-order-list:dry-run] would send to ${[...to, ...cc].map(maskEmail).join(", ")}: ${summary}`)
       return { status: "dry-run", orders: orders.length, refunds: refunds.length }
     }
-
-    await deps.send(payload)
-    deps.logger.info(`[sage-order-list] sent ${summary}`)
-    return { status: "sent", orders: orders.length, refunds: refunds.length }
+    deps.logger.info(`[sage-order-list] ${summary}`)
   } catch (err) {
     const reason = err instanceof Error ? err.message : String(err)
     deps.logger.error(`[sage-order-list] run failed: ${reason}`)
@@ -427,6 +453,45 @@ export async function runSageOrderList(deps: SageOrderListDeps): Promise<SageRun
       .catch(() => undefined)
     return { status: "failed", reason }
   }
+
+  try {
+    await deps.send(payload)
+  } catch (err) {
+    const reason = err instanceof Error ? err.message : String(err)
+    deps.logger.error(`[sage-order-list] send failed: ${reason}`)
+    // A non-2xx answer is definite: the web app did not send. A timeout or network
+    // error is not: the mail may have gone out before the answer was lost.
+    const definite = err instanceof IntegrationError && err.status !== null
+    await deps
+      .alert({
+        key: "sage-order-list-failed",
+        subject: definite
+          ? `Sage order list for ${window.label} was not sent`
+          : `Sage order list for ${window.label}: no answer from the mail route`,
+        lines: [
+          `Reason: ${reason}`,
+          definite
+            ? "Carla has no list for that day. Check the medusa log, then send the day's orders by hand or restart the job."
+            : "The list may have been sent: check Carla's inbox before resending.",
+        ],
+      })
+      .catch(() => undefined)
+    return { status: "failed", reason }
+  }
+
+  if (payload.incomplete) {
+    await deps
+      .alert({
+        key: "sage-order-list-incomplete",
+        subject: `Sage order list for ${window.label} is incomplete`,
+        lines: [
+          `The day holds more than ${cap} orders; the mail lists the first ${cap} only and says so.`,
+          "Add the missing orders to Sage by hand from the Medusa admin.",
+        ],
+      })
+      .catch(() => undefined)
+  }
+  return { status: "sent", orders: payload.orders.length, refunds: payload.refunds.length }
 }
 
 /** POST /api/email/sage-order-list on the web app. One attempt: a retried send could mail twice. */
@@ -444,7 +509,7 @@ export async function sendSageOrderListViaWeb(
       headers: { "Content-Type": "application/json", ...(secret ? { "x-webhook-secret": secret } : {}) },
       body: JSON.stringify(payload),
     },
-    { system: "web-email", retries: 0, timeoutMs: 30_000, fetchImpl },
+    { system: "web-email", retries: 0, timeoutMs: SEND_TIMEOUT_MS, fetchImpl },
   )
   if (!res.ok) {
     throw new IntegrationError(`sage-order-list mail route answered HTTP ${res.status}`, {

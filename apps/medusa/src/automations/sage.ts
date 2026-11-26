@@ -17,7 +17,7 @@
  */
 
 import { srInvoiceReference, type Logger } from "@suzanne/integrations"
-import { PermanentError, type AutomationHandler, type JobRecord } from "../modules/automations/queue"
+import { LEASE_MS, PermanentError, type AutomationHandler, type JobRecord } from "../modules/automations/queue"
 import type { SageClient } from "../modules/sage/client"
 import { requireCashCustomerId, requireTaxTypeId, type SageConfig } from "../modules/sage/config"
 import { SageHold } from "../modules/sage/errors"
@@ -36,6 +36,8 @@ export type SageDeps = {
   /** Adds the keys to the order's metadata, keeping the existing ones. */
   writeMetadata: (orderId: string, patch: Record<string, unknown>) => Promise<void>
   now?: () => Date
+  /** Milliseconds clock for the lease budget (tests). */
+  clock?: () => number
   logger: Logger
 }
 
@@ -46,9 +48,19 @@ type OrderModule = {
 
 /** Medusa replaces the whole metadata object on update, so the existing keys are spread back in. */
 export async function mergeOrderMetadata(orders: OrderModule, orderId: string, patch: Record<string, unknown>): Promise<void> {
-  const current = await orders.retrieveOrder(orderId, { select: ["id", "metadata"] })
-  await orders.updateOrders(orderId, { metadata: { ...(current.metadata ?? {}), ...patch } })
+  // Read fresh right before each write (another writer, such as the invoice PDF
+  // step, may have changed the metadata since), merge only our keys, then read
+  // back and write once more if our keys are not there.
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const current = await orders.retrieveOrder(orderId, { select: ["id", "metadata"] })
+    await orders.updateOrders(orderId, { metadata: { ...(current.metadata ?? {}), ...patch } })
+    const after = await orders.retrieveOrder(orderId, { select: ["id", "metadata"] })
+    if (Object.entries(patch).every(([k, v]) => after.metadata?.[k] === v)) return
+  }
 }
+
+/** Posting stops this long before the queue lease ends: a second run could otherwise claim the job and post too. */
+export const LEASE_SAFETY_MS = 3 * 60_000
 
 export type SageJobPayload = { order: SageOrderSnapshot }
 type SageState = { customerId?: number }
@@ -66,11 +78,13 @@ function jobLabel(job: JobRecord): string {
 
 export function sageInvoiceHandler(deps: SageDeps): AutomationHandler {
   const now = deps.now ?? (() => new Date())
+  const clock = deps.clock ?? Date.now
 
   return {
     name: SAGE_INVOICE,
     alertAfterAttempts: 3,
     async run(ctx) {
+      const startedAt = clock()
       const order = (ctx.payload as Partial<SageJobPayload>).order
       if (!order?.id || !Array.isArray(order.items)) throw new PermanentError("sage_invoice job has no order")
 
@@ -123,12 +137,15 @@ export function sageInvoiceHandler(deps: SageDeps): AutomationHandler {
         const client = deps.client()
         const reference = srInvoiceReference(order.displayId)
 
-        const existing = await client.findTaxInvoiceByReference(reference)
-        if (existing) {
+        const alreadyInSage = async () => {
+          const existing = await client.findTaxInvoiceByReference(reference)
+          if (!existing) return null
           await deps.writeMetadata(order.id, syncedMetadata(existing.ID, existing.DocumentNumber, now()))
           deps.logger.info(`[sage] order ${label(order)}: ${reference} is already in Sage (${existing.DocumentNumber}); metadata written, nothing posted`)
           return { result: { outcome: "already-in-sage" satisfies SageOutcome, invoiceId: existing.ID, documentNumber: existing.DocumentNumber } }
         }
+        const first = await alreadyInSage()
+        if (first) return first
 
         const state = (ctx.state as SageState | null) ?? {}
         let customerId = state.customerId
@@ -147,6 +164,16 @@ export function sageInvoiceHandler(deps: SageDeps): AutomationHandler {
         const itemIds = codes.length > 0 ? await deps.items().resolve(codes) : {}
         const { body, warnings } = buildSageInvoice({ order, customerId, taxTypeId, incomeAccountId: config.incomeAccountId, itemIds })
         for (const w of warnings) deps.logger.warn(`[sage] order ${label(order)}: ${w}`)
+
+        // The lease is 10 minutes; slow paging may have used most of it. Past the
+        // budget a second runner could claim this job, so stop and retry (the
+        // caches filled so far make the retry fast).
+        if (clock() - startedAt > LEASE_MS - LEASE_SAFETY_MS) {
+          throw new Error("Sage invoice run used up its time budget before posting; retrying")
+        }
+        // Cheap with $filter: the invoice may have appeared since the first look.
+        const late = await alreadyInSage()
+        if (late) return late
 
         const invoice = await client.saveTaxInvoice(body)
         await deps.writeMetadata(order.id, syncedMetadata(invoice.ID, invoice.DocumentNumber, now()))

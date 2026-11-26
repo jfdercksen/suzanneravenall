@@ -1,5 +1,6 @@
 import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Text } from '@react-email/components'
 import {
+  INCOMPLETE_TEXT,
   NO_CODE_TEXT,
   SAGE_LIST_FOOTER,
   SAGE_LIST_INSTRUCTION,
@@ -24,7 +25,7 @@ const cell = { color: INK, fontSize: '13px', lineHeight: '1.5', padding: '4px 8p
 const head = { ...cell, color: MUTED, fontSize: '12px', borderBottom: `1px solid ${BORDER}` }
 
 export default function SageOrderList({ data }: { data: SageOrderListData }) {
-  const empty = data.orders.length === 0 && data.refunds.length === 0
+  const empty = data.orders.length === 0 && data.refunds.length === 0 && !data.incomplete
   return (
     <Html lang="en">
       <Head />
@@ -40,6 +41,11 @@ export default function SageOrderList({ data }: { data: SageOrderListData }) {
               <Heading as="h1" style={{ color: INK, fontSize: '22px', fontWeight: '400', margin: '0 0 8px' }}>
                 Orders for Sage: {data.windowLabel}
               </Heading>
+              {data.incomplete ? (
+                <Text style={{ color: INK, fontSize: '14px', fontWeight: '700', lineHeight: '1.6', margin: '0 0 12px', border: `2px solid ${INK}`, padding: '8px 12px' }}>
+                  {INCOMPLETE_TEXT}
+                </Text>
+              ) : null}
               <Text style={{ color: INK, fontSize: '14px', lineHeight: '1.6', margin: '0 0 20px' }}>
                 {SAGE_LIST_INSTRUCTION}
               </Text>

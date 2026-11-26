@@ -1,6 +1,8 @@
 import { describe, it, expect, vi } from "vitest"
-import type { StaffAlert } from "@suzanne/integrations"
+import { IntegrationError, type StaffAlert } from "@suzanne/integrations"
 import {
+  SEND_TIMEOUT_MS,
+  checkRunHour,
   findRefunds,
   money,
   parseRecipients,
@@ -49,12 +51,13 @@ function order(over: Record<string, unknown> = {}) {
   }
 }
 
-function harness(opts: { env?: Record<string, string>; orders?: unknown[]; refunds?: SageRefundRow[]; sendError?: Error } = {}) {
+function harness(opts: { orderCap?: number; now?: Date; env?: Record<string, string>; orders?: unknown[]; refunds?: SageRefundRow[]; sendError?: Error } = {}) {
   const alerts: StaffAlert[] = []
   const sent: SageOrderListPayload[] = []
   const loadOrders = vi.fn(async () => opts.orders ?? [order()])
   const deps: SageOrderListDeps = {
-    now: () => NOW,
+    now: () => opts.now ?? NOW,
+    ...(opts.orderCap ? { orderCap: opts.orderCap } : {}),
     env: opts.env ?? baseEnv,
     loadOrders,
     loadRefunds: vi.fn(async () => opts.refunds ?? []),
@@ -288,6 +291,82 @@ describe("the list", () => {
     })
     expect((await runSageOrderList(h.deps)).status).toBe("failed")
     expect(h.alerts).toHaveLength(1)
+  })
+})
+
+describe("send outcome wording (L2)", () => {
+  it("a timeout says the list may have been sent", async () => {
+    const h = harness({ sendError: new IntegrationError("web-email: timed out", { system: "web-email", code: "TIMEOUT", retriable: true }) })
+    expect((await runSageOrderList(h.deps)).status).toBe("failed")
+    expect(h.alerts).toHaveLength(1)
+    expect(h.alerts[0]!.lines.join(" ")).toContain("may have been sent: check Carla's inbox before resending")
+    expect(h.alerts[0]!.subject).not.toContain("was not sent")
+  })
+
+  it("a network error says the same", async () => {
+    const h = harness({ sendError: new IntegrationError("web-email: network error", { system: "web-email", code: "NETWORK" }) })
+    await runSageOrderList(h.deps)
+    expect(h.alerts[0]!.lines.join(" ")).toContain("may have been sent")
+  })
+
+  it("a non-2xx answer stays a definite not sent", async () => {
+    const h = harness({ sendError: new IntegrationError("HTTP 500", { system: "web-email", status: 500 }) })
+    await runSageOrderList(h.deps)
+    expect(h.alerts[0]!.subject).toContain("was not sent")
+    expect(h.alerts[0]!.lines.join(" ")).not.toContain("may have been sent")
+  })
+
+  it("the web call waits up to 120 s", async () => {
+    expect(SEND_TIMEOUT_MS).toBe(120_000)
+    const fetchImpl = vi.fn(async (_u: string, init?: RequestInit) => {
+      void init
+      return new Response("{}", { status: 200 })
+    })
+    const spy = vi.spyOn(AbortSignal, "timeout")
+    await sendSageOrderListViaWeb({ to: ["a@b.co"] } as unknown as SageOrderListPayload, {}, fetchImpl)
+    spy.mockRestore()
+    expect(fetchImpl).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe("order cap (L3)", () => {
+  const many = (n: number) => Array.from({ length: n }, (_, i) => order({ id: `o${i}`, display_id: i + 1 }))
+
+  it("within the cap the list is complete and raises no extra alert", async () => {
+    const h = harness({ orders: many(3), orderCap: 3 })
+    await runSageOrderList(h.deps)
+    expect(h.sent[0]!.incomplete).toBe(false)
+    expect(h.alerts).toHaveLength(0)
+  })
+
+  it("over the cap it still sends what fits, marked incomplete, and alerts", async () => {
+    const h = harness({ orders: many(4), orderCap: 3 })
+    expect(await runSageOrderList(h.deps)).toEqual({ status: "sent", orders: 3, refunds: 0 })
+    expect(h.sent[0]!.orders).toHaveLength(3)
+    expect(h.sent[0]!.incomplete).toBe(true)
+    expect(h.alerts).toHaveLength(1)
+    expect(h.alerts[0]!.subject).toContain("incomplete")
+  })
+})
+
+describe("run hour guard (L4)", () => {
+  it("is quiet at 07:00 SAST", () => {
+    const logger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() }
+    expect(checkRunHour(new Date("2026-11-24T05:00:00Z"), logger, { TZ: "UTC" })).toBe(true)
+    expect(logger.warn).not.toHaveBeenCalled()
+  })
+
+  it("warns naming the container timezone when the hour is not 7, and the job still runs", async () => {
+    const logger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() }
+    expect(checkRunHour(new Date("2026-11-24T03:00:00Z"), logger, { TZ: "Africa/Johannesburg" })).toBe(false)
+    expect(String(logger.warn.mock.calls[0]![0])).toContain("Africa/Johannesburg")
+
+    const h = harness({ now: new Date("2026-11-24T03:00:00Z") })
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined)
+    h.deps.logger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() }
+    expect((await runSageOrderList(h.deps)).status).toBe("sent")
+    expect((h.deps.logger.warn as ReturnType<typeof vi.fn>).mock.calls.length).toBe(1)
+    warn.mockRestore()
   })
 })
 

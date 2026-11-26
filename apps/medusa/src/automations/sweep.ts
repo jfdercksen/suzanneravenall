@@ -12,7 +12,7 @@
 
 import type { AutomationMode, Logger, OrderSnapshot } from "@suzanne/integrations"
 import type { JobStore } from "../modules/automations/queue"
-import { dryRun, orderVtigerMode, thinkificMode, THINKIFIC_ENROLMENT, VTIGER_ORDER, type OrderAutomation } from "./config"
+import { dryRun, orderVtigerMode, SAGE_INVOICE, sageMode, thinkificMode, THINKIFIC_ENROLMENT, VTIGER_ORDER, type OrderAutomation } from "./config"
 
 /** Orders younger than this are left to the subscriber. */
 export const SWEEP_GRACE_MS = 2 * 60_000
@@ -88,6 +88,51 @@ export async function sweepRecentOrders(deps: SweepDeps): Promise<{ checked: num
         recovered += 1
         logger.warn(`[automation-sweep] recovered order ${order.id}: ${a} had no job (lost order.placed event?)`)
       }
+    }
+  }
+  return { checked, recovered }
+}
+
+export type SageSweepDeps = {
+  store: JobStore
+  /** Raw Query graph orders placed after `since` (ORDER_GRAPH_FIELDS plus created_at), oldest first. */
+  listOrdersSince: (since: Date) => Promise<Array<{ id: string; created_at?: string | Date | null }>>
+  /** Enqueue without starting the run (dispatchSageInvoice, kick false); "enqueued" means a new job. */
+  enqueueOrder: (order: unknown) => Promise<string>
+  env?: Record<string, string | undefined>
+  now?: () => Date
+  processStartedAt: Date
+  logger?: Logger
+}
+
+/**
+ * The same recovery for the Sage invoice: an order whose order.placed event was
+ * lost gets its sage_invoice job here. Same idempotency key as the subscriber's
+ * job, so nothing is doubled. Only runs in AUTOMATION_SAGE=code (off and shadow
+ * do nothing) and only for orders placed after code mode began, so orders
+ * Carla already invoiced by hand before the switch are not swept.
+ */
+export async function sweepSageInvoices(deps: SageSweepDeps): Promise<{ checked: number; recovered: number }> {
+  const env = deps.env ?? process.env
+  const now = (deps.now ?? (() => new Date()))()
+  const logger = deps.logger ?? console
+  const configured = sageMode(env)
+  const mode = configured === "code" && dryRun(env) ? "dry-run" : configured
+  const saved = await deps.store.getModeState(SAGE_INVOICE)
+  if (!saved || saved.mode !== mode) await deps.store.setModeState({ automation: SAGE_INVOICE, mode, since: deps.processStartedAt })
+  if (mode !== "code") return { checked: 0, recovered: 0 }
+  const since = !saved || saved.mode !== mode ? deps.processStartedAt : saved.since
+
+  const earliest = new Date(Math.max(since.getTime(), now.getTime() - SWEEP_WINDOW_MS))
+  let checked = 0
+  let recovered = 0
+  for (const order of await deps.listOrdersSince(earliest)) {
+    const createdAt = order.created_at ? new Date(order.created_at).getTime() : NaN
+    if (!Number.isFinite(createdAt) || createdAt > now.getTime() - SWEEP_GRACE_MS || createdAt <= since.getTime()) continue
+    checked += 1
+    if ((await deps.enqueueOrder(order)) === "enqueued") {
+      recovered += 1
+      logger.warn(`[automation-sweep] recovered order ${order.id}: sage_invoice had no job (lost order.placed event?)`)
     }
   }
   return { checked, recovered }
