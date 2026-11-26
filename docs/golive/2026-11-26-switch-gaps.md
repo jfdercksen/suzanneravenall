@@ -175,7 +175,10 @@ The old WordPress site exposes these integrations. Each stops at the switch, bec
    - the income account;
    - a no-VAT tax type;
    - how USD sales are booked.
-2. **The API key.** The vault holds one Sage key, received 4 Aug and described as sandbox. Inferred: for Sage SA the API key belongs to the integration and works on any company that login can open, so "live" may only mean the real company id. To confirm with Sage.
+2. **The API key.** The vault holds one Sage key, received 4 Aug: sandbox only. Corrected later on 26 Nov:
+   - Sage asked for 8 OAuth 2.0 client details for live access. The reply was drafted 4 Aug and never sent.
+   - So live access needs an OAuth sign-in, which is not built, and Sage's own review.
+   - Full facts in docs/golive/2026-11-26-sage-report.md.
 3. **Code:**
    - Move Sage into the outbox: an `AUTOMATION_SAGE` flag, retries, a dead-job alert, the metadata written in-process.
    - Fix tax, currency and amounts.
