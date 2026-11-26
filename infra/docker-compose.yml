@@ -141,6 +141,30 @@ services:
       # KI095 safety net: paid carts that never became a paid order are repaired
       # once or reported to staff (jobs/payment-reconcile.ts). code (default) | off.
       AUTOMATION_PAYMENT_RECONCILE: ${AUTOMATION_PAYMENT_RECONCILE:-code}
+      # Sage invoice link (docs/golive/sage-link-README.md). AUTOMATION_SAGE:
+      # off (default) | shadow (build and log only) | code (post to Sage).
+      AUTOMATION_SAGE: ${AUTOMATION_SAGE:-off}
+      SAGE_AUTH: ${SAGE_AUTH:-}
+      SAGE_EMAIL: ${SAGE_EMAIL:-}
+      SAGE_PASSWORD: ${SAGE_PASSWORD:-}
+      SAGE_API_KEY: ${SAGE_API_KEY:-}
+      SAGE_COMPANY_ID: ${SAGE_COMPANY_ID:-}
+      SAGE_API_URL: ${SAGE_API_URL:-}
+      SAGE_INCOME_ACCOUNT_ID: ${SAGE_INCOME_ACCOUNT_ID:-}
+      SAGE_TAX_TYPE_ID: ${SAGE_TAX_TYPE_ID:-}
+      SAGE_CUSTOMER_MODE: ${SAGE_CUSTOMER_MODE:-}
+      SAGE_CASH_CUSTOMER_ID: ${SAGE_CASH_CUSTOMER_ID:-}
+      SAGE_TOKEN_ENCRYPTION_KEY: ${SAGE_TOKEN_ENCRYPTION_KEY:-}
+      SAGE_OAUTH_AUTHORIZE_URL: ${SAGE_OAUTH_AUTHORIZE_URL:-}
+      SAGE_OAUTH_TOKEN_URL: ${SAGE_OAUTH_TOKEN_URL:-}
+      SAGE_OAUTH_CLIENT_ID: ${SAGE_OAUTH_CLIENT_ID:-}
+      SAGE_OAUTH_CLIENT_SECRET: ${SAGE_OAUTH_CLIENT_SECRET:-}
+      SAGE_OAUTH_REDIRECT_URI: ${SAGE_OAUTH_REDIRECT_URI:-}
+      SAGE_OAUTH_SCOPE: ${SAGE_OAUTH_SCOPE:-}
+      # Daily order list for the bookkeeper (jobs/sage-order-list.ts). off (default) | code.
+      AUTOMATION_SAGE_ORDER_LIST: ${AUTOMATION_SAGE_ORDER_LIST:-off}
+      SAGE_ORDER_LIST_EMAIL: ${SAGE_ORDER_LIST_EMAIL:-}
+      SAGE_ORDER_LIST_CC: ${SAGE_ORDER_LIST_CC:-}
       AUTOMATION_ALERT_EMAIL: ${AUTOMATION_ALERT_EMAIL:-}
       # Medusa's own dry-run switch, separate from the web app's
       # AUTOMATION_DRY_RUN so a shadow run here never pauses live lead sync.
@@ -249,8 +273,6 @@ services:
       # The Cal.com user page the session-30/-45/-60/-90 events hang off, for the
       # confirmation page's Book Your Session button (KI079); same value as medusa.
       CALCOM_SESSION_BOOKING_URL: ${CALCOM_SESSION_BOOKING_URL:-}
-      SAGE_CLIENT_ID: ${SAGE_CLIENT_ID}
-      SAGE_CLIENT_SECRET: ${SAGE_CLIENT_SECRET}
       NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
       NEXT_PUBLIC_MEDUSA_REGION_ID: ${NEXT_PUBLIC_MEDUSA_REGION_ID}
       NEXT_PUBLIC_MEDUSA_REGION_USD_ID: ${NEXT_PUBLIC_MEDUSA_REGION_USD_ID}

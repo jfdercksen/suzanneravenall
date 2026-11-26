@@ -26,6 +26,8 @@ export const THINKIFIC_ENROLMENT = "thinkific_enrolment"
 export const COURSE_ACCESS_EMAIL = "course_access_email"
 export const VTIGER_ORDER = "vtiger_order"
 
+export const SAGE_INVOICE = "sage_invoice"
+
 export type OrderAutomation = typeof THINKIFIC_ENROLMENT | typeof VTIGER_ORDER
 
 export function thinkificMode(env: Record<string, string | undefined> = process.env): AutomationMode {
@@ -37,11 +39,32 @@ export function orderVtigerMode(env: Record<string, string | undefined> = proces
   return automationMode(["AUTOMATION_ORDER_VTIGER", "AUTOMATION_VTIGER_ORDER"], "n8n", env)
 }
 
+export type SageMode = "off" | "shadow" | "code"
+
+/**
+ * AUTOMATION_SAGE: off (default) | shadow | code. shadow builds the invoice and
+ * logs a masked summary with no Sage call and nothing persisted. Unknown values
+ * mean off. (The shared flag parser has no "shadow", so Sage parses its own.)
+ */
+export function sageMode(env: Record<string, string | undefined> = process.env): SageMode {
+  const raw = (env.AUTOMATION_SAGE ?? "").trim().toLowerCase()
+  if (!raw) return "off"
+  if (raw === "off" || raw === "shadow" || raw === "code") return raw
+  console.warn(`[automation] AUTOMATION_SAGE="${raw}" is not one of off, shadow, code; using "off"`)
+  return "off"
+}
+
+export function sageIdempotencyKey(orderId: string): string {
+  return `${SAGE_INVOICE}:${orderId}`
+}
+
 /** The flag that governs a queued job. The course-access mail follows the Thinkific flag. */
 export function modeFor(automation: string, env: Record<string, string | undefined> = process.env): AutomationMode {
   if (automation === THINKIFIC_ENROLMENT || automation === COURSE_ACCESS_EMAIL) return thinkificMode(env)
   if (automation === VTIGER_ORDER) return orderVtigerMode(env)
   if (automation === CART_RECOVERY_EMAIL) return cartRecoveryMode(env)
+  // Only "code" runs durable jobs; shadow runs in memory (dispatch.ts), so queued jobs are held.
+  if (automation === SAGE_INVOICE) return sageMode(env) === "code" ? "code" : "off"
   if (automation === PAYMENT_RECONCILE) return paymentReconcileMode(env)
   return "off"
 }

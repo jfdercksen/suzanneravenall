@@ -19,7 +19,7 @@ import ws from 'ws'
 import { MEMBERSHIPS_MODULE } from '../modules/memberships'
 import type MembershipsModuleService from '../modules/memberships/service'
 import { orderVtigerMode, thinkificMode } from '../automations/config'
-import { dispatchOrderAutomations } from '../automations/dispatch'
+import { dispatchOrderAutomations, dispatchSageInvoice } from '../automations/dispatch'
 import { buildOrderSnapshot, ORDER_GRAPH_FIELDS } from '../automations/order-snapshot'
 import { createDryRunQueue, getAutomationQueue, staffAlerter } from '../automations/runtime'
 import { orderMarketingOptIn } from '../lib/order-marketing-opt-in'
@@ -818,7 +818,7 @@ async function handlePortalAccessGrant(order: RetrievedOrder): Promise<void> {
 // ── Subscriber ────────────────────────────────────────────────────────────────
 
 // Side effects on order placement (all fire-and-forget, never block order completion):
-// 1. n8n webhook → Sage invoice creation
+// 1. Sage invoice (our own code, AUTOMATION_SAGE: off | shadow | code)
 // 1b. Vtiger CRM: n8n webhook, or our own code (AUTOMATION_ORDER_VTIGER)
 // 1c. Thinkific enrollment (course products only, keyed by product.metadata.thinkific_course_id):
 //     n8n webhook, or our own code (AUTOMATION_THINKIFIC); see src/automations/
@@ -881,14 +881,14 @@ export default async function orderPlacedHandler({
     const isSessionOrder = categoryType === 'session'
     const calBookingUrl = isSessionOrder ? orderSessionBookingUrl(order) : null
 
-    // 1. n8n → Sage: fire-and-forget
-    void fetch(`${N8N_BASE_URL}/webhook/medusa-order-placed`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(order),
+    // 1. Sage invoice (AUTOMATION_SAGE: off by default | shadow | code): a durable,
+    // idempotent job; shadow only builds and logs. The old n8n Sage webhook is gone.
+    void dispatchSageInvoice(order, {
+      queue: () => getAutomationQueue(container),
+      dryRunQueue: createDryRunQueue,
     }).catch((err: unknown) => {
       const message = err instanceof Error ? err.message : String(err)
-      console.error(`[order-placed] n8n webhook failed for order ${orderId}: ${message}`)
+      console.error(`[order-placed] sage invoice enqueue failed for order ${orderId}: ${message}`)
     })
 
     // 1b. n8n → Vtiger: fire-and-forget. Only in n8n mode (AUTOMATION_ORDER_VTIGER,

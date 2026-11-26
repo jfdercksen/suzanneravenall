@@ -12,11 +12,19 @@ import { MedusaService } from "@medusajs/framework/utils"
 import AutomationJob from "./models/automation-job"
 import AutomationModeState from "./models/automation-mode-state"
 import CartRecovery from "./models/cart-recovery"
+import SageCustomerMap from "./models/sage-customer-map"
+import SageItemCache from "./models/sage-item-cache"
+import SageOauthState from "./models/sage-oauth-state"
+import SageOauthToken from "./models/sage-oauth-token"
 
 class AutomationsModuleService extends MedusaService({
   AutomationJob,
   AutomationModeState,
   CartRecovery,
+  SageCustomerMap,
+  SageItemCache,
+  SageOauthState,
+  SageOauthToken,
 }) {}
 
 export default AutomationsModuleService

@@ -11,10 +11,14 @@
 
 import { orderHasCourses, type AutomationMode, type OrderSnapshot } from "@suzanne/integrations"
 import type { AutomationQueue } from "../modules/automations/queue"
+import { buildSageOrderSnapshot } from "../modules/sage/invoice"
 import {
   dryRun,
   idempotencyKey,
   orderVtigerMode,
+  SAGE_INVOICE,
+  sageIdempotencyKey,
+  sageMode,
   thinkificMode,
   THINKIFIC_ENROLMENT,
   VTIGER_ORDER,
@@ -80,4 +84,44 @@ export async function dispatchOrderAutomations(
     result[automation] = created ? "enqueued" : "duplicate"
   }
   return result
+}
+
+export type SageDispatchAction = "enqueued" | "duplicate" | "shadow" | "dry-run" | "none"
+
+/**
+ * Hands a placed order to the Sage invoice automation, per AUTOMATION_SAGE:
+ *   off                 nothing
+ *   shadow, or a dry run  in-memory run with no Sage call (masked log only)
+ *   code                durable job (idempotent per order), run at once
+ * `rawOrder` is the Query graph order: the Sage job needs quantities and prices
+ * in cents (converted to rand once, in the snapshot), which the shared OrderSnapshot does not carry.
+ */
+export async function dispatchSageInvoice(
+  rawOrder: unknown,
+  deps: {
+    queue: () => AutomationQueue
+    dryRunQueue: () => AutomationQueue
+    env?: Record<string, string | undefined>
+    kick?: boolean
+  }
+): Promise<SageDispatchAction> {
+  const env = deps.env ?? process.env
+  const mode = sageMode(env)
+  if (mode === "off") return "none"
+  const order = buildSageOrderSnapshot(rawOrder)
+  const key = sageIdempotencyKey(order.id)
+  const payload = { order }
+
+  if (mode === "shadow" || dryRun(env)) {
+    // Nothing persisted: a shadow run can never block the real run later.
+    const q = deps.dryRunQueue()
+    const { job } = await q.enqueue(SAGE_INVOICE, key, payload, order.id)
+    await q.runJob(job.id)
+    return mode === "shadow" ? "shadow" : "dry-run"
+  }
+
+  const q = deps.queue()
+  const { created } =
+    deps.kick === false ? await q.enqueue(SAGE_INVOICE, key, payload, order.id) : await q.enqueueAndKick(SAGE_INVOICE, key, payload, order.id)
+  return created ? "enqueued" : "duplicate"
 }

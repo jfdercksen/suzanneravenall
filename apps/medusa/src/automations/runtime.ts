@@ -27,6 +27,13 @@ import {
   type QueryGraph,
 } from "./cart-recovery"
 import { dryRun, modeFor } from "./config"
+import { mergeOrderMetadata, sageInvoiceHandler, type SageDeps } from "./sage"
+import { SageClient } from "../modules/sage/client"
+import { sageConfigFromEnv } from "../modules/sage/config"
+import { sageAuthFromConfig } from "../modules/sage/auth"
+import { sageDb, sageStores } from "../modules/sage/factory"
+import { ItemResolver } from "../modules/sage/resolvers"
+import { MemoryCustomerMapStore, MemoryItemCacheStore } from "../modules/sage/store"
 import { findStuckPayments, paymentReconcileHandler, type ReconcileDeps } from "./payment-reconcile"
 import { toAmount, type AmountLike } from "../modules/payment-payfast/cancel-plan"
 import {
@@ -195,6 +202,48 @@ export function reconcileDeps(container: Resolver): ReconcileDeps {
   }
 }
 
+/** The Sage invoice job's clients on Medusa's Postgres and the order module. */
+export function sageDeps(container: Resolver): SageDeps {
+  let client: SageClient | null = null
+  let items: ItemResolver | null = null
+  const stores = () => sageStores(container)
+  const getClient = (): SageClient => {
+    if (!client) {
+      const config = sageConfigFromEnv()
+      client = new SageClient(config, sageAuthFromConfig(config, { store: () => stores().tokens }))
+    }
+    return client
+  }
+  return {
+    shadow: false,
+    config: () => sageConfigFromEnv(),
+    client: getClient,
+    customers: () => stores().customers,
+    items: () => (items ??= new ItemResolver(getClient(), stores().items)),
+    writeMetadata: (orderId, patch) => {
+      void sageDb(container) // fail early if the connection is not registered
+      return mergeOrderMetadata(container.resolve(Modules.ORDER), orderId, patch)
+    },
+    logger,
+  }
+}
+
+/** Shadow deps: no client, no database; the handler only builds and logs. */
+function sageShadowDeps(): SageDeps {
+  const refuse = (): never => {
+    throw new Error("Sage is not called in shadow or dry-run mode")
+  }
+  return {
+    shadow: true,
+    config: () => sageConfigFromEnv(),
+    client: refuse,
+    customers: () => new MemoryCustomerMapStore(),
+    items: () => new ItemResolver({ findItemByCode: refuse }, new MemoryItemCacheStore()),
+    writeMetadata: async () => refuse(),
+    logger,
+  }
+}
+
 let queue: AutomationQueue | null = null
 
 /** The durable queue (Medusa Postgres). Jobs whose flag is "off" are held. */
@@ -203,7 +252,7 @@ export function getAutomationQueue(container: Resolver): AutomationQueue {
     const db = container.resolve<RawSql>(ContainerRegistrationKeys.PG_CONNECTION)
     queue = new AutomationQueue({
       store: new PgJobStore(db),
-      handlers: [...buildHandlers(realDeps()), cartRecoveryHandler(container), paymentReconcileHandler(reconcileDeps(container))],
+      handlers: [...buildHandlers(realDeps()), cartRecoveryHandler(container), paymentReconcileHandler(reconcileDeps(container)), sageInvoiceHandler(sageDeps(container))],
       alert: (a) => staffAlerter().send(a),
       logger,
       isRunnable: (automation) => !dryRun() && modeFor(automation) !== "off",
@@ -220,7 +269,7 @@ export function createDryRunQueue(): AutomationQueue {
   const dryAlerter = createStaffAlerter({ logger, env: { AUTOMATION_DRY_RUN: "true" } })
   return new AutomationQueue({
     store: new MemoryJobStore(),
-    handlers: buildHandlers(dryDeps()),
+    handlers: [...buildHandlers(dryDeps()), sageInvoiceHandler(sageShadowDeps())],
     alert: (a) => dryAlerter.send(a),
     logger,
     // Follow-up jobs (the course-access mail) run inline so the whole dry run is in one log block.
