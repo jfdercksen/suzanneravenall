@@ -28,7 +28,9 @@ server {
     # The booking calendar is embedded in pages on suzanneravenall.com (CalInlineBooking,
     # CalBookingSection), a different origin, so X-Frame-Options SAMEORIGIN would block it
     # (go-live N2). frame-ancestors allows exactly the site and Cal.com itself.
-    add_header Content-Security-Policy "frame-ancestors 'self' https://suzanneravenall.com https://www.suzanneravenall.com" always;
+    # http://169.239.180.49 is the review site, so the booking embed can be tested before
+    # the switch (calendar first, Monday 30 Nov plan). REMOVE it after the switch.
+    add_header Content-Security-Policy "frame-ancestors 'self' https://suzanneravenall.com https://www.suzanneravenall.com http://169.239.180.49" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;

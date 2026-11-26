@@ -91,7 +91,7 @@ calh="$(curl -s -D - -o /dev/null $C https://cal.suzanneravenall.com:18443/ | tr
 check "cal: no X-Frame-Options (the site embeds the calendar, N2)" "" \
   "$(echo "$calh" | grep -i '^x-frame-options:' || true)"
 check "cal: frame-ancestors allows the site" \
-  "content-security-policy: frame-ancestors 'self' https://suzanneravenall.com https://www.suzanneravenall.com" \
+  "content-security-policy: frame-ancestors 'self' https://suzanneravenall.com https://www.suzanneravenall.com http://169.239.180.49" \
   "$(echo "$calh" | grep -i '^content-security-policy:' | sed 's/^[Cc]ontent-[Ss]ecurity-[Pp]olicy:/content-security-policy:/')"
 check "cal: HSTS without includeSubDomains" "max-age=31536000" \
   "$(echo "$calh" | grep -i '^strict-transport-security:' | cut -d' ' -f2-)"
