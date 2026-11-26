@@ -320,7 +320,7 @@ Then, by hand in `.env.golive` (nano): the G1 payment lines and the G2 notify ad
 Read-back (URLs only, no secrets):
 
 ```bash
-for k in NEXT_PUBLIC_SITE_URL NEXT_PUBLIC_MEDUSA_URL PAYLOAD_URL STORE_CORS ADMIN_CORS AUTH_CORS NEXT_PUBLIC_CAL_URL CALCOM_SESSION_BOOKING_URL NEXT_PUBLIC_SENTRY_ENVIRONMENT SENTRY_ENVIRONMENT PAYFAST_SANDBOX PAYPAL_SANDBOX CONTACT_NOTIFY_EMAIL QUIZ_NOTIFY_EMAIL INTAKE_NOTIFY_EMAIL NEXT_PUBLIC_SUPABASE_URL; do
+for k in NEXT_PUBLIC_SITE_URL NEXT_PUBLIC_MEDUSA_URL PAYLOAD_URL PAYLOAD_PUBLIC_SERVER_URL STORE_CORS ADMIN_CORS AUTH_CORS NEXT_PUBLIC_CAL_URL CALCOM_SESSION_BOOKING_URL NEXT_PUBLIC_WEBAPP_URL NEXTAUTH_URL NEXT_PUBLIC_SENTRY_ENVIRONMENT SENTRY_ENVIRONMENT PAYFAST_SANDBOX PAYPAL_SANDBOX CONTACT_NOTIFY_EMAIL QUIZ_NOTIFY_EMAIL INTAKE_NOTIFY_EMAIL NEXT_PUBLIC_SUPABASE_URL; do
   grep -E "^$k=" .env.golive || echo "$k MISSING"; done
 diff <(sed 's/=.*//' .env) <(sed 's/=.*//' .env.golive) && echo "SAME KEYS"
 ```
@@ -486,7 +486,7 @@ select 'product thumbnails with IP: ' || count(*) from product where thumbnail l
 SQL
 ```
 
-If either is above 0: stop and tell us; we give the exact UPDATE (one transaction, `replace(url, 'http://169.239.180.49', 'https://suzanneravenall.com')`) for Johan's yes.
+Expect above 0: on 26 Nov the live store API showed 51 of 54 product image URLs starting with `http://169.239.180.49`. The UPDATE is prepared in `docs/golive/F5-image-urls.sql` (one transaction, counts before and after, rollback statements in the file). Run it here, with Johan's yes.
 
 ### F6. Login server templates on aimate-db1 (us, with Johan's yes) - 5 min
 

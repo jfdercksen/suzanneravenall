@@ -85,6 +85,18 @@ docker rm -f nginx-conf-test >/dev/null
 
 # 3. Production plus Cal.com (R4), as on switch day if option a is chosen.
 run_set production-cal suzanneravenall.conf.disabled cal.conf.disabled
+C="--resolve cal.suzanneravenall.com:18443:127.0.0.1 -k"
+# shellcheck disable=SC2086
+calh="$(curl -s -D - -o /dev/null $C https://cal.suzanneravenall.com:18443/ | tr -d '\r')"
+check "cal: no X-Frame-Options (the site embeds the calendar, N2)" "" \
+  "$(echo "$calh" | grep -i '^x-frame-options:' || true)"
+check "cal: frame-ancestors allows the site" \
+  "content-security-policy: frame-ancestors 'self' https://suzanneravenall.com https://www.suzanneravenall.com" \
+  "$(echo "$calh" | grep -i '^content-security-policy:' | sed 's/^[Cc]ontent-[Ss]ecurity-[Pp]olicy:/content-security-policy:/')"
+check "cal: HSTS without includeSubDomains" "max-age=31536000" \
+  "$(echo "$calh" | grep -i '^strict-transport-security:' | cut -d' ' -f2-)"
+check "cal: http to https" "301 https://cal.suzanneravenall.com/x" \
+  "$(code -H 'Host: cal.suzanneravenall.com' http://127.0.0.1:18080/x) $(location -H 'Host: cal.suzanneravenall.com' http://127.0.0.1:18080/x)"
 docker rm -f nginx-conf-test >/dev/null
 
 if [ "$fail" -ne 0 ]; then echo "nginx conf check: FAILED"; exit 1; fi

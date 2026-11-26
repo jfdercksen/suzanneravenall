@@ -25,7 +25,10 @@ server {
     ssl_prefer_server_ciphers on;
 
     # Security headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
+    # The booking calendar is embedded in pages on suzanneravenall.com (CalInlineBooking,
+    # CalBookingSection), a different origin, so X-Frame-Options SAMEORIGIN would block it
+    # (go-live N2). frame-ancestors allows exactly the site and Cal.com itself.
+    add_header Content-Security-Policy "frame-ancestors 'self' https://suzanneravenall.com https://www.suzanneravenall.com" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
@@ -34,6 +37,9 @@ server {
     location / {
         # The Cal.com container listens on 3000 inside Docker (ports "3002:3000" in compose).
         proxy_pass http://calcom:3000;
+        # Cal.com sends no X-Frame-Options today (checked 26 Nov on :3002); drop one if a
+        # later image adds it, so the frame-ancestors rule above stays the only one.
+        proxy_hide_header X-Frame-Options;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

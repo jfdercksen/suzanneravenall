@@ -297,8 +297,11 @@ services:
       context: ..
       dockerfile: apps/payload/Dockerfile
     restart: unless-stopped
+    # Loopback only (go-live N4, 26 Nov 2026): the CMS is reached through nginx at /cms.
+    # Published on every interface, http://<server IP>:3001 was the admin over plain http,
+    # around any protection on /cms. PAYLOAD_BIND=0.0.0.0 restores the old behaviour.
     ports:
-      - "3001:3001"
+      - "${PAYLOAD_BIND:-127.0.0.1}:3001:3001"
     depends_on:
       postgres:
         condition: service_healthy
@@ -458,10 +461,17 @@ services:
   calcom:
     image: calcom/cal.com:latest
     restart: unless-stopped
+    # Today the booking pages are served straight from this port (http://<server IP>:3002),
+    # so it stays public by default. Once cal.suzanneravenall.com answers over https
+    # (runbook F7), set CALCOM_BIND=127.0.0.1 in infra/.env and recreate calcom (go-live N4).
     ports:
-      - "3002:3000"
+      - "${CALCOM_BIND:-0.0.0.0}:3002:3000"
     environment:
       NEXT_PUBLIC_WEBAPP_URL: ${NEXT_PUBLIC_WEBAPP_URL}
+      # Outlook calendar sync (go-live N1, KI080). Empty until the Microsoft app
+      # registration exists; Cal.com reads them for the Office 365 Calendar app.
+      MS_GRAPH_CLIENT_ID: ${MS_GRAPH_CLIENT_ID:-}
+      MS_GRAPH_CLIENT_SECRET: ${MS_GRAPH_CLIENT_SECRET:-}
       CALENDSO_ENCRYPTION_KEY: ${CALENDSO_ENCRYPTION_KEY}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
       NEXTAUTH_URL: ${NEXTAUTH_URL}

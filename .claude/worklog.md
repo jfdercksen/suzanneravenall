@@ -921,3 +921,8 @@ Brief from the EA (Johan's plan for 24 Nov): Suzanne, 20 Nov, "we do allow email
 - PASS checkout booking terms: "Read the booking terms" is in the live checkout page chunk (no cart opened, so not seen rendered).
 - PASS ACME path (R2): /.well-known/acme-challenge/probe now answers nginx's own 404 (153 bytes, no X-Powered-By). Before the deploy it went to Next.js (X-Powered-By: Next.js, 52 KB page). So certbot's webroot challenge is served by nginx on the review box.
 - Not done (each needs its own yes): DNS, certificates, the switch, the six wording conflicts, clean-up deletes, the B2 backup cap, Cal.com https, the mailer template URLs, A10/A11.
+
+## 2026-11-26 Switch gaps N1-N9 and Sage (EA audit, verified here; branch claude/golive-gaps)
+- Verified on code and box (outside HTTP only): HSTS includeSubDomains from Next.js live; CMS admin answers 200 on http://169.239.180.49:3001; cal.conf X-Frame-Options SAMEORIGIN; /wp-content/* to /; 51 of 54 product image URLs on http://169.239.180.49/uploads/; JSON-LD logo path missing; hosted supabase.co image host unused; T3 read-back omitted the Cal.com names; no Sage path (module uncalled, n8n webhook only).
+- Fixes on the branch, not merged, not deployed: next.config.mjs without HSTS and without the supabase.co host (next.config.golive.test.mjs); JSON-LD logo via lib/seo/site-logo.ts (test); cal.conf frame-ancestors for the site (test-config.sh checks); compose payload on loopback, calcom via CALCOM_BIND, MS_GRAPH keys passed (infra/scripts/check-compose-ports.sh, in the nginx config CI); docs/golive/F5-image-urls.sql; runbook T3 and F5. Web tests 2732/2732 (second run; the first had 2 load timeouts).
+- Report with options and the Sage state: docs/golive/2026-11-26-switch-gaps.md.

@@ -18,6 +18,7 @@ import { getProgramsByCategory, HOME_SELF_STUDY } from '../data/programs'
 import { getLiveCalendar } from '../lib/events/liveCalendar'
 import { ipCountry } from '../lib/geoip'
 import { CURRENCY_COOKIE, visitorCurrency } from '../lib/visitor-region'
+import { siteLogoUrl } from '../lib/seo/site-logo'
 
 const BOOK_HANDLE = 'the-latest-book-by-suzanne'
 
@@ -50,7 +51,7 @@ const organizationJsonLd = {
   '@type': 'Organization',
   name: 'Dr. Suzanne Ravenall',
   url: 'https://suzanneravenall.com',
-  logo: 'https://suzanneravenall.com/logos/suzanne-ravenall-logo.svg',
+  logo: siteLogoUrl(),
   sameAs: [
     'https://www.linkedin.com/in/sravenall',
     'https://www.instagram.com/suzanneravenall',

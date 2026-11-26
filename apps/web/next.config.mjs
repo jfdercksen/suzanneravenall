@@ -85,12 +85,8 @@ const nextConfig = {
 
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'mjhwonoekokxyisfljtj.supabase.co',
-        port: '',
-        pathname: '/storage/v1/object/public/**',
-      },
+      // The hosted Supabase storage host was removed on 26 Nov 2026: nothing loads
+      // images from it, and all Supabase is self-hosted on aimate-db1.
       {
         protocol: 'https',
         hostname: '*.b-cdn.net',
@@ -346,12 +342,10 @@ const nextConfig = {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
           },
-          {
-            // Cloudflare handles HSTS at the edge — do not add preload directive here
-            // as it would permanently affect all subdomains (including staging)
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains',
-          },
+          // No Strict-Transport-Security here: nginx sends it on the https site
+          // (suzanneravenall.conf, max-age=31536000, no includeSubDomains). This one had
+          // includeSubDomains, which would force https on mail., ftp. and staging. on the
+          // old host for two years, and a second HSTS header next to nginx's (go-live N3).
         ],
       },
     ]

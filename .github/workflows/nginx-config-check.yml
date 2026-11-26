@@ -1,12 +1,16 @@
 name: nginx config check
 
 # Runs infra/nginx/test-config.sh: nginx -t on the review and production confs in the
-# real nginx image, plus the ACME path, http->https, www->apex and HSTS checks the
-# go-live switch depends on (runbook R1 to R4). No server is touched.
+# real nginx image, plus the ACME path, http->https, www->apex, HSTS and Cal.com embed
+# checks the go-live switch depends on (runbook R1 to R4, N2). Also
+# infra/scripts/check-compose-ports.sh: which host interface each published port binds
+# to, and the Cal.com Microsoft keys (N1, N4). No server is touched.
 on:
   push:
     paths:
       - 'infra/nginx/**'
+      - 'infra/docker-compose.yml'
+      - 'infra/scripts/check-compose-ports.sh'
       - '.github/workflows/nginx-config-check.yml'
   workflow_dispatch:
 
@@ -20,3 +24,6 @@ jobs:
 
       - name: Check the nginx confs
         run: bash infra/nginx/test-config.sh
+
+      - name: Check the compose port bindings
+        run: bash infra/scripts/check-compose-ports.sh
