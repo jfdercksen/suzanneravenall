@@ -909,3 +909,15 @@ Brief from the EA (Johan's plan for 24 Nov): Suzanne, 20 Nov, "we do allow email
 - PASS quiz test send (D025): test lead QA Quiz, johan+quiz1124@aiautomations.co.za, diagnostic What Nervous System Pattern Is Running Your Life?. Link mail to the test address 10:15:37; team mail "QA Quiz completed: ..." 10:17:12 To johan@aiautomations.co.za only (no Cc, no Bcc): name, email, result, every question with its answer on the 0 to 4 scale, "Not answered" for skipped ones, link to the staff page copy, "keep this mail within the team".
 - Notes: 4 of 12 answered Not answered because the scripted clicks fired during the question transition and skipped questions (a fast double tap might do the same: worth a look); the result line repeats the title ("The Hyper-Alert Achiever: Your Pattern: The Hyper-Alert Achiever"); the quiz link mail still uses the old navy and electric blue colours, not the monochrome standard. Intake test send not run (needs a new R0 session order). Still for Johan on the box: docker compose --profile tools build payload-tools.
 - Test records: quiz subscriber johan+quiz1124@aiautomations.co.za and its two mails.
+
+## 2026-11-26 Go-live deploy: A1-A5 wording and nginx R1-R5 (Johan, 25 Nov: "Yes, deploy tomorrow")
+- feature/design-standard 9f24f8b -> 6c93556 by fast-forward (claude/golive-nginx, which contains claude/golive-wording); no merge commit, no conflicts. Local web tests before push: 241 files, 2725/2725.
+- Run 45775686845 (services web nginx): Build and Test success, Deploy branch to review VPS success, Deploy to Production skipped.
+- PASS /api/health 200.
+- PASS /legal/terms: "4B. Events, photos and recordings" and "4C. Live programs", last updated 25 November 2026.
+- PASS /legal/privacy: "PO Box 910, Kyalami, Midrand" present, no Oxmoor.
+- PASS /programs/certification/akashic-navigation 200: no membersupport@, no certification@, support@ravenallinstitute.com shown.
+- PASS /programs: no "as long as you need", "12 months" shown.
+- PASS checkout booking terms: "Read the booking terms" is in the live checkout page chunk (no cart opened, so not seen rendered).
+- PASS ACME path (R2): /.well-known/acme-challenge/probe now answers nginx's own 404 (153 bytes, no X-Powered-By). Before the deploy it went to Next.js (X-Powered-By: Next.js, 52 KB page). So certbot's webroot challenge is served by nginx on the review box.
+- Not done (each needs its own yes): DNS, certificates, the switch, the six wording conflicts, clean-up deletes, the B2 backup cap, Cal.com https, the mailer template URLs, A10/A11.
