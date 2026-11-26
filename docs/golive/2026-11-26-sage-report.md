@@ -27,7 +27,7 @@ No Sage account, Stock2Shop console or server setting was opened. Nothing was bu
 | Sign-in to Sage | Basic auth with a Sage login plus API key (the **sandbox** method). The **live** method Sage asked for is OAuth 2.0 (their request for 8 client details, our reply drafted 4 Aug, never sent). OAuth is **not built**: no callback route, no token storage, no refresh | service.ts:35-52 |
 | Invoice lines | One account-based line per item (description and amount on an income account). **No Sage item codes**, so no S0027-style codes on the invoice and no stock movement | service.ts:181-197 |
 | Tax | Picks the 15% VAT type. **Wrong:** the company is not VAT registered (KI033) | service.ts:79-92 |
-| Amounts | Divides the price by 100. Medusa v2 holds rand, not cents, so a R1500 line would book as R15. Read from the code, not run | service.ts:186 |
+| Amounts | Divides the price by 100. Correct: this shop stores prices in cents (checked on the live store 26 Nov: R2,490 is held as 249000). An earlier version of this report called it a bug; it is not | service.ts:186 |
 | Currency | No currency handling: a USD order would book as rand (KI093) | - |
 | Payments in Sage (receipt allocated to the invoice) | Not built | - |
 | Backfill (send past orders) | Not built | - |

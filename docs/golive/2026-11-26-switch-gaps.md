@@ -165,7 +165,7 @@ The old WordPress site exposes these integrations. Each stops at the switch, bec
 **Also wrong in the code (to fix when it is built):**
 - The tax type is 15%, but the company is not VAT registered (KI007, KI033).
 - USD orders would book as ZAR (KI093).
-- The module divides unit_price by 100, but Medusa v2 holds major units, so a R1500 line would book as R15. Inferred from the code, not tested.
+- Amounts: the module divides unit_price by 100. That is correct, because this shop stores prices in cents (checked 26 Nov). An earlier version of this line called it a bug.
 - The SAGE_CLIENT_ID/SECRET names are OAuth leftovers. Sage SA v2 uses a Sage login plus an API key and a company id.
 
 **What is needed:**
