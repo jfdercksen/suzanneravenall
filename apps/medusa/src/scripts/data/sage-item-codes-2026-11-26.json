@@ -1,0 +1,1166 @@
+{
+  "source": "infra/scripts/catalogue-parity/parity.csv (14 Oct 2026, new variant to WooCommerce product) joined to the old shop public product list read 26 Nov 2026 (wp-json/wc/store/v1/products, sku field)",
+  "read_at": "2026-11-26",
+  "entries": [
+    {
+      "handle": "rapid-repatterning-session",
+      "variant_title": "90 min online",
+      "woo_id": 9229,
+      "woo_name": "Rapid Repatterning Session (90 mins) (Single online session)",
+      "sage_item_code": "S0154",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-repatterning-session",
+      "variant_title": "90 min in-person",
+      "woo_id": 14331,
+      "woo_name": "Rapid Repatterning Session (90 mins In-person)",
+      "sage_item_code": "S0103",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-repatterning-session",
+      "variant_title": "Package of 04 (60 min online)",
+      "woo_id": 9230,
+      "woo_name": "Rapid Repatterning Session (60 mins) (Package of 04 sessions)",
+      "sage_item_code": "S0102",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-repatterning-session",
+      "variant_title": "Package of 08 (60 min online)",
+      "woo_id": 9231,
+      "woo_name": "Rapid Repatterning Session (60 mins) (Package of 08 sessions)",
+      "sage_item_code": "S0101",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-repatterning-session",
+      "variant_title": "Package of 12 (60 min online)",
+      "woo_id": 9232,
+      "woo_name": "Rapid Repatterning Session (60 mins) (Package of 12 sessions)",
+      "sage_item_code": "S0100",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-repatterning-session",
+      "variant_title": "Package of 16 (60 min online)",
+      "woo_id": 9233,
+      "woo_name": "Rapid Repatterning Session (60 mins) (Package of 16 sessions)",
+      "sage_item_code": "S0099",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-repatterning-session",
+      "variant_title": "Package of 04 (90 min online)",
+      "woo_id": 16449,
+      "woo_name": "Rapid Repatterning / Coaching (90 mins) (package of 04)",
+      "sage_item_code": "S0194",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-repatterning-session",
+      "variant_title": "Package of 08 (90 min online)",
+      "woo_id": 16450,
+      "woo_name": "Rapid Repatterning / Coaching (90 mins) (package of 08)",
+      "sage_item_code": "S0195",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-repatterning-session",
+      "variant_title": "Package of 12 (90 min online)",
+      "woo_id": 16452,
+      "woo_name": "Rapid Repatterning / Coaching (90 mins) (package of 12)",
+      "sage_item_code": "S0196",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-repatterning-session",
+      "variant_title": "Package of 16 (90 min online)",
+      "woo_id": 16451,
+      "woo_name": "Rapid Repatterning / Coaching (90 mins) (package of 16)",
+      "sage_item_code": "S0197",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-repatterning-session",
+      "variant_title": "60 min in-person",
+      "woo_id": 14335,
+      "woo_name": "Rapid Repatterning Session (60 mins) (In-person session)",
+      "sage_item_code": "S0156",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-repatterning-session",
+      "variant_title": "60 min online",
+      "woo_id": 6674,
+      "woo_name": "Rapid Repatterning Session (60 mins) (single online session)",
+      "sage_item_code": "S0124",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-session",
+      "variant_title": "60 min online",
+      "woo_id": 6671,
+      "woo_name": "Resonance Repatterning / Coaching (60 Mins)",
+      "sage_item_code": "S0126",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-session",
+      "variant_title": "90 min online",
+      "woo_id": 9249,
+      "woo_name": "Resonance Repatterning / Coaching (90 Mins)",
+      "sage_item_code": "S0084",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-session",
+      "variant_title": "Package of 04 (60 min)",
+      "woo_id": 9253,
+      "woo_name": "Resonance Repatterning / Coaching Session (60 Mins) (package of 04)",
+      "sage_item_code": "S0080",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-session",
+      "variant_title": "Package of 08 (60 min)",
+      "woo_id": 9254,
+      "woo_name": "Resonance Repatterning / Coaching Session (60 Mins) (package of 08)",
+      "sage_item_code": "S0079",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-session",
+      "variant_title": "Package of 12 (60 min)",
+      "woo_id": 9255,
+      "woo_name": "Resonance Repatterning / Coaching Session (60 Mins) (package of 12)",
+      "sage_item_code": "S0078",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-session",
+      "variant_title": "Package of 16 (60 min)",
+      "woo_id": 9256,
+      "woo_name": "Resonance Repatterning / Coaching Session (60 Mins) (package of 16)",
+      "sage_item_code": "S0077",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-session",
+      "variant_title": "Package of 04 (90 min)",
+      "woo_id": 8630,
+      "woo_name": "Resonance Repatterning / Coaching (90 mins) (package of 04)",
+      "sage_item_code": "S0116",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-session",
+      "variant_title": "Package of 08 (90 min)",
+      "woo_id": 9250,
+      "woo_name": "Resonance Repatterning / Coaching (90 mins) (package of 08)",
+      "sage_item_code": "S0083",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-session",
+      "variant_title": "Package of 16 (90 min)",
+      "woo_id": 9252,
+      "woo_name": "Resonance Repatterning / Coaching (90 mins) (package of 16)",
+      "sage_item_code": "S0081",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-session",
+      "variant_title": "Package of 12 (90 min)",
+      "woo_id": 9251,
+      "woo_name": "Resonance Repatterning / Coaching (90 mins) (package of 12)",
+      "sage_item_code": "S0082",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "transformation-coaching-60-mins",
+      "variant_title": "60 min",
+      "woo_id": 9237,
+      "woo_name": "Transformation Coaching (60 mins)",
+      "sage_item_code": "S0095",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "transformation-coaching-60-mins",
+      "variant_title": "90 min",
+      "woo_id": 9238,
+      "woo_name": "Transformation Coaching (90 mins)",
+      "sage_item_code": "S0094",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "transformation-coaching-60-mins",
+      "variant_title": "Package of 04",
+      "woo_id": 9239,
+      "woo_name": "Transformation Coaching (60 mins) (package of 04)",
+      "sage_item_code": "S0093",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "transformation-coaching-60-mins",
+      "variant_title": "Package of 08",
+      "woo_id": 9240,
+      "woo_name": "Transformation Coaching (60 mins) (package of 08)",
+      "sage_item_code": "S0092",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "transformation-coaching-60-mins",
+      "variant_title": "Package of 12",
+      "woo_id": 9241,
+      "woo_name": "Transformation Coaching (60 mins) (package of 12)",
+      "sage_item_code": "S0091",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "transformation-coaching-60-mins",
+      "variant_title": "Package of 16",
+      "woo_id": 9242,
+      "woo_name": "Transformation Coaching (60 mins) (package of 16)",
+      "sage_item_code": "S0090",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "executive-coaching-30-mins",
+      "variant_title": "30 min",
+      "woo_id": 9243,
+      "woo_name": "Executive coaching (30 mins)",
+      "sage_item_code": "S0089",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "executive-coaching-30-mins",
+      "variant_title": "60 min",
+      "woo_id": 9332,
+      "woo_name": "Executive coaching (60 mins)",
+      "sage_item_code": "S0032",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "executive-coaching-30-mins",
+      "variant_title": "Package of 04",
+      "woo_id": 9245,
+      "woo_name": "Executive coaching (60 mins) (package of 04)",
+      "sage_item_code": "S0088",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "executive-coaching-30-mins",
+      "variant_title": "Package of 08",
+      "woo_id": 9246,
+      "woo_name": "Executive coaching (60 mins) (package of 08)",
+      "sage_item_code": "S0087",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "executive-coaching-30-mins",
+      "variant_title": "Package of 12",
+      "woo_id": 9247,
+      "woo_name": "Executive coaching (60 mins) (package of 12)",
+      "sage_item_code": "S0086",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "executive-coaching-30-mins",
+      "variant_title": "Package of 16",
+      "woo_id": 9248,
+      "woo_name": "Executive coaching (60 mins) (package of 16)",
+      "sage_item_code": "S0085",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-clearing-session",
+      "variant_title": "60 min",
+      "woo_id": 6675,
+      "woo_name": "Akashic Coaching/Clearing Session (60 mins)",
+      "sage_item_code": "S0123",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-clearing-session",
+      "variant_title": "90 min",
+      "woo_id": 10768,
+      "woo_name": "Akashic Coaching/Clearing Session (90min)",
+      "sage_item_code": "S0015",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-clearing-session",
+      "variant_title": "Package of 04",
+      "woo_id": 9234,
+      "woo_name": "Akashic Coaching/Clearing Session (60 mins) (package of 04)",
+      "sage_item_code": "S0098",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-clearing-session",
+      "variant_title": "Package of 08",
+      "woo_id": 9235,
+      "woo_name": "Akashic Coaching/Clearing Session (60 mins) (package of 08)",
+      "sage_item_code": "S0097",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-clearing-session",
+      "variant_title": "Package of 12",
+      "woo_id": 9236,
+      "woo_name": "Akashic Coaching/Clearing Session (60 mins) (package of 12)",
+      "sage_item_code": "S0096",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "group-family-coaching-60-mins",
+      "variant_title": "Single session",
+      "woo_id": 9257,
+      "woo_name": "Group Family Coaching (60 Mins) (Single Sesson)",
+      "sage_item_code": "S0076",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "group-family-coaching-60-mins",
+      "variant_title": "Package of 04",
+      "woo_id": 9258,
+      "woo_name": "Group Family Coaching (60 Mins) (Package of 04)",
+      "sage_item_code": "S0075",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "group-family-coaching-60-mins",
+      "variant_title": "Package of 08",
+      "woo_id": 9259,
+      "woo_name": "Group Family Coaching (60 Mins) (Package of 08)",
+      "sage_item_code": "S0074",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "exploring-the-alpha-mind-45-minutes",
+      "variant_title": "Single session (45 min)",
+      "woo_id": 9260,
+      "woo_name": "Exploring the Alpha Mind (45 mins)",
+      "sage_item_code": "S0073",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "exploring-the-alpha-mind-45-minutes",
+      "variant_title": "Package of 05",
+      "woo_id": 9261,
+      "woo_name": "Exploring the Alpha Mind (45 Mins) (Package of 05)",
+      "sage_item_code": "S0072",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "exploring-the-alpha-mind-45-minutes",
+      "variant_title": "Package of 08",
+      "woo_id": 9262,
+      "woo_name": "Exploring the Alpha Mind (45 Mins) (Package of 08)",
+      "sage_item_code": "S0071",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-transformation-therapy-session",
+      "variant_title": "1 hypnosis session + recording",
+      "woo_id": 9228,
+      "woo_name": "Rapid Transformation Therapy Session (1 hypnosis session + hypnosis recording)",
+      "sage_item_code": "S0104",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "rapid-transformation-therapy-session",
+      "variant_title": "1 hypnosis session + recording + 2 coaching sessions",
+      "woo_id": 6673,
+      "woo_name": "Rapid Transformation Therapy Session (1 hypnosis session, hypnosis, recording + 2 coaching sessions)",
+      "sage_item_code": "S0125",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "energetic-clearing-completed-remotely",
+      "variant_title": "Single session",
+      "woo_id": 9265,
+      "woo_name": "Energetic Clearing (completed remotely)",
+      "sage_item_code": "S0068",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "energetic-clearing-completed-remotely",
+      "variant_title": "Package of 04",
+      "woo_id": 9266,
+      "woo_name": "Energetic Clearing (completed remotely) Package of 04",
+      "sage_item_code": "S0067",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "energetic-clearing-completed-remotely",
+      "variant_title": "Package of 08",
+      "woo_id": 9267,
+      "woo_name": "Energetic Clearing (completed remotely) Package of 08",
+      "sage_item_code": "S0066",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "energetic-clearing-completed-remotely",
+      "variant_title": "Package of 12",
+      "woo_id": 9268,
+      "woo_name": "Energetic Clearing (completed remotely) Package of 12",
+      "sage_item_code": "S0065",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-1-fundamentals-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 8828,
+      "woo_name": "Resonance Repatterning Program 1 Fundamentals (Live via Zoom)",
+      "sage_item_code": "S0105",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-1-fundamentals-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 9273,
+      "woo_name": "Resonance Repatterning Program 1 Fundamentals (Self Study)",
+      "sage_item_code": "S0060",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-1-fundamentals-live-via-zoom",
+      "variant_title": "Live Retaker",
+      "woo_id": 10713,
+      "woo_name": "Resonance Repatterning Program 1 Fundamentals (Live Retaker via Zoom)",
+      "sage_item_code": "S0024",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-2-primary-patterns-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 9274,
+      "woo_name": "Resonance Repatterning Program 2 Primary Patterns (Self Study)",
+      "sage_item_code": "S0059",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-2-primary-patterns-live-via-zoom",
+      "variant_title": "Live Retaker",
+      "woo_id": 10714,
+      "woo_name": "Resonance Repatterning Program 2 Primary Patterns (Live Retaker via Zoom)",
+      "sage_item_code": "S0023",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-2-primary-patterns-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 9277,
+      "woo_name": "Resonance Repatterning Program 2 Primary Patterns (Live via Zoom)",
+      "sage_item_code": "S0056",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-3-unconscious-patterns-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 9282,
+      "woo_name": "Resonance Repatterning Program 3 Unconscious Patterns (Live via Zoom)",
+      "sage_item_code": "S0052",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-3-unconscious-patterns-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 9278,
+      "woo_name": "Resonance Repatterning Program 3 Unconscious Patterns (Self Study)",
+      "sage_item_code": "S0055",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-3-unconscious-patterns-live-via-zoom",
+      "variant_title": "Live Retaker",
+      "woo_id": 10716,
+      "woo_name": "Resonance Repatterning Program 3 Unconscious Patterns (Live Retaker via Zoom)",
+      "sage_item_code": "S0022",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-4-chakra-patterns-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 9283,
+      "woo_name": "Resonance Repatterning Program 4 Chakra Patterns (Self Study)",
+      "sage_item_code": "S0051",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-4-chakra-patterns-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 9286,
+      "woo_name": "Resonance Repatterning Program 4 Chakra Patterns (Live via Zoom)",
+      "sage_item_code": "S0048",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-4-chakra-patterns-live-via-zoom",
+      "variant_title": "Live Retaker",
+      "woo_id": 10718,
+      "woo_name": "Resonance Repatterning Program 4 Chakra Patterns (Live Retaker via Zoom)",
+      "sage_item_code": "S0021",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-5-five-elements-meridians-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 11270,
+      "woo_name": "Resonance Repatterning Program 5 Five Elements & Meridians (Live via Zoom)",
+      "sage_item_code": "S0011",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-5-five-elements-meridians-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 11266,
+      "woo_name": "Resonance Repatterning Program 5 Five Elements & Meridians (Self Study)",
+      "sage_item_code": "S0014",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-5-five-elements-meridians-live-via-zoom",
+      "variant_title": "Live Retaker",
+      "woo_id": 10719,
+      "woo_name": "Resonance Repatterning Program 5 Five Elements & Meridians (Live Retaker via Zoom)",
+      "sage_item_code": "S0020",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-full-basic-training-series-programs-1-5-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 10721,
+      "woo_name": "Resonance Repatterning Full Basic Training Series, Programs 1-5 (Live via Zoom)",
+      "sage_item_code": "S0019",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 13156,
+      "woo_name": "Resonance Repatterning Accelerated Basic 5 Training Series: Review of Programs 1-5 (Self Study)",
+      "sage_item_code": "S0135",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-accelerated-basic-5-training-series-review-of-programs-1-5-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 17526,
+      "woo_name": "Resonance Repatterning Accelerated Basic 5 Training Series: Review of Programs 1-5 (Live via Zoom)",
+      "sage_item_code": "S0241",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 8724,
+      "woo_name": "Akashic Navigator & Intuitive Coaching Fundamentals: Clearing Self, Level 1 (Self Study)",
+      "sage_item_code": "S0114",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+      "variant_title": "Live Retaker",
+      "woo_id": 10710,
+      "woo_name": "Akashic Navigator & Intuitive Coaching Fundamentals: Clearing Self, Level 1 (Live Retaker via Zoom)",
+      "sage_item_code": "S0026",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-navigator-intuitive-coaching-fundamentals-clearing-self-level-1-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 8726,
+      "woo_name": "Akashic Navigator & Intuitive Coaching Fundamentals: Clearing Self, Level 1 (Live via Zoom)",
+      "sage_item_code": "S0112",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 11614,
+      "woo_name": "Akashic Navigator & Intuitive Coaching Advanced: Clearing Others, Level 2 (Self Study)",
+      "sage_item_code": "S0003",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom",
+      "variant_title": "Live Retaker",
+      "woo_id": 10711,
+      "woo_name": "Akashic Navigator & Intuitive Coaching Advanced: Clearing Others, Level 2 (Live Retaker via Zoom)",
+      "sage_item_code": "S0025",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-navigator-intuitive-coaching-advanced-clearing-others-level-2-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 13977,
+      "woo_name": "Akashic Navigator & Intuitive Coaching Advanced: Clearing Others, Level 2 (Live via Zoom)",
+      "sage_item_code": "S0005",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 9269,
+      "woo_name": "Akashic Navigator & Intuitive Coaching Fundamentals & Advanced: Purchased together (Self Study)",
+      "sage_item_code": "S0064",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom",
+      "variant_title": "Live Retaker",
+      "woo_id": 11504,
+      "woo_name": "Akashic Navigator & Intuitive Coaching Fundamentals & Adv: Purchased together (Live Retaker Zoom)",
+      "sage_item_code": "S0010",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "akashic-navigator-intuitive-coaching-fundamentals-advanced-purchased-together-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 9272,
+      "woo_name": "Akashic Navigator & Intuitive Coaching Fundamentals & Advanced: Purchased together (Live via Zoom)",
+      "sage_item_code": "S0061",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 11611,
+      "woo_name": "Deep Energy Clearing Fundamentals: Clearing Self, Level 1 (Live via Zoom)",
+      "sage_item_code": "S0006",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 11608,
+      "woo_name": "Deep Energy Clearing Fundamentals: Clearing Self, Level 1 (Self Study)",
+      "sage_item_code": "S0009",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "deep-energy-clearing-fundamentals-clearing-self-level-1-live-via-zoom",
+      "variant_title": "Live Retaker",
+      "woo_id": 10723,
+      "woo_name": "Deep Energy Clearing Fundamentals: Clearing Self, Level 1 (Live Retaker via Zoom)",
+      "sage_item_code": "S0017",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 8729,
+      "woo_name": "Deep Energy Clearing Advanced: Clearing Others, Level 2 (Self Study)",
+      "sage_item_code": "S0109",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom",
+      "variant_title": "Live Retaker",
+      "woo_id": 10724,
+      "woo_name": "Deep Energy Clearing Advanced: Clearing Others, Level 2 (Live Retaker via Zoom)",
+      "sage_item_code": "S0016",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "deep-energy-clearing-advanced-clearing-others-level-2-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 8731,
+      "woo_name": "Deep Energy Clearing Advanced: Clearing Others, Level 2 (Live via Zoom)",
+      "sage_item_code": "S0107",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live",
+      "variant_title": "Live via Zoom",
+      "woo_id": 9301,
+      "woo_name": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 1 (Live Zoom)",
+      "sage_item_code": "S0035",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-1-live",
+      "variant_title": "Self Study",
+      "woo_id": 9300,
+      "woo_name": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 1 (Self Study)",
+      "sage_item_code": "S0036",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live",
+      "variant_title": "Live via Zoom",
+      "woo_id": 6104,
+      "woo_name": "Trauma to Transcendence: Breaking the hold of the Childhood brain on your adult self (Live via Zoom)",
+      "sage_item_code": "S0130",
+      "parity_status": "(hidden on current site)"
+    },
+    {
+      "handle": "trauma-to-transcendence-breaking-the-hold-of-the-childhood-brain-on-your-adult-self-live",
+      "variant_title": "Self Study",
+      "woo_id": 9292,
+      "woo_name": "Trauma to Transcendence: Breaking the hold of the Childhood brain on your adult self (Self Study)",
+      "sage_item_code": "S0042",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "finding-my-life-purpose-live",
+      "variant_title": "Self Study",
+      "woo_id": 9542,
+      "woo_name": "Finding My Life Purpose (Self Study)",
+      "sage_item_code": "S0031",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "finding-my-life-purpose-live",
+      "variant_title": "Live via Zoom",
+      "woo_id": 6129,
+      "woo_name": "Finding My Life Purpose (Live via Zoom)",
+      "sage_item_code": "S0127",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "love-relationships-live",
+      "variant_title": "Live via Zoom",
+      "woo_id": 6109,
+      "woo_name": "Love & Relationships (Live via Zoom)",
+      "sage_item_code": "S0129",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "love-relationships-live",
+      "variant_title": "Self Study",
+      "woo_id": 9294,
+      "woo_name": "Love & Relationships (Self Study)",
+      "sage_item_code": "S0041",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "intuition-in-my-personal-capacity-live",
+      "variant_title": "Business Capacity: Live via Zoom",
+      "woo_id": 9296,
+      "woo_name": "Intuition in My Business Capacity (Live via Zoom)",
+      "sage_item_code": "S0039",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "intuition-in-my-personal-capacity-live",
+      "variant_title": "Business Capacity: Self Study",
+      "woo_id": 9297,
+      "woo_name": "Intuition in My Business Capacity (Self Study)",
+      "sage_item_code": "S0038",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "intuition-in-my-personal-capacity-live",
+      "variant_title": "Personal Capacity: Live via Zoom",
+      "woo_id": 6113,
+      "woo_name": "Intuition in My Personal Capacity (Live via Zoom)",
+      "sage_item_code": "S0128",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "intuition-in-my-personal-capacity-live",
+      "variant_title": "Personal Capacity: Self Study",
+      "woo_id": 9295,
+      "woo_name": "Intuition in My Personal Capacity (Self Study)",
+      "sage_item_code": "S0040",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "meditation-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 8606,
+      "woo_name": "Meditation (Live via Zoom)",
+      "sage_item_code": "S0117",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "meditation-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 9302,
+      "woo_name": "Meditation (Self Study)",
+      "sage_item_code": "S0034",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "mindfulness-live",
+      "variant_title": "Self Study",
+      "woo_id": 9303,
+      "woo_name": "Mindfulness (Self Study)",
+      "sage_item_code": "S0033",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "mindfulness-live",
+      "variant_title": "Live via Zoom",
+      "woo_id": 8604,
+      "woo_name": "Mindfulness (Live via Zoom)",
+      "sage_item_code": "S0118",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "group-session-being-a-great-boundary-setter-booked-as-a-series-only",
+      "variant_title": "Live (booked as series)",
+      "woo_id": 13492,
+      "woo_name": "Group Session Being a Great Boundary Setter (booked as a series only)",
+      "sage_item_code": "S0029",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "group-session-being-a-great-boundary-setter-booked-as-a-series-only",
+      "variant_title": "Recorded series",
+      "woo_id": 9749,
+      "woo_name": "Group Session Being a Great Boundary Setter (available as a recorded series)",
+      "sage_item_code": "S0144",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "career-progression-group-session",
+      "variant_title": "Live (booked as series)",
+      "woo_id": 6679,
+      "woo_name": "Group Session Career Progression (booked as a series only)",
+      "sage_item_code": "S0120",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "career-progression-group-session",
+      "variant_title": "Recorded series",
+      "woo_id": 13163,
+      "woo_name": "Group Session Career Progression (available as a recorded series)",
+      "sage_item_code": "S0145",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "group-session-develop-super-confidence",
+      "variant_title": "Recorded series",
+      "woo_id": 13241,
+      "woo_name": "Group Session Develop Super Confidence (available as a recorded series) Coming Soon",
+      "sage_item_code": "S0143",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "group-session-develop-super-confidence",
+      "variant_title": "Live",
+      "woo_id": 13237,
+      "woo_name": "Group Session Develop Super Confidence",
+      "sage_item_code": "S0142",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "love-relationships-group-session",
+      "variant_title": "Recorded series",
+      "woo_id": null,
+      "woo_name": null,
+      "sage_item_code": null,
+      "parity_status": "NO MATCH on current site"
+    },
+    {
+      "handle": "love-relationships-group-session",
+      "variant_title": "Live (booked as series)",
+      "woo_id": 13168,
+      "woo_name": "Group Session Love & Relationships",
+      "sage_item_code": "S0136",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "money-mastery-group-session",
+      "variant_title": "Recorded series",
+      "woo_id": 13171,
+      "woo_name": "Group Session Money Mastery (available as a recorded series)",
+      "sage_item_code": "S0146",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "money-mastery-group-session",
+      "variant_title": "Live (booked as series)",
+      "woo_id": 6677,
+      "woo_name": "Group Session Money Mastery (booked as a series only)",
+      "sage_item_code": "S0122",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "group-session-shedding-excess-weight",
+      "variant_title": "Live (booked as series)",
+      "woo_id": 13493,
+      "woo_name": "Group Session Shedding excess Weight (booked as a series only)",
+      "sage_item_code": "S0030",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "group-session-shedding-excess-weight",
+      "variant_title": "Recorded series",
+      "woo_id": 13184,
+      "woo_name": "Group Session Shedding excess Weight (available as recorded series)",
+      "sage_item_code": "S0139",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study",
+      "variant_title": "Self Study",
+      "woo_id": 16237,
+      "woo_name": "Resonance Repatterning Program 7 Principles of Relationships Practical + Demos (Self Study)",
+      "sage_item_code": "S0188",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-7-principles-of-relationships-practical-demos-self-study",
+      "variant_title": "Live via Zoom",
+      "woo_id": 16492,
+      "woo_name": "Resonance Repatterning Program 7 Principles of Relationships Practical + Demos (Live via Zoom)",
+      "sage_item_code": "S0200",
+      "parity_status": "USD DIFF"
+    },
+    {
+      "handle": "resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study",
+      "variant_title": "Live via Zoom",
+      "woo_id": 16493,
+      "woo_name": "Resonance Repatterning Program 9 Energetics of Relationships Practical + Demos (Live via Zoom)",
+      "sage_item_code": "S0201",
+      "parity_status": "USD DIFF"
+    },
+    {
+      "handle": "resonance-repatterning-program-9-energetics-of-relationships-practical-demos-self-study",
+      "variant_title": "Self Study",
+      "woo_id": 16236,
+      "woo_name": "Resonance Repatterning Program 9 Energetics of Relationships Practical + Demos (Self Study)",
+      "sage_item_code": "S0189",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "be-an-energy-ninja-mastering-energy-for-an-abundant-life-repattern-your-life-level-2-live",
+      "variant_title": "Live via Zoom",
+      "woo_id": 10722,
+      "woo_name": "Be an Energy Ninja: Mastering energy for an abundant life - Repattern your life Level 2 (Live Zoom)",
+      "sage_item_code": "S0018",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "group-session-attraction-frequency-recorded",
+      "variant_title": "Recorded series",
+      "woo_id": 13235,
+      "woo_name": "Group Session Attraction Frequency (available as a recorded series) Coming Soon",
+      "sage_item_code": "S0141",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "group-session-nice-or-not-nice-in-communication-booked-as-a-series-only",
+      "variant_title": "Live (booked as series)",
+      "woo_id": 13491,
+      "woo_name": "Group Session Coherent Communication (booked as a series only)",
+      "sage_item_code": "S0027",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "group-session-nice-or-not-nice-in-communication-booked-as-a-series-only",
+      "variant_title": "Recorded series",
+      "woo_id": null,
+      "woo_name": null,
+      "sage_item_code": null,
+      "parity_status": "NO MATCH on current site"
+    },
+    {
+      "handle": "coherence-muscle-testing-self-study-online-2",
+      "variant_title": "Self Study",
+      "woo_id": 9298,
+      "woo_name": "Coherence Muscle Testing (Self Study Online)",
+      "sage_item_code": "S0134",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-all-repatternings-as-demos-talk-throughs-resources-self-study",
+      "variant_title": "Self Study",
+      "woo_id": 13639,
+      "woo_name": "Resonance Repatterning All Repatternings as Demo’s / Talk Throughs + Resources (Self Study)",
+      "sage_item_code": "S0132",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "post-traumatic-growth-self-study-online",
+      "variant_title": "Self Study",
+      "woo_id": 14545,
+      "woo_name": "Post Traumatic Growth (Self Study Online)",
+      "sage_item_code": "S0158",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "the-latest-book-by-suzanne",
+      "variant_title": "Pre-order",
+      "woo_id": 4740,
+      "woo_name": "The Latest Book By Suzanne (Pre-order)",
+      "sage_item_code": "S0131",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "quantum-healing-codes-ebook-audio-download",
+      "variant_title": "eBook & Audio Download",
+      "woo_id": 14243,
+      "woo_name": "Quantum Healing Codes",
+      "sage_item_code": "S0150",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "bringing-your-energy-back",
+      "variant_title": "Default",
+      "woo_id": 16441,
+      "woo_name": "Bringing Your Energy Back",
+      "sage_item_code": "S0191",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "energetic-alignment-inner-neutrality",
+      "variant_title": "Default",
+      "woo_id": 16437,
+      "woo_name": "Energetic Alignment & Inner Neutrality",
+      "sage_item_code": "S0193",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "relaxation-energy-reclamation",
+      "variant_title": "Default",
+      "woo_id": 16440,
+      "woo_name": "Relaxation & Energy Reclamation",
+      "sage_item_code": "S0192",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "getting-unstuck-self-study",
+      "variant_title": "Default",
+      "woo_id": 13488,
+      "woo_name": "Getting Unstuck (Self Study)",
+      "sage_item_code": "S0001",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-full-basic-5-series-demo-s-self-study-online-with-mentoring",
+      "variant_title": "Standard",
+      "woo_id": 9288,
+      "woo_name": "Resonance Repatterning Full Basic Training, Programs 1-5 + Demos + Resources (Self Study)",
+      "sage_item_code": "S0046",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-full-basic-5-series-demo-s-live",
+      "variant_title": "Standard",
+      "woo_id": 13795,
+      "woo_name": "Resonance Repatterning Full Basic Training, Programs 1-5 + Demos + Resources (Live via Zoom)",
+      "sage_item_code": "S0043",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-6-inner-cultivation-practical-demos-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": 16238,
+      "woo_name": "Resonance Repatterning Program 6 Inner Cultivation Practical + Demos (Self Study)",
+      "sage_item_code": "S0187",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "resonance-repatterning-program-6-inner-cultivation-practical-demos-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 16491,
+      "woo_name": "Resonance Repatterning Program 6 Inner Cultivation Practical + Demos (Live via Zoom)",
+      "sage_item_code": "S0199",
+      "parity_status": "USD DIFF"
+    },
+    {
+      "handle": "deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom",
+      "variant_title": "Live via Zoom",
+      "woo_id": 16259,
+      "woo_name": "Deep Energy Clearing Fundamentals & Advanced: Purchased Together (Live via Zoom)",
+      "sage_item_code": "S0151",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom",
+      "variant_title": "Live Retaker",
+      "woo_id": 16260,
+      "woo_name": "Deep Energy Clearing Fundamentals & Advanced: Purchased Together (Live Retaker via Zoom)",
+      "sage_item_code": "S0190",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "deep-energy-clearing-fundamentals-advanced-purchased-together-live-via-zoom",
+      "variant_title": "Self Study",
+      "woo_id": null,
+      "woo_name": null,
+      "sage_item_code": null,
+      "parity_status": "NO MATCH on current site"
+    },
+    {
+      "handle": "mentorship-single-session-live",
+      "variant_title": "Single Session (Live)",
+      "woo_id": 16061,
+      "woo_name": "Practitioner Mentorship Single Session (Live)",
+      "sage_item_code": "S0177",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "mentorship-single-session-live",
+      "variant_title": "Single Session (Self Study)",
+      "woo_id": 16063,
+      "woo_name": "Practitioner Mentorship Single Session (Self study)",
+      "sage_item_code": "S0179",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "mentorship-single-session-live",
+      "variant_title": "Bundle of 5 Sessions (Live)",
+      "woo_id": 16062,
+      "woo_name": "Practitioner Mentorship Bundle of 5 Sessions (Live)",
+      "sage_item_code": "S0178",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "mentorship-single-session-live",
+      "variant_title": "Bundle of 5 Sessions (Self Study)",
+      "woo_id": 16064,
+      "woo_name": "Practitioner Mentorship Bundle of 5 Sessions (Self study)",
+      "sage_item_code": "S0180",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "email-support",
+      "variant_title": "Per month",
+      "woo_id": 16065,
+      "woo_name": "Email Support",
+      "sage_item_code": "S0182",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "coaching-support-package",
+      "variant_title": "Per session",
+      "woo_id": 16067,
+      "woo_name": "Coaching",
+      "sage_item_code": "S0181",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "vip-package",
+      "variant_title": "Per month",
+      "woo_id": 16066,
+      "woo_name": "VIP Package",
+      "sage_item_code": "S0183",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "bonus-lifetime-access-self-study-online",
+      "variant_title": "Per programme level",
+      "woo_id": 16110,
+      "woo_name": "Bonus Lifetime Access (Self Study Online)",
+      "sage_item_code": "S0186",
+      "parity_status": "OK"
+    },
+    {
+      "handle": "ravenall-institute-certification-observation-fee",
+      "variant_title": "Once-off",
+      "woo_id": 16138,
+      "woo_name": "Ravenall Institute Certification Observation Fee",
+      "sage_item_code": "S0184",
+      "parity_status": "OK"
+    }
+  ]
+}
