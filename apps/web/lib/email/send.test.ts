@@ -136,6 +136,18 @@ describe('sendEmail', () => {
     expect(body.attachment).toBeUndefined()
   })
 
+  it('sends cc recipients in the Brevo cc field and leaves it out when empty', async () => {
+    fetchMock.mockResolvedValue(okResponse({ messageId: 'id-cc' }))
+
+    await sendEmail({ to: ['a@b.c'], cc: ['Boss <boss@b.c>'], subject: 'S', html: 'x' })
+    await sendEmail({ to: ['a@b.c'], cc: [], subject: 'S', html: 'x' })
+
+    const first = JSON.parse((fetchMock.mock.calls[0] as [string, RequestInit])[1].body as string)
+    const second = JSON.parse((fetchMock.mock.calls[1] as [string, RequestInit])[1].body as string)
+    expect(first.cc).toEqual([{ name: 'Boss', email: 'boss@b.c' }])
+    expect(second.cc).toBeUndefined()
+  })
+
   it('throws before calling the network when the key is missing', async () => {
     vi.stubEnv('BREVO_API_KEY', '')
 

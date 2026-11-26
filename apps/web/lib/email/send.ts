@@ -20,6 +20,8 @@ export type SendEmailInput = {
   from?: string
   to: string[]
   replyTo?: string
+  /** Copy recipients (Brevo "cc"). */
+  cc?: string[]
   subject: string
   /** A React Email element; rendered to HTML here. */
   react?: ReactElement
@@ -79,6 +81,7 @@ export async function sendEmail(input: SendEmailInput): Promise<string> {
   if (html) payload.htmlContent = html
   if (input.text) payload.textContent = input.text
   if (input.replyTo) payload.replyTo = parseAddress(input.replyTo)
+  if (input.cc && input.cc.length > 0) payload.cc = input.cc.map(parseAddress)
   if (input.headers && Object.keys(input.headers).length > 0) payload.headers = input.headers
   if (input.attachments && input.attachments.length > 0) {
     // Brevo takes inline attachments as { name, content: base64 }.
