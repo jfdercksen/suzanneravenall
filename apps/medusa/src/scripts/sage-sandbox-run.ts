@@ -99,12 +99,15 @@ async function discover(config: SageConfig, auth: BasicAuth): Promise<void> {
     ["items", "/Item/Get", { $top: "200" }],
     ["customers-page", "/Customer/Get", { $top: "5" }],
     ["tax-invoices-page", "/TaxInvoice/Get", { $top: "3", $orderby: "ID desc" }],
+    // Dollar orders: is multi-currency on in this company, and which currencies exist?
+    ["currencies", "/Currency/Get", {}],
   ] as const) {
     const r = await rawGet(config, auth, path, params)
     save(name, r)
     log(`${path}: HTTP ${r.status}, ${results(r.body).length} row(s)`)
     if (name === "tax-types") for (const t of results(r.body)) log(`  tax type ${t.ID}: ${t.Name} (${t.Percentage}%)${t.IsDefault ? " default" : ""}`)
     if (name === "accounts") for (const a of results(r.body).filter((a) => /income|sales|revenue/i.test(String(a.Name ?? "")) || a.AccountCategory === 1)) log(`  account ${a.ID}: ${a.Name}`)
+    if (name === "currencies") log(`  currencies: ${r.status >= 400 ? `not available (HTTP ${r.status}): multi-currency may be off` : results(r.body).map((c) => `${c.ID} ${c.Code ?? c.Description ?? ""}`).join(", ") || "none"}`)
     if (name === "items") log(`  item codes: ${results(r.body).map((i) => i.Code).slice(0, 40).join(", ") || "none"}`)
     if (name === "tax-invoices-page") for (const inv of results(r.body)) log(`  invoice ${inv.ID} ref ${inv.Reference ?? ""}: line types ${((inv.Lines as Array<Record<string, unknown>>) ?? []).map((l) => l.LineType).join(",") || "(lines not in list answer)"}`)
   }
