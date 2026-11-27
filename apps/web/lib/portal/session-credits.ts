@@ -1,4 +1,4 @@
-import { sessionDurationMinutes, type SessionDuration, type SessionLine } from '@suzanne/integrations'
+import { isInPersonSession, sessionDurationMinutes, type SessionDuration, type SessionLine } from '@suzanne/integrations'
 
 /**
  * Paid sessions still to book (I-13, /portal/appointments).
@@ -67,6 +67,8 @@ export interface SessionCredit {
   remaining: number
   /** The line the Book Now link is built from (same mapping as the order mail) */
   line: SessionLine
+  /** In-person sessions are arranged by the team, never self-booked (27 Nov 2026) */
+  inPerson: boolean
 }
 
 const PACKAGE = /package\s+of\s+0*(\d+)/i
@@ -109,14 +111,15 @@ export function computeSessionCredits(
     const credits = sessionsPerUnit(line.variantTitle) * quantity
     const service = serviceOf(line)
     const durationMinutes = sessionDurationMinutes(line)
-    const key = `${service}\u0000${durationMinutes}`
+    const inPerson = isInPersonSession(line)
+    const key = `${service}\u0000${durationMinutes}\u0000${inPerson ? 'in-person' : 'online'}`
     const pool = byKey.get(key)
     if (pool) {
       pool.total += credits
       pool.remaining += credits
       continue
     }
-    const created: SessionCredit = { service, durationMinutes, total: credits, used: 0, remaining: credits, line }
+    const created: SessionCredit = { service, durationMinutes, total: credits, used: 0, remaining: credits, line, inPerson }
     byKey.set(key, created)
     pools.push(created)
   }
@@ -134,7 +137,12 @@ export function computeSessionCredits(
   const serviceByBooking = new Map<string, string>()
   for (const booking of used) {
     const pool =
-      pools.find((p) => p.remaining > 0 && p.durationMinutes === booking.minutes) ?? pools.find((p) => p.remaining > 0)
+      // A Cal.com booking is an online one unless only in-person credit is left
+      // (the team booked it for the client), so online pools are used first.
+      pools.find((p) => !p.inPerson && p.remaining > 0 && p.durationMinutes === booking.minutes) ??
+      pools.find((p) => p.remaining > 0 && p.durationMinutes === booking.minutes) ??
+      pools.find((p) => !p.inPerson && p.remaining > 0) ??
+      pools.find((p) => p.remaining > 0)
     if (!pool) continue
     pool.used += 1
     pool.remaining -= 1

@@ -11,9 +11,11 @@ import {
   membershipTermEnd,
   membershipTierSlug,
   orderHasCourses,
+  isInPersonSession,
   sessionBookingUrl,
   type MembershipAccessFields,
   type MembershipLevel,
+  type SessionLine,
 } from '@suzanne/integrations'
 import ws from 'ws'
 import { MEMBERSHIPS_MODULE } from '../modules/memberships'
@@ -61,6 +63,9 @@ interface OrderItemVariant {
 
 interface OrderItem {
   variant?: OrderItemVariant
+  title?: string
+  product_title?: string | null
+  quantity?: number
 }
 
 interface OrderCustomer {
@@ -72,11 +77,14 @@ interface OrderCustomer {
 interface OrderAddressName {
   first_name?: string | null
   last_name?: string | null
+  phone?: string | null
 }
 
 interface RetrievedOrder {
   id: string
   customer_id: string
+  display_id?: number | string | null
+  created_at?: string | Date | null
   customer?: OrderCustomer
   billing_address?: OrderAddressName | null
   items?: OrderItem[]
@@ -196,24 +204,57 @@ export function detectOrderProductType(items: OrderItem[]): ProductType {
   return 'other'
 }
 
+function sessionLineOf(item: OrderItem): SessionLine {
+  const product = item.variant?.product
+  return { productTitle: product?.title, productHandle: product?.handle, variantTitle: item.variant?.title }
+}
+
+// The session lines of an order split by how they are arranged. In-person
+// sessions are never self-booked: the team contacts the client (27 Nov 2026).
+export function splitSessionLines(order: Pick<RetrievedOrder, 'items'>): { online: OrderItem[]; inPerson: OrderItem[] } {
+  const sessions = (order.items ?? []).filter((item) => detectOrderProductType([item]) === 'session')
+  return {
+    online: sessions.filter((item) => !isInPersonSession(sessionLineOf(item))),
+    inPerson: sessions.filter((item) => isInPersonSession(sessionLineOf(item))),
+  }
+}
+
 // The "Book Your Session" link for a session order: the Cal.com event that
-// matches the first session line's length, with the buyer's name and email
-// filled in (KI079).
+// matches the first ONLINE session line's length, with the buyer's name and
+// email filled in (KI079). An in-person line never sets the length.
 export function orderSessionBookingUrl(
   order: Pick<RetrievedOrder, 'items' | 'customer' | 'billing_address'>,
   baseUrl: string = CALCOM_SESSION_BOOKING_URL
 ): string {
   const items = order.items ?? []
-  const line = items.find((item) => detectOrderProductType([item]) === 'session') ?? items[0]
-  const product = line?.variant?.product
+  const { online, inPerson } = splitSessionLines(order)
+  const line = online[0] ?? inPerson[0] ?? items[0]
   const name =
     bookerName(order.customer?.first_name, order.customer?.last_name) ??
     bookerName(order.billing_address?.first_name, order.billing_address?.last_name)
-  return sessionBookingUrl(
-    baseUrl,
-    { productTitle: product?.title, productHandle: product?.handle, variantTitle: line?.variant?.title },
-    { name, email: order.customer?.email }
-  )
+  return sessionBookingUrl(baseUrl, line ? sessionLineOf(line) : {}, { name, email: order.customer?.email })
+}
+
+// The body of the team notice (web /api/email/in-person-session). The
+// reference follows the invoice number: SR- and the display id to 5 digits.
+export function buildInPersonNotice(order: RetrievedOrder & { email?: string | null }, lines: OrderItem[]): Record<string, unknown> {
+  const displayId = Number(order.display_id)
+  return {
+    orderId: order.id,
+    displayId: Number.isFinite(displayId) ? displayId : null,
+    reference: Number.isFinite(displayId) ? `SR-${String(displayId).padStart(5, '0')}` : order.id,
+    customerName:
+      bookerName(order.customer?.first_name, order.customer?.last_name) ??
+      bookerName(order.billing_address?.first_name, order.billing_address?.last_name),
+    email: order.customer?.email ?? order.email ?? null,
+    phone: order.billing_address?.phone?.trim() || null,
+    orderDate: order.created_at ? new Date(order.created_at).toISOString() : null,
+    lines: lines.map((item) => ({
+      product: item.variant?.product?.title ?? item.product_title ?? item.title ?? '',
+      variant: item.variant?.title ?? null,
+      quantity: item.quantity ?? 1,
+    })),
+  }
 }
 
 export function getHighestCategoryAccess(items: OrderItem[]): CategoryAccess | null {
@@ -610,18 +651,23 @@ interface NoviceEventTable {
 
 const PG_UNIQUE_VIOLATION = '23505'
 
-function postInternalEmail(path: string, body: Record<string, unknown>, orderId: string): void {
+function postInternalEmail(
+  path: string,
+  body: Record<string, unknown>,
+  orderId: string,
+  failure: { key: string; subject: string } = { key: 'membership-email', subject: 'Membership email failed' }
+): void {
   void fetch(`${WEB_BASE_URL}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...(N8N_WEBHOOK_SECRET ? { 'x-webhook-secret': N8N_WEBHOOK_SECRET } : {}) },
     body: JSON.stringify(body),
   })
     .then((res) => {
-      if (!res.ok) reportPortalFailure('membership-email', 'Membership email failed', [`Order: ${orderId}`, `Route: ${path}`, `Status: ${res.status}`])
+      if (!res.ok) reportPortalFailure(failure.key, failure.subject, [`Order: ${orderId}`, `Route: ${path}`, `Status: ${res.status}`])
     })
     .catch((err: unknown) => {
       const msg = err instanceof Error ? err.message : String(err)
-      reportPortalFailure('membership-email', 'Membership email failed', [`Order: ${orderId}`, `Route: ${path}`, `Error: ${msg}`])
+      reportPortalFailure(failure.key, failure.subject, [`Order: ${orderId}`, `Route: ${path}`, `Error: ${msg}`])
     })
 }
 
@@ -879,7 +925,13 @@ export default async function orderPlacedHandler({
     const hasCourses = orderHasCourses(buildOrderSnapshot(order))
     const productType: ProductType = hasCourses ? (categoryType === 'live' ? 'live-course' : 'self-paced') : categoryType
     const isSessionOrder = categoryType === 'session'
-    const calBookingUrl = isSessionOrder ? orderSessionBookingUrl(order) : null
+    // In-person sessions are arranged by the team, never self-booked. All
+    // in-person: no booking link. Mixed: the link comes from the first online
+    // line. Either way the mail says the team arranges the in-person part.
+    const { online: onlineSessionLines, inPerson: inPersonSessionLines } = splitSessionLines(order)
+    const inPersonArranged = isSessionOrder && inPersonSessionLines.length > 0
+    const calBookingUrl =
+      isSessionOrder && !(inPersonArranged && onlineSessionLines.length === 0) ? orderSessionBookingUrl(order) : null
 
     // 1. n8n → Sage: fire-and-forget
     void fetch(`${N8N_BASE_URL}/webhook/medusa-order-placed`, {
@@ -956,7 +1008,7 @@ export default async function orderPlacedHandler({
         const confirmRes = await fetch(`${WEB_BASE_URL}/api/email/order-confirmation`, {
           method: 'POST',
           headers,
-          body: JSON.stringify({ orderId, invoiceUrl, productType, calBookingUrl }),
+          body: JSON.stringify({ orderId, invoiceUrl, productType, calBookingUrl, ...(inPersonArranged ? { inPersonArranged: true } : {}) }),
         })
         if (!confirmRes.ok) {
           console.error(
@@ -971,6 +1023,22 @@ export default async function orderPlacedHandler({
       const message = err instanceof Error ? err.message : String(err)
       console.error(`[order-placed] invoice+email chain error for order ${orderId}: ${message}`)
     })
+
+    // 2b. Team notice for in-person sessions: staff contact the client to
+    // agree the day. Never blocks the order; a failure raises a staff alert.
+    if (inPersonArranged) {
+      try {
+        postInternalEmail(
+          '/api/email/in-person-session',
+          buildInPersonNotice(order, inPersonSessionLines),
+          orderId,
+          { key: 'in-person-notice', subject: 'In-person session notice failed' }
+        )
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err)
+        reportPortalFailure('in-person-notice', 'In-person session notice failed', [`Order: ${orderId}`, `Error: ${message}`])
+      }
+    }
 
     // 3. Membership activation — fire-and-forget
     void handleMembershipActivation(order, container).catch((err: unknown) => {

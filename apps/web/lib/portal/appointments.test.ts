@@ -90,6 +90,29 @@ describe('buildAppointmentsView', () => {
     expect(view.toBook[0]).toMatchObject({ remaining: 0, total: 1, bookUrl: null })
   })
 
+  it('an in-person purchase shows the arranged-by-team line and no booking link', () => {
+    const inPerson = { ...PACKAGE, productTitle: 'Rapid Repatterning Session', variantTitle: '90 min in-person' }
+    const view = buildAppointmentsView([], [inPerson], { ...OPTS, gateLinks: new Map([['Rapid Repatterning Session|90', 'http://site/book/x']]) })
+    expect(view.toBook).toEqual([
+      expect.objectContaining({
+        arrangedByTeam: true,
+        arrangedNote: 'Arranged by our team: we will contact you to agree the date',
+        bookUrl: null,
+      }),
+    ])
+  })
+
+  it('keeps online and in-person credits of the same service apart; online credits unchanged', () => {
+    const online = { ...PACKAGE, productTitle: 'Rapid Repatterning Session', variantTitle: '90 min online' }
+    const inPerson = { ...PACKAGE, productTitle: 'Rapid Repatterning Session', variantTitle: '90 min in-person' }
+    const { toBook } = buildAppointmentsView([], [online, inPerson], OPTS)
+    expect(toBook).toHaveLength(2)
+    const onlineCredit = toBook.find((c) => !c.arrangedByTeam)!
+    expect(onlineCredit.bookUrl).toContain('/session-90')
+    expect(onlineCredit.arrangedNote).toBeNull()
+    expect(toBook.find((c) => c.arrangedByTeam)!.bookUrl).toBeNull()
+  })
+
   it('names a non-session appointment by its Cal.com event', () => {
     const view = buildAppointmentsView(
       [row('dc', '2026-11-03T08:00:00Z', { event_slug: 'discovery-call', title: 'Discovery Call between Dr Suzanne Ravenall and Johan QA Test' })],

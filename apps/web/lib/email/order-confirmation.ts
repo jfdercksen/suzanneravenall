@@ -6,6 +6,7 @@ import { companyVatNumber } from './company'
 import { formatAmount } from './utils'
 import { siteUrl } from './site-url'
 import { DOWNLOAD_LINK_TTL_LABEL } from '../downloads/storage'
+import { IN_PERSON_ARRANGED_LINE } from '../booking/in-person-copy'
 
 export type { OrderEmailData }
 
@@ -89,6 +90,7 @@ function buildPlainText(order: OrderEmailData, invoice: InvoiceDelivery): string
     ...(order.calBookingUrl
       ? ['BOOK YOUR SESSION', '=================', `Choose a date and time: ${order.calBookingUrl}`, BOOKING_LINK_REUSE_LINE, '']
       : []),
+    ...(order.inPersonArranged ? ['YOUR IN-PERSON SESSION', '=====================', IN_PERSON_ARRANGED_LINE, ''] : []),
     ...(order.downloads && order.downloads.length > 0
       ? [
           'YOUR DOWNLOADS',
@@ -150,7 +152,7 @@ function buildPlainText(order: OrderEmailData, invoice: InvoiceDelivery): string
     'WHAT HAPPENS NEXT',
     '=================',
     // Same steps as the HTML version, per product type.
-    ...getNextSteps(order.productType).map(({ step, text }) => `${Number(step)}. ${text}`),
+    ...getNextSteps(order.productType, Boolean(order.inPersonArranged) && !order.calBookingUrl).map(({ step, text }) => `${Number(step)}. ${text}`),
     '',
     'QUESTIONS?',
     '==========',

@@ -68,6 +68,8 @@ const FULL: MemberAppointments = {
       remaining: 3,
       total: 4,
       bookUrl: 'http://cal.test/suzanneravenall/session-60?name=Johan+QA+Test',
+      arrangedByTeam: false,
+      arrangedNote: null,
     },
   ],
 }
@@ -77,6 +79,24 @@ function section(name: RegExp) {
 }
 
 describe('AppointmentsContent', () => {
+  it('shows the arranged-by-team line instead of Book Now for an in-person credit', () => {
+    const inPerson = {
+      key: 'rr-90-in-person',
+      service: 'Rapid Repatterning Session',
+      durationLabel: '90 min',
+      remaining: 1,
+      total: 1,
+      bookUrl: null,
+      arrangedByTeam: true,
+      arrangedNote: 'Arranged by our team: we will contact you to agree the date',
+    }
+    render(<AppointmentsContent {...FULL} toBook={[...FULL.toBook, inPerson]} />)
+    const items = screen.getAllByTestId('sessions-to-book')
+    expect(within(items[1]!).getByText('Arranged by our team: we will contact you to agree the date')).toBeInTheDocument()
+    expect(within(items[1]!).queryByRole('link')).toBeNull()
+    expect(within(items[0]!).getByRole('link', { name: 'Book Now' })).toBeInTheDocument()
+  })
+
   it('renders the three sections with the booking, the remaining sessions and the past list', () => {
     render(<AppointmentsContent {...FULL} />)
     expect(screen.getByRole('heading', { level: 1, name: 'My Sessions' })).toBeInTheDocument()

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { bookerName, sessionBookingUrl, type SessionLine } from '@suzanne/integrations'
+import { bookerName, isInPersonSession, sessionBookingUrl, type SessionLine } from '@suzanne/integrations'
 import type { OrderProductType } from '@/lib/email/types'
 import { orderProductType, type OrderCategoryForType, type OrderLineForType } from '@/lib/checkout/orderProductType'
 import { isPreorder, variantLabel } from '@/lib/shop/lineItem'
@@ -120,6 +120,8 @@ interface DescribedOrder {
   productType: OrderProductType
   /** The session event to book on, with the buyer filled in; session orders only (KI079). */
   bookingUrl: string | null
+  /** A session line is in-person: the team arranges it (shown with or without a booking link). */
+  inPersonArranged: boolean
   /** The session line and buyer the /book link is issued for (J-07); not sent to the browser */
   gate: { line: SessionLine & { quantity: number }; name: string | null; email: string | null } | null
 }
@@ -156,17 +158,27 @@ async function describeOrder(lines: CartLine[], buyer: CartBuyer): Promise<Descr
   const productType = orderProductType(typed)
   let bookingUrl: string | null = null
   let gate: DescribedOrder['gate'] = null
-  // The first session line decides the length, as in the order mail.
-  const sessionIndex = productType === 'session' ? typed.findIndex((line) => orderProductType([line]) === 'session') : -1
-  const index = productType === 'session' ? Math.max(sessionIndex, 0) : -1
+  let inPersonArranged = false
+  const sessionLineAt = (i: number): SessionLine => {
+    const l = lines[i]!
+    return {
+      // Same title rule as the order mail and the portal: product, snapshot, line.
+      productTitle: (l.product_id ? products.get(l.product_id)?.title : null) ?? l.product_title ?? l.title,
+      productHandle: typed[i]?.variant?.product?.handle,
+      variantTitle: l.variant_title,
+    }
+  }
+  // In-person sessions are arranged by the team, never self-booked (27 Nov
+  // 2026). The first ONLINE session line decides the length; with none, there
+  // is no booking link at all.
+  const sessionIdx = productType === 'session' ? typed.flatMap((line, i) => (orderProductType([line]) === 'session' ? [i] : [])) : []
+  const onlineIdx = sessionIdx.filter((i) => !isInPersonSession(sessionLineAt(i)))
+  inPersonArranged = sessionIdx.length > onlineIdx.length
+  const allInPerson = sessionIdx.length > 0 && onlineIdx.length === 0
+  const index = productType === 'session' && !allInPerson ? (onlineIdx[0] ?? 0) : -1
   const line = index >= 0 ? lines[index] : undefined
   if (line) {
-    const sessionLine = {
-      // Same title rule as the order mail and the portal: product, snapshot, line.
-      productTitle: (line.product_id ? products.get(line.product_id)?.title : null) ?? line.product_title ?? line.title,
-      productHandle: typed[index]?.variant?.product?.handle,
-      variantTitle: line.variant_title,
-    }
+    const sessionLine = sessionLineAt(index)
     const name =
       bookerName(buyer.customer?.first_name, buyer.customer?.last_name) ??
       bookerName(buyer.billing_address?.first_name, buyer.billing_address?.last_name)
@@ -178,7 +190,7 @@ async function describeOrder(lines: CartLine[], buyer: CartBuyer): Promise<Descr
     }
   }
 
-  return { items, productType, bookingUrl, gate }
+  return { items, productType, bookingUrl, inPersonArranged, gate }
 }
 
 export async function GET(req: NextRequest) {

@@ -107,6 +107,8 @@ export async function creditStateFor(
  */
 export function poolFor(credits: readonly SessionCredit[], record: Pick<BookingTokenRecord, 'service_name' | 'duration_minutes'>): SessionCredit | null {
   return (
+    // A link is only issued for an online line, so an in-person pool of the same service is the last choice.
+    credits.find((c) => !c.inPerson && c.service === record.service_name && c.durationMinutes === record.duration_minutes) ??
     credits.find((c) => c.service === record.service_name && c.durationMinutes === record.duration_minutes) ??
     credits.find((c) => c.durationMinutes === record.duration_minutes && c.remaining > 0) ??
     credits.find((c) => c.durationMinutes === record.duration_minutes) ??

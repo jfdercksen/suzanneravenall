@@ -69,6 +69,18 @@ export function sessionBookingUrl(baseUrl: string, line: SessionLine, booker: Se
   return `${base}/session-${sessionDurationMinutes(line)}${query ? `?${query}` : ''}`
 }
 
+const IN_PERSON_RE = /\bin[\s-]?person\b/i
+
+/**
+ * An in-person session is arranged by the team, never self-booked (Shayna,
+ * 27 Nov 2026). The variant title says so ("90 min in-person"); when the
+ * line has no variant title the product title is read instead.
+ */
+export function isInPersonSession(line: SessionLine): boolean {
+  const variant = line.variantTitle?.trim()
+  return IN_PERSON_RE.test(variant ? variant : (line.productTitle ?? ''))
+}
+
 /** "First Last" from the parts an order or cart carries; null when both are empty. */
 export function bookerName(first?: string | null, last?: string | null): string | null {
   const name = [first, last].map((part) => part?.trim() ?? '').filter(Boolean).join(' ')

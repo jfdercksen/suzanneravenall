@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, it, expect } from 'vitest'
-import { bookerName, sessionBookingUrl, sessionDurationMinutes } from './session-booking'
+import { bookerName, isInPersonSession, sessionBookingUrl, sessionDurationMinutes } from './session-booking'
 
 // KI079: the session length for every private-session variant on sale, read
 // from the 15 Oct purchase list, and the Cal.com link it books on.
@@ -188,5 +188,30 @@ describe('bookerName', () => {
 
   it('returns null when both parts are empty', () => {
     expect(bookerName(' ', null)).toBeNull()
+  })
+})
+
+describe('isInPersonSession', () => {
+  it.each([
+    ['90 min in-person', true],
+    ['90 min In Person', true],
+    ['Package of 04 (60 min in person)', true],
+    ['90 min online', false],
+    ['', false],
+  ])('reads the variant title %j as %s', (variantTitle, expected) => {
+    expect(isInPersonSession({ variantTitle })).toBe(expected)
+  })
+
+  it('reads the product title when the line has no variant title', () => {
+    expect(isInPersonSession({ productTitle: 'In-Person Session', variantTitle: null })).toBe(true)
+    expect(isInPersonSession({ productTitle: 'Rapid Repatterning', variantTitle: undefined })).toBe(false)
+  })
+
+  it('trusts the variant title over the product title', () => {
+    expect(isInPersonSession({ productTitle: 'In Person Session', variantTitle: '60 min online' })).toBe(false)
+  })
+
+  it('is false for an empty line', () => {
+    expect(isInPersonSession({})).toBe(false)
   })
 })

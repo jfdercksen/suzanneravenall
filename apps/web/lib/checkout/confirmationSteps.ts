@@ -6,9 +6,10 @@ import type { OrderProductType } from '@/lib/email/types'
  * getNextSteps). The mail can say "above"; the page points at the mail.
  * KI065 and KI044: the page used to print one paragraph for every order.
  */
-export function confirmationNextSteps(productType: OrderProductType | null): string {
+export function confirmationNextSteps(productType: OrderProductType | null, teamArranges = false): string {
   switch (productType) {
     case 'session':
+      if (teamArranges) return 'Our team will contact you to agree the date and time of your session. Meanwhile, bring any questions or intentions you want to explore.'
       return 'Book your session with the button below or the link in your confirmation email. Choose a time that suits you, and bring any questions or intentions you want to explore.'
     case 'self-paced':
       return 'Watch for your course access email from Ravenall Institute: it has your login for the course platform. Then work through the materials at your own pace.'

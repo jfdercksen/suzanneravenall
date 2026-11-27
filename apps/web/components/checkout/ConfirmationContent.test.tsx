@@ -147,6 +147,45 @@ describe('ConfirmationContent', () => {
     expect(button).toHaveAttribute('target', '_blank')
   })
 
+  describe('in-person sessions (27 Nov 2026)', () => {
+    const PARAGRAPH =
+      'Your in-person session is arranged by our team. Suzanne sets aside one day a month for in-person sessions, and we will contact you to agree the date and time.'
+    const base = {
+      status: 'completed',
+      orderNumber: 76,
+      items: [{ title: 'Rapid Repatterning Session', variant: '90 min in-person', quantity: 1, preorder: false }],
+      productType: 'session',
+    }
+
+    it('all in-person: the paragraph replaces the Book Your Session button', async () => {
+      search = `free=1&order=76&cartId=${CART_ID}`
+      stubStatus(200, { ...base, bookingUrl: null, inPersonArranged: true })
+      render(<ConfirmationContent />)
+
+      expect(await screen.findByText(PARAGRAPH)).toBeInTheDocument()
+      expect(screen.queryByRole('link', { name: /Book Your Session/ })).not.toBeInTheDocument()
+      expect(screen.queryByText(/Book your session with the button below/)).not.toBeInTheDocument()
+    })
+
+    it('mixed: the button stays and the paragraph is shown too', async () => {
+      search = `free=1&order=76&cartId=${CART_ID}`
+      stubStatus(200, { ...base, bookingUrl: 'http://cal.test/suzanneravenall/session-45', inPersonArranged: true })
+      render(<ConfirmationContent />)
+
+      expect(await screen.findByText(PARAGRAPH)).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: /Book Your Session/ })).toHaveAttribute('href', 'http://cal.test/suzanneravenall/session-45')
+    })
+
+    it('online: no paragraph', async () => {
+      search = `free=1&order=76&cartId=${CART_ID}`
+      stubStatus(200, { ...base, bookingUrl: 'http://cal.test/suzanneravenall/session-60' })
+      render(<ConfirmationContent />)
+
+      expect(await screen.findByRole('link', { name: /Book Your Session/ })).toBeInTheDocument()
+      expect(screen.queryByText(PARAGRAPH)).not.toBeInTheDocument()
+    })
+  })
+
   it('shows no booking button for other orders or a link that is not http(s)', async () => {
     search = `free=1&order=75&cartId=${CART_ID}`
     stubStatus(200, {

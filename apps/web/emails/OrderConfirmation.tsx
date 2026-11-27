@@ -19,6 +19,7 @@ import { formatAmount } from '../lib/email/utils'
 import { siteUrl } from '../lib/email/site-url'
 import { THINKIFIC_COURSES_URL } from '../lib/email/templates/CourseAccess'
 import { DOWNLOAD_LINK_TTL_LABEL } from '../lib/downloads/storage'
+import { IN_PERSON_ARRANGED_LINE } from '../lib/booking/in-person-copy'
 
 const NAVY = '#012B43'
 const BLUE = '#1719F4'
@@ -56,11 +57,13 @@ interface NextStep {
   text: string
 }
 
-export function getNextSteps(productType: OrderProductType | undefined): NextStep[] {
+export function getNextSteps(productType: OrderProductType | undefined, teamArranges = false): NextStep[] {
   switch (productType) {
     case 'session':
       return [
-        { step: '01', text: 'Your booking link is above. Schedule your session at your convenience.' },
+        teamArranges
+          ? { step: '01', text: 'Our team will contact you to agree the date and time of your session.' }
+          : { step: '01', text: 'Your booking link is above. Schedule your session at your convenience.' },
         { step: '02', text: 'Prepare any questions, topics, or intentions you want to explore.' },
         { step: '03', text: 'Join your session. Suzanne will guide the rest.' },
       ]
@@ -131,6 +134,7 @@ export default function OrderConfirmation({
   invoiceAttachmentName = null,
   productType,
   calBookingUrl,
+  inPersonArranged,
   downloads,
   business,
   portalInvite,
@@ -142,7 +146,7 @@ export default function OrderConfirmation({
     year: 'numeric',
   })
 
-  const nextSteps = getNextSteps(productType)
+  const nextSteps = getNextSteps(productType, Boolean(inPersonArranged) && !calBookingUrl)
 
   // Ravenall Institute is not VAT registered by default (companyVatNumber()
   // returns null): show no VAT line and no tax-invoice wording. Setting
@@ -223,6 +227,18 @@ export default function OrderConfirmation({
                 <Link href={calBookingUrl} style={{ color: BLUE, textDecoration: 'none' }}>
                   {calBookingUrl}
                 </Link>
+              </Text>
+            </Section>
+          )}
+
+          {/* In-person sessions: arranged by the team, never self-booked */}
+          {inPersonArranged && (
+            <Section style={{ backgroundColor: NAVY, padding: '32px 40px', marginBottom: '0' }}>
+              <Text style={{ color: BLUE, fontSize: '11px', fontWeight: '700', letterSpacing: '0.15em', textTransform: 'uppercase', margin: '0 0 12px' }}>
+                Your In-Person Session
+              </Text>
+              <Text style={{ color: '#ffffff', fontSize: '14px', lineHeight: '1.6', margin: 0 }}>
+                {IN_PERSON_ARRANGED_LINE}
               </Text>
             </Section>
           )}

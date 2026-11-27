@@ -161,6 +161,49 @@ describe('POST /api/email/order-confirmation', () => {
       expect(h.send.mock.calls[0]![0].order.calBookingUrl).toBe('http://cal/suzanneravenall/session-60')
     })
 
+    describe('in-person sessions (27 Nov 2026)', () => {
+      const line = (id: string, variant: string) => ({
+        id,
+        title: variant,
+        product_title: 'Rapid Repatterning Session',
+        quantity: 1,
+        unit_price: 0,
+        variant: { title: variant, product: { title: 'Rapid Repatterning Session', handle: 'rapid-repatterning-session', categories: [{ handle: 'private-sessions' }] } },
+      })
+      const stubOrder = (items: unknown[]) =>
+        vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ order: { ...sessionOrder, items } }), { status: 200 })))
+
+      it('passes inPersonArranged through to the mail', async () => {
+        await POST(makeRequest({ orderId: 'order_1', productType: 'session', calBookingUrl: 'http://cal/x/session-60', inPersonArranged: true }) as never)
+        expect(h.send.mock.calls[0]![0].order.inPersonArranged).toBe(true)
+      })
+
+      it('ignores a flag that is not boolean true', async () => {
+        await POST(makeRequest({ orderId: 'order_1', productType: 'other', inPersonArranged: 'yes' }) as never)
+        expect(h.send.mock.calls[0]![0].order).not.toHaveProperty('inPersonArranged')
+      })
+
+      it('does not re-add a booking link for an all in-person order, even when a gate link could be issued', async () => {
+        stubOrder([line('s1', '90 min in-person')])
+        h.gate.mockResolvedValue('http://site/book/' + 'a'.repeat(43))
+        await POST(makeRequest({ orderId: 'order_1', productType: 'session', calBookingUrl: 'http://cal/x/session-90', inPersonArranged: true }) as never)
+        expect(h.gate).not.toHaveBeenCalled()
+        const order = h.send.mock.calls[0]![0].order
+        expect(order.calBookingUrl).toBeNull()
+        expect(order.inPersonArranged).toBe(true)
+      })
+
+      it('mixed: the gate link is issued for the first online line, not the in-person one', async () => {
+        stubOrder([line('s1', '90 min in-person'), line('s2', '45 min online')])
+        h.gate.mockResolvedValue('http://site/book/' + 'b'.repeat(43))
+        await POST(makeRequest({ orderId: 'order_1', productType: 'session', calBookingUrl: 'http://cal/x/session-45', inPersonArranged: true }) as never)
+        expect(h.gate.mock.calls[0]![0].line.variantTitle).toBe('45 min online')
+        const order = h.send.mock.calls[0]![0].order
+        expect(order.calBookingUrl).toBe('http://site/book/' + 'b'.repeat(43))
+        expect(order.inPersonArranged).toBe(true)
+      })
+    })
+
     it('issues no link for an order that is not a session order', async () => {
       await POST(makeRequest({ orderId: 'order_1', productType: 'other' }) as never)
       expect(h.gate).not.toHaveBeenCalled()

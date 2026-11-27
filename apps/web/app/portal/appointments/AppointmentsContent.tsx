@@ -98,7 +98,9 @@ export default function AppointmentsContent({
                   <p className="text-white text-2xl font-semibold tracking-tight mb-4">
                     {item.remaining} <span className="text-white/70 text-base font-normal">of {item.total} left to book</span>
                   </p>
-                  {item.bookUrl ? (
+                  {item.arrangedNote ? (
+                    <p className="mt-auto text-white/85 text-sm">{item.arrangedNote}</p>
+                  ) : item.bookUrl ? (
                     <a
                       href={item.bookUrl}
                       target="_blank"

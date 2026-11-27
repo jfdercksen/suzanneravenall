@@ -204,6 +204,8 @@ services:
       # Intake forms (H-12): completed forms go here (else CONTACT_NOTIFY_EMAIL,
       # else support@ravenallinstitute.com); same delays as medusa.
       INTAKE_NOTIFY_EMAIL: ${INTAKE_NOTIFY_EMAIL:-}
+      # In-person session notice (else CONTACT_NOTIFY_EMAIL, else support).
+      IN_PERSON_NOTIFY_EMAIL: ${IN_PERSON_NOTIFY_EMAIL:-}
       INTAKE_REMINDER_DELAYS: ${INTAKE_REMINDER_DELAYS:-}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN}

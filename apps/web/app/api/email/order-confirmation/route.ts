@@ -7,7 +7,7 @@ import { downloadInvoicePdf } from '@/lib/invoices/storage'
 import { downloadsForOrder, isDownloadOnlyOrder, signDownloadUrls } from '@/lib/downloads/storage'
 import { medusaAdminAuthHeader } from '@/lib/medusa/admin-auth'
 import { readOrderBusiness } from '@/lib/checkout/business'
-import { bookerName } from '@suzanne/integrations'
+import { bookerName, isInPersonSession, type SessionLine } from '@suzanne/integrations'
 import { orderProductType, type OrderCategoryForType } from '@/lib/checkout/orderProductType'
 import { orderGateLink } from '@/lib/booking/order-link'
 import { portalInviteFor } from '@/lib/portal/portal-invite'
@@ -90,12 +90,14 @@ export async function POST(req: NextRequest) {
   let invoiceUrl: string | null
   let productType: OrderProductType | undefined
   let calBookingUrl: string | null
+  let inPersonArranged = false
   try {
     const body = (await req.json()) as {
       orderId?: unknown
       invoiceUrl?: unknown
       productType?: unknown
       calBookingUrl?: unknown
+      inPersonArranged?: unknown
     }
     if (!body.orderId || typeof body.orderId !== 'string') {
       return NextResponse.json({ error: 'orderId is required' }, { status: 400 })
@@ -108,6 +110,7 @@ export async function POST(req: NextRequest) {
         ? (body.productType as OrderProductType)
         : undefined
     calBookingUrl = typeof body.calBookingUrl === 'string' ? body.calBookingUrl : null
+    inPersonArranged = body.inPersonArranged === true
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
@@ -176,13 +179,31 @@ export async function POST(req: NextRequest) {
     total: order.total,
     productType,
     calBookingUrl,
+    ...(inPersonArranged ? { inPersonArranged: true } : {}),
     business: businessForEmail(readOrderBusiness(order)),
   }
 
   // Session orders: the per-order /book link instead of the reusable Cal.com
   // page (J-07). Same line rule as the order mail: the first session line.
   if (productType === 'session') {
-    const sessionItem = order.items.find((item) => orderProductType([item]) === 'session') ?? order.items[0]
+    // In-person lines are arranged by the team (27 Nov 2026): the gate link is
+    // built from the first ONLINE session line, and an all in-person order
+    // gets no booking link at all, whatever the caller sent.
+    const lineOf = (item: MedusaOrderItem): SessionLine => ({
+      productTitle: item.variant?.product?.title ?? item.product_title ?? item.title,
+      productHandle: item.variant?.product?.handle ?? null,
+      variantTitle: item.variant?.title ?? null,
+    })
+    const sessionItems = order.items.filter((item) => orderProductType([item]) === 'session')
+    const onlineItems = sessionItems.filter((item) => !isInPersonSession(lineOf(item)))
+    const allInPerson = sessionItems.length > 0 && onlineItems.length === 0
+    if (allInPerson) {
+      emailOrder.calBookingUrl = null
+      emailOrder.inPersonArranged = true
+    } else if (sessionItems.length > onlineItems.length) {
+      emailOrder.inPersonArranged = true
+    }
+    const sessionItem = allInPerson ? undefined : (onlineItems[0] ?? order.items[0])
     const gateLink = sessionItem
       ? await orderGateLink({
           orderId: order.id,

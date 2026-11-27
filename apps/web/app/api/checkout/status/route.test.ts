@@ -103,6 +103,7 @@ describe('GET /api/checkout/status', () => {
       items: [{ title: 'Program 1', variant: 'Live via Zoom', quantity: 1, preorder: false }],
       productType: 'live-course',
       bookingUrl: null,
+      inPersonArranged: false,
     })
     const productsCall = fetchMock.mock.calls.map(([u]) => u).find((u) => u.includes('/store/products?'))
     expect(productsCall).toContain('id%5B%5D=prod_rr1')
@@ -135,6 +136,7 @@ describe('GET /api/checkout/status', () => {
       items: [{ title: 'The Breakthrough Trilogy', variant: null, quantity: 2, preorder: true }],
       productType: 'other',
       bookingUrl: null,
+      inPersonArranged: false,
     })
   })
 
@@ -193,6 +195,70 @@ describe('GET /api/checkout/status', () => {
     } finally {
       delete process.env.CALCOM_SESSION_BOOKING_URL
     }
+  })
+
+  describe('in-person session lines (27 Nov 2026)', () => {
+    const sessionCart = (variants: string[]) =>
+      vi.fn(async (url: string) => ({
+        ok: true,
+        status: 200,
+        json: async () => {
+          if (url.includes('/store/order-by-cart/')) return { display_id: 80 }
+          if (url.includes('/store/products?')) {
+            return {
+              products: [
+                {
+                  id: 'prod_rrs',
+                  handle: 'rapid-repatterning-session',
+                  metadata: null,
+                  categories: [{ handle: 'private-sessions' }],
+                  variants: variants.map((_, i) => ({ id: `variant_${i}`, metadata: null })),
+                },
+              ],
+            }
+          }
+          return {
+            cart: {
+              id: CART_ID,
+              completed_at: '2026-11-27T10:00:00Z',
+              email: 'client@example.com',
+              billing_address: { first_name: 'Thandi', last_name: 'Nkosi' },
+              items: variants.map((v, i) => ({ title: 'Rapid Repatterning Session', product_title: 'Rapid Repatterning Session', variant_title: v, quantity: 1, product_id: 'prod_rrs', variant_id: `variant_${i}` })),
+            },
+          }
+        },
+      }))
+
+    beforeEach(() => {
+      process.env.CALCOM_SESSION_BOOKING_URL = 'http://cal-test:3002/suzanneravenall'
+    })
+    afterEach(() => {
+      delete process.env.CALCOM_SESSION_BOOKING_URL
+    })
+
+    it('all in-person: no booking url, no gate link asked for, inPersonArranged true', async () => {
+      vi.stubGlobal('fetch', sessionCart(['90 min in-person']))
+      h.gate.mockResolvedValue('http://site/book/' + 'a'.repeat(43))
+      const body = await (await GET(makeRequest(CART_ID))).json()
+      expect(body.productType).toBe('session')
+      expect(body.bookingUrl).toBeNull()
+      expect(body.inPersonArranged).toBe(true)
+      expect(h.gate).not.toHaveBeenCalled()
+    })
+
+    it('mixed: the booking url is built from the online line and inPersonArranged is true', async () => {
+      vi.stubGlobal('fetch', sessionCart(['90 min in-person', '45 min online']))
+      const body = await (await GET(makeRequest(CART_ID))).json()
+      expect(body.bookingUrl).toContain('/session-45?')
+      expect(body.inPersonArranged).toBe(true)
+    })
+
+    it('online only: unchanged', async () => {
+      vi.stubGlobal('fetch', sessionCart(['60 min online']))
+      const body = await (await GET(makeRequest(CART_ID))).json()
+      expect(body.bookingUrl).toContain('/session-60?')
+      expect(body.inPersonArranged).toBe(false)
+    })
   })
 
   it('reports pending for a cart that is not an order yet', async () => {

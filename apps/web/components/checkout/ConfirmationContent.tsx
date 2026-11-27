@@ -8,6 +8,7 @@ import { CheckCircle, Mail, Calendar, ArrowRight, Clock, Loader2, ShoppingBag } 
 import { useCart } from '@/lib/cart'
 import type { OrderProductType } from '@/lib/email/types'
 import { confirmationNextSteps } from '@/lib/checkout/confirmationSteps'
+import { IN_PERSON_ARRANGED_LINE } from '@/lib/booking/in-person-copy'
 import { PREORDER_NOTE } from '@/lib/shop/lineItem'
 
 // confirmed: Medusa says the cart is now an order (or PayPal captured it).
@@ -39,9 +40,11 @@ interface StatusResult {
   productType: OrderProductType | null
   /** Session orders: the Cal.com event to book on, as in the order mail (KI079). */
   bookingUrl: string | null
+  /** A session line is in-person: the team arranges it, so there is no self-booking for it. */
+  inPersonArranged: boolean
 }
 
-const NO_ORDER: Omit<StatusResult, 'state'> = { orderNumber: null, items: [], productType: null, bookingUrl: null }
+const NO_ORDER: Omit<StatusResult, 'state'> = { orderNumber: null, items: [], productType: null, bookingUrl: null, inPersonArranged: false }
 
 // Only an http(s) link becomes a button; anything else is dropped.
 function readBookingUrl(value: unknown): string | null {
@@ -88,6 +91,7 @@ async function checkOrderStatus(cartId: string, attempts: number): Promise<Statu
           items?: unknown
           productType?: OrderProductType
           bookingUrl?: unknown
+          inPersonArranged?: unknown
         }
         if (data.status === 'completed') {
           return {
@@ -96,6 +100,7 @@ async function checkOrderStatus(cartId: string, attempts: number): Promise<Statu
             items: readLines(data.items),
             productType: typeof data.productType === 'string' ? data.productType : null,
             bookingUrl: data.productType === 'session' ? readBookingUrl(data.bookingUrl) : null,
+            inPersonArranged: data.productType === 'session' && data.inPersonArranged === true,
           }
         }
       }
@@ -113,6 +118,7 @@ export default function ConfirmationContent() {
   const [orderLines, setOrderLines] = useState<OrderLine[]>([])
   const [productType, setProductType] = useState<OrderProductType | null>(null)
   const [bookingUrl, setBookingUrl] = useState<string | null>(null)
+  const [inPersonArranged, setInPersonArranged] = useState(false)
   const [orderState, setOrderState] = useState<OrderState>('checking')
 
   // PayFast return params: gateway=payfast&m_payment_id=<cartId> (set in our return_url)
@@ -142,10 +148,11 @@ export default function ConfirmationContent() {
     async function finalise() {
       let state: SettledState = 'none'
       let number: number | null = null
-      let details: Pick<StatusResult, 'items' | 'productType' | 'bookingUrl'> = {
+      let details: Pick<StatusResult, 'items' | 'productType' | 'bookingUrl' | 'inPersonArranged'> = {
         items: [],
         productType: null,
         bookingUrl: null,
+        inPersonArranged: false,
       }
 
       if (isFreeOrder && freeCartId) {
@@ -175,7 +182,7 @@ export default function ConfirmationContent() {
           // Captured just now: one read for the order number and lines only.
           const read = await checkOrderStatus(payPalCartId, 1)
           number = read.orderNumber
-          details = { items: read.items, productType: read.productType, bookingUrl: read.bookingUrl }
+          details = { items: read.items, productType: read.productType, bookingUrl: read.bookingUrl, inPersonArranged: read.inPersonArranged }
         }
       } else if (payFastCartId) {
         try {
@@ -195,6 +202,7 @@ export default function ConfirmationContent() {
       setOrderLines(details.items)
       setProductType(details.productType)
       setBookingUrl(details.bookingUrl)
+      setInPersonArranged(details.inPersonArranged)
       setOrderState(state)
       // Only a confirmed order empties the cart, and only the cart it was for.
       if (state === 'confirmed' && cartId) {
@@ -217,7 +225,7 @@ export default function ConfirmationContent() {
     ? [PREORDER_NOTE, productType && productType !== 'other' ? confirmationNextSteps(productType) : '']
         .filter(Boolean)
         .join(' ')
-    : confirmationNextSteps(productType)
+    : confirmationNextSteps(productType, inPersonArranged && !bookingUrl)
 
   return (
     <div className="min-h-screen bg-brand-cream">
@@ -344,6 +352,13 @@ export default function ConfirmationContent() {
                 </p>
               )}
             </motion.div>
+          )}
+
+          {/* In-person sessions: arranged by the team, no booking button for them */}
+          {inPersonArranged && (
+            <p className="max-w-xl mx-auto mb-6 text-center text-sm sm:text-base text-brand-muted">
+              {IN_PERSON_ARRANGED_LINE}
+            </p>
           )}
 
           {/* CTAs */}

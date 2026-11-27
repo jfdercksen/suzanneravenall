@@ -1,4 +1,5 @@
 import { sessionBookingUrl, type SessionBooker } from '@suzanne/integrations'
+import { IN_PERSON_PORTAL_LINE } from '@/lib/booking/in-person-copy'
 import { bookingSessionMinutes, computeSessionCredits, type PurchasedSessionLine } from './session-credits'
 import type { SessionBookingStatus } from './session-bookings'
 
@@ -56,8 +57,12 @@ export interface SessionsToBookView {
   durationLabel: string
   remaining: number
   total: number
-  /** Null once every session of this purchase is booked */
+  /** Null once every session of this purchase is booked, and always null for in-person sessions */
   bookUrl: string | null
+  /** The team arranges this purchase (in-person): no booking link, the page says so */
+  arrangedByTeam: boolean
+  /** The line shown instead of the booking link when the team arranges it; null otherwise */
+  arrangedNote: string | null
 }
 
 export interface AppointmentsView {
@@ -227,15 +232,17 @@ export function buildAppointmentsView(
   const toBook = credits
     .sort((a, b) => Number(b.remaining > 0) - Number(a.remaining > 0))
     .map((credit) => ({
-      key: `${credit.service}-${credit.durationMinutes}`,
+      key: `${credit.service}-${credit.durationMinutes}${credit.inPerson ? '-in-person' : ''}`,
       service: credit.service,
       durationLabel: `${credit.durationMinutes} min`,
       remaining: credit.remaining,
       total: credit.total,
       // The /book gate counts again at click time; the direct Cal.com link
       // only for purchases made before the gate existed.
+      arrangedByTeam: credit.inPerson && credit.remaining > 0,
+      arrangedNote: credit.inPerson && credit.remaining > 0 ? IN_PERSON_PORTAL_LINE : null,
       bookUrl:
-        credit.remaining > 0
+        credit.remaining > 0 && !credit.inPerson
           ? (gateLinks?.get(`${credit.service}|${credit.durationMinutes}`) ?? sessionBookingUrl(sessionBase, credit.line, booker))
           : null,
     }))

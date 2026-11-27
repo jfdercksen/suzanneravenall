@@ -94,6 +94,8 @@ export interface OrderEmailData {
   total: number
   productType?: OrderProductType
   calBookingUrl?: string | null
+  /** A session line is in-person: the team arranges it, so the mail says so (with or without a booking link). */
+  inPersonArranged?: boolean
   /** Signed links for files bought as a download; shown above the order summary. */
   downloads?: OrderDownload[]
   /** Business checkout: the company the order is billed to, shown under the order reference. */

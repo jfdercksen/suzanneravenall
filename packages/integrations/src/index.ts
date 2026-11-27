@@ -94,6 +94,7 @@ export {
 export {
   sessionDurationMinutes,
   sessionBookingUrl,
+  isInPersonSession,
   bookerName,
   SESSION_DURATIONS,
   DEFAULT_SESSION_DURATION,

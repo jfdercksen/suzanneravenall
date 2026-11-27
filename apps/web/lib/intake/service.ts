@@ -1,4 +1,5 @@
 import { randomBytes } from 'crypto'
+import { isInPersonSession } from '@suzanne/integrations'
 import { logError } from '@/lib/log'
 import { sendStaffAlert } from '@/lib/integrations/staff-alert'
 import { sendIntakeCompletedEmail, sendIntakeRequestEmail } from '@/lib/email/intake'
@@ -78,15 +79,13 @@ async function noteFailure(record: IntakeRecord, what: string, err: unknown, dep
 // Order -> intake records + first mail
 // ---------------------------------------------------------------------------
 
-const IN_PERSON_RE = /\bin[\s-]?person\b/i
-
 /**
  * In-person when every variant bought of the service says so ("90 min
  * in-person"). Unknown (no titles, Medusa not readable) counts as online, so
  * the client still gets the Zoom link.
  */
 export function isInPerson(titles: string[] | undefined): boolean {
-  return Boolean(titles && titles.length > 0 && titles.every((t) => IN_PERSON_RE.test(t)))
+  return Boolean(titles && titles.length > 0 && titles.every((t) => isInPersonSession({ variantTitle: t })))
 }
 
 export interface OrderLine {
